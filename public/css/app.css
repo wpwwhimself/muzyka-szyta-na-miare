@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&family=Raleway:wght@400&display=swap');
+:root{
+    --ui-clr-1: #fffaa1;
+    --ui-clr-2: #926fa8;
+}
+
+/*****************UNIVERSALS****************/
+h1, h2, h3, h4{
+    font-family: "Krona One";
+    font-weight: normal;
+}
+
+/**********************BODY*****************/
+body{
+    font-family: "Raleway";
+    margin: 0;
+    min-height: 100vh;
+}
+
+.main-wrapper{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+/**********************FOOTER***************/
+footer{
+    background: linear-gradient(to bottom right, var(--ui-clr-1) 20%, var(--ui-clr-2) 80%);
+    padding: 1em 5em;
+    display: grid; grid-template-columns: 1fr 5fr;
+    align-items: center;
+}
+footer h2, footer p{
+    margin: 0;
+}
+footer>img{
+    float: left;
+    margin-right: 20px;
+    height: 5em;
+    justify-self: center;
+}

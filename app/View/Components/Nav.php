@@ -4,19 +4,17 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Header extends Component
+class Nav extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public $title;
     public $forWhom;
 
-    public function __construct($title, $forWhom)
+    public function __construct($forWhom)
     {
-        $this->title = $title;
         $this->forWhom = $forWhom;
     }
 
@@ -27,6 +25,6 @@ class Header extends Component
      */
     public function render()
     {
-        return view('components.header');
+        return view('components.nav');
     }
 }

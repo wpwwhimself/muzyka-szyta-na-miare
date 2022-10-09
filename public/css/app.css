@@ -9,6 +9,18 @@ h1, h2, h3, h4{
     font-family: "Krona One";
     font-weight: normal;
 }
+.logo{
+    height: 5em;
+}
+a{
+    text-decoration: none;
+    font-weight: bold;
+    color: initial;
+    transition-duration: 0.3s;
+}
+a:hover{
+    color: var(--ui-clr-2);
+}
 
 /**********************BODY*****************/
 body{
@@ -18,14 +30,44 @@ body{
 }
 
 .main-wrapper{
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
+}
+
+/**********************HEADER***************/
+header{
+    padding: 2em 4em;
+    display: grid; grid-template-columns: 6em 5fr;
+    align-items: center;
+    background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1));
+    box-shadow: 0 0 50px #00000077;
+}
+header small{
+    color: gray;
+    opacity: 0.6;
+    font-family: "Raleway";
+}
+header h1{
+    margin: 0;
+}
+
+/**********************NAV******************/
+nav{
+    display: flex; flex-direction: row;
+}
+nav a{
+    margin-right: 1em;
+    padding: 0.5em;
+}
+nav li{
+    list-style-type: none;
 }
 
 /**********************FOOTER***************/
 footer{
-    background: linear-gradient(to bottom right, var(--ui-clr-1) 20%, var(--ui-clr-2) 80%);
-    padding: 1em 5em;
+    background: linear-gradient(to bottom, lightgray, dimgray);
+    border-top: 3px solid black;
+    margin-top: 3em; padding: 1em 5em;
     display: grid; grid-template-columns: 1fr 5fr;
     align-items: center;
 }
@@ -33,8 +75,5 @@ footer h2, footer p{
     margin: 0;
 }
 footer>img{
-    float: left;
-    margin-right: 20px;
-    height: 5em;
     justify-self: center;
 }

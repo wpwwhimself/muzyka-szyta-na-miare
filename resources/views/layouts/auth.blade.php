@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="icon" href="{{ URL::asset("logo.png") }}">
-  <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
-  <link rel="stylesheet" href="{{ URL::asset("css/auth.css") }}">
+    <link rel="icon" href="{{ URL::asset("logo.png") }}">
+    <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
+    <link rel="stylesheet" href="{{ URL::asset("css/auth.css") }}">
 
-  <title>Logowanie | Muzyka szyta na miarę</title>
+    <title>{{ $title }} | Muzyka szyta na miarę</title>
 </head>
 <body>
-  <div class="main-wrapper">
-  @yield("content")
-  </div>
-  <x-footer />
+    <x-header :title="$title" :for-whom="$forWhom" />
+    <div class="main-wrapper">
+        @yield("content")
+    </div>
+    <x-footer />
 </body>
 </html>

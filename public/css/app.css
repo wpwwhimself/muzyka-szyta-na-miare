@@ -39,7 +39,7 @@ header{
     padding: 2em 4em;
     display: grid; grid-template-columns: 6em 5fr;
     align-items: center;
-    background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1));
+    background: linear-gradient(to bottom, white, var(--ui-clr-1));
     box-shadow: 0 0 50px #00000077;
 }
 header small{

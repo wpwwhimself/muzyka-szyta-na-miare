@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, "index"])->name("home");
-
 Route::get('/auth', [AuthController::class, "input"])->name("login");
+Route::post('/auth/login', [AuthController::class, "authenticate"])->name("authenticate");
+Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
+Route::get('/dashboard', [DashboardController::class, "main"])->middleware("auth")->name("dashboard");

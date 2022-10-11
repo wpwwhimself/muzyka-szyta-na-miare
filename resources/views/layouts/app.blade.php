@@ -7,9 +7,11 @@
 
     <link rel="icon" href="{{ URL::asset("logo.png") }}">
     <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
-    <link rel="stylesheet" href="{{ URL::asset("css/auth.css") }}">
+    @if (isset($extraCss))
+    <link rel="stylesheet" href="{{ URL::asset("css/$extraCss.css") }}">
+    @endif
 
-    <title>{{ $title }} | Muzyka szyta na miarę</title>
+    <title>{{ $title == null ? "WPWW –" : "$title |" }} Muzyka szyta na miarę</title>
 </head>
 <body>
     <x-header :title="$title" :for-whom="$forWhom" />

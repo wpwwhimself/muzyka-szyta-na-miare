@@ -12,6 +12,8 @@ h1, h2, h3, h4{
 .logo{
     height: 5em;
 }
+
+/* CLICKABLE */
 a{
     text-decoration: none;
     font-weight: bold;
@@ -20,6 +22,25 @@ a{
 }
 a:hover{
     color: var(--ui-clr-2);
+}
+
+/* FORM */
+input[type="text"], input[type="password"], select, input[type="submit"]{
+    font-family: Raleway;
+    font-size: 1.5em;
+    text-align: center;
+    border-left: none; border-right: none; border-top: none;
+}
+label{
+    font-style: italic;
+}
+input[type="checkbox"]{
+    height: 1.5em;
+}
+input[type="submit"]{
+    width: fit-content;
+    padding: 0.5em;
+    margin: 0 auto;
 }
 
 /**********************BODY*****************/
@@ -46,6 +67,7 @@ header small{
     color: gray;
     opacity: 0.6;
     font-family: "Raleway";
+    margin-left: 0.5em;
 }
 header h1{
     margin: 0;

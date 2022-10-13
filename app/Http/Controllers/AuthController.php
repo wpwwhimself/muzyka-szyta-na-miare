@@ -23,7 +23,8 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('login', 'password');
-        if(Auth::attempt($credentials)){
+        $remember = $request->input('remember') == "on";
+        if(Auth::attempt($credentials, $remember)){
             $request->session()->regenerate();
             return redirect()->intended("dashboard")->withSuccess("Zalogowano");
         }
@@ -53,6 +54,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect(route("login"));
+        return redirect("/");
     }
 }

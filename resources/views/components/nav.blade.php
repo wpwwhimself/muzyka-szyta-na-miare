@@ -7,5 +7,6 @@
     @endguest
     @auth
         <a href="/dashboard"><li>Moje zlecenia</li></a>
+        <a href="/auth/logout"><li>Wyloguj się</li></a>
     @endauth
 </nav>

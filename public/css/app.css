@@ -17,11 +17,11 @@ h1, h2, h3, h4{
 a{
     text-decoration: none;
     font-weight: bold;
-    color: initial;
+    color: inherit;
     transition-duration: 0.3s;
 }
 a:hover{
-    color: var(--ui-clr-2);
+    color: var(--ui-clr-1);
 }
 
 /* FORM */
@@ -39,15 +39,25 @@ input[type="checkbox"]{
 }
 input[type="submit"]{
     width: fit-content;
-    padding: 0.5em;
+    padding: 0.5em 1.5em;
     margin: 0 auto;
+    border-radius: 2em;
+    transition-duration: 0.3s;
+    border: outset 2px black;
+    background-color: var(--ui-clr-2);
+}
+input[type="submit"]:hover{
+    background-color: var(--ui-clr-1);
+}
+input[type="submit"]:active{
+    background-color: white;
+    border: inset 2px black;
 }
 
 /**********************BODY*****************/
 body{
     font-family: "Raleway";
     margin: 0;
-    min-height: 100vh;
 }
 
 .main-wrapper{
@@ -58,16 +68,17 @@ body{
 /**********************HEADER***************/
 header{
     padding: 2em 4em;
-    display: grid; grid-template-columns: 6em 5fr;
+    display: flex; flex-direction: row;
     align-items: center;
-    background: linear-gradient(to bottom, white, var(--ui-clr-1));
+    background: linear-gradient(to bottom right, lightgray, var(--ui-clr-2));
     box-shadow: 0 0 50px #00000077;
 }
 header small{
-    color: gray;
+    color: dimgray;
     opacity: 0.6;
     font-family: "Raleway";
     margin-left: 0.5em;
+    white-space: nowrap;
 }
 header h1{
     margin: 0;
@@ -76,6 +87,7 @@ header h1{
 /**********************NAV******************/
 nav{
     display: flex; flex-direction: row;
+    flex-wrap: wrap;
 }
 nav a{
     margin-right: 1em;
@@ -87,15 +99,42 @@ nav li{
 
 /**********************FOOTER***************/
 footer{
-    background: linear-gradient(to bottom, lightgray, dimgray);
-    border-top: 3px solid black;
+    background: linear-gradient(to bottom right, #333, dimgray);
     margin-top: 3em; padding: 1em 5em;
-    display: grid; grid-template-columns: 1fr 5fr;
-    align-items: center;
+    display: flex; flex-direction: row-reverse; align-items: center;
+    font-size: 85%;
+    text-align: right;
+    color: white;
 }
 footer h2, footer p{
     margin: 0;
 }
 footer>img{
     justify-self: center;
+}
+
+/************************MOBILITY**************/
+@media screen and (max-width: 600px){
+    header{
+        padding: 2em 1em;
+        flex-direction: column;
+    }
+    header h1{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    header small{
+        font-size: 0.6em;
+    }
+
+    nav{
+        justify-content: center;
+    }
+
+    footer{
+        padding: 1em;
+        flex-direction: column-reverse;
+        text-align: center;
+    }
 }

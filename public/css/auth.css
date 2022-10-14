@@ -11,3 +11,21 @@
 .login-grid-container{
     padding: 2em;
 }
+
+/************************MOBILITY**************/
+@media screen and (max-width: 900px){
+    .login-grid{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .login-grid{
+        flex-direction: column;
+    }
+    .login-grid-container{
+        padding: 0.5em 2em;
+    }
+}

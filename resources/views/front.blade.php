@@ -8,11 +8,10 @@
         <a href="#pricing"><li>Cennik</li></a>
         <a href="#contact"><li>Kontakt</li></a>
         @guest
-        <a href="/auth"><li>Zaloguj się</li></a>
+        <a href="{{ route("login") }}"><li>Zaloguj się</li></a>
         @endguest
         @auth
-        <a href="/dashboard"><li>Moje projekty</li></a>
-        <a href="/auth/logout"><li>Wyloguj się</li></a>
+        <a href="{{ route("dashboard") }}"><li>Moje projekty</li></a>
         @endauth
     </nav>
     <section id=home>

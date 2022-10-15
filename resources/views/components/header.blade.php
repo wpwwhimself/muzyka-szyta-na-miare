@@ -1,7 +1,10 @@
 <header>
     <x-logo />
     <div>
-        <h1>{!! $title == null ? config("app.name") : $title."<small>".config("app.name")."</small>" !!}</h1>
+        <div class="flex-right">
+            <h1>{{  $title == null ? config("app.name") : $title }}</h1>
+            <h2>{{ $title != null ? config("app.name") : "" }}</h2>
+        </div>
         <x-nav :for-whom="$forWhom" />
     </div>
 </header>

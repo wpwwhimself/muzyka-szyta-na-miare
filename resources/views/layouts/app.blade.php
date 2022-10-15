@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ URL::asset("css/$extraCss.css") }}">
     @endif
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <title>{{ $title == null ? "WPWW –" : "$title |" }} Muzyka szyta na miarę</title>
 </head>
 <body>

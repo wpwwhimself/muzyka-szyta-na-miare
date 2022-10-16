@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientsTable extends Migration
+class CreateRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,22 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->string("name");
             $table->string("surname")->nullable();
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();
-            $table->foreignId("user_id")->constrained();
+            $table->foreignId("user_id")->nullable()->constrained();
             $table->string("contact_preference")->default("email");
-            $table->integer("trust")->default(0)->comment("1: bigger trust, -1: swindler");
-            $table->float("budget")->default(0);
-            $table->text("default_wishes")->nullable();
-            $table->text("special_prices")->nullable();
-            $table->timestamps();
+            $table->boolean("made_by_me")->default(false);
+            $table->string("quest_type");
+            $table->string("link")->nullable();
+            $table->text("wishes")->nullable();
+            $table->date("deadline")->nullable();
+            $table->foreignId("status_id")->constrained("statuses");
+            $table->foreignId("quest_id")->nullable()->constrained();
         });
     }
 
@@ -37,6 +39,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('requests');
     }
 }

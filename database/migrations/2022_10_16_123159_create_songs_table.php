@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusesTable extends Migration
+class CreateSongsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('statuses', function (Blueprint $table) {
-            $table->unsignedBigInteger("id")->primary();
-            $table->string("name");
+        Schema::create('songs', function (Blueprint $table) {
+            $table->id();
+            $table->string("title");
+            $table->string("artist");
+            $table->string("cover_artist")->nullable();
+            $table->string("genre");
         });
     }
 
@@ -26,6 +29,6 @@ class CreateStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('statuses');
+        Schema::dropIfExists('songs');
     }
 }

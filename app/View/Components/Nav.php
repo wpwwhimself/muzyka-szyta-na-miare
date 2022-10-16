@@ -11,11 +11,10 @@ class Nav extends Component
      *
      * @return void
      */
-    public $forWhom;
 
-    public function __construct($forWhom)
+    public function __construct()
     {
-        $this->forWhom = $forWhom;
+        //
     }
 
     /**

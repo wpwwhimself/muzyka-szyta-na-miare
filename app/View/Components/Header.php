@@ -12,12 +12,10 @@ class Header extends Component
      * @return void
      */
     public $title;
-    public $forWhom;
 
-    public function __construct($title, $forWhom)
+    public function __construct($title)
     {
         $this->title = $title;
-        $this->forWhom = $forWhom;
     }
 
     /**

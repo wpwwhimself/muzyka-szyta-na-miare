@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/auth', [AuthController::class, "input"])->name("login");
 Route::post('/auth/login', [AuthController::class, "authenticate"])->name("authenticate");
-Route::get('/auth/createnew', function(){
+Route::get('/auth/manual-new-user', function(){
     return view("auth.createnew");
 });
 Route::post('/auth/register', [AuthController::class, "register"])->name("register");

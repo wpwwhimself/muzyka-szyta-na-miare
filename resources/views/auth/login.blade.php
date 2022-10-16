@@ -1,6 +1,13 @@
 @extends('layouts.app', array_merge(compact("title", "forWhom"), ["extraCss" => "auth"]))
 
 @section('content')
+    @foreach (["success", "error"] as $status)
+        @if (session($status))
+            <div class="alert {{ $status }}">
+                {{ session($status) }}
+            </div>
+        @endif
+    @endforeach
     <form class="login-form" method="post" action="{{ route("authenticate") }}">
         @csrf
         <h1>Zaloguj się</h1>

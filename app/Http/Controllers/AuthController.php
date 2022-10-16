@@ -11,8 +11,7 @@ class AuthController extends Controller
 {
     public function input(){
         return view("auth.login", [
-            "title" => "Logowanie",
-            "forWhom" => "guest"
+            "title" => "Logowanie"
         ]);
     }
 
@@ -26,10 +25,10 @@ class AuthController extends Controller
         $remember = $request->input('remember') == "on";
         if(Auth::attempt($credentials, $remember)){
             $request->session()->regenerate();
-            return redirect()->intended("dashboard")->with("status", "Zalogowano");
+            return redirect()->intended("dashboard")->with("success", "Zalogowano");
         }
 
-        return back()->with("status", "Nieprawidłowe dane logowania");
+        return back()->with("error", "Nieprawidłowe dane logowania");
     }
 
     public function register(Request $request){
@@ -41,7 +40,7 @@ class AuthController extends Controller
         $data = $request->all();
         $check = $this->createUser($data);
 
-        return redirect("dashboard")->with("status", "Utworzono nowy login");
+        return redirect("dashboard")->with("success", "Utworzono nowy login");
     }
     public function createUser(array $data){
         return User::create([

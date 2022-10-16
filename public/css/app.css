@@ -59,6 +59,25 @@ input[type="submit"]:active{
     border: inset 2px black;
 }
 
+/* ALERTS */
+.alert{
+    border-radius: 1em;
+    border: 1px solid gray;
+    padding: 1em;
+}
+.success{
+    --clr: 22, 191, 22;
+    color: rgb(var(--clr));
+}
+.error{
+    --clr: 236, 46, 40;
+    color: rgb(var(--clr));
+}
+.alert.success, .alert.error{
+    border-color: rgb(var(--clr));
+    background-color: rgba(var(--clr), 0.2);
+}
+
 /**********************BODY*****************/
 body{
     font-family: "Raleway";

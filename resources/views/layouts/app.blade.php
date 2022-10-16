@@ -16,7 +16,7 @@
     <title>{{ $title == null ? "WPWW –" : "$title |" }} Muzyka szyta na miarę</title>
 </head>
 <body>
-    <x-header :title="$title" :for-whom="$forWhom" />
+    <x-header :title="$title" />
     <div class="main-wrapper">
         @yield("content")
     </div>

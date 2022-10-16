@@ -6,6 +6,8 @@ $(function(){
     setTimeout(function(){$("#home li").removeClass("disguised2");},2000);
     setTimeout(function(){$("#home .title").removeClass("disguised3");},2500);
     setTimeout(function(){$("#home img").removeClass("disguised3");},3000);
+    setTimeout(function(){$("#scrolldown").addClass("appeared");},3500);
+    setTimeout(function(){$("#scrolldown").addClass("move");},4000);
 
     /* scroll na intro */
     var $animation_elements = $('.spreadable');

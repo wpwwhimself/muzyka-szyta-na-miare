@@ -1,6 +1,7 @@
 @extends('layouts.app-front')
 
 @section('everything')
+    <img id=scrolldown class="animatable" src="{{ asset("assets/front/img/scroll.png") }}" alt="scroll down to see more">
     <nav>
         <a href="#services"><li>Usługi</li></a>
         <a href="#recomms"><li>Klienci</li></a>

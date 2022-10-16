@@ -62,20 +62,30 @@ input[type="submit"]:active{
 /* ALERTS */
 .alert{
     border-radius: 1em;
+    position: absolute;
     border: 1px solid gray;
     padding: 1em;
+    opacity: 0; translate: 0 -50px;
+    transition-duration: 0.3s;
+    font-weight: bold;
+}
+.alert.in{
+    opacity: 1;
+    translate: 0 0;
 }
 .success{
-    --clr: 22, 191, 22;
-    color: rgb(var(--clr));
+    --clr: #16bf16;
+    --clr-wh: #b5ffb5c5;
+    color: var(--clr);
 }
 .error{
-    --clr: 236, 46, 40;
-    color: rgb(var(--clr));
+    --clr: #ec2e28;
+    --clr-wh: #f8a3a0ce;
+    color: var(--clr);
 }
 .alert.success, .alert.error{
-    border-color: rgb(var(--clr));
-    background-color: rgba(var(--clr), 0.2);
+    border-color: var(--clr);
+    background-color: var(--clr-wh);
 }
 
 /**********************BODY*****************/

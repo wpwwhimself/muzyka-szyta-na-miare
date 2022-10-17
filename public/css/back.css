@@ -14,7 +14,7 @@
 
 .dashboard-mini-wrapper{
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 .quest-mini{
     border-radius: 2em;

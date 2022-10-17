@@ -1,0 +1,73 @@
+.section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.section-header a::after{
+    content: "»";
+    margin-left: 0.5em;
+}
+#dashboard-quests{
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-mini-wrapper{
+    display: flex;
+    overflow-x: scroll;
+}
+.quest-mini{
+    border-radius: 2em;
+    margin: 1em; padding: 1em;
+    width: fit-content;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to bottom right, var(--q-clr), white);
+}
+.quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
+.quest-meta{
+    width: fit-content;
+    align-self: flex-end;
+    display: grid;
+    grid-template-columns: 2em 1fr;
+}
+.quest-meta p{
+    margin: 0;
+    text-align: right;
+}
+.quest-meta i{
+    font-style: normal;
+    text-align: center;
+}
+
+.quest-status{
+    margin: 0.5em 0;
+    font-style: italic;
+    opacity: 0.5;
+}
+.song-title{
+    font-size: 1.25rem;
+    margin: 0;
+}
+.song-artist{
+    margin: 0;
+}
+
+/* quest and request phases */
+.p-1, .p-11{ --q-clr: #f5aeb9; }
+.p-12{ --q-clr: #7de6e6; }
+.p-13{ --q-clr: #a37c57; }
+.p-5, .p-15{ --q-clr: #9157a8; }
+.p-6, .p-16, .p-26{ --q-clr: #cf3c3c; }
+.p-7, .p-8, .p-18{ --q-clr: #afafaf; }
+.p-9, .p-19{ --q-clr: #39c439; }
+
+@media screen and (max-width: 600px){
+    .quest-mini{
+        flex-direction: column;
+    }
+    .quest-meta{
+        align-self: flex-end;
+    }
+}

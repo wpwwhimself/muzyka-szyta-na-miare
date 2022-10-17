@@ -9,10 +9,4 @@ class HomeController extends Controller
     public function index(){
         return view("front");
     }
-
-    public function dashboard(){
-        return view("dashboard", [
-            "title" => "Podsumowanie"
-        ]);
-    }
 }

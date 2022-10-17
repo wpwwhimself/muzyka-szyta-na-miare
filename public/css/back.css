@@ -23,7 +23,10 @@
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    background: linear-gradient(to bottom right, var(--q-clr), white);
+    border: 5px solid var(--q-clr);
+    box-sizing: border-box;
+    background-color: #eee;
+    /* background: linear-gradient(to bottom right, var(--q-clr) 50%, white); */
 }
 .quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
 .quest-meta{
@@ -42,9 +45,13 @@
 }
 
 .quest-status{
-    margin: 0.5em 0;
+    margin: 0.25em 0; padding: 0.25em 0;
     font-style: italic;
-    opacity: 0.5;
+    text-align: center;
+    /* opacity: 0.5; */
+    color: var(--q-clr);
+    background-color: black;
+    border-radius: 2em;
 }
 .song-title{
     font-size: 1.25rem;

@@ -480,24 +480,42 @@ footer h2{
     100% { transform: translate(0,0) }
 }
 
-/*-------------STOPKA------------*/
+/*-------------cookies------------*/
 
-/* footer{
-	position: fixed;
-	bottom: 20px; right: 20px;
-	z-index: 2;
-	font-size: 0.7em;
-	text-align: right;
-	color: white;
-} */
+.cookie-consent{
+    position: fixed; bottom: 1em;
+    width: 100%;
+    z-index: 98;
+}
+.cookie-consent div{
+    max-width: 70vw;
+    margin: auto;
+    background-color: #fffaa1aa;
+    display: flex; justify-content: space-around; align-items: center;
+    border-radius: 2em;
+}
+.cookie-consent button{
+    background-color: var(--ui-clr-1);
+    border-radius: 2em;
+    padding: 0.5em;
+    font-family: "Raleway";
+    border: none;
+    transition-duration: 0.3s;
+}
+.cookie-consent button:hover{
+    background-color: var(--ui-clr-2);
+    color: white;
+}
 
 /*-------------MOBILE------------*/
 
 @media screen and (max-width: 750px){
-    nav{ width: 100%; left: initial; letter-spacing: initial; }
-	nav:hover{ background-color: initial; }
+    nav{ width: 100%; left: initial;  }
+    nav a{ margin: 0.2em; padding: 0.5em; }
 
-	/* footer{ position: static; } */
+    .cookie-consent div{
+        max-width: 90vw;
+    }
 
 	.flexright{ flex-direction: column; align-items: center; }
 	iframe{ width: 95%; height: 100%; }

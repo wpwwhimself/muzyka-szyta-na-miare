@@ -433,4 +433,5 @@
         </div>
         <x-footer />
     </section>
+    @include('cookie-consent::index')
 @endsection

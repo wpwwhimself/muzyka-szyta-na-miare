@@ -22,7 +22,7 @@ h1, h2, h3, h4{
     box-shadow: 0.3rem 0.3rem 0.5rem #00000044;
 }
 .auth-link{
-    box-shadow: inset 0 0 0.4em 0.2em var(--ui-clr-2);
+    border: solid 2px var(--ui-clr-2);
 }
 
 /* CLICKABLE */

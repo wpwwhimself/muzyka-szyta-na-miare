@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\DB;
 
 if(!function_exists("price_calc")){
     function price_calc($labels, $price_schema = "b", $veteran_discount = false){
+        if(is_numeric($labels)) return $labels;
+
         $price = 0; $multiplier = 1;
 
         $price_list = DB::table("prices")

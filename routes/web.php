@@ -20,12 +20,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/auth', [AuthController::class, "input"])->name("login");
 Route::post('/auth/login', [AuthController::class, "authenticate"])->name("authenticate");
-Route::get('/auth/manual-new-user', function(){
-    return view("auth.createnew");
-})->name("manual-new-user");
+// Route::get('/auth/manual-new-user', function(){
+//     return view("auth.createnew");
+// });
 Route::post('/auth/register', [AuthController::class, "register"])->name("register");
 Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
 
 Route::get('/dashboard', [BackController::class, "dashboard"])->middleware("auth")->name("dashboard");
 Route::get('/quests', [BackController::class, "quests"])->middleware("auth")->name("quests");
+Route::get('/requests', [BackController::class, "requests"])->middleware("auth")->name("requests");
 Route::get('/quests/{id}', [BackController::class, "quest"])->middleware("auth")->name("quest");

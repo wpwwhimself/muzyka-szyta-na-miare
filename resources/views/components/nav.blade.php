@@ -4,8 +4,12 @@
     @endguest
     @auth
         <a href="{{ route("dashboard") }}"><li>{{ Auth::id() == 1 ? "Dashboard" : "Moje zlecenia" }}</li></a>
+        <a href=#><li>Zapytania</li></a>
+        <a href=#><li>Zlecenia</li></a>
         @if (Auth::id() == 1)
-            <a href="{{ route("manual-new-user") }}">Dodaj usera</a>
+            <a href=#><li>Klienci</li></a>
+            <a href=#><li>Reklama</li></a>
+            <a href=#><li>Komunikacja</li></a>
         @endif
         <a href="{{ route("logout") }}" class="auth-link"><li>Wyloguj się</li></a>
     @endauth

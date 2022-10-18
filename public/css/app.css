@@ -24,6 +24,10 @@ h1, h2, h3, h4{
 .auth-link{
     border: solid 2px var(--ui-clr-2);
 }
+.grayed-out{
+    font-style: italic;
+    color: gray;
+}
 
 /* CLICKABLE */
 a{

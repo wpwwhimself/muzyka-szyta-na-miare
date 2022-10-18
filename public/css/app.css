@@ -135,6 +135,7 @@ header .flex-right{
 nav{
     display: flex; flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
 }
 nav a{
     margin: 0.2em 1em 0.2em 0;

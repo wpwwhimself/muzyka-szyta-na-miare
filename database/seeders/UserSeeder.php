@@ -25,5 +25,12 @@ class UserSeeder extends Seeder
                 "password" => Hash::make("marchewka")
             ]
         ]);
+        DB::table("clients")->insert([
+            "id" => 2,
+            "client_name" => "Jan",
+            "surname" => "Testowy",
+            "email" => "bob@gmail.com",
+            "phone" => 123456789
+        ]);
     }
 }

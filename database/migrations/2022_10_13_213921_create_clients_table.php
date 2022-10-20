@@ -14,13 +14,12 @@ class CreateClientsTable extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId("id")->primary()->constrained("users");
             $table->string("client_name");
             $table->string("surname")->nullable();
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();
-            $table->foreignId("user_id")->constrained();
             $table->string("contact_preference")->default("email");
             $table->integer("trust")->default(0)->comment("1: bigger trust, -1: swindler");
             $table->float("budget")->default(0);

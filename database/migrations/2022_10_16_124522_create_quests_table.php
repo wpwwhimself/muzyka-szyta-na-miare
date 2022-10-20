@@ -23,6 +23,7 @@ class CreateQuestsTable extends Migration
             $table->text("price");
             $table->float("paid")->default(0);
             $table->date("deadline")->nullable();
+            $table->boolean("hard_deadline")->default(false);
             $table->timestamps();
         });
     }

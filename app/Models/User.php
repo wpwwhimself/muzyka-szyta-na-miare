@@ -39,4 +39,8 @@ class User extends Authenticatable
      */
     protected $casts = [
     ];
+
+    public function client(){
+        return $this->hasOne(Client::class);
+    }
 }

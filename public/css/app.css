@@ -198,6 +198,9 @@ footer>img{
     nav{
         justify-content: center;
     }
+    nav a{
+        margin: 0.2em 1em;
+    }
 
     footer{
         position: static;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ class CreateRequestsTable extends Migration
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();
-            $table->foreignId("user_id")->nullable()->constrained();
+            $table->foreignId("client_id")->nullable()->constrained();
             $table->string("contact_preference")->default("email");
             $table->boolean("made_by_me")->default(false);
             $table->string("quest_type");

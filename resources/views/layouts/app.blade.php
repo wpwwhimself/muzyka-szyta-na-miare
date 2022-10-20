@@ -7,6 +7,7 @@
 
     <link rel="icon" href="{{ asset("logo.png") }}">
     <link rel="stylesheet" href="{{ asset("css/app.css") }}">
+    <link rel="stylesheet" href="{{ asset("css/back.css") }}">
     @if (isset($extraCss))
     <link rel="stylesheet" href="{{ asset("css/$extraCss.css") }}">
     @endif

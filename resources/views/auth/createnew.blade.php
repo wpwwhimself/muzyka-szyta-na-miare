@@ -1,4 +1,4 @@
-@extends('layouts.app', ["title" => "Tworzenie nowego loginu", "forWhom" => "archmage", "extraCss" => "auth"])
+@extends('layouts.app', ["title" => "Tworzenie nowego loginu"])
 
 @section('content')
     <form method="post" action="{{ route("register") }}">

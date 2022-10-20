@@ -28,6 +28,9 @@ h1, h2, h3, h4{
     font-style: italic;
     color: gray;
 }
+.grayed-out::before, .grayed-out::after{
+    content: " — ";
+}
 
 /* CLICKABLE */
 a{
@@ -105,6 +108,7 @@ body{
     display: flex; flex-direction: column; align-items: stretch;
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
 }
 
 .main-wrapper{

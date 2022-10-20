@@ -1,4 +1,4 @@
-@extends('layouts.app', compact("title", "extraCss"))
+@extends('layouts.app', compact("title"))
 
 @section('content')
     @foreach (["success", "error"] as $status)
@@ -9,14 +9,18 @@
         @endif
     @endforeach
 
+    <section id="who-am-i">
+        <h2>Zalogowano jako {{ Auth::user()->client->clientsName ?? "🧙‍♂️" }}</h2>
+    </section>
+
     <section id="dashboard-requests">
         <div class="section-header">
             <h1>🎤 Zapytania</h1>
-            <a href="{{ route("requests") }}">Wszystkie</a>
+            <a href="{{ route("quests") }}">Wszystkie</a>
         </div>
         <div class="dashboard-mini-wrapper">
         @if (!count($requests))
-            <p class="grayed-out">— brak aktywnych zapytań —</p>
+            <p class="grayed-out">brak aktywnych zapytań</p>
         @else
             @foreach ($requests as $request)
                 <x-request-mini :request="$request" />
@@ -32,7 +36,7 @@
         </div>
         <div class="dashboard-mini-wrapper">
         @if (!count($requests))
-            <p class="grayed-out">— brak aktywnych zleceń —</p>
+            <p class="grayed-out">brak aktywnych zleceń</p>
         @else
             @foreach ($quests as $quest)
                 <x-quest-mini :quest="$quest" />

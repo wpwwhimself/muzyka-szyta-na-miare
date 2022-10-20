@@ -400,10 +400,11 @@ układ dla FAQ: nieparzyste kropki pogrubione */
 #contact{
     background: url('/background.jpg');
     color: white;
+    padding-bottom: 7em;
 }
 #contact a:not(footer a){
     display: flex; flex-direction: column; align-items: center;
-    width: 16%; min-width: 225px;
+    min-width: 225px;
     font-size: 25px;
     transition: transform 0.3s ease-out;
 }

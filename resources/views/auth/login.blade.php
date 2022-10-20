@@ -1,4 +1,4 @@
-@extends('layouts.app', array_merge(compact("title"), ["extraCss" => "auth"]))
+@extends('layouts.app', compact("title"))
 
 @section('content')
     @foreach (["success", "error"] as $status)

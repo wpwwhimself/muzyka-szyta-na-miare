@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function input(){
         return view("auth.login", [
-            "title" => "Logowanie"
+            "title" => "Logowanie",
         ]);
     }
 

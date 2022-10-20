@@ -27,6 +27,7 @@ class CreateRequestsTable extends Migration
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
             $table->date("deadline")->nullable();
+            $table->boolean("hard_deadline")->default(false);
             $table->foreignId("status_id")->constrained("statuses");
             $table->foreignId("quest_id")->nullable()->constrained();
             $table->timestamps();

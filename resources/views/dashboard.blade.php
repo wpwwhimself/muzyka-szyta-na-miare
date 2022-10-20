@@ -15,11 +15,12 @@
             <a href="{{ route("requests") }}">Wszystkie</a>
         </div>
         <div class="dashboard-mini-wrapper">
-        @foreach ($requests as $request)
-            <x-request-mini :request="$request" />
-        @endforeach
         @if (!count($requests))
             <p class="grayed-out">— brak aktywnych zapytań —</p>
+        @else
+            @foreach ($requests as $request)
+                <x-request-mini :request="$request" />
+            @endforeach
         @endif
         </div>
     </section>
@@ -30,11 +31,12 @@
             <a href="{{ route("quests") }}">Wszystkie</a>
         </div>
         <div class="dashboard-mini-wrapper">
-        @foreach ($quests as $quest)
-            <x-quest-mini :quest="$quest" />
-        @endforeach
         @if (!count($requests))
             <p class="grayed-out">— brak aktywnych zleceń —</p>
+        @else
+            @foreach ($quests as $quest)
+                <x-quest-mini :quest="$quest" />
+            @endforeach
         @endif
         </div>
     </section>

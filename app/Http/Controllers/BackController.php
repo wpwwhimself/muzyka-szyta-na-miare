@@ -113,9 +113,35 @@ class BackController extends Controller
     }
     public function addRequestBack(HttpRequest $rq){
         $request = new Request;
-        $request->client_name = $rq->client_name;
-        $request->made_by_me = true;
+
+        if(Auth::id() != 1){
+            $request->client_id = Auth::user()->client->id;
+            $request->client_name = Auth::user()->client->client_name;
+            $request->email = Auth::user()->client->email;
+            $request->phone = Auth::user()->client->phone;
+            $request->other_medium = Auth::user()->client->other_medium;
+            $request->contact_preference = Auth::user()->client->contact_preference ?? "email";
+            $request->wishes = Auth::user()->client->default_wishes;
+        }else{
+            $request->client_name = $rq->client_name;
+            $request->email = $rq->email;
+            $request->phone = $rq->phone;
+            $request->other_medium = $rq->other_medium;
+            $request->contact_preference = $rq->contact_preference ?? "email";
+        }
+        $request->title = $rq->title;
+        $request->artist = $rq->artist;
+        $request->cover_artist = $rq->cover_artist;
+        $request->link = $rq->link;
+        $request->price = $rq->price;
+        $request->deadline = $rq->deadline;
+        $request->hard_deadline = $rq->hard_deadline ?? false;
+
+        $request->wishes = ($request->wishes == null) ? $rq->wishes : $request->wishes."\n".$rq->wishes;
+
+
         $request->quest_type = $rq->quest_type;
+        $request->made_by_me = true;
         $request->status_id = 1;
         $request->save();
 

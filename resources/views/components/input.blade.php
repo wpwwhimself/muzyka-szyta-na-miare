@@ -2,6 +2,7 @@
     'type', 'name', 'label',
     'autofocus' => false,
     'required' => false,
+    "disabled" => false,
     "hint" => null
 ])
 
@@ -16,6 +17,7 @@
             id="{{ $name }}"
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
+            {{ $disabled ? "disabled" : "" }}
             {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
             ></textarea>
     @else
@@ -25,6 +27,7 @@
             id="{{ $name }}"
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
+            {{ $disabled ? "disabled" : "" }}
             {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
             />
     @endif

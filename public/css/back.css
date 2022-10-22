@@ -9,7 +9,7 @@ section{
     border-radius: 2em;
     background-color: #eee;
     /* box-shadow: 2px 2px 5px #00000044; */
-    margin: 1em;
+    margin: 1em 1em 0;
     padding: 1em;
 }
 .grid-2, .grid-3{ display: grid; }

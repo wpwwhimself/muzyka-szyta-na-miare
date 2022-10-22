@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset("css/$extraCss.css") }}">
     @endif
 
+    <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
 

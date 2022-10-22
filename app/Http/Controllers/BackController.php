@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Quest;
 use App\Models\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BackController extends Controller
 {
@@ -99,5 +100,16 @@ class BackController extends Controller
             "title" => "Zapytanie",
             "quest" => $request
         ]);
+    }
+
+    public function addRequest(){
+        $questTypes = ["podkład muzyczny", "nuty", "występ"];
+        $questTypes = array_combine($questTypes, $questTypes);
+
+        $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
+
+        return view("add-request", array_merge([
+            "title" => "Nowe zapytanie"
+        ], compact("questTypes", "prices")));
     }
 }

@@ -3,15 +3,13 @@
 @section('content')
     @foreach (["success", "error"] as $status)
         @if (session($status))
-            <div class="alert {{ $status }}">
-                {{ session($status) }}
-            </div>
+            <x-alert :status="$status" />
         @endif
     @endforeach
     <form class="login-form" method="post" action="{{ route("authenticate") }}">
         @csrf
         <h1>Zaloguj się</h1>
-        <div class="login-grid">
+        <div class="grid-3">
             <x-input class="login-grid-container"
                 type="text" name="login" label="Login"
                 :autofocus="true" :required="true" />

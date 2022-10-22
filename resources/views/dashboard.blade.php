@@ -3,9 +3,7 @@
 @section('content')
     @foreach (["success", "error"] as $status)
         @if (session($status))
-            <div class="alert {{ $status }}">
-                {{ session($status) }}
-            </div>
+            <x-alert :status="$status" />
         @endif
     @endforeach
 
@@ -15,8 +13,11 @@
 
     <section id="dashboard-requests">
         <div class="section-header">
-            <h1>🎤 Zapytania</h1>
-            <a href="{{ route("quests") }}">Wszystkie</a>
+            <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
+            <div>
+                <a href="{{ route("quests") }}">Wszystkie <i class="fa-solid fa-angles-right"></i></a>
+                <a href="{{ route("add-request") }}">Dodaj nowe <i class="fa-solid fa-plus"></i></a>
+            </div>
         </div>
         <div class="dashboard-mini-wrapper">
         @if (!count($requests))
@@ -31,8 +32,10 @@
 
     <section id="dashboard-quests">
         <div class="section-header">
-            <h1>🎸 Aktualne zlecenia</h1>
-            <a href="{{ route("quests") }}">Wszystkie</a>
+            <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
+            <div>
+                <a href="{{ route("quests") }}">Wszystkie <i class="fa-solid fa-angles-right"></i></a>
+            </div>
         </div>
         <div class="dashboard-mini-wrapper">
         @if (!count($requests))
@@ -47,7 +50,7 @@
 
     <section id="dashboard-finances">
         <div class="section-header">
-            <h1>💰 Finanse</h1>
+            <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
         </div>
         <div class="dashboard-mini-wrapper">
             🚧 TBD 🚧

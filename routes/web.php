@@ -19,17 +19,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/auth', [AuthController::class, "input"])->name("login");
-Route::post('/auth/login', [AuthController::class, "authenticate"])->name("authenticate");
+Route::post('/auth-back', [AuthController::class, "authenticate"])->name("authenticate");
 // Route::get('/auth/manual-new-user', function(){
 //     return view("auth.createnew");
 // });
-Route::post('/auth/register', [AuthController::class, "register"])->name("register");
+Route::post('/auth/register-back', [AuthController::class, "register"])->name("register");
 Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
 
 Route::get('/dashboard', [BackController::class, "dashboard"])->middleware("auth")->name("dashboard");
 Route::get('/quests', [BackController::class, "quests"])->middleware("auth")->name("quests");
 Route::get('/quests/q{id}', [BackController::class, "quest"])->middleware("auth")->name("quest");
 Route::get('/quests/rq{id}', [BackController::class, "request"])->middleware("auth")->name("request");
+
+Route::get('/quests/q/add', [BackController::class, "addQuest"])->middleware("auth")->name("add-quest");
+Route::get('/quests/rq/add', [BackController::class, "addRequest"])->middleware("auth")->name("add-request");
+
+Route::get('/quests/q/add-back', [BackController::class, "addQuestBack"])->middleware("auth")->name("add-quest-back");
+Route::get('/quests/rq/add-back', [BackController::class, "addRequestBack"])->middleware("auth")->name("add-request-back");
 
 Route::get('/clients', [BackController::class, "clients"])->middleware("auth")->name("clients");
 Route::get('/clients/{id}', [BackController::class, "client"])->middleware("auth")->name("client");

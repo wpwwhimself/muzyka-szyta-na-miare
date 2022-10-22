@@ -7,9 +7,23 @@
         @endif
     @endforeach
 
-    <section id="who-am-i">
-        <h2>Zalogowano jako {{ Auth::user()->client->clientsName ?? "🧙‍♂️" }}</h2>
-    </section>
+    <div class="grid-2">
+        <section id="who-am-i">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
+            </div>
+            <h2>{{ Auth::user()->client->clientsName ?? "🧙‍♂️" }}</h2>
+        </section>
+
+        <section id="dashboard-finances">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
+            </div>
+            <div class="dashboard-mini-wrapper">
+                🚧 TBD 🚧
+            </div>
+        </section>
+    </div>
 
     <section id="dashboard-requests">
         <div class="section-header">
@@ -38,22 +52,13 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @if (!count($requests))
+        @if (!count($quests))
             <p class="grayed-out">brak aktywnych zleceń</p>
         @else
             @foreach ($quests as $quest)
                 <x-quest-mini :quest="$quest" />
             @endforeach
         @endif
-        </div>
-    </section>
-
-    <section id="dashboard-finances">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
-        </div>
-        <div class="dashboard-mini-wrapper">
-            🚧 TBD 🚧
         </div>
     </section>
 @endsection

@@ -2,6 +2,7 @@
 
 @section('content')
     <form method="post" action={{ route("add-request-back") }}>
+        @csrf
         <h1>Dodaj nowe zapytanie</h1>
         <div class="grid-3">
             <section class="input-group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quest;
 use App\Models\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -12,14 +13,14 @@ class BackController extends Controller
     public function dashboard(){
         $client = Auth::user()->client;
 
-        $requests = Request::join("clients", "requests.client_id", "=", "clients.id")
-            ->join("statuses", "requests.status_id", "=", "statuses.id")
+        $requests = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
+            ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
             ->whereNotIn("status_id", [7, 8, 9])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
-        $quests = Quest::join("songs", "quests.song_id", "=", "songs.id")
-            ->join("clients", "quests.client_id", "=", "clients.id")
-            ->join("statuses", "quests.status_id", "=", "statuses.id")
+        $quests = Quest::leftJoin("songs", "quests.song_id", "=", "songs.id")
+            ->leftJoin("clients", "quests.client_id", "=", "clients.id")
+            ->leftJoin("statuses", "quests.status_id", "=", "statuses.id")
             ->whereNotIn("status_id", [18, 19])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
@@ -63,12 +64,12 @@ class BackController extends Controller
     public function quests(){
         $client = Auth::user()->client;
 
-        $quests = Quest::join("songs", "quests.song_id", "=", "songs.id")
-            ->join("clients", "quests.client_id", "=", "clients.id")
-            ->join("statuses", "quests.status_id", "=", "statuses.id")
+        $quests = Quest::leftJoin("songs", "quests.song_id", "=", "songs.id")
+            ->leftJoin("clients", "quests.client_id", "=", "clients.id")
+            ->leftJoin("statuses", "quests.status_id", "=", "statuses.id")
             ->orderBy("quests.created_at", "desc");
-        $requests = Request::join("clients", "requests.client_id", "=", "clients.id")
-            ->join("statuses", "requests.status_id", "=", "statuses.id")
+        $requests = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
+            ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
             ->where("status_id", "!=", 9)
             ->orderBy("requests.created_at");
         if(Auth::id() != 1){
@@ -111,5 +112,15 @@ class BackController extends Controller
         return view("add-request", array_merge([
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices")));
+    }
+    public function addRequestBack(HttpRequest $rq){
+        $request = new Request;
+        $request->client_name = $rq->client_name;
+        $request->made_by_me = true;
+        $request->quest_type = $rq->quest_type;
+        $request->status_id = 1;
+        $request->save();
+
+        return redirect("quests")->with("success", "Dodano nowe zapytanie");
     }
 }

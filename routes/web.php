@@ -34,8 +34,8 @@ Route::get('/quests/rq{id}', [BackController::class, "request"])->middleware("au
 Route::get('/quests/q/add', [BackController::class, "addQuest"])->middleware("auth")->name("add-quest");
 Route::get('/quests/rq/add', [BackController::class, "addRequest"])->middleware("auth")->name("add-request");
 
-Route::get('/quests/q/add-back', [BackController::class, "addQuestBack"])->middleware("auth")->name("add-quest-back");
-Route::get('/quests/rq/add-back', [BackController::class, "addRequestBack"])->middleware("auth")->name("add-request-back");
+Route::post('/quests/q/add-back', [BackController::class, "addQuestBack"])->middleware("auth")->name("add-quest-back");
+Route::post('/quests/rq/add-back', [BackController::class, "addRequestBack"])->middleware("auth")->name("add-request-back");
 
 Route::get('/clients', [BackController::class, "clients"])->middleware("auth")->name("clients");
 Route::get('/clients/{id}', [BackController::class, "client"])->middleware("auth")->name("client");

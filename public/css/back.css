@@ -12,6 +12,9 @@ section{
     margin: 1em;
     padding: 1em;
 }
+.grid-2, .grid-3{ display: grid; }
+.grid-2{ grid-template-columns: 1fr 1fr; }
+.grid-3{ grid-template-columns: 1fr 1fr 1fr; }
 
 form, .login-grid-container, .input-container{
     display: flex;
@@ -22,10 +25,6 @@ form, .login-grid-container, .input-container{
 .input-group{
     display: flex;
     flex-direction: column;
-}
-.grid-3{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
 }
 .login-grid-container{
     padding: 0 2em;

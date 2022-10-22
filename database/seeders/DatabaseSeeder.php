@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PricesSeeder::class);
         $this->call(StatusesSeeder::class);
-        $this->call(UserSeeder::class);
+        if(App::environment() == "local"){
+            $this->call(UserSeeder::class);
+            $this->call(DummyQuestsSeeder::class);
+        }
     }
 }

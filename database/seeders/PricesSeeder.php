@@ -58,6 +58,12 @@ class PricesSeeder extends Seeder
                 "price_b" => 0.3
             ],
             [
+                "indicator" => "z",
+                "service" => "obsługa poza kolejnością (%)",
+                "price_a" => 1,
+                "price_b" => 1
+            ],
+            [
                 "indicator" => "h",
                 "service" => "akordy/przepisanie melodii",
                 "price_a" => 30,

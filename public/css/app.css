@@ -19,7 +19,7 @@ h1, h2, h3, h4{
 }
 .hover-lift:hover{
     color: inherit;
-    box-shadow: 0.3rem 0.3rem 0.5rem #00000044;
+    box-shadow: 0 0 1rem #00000044;
 }
 .auth-link{
     border: solid 2px var(--ui-clr-2);
@@ -43,29 +43,56 @@ a:hover{
 }
 
 /* FORM */
-input[type="text"], input[type="password"], select, input[type="submit"]{
+.input-container{
+    margin: 0.2em 0;
+    position: relative;
+}
+input, select, textarea{
+    background: none;
     font-family: Raleway;
+    border-left: none; border-right: none; border-top: none;
+}
+input, select{
     font-size: 1.5em;
     text-align: center;
-    border-left: none; border-right: none; border-top: none;
+}
+.input-hint{
+    position: absolute; top: 0; right: 0;
+    text-align: right;
+    z-index: 5;
+}
+.input-hint-content{
+    text-align: left;
+    display: none; opacity: 0;
+    grid-template-columns: 1fr 5fr;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: #333;
+    color: white;
+}
+.input-hint:hover .input-hint-content{
+    display: grid; opacity: 1;
 }
 label{
     font-style: italic;
+    color: dimgray;
 }
 input[type="checkbox"]{
-    height: 1.5em;
+    height: 1.2em;
 }
 input[type="submit"]{
     width: fit-content;
     padding: 0.5em 1.5em;
     margin: 0 auto;
-    border: none;
+    border: 2px solid black;
     border-radius: 2em;
     transition-duration: 0.3s;
     background-color: var(--ui-clr-1);
 }
 input[type="submit"]:hover{
-    background-color: var(--ui-clr-1);
+    background-color: var(--ui-clr-2);
+    color: white;
+    border-color: white;
 }
 input[type="submit"]:active{
     background-color: white;
@@ -76,7 +103,8 @@ input[type="submit"]:active{
 .alert{
     border-radius: 1em;
     position: absolute; right: 3em;
-    border: 1px solid gray;
+    border: 2px solid gray;
+    box-shadow: 0.5em 0.5em 1.5em #00000044;
     padding: 1em;
     opacity: 0; translate: 0 -50px;
     transition-duration: 0.3s;

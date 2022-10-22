@@ -1,33 +1,51 @@
 body{
     padding-bottom: 7em;
+    min-height: calc(100vh - 7em);
 }
 h2{
     font-size: 1.2em;
 }
+section{
+    border-radius: 2em;
+    background-color: #eee;
+    /* box-shadow: 2px 2px 5px #00000044; */
+    margin: 1em;
+    padding: 1em;
+}
 
-.login-form, .login-grid-container{
+form, .login-grid-container, .input-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
 }
-.login-grid{
+.input-group{
+    display: flex;
+    flex-direction: column;
+}
+.grid-3{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
 .login-grid-container{
-    padding: 2em;
+    padding: 0 2em;
 }
 
 .section-header{
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-start;
 }
-.section-header a::after{
-    content: "»";
-    margin-left: 0.5em;
+.section-header h1{
+    margin-top: 0;
 }
+.section-header>div{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+
 #dashboard-quests{
     display: flex;
     flex-direction: column;
@@ -93,7 +111,7 @@ h2{
 
 /************************MOBILITY**************/
 @media screen and (max-width: 900px){
-    .login-grid{
+    .grid-3{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -101,7 +119,10 @@ h2{
 }
 
 @media screen and (max-width: 600px){
-    .login-grid{
+    section{
+        margin: 1em 0;
+    }
+    .grid-3{
         flex-direction: column;
     }
     .login-grid-container{

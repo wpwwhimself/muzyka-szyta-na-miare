@@ -47,12 +47,12 @@ a:hover{
     margin: 0.2em 0;
     position: relative;
 }
-input, select, textarea{
+input, select, textarea, button{
     background: none;
     font-family: Raleway;
     border-left: none; border-right: none; border-top: none;
 }
-input, select{
+input, select, button{
     font-size: 1.5em;
     text-align: center;
 }
@@ -80,7 +80,7 @@ label{
 input[type="checkbox"]{
     height: 1.2em;
 }
-input[type="submit"]{
+*[type="submit"]{
     width: fit-content;
     padding: 0.5em 1.5em;
     margin: 0 auto;
@@ -89,12 +89,12 @@ input[type="submit"]{
     transition-duration: 0.3s;
     background-color: var(--ui-clr-1);
 }
-input[type="submit"]:hover{
+*[type="submit"]:hover{
     background-color: var(--ui-clr-2);
     color: white;
     border-color: white;
 }
-input[type="submit"]:active{
+*[type="submit"]:active{
     background-color: white;
     border: inset 2px black;
 }

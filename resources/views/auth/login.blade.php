@@ -20,6 +20,8 @@
                 type="checkbox" name="remember" label="Zapamiętaj mnie"
                 />
         </div>
-        <input type="submit" class="hover-lift auth-link" name="submit" value="Zaloguj" />
+        <button type="submit" class="hover-lift auth-link">
+            <i class="fa-solid fa-check"></i> Zaloguj się
+        </button>
     </form>
 @endsection

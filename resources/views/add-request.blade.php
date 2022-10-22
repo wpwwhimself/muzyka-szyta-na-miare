@@ -29,6 +29,8 @@
                 <x-input type="checkbox" name="hard_deadline" label="Termin narzucony przez klienta" />
             </section>
         </div>
-        <input type="submit" name="submit" value="Dodaj" class="hover-lift" />
+        <button type="submit" class="hover-lift">
+            <i class="fa-solid fa-check"></i> Dodaj
+        </button>
     </form>
 @endsection

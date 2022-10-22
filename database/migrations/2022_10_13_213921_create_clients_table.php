@@ -16,7 +16,6 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->foreignId("id")->primary()->constrained("users");
             $table->string("client_name");
-            $table->string("surname")->nullable();
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();

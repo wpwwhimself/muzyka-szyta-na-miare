@@ -7,7 +7,7 @@
         <p class="quest-status">Status: <strong>{{ $quest->status_name }}</strong></p>
     </div>
     <div class="quest-meta">
-        <i title="klient">👤</i><p class="client-name">{{ $quest->surname == null ? $quest->client_name : $quest->client_name . " " . $quest->surname }}</p>
+        <i title="klient">👤</i><p class="client-name">{{ $quest->client_name }}</p>
         <i title="wycena">💰</i><p class="quest-paid">{{ $quest->paid }} / {{ price_calc($quest->price) }}</p>
         <i title="planowany termin ukończenia">📅</i><p class="quest-deadline">{{ $quest->deadline ?? "—" }}</p>
     </div>

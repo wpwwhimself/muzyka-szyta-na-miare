@@ -27,8 +27,7 @@ class UserSeeder extends Seeder
         ]);
         DB::table("clients")->insert([
             "id" => 2,
-            "client_name" => "Jan",
-            "surname" => "Testowy",
+            "client_name" => "Jan Testowy",
             "email" => "bob@gmail.com",
             "phone" => 123456789
         ]);

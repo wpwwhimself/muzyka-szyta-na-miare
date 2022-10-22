@@ -7,8 +7,7 @@
         <div class="grid-3">
             <section class="input-group">
                 <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
-                <x-input type="text" name="client_name" label="Imię/Nazwa" :autofocus="true" :required="true" />
-                <x-input type="text" name="surname" label="Nazwisko" />
+                <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" />
                 <x-input type="email" name="email" label="Adres e-mail" />
                 <x-input type="tel" name="phone" label="Numer telefonu" />
                 <x-input type="text" name="other_medium" label="Inna forma kontaktu" />

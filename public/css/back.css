@@ -61,12 +61,16 @@ form, .login-grid-container, .input-container{
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 5px solid var(--q-clr);
+    border: 5px solid rgb(var(--q-clr));
     box-sizing: border-box;
-    background-color: #eee;
-    /* background: linear-gradient(to bottom right, var(--q-clr) 50%, white); */
+    background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5));
 }
 .quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
+
+.quest-details{
+    display: flex;
+    justify-content: space-between;
+}
 .quest-meta{
     width: fit-content;
     align-self: flex-end;
@@ -75,41 +79,43 @@ form, .login-grid-container, .input-container{
 }
 .quest-meta p{
     margin: 0;
-    text-align: right;
 }
+.quest-meta:first-child p{ text-align: left; }
+.quest-meta:last-child p{ text-align: right; }
 .quest-meta i{
     font-style: normal;
     text-align: center;
 }
 
 .quest-status{
-    margin: 0.25em 0; padding: 0.25em 0;
-    font-style: italic;
-    text-align: center;
-    /* opacity: 0.5; */
-    color: var(--q-clr);
-    background-color: black;
+    color: rgb(var(--q-clr));
+    font-weight: bold;
     border-radius: 2em;
+    white-space: nowrap;
+}
+
+.song-title, .song-artist{
+    text-align: center;
+    margin: 0;
 }
 .song-title{
     font-size: 1.25rem;
-    margin: 0;
-}
-.song-artist{
-    margin: 0;
+    background-color: #00000044;
+    margin-bottom: 0.5em;
+    border-radius: 2em;
 }
 
 /* quest and request phases */
-.p-1, .p-11{ --q-clr: #f5aeb9; }
-.p-12{ --q-clr: #7de6e6; }
-.p-13{ --q-clr: #a37c57; }
-.p-5, .p-15{ --q-clr: #9157a8; }
-.p-6, .p-16, .p-26{ --q-clr: #cf3c3c; }
-.p-7, .p-8, .p-18{ --q-clr: #afafaf; }
-.p-9, .p-19{ --q-clr: #39c439; }
+.p-1, .p-11{ --q-clr: 245, 174, 185; }
+.p-12{ --q-clr: 125, 230, 230; }
+.p-13{ --q-clr: 163, 124, 87; }
+.p-5, .p-15{ --q-clr: 145, 87, 168; }
+.p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }
+.p-7, .p-8, .p-18{ --q-clr: 175, 175, 175; }
+.p-9, .p-19{ --q-clr: 57, 196, 57; }
 
 /************************MOBILITY**************/
-@media screen and (max-width: 900px){
+@media screen and (max-width: 960px){
     .grid-3{
         display: flex;
         flex-wrap: wrap;

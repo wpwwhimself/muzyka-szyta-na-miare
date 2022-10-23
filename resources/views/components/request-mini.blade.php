@@ -4,11 +4,39 @@
     <div>
         <p class="song-artist">{{ $request->artist }}</p>
         <h2 class="song-title">{{ $request->title }}</h2>
-        <p class="quest-status">Status: <strong>{{ $request->status_name }}</strong></p>
     </div>
-    <div class="quest-meta">
-        <i title="klient">👤</i><p class="client-name">{{ $request->client_name }}</p>
-        <i title="wycena">💰</i><p class="quest-paid">{{ $request->paid }} / {{ price_calc($request->price) }}</p>
-        <i title="planowany termin ukończenia">📅</i><p class="quest-deadline">{{ $request->deadline ?? "—" }}</p>
+    <div class="quest-details">
+        <div class="quest-meta">
+            <i class="fa-solid fa-hashtag"></i>
+            <p class="quest-id">{{ $request->id }}</p>
+
+            <i class="fa-solid fa-traffic-light"></i>
+            <p class="quest-status">{{ $request->status_name }}</p>
+        </div>
+        <div class="quest-meta">
+            @if (Auth::id() == 1)
+                @if ($request->cl_client_name != null)
+                <i class="fa-solid fa-user"></i>
+                <p class="client-name">{{ $request->cl_client_name }}</p>
+                @else
+                <i class="fa-regular fa-user"></i>
+                <p class="client-name">{{ $request->rq_client_name }}</p>
+                @endif
+            @endif
+
+            @if ($request->price)
+            <i class="fa-solid fa-sack-dollar"></i>
+            <p class="quest-paid">{{ price_calc($request->price) }}</p>
+            @endif
+
+            @if ($request->deadline)
+                @if ($request->hard_deadline)
+                <i class="fa-solid fa-calendar-xmark"></i>
+                @else
+                <i class="fa-solid fa-calendar"></i>
+                @endif
+            <p class="quest-deadline">{{ $request->deadline ?? "—" }}</p>
+            @endif
+        </div>
     </div>
 </a>

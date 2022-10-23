@@ -28,17 +28,18 @@ class BackController extends Controller
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
         }
-        $requests = $requests->get(
+        $requests = $requests->get([
             "requests.id",
             "title",
             "artist",
-            "coalesce(requests.client_name, clients.client_name) as client_name",
+            "requests.client_name as rq_client_name",
+            "clients.client_name as cl_client_name",
             "status_id",
             "status_name",
             "price",
             "deadline",
             "hard_deadline"
-        );
+        ]);
         $quests = $quests->get([
             "quests.id",
             "title",
@@ -122,12 +123,14 @@ class BackController extends Controller
             $request->other_medium = Auth::user()->client->other_medium;
             $request->contact_preference = Auth::user()->client->contact_preference ?? "email";
             $request->wishes = Auth::user()->client->default_wishes;
+            $request->hard_deadline = true;
         }else{
             $request->client_name = $rq->client_name;
             $request->email = $rq->email;
             $request->phone = $rq->phone;
             $request->other_medium = $rq->other_medium;
             $request->contact_preference = $rq->contact_preference ?? "email";
+            $request->hard_deadline = $rq->hard_deadline ?? false;
         }
         $request->title = $rq->title;
         $request->artist = $rq->artist;
@@ -135,7 +138,6 @@ class BackController extends Controller
         $request->link = $rq->link;
         $request->price = $rq->price;
         $request->deadline = $rq->deadline;
-        $request->hard_deadline = $rq->hard_deadline ?? false;
 
         $request->wishes = ($request->wishes == null) ? $rq->wishes : $request->wishes."\n".$rq->wishes;
 

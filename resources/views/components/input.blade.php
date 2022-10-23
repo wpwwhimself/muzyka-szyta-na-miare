@@ -28,7 +28,7 @@
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}
-            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
+            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "class"]))) }}
             />
     @endif
     <label for="{{ $name }}">{{ $label }}</label>

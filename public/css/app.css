@@ -79,6 +79,7 @@ label{
 }
 input[type="checkbox"]{
     height: 1.2em;
+    accent-color: var(--ui-clr-2);
 }
 *[type="submit"]{
     width: fit-content;
@@ -125,7 +126,7 @@ input[type="checkbox"]{
     color: var(--clr);
 }
 .alert.success, .alert.error{
-    border-color: var(--clr);
+    border-color: currentColor;
     background-color: var(--clr-wh);
 }
 

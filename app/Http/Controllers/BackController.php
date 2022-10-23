@@ -93,12 +93,15 @@ class BackController extends Controller
             "quest" => $quest
         ]);
     }
-    public function request(){
-        $request = [];
+    public function request($id){
+        $request = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
+        ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
+        ->where("id", $id)
+        ->get();
 
-        return view("quest", [
+        return view("request", [
             "title" => "Zapytanie",
-            "quest" => $request
+            "request" => $request
         ]);
     }
 

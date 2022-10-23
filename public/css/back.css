@@ -63,7 +63,8 @@ form, .login-grid-container, .input-container{
     justify-content: space-between;
     border: 5px solid rgb(var(--q-clr));
     box-sizing: border-box;
-    background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5));
+    background-color: white;
+    /* background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5)); */
 }
 .quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
 
@@ -100,7 +101,7 @@ form, .login-grid-container, .input-container{
 }
 .song-title{
     font-size: 1.25rem;
-    background-color: #00000044;
+    background-color: rgb(var(--q-clr));
     margin-bottom: 0.5em;
     border-radius: 2em;
 }

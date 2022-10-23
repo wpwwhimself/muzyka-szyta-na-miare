@@ -26,7 +26,7 @@
 
             @if ($request->price)
             <i class="fa-solid fa-sack-dollar"></i>
-            <p class="quest-paid">{{ price_calc($request->price) }}</p>
+            <p class="quest-paid">{{ price_calc($request->price) }} zł</p>
             @endif
 
             @if ($request->deadline)

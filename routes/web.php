@@ -28,8 +28,8 @@ Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
 
 Route::get('/dashboard', [BackController::class, "dashboard"])->middleware("auth")->name("dashboard");
 Route::get('/quests', [BackController::class, "quests"])->middleware("auth")->name("quests");
-Route::get('/quests/q{id}', [BackController::class, "quest"])->middleware("auth")->name("quest");
-Route::get('/quests/rq{id}', [BackController::class, "request"])->middleware("auth")->name("request");
+Route::get('/quests/q/{id}', [BackController::class, "quest"])->middleware("auth")->name("quest");
+Route::get('/quests/rq/{id}', [BackController::class, "request"])->middleware("auth")->name("request");
 
 Route::get('/quests/q/add', [BackController::class, "addQuest"])->middleware("auth")->name("add-quest");
 Route::get('/quests/rq/add', [BackController::class, "addRequest"])->middleware("auth")->name("add-request");

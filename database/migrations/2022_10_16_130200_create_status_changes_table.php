@@ -15,7 +15,8 @@ class CreateStatusChangesTable extends Migration
     {
         Schema::create('status_changes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("quest_id")->constrained();
+            $table->string("quest_id", 4)->nullable();
+                $table->foreign("quest_id")->references("id")->on("quests");
             $table->foreignId("status_id")->constrained("statuses");
             $table->text("comment")->nullable();
             $table->dateTime("date");

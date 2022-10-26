@@ -15,7 +15,8 @@ class CreateQuestWorkTimesTable extends Migration
     {
         Schema::create('quest_work_times', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("quest_id")->constrained();
+            $table->string("quest_id", 4)->nullable();
+                $table->foreign("quest_id")->references("id")->on("quests");
             $table->foreignId("status_id")->constrained("statuses");
             $table->time("time_spent")->default(0);
             $table->boolean("now_working")->default(false);

@@ -43,7 +43,7 @@ class PricesSeeder extends Seeder
                 "indicator" => "a",
                 "service" => "przearanżowanie podkładu",
                 "price_a" => 15,
-                "price_b" => 20
+                "price_b" => 25
             ],
             [
                 "indicator" => "x",
@@ -109,19 +109,19 @@ class PricesSeeder extends Seeder
                 "indicator" => "q",
                 "service" => "przygotowanie filmu",
                 "price_a" => 20,
-                "price_b" => 40
+                "price_b" => 60
             ],
             [
                 "indicator" => "r",
                 "service" => "przygotowanie napisów do filmu",
                 "price_a" => 20,
-                "price_b" => 20
+                "price_b" => 60
             ],
             [
                 "indicator" => "v",
                 "service" => "występ jako akompaniator (godz.)",
                 "price_a" => 60,
-                "price_b" => 200
+                "price_b" => 250
             ],
             [
                 "indicator" => "w",

@@ -72,44 +72,52 @@ class StatusesSeeder extends Seeder
                 "status_name" => "⏪ oddane do poprawki po terminie"
             ],
             [
-                "id" => 120,
+                "id" => 100,
                 "status_name" => "🔍 analiza i wstępna obróbka"
             ],
             [
-                "id" => 121,
+                "id" => 101,
                 "status_name" => "🥁 nagrania: perkusja"
             ],
             [
-                "id" => 122,
+                "id" => 102,
                 "status_name" => "🎸 nagrania: gitary"
             ],
             [
-                "id" => 123,
+                "id" => 103,
                 "status_name" => "🎹 nagrania: fortepiany"
             ],
             [
-                "id" => 124,
+                "id" => 104,
                 "status_name" => "⚡ nagrania: syntezatory"
             ],
             [
-                "id" => 125,
+                "id" => 105,
                 "status_name" => "🎺 nagrania: dęte"
             ],
             [
-                "id" => 126,
+                "id" => 106,
                 "status_name" => "🎻 nagrania: smyczki"
             ],
             [
-                "id" => 127,
+                "id" => 107,
                 "status_name" => "🎙 nagrania: wokale"
             ],
             [
-                "id" => 128,
+                "id" => 108,
                 "status_name" => "🌊 nagrania: inne"
             ],
             [
-                "id" => 129,
+                "id" => 109,
                 "status_name" => "🎛 mix i mastering"
+            ],
+            [
+                "id" => 110,
+                "status_name" => "🎵 pisanie nut"
+            ],
+            [
+                "id" => 111,
+                "status_name" => "🎬 przygotowanie filmu"
             ]
         ]);
     }

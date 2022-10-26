@@ -14,13 +14,13 @@ class CreateQuestsTable extends Migration
     public function up()
     {
         Schema::create('quests', function (Blueprint $table) {
-            $table->id();
+            $table->string("id", 4)->primary();
             $table->foreignId("song_id")->constrained();
             $table->foreignId("client_id")->constrained();
             $table->foreignId("status_id")->constrained();
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
-            $table->text("price");
+            $table->string("price");
             $table->float("paid")->default(0);
             $table->date("deadline")->nullable();
             $table->boolean("hard_deadline")->default(false);

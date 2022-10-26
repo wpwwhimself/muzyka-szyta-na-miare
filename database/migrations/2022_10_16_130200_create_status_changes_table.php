@@ -18,7 +18,7 @@ class CreateStatusChangesTable extends Migration
             $table->string("quest_id", 4)->nullable();
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->foreignId("status_id")->constrained("statuses");
-            $table->foreignId("changed_by")->references("id")->on("users");
+            $table->foreignId("changed_by")->nullable()->references("id")->on("users");
             $table->text("comment")->nullable();
             $table->dateTime("date");
         });

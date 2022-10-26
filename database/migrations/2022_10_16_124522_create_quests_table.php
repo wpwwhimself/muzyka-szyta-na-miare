@@ -17,7 +17,7 @@ class CreateQuestsTable extends Migration
             $table->string("id", 4)->primary();
             $table->foreignId("song_id")->constrained();
             $table->foreignId("client_id")->constrained();
-            $table->foreignId("status_id")->constrained();
+            $table->foreignId("status_id")->constrained("statuses");
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
             $table->string("price");

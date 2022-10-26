@@ -33,7 +33,8 @@ class CreateRequestsTable extends Migration
             $table->string("artist")->nullable();
             $table->string("cover_artist")->nullable();
             $table->string("price")->nullable();
-            $table->foreignId("quest_id")->nullable()->constrained();
+            $table->string("id", 4)->nullable();
+                $table->foreign("quest_id")->references("id")->on("quests");
             $table->timestamps();
         });
     }

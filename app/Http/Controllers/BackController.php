@@ -75,8 +75,16 @@ class BackController extends Controller
             $quests = $quests->where("client_id", $client->id);
             $requests = $requests->where("client_id", $client->id);
         }
-        $quests = $quests->get();
-        $requests = $requests->get();
+        $quests = $quests->get(); //TODO dodać selecta
+        $requests = $requests->get([
+            "requests.id",
+            "title",
+            "artist",
+            "requests.client_name as rq_client_name",
+            "clients.client_name as cl_client_name",
+            "status_id",
+            "status_name",
+        ]);
 
         return view("quests", [
             "title" => "Lista zleceń",
@@ -96,13 +104,16 @@ class BackController extends Controller
     public function request($id){
         $request = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
         ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
-        ->where("id", $id)
+        ->where("requests.id", $id)
         ->get();
+        // ->get([
+        //     ""
+        // ]);
+        $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
-        return view("request", [
+        return view("request", array_merge([
             "title" => "Zapytanie",
-            "request" => $request
-        ]);
+        ], compact("request", "prices")));
     }
 
     public function addRequest(){

@@ -95,6 +95,22 @@ form, .login-grid-container, .input-container{
     white-space: nowrap;
 }
 
+.quests-table{
+    border-spacing: 0;
+    width: 100%;
+}
+
+.quests-table tr:hover{
+    background: linear-gradient(to right, rgb(var(--q-clr)), transparent);
+}
+.quests-table thead{
+    text-align: left;
+}
+.quests-table td, .quests-table th{
+    box-sizing: border-box;
+    padding: 0.3em;
+}
+
 .song-title, .song-artist{
     text-align: center;
     margin: 0;
@@ -104,6 +120,11 @@ form, .login-grid-container, .input-container{
     background-color: rgb(var(--q-clr));
     margin-bottom: 0.5em;
     border-radius: 2em;
+}
+.quests-table .song-title{
+    text-align: left;
+    margin: 0;
+    background: none;
 }
 
 /* quest and request phases */

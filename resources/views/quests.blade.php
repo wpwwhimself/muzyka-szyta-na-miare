@@ -30,9 +30,37 @@
                 </div>
             </div>
             @if (count($requests))
-                @foreach ($requests as $request)
-                    request
-                @endforeach
+                <table class="quests-table">
+                    <thead>
+                        <tr>
+                            <th>Tytuł<br>Wykonawca</th>
+                            <th>Klient</th>
+                            <th><i class="fa-solid fa-traffic-light"></i> Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($requests as $request)
+                        <tr class="p-{{ $request->status_id }}">
+                            <td>
+                                <h3 class="song-title">{{ $request->title }}</h3>
+                                <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
+                            </td>
+                            <td>
+                            @if ($request->cl_client_name != null)
+                                <i class="fa-solid fa-user"></i> {{ $request->cl_client_name }}
+                            @else
+                                <i class="fa-regular fa-user"></i> {{ $request->rq_client_name }}
+                            @endif
+                            </td>
+                            <td class="quest-status">{{ $request->status_name }}</td>
+                            <td>
+                                <a href="{{ route("request", $request->id) }}" title="Szczegóły zapytania"><i class="fa-solid fa-angles-right"></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             @else
                 <p class="grayed-out">brak zapytań</p>
             @endif

@@ -13,45 +13,18 @@ class BackController extends Controller
     public function dashboard(){
         $client = Auth::user()->client;
 
-        $requests = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
-            ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
-            ->whereNotIn("status_id", [7, 8, 9])
+        $requests = Request::whereNotIn("status_id", [7, 8, 9])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
-        $quests = Quest::leftJoin("songs", "quests.song_id", "=", "songs.id")
-            ->leftJoin("clients", "quests.client_id", "=", "clients.id")
-            ->leftJoin("statuses", "quests.status_id", "=", "statuses.id")
-            ->whereNotIn("status_id", [18, 19])
+        $quests = Quest::whereNotIn("status_id", [18, 19])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
         }
-        $requests = $requests->get([
-            "requests.id",
-            "title",
-            "artist",
-            "requests.client_name as rq_client_name",
-            "clients.client_name as cl_client_name",
-            "status_id",
-            "status_name",
-            "price",
-            "deadline",
-            "hard_deadline"
-        ]);
-        $quests = $quests->get([
-            "quests.id",
-            "title",
-            "artist",
-            "client_name",
-            "status_id",
-            "status_name",
-            "price",
-            "paid",
-            "deadline",
-            "hard_deadline"
-        ]);
+        $requests = $requests->get();
+        $quests = $quests->get();
 
         return view("dashboard", [
             "title" => "Podsumowanie",
@@ -63,28 +36,15 @@ class BackController extends Controller
     public function quests(){
         $client = Auth::user()->client;
 
-        $quests = Quest::leftJoin("songs", "quests.song_id", "=", "songs.id")
-            ->leftJoin("clients", "quests.client_id", "=", "clients.id")
-            ->leftJoin("statuses", "quests.status_id", "=", "statuses.id")
-            ->orderBy("quests.created_at", "desc");
-        $requests = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
-            ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
-            ->where("status_id", "!=", 9)
+        $quests = Quest::orderBy("quests.created_at", "desc");
+        $requests = Request::where("status_id", "!=", 9)
             ->orderBy("requests.created_at");
         if(Auth::id() != 1){
             $quests = $quests->where("client_id", $client->id);
             $requests = $requests->where("client_id", $client->id);
         }
-        $quests = $quests->get(); //TODO dodać selecta
-        $requests = $requests->get([
-            "requests.id",
-            "title",
-            "artist",
-            "requests.client_name as rq_client_name",
-            "clients.client_name as cl_client_name",
-            "status_id",
-            "status_name",
-        ]);
+        $quests = $quests->get();
+        $requests = $requests->get();
 
         return view("quests", [
             "title" => "Lista zleceń",
@@ -102,13 +62,9 @@ class BackController extends Controller
         ]);
     }
     public function request($id){
-        $request = Request::leftJoin("clients", "requests.client_id", "=", "clients.id")
-        ->leftJoin("statuses", "requests.status_id", "=", "statuses.id")
-        ->where("requests.id", $id)
+        $request = Request::where("requests.id", $id)
         ->get();
-        // ->get([
-        //     ""
-        // ]);
+
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
         return view("request", array_merge([

@@ -11,16 +11,16 @@
             <p class="quest-id">{{ $request->id }}</p>
 
             <i class="fa-solid fa-traffic-light"></i>
-            <p class="quest-status">{{ $request->status_name }}</p>
+            <p class="quest-status">{{ $request->status->status_name }}</p>
         </div>
         <div class="quest-meta">
             @if (Auth::id() == 1)
-                @if ($request->cl_client_name != null)
+                @if ($request->client?->client_name)
                 <i class="fa-solid fa-user"></i>
-                <p class="client-name">{{ $request->cl_client_name }}</p>
+                <p class="client-name">{{ $request->client->client_name }}</p>
                 @else
                 <i class="fa-regular fa-user"></i>
-                <p class="client-name">{{ $request->rq_client_name }}</p>
+                <p class="client-name">{{ $request->client_name }}</p>
                 @endif
             @endif
 

@@ -62,8 +62,7 @@ class BackController extends Controller
         ]);
     }
     public function request($id){
-        $request = Request::where("requests.id", $id)
-        ->get();
+        $request = Request::find(1);
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 

@@ -18,8 +18,8 @@
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}
-            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
-            ></textarea>
+            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "value"]))) }}
+            >{{ $value }}</textarea>
     @else
         <input
             type="{{ $type }}"

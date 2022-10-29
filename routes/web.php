@@ -20,9 +20,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/auth', [AuthController::class, "input"])->name("login");
 Route::post('/auth-back', [AuthController::class, "authenticate"])->name("authenticate");
-// Route::get('/auth/manual-new-user', function(){
-//     return view("auth.createnew");
-// });
 Route::post('/auth/register-back', [AuthController::class, "register"])->name("register");
 Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
 
@@ -36,6 +33,8 @@ Route::get('/quests/rq/add', [BackController::class, "addRequest"])->middleware(
 
 Route::post('/quests/q/add-back', [BackController::class, "addQuestBack"])->middleware("auth")->name("add-quest-back");
 Route::post('/quests/rq/add-back', [BackController::class, "addRequestBack"])->middleware("auth")->name("add-request-back");
+Route::post('/quests/q/mod-back', [BackController::class, "modQuestBack"])->middleware("auth")->name("mod-quest-back");
+Route::post('/quests/rq/mod-back', [BackController::class, "modRequestBack"])->middleware("auth")->name("mod-request-back");
 
 Route::get('/clients', [BackController::class, "clients"])->middleware("auth")->name("clients");
 Route::get('/clients/id/{id}', [BackController::class, "client"])->middleware("auth")->name("client");

@@ -47,13 +47,13 @@
                                 <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
                             </td>
                             <td>
-                            @if ($request->cl_client_name != null)
-                                <i class="fa-solid fa-user"></i> {{ $request->cl_client_name }}
+                            @if ($request->client?->client_name)
+                                <i class="fa-solid fa-user"></i> {{ $request->client->client_name }}
                             @else
-                                <i class="fa-regular fa-user"></i> {{ $request->rq_client_name }}
+                                <i class="fa-regular fa-user"></i> {{ $request->client_name }}
                             @endif
                             </td>
-                            <td class="quest-status">{{ $request->status_name }}</td>
+                            <td class="quest-status">{{ $request->status->status_name }}</td>
                             <td>
                                 <a href="{{ route("request", $request->id) }}" title="Szczegóły zapytania"><i class="fa-solid fa-angles-right"></i></a>
                             </td>

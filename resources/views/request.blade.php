@@ -10,6 +10,7 @@
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <h1>Szczegóły zapytania</h1>
+    <x-phase-indicator :status-id="$request->status_id" />
     <div class="grid-3">
         <section class="">
             <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
@@ -40,11 +41,15 @@
             @if (Auth::id() == 1)
             <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" />
             @endif
+            <p>Tu będzie przekalkulowana wycena</p>
             <x-input type="date" name="deadline" label="Termin wykonania" />
             @if (Auth::id() == 1)
             <x-input type="checkbox" name="hard_deadline" label="Termin narzucony przez klienta" />
             @endif
         </section>
     </div>
+    <button type="submit" class="hover-lift">
+        <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
+    </button>
 </form>
 @endsection

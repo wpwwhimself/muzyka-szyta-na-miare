@@ -3,7 +3,8 @@
     'autofocus' => false,
     'required' => false,
     "disabled" => false,
-    "hint" => null
+    "hint" => null,
+    "value" => null
 ])
 
 <div {{
@@ -18,13 +19,14 @@
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}
-            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "value"]))) }}
+            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
             >{{ $value }}</textarea>
     @else
         <input
             type="{{ $type }}"
             name="{{ $name }}"
             id="{{ $name }}"
+            {!! $value ? "value=\"$value\"" : "" !!}
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}

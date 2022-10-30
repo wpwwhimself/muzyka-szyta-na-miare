@@ -34,13 +34,11 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @if (!count($requests))
+        @forelse ($requests as $request)
+            <x-request-mini :request="$request" />
+        @empty
             <p class="grayed-out">brak aktywnych zapytań</p>
-        @else
-            @foreach ($requests as $request)
-                <x-request-mini :request="$request" />
-            @endforeach
-        @endif
+        @endforelse
         </div>
     </section>
 
@@ -52,13 +50,11 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @if (!count($quests))
+        @forelse ($quests as $quest)
+            <x-quest-mini :quest="$quest" />
+        @empty
             <p class="grayed-out">brak aktywnych zleceń</p>
-        @else
-            @foreach ($quests as $quest)
-                <x-quest-mini :quest="$quest" />
-            @endforeach
-        @endif
+        @endforelse
         </div>
     </section>
 @endsection

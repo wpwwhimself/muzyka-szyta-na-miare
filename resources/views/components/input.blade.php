@@ -33,8 +33,12 @@
             {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "class"]))) }}
             />
     @endif
+
+    @if($type != "hidden")
     <label for="{{ $name }}">{{ $label }}</label>
-    @if ($hint)
+    @endif
+
+    @if ($hint && $type != "hidden")
         <div class="input-hint">
             <i class="fa-solid fa-circle-info"
                 {{ Popper::pop(implode(" ", array_map(function($key, $val){

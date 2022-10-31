@@ -129,7 +129,7 @@ form, .login-grid-container, .input-container{
 
 .quest-phase-bars{
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(10, 1fr);
 }
 .quest-phase-bars div{
     background-color: lightgray;

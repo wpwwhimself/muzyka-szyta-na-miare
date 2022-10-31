@@ -39,22 +39,57 @@
         <section class="">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             @if (Auth::id() == 1)
-            <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" />
+            <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" value="{{ $request->price }}" />
+            @else
+            <x-input type="hidden" name="price" label="Wycena (kod lub kwota)" :hint="$prices" value="{{ $request->price }}" />
+            @endif
+            <div id="price-summary">
+                <div class="positions"></div>
+                <hr />
+                <div class="summary"><span>Razem:</span><span>0 zł</span></div>
+            </div>
             <script>
-            $("input#price").keydown(function (e) {
-
+            function calcPriceNow(){
+                const labels = $("#price").val();
+                const positions_list = $("#price-summary .positions");
+                const sum_row = $("#price-summary .summary");
+                if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
+                else{
+                    $.ajax({
+                        url: "/price_calc",
+                        type: "post",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            labels: labels,
+                            price_schema: "B",
+                            veteran_discount: 0
+                        },
+                        success: function(res){
+                            let content = ``;
+                            for(line of res[1]){
+                                content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+                            }
+                            positions_list.html(content);
+                            sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`)
+                        }
+                    });
+                }
+            }
+            $(document).ready(function(){
+                calcPriceNow();
+                $("#price").change(function (e) { calcPriceNow() });
             });
             </script>
-            @endif
-            <p>Tu będzie przekalkulowana wycena</p>
             <x-input type="date" name="deadline" label="Termin wykonania" />
             @if (Auth::id() == 1)
             <x-input type="checkbox" name="hard_deadline" label="Termin narzucony przez klienta" />
             @endif
         </section>
     </div>
+    @if (Auth::id() == 1 && $request->status_id == 1)
     <button type="submit" class="hover-lift">
         <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
     </button>
+    @endif
 </form>
 @endsection

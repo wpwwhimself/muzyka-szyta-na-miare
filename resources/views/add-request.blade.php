@@ -34,6 +34,41 @@
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
                 @if (Auth::id() == 1)
                 <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" />
+                <div id="price-summary">
+                    <div class="positions"></div>
+                    <hr />
+                    <div class="summary"><span>Razem:</span><span>0 zł</span></div>
+                </div>
+                <script>
+                function calcPriceNow(){
+                    const labels = $("#price").val();
+                    const positions_list = $("#price-summary .positions");
+                    if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
+                    else{
+                        $.ajax({
+                            url: "/price_calc",
+                            type: "post",
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                labels: labels,
+                                price_schema: "B",
+                                veteran_discount: 0
+                            },
+                            success: function(res){
+                                let content = ``;
+                                for(line of res[1]){
+                                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+                                }
+                                positions_list.html(content);
+                            }
+                        });
+                    }
+                }
+                $(document).ready(function(){
+                    calcPriceNow();
+                    $("#price").change(function (e) { calcPriceNow() });
+                });
+                </script>
                 @endif
                 <x-input type="date" name="deadline" label="Termin wykonania" />
                 @if (Auth::id() == 1)

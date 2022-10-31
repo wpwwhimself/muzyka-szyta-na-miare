@@ -95,20 +95,19 @@ form, .login-grid-container, .input-container{
     white-space: nowrap;
 }
 
-.quests-table{
-    border-spacing: 0;
-    width: 100%;
+.quests-table .table-row{
+    display: grid;
+    align-items: center;
+    padding: 0.5em;
+    border-radius: 1em;
 }
-
-.quests-table tr:hover{
+#quests-list .table-row{ grid-template-columns: 3fr 1fr 1fr 1fr; }
+#requests-list .table-row{ grid-template-columns: 3fr 1fr 1fr; }
+.quests-table .table-row:hover{
     background: linear-gradient(to right, rgb(var(--q-clr)), transparent);
 }
-.quests-table thead{
-    text-align: left;
-}
-.quests-table td, .quests-table th{
-    box-sizing: border-box;
-    padding: 0.3em;
+.quests-table .table-header{
+    font-weight: bold;
 }
 
 .song-title, .song-artist{
@@ -130,7 +129,7 @@ form, .login-grid-container, .input-container{
 
 .quest-phase-bars{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(8, 1fr);
 }
 .quest-phase-bars div{
     background-color: lightgray;
@@ -149,6 +148,21 @@ form, .login-grid-container, .input-container{
 .quest-phase-label h3{
     margin: 0 0.5em;
     color: rgb(var(--q-clr));
+}
+
+#price-summary div{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+}
+#price-summary .grayed-out{
+    grid-column: span 1/1;
+}
+#price-summary div span:nth-child(even){
+    text-align: right;
+}
+#price-summary .summary{
+    font-weight: bold;
 }
 
 /* quest and request phases */

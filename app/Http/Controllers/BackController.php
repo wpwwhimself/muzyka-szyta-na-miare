@@ -57,7 +57,7 @@ class BackController extends Controller
         }
         $requests = $requests->get();
 
-        return view("quests", [
+        return view("requests", [
             "title" => "Lista zapytań",
             "requests" => $requests
         ]);
@@ -126,6 +126,6 @@ class BackController extends Controller
         $request->status_id = 1;
         $request->save();
 
-        return redirect("quests")->with("success", "Dodano nowe zapytanie");
+        return redirect("requests")->with("success", "Dodano nowe zapytanie");
     }
 }

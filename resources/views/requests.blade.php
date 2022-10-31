@@ -13,39 +13,33 @@
                     <a href="{{ route("add-request") }}">Dodaj nowe <i class="fa-solid fa-plus"></i></a>
                 </div>
             </div>
-            <table class="quests-table">
-                <thead>
-                    <tr>
-                        <th>Tytuł<br>Wykonawca</th>
-                        <th>Klient</th>
-                        <th><i class="fa-solid fa-traffic-light"></i> Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="quests-table">
+                <div class="table-header table-row">
+                    <span>Tytuł<br>Wykonawca</span>
+                    <span>Klient</span>
+                    <span><i class="fa-solid fa-traffic-light"></i> Status</span>
+                </div>
+                <hr />
                 @forelse ($requests as $request)
-                    <tr class="p-{{ $request->status_id }}">
-                        <td>
-                            <h3 class="song-title">{{ $request->title }}</h3>
-                            <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
-                        </td>
-                        <td>
-                        @if ($request->client?->client_name)
-                            <i class="fa-solid fa-user"></i> {{ $request->client->client_name }}
-                        @else
-                            <i class="fa-regular fa-user"></i> {{ $request->client_name }}
-                        @endif
-                        </td>
-                        <td class="quest-status">{{ $request->status->status_name }}</td>
-                        <td>
-                            <a href="{{ route("request", $request->id) }}" title="Szczegóły zapytania"><i class="fa-solid fa-angles-right"></i></a>
-                        </td>
-                    </tr>
+                <a href="{{ route("request", $request->id) }}" class="table-row p-{{ $request->status_id }}">
+                    <span>
+                        <h3 class="song-title">{{ $request->title }}</h3>
+                        <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
+                    </span>
+                    <span>
+                    @if ($request->client?->client_name)
+                        <i class="fa-solid fa-user"></i> {{ $request->client->client_name }}
+                    @else
+                        <i class="fa-regular fa-user"></i> {{ $request->client_name }}
+                    @endif
+                    </span>
+                    <span class="quest-status">{{ $request->status->status_name }}</span>
+                </a>
                 @empty
-                    <p class="grayed-out">brak zapytań</p>
+                <p class="grayed-out">brak zapytań</p>
                 @endforelse
                 </tbody>
-            </table>
+            </div>
         </section>
     </div>
 @endsection

@@ -40,6 +40,11 @@
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             @if (Auth::id() == 1)
             <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" />
+            <script>
+            $("input#price").keydown(function (e) {
+
+            });
+            </script>
             @endif
             <p>Tu będzie przekalkulowana wycena</p>
             <x-input type="date" name="deadline" label="Termin wykonania" />

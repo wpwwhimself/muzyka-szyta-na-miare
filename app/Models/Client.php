@@ -15,4 +15,7 @@ class Client extends Model
     public function quests(){
         return $this->hasMany(Quest::class);
     }
+    public function isVeteran(){
+
+    }
 }

@@ -18,26 +18,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, "index"])->name("home");
-Route::get('/auth', [AuthController::class, "input"])->name("login");
-Route::post('/auth-back', [AuthController::class, "authenticate"])->name("authenticate");
-Route::post('/auth/register-back', [AuthController::class, "register"])->name("register");
-Route::get('/auth/logout', [AuthController::class, "logout"])->name("logout");
-Route::get('/dashboard', [BackController::class, "dashboard"])->middleware("auth")->name("dashboard");
 
-Route::get('/quests', [BackController::class, "quests"])->middleware("auth")->name("quests");
-Route::get('/quests/view/{id}', [BackController::class, "quest"])->middleware("auth")->name("quest");
-Route::get('/quests/add', [BackController::class, "addQuest"])->middleware("auth")->name("add-quest");
-Route::post('/quests/add-back', [BackController::class, "addQuestBack"])->middleware("auth")->name("add-quest-back");
-Route::post('/quests/mod-back', [BackController::class, "modQuestBack"])->middleware("auth")->name("mod-quest-back");
+Route::controller(AuthController::class)->group(function(){
+    Route::get('/auth', "input")->name("login");
+    Route::post('/auth-back', "authenticate")->name("authenticate");
+    Route::post('/auth/register-back', "register")->name("register");
+    Route::get('/auth/logout', "logout")->name("logout");
+});
 
-Route::get('/requests', [BackController::class, "requests"])->middleware("auth")->name("requests");
-Route::get('/requests/view/{id}', [BackController::class, "request"])->middleware("auth")->name("request");
-Route::get('/requests/add', [BackController::class, "addRequest"])->middleware("auth")->name("add-request");
-Route::post('/requests/add-back', [BackController::class, "addRequestBack"])->middleware("auth")->name("add-request-back");
-Route::post('/requests/mod-back', [BackController::class, "modRequestBack"])->middleware("auth")->name("mod-request-back");
+Route::controller(BackController::class)->group(function(){
+    Route::get('/dashboard', "dashboard")->middleware("auth")->name("dashboard");
 
-Route::get('/clients', [BackController::class, "clients"])->middleware("auth")->name("clients");
-Route::get('/clients/view/{id}', [BackController::class, "client"])->middleware("auth")->name("client");
+    Route::get('/quests', "quests")->middleware("auth")->name("quests");
+    Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
+    Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
+    Route::post('/quests/add-back', "addQuestBack")->middleware("auth")->name("add-quest-back");
+    Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
 
-Route::get('/ads', [BackController::class, "ads"])->middleware("auth")->name("ads");
-Route::get('/messages', [BackController::class, "messages"])->middleware("auth")->name("messages");
+    Route::get('/requests', "requests")->middleware("auth")->name("requests");
+    Route::get('/requests/view/{id}', "request")->middleware("auth")->name("request");
+    Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
+    Route::post('/requests/add-back', "addRequestBack")->middleware("auth")->name("add-request-back");
+    Route::post('/requests/mod-back', "modRequestBack")->middleware("auth")->name("mod-request-back");
+
+    Route::get('/clients', "clients")->middleware("auth")->name("clients");
+    Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
+
+    Route::get('/ads', "ads")->middleware("auth")->name("ads");
+    Route::get('/messages', "messages")->middleware("auth")->name("messages");
+});

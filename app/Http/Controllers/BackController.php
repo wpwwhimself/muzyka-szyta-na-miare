@@ -37,18 +37,28 @@ class BackController extends Controller
         $client = Auth::user()->client;
 
         $quests = Quest::orderBy("quests.created_at", "desc");
-        $requests = Request::where("status_id", "!=", 9)
-            ->orderBy("requests.created_at");
         if(Auth::id() != 1){
             $quests = $quests->where("client_id", $client->id);
-            $requests = $requests->where("client_id", $client->id);
         }
         $quests = $quests->get();
-        $requests = $requests->get();
 
         return view("quests", [
             "title" => "Lista zleceń",
-            "quests" => $quests,
+            "quests" => $quests
+        ]);
+    }
+    public function requests(){
+        $client = Auth::user()->client;
+
+        $requests = Request::where("status_id", "!=", 9)
+            ->orderBy("requests.created_at");
+        if(Auth::id() != 1){
+            $requests = $requests->where("client_id", $client->id);
+        }
+        $requests = $requests->get();
+
+        return view("quests", [
+            "title" => "Lista zapytań",
             "requests" => $requests
         ]);
     }

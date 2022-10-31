@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Client extends Model
 {
@@ -16,6 +17,10 @@ class Client extends Model
         return $this->hasMany(Quest::class);
     }
     public function isVeteran(){
+        $veteran_from = DB::table("settings")->where("setting_name", "veteran_from")->get(["value_str"]);
 
+    }
+    public function pricing(){
+        //
     }
 }

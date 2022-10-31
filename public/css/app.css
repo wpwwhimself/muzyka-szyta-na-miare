@@ -61,18 +61,6 @@ input, select, button{
     text-align: right;
     z-index: 5;
 }
-.input-hint-content{
-    text-align: left;
-    display: none; opacity: 0;
-    grid-template-columns: 1fr 5fr;
-    padding: 1em;
-    border-radius: 1em;
-    background-color: #333;
-    color: white;
-}
-.input-hint:hover .input-hint-content{
-    display: grid; opacity: 1;
-}
 label{
     font-style: italic;
     color: dimgray;

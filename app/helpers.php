@@ -14,10 +14,13 @@ if(!function_exists("price_calc")){
 
         foreach($price_list as $cat){
             preg_match_all("/$cat->indicator/", $labels, $matches);
-            if(!in_array($cat->indicator, ["x", "o", "u"])){
-                $price += $cat->price * count($matches[0]);
-            }else{
-                $multiplier += $cat->price * count($matches[0]);
+            switch($cat->operation){
+                case "+":
+                    $price += $cat->price * count($matches[0]);
+                    break;
+                case "*":
+                    $multiplier += $cat->price * count($matches[0]);
+                    break;
             }
         }
 

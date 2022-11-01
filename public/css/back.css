@@ -133,11 +133,12 @@ form, .login-grid-container, .input-container{
 .quest-phase-bars{
     display: grid;
     grid-template-columns: repeat(10, 1fr);
+    margin: 0.3em;
 }
 .quest-phase-bars div{
     background-color: lightgray;
     margin: 0 0.1em;
-    height: 0.5em;
+    height: 0.7em;
     border-radius: 1em;
 }
 .quest-phase-bars .highlighted{
@@ -171,7 +172,7 @@ form, .login-grid-container, .input-container{
     font-weight: bold;
 }
 
-#new-request-box{
+#request-box{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

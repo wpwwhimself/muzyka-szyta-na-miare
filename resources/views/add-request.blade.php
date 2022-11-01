@@ -4,7 +4,7 @@
     <form method="post" action={{ route("add-request-back") }}>
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
-        <div id="new-request-box">
+        <div id="request-box">
             <section class="input-group">
                 <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
                 <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" />

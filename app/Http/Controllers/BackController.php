@@ -78,14 +78,28 @@ class BackController extends Controller
         ]);
     }
     public function request($id){
-        $request = Request::find(1);
+        $request = Request::find($id);
         $archmage = (Auth::id() == 1) ? "archmage." : "";
+
+        if(Auth::id() == 1){
+            $clients_raw = Client::all()->toArray();
+            foreach($clients_raw as $client){
+                $clients[$client["id"]] = $client["client_name"];
+            }
+        }else{
+            $clients = [];
+        }
+
+        $questTypes_raw = QuestType::all()->toArray();
+        foreach($questTypes_raw as $val){
+            $questTypes[$val["id"]] = $val["type"];
+        }
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
         return view($archmage."request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices")));
+        ], compact("request", "prices", "questTypes", "clients")));
     }
 
     public function addRequest(){
@@ -152,7 +166,7 @@ class BackController extends Controller
 
         $request->quest_type_id = $rq->quest_type;
         $request->made_by_me = true;
-        $request->status_id = 1;
+        $request->status_id = (Auth::id() == 1) ? 5 : 1;
         $request->save();
 
         return redirect("requests")->with("success", "Dodano nowe zapytanie");

@@ -4,7 +4,7 @@
     <form method="post" action={{ route("add-request-back") }}>
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
-        <div id="new-request-box">
+        <div id="request-box">
             <section class="input-group">
                 <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
                 <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" />
@@ -120,7 +120,7 @@
             </section>
         </div>
         <button type="submit" class="hover-lift">
-            <i class="fa-solid fa-check"></i> Dodaj
+            <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
         </button>
     </form>
 @endsection

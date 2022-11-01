@@ -3,7 +3,8 @@
     'autofocus' => false,
     'required' => false,
     'options',
-    'emptyOption' => false
+    'emptyOption' => false,
+    'value' => null
 ])
 
 <div {{
@@ -18,10 +19,10 @@
         {{ $required ? "required" : "" }}
         >
         @if ($emptyOption)
-            <option value="" selected></option>
+            <option value="" {{ $value ? "" : "selected" }}></option>
         @endif
         @foreach ($options as $key => $val)
-            <option value="{{ $key }}">{{ $val }}</option>
+            <option value="{{ $key }}" {{  $value == $key ? "selected" : "" }}>{{ $val }}</option>
         @endforeach
     </select>
     <label for="{{ $name }}">{{ $label }}</label>

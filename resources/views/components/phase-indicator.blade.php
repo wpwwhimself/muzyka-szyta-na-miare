@@ -1,4 +1,4 @@
-<div class="quest-phase p-{{ $statusId }}">
+<div class="quest-phase p-{{ $statusId }}" status="{{ $statusId }}">
     <div class="quest-phase-label">
         <span>Faza:</span>
         <h3>{{ $statusName($statusId) }}</h3>

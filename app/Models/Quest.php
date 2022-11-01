@@ -18,4 +18,7 @@ class Quest extends Model
     public function song(){
         return $this->belongsTo(Song::class);
     }
+    public function quest_type(){
+        return $this->hasOne(QuestType::class);
+    }
 }

@@ -23,7 +23,7 @@ class CreateRequestsTable extends Migration
             $table->foreignId("client_id")->nullable()->constrained();
             $table->string("contact_preference")->default("email");
             $table->boolean("made_by_me")->default(false);
-            $table->string("quest_type");
+            $table->foreignId("quest_type_id")->constrained();
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
             $table->date("deadline")->nullable();

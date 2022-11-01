@@ -15,4 +15,7 @@ class Request extends Model
     public function status(){
         return $this->belongsTo(Status::class);
     }
+    public function quest_type(){
+        return $this->hasOne(QuestType::class);
+    }
 }

@@ -12,7 +12,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
             </div>
-            <h2>{{ Auth::user()->client->client_name ?? "anonimowy klient" }}</h2>
+            <h2>🧙‍♂️ arcymag we własnej osobie</h2>
         </section>
 
         <section id="dashboard-finances">

@@ -16,11 +16,4 @@ class Client extends Model
     public function quests(){
         return $this->hasMany(Quest::class);
     }
-    public function isVeteran(){
-        $veteran_from = DB::table("settings")->where("setting_name", "veteran_from")->get(["value_str"]);
-
-    }
-    public function pricing(){
-        //
-    }
 }

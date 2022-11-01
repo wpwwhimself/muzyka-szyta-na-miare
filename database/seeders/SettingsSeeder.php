@@ -24,7 +24,7 @@ class SettingsSeeder extends Seeder
                 "value_str" => "B"
             ],
             [
-                "setting_name" => "current_pricing_since",
+                "setting_name" => "pricing_B_since",
                 "value_str" => "2022-09-09"
             ]
         ]);

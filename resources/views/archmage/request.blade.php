@@ -56,7 +56,7 @@
                 if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
                 else{
                     $.ajax({
-                        url: "/price_calc",
+                        url: "{{ url('price_calc') }}",
                         type: "post",
                         data: {
                             _token: '{{ csrf_token() }}',

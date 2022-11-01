@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\Client;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 if(!function_exists("price_calc")){
-    function price_calc($labels, $price_schema = "B", $veteran_discount = false){
-        if(is_numeric($labels)) return $labels;
+    function price_calc($labels){
+        $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
+        $price_schema = pricing($client_id);
 
         $price = 0; $multiplier = 1; $positions = [];
 
@@ -30,14 +33,45 @@ if(!function_exists("price_calc")){
 
         $price *= $multiplier;
 
-        if($veteran_discount){
+        if(is_veteran($client_id)){
             $discount_value = ($price_schema == "A") ? 0.3 : 0.15;
             $price *= (1 - $discount_value);
             array_push($positions, ["zniżka stałego klienta", "-".($discount_value*100)."%"]);
         }
 
-        return [$price, $positions];
+        // price override
+        $override = false;
+        if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
+            $price = floatval(str_replace(",",".",$matches[0][0]));
+            $override = true;
+        }
+
+        return [$price, $positions, $override];
     }
 }
 
+if(!function_exists("is_veteran")){
+    function is_veteran($client_id){
+        if($client_id == "") return false;
+        $veteran_from = DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
+        $quest_count = Client::find($client_id)->quests->where("status_id", 19)->count();
+        return $quest_count >= $veteran_from;
+    }
+}
+if(!function_exists("pricing")){
+    function pricing($client_id){
+        $current_pricing = DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
+        if($client_id == "") return $current_pricing;
+        else{
+            $client_since = Client::find($client_id)->value("created_at");
+            //loop for cycling through pricing schemas
+            for($letter = "A"; $letter != $current_pricing; $letter = $next_letter){
+                $next_letter = chr(ord($letter) + 1);
+                $this_pricing_since = Carbon::parse(DB::table("settings")->where("setting_name", "pricing_".$next_letter."_since")->value("value_str"));
+                if($client_since->lt($this_pricing_since)) return $letter;
+            }
+        }
+        return $current_pricing;
+    }
+}
 ?>

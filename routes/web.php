@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\HomeController;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,9 @@ Route::controller(BackController::class)->group(function(){
 
 });
 
+Route::get('/client_data', function(Request $request){
+    return Client::find($request->id)->toJson();
+})->name("client_data");
 Route::post('/price_calc', function(Request $request){
     return price_calc($request->labels, $request->price_schema, $request->veteran_discount);
-});
+})->name("price_calc");

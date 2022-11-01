@@ -2,7 +2,8 @@
     'type', 'name', 'label',
     'autofocus' => false,
     'required' => false,
-    'options'
+    'options',
+    'emptyOption' => false
 ])
 
 <div {{
@@ -16,6 +17,9 @@
         {{ $autofocus ? "autofocus" : "" }}
         {{ $required ? "required" : "" }}
         >
+        @if ($emptyOption)
+            <option value="" selected></option>
+        @endif
         @foreach ($options as $key => $val)
             <option value="{{ $key }}">{{ $val }}</option>
         @endforeach

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -90,18 +91,25 @@ class BackController extends Controller
     public function addRequest(){
         $archmage = (Auth::id() == 1) ? "archmage." : "";
 
+        if(Auth::id() == 1){
+            $clients_raw = Client::all()->toArray();
+            foreach($clients_raw as $client){
+                $clients[$client["id"]] = $client["client_name"];
+            }
+        }else{
+            $clients = [];
+        }
+
         $questTypes_raw = QuestType::all()->toArray();
-        foreach($questTypes_raw as $key => $val){
+        foreach($questTypes_raw as $val){
             $questTypes[$val["id"]] = $val["type"];
         }
-        // dd($questTypes);
-        // $questTypes = array_combine($questTypes, $questTypes);
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
         return view($archmage."add-request", array_merge([
             "title" => "Nowe zapytanie"
-        ], compact("questTypes", "prices")));
+        ], compact("questTypes", "prices", "clients")));
     }
     public function addRequestBack(HttpRequest $rq){
         $request = new Request;
@@ -116,11 +124,21 @@ class BackController extends Controller
             $request->wishes = Auth::user()->client->default_wishes;
             $request->hard_deadline = true;
         }else{
-            $request->client_name = $rq->client_name;
-            $request->email = $rq->email;
-            $request->phone = $rq->phone;
-            $request->other_medium = $rq->other_medium;
-            $request->contact_preference = $rq->contact_preference ?? "email";
+            if($rq->client_id){
+                $client = Client::find($rq->client_id);
+                $request->client_id = $rq->client_id;
+                $request->client_name = $client->client_name;
+                $request->email = $client->email;
+                $request->phone = $client->phone;
+                $request->other_medium = $client->other_medium;
+                $request->contact_preference = $client->contact_preference ?? "email";
+            }else{
+                $request->client_name = $rq->client_name;
+                $request->email = $rq->email;
+                $request->phone = $rq->phone;
+                $request->other_medium = $rq->other_medium;
+                $request->contact_preference = $rq->contact_preference ?? "email";
+            }
             $request->hard_deadline = ($rq->hard_deadline == "on");
         }
         $request->title = $rq->title;

@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
 
-    <title>{{ $title == null ? "WPWW –" : "$title |" }} Muzyka szyta na miarę</title>
+    <title>{{ $title == null ? "WPWW" : "$title |" }} Muzyka Szyta Na Miarę</title>
 </head>
 <body>
     <x-header :title="$title" />

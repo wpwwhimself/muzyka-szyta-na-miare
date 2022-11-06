@@ -17,15 +17,20 @@ class AuthController extends Controller
 
     public function authenticate(Request $request){
         $request->validate([
-            'login' => ['required'],
+            // 'login' => ['required']
             'password' => ['required']
         ]);
 
-        $credentials = $request->only('login', 'password');
+        $credentials = $request->password;
         $remember = $request->input('remember') == "on";
-        if(Auth::attempt($credentials, $remember)){
-            $request->session()->regenerate();
-            return redirect()->intended("dashboard")->with("success", "Zalogowano");
+
+        $users = User::all();
+        foreach($users as $user){
+            if($credentials === $user->password){
+                Auth::login(User::find($user->id), $remember);
+                $request->session()->regenerate();
+                return redirect()->intended("dashboard")->with("success", "Zalogowano");
+            }
         }
 
         return back()->with("error", "Nieprawidłowe dane logowania");
@@ -33,7 +38,7 @@ class AuthController extends Controller
 
     public function register(Request $request){
         $request->validate([
-            'login' => 'required|unique:users',
+            // 'login' => 'required|unique:users',
             'password' => 'required|min:6'
         ]);
 
@@ -44,7 +49,7 @@ class AuthController extends Controller
     }
     public function createUser(array $data){
         return User::create([
-            'login' => $data['login'],
+            // 'login' => $data['login'],
             'password' => Hash::make($data['password'])
         ]);
     }

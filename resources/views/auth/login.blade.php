@@ -9,10 +9,10 @@
     <form class="login-form" method="post" action="{{ route("authenticate") }}">
         @csrf
         <h1>Zaloguj się</h1>
-        <div class="grid-3">
-            <x-input class="login-grid-container"
+        <div class="grid-2">
+            {{-- <x-input class="login-grid-container"
                 type="text" name="login" label="Login"
-                :autofocus="true" :required="true" />
+                :autofocus="true" :required="true" /> --}}
             <x-input class="login-grid-container"
                 type="password" name="password" label="Hasło"
                 :required="true" />

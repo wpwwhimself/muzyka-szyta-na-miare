@@ -17,12 +17,12 @@ class UserSeeder extends Seeder
     {
         DB::table("users")->insert([
             [
-                "login" => "archmage",
-                "password" => Hash::make("kalafior")
+                "id" => 1,
+                "password" => "kalafior"
             ],
             [
-                "login" => "jantestowy",
-                "password" => Hash::make("marchewka")
+                "id" => 2,
+                "password" => "marchewka"
             ]
         ]);
         DB::table("clients")->insert([

@@ -58,6 +58,7 @@ if(!function_exists("is_veteran")){
         return $quest_count >= $veteran_from;
     }
 }
+
 if(!function_exists("pricing")){
     function pricing($client_id){
         $current_pricing = DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
@@ -72,6 +73,41 @@ if(!function_exists("pricing")){
             }
         }
         return $current_pricing;
+    }
+}
+
+if(!function_exists("to_base36")){
+    function to_base36($number){
+        $code = "";
+        if($number == 0) $code = $number;
+        while($number > 0){
+            $remainder = $number % 36;
+            if($remainder <= 9){
+                $code = $remainder . $code;
+            }else{
+                //number dictates ascii code
+                $remainder += 55; //shift to ASCII A-Z
+                $code = chr($remainder) . $code;
+            }
+            $number = intdiv($number, 36);
+        }
+        return $code;
+    }
+}
+if(!function_exists("from_base36")){
+    function from_base36($code){
+        $number = 0; $multiplier = 1;
+
+        while($code != ""){
+            $digit = substr($code, -1);
+            if(!is_numeric($digit)){
+                $digit = ord($digit) - 55;
+            }
+            $number += $digit * $multiplier;
+            $multiplier *= 36;
+            $code = substr($code, 0, -1);
+        }
+        return $number;
     }
 }
 ?>

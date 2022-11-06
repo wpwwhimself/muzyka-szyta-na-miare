@@ -500,6 +500,7 @@ footer h2{
     border-radius: 2em;
     padding: 0.5em;
     font-family: "Raleway";
+    font-size: 1em;
     border: none;
     transition-duration: 0.3s;
 }

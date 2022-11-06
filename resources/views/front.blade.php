@@ -30,7 +30,7 @@
         <img src="{{ asset("logo.png") }}" alt="logo" class="disguised3 animatable">
         <div class="title disguised3 animatable">
             <h1>WPWW</h1>
-            <h2>Muzyka szyta na miarę</h2>
+            <h2>Muzyka Szyta Na Miarę</h2>
         </div>
     </section>
     <section id="intro">

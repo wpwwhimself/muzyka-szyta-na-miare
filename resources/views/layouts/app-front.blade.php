@@ -33,7 +33,7 @@
     gtag('config', 'UA-73695122-4');
     </script>
 
-    <title>WPWW – Muzyka szyta na miarę ✂🎵 Podkłady i usługi muzyczne</title>
+    <title>WPWW Muzyka Szyta Na Miarę ✂🎵 Podkłady i usługi muzyczne</title>
 </head>
 <body>
     @yield('everything')

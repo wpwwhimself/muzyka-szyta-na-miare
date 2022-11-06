@@ -21,7 +21,7 @@ class CreateSongsTable extends Migration
             $table->string("link")->nullable();
             $table->foreignId("quest_type_id")->constrained();
             $table->string("genre");
-            $table->int("instruments_code")->default(0)->comment("drums, guitars, pianos, synths, brass, strings, vocals, others");
+            $table->integer("instruments_code")->default(0)->comment("drums, guitars, pianos, synths, brass, strings, vocals, others");
             $table->string("price_code");
             $table->text("notes");
             $table->timestamps();

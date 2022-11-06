@@ -16,25 +16,29 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->string("client_name");
+            $table->boolean("made_by_me")->default(false);
+
+            $table->foreignId("client_id")->nullable()->constrained();
+            $table->string("client_name")->nullable();
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();
-            $table->foreignId("client_id")->nullable()->constrained();
             $table->string("contact_preference")->default("email");
-            $table->boolean("made_by_me")->default(false);
-            $table->foreignId("quest_type_id")->constrained();
-            $table->string("link")->nullable();
-            $table->text("wishes")->nullable();
-            $table->date("deadline")->nullable();
-            $table->date("hard_deadline")->nullable();
-            $table->foreignId("status_id")->constrained("statuses");
+
+            $table->foreignId("song_id")->nullable()->constrained();
+            $table->foreignId("quest_type_id")->nullable()->constrained();
             $table->string("title")->nullable();
             $table->string("artist")->nullable();
             $table->string("cover_artist")->nullable();
+            $table->string("link")->nullable();
+            $table->text("wishes")->nullable();
             $table->string("price_code")->nullable();
+
+            $table->date("deadline")->nullable();
+            $table->date("hard_deadline")->nullable();
+            $table->foreignId("status_id")->constrained("statuses");
             $table->float("price")->nullable();
-            $table->string("quest_id", 4)->nullable();
+            $table->string("quest_id")->nullable();
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->timestamps();
         });

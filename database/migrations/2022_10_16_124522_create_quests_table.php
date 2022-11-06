@@ -14,16 +14,14 @@ class CreateQuestsTable extends Migration
     public function up()
     {
         Schema::create('quests', function (Blueprint $table) {
-            $table->string("id", 4)->primary();
+            $table->string("id")->primary();
             $table->foreignId("quest_type_id")->constrained();
             $table->foreignId("song_id")->constrained();
             $table->foreignId("client_id")->constrained();
             $table->foreignId("status_id")->constrained("statuses");
-            $table->string("link")->nullable();
-            $table->text("wishes")->nullable();
-            $table->string("price_code");
+            $table->string("price_code_override")->nullable();
             $table->float("price");
-            $table->float("paid")->default(0);
+            $table->boolean("paid")->default(false);
             $table->date("deadline")->nullable();
             $table->date("hard_deadline")->nullable();
             $table->timestamps();

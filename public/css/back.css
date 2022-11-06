@@ -94,6 +94,7 @@ form, .login-grid-container, .input-container{
 }
 
 .quest-status{
+    color: rgb(var(--q-clr));
     font-weight: bold;
     border-radius: 2em;
     white-space: nowrap;

@@ -13,10 +13,12 @@ class PhaseIndicator extends Component
      * @return void
      */
     public $statusId;
+    public $small;
 
-    public function __construct($statusId)
+    public function __construct($statusId, $small = false)
     {
         $this->statusId = $statusId;
+        $this->small = $small;
     }
 
     public function statusName($statusId){

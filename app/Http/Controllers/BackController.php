@@ -56,7 +56,7 @@ class BackController extends Controller
         $archmage = (Auth::id() == 1) ? "archmage." : "";
 
         $requests = Request::where("status_id", "!=", 9)
-            ->orderBy("created_at", "desc");
+            ->orderBy("updated_at", "desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
         }
@@ -125,10 +125,12 @@ class BackController extends Controller
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients")));
     }
-    public function addRequestBack(HttpRequest $rq){
-        $request = new Request;
+    public function modRequestBack(HttpRequest $rq){
+        $modifying = $rq->modifying; //insert -- 0; update -- request_id
+        $request = ($modifying != 0) ? Request::find($modifying) : new Request;
 
         if(Auth::id() != 1){
+            // składanie requesta przez klienta
             $request->client_id = Auth::user()->client->id;
             $request->client_name = Auth::user()->client->client_name;
             $request->email = Auth::user()->client->email;
@@ -136,8 +138,9 @@ class BackController extends Controller
             $request->other_medium = Auth::user()->client->other_medium;
             $request->contact_preference = Auth::user()->client->contact_preference ?? "email";
             $request->wishes = Auth::user()->client->default_wishes;
-            $request->hard_deadline = true;
+            $request->made_by_me = false;
         }else{
+            // składanie requesta przeze mnie
             if($rq->client_id){
                 $client = Client::find($rq->client_id);
                 $request->client_id = $rq->client_id;
@@ -153,19 +156,20 @@ class BackController extends Controller
                 $request->other_medium = $rq->other_medium;
                 $request->contact_preference = $rq->contact_preference ?? "email";
             }
-            $request->hard_deadline = ($rq->hard_deadline == "on");
+            $request->price = price_calc($rq->price_code, $rq->client_id)[0];
+            $request->made_by_me = true;
         }
         $request->title = $rq->title;
         $request->artist = $rq->artist;
         $request->cover_artist = $rq->cover_artist;
         $request->link = $rq->link;
-        $request->price = $rq->price;
+        $request->price_code = $rq->price_code;
         $request->deadline = $rq->deadline;
+        $request->hard_deadline = $rq->hard_deadline;
 
         $request->wishes = ($request->wishes == null) ? $rq->wishes : $request->wishes."\n".$rq->wishes;
 
         $request->quest_type_id = $rq->quest_type;
-        $request->made_by_me = true;
         $request->status_id = (Auth::id() == 1) ? 5 : 1;
         $request->save();
 

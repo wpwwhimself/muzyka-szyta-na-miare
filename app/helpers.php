@@ -5,8 +5,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 if(!function_exists("price_calc")){
-    function price_calc($labels){
-        $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
+    function price_calc($labels, $client_id){
+        if($client_id == null) $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
         $price_schema = pricing($client_id);
 
         $price = 0; $multiplier = 1; $positions = [];

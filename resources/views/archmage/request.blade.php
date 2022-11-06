@@ -52,8 +52,9 @@
                             $("#other_medium").val(res.other_medium);
                             $("#contact_preference").val(res.contact_preference);
                             // $("#wishes").html(res.default_wishes);
-                            $("#special-prices-warning")
-                            .html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);
+                            if(res.special_prices != null){
+                                $("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);
+                            }
                         }
                     });
                 }else{
@@ -83,13 +84,14 @@
             <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
             <x-input type="text" name="cover_artist" label="Coverujący" value="{{ $request->cover_artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" value="{{ $request->link }}" />
+            <x-link-interpreter :raw="$request->link" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
         </section>
 
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             <div id="special-prices-warning"></div>
-            <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" value="{{ $request->price }}" />
+            <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" value="{{ $request->price_code }}" />
             <div id="price-summary">
                 <div class="positions"></div>
                 <hr />
@@ -97,7 +99,7 @@
             </div>
             <script>
             function calcPriceNow(){
-                const labels = $("#price").val();
+                const labels = $("#price_code").val();
                 const client_id = $("#client_id").val();
                 const positions_list = $("#price-summary .positions");
                 const sum_row = $("#price-summary .summary");
@@ -126,11 +128,11 @@
             }
             $(document).ready(function(){
                 calcPriceNow();
-                $("#price").change(function (e) { calcPriceNow() });
+                $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="date" name="deadline" label="Termin wykonania" value="{{ $request->deadline }}" />
-            <x-input type="checkbox" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
+            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" />
         </section>
 
         <section class="input-group" id="quest-calendar">
@@ -138,6 +140,7 @@
             🚧 TBD 🚧
         </section>
     </div>
+    <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <button type="submit" class="hover-lift">
         <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
     </button>

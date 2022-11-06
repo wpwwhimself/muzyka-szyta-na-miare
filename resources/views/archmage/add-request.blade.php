@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-    <form method="post" action={{ route("add-request-back") }}>
+    <form method="post" action={{ route("mod-request-back") }}>
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
         <div id="request-box">
@@ -63,14 +63,14 @@
                 <x-input type="text" name="title" label="Tytuł utworu" />
                 <x-input type="text" name="artist" label="Oryginalny wykonawca" />
                 <x-input type="text" name="cover_artist" label="Coverujący" />
-                <x-input type="url" name="link" label="Link do nagrania" />
+                <x-input type="text" name="link" label="Link do nagrania" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" />
             </section>
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
                 <div id="special-prices-warning"></div>
-                <x-input type="text" name="price" label="Wycena (kod lub kwota)" :hint="$prices" />
+                <x-input type="text" name="price_code" label="Wycena (kod i kwota)" :hint="$prices" />
                 <div id="price-summary">
                     <div class="positions"></div>
                     <hr />
@@ -78,7 +78,7 @@
                 </div>
                 <script>
                 function calcPriceNow(){
-                    const labels = $("#price").val();
+                    const labels = $("#price_code").val();
                     const client_id = $("#client_id").val();
                     const positions_list = $("#price-summary .positions");
                     const sum_row = $("#price-summary .summary");
@@ -107,11 +107,11 @@
                 }
                 $(document).ready(function(){
                     calcPriceNow();
-                    $("#price").change(function (e) { calcPriceNow() });
+                    $("#price_code").change(function (e) { calcPriceNow() });
                 });
                 </script>
-                <x-input type="date" name="deadline" label="Termin wykonania" />
-                <x-input type="checkbox" name="hard_deadline" label="Termin narzucony przez klienta" />
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
+                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
             </section>
 
             <section class="input-group">
@@ -119,6 +119,7 @@
                 🚧 TBD 🚧
             </section>
         </div>
+        <input type="hidden" name="modifying" value="0" />
         <button type="submit" class="hover-lift">
             <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
         </button>

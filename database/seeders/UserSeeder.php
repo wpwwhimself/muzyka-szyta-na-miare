@@ -29,7 +29,9 @@ class UserSeeder extends Seeder
             "id" => 2,
             "client_name" => "Jan Testowy",
             "email" => "bob@gmail.com",
-            "phone" => 123456789
+            "phone" => 123456789,
+            "created_at" => "2022-01-01",
+            "updated_at" => "2022-01-01"
         ]);
     }
 }

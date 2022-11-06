@@ -89,8 +89,11 @@ form, .login-grid-container, .input-container{
     text-align: center;
 }
 
+.quest-links{
+    font-size: 1.5em;
+}
+
 .quest-status{
-    color: rgb(var(--q-clr));
     font-weight: bold;
     border-radius: 2em;
     white-space: nowrap;
@@ -106,7 +109,7 @@ form, .login-grid-container, .input-container{
     border-radius: 1em;
 }
 .quests-table .table-row:hover{
-    background: linear-gradient(to right, rgb(var(--q-clr)), transparent);
+    background: rgba(var(--q-clr), 0.3);
     color: initial;
 }
 .quests-table .table-header{
@@ -149,7 +152,7 @@ form, .login-grid-container, .input-container{
     display: flex;
     justify-content: center; align-items: baseline;
 }
-.quest-phase-label h3{
+.quest-phase-label h3, .quest-phase-label p{
     margin: 0 0.5em;
     color: rgb(var(--q-clr));
 }

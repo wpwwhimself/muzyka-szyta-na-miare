@@ -44,7 +44,9 @@
                         <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
                     @endif
                     </span>
-                    <span class="quest-status">{{ $request->status->status_name }}</span>
+                    <span class="quest-status">
+                        <x-phase-indicator :status-id="$request->status_id" :small="true" />
+                    </span>
                 </a>
                 @empty
                 <p class="grayed-out">brak zapytań</p>

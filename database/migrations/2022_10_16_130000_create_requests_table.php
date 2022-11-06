@@ -27,12 +27,13 @@ class CreateRequestsTable extends Migration
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
             $table->date("deadline")->nullable();
-            $table->boolean("hard_deadline")->default(false);
+            $table->date("hard_deadline")->nullable();
             $table->foreignId("status_id")->constrained("statuses");
             $table->string("title")->nullable();
             $table->string("artist")->nullable();
             $table->string("cover_artist")->nullable();
-            $table->string("price")->nullable();
+            $table->string("price_code")->nullable();
+            $table->float("price")->nullable();
             $table->string("quest_id", 4)->nullable();
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->timestamps();

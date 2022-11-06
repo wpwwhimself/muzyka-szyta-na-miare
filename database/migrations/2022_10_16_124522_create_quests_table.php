@@ -21,10 +21,11 @@ class CreateQuestsTable extends Migration
             $table->foreignId("status_id")->constrained("statuses");
             $table->string("link")->nullable();
             $table->text("wishes")->nullable();
-            $table->string("price");
+            $table->string("price_code");
+            $table->float("price");
             $table->float("paid")->default(0);
             $table->date("deadline")->nullable();
-            $table->boolean("hard_deadline")->default(false);
+            $table->date("hard_deadline")->nullable();
             $table->timestamps();
         });
     }

@@ -23,7 +23,7 @@ class CreateSongsTable extends Migration
             $table->string("genre");
             $table->integer("instruments_code")->default(0)->comment("drums, guitars, pianos, synths, brass, strings, vocals, others");
             $table->string("price_code");
-            $table->text("notes");
+            $table->text("notes")->nullable();
             $table->timestamps();
         });
     }

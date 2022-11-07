@@ -4,13 +4,14 @@
     'required' => false,
     "disabled" => false,
     "hint" => null,
-    "value" => null
+    "value" => null,
+    "small" => false
 ])
 
 <div {{
     $attributes
-        ->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "placeholder"])))
-        ->merge(["class" => "input-container"])
+        ->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "placeholder", "small"])))
+        ->merge(["class" => ($small) ? "input-container input-small" : "input-container"])
     }}>
 
     @if ($hint && $type != "hidden")

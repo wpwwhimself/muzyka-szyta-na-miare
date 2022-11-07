@@ -23,7 +23,7 @@ class CreateRequestsTable extends Migration
             $table->string("email")->nullable();
             $table->integer("phone")->nullable();
             $table->string("other_medium")->nullable();
-            $table->string("contact_preference")->default("email");
+            $table->string("contact_preference")->nullable()->default("email");
 
             $table->foreignId("song_id")->nullable()->constrained();
             $table->foreignId("quest_type_id")->nullable()->constrained();
@@ -34,10 +34,10 @@ class CreateRequestsTable extends Migration
             $table->text("wishes")->nullable();
             $table->string("price_code")->nullable();
 
+            $table->float("price")->nullable();
             $table->date("deadline")->nullable();
             $table->date("hard_deadline")->nullable();
             $table->foreignId("status_id")->constrained("statuses");
-            $table->float("price")->nullable();
             $table->string("quest_id")->nullable();
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->timestamps();

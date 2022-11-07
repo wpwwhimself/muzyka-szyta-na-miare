@@ -92,7 +92,7 @@
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             <div id="special-prices-warning"></div>
             <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" value="{{ $request->price_code }}" />
-            <div id="price-summary">
+            <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
                 <div class="summary"><span>Razem:</span><span>0 zł</span></div>

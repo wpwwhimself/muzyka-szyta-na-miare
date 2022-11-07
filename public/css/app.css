@@ -56,6 +56,9 @@ input, select, button{
     font-size: 1.5em;
     text-align: center;
 }
+input:disabled, select:disabled, textarea:disabled{
+    border-color: #aaaaaa22;
+}
 option{
     background-color: var(--bg);
 }

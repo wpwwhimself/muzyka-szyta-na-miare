@@ -2,7 +2,7 @@ body{
     padding-bottom: 7em;
     min-height: calc(100vh - 7em);
     background-color: var(--bg); color: var(--fg);
-    --bg: #222; --fg: white;
+    --bg: #222; --fg: #ddd;
 }
 h2{
     font-size: 1.2em;
@@ -116,7 +116,7 @@ form, .login-grid-container, .input-container{
 }
 .quests-table .table-row:hover{
     background: rgba(var(--q-clr), 0.3);
-    color: initial;
+    color: inherit;
 }
 .quests-table .table-header{
     font-weight: bold;
@@ -145,7 +145,7 @@ form, .login-grid-container, .input-container{
     margin: 0.3em;
 }
 .quest-phase-bars div{
-    background-color: lightgray;
+    background-color: #ffffff44;
     margin: 0 0.1em;
     height: 0.7em;
     border-radius: 1em;

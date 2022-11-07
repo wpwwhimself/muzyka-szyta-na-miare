@@ -12,7 +12,7 @@
                 <x-input type="text" name="artist" label="Oryginalny wykonawca" />
                 <x-input type="text" name="cover_artist" label="Coverujący" />
                 <x-input type="text" name="link" label="Link do nagrania" />
-                <x-input type="TEXT" name="wishes" label="Życzenia" />
+                <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ Auth::user()->client->default_wishes }}" />
                 <x-input type="date" name="hard_deadline" label="Opcjonalny termin wykonania" />
             </section>
         </div>

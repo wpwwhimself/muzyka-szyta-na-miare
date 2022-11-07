@@ -35,8 +35,7 @@
                                 $("#other_medium").val(res.other_medium);
                                 $("#contact_preference").val(res.contact_preference);
                                 $("#wishes").html(res.default_wishes);
-                                $("#special-prices-warning")
-                                .html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);
+                                if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
                             }
                         });
                     }else{
@@ -58,20 +57,66 @@
             </section>
 
             <section class="input-group">
-                <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
-                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" />
+                <h2><i class="fa-solid fa-cart-flatbed"></i> Dane utworu</h2>
+                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
                 <x-input type="text" name="title" label="Tytuł utworu" />
                 <x-input type="text" name="artist" label="Oryginalny wykonawca" />
                 <x-input type="text" name="cover_artist" label="Coverujący" />
-                <x-input type="text" name="link" label="Link do nagrania" />
+                <x-input type="text" name="link" label="Link do nagrania" :small="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" />
+
+                <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
+                <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" />
+                <div id="song-summary" class="hint-table">
+                    <div class="positions"></div>
+                </div>
+                <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" />
+                <script>
+                function loadSong(){
+                    const song_id = $("#song_id").val();
+                    const positions_list = $("#song-summary .positions");
+                    const bind_checkbox = $("#bind_with_song").parent();
+                    const empty = $("#song_id").val() == "";
+                    let songdata = {};
+
+                    if(!empty){
+                        $.ajax({
+                            url: "{{ url('song_data') }}",
+                            type: "get",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                id: $("#song_id").val()
+                            },
+                            success: function(res){
+                                res = JSON.parse(res);
+                                let content = ``;
+                                content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
+                                content += `<span>Artysta</span><span>${res.artist}</span>`;
+                                content += `<span>Coverujący</span><span>${res.cover_artist}</span>`;
+                                content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
+                                content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
+                                content += `<span>Uwagi</span><span>${res.notes}</span>`;
+                                positions_list.html(content);
+                                bind_checkbox.show();
+                            }
+                        });
+                    }else{
+                        positions_list.html("");
+                        bind_checkbox.hide();
+                    }
+                }
+                $(document).ready(function(){
+                    loadSong();
+                    $("#song_id").change(function (e) { loadSong() });
+                });
+                </script>
             </section>
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
                 <div id="special-prices-warning"></div>
-                <x-input type="text" name="price_code" label="Wycena (kod i kwota)" :hint="$prices" />
-                <div id="price-summary">
+                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" />
+                <div id="price-summary" class="hint-table">
                     <div class="positions"></div>
                     <hr />
                     <div class="summary"><span>Razem:</span><span>0 zł</span></div>
@@ -124,4 +169,11 @@
             <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
         </button>
     </form>
+
+    <script>
+    $(document).ready(function(){
+    // $("#client_id").select2();
+    // $("#song_id").select2();
+    });
+    </script>
 @endsection

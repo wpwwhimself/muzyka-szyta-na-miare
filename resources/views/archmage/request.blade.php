@@ -14,7 +14,7 @@
         //disabling inputs if no change is allowed
         if([5, 7, 8, 9].includes(parseInt($(".quest-phase").attr("status")))){
             $("input, select, textarea").prop("disabled", true);
-            $("button[type=submit]").hide();
+            $("button, .submit").hide();
             $("#quest-calendar").hide();
         };
     });
@@ -179,14 +179,21 @@
             </script>
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
+        </section>
 
+        <section class="input-group" id="quest-calendar">
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             🚧 TBD 🚧
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
-    <button type="submit" class="hover-lift">
-        <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
-    </button>
+    <div class="flexright">
+        <button type="submit" class="hover-lift">
+            <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
+        </button>
+        <a href='{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}' class="submit danger hover-lift">
+            <i class="fa-solid fa-trash"></i> Nie podejmę się
+        </a>
+    </div>
 </form>
 @endsection

@@ -56,8 +56,7 @@ class BackController extends Controller
         $client = Auth::user()->client;
         $archmage = (Auth::id() == 1) ? "archmage." : "";
 
-        $requests = Request::where("status_id", "!=", 9)
-            ->orderBy("updated_at", "desc");
+        $requests = Request::orderBy("updated_at", "desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
         }
@@ -146,11 +145,6 @@ class BackController extends Controller
             // składanie requesta przez klienta
             $request->made_by_me = false;
             $request->client_id = Auth::user()->client->id;
-            // $request->client_name = Auth::user()->client->client_name;
-            // $request->email = Auth::user()->client->email;
-            // $request->phone = Auth::user()->client->phone;
-            // $request->other_medium = Auth::user()->client->other_medium;
-            // $request->contact_preference = Auth::user()->client->contact_preference ?? "email";
             $request->quest_type_id = $rq->quest_type;
             $request->title = $rq->title;
             $request->artist = $rq->artist;
@@ -185,9 +179,25 @@ class BackController extends Controller
         $request->deadline = $rq->deadline;
         $request->hard_deadline = $rq->hard_deadline;
 
-        $request->status_id = (Auth::id() == 1) ? 5 : 1;
+        if($rq->questioning) $request->status_id = 6;
+        else $request->status_id = (Auth::id() == 1) ? 5 : 1;
+
         $request->save();
 
-        return redirect("requests")->with("success", "Dodano nowe zapytanie");
+        //TODO log zmiany statusu
+
+        return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
+    }
+
+    public function requestFinal($id, $status){
+        $request = Request::findOrFail($id);
+
+        $request->status_id = $status;
+        //TODO if($status == 9) utwórz questa i dopisz go do requesta
+        $request->save();
+
+        //TODO log zmiany statusu
+
+        return redirect()->route("requests")->with("success", "Zapytanie zmienione");
     }
 }

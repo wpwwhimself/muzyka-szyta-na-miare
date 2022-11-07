@@ -8,7 +8,7 @@
         @endif
     </div>
     <div class="quest-phase-bars">
-        @for ($i = 0; $i < 10; $i++)
+        @for ($i = 0; $i < 9; $i++)
         <div {{ ($i < $bars($statusId)) ? "class=highlighted" : "" }}></div>
         @endfor
     </div>

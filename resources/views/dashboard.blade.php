@@ -15,7 +15,7 @@
             <h2>{{ Auth::user()->client->client_name ?? "anonimowy klient" }}</h2>
             <div class="hint-table">
                 <div class="positions">
-                    <span>Ukończonych zleceń</span><span>???</span>
+                    <span>Ukończonych zleceń</span><span>🚧 TBD 🚧</span>
                 </div>
             </div>
         </section>

@@ -1,8 +1,8 @@
 @media (prefers-color-scheme: dark){
-    body{ --bg: #222; --fg: #eee; }   
+    body{ --bg: #222; --fg: #eee; }
 }
 @media (prefers-color-scheme: light){
-    body{ --bg: white; --fg: black; }   
+    body{ --bg: white; --fg: black; }
 }
 
 body{
@@ -128,6 +128,10 @@ form, .login-grid-container, .input-container{
     font-weight: bold;
 }
 
+.quests-table .table-row span:first-child{
+    text-align: center;
+}
+
 .song-title, .song-artist{
     text-align: center;
     margin: 0;
@@ -147,7 +151,7 @@ form, .login-grid-container, .input-container{
 
 .quest-phase-bars{
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     margin: 0.3em;
 }
 .quest-phase-bars div{
@@ -171,13 +175,13 @@ form, .login-grid-container, .input-container{
 
 .hint-table div{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     text-align: left;
 }
 .hint-table .grayed-out{
     grid-column: span 1/1;
 }
-.hint-table div span:hover{
+.hint-table .positions span:nth-child(4n+3), .hint-table .positions span:nth-child(4n){
     background-color: #ffffff22;
 }
 .hint-table div span:nth-child(even){

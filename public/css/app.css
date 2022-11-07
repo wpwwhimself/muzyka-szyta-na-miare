@@ -28,7 +28,11 @@ h1, h2, h3, h4{
     font-style: italic;
     color: gray;
 }
-.grayed-out::before, .grayed-out::after{
+.yellowed-out{
+    font-style: italic;
+    color: var(--ui-clr-1);
+}
+.grayed-out::before, .grayed-out::after, .yellowed-out::before, .yellowed-out::after{
     content: " — ";
 }
 
@@ -47,12 +51,12 @@ a:hover{
     margin: 0.2em 0;
     position: relative;
 }
-input, select, textarea, button{
+input, select, textarea, button, .submit{
     background: none; color: inherit;
     font-family: Raleway;
     border-left: none; border-right: none; border-top: none;
 }
-input, select, button{
+input, select, button, .submit{
     font-size: 1.5em;
     text-align: center;
 }
@@ -75,7 +79,7 @@ input[type="checkbox"]{
     height: 1.2em;
     accent-color: var(--ui-clr-2);
 }
-*[type="submit"]{
+*[type="submit"], .submit{
     width: fit-content;
     padding: 0.5em 1.5em;
     margin: 0.5em auto 0;
@@ -84,14 +88,17 @@ input[type="checkbox"]{
     transition-duration: 0.3s;
     background-color: var(--ui-clr-1); color: black;
 }
-*[type="submit"]:hover{
+*[type="submit"]:hover, .submit:hover{
     background-color: var(--ui-clr-2);
     color: white;
     border-color: white;
 }
-*[type="submit"]:active{
+*[type="submit"]:active, .submit:active{
     background-color: white;
     border: inset 2px black;
+}
+.danger{
+    background-color: #ec2e28;
 }
 
 /* ALERTS */

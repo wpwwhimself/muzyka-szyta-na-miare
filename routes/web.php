@@ -43,6 +43,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/mod-back', "modRequestBack")->middleware("auth")->name("mod-request-back");
 
+    Route::get('/request/final/{id}-{status}', "requestFinal")->name("request-final");
+
     Route::get('/clients', "clients")->middleware("auth")->name("clients");
     Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
 

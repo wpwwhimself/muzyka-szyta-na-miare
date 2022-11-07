@@ -74,7 +74,7 @@ class PricesSeeder extends Seeder
             [
                 "indicator" => "h",
                 "service" => "akordy/przepisanie melodii",
-                "operation" => "*",
+                "operation" => "+",
                 "price_a" => 30,
                 "price_b" => 30
             ],

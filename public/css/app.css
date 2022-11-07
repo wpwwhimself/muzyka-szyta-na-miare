@@ -48,13 +48,16 @@ a:hover{
     position: relative;
 }
 input, select, textarea, button{
-    background: none;
+    background: none; color: inherit;
     font-family: Raleway;
     border-left: none; border-right: none; border-top: none;
 }
 input, select, button{
     font-size: 1.5em;
     text-align: center;
+}
+option{
+    background-color: var(--bg);
 }
 .input-hint{
     position: absolute; top: 0; right: 0;
@@ -76,7 +79,7 @@ input[type="checkbox"]{
     border: 2px solid black;
     border-radius: 2em;
     transition-duration: 0.3s;
-    background-color: var(--ui-clr-1);
+    background-color: var(--ui-clr-1); color: black;
 }
 *[type="submit"]:hover{
     background-color: var(--ui-clr-2);
@@ -141,6 +144,7 @@ header{
     align-items: center;
     background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1));
     box-shadow: 0 0 50px #00000077;
+    color: black;
 }
 header h1{
     margin: 0 0.5em 0 0;

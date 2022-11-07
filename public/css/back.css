@@ -1,13 +1,15 @@
 body{
     padding-bottom: 7em;
     min-height: calc(100vh - 7em);
+    background-color: var(--bg); color: var(--fg);
+    --bg: #222; --fg: white;
 }
 h2{
     font-size: 1.2em;
 }
 section{
     border-radius: 2em;
-    background-color: #eee;
+    background-color: #00000033;
     /* box-shadow: 2px 2px 5px #00000044; */
     margin: 1em 1em 0;
     padding: 1em;
@@ -21,6 +23,9 @@ form, .login-grid-container, .input-container{
     flex-direction: column;
     justify-content: center;
     text-align: center;
+}
+.input-container.input-small input, .input-container.input-small select{
+    font-size: 1em;
 }
 .input-group{
     display: flex;
@@ -158,21 +163,21 @@ form, .login-grid-container, .input-container{
     color: rgb(var(--q-clr));
 }
 
-#price-summary div{
+.hint-table div{
     display: grid;
     grid-template-columns: 1fr 1fr;
     text-align: left;
 }
-#price-summary .grayed-out{
+.hint-table .grayed-out{
     grid-column: span 1/1;
 }
-#price-summary div span:nth-child(even){
+.hint-table div span:nth-child(even){
     text-align: right;
 }
 #price-summary .overridden span:nth-child(even){
     text-decoration: line-through;
 }
-#price-summary .summary{
+.hint-table .summary{
     font-weight: bold;
 }
 

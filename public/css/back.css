@@ -1,8 +1,14 @@
+@media (prefers-color-scheme: dark){
+    body{ --bg: #222; --fg: #eee; }   
+}
+@media (prefers-color-scheme: light){
+    body{ --bg: white; --fg: black; }   
+}
+
 body{
     padding-bottom: 7em;
     min-height: calc(100vh - 7em);
     background-color: var(--bg); color: var(--fg);
-    --bg: #222; --fg: #ddd;
 }
 h2{
     font-size: 1.2em;

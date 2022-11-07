@@ -79,13 +79,59 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
-            <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
+            <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
             <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
             <x-input type="text" name="cover_artist" label="Coverujący" value="{{ $request->cover_artist }}" />
-            <x-input type="url" name="link" label="Link do nagrania" value="{{ $request->link }}" />
+            <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
+
+            <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
+            <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" />
+            <div id="song-summary" class="hint-table">
+                <div class="positions"></div>
+            </div>
+            <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" />
+            <script>
+            function loadSong(){
+                const song_id = $("#song_id").val();
+                const positions_list = $("#song-summary .positions");
+                const bind_checkbox = $("#bind_with_song").parent();
+                const empty = $("#song_id").val() == "";
+                let songdata = {};
+
+                if(!empty){
+                    $.ajax({
+                        url: "{{ url('song_data') }}",
+                        type: "get",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: $("#song_id").val()
+                        },
+                        success: function(res){
+                            res = JSON.parse(res);
+                            let content = ``;
+                            content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
+                            content += `<span>Artysta</span><span>${res.artist}</span>`;
+                            content += `<span>Coverujący</span><span>${res.cover_artist}</span>`;
+                            content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
+                            content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
+                            content += `<span>Uwagi</span><span>${res.notes}</span>`;
+                            positions_list.html(content);
+                            bind_checkbox.show();
+                        }
+                    });
+                }else{
+                    positions_list.html("");
+                    bind_checkbox.hide();
+                }
+            }
+            $(document).ready(function(){
+                loadSong();
+                $("#song_id").change(function (e) { loadSong() });
+            });
+            </script>
         </section>
 
         <section class="input-group">
@@ -133,9 +179,7 @@
             </script>
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" />
-        </section>
 
-        <section class="input-group" id="quest-calendar">
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             🚧 TBD 🚧
         </section>

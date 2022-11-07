@@ -78,7 +78,7 @@ input[type="checkbox"]{
 *[type="submit"]{
     width: fit-content;
     padding: 0.5em 1.5em;
-    margin: 0 auto;
+    margin: 0.5em auto 0;
     border: 2px solid black;
     border-radius: 2em;
     transition-duration: 0.3s;

@@ -87,8 +87,14 @@ class BackController extends Controller
             foreach($clients_raw as $client){
                 $clients[$client["id"]] = $client["client_name"];
             }
+            $songs_raw = Song::all()->toArray();
+            foreach($songs_raw as $song){
+                $artist = ($song["cover_artist"] != null) ? $song["cover_artist"] : $song["artist"];
+                $songs[$song["id"]] = $song["title"]." ($artist)";
+            }
         }else{
             $clients = [];
+            $songs = [];
         }
 
         $questTypes_raw = QuestType::all()->toArray();
@@ -100,7 +106,7 @@ class BackController extends Controller
 
         return view($archmage."request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices", "questTypes", "clients")));
+        ], compact("request", "prices", "questTypes", "clients", "songs")));
     }
 
     public function addRequest(){

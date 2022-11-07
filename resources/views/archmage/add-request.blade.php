@@ -157,9 +157,7 @@
                 </script>
                 <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
-            </section>
 
-            <section class="input-group">
                 <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
                 🚧 TBD 🚧
             </section>

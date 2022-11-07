@@ -178,7 +178,7 @@
             });
             </script>
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" />
+            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
 
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             🚧 TBD 🚧

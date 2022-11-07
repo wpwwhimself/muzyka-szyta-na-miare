@@ -26,16 +26,16 @@
 
             @if ($request->price)
             <i class="fa-solid fa-sack-dollar"></i>
-            {{-- <p class="quest-paid">{{ price_calc($request->price)[0] }} zł</p> --}}
+            <p class="quest-paid">{{ $request->price }} zł</p>
             @endif
 
             @if ($request->deadline)
-                @if ($request->hard_deadline)
-                <i class="fa-solid fa-calendar-xmark"></i>
-                @else
-                <i class="fa-solid fa-calendar"></i>
-                @endif
-            <p class="quest-deadline">{{ $request->deadline ?? "—" }}</p>
+            <i class="fa-solid fa-calendar"></i>
+            <p class="quest-deadline">{{ $request->deadline }}</p>
+            @endif
+            @if ($request->hard_deadline)
+            <i class="fa-solid fa-calendar-xmark"></i>
+            <p class="quest-deadline">{{ $request->hard_deadline }}</p>
             @endif
         </div>
     </div>

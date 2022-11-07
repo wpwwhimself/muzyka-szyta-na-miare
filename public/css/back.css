@@ -171,6 +171,9 @@ form, .login-grid-container, .input-container{
 .hint-table .grayed-out{
     grid-column: span 1/1;
 }
+.hint-table div span:hover{
+    background-color: #ffffff22;
+}
 .hint-table div span:nth-child(even){
     text-align: right;
 }

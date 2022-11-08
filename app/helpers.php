@@ -2,7 +2,22 @@
 
 use App\Models\Client;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
+/**
+ * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)
+ */
+if(!function_exists("user_role")){
+    function user_role(){
+        $role = "";
+        switch(Auth::id()){
+            case 1: $role = "archmage"; break;
+            default: $role = "client"; break;
+        }
+        return $role;
+    }
+}
 
 if(!function_exists("price_calc")){
     function price_calc($labels, $client_id){

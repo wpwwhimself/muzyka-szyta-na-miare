@@ -15,7 +15,6 @@ class BackController extends Controller
 {
     public function dashboard(){
         $client = Auth::user()->client;
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
 
         $requests = Request::whereNotIn("status_id", [7, 8, 9])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
@@ -30,7 +29,7 @@ class BackController extends Controller
         $requests = $requests->get();
         $quests = $quests->get();
 
-        return view($archmage."dashboard", [
+        return view(user_role().".dashboard", [
             "title" => (Auth::id() == 1) ? "Szpica arcymaga" : "Pulpit",
             "quests" => $quests,
             "requests" => $requests
@@ -39,7 +38,6 @@ class BackController extends Controller
 
     public function quests(){
         $client = Auth::user()->client;
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
 
         $quests = Quest::orderBy("quests.created_at", "desc");
         if(Auth::id() != 1){
@@ -47,14 +45,13 @@ class BackController extends Controller
         }
         $quests = $quests->get();
 
-        return view($archmage."quests", [
+        return view(user_role().".quests", [
             "title" => "Lista zleceń",
             "quests" => $quests
         ]);
     }
     public function requests(){
         $client = Auth::user()->client;
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
 
         $requests = Request::orderBy("updated_at", "desc");
         if(Auth::id() != 1){
@@ -62,7 +59,7 @@ class BackController extends Controller
         }
         $requests = $requests->get();
 
-        return view($archmage."requests", [
+        return view(user_role().".requests", [
             "title" => "Lista zapytań",
             "requests" => $requests
         ]);
@@ -70,16 +67,14 @@ class BackController extends Controller
 
     public function quest(){
         $quest = [];
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
 
-        return view($archmage."quest", [
+        return view(user_role().".quest", [
             "title" => "Zlecenie",
             "quest" => $quest
         ]);
     }
     public function request($id){
         $request = Request::find($id);
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
 
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
@@ -103,14 +98,12 @@ class BackController extends Controller
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
-        return view($archmage."request", array_merge([
+        return view(user_role().".request", array_merge([
             "title" => "Zapytanie",
         ], compact("request", "prices", "questTypes", "clients", "songs")));
     }
 
     public function addRequest(){
-        $archmage = (Auth::id() == 1) ? "archmage." : "";
-
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
@@ -133,7 +126,7 @@ class BackController extends Controller
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
 
-        return view($archmage."add-request", array_merge([
+        return view(user_role().".add-request", array_merge([
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients", "songs")));
     }
@@ -186,7 +179,7 @@ class BackController extends Controller
 
         //TODO log zmiany statusu
 
-        return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
+        return redirect()->route(user_role().".request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
 
     public function requestFinal($id, $status){
@@ -198,6 +191,6 @@ class BackController extends Controller
 
         //TODO log zmiany statusu
 
-        return redirect()->route("requests")->with("success", "Zapytanie zmienione");
+        return redirect()->route(user_role().".requests")->with("success", "Zapytanie zmienione");
     }
 }

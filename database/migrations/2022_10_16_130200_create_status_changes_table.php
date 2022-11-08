@@ -17,7 +17,6 @@ class CreateStatusChangesTable extends Migration
             $table->id();
             $table->string("re_quest_id")->nullable();
             $table->foreignId("new_status_id")->constrained("statuses");
-            $table->foreignId("past_status_id")->nullable()->constrained("statuses");
             $table->foreignId("changed_by")->nullable()->references("id")->on("users");
             $table->text("comment")->nullable();
             $table->dateTime("date");

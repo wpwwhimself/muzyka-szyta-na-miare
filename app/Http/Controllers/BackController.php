@@ -7,6 +7,7 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
+use App\Models\StatusChange;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -189,8 +190,19 @@ class BackController extends Controller
         //TODO if($status == 9) utwórz questa i dopisz go do requesta
         $request->save();
 
-        //TODO log zmiany statusu
+        $this->statusHistory("rq".$id, $status, $comment);
 
         return redirect()->route(user_role().".requests")->with("success", "Zapytanie zmienione");
+    }
+
+    public function statusHistory($re_quest_id, $new_status_id, $comment){
+        $row = new StatusChange;
+
+        $row->re_quest_id = $re_quest_id;
+        $row->new_status_id = $new_status_id;
+        $row->changed_by = Auth::id();
+        $row->comment = $comment;
+
+        $row->save();        
     }
 }

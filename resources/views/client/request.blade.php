@@ -1,4 +1,4 @@
-@extends('layouts.app', ["title" => "$request->title | $title #$request->id"])
+@extends('layouts.app', ["title" => "$request->title | $title"])
 
 @section('content')
 @foreach (["success", "error"] as $status)

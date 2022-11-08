@@ -9,4 +9,5 @@ class StatusChange extends Model
 {
     use HasFactory;
     const CREATED_AT = "date";
+    const UPDATED_AT = "date";
 }

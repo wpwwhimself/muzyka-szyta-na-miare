@@ -150,6 +150,12 @@ class BackController extends Controller
             $request->made_by_me = true;
             if($rq->client_id){
                 $request->client_id = $rq->client_id;
+                $client = Client::find($rq->client_id);
+                $request->client_name = $client->client_name;
+                $request->email = $client->email;
+                $request->phone = $client->phone;
+                $request->other_medium = $client->other_medium;
+                $request->contact_preference = $client->contact_preference;
             }else{
                 $request->client_name = $rq->client_name;
                 $request->email = $rq->email;
@@ -159,6 +165,13 @@ class BackController extends Controller
             }
             if($rq->bind_with_song == "on"){
                 $request->song_id = $rq->song_id;
+                $song = Song::find($rq->song_id);
+                $request->quest_type_id = $song->quest_type_id;
+                $request->title = $song->title;
+                $request->artist = $song->artist;
+                $request->cover_artist = $song->cover_artist;
+                $request->link = $song->link;
+                $request->wishes = $song->wishes;
             }else{
                 $request->quest_type_id = $rq->quest_type;
                 $request->title = $rq->title;
@@ -178,9 +191,9 @@ class BackController extends Controller
 
         $request->save();
 
-        //TODO log zmiany statusu
+        $this->statusHistory($request->id, $request->status_id, null);
 
-        return redirect()->route(user_role().".request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
+        return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
 
     public function requestFinal($id, $status){
@@ -190,9 +203,9 @@ class BackController extends Controller
         //TODO if($status == 9) utwórz questa i dopisz go do requesta
         $request->save();
 
-        $this->statusHistory("rq".$id, $status, $comment);
+        $this->statusHistory($id, $status, null); //todo komentarze
 
-        return redirect()->route(user_role().".requests")->with("success", "Zapytanie zmienione");
+        return redirect()->route("requests")->with("success", "Zapytanie zmienione");
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment){
@@ -203,6 +216,6 @@ class BackController extends Controller
         $row->changed_by = Auth::id();
         $row->comment = $comment;
 
-        $row->save();        
+        $row->save();
     }
 }

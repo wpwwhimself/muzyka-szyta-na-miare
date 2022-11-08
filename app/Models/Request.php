@@ -19,4 +19,7 @@ class Request extends Model
     public function quest_type(){
         return $this->belongsTo(QuestType::class);
     }
+    public function song(){
+        return $this->belongsTo(Song::class);
+    }
 }

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Request;
 use App\Models\Song;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DummyQuestsSeeder extends Seeder
 {
@@ -38,18 +37,18 @@ class DummyQuestsSeeder extends Seeder
                 "price_code" => "b"
             ]
         ]);
-        Request::insert([
-            "made_by_me" => true,
-            "client_id" => 2,
-            "quest_type_id" => 1, "title" => "Aaaa", "artist" => "Bbbb Bbb",
-            "status_id" => 1
-        ]);
-        Request::insert([
-            "made_by_me" => false,
-            "client_name" => "Agata Kowalska", "email" => "lowcy.b@aaa.com",
-            "song_id" => 2,
-            "price_code" => "c", "price" => 70, "deadline" => "2022-12-13",
-            "status_id" => 5
-        ]);
+        // Request::insert([
+        //     "made_by_me" => true,
+        //     "client_id" => 2,
+        //     "quest_type_id" => 1, "title" => "Aaaa", "artist" => "Bbbb Bbb",
+        //     "status_id" => 1
+        // ]);
+        // Request::insert([
+        //     "made_by_me" => false,
+        //     "client_name" => "Agata Kowalska", "email" => "lowcy.b@aaa.com",
+        //     "song_id" => 2,
+        //     "price_code" => "c", "price" => 70, "deadline" => "2022-12-13",
+        //     "status_id" => 5
+        // ]);
     }
 }

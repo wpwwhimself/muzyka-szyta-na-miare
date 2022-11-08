@@ -15,7 +15,7 @@ class CreateRequestsTable extends Migration
     public function up()
     {
         Schema::create('requests', function (Blueprint $table) {
-            $table->id();
+            $table->uuid("id")->primary();
             $table->boolean("made_by_me")->default(false);
 
             $table->foreignId("client_id")->nullable()->constrained();

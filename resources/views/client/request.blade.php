@@ -46,7 +46,7 @@
             <script>
             function calcPriceNow(){
                 const labels = "{{ $request->price_code }}";
-                const client_id = {{ $request->client_id }};
+                const client_id = {!! $request->client_id ?? "\"\"" !!};
                 const positions_list = $("#price-summary .positions");
                 const sum_row = $("#price-summary .summary");
                 if(labels == "") $("#price-summary").hide();

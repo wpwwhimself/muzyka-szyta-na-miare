@@ -14,7 +14,7 @@
                 </div>
             </div>
             <style>
-            .table-row{ grid-template-columns: 3em 3fr 1fr 1fr; }
+            .table-row{ grid-template-columns: 3em 3fr 1fr 11em; }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">

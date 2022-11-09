@@ -39,11 +39,11 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
 
     Route::get('/requests', "requests")->middleware("auth")->name("requests");
-    Route::get('/requests/view/{id}', "request")->middleware("auth")->name("request");
-    Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
-    Route::post('/requests/mod-back', "modRequestBack")->middleware("auth")->name("mod-request-back");
+    Route::get('/requests/view/{id}', "request")->name("request");
+    Route::get('/requests/add', "addRequest")->name("add-request");
+    Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
-    Route::get('/request/final/{id}/{status}', "requestFinal")->name("request-final");
+    Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
 
     Route::get('/clients', "clients")->middleware("auth")->name("clients");
     Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
@@ -52,6 +52,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/messages', "messages")->middleware("auth")->name("messages");
 
 });
+
+Route::get('/request-finalized/{status}', function($status){ return view("request-finalized", ["title" => "Gotowe", "status" => $status]); })->name("request-finalized");
 
 Route::get('/client_data', function(Request $request){
     return Client::find($request->id)->toJson();

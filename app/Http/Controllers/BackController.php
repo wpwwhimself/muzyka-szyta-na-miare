@@ -137,8 +137,10 @@ class BackController extends Controller
 
         if(Auth::id() != 1){
             // składanie requesta przez klienta
+            if(Auth::check()){
+                $request->client_id = Auth::user()->client->id;
+            }
             $request->made_by_me = false;
-            $request->client_id = Auth::user()->client->id;
             $request->quest_type_id = $rq->quest_type;
             $request->title = $rq->title;
             $request->artist = $rq->artist;
@@ -205,6 +207,9 @@ class BackController extends Controller
 
         $this->statusHistory($id, $status, null); //todo komentarze
 
+        if(!Auth::check()){
+            return redirect()->route("request-finalized", ["status" => $status]);
+        }
         return redirect()->route("requests")->with("success", "Zapytanie zmienione");
     }
 

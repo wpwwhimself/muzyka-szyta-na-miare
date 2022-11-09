@@ -202,10 +202,21 @@ class BackController extends Controller
         $request = Request::findOrFail($id);
 
         $request->status_id = $status;
-        //TODO if($status == 9) utwórz questa i dopisz go do requesta
+
+        // adding new quest
+        if($status == 9){
+            //TODO add new song if not exists
+            //TODO add new client if not exists
+            Quest::create([
+                "id" => "AAA", //TODO new ID generator
+                "quest_type_id" => $request->quest_type_id,
+                "song_id"
+            ]);
+        }
+
         $request->save();
 
-        $this->statusHistory($id, $status, null); //todo komentarze
+        $this->statusHistory($id, $status, null);
 
         if(!Auth::check()){
             return redirect()->route("request-finalized", ["status" => $status]);

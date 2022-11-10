@@ -1,7 +1,6 @@
--- users + clients
+-- clients
 SELECT
     k.id "id",
-    k.hasło "password",
     (CASE
         WHEN k.nazwisko REGEXP '/' THEN SUBSTRING(k.nazwisko, 1, POSITION('/' IN k.nazwisko)-1)
         ELSE k.nazwisko
@@ -34,10 +33,10 @@ LEFT JOIN (
     from p_questy q
     group by q.klient_id
     ) fq ON fq.klient_id = k.id
+WHERE k.id != 1
 UNION ALL
 SELECT
     null "id",
-    CONCAT('A', SUBSTRING(k.hasło, 2)) "password",
     SUBSTRING(k.nazwisko, POSITION('/' IN k.nazwisko)+1) "client_name",
     (CASE
     	WHEN k.t_kontakt REGEXP '@' THEN k.t_kontakt
@@ -65,4 +64,4 @@ LEFT JOIN (
     from p_questy q
     group by q.klient_id
     ) fq ON fq.klient_id = k.id
-WHERE k.nazwisko REGEXP '/'
+WHERE k.nazwisko REGEXP '/' AND k.id != 1;

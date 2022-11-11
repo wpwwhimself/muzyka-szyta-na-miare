@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuestTypesTable extends Migration
+class CreateGenresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateQuestTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('quest_types', function (Blueprint $table) {
+        Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string("type");
-            $table->char("code");
+            $table->string("name");
         });
     }
 
@@ -27,6 +26,6 @@ class CreateQuestTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quest_types');
+        Schema::dropIfExists('genres');
     }
 }

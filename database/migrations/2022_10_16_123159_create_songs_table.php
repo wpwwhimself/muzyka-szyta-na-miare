@@ -14,14 +14,12 @@ class CreateSongsTable extends Migration
     public function up()
     {
         Schema::create('songs', function (Blueprint $table) {
-            $table->id();
+            $table->string("id")->primary();
             $table->string("title")->nullable();
             $table->string("artist")->nullable();
-            $table->string("cover_artist")->nullable();
             $table->string("link")->nullable();
-            $table->string("genre")->nullable();
-            $table->integer("instruments_code")->default(0)->comment("drums, guitars, pianos, synths, brass, strings, vocals, others");
-            // $table->string("price_code");
+            $table->foreignId("genre_id")->nullable()->constrained();
+            $table->string("price_code");
             $table->text("notes")->nullable();
             $table->timestamps();
         });

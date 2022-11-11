@@ -25,7 +25,8 @@ class CreateRequestsTable extends Migration
             $table->string("other_medium")->nullable();
             $table->string("contact_preference")->nullable()->default("email");
 
-            $table->foreignId("song_id")->nullable()->constrained();
+            $table->string("song_id")->nullable();
+                $table->foreign("song_id")->references("id")->on("songs");
             $table->foreignId("quest_type_id")->nullable()->constrained();
             $table->string("title")->nullable();
             $table->string("artist")->nullable();

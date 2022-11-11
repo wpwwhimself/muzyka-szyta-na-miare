@@ -13,10 +13,10 @@ class CreateQuestWorkTimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('quest_work_times', function (Blueprint $table) {
+        Schema::create('song_work_times', function (Blueprint $table) {
             $table->id();
-            $table->string("quest_id", 4)->nullable();
-                $table->foreign("quest_id")->references("id")->on("quests");
+            $table->string("song_id");
+                $table->foreign("song_id")->references("id")->on("songs");
             $table->foreignId("status_id")->constrained("statuses");
             $table->time("time_spent")->default(0);
             $table->boolean("now_working")->default(false);

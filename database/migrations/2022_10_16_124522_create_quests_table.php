@@ -15,8 +15,8 @@ class CreateQuestsTable extends Migration
     {
         Schema::create('quests', function (Blueprint $table) {
             $table->string("id")->primary();
-            $table->foreignId("quest_type_id")->constrained();
-            $table->foreignId("song_id")->constrained();
+            $table->string("song_id");
+                $table->foreign("song_id")->references("id")->on("songs");
             $table->foreignId("client_id")->constrained();
             $table->foreignId("status_id")->constrained("statuses");
             $table->string("price_code_override")->nullable();

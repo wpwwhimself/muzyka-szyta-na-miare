@@ -11,17 +11,3 @@ LEFT JOIN (
     from p_questy q
     group by q.klient_id
     ) fq ON fq.klient_id = k.id
-UNION ALL
-SELECT
-    null "id",
-    CONCAT('A', SUBSTRING(k.hasło, 2)) "password",
-    null "remember_token",
-    fq.date "created_at",
-    fq.date "updated_at"
-FROM p_klienci k
-LEFT JOIN (
-    select q.klient_id, min(q.data_1) "date"
-    from p_questy q
-    group by q.klient_id
-    ) fq ON fq.klient_id = k.id
-WHERE k.nazwisko REGEXP '/';

@@ -9,6 +9,9 @@ class Quest extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = "string";
+
     public function client(){
         return $this->belongsTo(Client::class);
     }

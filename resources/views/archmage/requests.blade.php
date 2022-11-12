@@ -31,12 +31,12 @@
                     </span>
                     <span>
                         <h3 class="song-title">{{ $request->title }}</h3>
-                        <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
+                        <span class="song-artist">{{ $request->artist }}</span>
                     </span>
                     <span>
                     @if ($request->client?->client_name)
                         @if (is_veteran($request->client->id))
-                        <i class="fa-solid fa-user-tie" @popper(stały klient)></i> {{ $request->client->client_name }}
+                        <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
                         @else
                         <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
                         @endif
@@ -51,7 +51,6 @@
                 @empty
                 <p class="grayed-out">brak zapytań</p>
                 @endforelse
-                </tbody>
             </div>
         </section>
     </div>

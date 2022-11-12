@@ -2,6 +2,10 @@
 :root{
     --ui-clr-1: #fffaa1;
     --ui-clr-2: #926fa8;
+
+    --ok: 46, 184, 46;
+    --warning: 247, 167, 20;
+    --danger: 218, 69, 69;
 }
 
 /*****************UNIVERSALS****************/
@@ -98,7 +102,7 @@ input[type="checkbox"]{
     border: inset 2px black;
 }
 .danger{
-    background-color: #ec2e28;
+    background-color: rgb(var(--danger));
 }
 
 /* ALERTS */
@@ -117,14 +121,12 @@ input[type="checkbox"]{
     translate: 0 0;
 }
 .success{
-    --clr: #16bf16;
-    --clr-wh: #b5ffb5c5;
-    color: var(--clr);
+    --clr-wh: rgba(var(--ok), 0.7);
+    color: rgb(var(--ok));
 }
 .error{
-    --clr: #ec2e28;
-    --clr-wh: #f8a3a0ce;
-    color: var(--clr);
+    --clr-wh: rgba(var(--danger), 0.7);
+    color: rgb(var(--danger));
 }
 .alert.success, .alert.error{
     border-color: currentColor;
@@ -186,6 +188,19 @@ nav li{
 }
 nav .active{
     background-color: var(--ui-clr-1);
+    color: black;
+}
+
+.pagination{
+    justify-content: center;
+    margin-top: 1em;
+}
+.pagination a{
+    margin: 0; padding: 0;
+}
+.pagination li{
+    padding: 0.5em;
+    border-radius: 2em;
 }
 
 /**********************FOOTER***************/

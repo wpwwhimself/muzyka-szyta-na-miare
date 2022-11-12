@@ -90,6 +90,9 @@ form, .login-grid-container, .input-container{
     display: grid;
     grid-template-columns: 2em 1fr;
 }
+.quest-meta:last-child{
+    grid-template-columns: 1fr 2em;
+}
 .quest-meta p{
     margin: 0;
 }
@@ -109,6 +112,10 @@ form, .login-grid-container, .input-container{
     font-weight: bold;
     border-radius: 2em;
     white-space: nowrap;
+}
+
+.quest-paid{
+    color: rgb(var(--ok));
 }
 
 .quests-table .quest-type{
@@ -136,11 +143,15 @@ form, .login-grid-container, .input-container{
     text-align: center;
     margin: 0;
 }
+.song-title-artist{
+    margin-bottom: 0.5em;
+    background-color: rgba(var(--q-clr), 0.5);
+    border-radius: 1em;
+}
 .song-title{
     font-size: 1.25rem;
     background-color: rgb(var(--q-clr));
-    margin-bottom: 0.5em;
-    border-radius: 2em;
+    border-radius: 1em;
 }
 .quests-table .song-title{
     text-align: left;
@@ -175,8 +186,13 @@ form, .login-grid-container, .input-container{
 
 .hint-table div{
     display: grid;
-    grid-template-columns: 2fr 1fr;
     text-align: left;
+}
+#song-summary.hint-table div{
+    grid-template-columns: auto auto;
+}
+#price-summary.hint-table div{
+    grid-template-columns: 3fr 1fr;
 }
 .hint-table .grayed-out{
     grid-column: span 1/1;

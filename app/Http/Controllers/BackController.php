@@ -21,6 +21,7 @@ class BackController extends Controller
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         $quests = Quest::whereNotIn("status_id", [18, 19])
+            ->orderBy("status_id")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         if(Auth::id() != 1){
@@ -44,7 +45,7 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $quests = $quests->where("client_id", $client->id);
         }
-        $quests = $quests->get();
+        $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [
             "title" => "Lista zleceń",
@@ -84,8 +85,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $artist = ($song["cover_artist"] != null) ? $song["cover_artist"] : $song["artist"];
-                $songs[$song["id"]] = $song["title"]." ($artist)";
+                $songs[$song["id"]] = "$song[title] ($song[artist])";
             }
         }else{
             $clients = [];
@@ -112,8 +112,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $artist = ($song["cover_artist"] != null) ? $song["cover_artist"] : $song["artist"];
-                $songs[$song["id"]] = $song["title"]." ($artist)";
+                $songs[$song["id"]] = "$song[title] ($song[artist])";
             }
         }else{
             $clients = [];
@@ -144,7 +143,6 @@ class BackController extends Controller
             $request->quest_type_id = $rq->quest_type;
             $request->title = $rq->title;
             $request->artist = $rq->artist;
-            $request->cover_artist = $rq->cover_artist;
             $request->link = $rq->link;
             $request->wishes = $rq->wishes;
         }else{
@@ -171,14 +169,12 @@ class BackController extends Controller
                 $request->quest_type_id = $song->quest_type_id;
                 $request->title = $song->title;
                 $request->artist = $song->artist;
-                $request->cover_artist = $song->cover_artist;
                 $request->link = $song->link;
                 $request->wishes = $song->wishes;
             }else{
                 $request->quest_type_id = $rq->quest_type;
                 $request->title = $rq->title;
                 $request->artist = $rq->artist;
-                $request->cover_artist = $rq->cover_artist;
                 $request->link = $rq->link;
                 $request->wishes = $rq->wishes;
             }

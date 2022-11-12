@@ -1,6 +1,6 @@
 @props(['quest'])
 
-<a href="{{ route("quest", $quest->id) }}" class="quest-mini hover-lift q-container p-{{ $quest->status_id }}">
+<a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="quest-mini hover-lift q-container p-{{ $quest->status_id }}">
     <div class="song-title-artist">
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>

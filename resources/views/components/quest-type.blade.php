@@ -12,5 +12,6 @@
         fa-guitar
         @break
     @default
+        fa-circle-question
 @endswitch
 " {{ Popper::pop($label) }}></i>

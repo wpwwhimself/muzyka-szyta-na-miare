@@ -76,7 +76,7 @@ class BackController extends Controller
         ]);
     }
     public function request($id){
-        $request = Request::find($id);
+        $request = Request::findOrFail($id);
 
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Client;
+use App\Models\QuestType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,12 @@ if(!function_exists("user_role")){
             default: $role = "client"; break;
         }
         return $role;
+    }
+}
+
+if(!function_exists("song_quest_type")){
+    function song_quest_type($song_id){
+        return QuestType::where("code", substr($song_id, 0, 1))->first();
     }
 }
 

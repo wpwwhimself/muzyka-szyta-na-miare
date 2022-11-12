@@ -8,6 +8,7 @@ use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
 use App\Models\StatusChange;
+use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,15 +56,25 @@ class BackController extends Controller
     public function requests(){
         $client = Auth::user()->client;
 
-        $requests = Request::orderBy("updated_at", "desc");
+        $splitting_by_status = [7, 8, 9];
+        $requests = Request::whereNotIn("status_id", $splitting_by_status)
+            ->orderBy("updated_at", "desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
         }
         $requests = $requests->get();
 
+        $past_requests = Request::whereIn("status_id", $splitting_by_status)
+            ->orderBy("updated_at", "desc");
+        if(Auth::id() != 1){
+            $past_requests = $past_requests->where("client_id", $client->id);
+        }
+        $past_requests = $past_requests->paginate(25);
+
         return view(user_role().".requests", [
             "title" => "Lista zapytań",
-            "requests" => $requests
+            "requests" => $requests,
+            "past_requests" => $past_requests
         ]);
     }
 
@@ -166,7 +177,7 @@ class BackController extends Controller
             if($rq->bind_with_song == "on"){
                 $request->song_id = $rq->song_id;
                 $song = Song::find($rq->song_id);
-                $request->quest_type_id = $song->quest_type_id;
+                $request->quest_type_id = song_quest_type($rq->song_id)->id;
                 $request->title = $song->title;
                 $request->artist = $song->artist;
                 $request->link = $song->link;
@@ -201,13 +212,53 @@ class BackController extends Controller
 
         // adding new quest
         if($status == 9){
-            //TODO add new song if not exists
-            //TODO add new client if not exists
-            Quest::create([
-                "id" => "AAA", //TODO new ID generator
-                "quest_type_id" => $request->quest_type_id,
-                "song_id"
-            ]);
+            //add new song if not exists
+            if(!$request->song_id){
+                $song = new Song;
+                $song->id = next_song_id($request->quest_type_id);
+                $song->title = $request->title;
+                $song->artist = $request->artist;
+                $song->link = $request->link;
+                $song->genre_id = null; //TODO dodawanie gatunku
+                $song->price_code = $request->price_code;
+                $song->notes = $request->wishes;
+                $song->save();
+            }
+            //add new client if not exists
+            if(!$request->client_id){
+                $user = new User;
+                $user->password = generate_password();
+                $user->save();
+
+                $client = new Client;
+                $client->id = $user->id;
+                $client->client_name = $request->client_name;
+                $client->email = $request->email;
+                $client->phone = $request->phone;
+                $client->other_medium = $request->other_medium;
+                $client->contact_preference = $request->contact_preference;
+                $client->save();
+            }else{
+                $client = Client::find($request->client_id);
+            }
+
+            $quest = new Quest;
+            $quest->id = next_quest_id($request->quest_type_id);
+            $quest->song_id = $request->song_id ?? $song->id;
+            $quest->client_id = $request->client_id ?? $user->id;
+            $quest->status_id = 11;
+            $quest->price_code_override = $request->price_code;
+            $quest->price = $request->price;
+            if($client->budget >= $request->price){
+                $quest->paid = 1;
+                $client->budget -= $request->price;
+                $client->save();
+            }else{
+                $quest->paid = 0;
+            }
+            $quest->deadline = $request->deadline;
+            $quest->hard_deadline = $request->hard_deadline;
+            $quest->save();
         }
 
         $request->save();

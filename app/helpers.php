@@ -1,7 +1,10 @@
 <?php
 
 use App\Models\Client;
+use App\Models\Quest;
 use App\Models\QuestType;
+use App\Models\Song;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +26,46 @@ if(!function_exists("user_role")){
 if(!function_exists("song_quest_type")){
     function song_quest_type($song_id){
         return QuestType::where("code", substr($song_id, 0, 1))->first();
+    }
+}
+
+if(!function_exists("next_quest_id")){
+    function next_quest_id($quest_type_id){
+        $letter = QuestType::find($quest_type_id)->value("code");
+        $newest_id = Quest::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
+        if(!$newest_id){
+            return $letter . date("y") . "-00";
+        }
+        $dash_pos = strpos($newest_id, "-");
+        $newest_id_last = substr($newest_id, $dash_pos + 1);
+        return $letter . date("y") . "-" . to_base36(from_base36($newest_id_last) + 1);
+    }
+}
+if(!function_exists("next_song_id")){
+    function next_song_id($quest_type_id){
+        $letter = QuestType::find($quest_type_id)->value("code");
+        $newest_id = Song::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
+        if(!$newest_id){
+            return $letter . "000";
+        }
+        $newest_id_last = substr($newest_id, 1);
+        return $letter . to_base36(from_base36($newest_id_last) + 1, 3);
+    }
+}
+
+if(!function_exists("generate_password")){
+    function generate_password(){
+        $existing_passwords = User::pluck("password")->toArray();
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
+        do{
+            //sprawdź unikatowość
+            $flag = false;
+            $haslo = substr(str_shuffle($chars),0,12);
+            foreach($existing_passwords as $ptc){ //password to check
+                if($ptc == $haslo) $flag = true;
+            }
+        }while($flag);
+        return $haslo;
     }
 }
 
@@ -99,7 +142,7 @@ if(!function_exists("pricing")){
 }
 
 if(!function_exists("to_base36")){
-    function to_base36($number){
+    function to_base36($number, $pad = 2){
         $code = "";
         if($number == 0) $code = $number;
         while($number > 0){
@@ -113,7 +156,7 @@ if(!function_exists("to_base36")){
             }
             $number = intdiv($number, 36);
         }
-        return $code;
+        return str_pad($code, $pad, "0", STR_PAD_LEFT);
     }
 }
 if(!function_exists("from_base36")){

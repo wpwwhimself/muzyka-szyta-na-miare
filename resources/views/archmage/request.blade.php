@@ -14,7 +14,7 @@
         //disabling inputs if no change is allowed
         if([5, 7, 8, 9].includes(parseInt($(".quest-phase").attr("status")))){
             $("input, select, textarea").prop("disabled", true);
-            $("button, .submit").hide();
+            $("#step-1").hide();
             $("#quest-calendar").hide();
         };
     });
@@ -186,12 +186,17 @@
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
-    <div class="flexright">
+    <div id="step-1" class="flexright">
         <button type="submit" class="hover-lift">
             <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
         </button>
         <a href='{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}' class="submit danger hover-lift">
             <i class="fa-solid fa-trash"></i> Nie podejmę się
+        </a>
+    </div>
+    <div id="step-2" class="flexright">
+        <a href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" class="submit hover-lift">
+            <i class="fa-solid fa-file-contract"></i> Potwierdź jako klient
         </a>
     </div>
 </form>

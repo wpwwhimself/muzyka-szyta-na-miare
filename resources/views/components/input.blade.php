@@ -17,7 +17,7 @@
     @if ($hint && $type != "hidden")
     <div class="input-hint">
         <i class="fa-solid fa-circle-info"
-            {{ Popper::pop(implode(", ", array_map(function($key, $val){
+            {{ Popper::size('small')->pop(implode("<br>", array_map(function($key, $val){
                 return "<b>$key</b>: $val";
             }, array_keys($hint), array_values($hint))))
             }}

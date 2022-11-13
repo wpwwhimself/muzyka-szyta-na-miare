@@ -27,7 +27,11 @@
                 @forelse ($quests as $quest)
                 <a href="{{ route("quest", $quest->id) }}" class="table-row p-{{ $quest->status_id }}">
                     <span>
-                        <x-quest-type :id="song_quest_type($quest->song_id)->id ?? 0" :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'" />
+                        <x-quest-type
+                            :id="song_quest_type($quest->song_id)->id ?? 0"
+                            :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
+                            :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                            />
                     </span>
                     <span>
                         <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>

@@ -15,9 +15,22 @@ class QuestTypesSeeder extends Seeder
     public function run()
     {
         DB::table("quest_types")->insert([
-            ["code" => "P", "type" => "podkład muzyczny"],
-            ["code" => "N", "type" => "nuty"],
-            ["code" => "W", "type" => "występ"]
+            [
+                "code" => "P", "type" => "podkład muzyczny",
+                "fa_symbol" => "fa-file-audio"
+            ],
+            [
+                "code" => "N", "type" => "nuty",
+                "fa_symbol" => "fa-music"
+            ],
+            [
+                "code" => "W", "type" => "występ",
+                "fa_symbol" => "fa-guitar"
+            ],
+            [
+                "code" => "O", "type" => "obróbka",
+                "fa_symbol" => "fa-screwdriver-wrench"
+            ],
         ]);
     }
 }

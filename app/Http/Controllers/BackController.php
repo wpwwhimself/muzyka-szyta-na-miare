@@ -56,25 +56,15 @@ class BackController extends Controller
     public function requests(){
         $client = Auth::user()->client;
 
-        $splitting_by_status = [7, 8, 9];
-        $requests = Request::whereNotIn("status_id", $splitting_by_status)
-            ->orderBy("updated_at", "desc");
+        $requests = Request::orderBy("updated_at", "desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
         }
-        $requests = $requests->get();
-
-        $past_requests = Request::whereIn("status_id", $splitting_by_status)
-            ->orderBy("updated_at", "desc");
-        if(Auth::id() != 1){
-            $past_requests = $past_requests->where("client_id", $client->id);
-        }
-        $past_requests = $past_requests->paginate(25);
+        $requests = $requests->paginate(25);
 
         return view(user_role().".requests", [
             "title" => "Lista zapytań",
             "requests" => $requests,
-            "past_requests" => $past_requests
         ]);
     }
 
@@ -135,7 +125,7 @@ class BackController extends Controller
             $questTypes[$val["id"]] = $val["type"];
         }
 
-        $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
+        $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
 
         return view(user_role().".add-request", array_merge([
             "title" => "Nowe zapytanie"
@@ -223,6 +213,8 @@ class BackController extends Controller
                 $song->price_code = $request->price_code;
                 $song->notes = $request->wishes;
                 $song->save();
+
+                $request->song_id = $song->id;
             }
             //add new client if not exists
             if(!$request->client_id){
@@ -238,6 +230,8 @@ class BackController extends Controller
                 $client->other_medium = $request->other_medium;
                 $client->contact_preference = $request->contact_preference;
                 $client->save();
+
+                $request->client_id = $user->id;
             }else{
                 $client = Client::find($request->client_id);
             }

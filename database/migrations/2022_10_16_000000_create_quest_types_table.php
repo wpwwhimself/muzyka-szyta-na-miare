@@ -17,6 +17,7 @@ class CreateQuestTypesTable extends Migration
             $table->id();
             $table->string("type");
             $table->char("code");
+            $table->string("fa_symbol");
         });
     }
 

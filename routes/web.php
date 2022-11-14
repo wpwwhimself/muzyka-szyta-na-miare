@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\HomeController;
 use App\Models\Client;
+use App\Models\QuestType;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,12 +56,21 @@ Route::controller(BackController::class)->group(function(){
 
 Route::get('/request-finalized/{status}', function($status){ return view("request-finalized", ["title" => "Gotowe", "status" => $status]); })->name("request-finalized");
 
-Route::get('/client_data', function(Request $request){
+Route::get('/client_data', function(Request $request){ 
     return Client::find($request->id)->toJson();
-})->name("client_data");
-Route::get('/song_data', function(Request $request){
-    return Song::find($request->id)->toJson();
-})->name("song_data");
-Route::post('/price_calc', function(Request $request){
-    return price_calc($request->labels, $request->price_schema, $request->veteran_discount);
-})->name("price_calc");
+});
+Route::get('/song_data', function(Request $request){ 
+    $song = Song::find($request->id);
+    return json_encode(
+        array_merge(
+            song_quest_type($song->id)->toArray(),
+            $song->toArray()
+        )
+    );
+});
+Route::post('/price_calc', function(Request $request){ 
+    return price_calc($request->labels, $request->price_schema, $request->veteran_discount); 
+});
+Route::get('/quest_type_from_id', function(Request $request){ 
+    return QuestType::where("code", $request->initial)->first()->toJson(); 
+});

@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusesSeeder::class);
         $this->call(QuestTypesSeeder::class);
         $this->call(SettingsSeeder::class);
-        if(App::environment() == "local"){
-            // $this->call(UserSeeder::class);
-            // $this->call(DummyQuestsSeeder::class);
+        if(App::environment() == "localq"){
+            $this->call(UserSeeder::class);
+            $this->call(DummyQuestsSeeder::class);
         }
     }
 }

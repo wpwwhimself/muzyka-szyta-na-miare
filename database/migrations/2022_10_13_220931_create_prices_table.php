@@ -17,7 +17,8 @@ class CreatePricesTable extends Migration
             $table->id();
             $table->char("indicator")->unique();
             $table->string("service");
-            $table->foreignId("quest_type_id")->nullable()->constrained();
+            $table->bigInteger("quest_type_id")->nullable();
+            // $table->foreignId("quest_type_id")->nullable()->constrained();
             $table->char("operation")->comment("+: addition, *: multiplication");
             $table->float("price_a")->nullable();
             $table->float("price_b")->nullable();

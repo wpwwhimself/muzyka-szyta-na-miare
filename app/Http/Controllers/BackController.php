@@ -68,8 +68,8 @@ class BackController extends Controller
         ]);
     }
 
-    public function quest(){
-        $quest = [];
+    public function quest($id){
+        $quest = Quest::findOrFail($id);
 
         return view(user_role().".quest", [
             "title" => "Zlecenie",

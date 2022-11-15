@@ -210,7 +210,7 @@ form, .login-grid-container, .input-container{
     font-weight: bold;
 }
 
-#request-box{
+#quest-box{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

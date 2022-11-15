@@ -71,10 +71,9 @@ class BackController extends Controller
     public function quest($id){
         $quest = Quest::findOrFail($id);
 
-        return view(user_role().".quest", [
-            "title" => "Zlecenie",
-            "quest" => $quest
-        ]);
+        $history = DB::table("status_changes")->whereIn("re_quest_id", [$id, Request::where("quest_id", $id)->value("id")])->get();
+
+        return view(user_role().".quest", array_merge(["title" => "Zlecenie"], compact("quest", "history")));
     }
     public function request($id){
         $request = Request::findOrFail($id);
@@ -253,6 +252,8 @@ class BackController extends Controller
             $quest->deadline = $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
             $quest->save();
+
+            $request->quest_id = $quest->id;
         }
 
         $request->save();

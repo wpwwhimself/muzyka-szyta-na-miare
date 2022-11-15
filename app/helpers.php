@@ -43,7 +43,7 @@ if(!function_exists("next_quest_id")){
 }
 if(!function_exists("next_song_id")){
     function next_song_id($quest_type_id){
-        $letter = QuestType::find($quest_type_id)->value("code");
+        $letter = QuestType::find($quest_type_id)->code;
         $newest_id = Song::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
         if(!$newest_id){
             return $letter . "000";
@@ -129,7 +129,7 @@ if(!function_exists("pricing")){
         $current_pricing = DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
         if($client_id == "") return $current_pricing;
         else{
-            $client_since = Client::find($client_id)->value("created_at");
+            $client_since = Client::find($client_id)->created_at;
             //loop for cycling through pricing schemas
             for($letter = "A"; $letter != $current_pricing; $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);

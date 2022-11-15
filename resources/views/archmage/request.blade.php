@@ -11,17 +11,26 @@
     @csrf
     <script>
     $(document).ready(function(){
+        const status = parseInt($(".quest-phase").attr("status"));
         //disabling inputs if no change is allowed
-        if([5, 7, 8, 9].includes(parseInt($(".quest-phase").attr("status")))){
+        if([5, 7, 8, 9].includes(status)){
             $("input, select, textarea").prop("disabled", true);
             $("#step-1").hide();
             $("#quest-calendar").hide();
+            if(status == 9){
+                $("#step-2").hide();
+            }
         };
     });
     </script>
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
-    <div id="request-box">
+    
+    @if ($request->quest_id)
+    <h2>Zlecenie przepisane z numerem <a href={{ route("quest", ["id" => $request->quest_id]) }}>{{ $request->quest_id }}</a></h2>
+    @endif
+    
+    <div id="quest-box">
         <section class="input-group">
             <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" />

@@ -20,7 +20,7 @@
     </script>
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
-    <div id="request-box">
+    <div id="quest-box">
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />

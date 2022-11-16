@@ -197,12 +197,17 @@
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <div id="step-1" class="flexright">
-        <button type="submit" class="hover-lift">
-            <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
-        </button>
-        <a href='{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}' class="submit danger hover-lift">
-            <i class="fa-solid fa-trash"></i> Nie podejmę się
-        </a>
+        <x-button
+            label="Popraw i oddaj do wyceny"
+            icon="paper-plane"
+            action="submit"
+            />
+        <x-button
+            label="Nie podejmę się"
+            icon="trash"
+            :danger="true"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}"
+            />
     </div>
     <div id="step-2" class="flexright">
         <a href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" class="submit hover-lift">

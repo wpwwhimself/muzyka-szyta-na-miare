@@ -78,11 +78,7 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
-            @forelse ($history as $item)
-            {{ $item->date }}
-            @empty
-                
-            @endforelse
+            <x-quest-history :quest="$quest" />
         </section>
     </div>
 

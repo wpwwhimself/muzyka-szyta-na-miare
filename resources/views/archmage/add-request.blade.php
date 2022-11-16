@@ -62,6 +62,7 @@
                 <x-input type="text" name="title" label="Tytuł utworu" />
                 <x-input type="text" name="artist" label="Wykonawca" />
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" />
+                <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" />
 
                 <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
@@ -92,6 +93,7 @@
                                 content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                                 content += `<span>Artysta</span><span>${res.artist}</span>`;
                                 content += `<span>Rodzaj zlecenia</span><span>${res.type}</span>`;
+                                content += `<span>Gatunek</span><span>${res.genre}</span>`;
                                 content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
                                 content += `<span>Uwagi</span><span>${res.notes}</span>`;
                                 positions_list.html(content);

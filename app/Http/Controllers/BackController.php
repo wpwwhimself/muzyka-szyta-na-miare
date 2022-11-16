@@ -10,6 +10,7 @@ use App\Models\Song;
 use App\Models\StatusChange;
 use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -98,10 +99,11 @@ class BackController extends Controller
         }
 
         $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
+        $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
         return view(user_role().".request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices", "questTypes", "clients", "songs")));
+        ], compact("request", "prices", "questTypes", "clients", "songs", "genres")));
     }
 
     public function addRequest(){
@@ -125,10 +127,11 @@ class BackController extends Controller
         }
 
         $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
+        $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
         return view(user_role().".add-request", array_merge([
             "title" => "Nowe zapytanie"
-        ], compact("questTypes", "prices", "clients", "songs")));
+        ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
     public function modRequestBack(HttpRequest $rq){
         $modifying = $rq->modifying; //insert -- 0; update -- request_id
@@ -139,7 +142,7 @@ class BackController extends Controller
             if(Auth::check()){
                 $request->client_id = Auth::user()->client->id;
             }
-            $request->made_by_me = false;
+            if($request->made_by_me === null) $request->made_by_me = false;
             $request->quest_type_id = $rq->quest_type;
             $request->title = $rq->title;
             $request->artist = $rq->artist;
@@ -147,7 +150,7 @@ class BackController extends Controller
             $request->wishes = $rq->wishes;
         }else{
             // składanie requesta przeze mnie
-            $request->made_by_me = true;
+            if($request->made_by_me === null) $request->made_by_me = true;
             if($rq->client_id){
                 $request->client_id = $rq->client_id;
                 $client = Client::find($rq->client_id);
@@ -170,12 +173,14 @@ class BackController extends Controller
                 $request->title = $song->title;
                 $request->artist = $song->artist;
                 $request->link = $song->link;
+                $request->genre_id = $song->genre_id;
                 $request->wishes = $song->wishes;
             }else{
                 $request->quest_type_id = $rq->quest_type;
                 $request->title = $rq->title;
                 $request->artist = $rq->artist;
                 $request->link = $rq->link;
+                $request->genre_id = $rq->genre_id;
                 $request->wishes = $rq->wishes;
             }
             $request->price_code = $rq->price_code;
@@ -189,7 +194,13 @@ class BackController extends Controller
 
         $request->save();
 
-        $this->statusHistory($request->id, $request->status_id, null);
+        $comment = null;
+        if(in_array($request->status_id, [5, 6])){
+            $comment = json_encode(Arr::where($request->getChanges(), fn($val, $key) => ($key != "updated_at" && $key != "status_id")));
+            if($comment == "[]") $comment = null;
+        }
+
+        $this->statusHistory($request->id, $request->status_id, $comment);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
@@ -208,7 +219,7 @@ class BackController extends Controller
                 $song->title = $request->title;
                 $song->artist = $request->artist;
                 $song->link = $request->link;
-                $song->genre_id = null; //TODO dodawanie gatunku
+                $song->genre_id = $request->genre_id;
                 $song->price_code = $request->price_code;
                 $song->notes = $request->wishes;
                 $song->save();

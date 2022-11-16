@@ -30,8 +30,8 @@ class CreateRequestsTable extends Migration
             $table->foreignId("quest_type_id")->nullable()->constrained();
             $table->string("title")->nullable();
             $table->string("artist")->nullable();
-            $table->string("cover_artist")->nullable();
             $table->string("link")->nullable();
+            $table->foreignId("genre_id")->nullable()->constrained();
             $table->text("wishes")->nullable();
             $table->string("price_code")->nullable();
 

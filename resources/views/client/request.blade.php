@@ -26,7 +26,6 @@
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
             <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
-            <x-input type="text" name="cover_artist" label="Coverujący" value="{{ $request->cover_artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />

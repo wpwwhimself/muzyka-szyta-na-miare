@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PricesSeeder::class);
         $this->call(StatusesSeeder::class);
         $this->call(QuestTypesSeeder::class);
+        $this->call(GenresSeeder::class);
         $this->call(SettingsSeeder::class);
         if(App::environment() == "localq"){
             $this->call(UserSeeder::class);

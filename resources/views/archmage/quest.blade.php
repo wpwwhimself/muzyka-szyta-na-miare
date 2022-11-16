@@ -19,6 +19,7 @@
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />
+            <x-input type="text" name="genre_id" label="Gatunek" value="{{ $quest->song->genre->name }}" :disabled="true" :small="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" :disabled="true" />
         </section>
         <section class="input-group">

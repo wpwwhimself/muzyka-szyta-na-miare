@@ -40,7 +40,7 @@
         </div>
         <div class="dashboard-mini-wrapper">
         @forelse ($requests as $request)
-            <x-request-mini :request="$request" />
+            <x-quest-mini :request="$request" />
         @empty
             <p class="grayed-out">brak aktywnych zapytań</p>
         @endforelse

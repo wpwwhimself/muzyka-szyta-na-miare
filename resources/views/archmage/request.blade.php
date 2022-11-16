@@ -17,10 +17,10 @@
             $("input, select, textarea").prop("disabled", true);
             $("#step-1").hide();
             $("#quest-calendar").hide();
-            if(status == 9){
-                $("#step-2").hide();
-            }
         };
+        if([1,6,9].includes(status)){
+            $("#step-2").hide();
+        }
     });
     </script>
     <h1>Szczegóły zapytania</h1>
@@ -93,6 +93,7 @@
             <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
+            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
 
             <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\HomeController;
 use App\Models\Client;
+use App\Models\Genre;
 use App\Models\QuestType;
 use App\Models\Song;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ Route::controller(BackController::class)->group(function(){
 
     Route::get('/requests', "requests")->middleware("auth")->name("requests");
     Route::get('/requests/view/{id}', "request")->name("request");
-    Route::get('/requests/add', "addRequest")->name("add-request");
+    Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
@@ -64,6 +65,7 @@ Route::get('/song_data', function(Request $request){
     return json_encode(
         array_merge(
             song_quest_type($song->id)->toArray(),
+            ["genre" => Genre::find($song->genre_id)->name],
             $song->toArray()
         )
     );

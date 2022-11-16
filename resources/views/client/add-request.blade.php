@@ -7,10 +7,9 @@
         <div id="quest-box">
             <section class="input-group">
                 <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
-                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" />
+                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
                 <x-input type="text" name="title" label="Tytuł utworu" />
                 <x-input type="text" name="artist" label="Oryginalny wykonawca" />
-                <x-input type="text" name="cover_artist" label="Coverujący" />
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ Auth::user()->client->default_wishes }}" />
                 <x-input type="date" name="hard_deadline" label="Opcjonalny termin wykonania" />

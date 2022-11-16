@@ -12,4 +12,8 @@ class Song extends Model
 
     public $incrementing = false;
     protected $keyType = "string";
+
+    public function genre(){
+        return $this->belongsTo(Genre::class);
+    }
 }

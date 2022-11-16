@@ -4,7 +4,7 @@
     <form method="post" action={{ route("mod-request-back") }}>
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
-        <div id="request-box">
+        <div id="quest-box">
             <section class="input-group">
                 <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
                 <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" />

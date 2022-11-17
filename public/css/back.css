@@ -77,6 +77,9 @@ form, .login-grid-container, .input-container{
     background-color: #ffffff44;
     /* background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5)); */
 }
+.quest-mini:hover{
+    box-shadow: 0 0 1em var(--ui-clr-2);
+}
 .quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
 .quest-mini .song-title{ padding: 0.2em 0.6em; }
 

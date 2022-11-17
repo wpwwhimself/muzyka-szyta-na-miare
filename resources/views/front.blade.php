@@ -374,39 +374,40 @@
     </section>
     <section id="contact">
         <h2>Napisz już teraz!</h2>
-        <!--
-        <form method="post" action="contactform.php" id='contactform'>
-            <label for="m_name">Twoje imię lub nazwisko</label>
-            <input type="text" id="m_name" name="m_name" placeholder="Jan Kowalski" class="animatable"></input>
-            <div id="contact_justasking" class="dividebytwo">
-                <div>
-                    <label>Jesteś zainteresowany/a</label>
-                    <div>
-                        <div><input type="checkbox" id="m_int1" name="m_int1" value="nut"><label for="m_int1">nutami</label></div>
-                        <div><input type="checkbox" id="m_int2" name="m_int2" value="podkładu"><label for="m_int2">podkładem</label></div>
-                        <div><input type="checkbox" id="m_int3" name="m_int3" value="nagrania"><label for="m_int3">nagraniem</label></div>
-                        <div><input type="checkbox" id="m_int4" name="m_int4" value="występu"><label for="m_int4">występem</label></div>
-                    </div>
-                </div>
-                <div>
-                    <label for="m_req">Jakie są szczegóły?<br><i>(np. styl, link do oryginału, obostrzenia czasowe, czy z linią melodyczną)</i></label>
-                    <textarea id="m_req" name="m_req" class="animatable"></textarea>
-                </div>
+        <form method="post" action="{{ route("mod-request-back") }}" id='contactform'>
+            @csrf
+            <div>
+                <h3>Szczegóły zlecenia</h3>
+                <label for="quest_type">Rodzaj zlecenia</label>
+                <select name="quest_type">
+                @foreach ($quest_types as $key => $val)
+                    <option value="{{ $key }}">{{ $val }}</option>
+                @endforeach
+                </select>
+                <label for="m_title">Tytuł utworu</label>
+                <input type="text" id="m_title" name="title" class="animatable"></input>
+                <label for="m_artist">Wykonawca</label>
+                <input type="text" id="m_artist" name="artist" class="animatable"></input>
+                <label for="m_link">Linki do nagrań<br><i>(oddzielone przecinkiem)</i></label>
+                <input type="url" id="m_link" name="link" class="animatable"></input>
+                <label for="m_req">Jakie są Twoje życzenia?<br><i>(np. styl, czy z linią melodyczną itp.)</i></label>
+                <textarea id="m_req" name="wishes" class="animatable"></textarea>
+                <label for="m_date">Na kiedy jest potrzebne?<br><i>(opcjonalnie)</i></label>
+                <input type="date" id="m_date" name="hard_deadline" class="animatable"></input>
             </div>
-            <label for="m_tel">Jak mogę do Ciebie dotrzeć?<br><i>(wypełnij co najmniej jedno, choć zachęcam do podania maila)</i></label>
-            <div class="dividebytwo">
-                <input type="tel" id="m_tel" name="m_tel" placeholder="123456789" class="animatable"></input>
-                <input type="email" id="m_mail" name="m_mail" placeholder="jankowalski@poczta.pl" class="animatable"></input>
-            </div>
-            <div class="dividebytwo">
-                <div>
-                    <label for="m_test">Cztery razy pięć?</label>
-                    <input type="number" id="m_test" name="m_test" required></input>
-                </div>
+            <div>
+                <h3>Twoje dane</h3>
+                <label for="m_name">Imię i nazwisko</label>
+                <input type="text" id="m_name" name="client_name" placeholder="Jan Kowalski" class="animatable"></input>
+                <label>Jak mogę do Ciebie dotrzeć?<br><i>(wypełnij co najmniej jedno, choć zachęcam do podania maila)</i></label>
+                <input type="email" id="m_mail" name="email" placeholder="jankowalski@poczta.pl" class="animatable"></input>
+                <input type="tel" id="m_tel" name="phone" placeholder="123456789" class="animatable"></input>
+                <input type="text" id="m_other" name="other_medium" placeholder="inna forma kontaktu" class="animatable"></input>
+                <label for="m_test">Cztery razy pięć?</label>
+                <input type="number" id="m_test" name="m_test" required></input>
                 <input type="submit" name="m_sub" value="Wyślij" class="animatable"></input>
             </div>
         </form>
-        -->
         <div class="flexright">
         <a href="mailto:contact@wpww.pl">
             <img alt='email' src="{{ asset("assets/front/img/contact/email.png") }}">

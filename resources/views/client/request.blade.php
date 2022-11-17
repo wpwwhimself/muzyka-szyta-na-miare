@@ -75,21 +75,31 @@
                 calcPriceNow();
             });
             </script>
+            @if ($request->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
+            @endif
+        </section>
+
+        <section class="input-group">
+            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+            <x-quest-history :quest="$request" />
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <input type="hidden" name="questioning" value="1" />
     <div class="flexright">
-        <a href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" class="submit hover-lift">
-            <i class="fa-solid fa-file-contract"></i> Potwierdź
-        </a>
-        <button type="submit" class="hover-lift">
-            <i class="fa-solid fa-people-pulling"></i> Popraw i zakwestionuj
-        </button>
-        <a href="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" class="submit danger hover-lift">
-            <i class="fa-solid fa-trash"></i> Odrzuć
-        </a>
+        <x-button
+            label="Potwierdź" icon="9"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
+            />
+        <x-button
+            label="Popraw i zakwestionuj" icon="6"
+            action="submit"
+            />
+        <x-button
+            label="Odrzuć" icon="8" :danger="true"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}"
+            />
     </div>
 </form>
 @endsection

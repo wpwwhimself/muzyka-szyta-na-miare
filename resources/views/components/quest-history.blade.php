@@ -4,11 +4,12 @@
         <span>
             <span class="client-name">{{ $clientName($item->changed_by) ?? $quest->client_name }}</span>
             <br>
-            {{ $statusName($item->new_status_id) }}
-            <br>
+            {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
+            <ul>
             @foreach (json_decode($item->comment) ?? [] as $key=>$val)
-            {{ $key }} → {{ $val }}
+            <li>{{ $key }} → {{ $val }}</li>
             @endforeach
+            </ul>
         </span>
         <span>{!! str_replace(" ", "<br>", $item->date) !!}</span>
     </div>

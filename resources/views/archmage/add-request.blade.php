@@ -62,7 +62,7 @@
                 <x-input type="text" name="title" label="Tytuł utworu" />
                 <x-input type="text" name="artist" label="Wykonawca" />
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" />
-                <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" />
+                <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" :required="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" />
 
                 <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
@@ -110,12 +110,13 @@
                     $("#song_id").change(function (e) { loadSong() });
                 });
                 </script>
+                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
             </section>
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
                 <div id="special-prices-warning"></div>
-                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" />
+                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" :required="true" />
                 <div id="price-summary" class="hint-table">
                     <div class="positions"></div>
                     <hr />
@@ -155,17 +156,17 @@
                     $("#price_code").change(function (e) { calcPriceNow() });
                 });
                 </script>
-                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
-                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" :required="true" />
 
                 <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
                 🚧 TBD 🚧
             </section>
         </div>
         <input type="hidden" name="modifying" value="0" />
-        <button type="submit" class="hover-lift">
-            <i class="fa-solid fa-paper-plane"></i> Popraw i oddaj do wyceny
-        </button>
+        <x-button
+            label="Oddaj do wyceny" icon="5"
+            action="submit"
+            />
     </form>
 
     <script>

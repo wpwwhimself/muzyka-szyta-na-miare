@@ -26,8 +26,14 @@ class QuestHistory extends Component
     public function statusName($id){
         return Status::find($id)->status_name;
     }
+    public function statusSymbol($id){
+        $symbol = Status::find($id)->status_symbol;
+        if($id >= 100) return $symbol;
+        return "<i class='fa-solid $symbol'></i>";
+    }
     public function clientName($id){
         if($id == 1) return "WPWW";
+        if($id == null) return $this->quest->client_name;
         return Client::find($id)->client_name;
     }
 

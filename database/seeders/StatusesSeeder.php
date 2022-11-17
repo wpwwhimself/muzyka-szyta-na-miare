@@ -29,18 +29,18 @@ class StatusesSeeder extends Seeder
             ["id" => 18, "status_name" => "odrzucone", "status_symbol" => "fa-dumpster-fire"],
             ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
             ["id" => 26, "status_name" => "oddane do poprawki po terminie", "status_symbol" => "fa-recycle"],
-            ["id" => 100, "status_name" => "🔍 analiza i wstępna obróbka"],
-            ["id" => 101, "status_name" => "🥁 nagrania: perkusja"],
-            ["id" => 102, "status_name" => "🎸 nagrania: gitary"],
-            ["id" => 103, "status_name" => "🎹 nagrania: fortepiany"],
-            ["id" => 104, "status_name" => "⚡ nagrania: syntezatory"],
-            ["id" => 105, "status_name" => "🎺 nagrania: dęte"],
-            ["id" => 106, "status_name" => "🎻 nagrania: smyczki"],
-            ["id" => 107, "status_name" => "🎙 nagrania: wokale"],
-            ["id" => 108, "status_name" => "🌊 nagrania: inne"],
-            ["id" => 109, "status_name" => "🎛 mix i mastering"],
-            ["id" => 110, "status_name" => "🎵 pisanie nut"],
-            ["id" => 111, "status_name" => "🎬 przygotowanie filmu"]
+            ["id" => 100, "status_name" => "analiza i wstępna obróbka", "status_symbol" => "🔍"],
+            ["id" => 101, "status_name" => "nagrania: perkusja", "status_symbol" => "🥁"],
+            ["id" => 102, "status_name" => "nagrania: gitary", "status_symbol" => "🎸"],
+            ["id" => 103, "status_name" => "nagrania: fortepiany", "status_symbol" => "🎹"],
+            ["id" => 104, "status_name" => "nagrania: syntezatory", "status_symbol" => "⚡"],
+            ["id" => 105, "status_name" => "nagrania: dęte", "status_symbol" => "🎺"],
+            ["id" => 106, "status_name" => "nagrania: smyczki", "status_symbol" => "🎻"],
+            ["id" => 107, "status_name" => "nagrania: wokale", "status_symbol" => "🎙"],
+            ["id" => 108, "status_name" => "nagrania: inne", "status_symbol" => "🌊"],
+            ["id" => 109, "status_name" => "mix i mastering", "status_symbol" => "🎛"],
+            ["id" => 110, "status_name" => "pisanie nut", "status_symbol" => "🎵"],
+            ["id" => 111, "status_name" => "przygotowanie filmu", "status_symbol" => "🎬"]
         ]);
     }
 }

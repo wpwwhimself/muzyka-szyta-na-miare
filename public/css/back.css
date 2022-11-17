@@ -223,13 +223,13 @@ form, .login-grid-container, .input-container{
     border-radius: 1em;
     background: linear-gradient(to bottom right, transparent, rgba(var(--q-clr), 0.5));
     margin: 0.3em; padding: 0.3em 0.5em;
-    display: flex; justify-content: space-between; align-items: center;
-    max-width: 300px;
+    display: grid; grid-template-columns: 2.5fr 1fr; column-gap: 0.5em;
 }
 #quest-history .history-position.by-client{ margin-right: 2em; }
 #quest-history .history-position.by-me{ margin-left: 2em; }
 #quest-history .history-position span:nth-child(1){ text-align: left; }
 #quest-history .history-position .client-name{ color: dimgray; font-style: italic; }
+#quest-history .history-position ul{ margin: 0; padding-left: 1em; color: silver; }
 
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }

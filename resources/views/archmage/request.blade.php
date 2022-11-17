@@ -93,7 +93,7 @@
             <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
-            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" />
+            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
 
             <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
@@ -102,6 +102,7 @@
                 <div class="positions"></div>
             </div>
             <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" />
+            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
             <script>
             function loadSong(){
                 const song_id = $("#song_id").val();
@@ -146,7 +147,7 @@
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             <div id="special-prices-warning"></div>
-            <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" value="{{ $request->price_code }}" />
+            <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" value="{{ $request->price_code }}" :required="true" />
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
@@ -186,26 +187,27 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" :required="true" />
         </section>
 
         <section class="input-group" id="quest-calendar">
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             🚧 TBD 🚧
         </section>
+
+        <section class="input-group">
+            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+            <x-quest-history :quest="$request" />
+        </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <div id="step-1" class="flexright">
         <x-button
-            label="Popraw i oddaj do wyceny"
-            icon="paper-plane"
+            label="Popraw i oddaj do wyceny" icon="5"
             action="submit"
             />
         <x-button
-            label="Nie podejmę się"
-            icon="trash"
-            :danger="true"
+            label="Nie podejmę się" icon="7" :danger="true"
             action="{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}"
             />
     </div>

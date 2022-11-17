@@ -139,7 +139,7 @@ class BackController extends Controller
             // składanie requesta przez klienta
             if(Auth::check()){
                 $request->client_id = Auth::user()->client->id;
-            }else{
+            }else if(!$modifying){
                 if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
                 $request->client_name = $rq->client_name;
                 $request->email = $rq->email;

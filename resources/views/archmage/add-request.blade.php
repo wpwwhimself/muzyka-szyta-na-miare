@@ -7,7 +7,7 @@
         <div id="quest-box">
             <section class="input-group">
                 <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
-                <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" />
+                <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" :small="true" />
                 <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" />
                 <x-input type="email" name="email" label="Adres e-mail" />
                 <x-input type="tel" name="phone" label="Numer telefonu" />
@@ -171,8 +171,8 @@
 
     <script>
     $(document).ready(function(){
-    // $("#client_id").select2();
-    // $("#song_id").select2();
+    $("#client_id").select2();
+    $("#song_id").select2();
     });
     </script>
 @endsection

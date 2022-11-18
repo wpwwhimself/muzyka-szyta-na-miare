@@ -64,6 +64,7 @@ input, select, textarea, button, .submit{
     border-left: none; border-right: none; border-top: none;
     outline: none;
 }
+.select2-dropdown, .select2-selection--single{ background-color: var(--bg) !important; color: var(--fg) !important; }
 input, select, button, .submit{
     font-size: 1.5em;
     text-align: center;
@@ -91,9 +92,9 @@ input[type="checkbox"]{
     accent-color: var(--ui-clr-2);
 }
 *[type="submit"], .submit{
+    display: inline-block;
     width: fit-content;
-    padding: 0.5em 1.5em;
-    margin: 0.5em auto 0;
+    padding: 0.5em 1.5em; margin: 0.5em auto 0;
     border: 2px solid black;
     border-radius: 2em;
     transition-duration: 0.3s;
@@ -115,7 +116,7 @@ input[type="checkbox"]{
 /* ALERTS */
 .alert{
     border-radius: 1em;
-    position: absolute; right: 3em;
+    position: absolute; right: 3em; top: 3em;
     border: 2px solid gray;
     box-shadow: 0.5em 0.5em 1.5em #00000044;
     padding: 1em;
@@ -128,11 +129,11 @@ input[type="checkbox"]{
     translate: 0 0;
 }
 .success{
-    --clr-wh: rgba(var(--ok), 0.7);
+    --clr-wh: rgba(var(--ok), 0.4);
     color: rgb(var(--ok));
 }
 .error{
-    --clr-wh: rgba(var(--danger), 0.7);
+    --clr-wh: rgba(var(--danger), 0.4);
     color: rgb(var(--danger));
 }
 .alert.success, .alert.error{

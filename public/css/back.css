@@ -95,6 +95,7 @@ form, .login-grid-container, .input-container{
 }
 .quest-meta:last-child{
     grid-template-columns: 1fr 2em;
+    margin-left: 0.5em;
 }
 .quest-meta p{
     margin: 0;

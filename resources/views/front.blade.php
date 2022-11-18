@@ -1,11 +1,6 @@
 @extends('layouts.app-front')
 
 @section('everything')
-    @foreach (["success", "error"] as $status)
-    @if (session($status))
-        <x-alert :status="$status" />
-    @endif
-    @endforeach
     <img id=scrolldown class="animatable" src="{{ asset("assets/front/img/scroll.png") }}" alt="scroll down to see more">
     <nav>
         <a href="#services"><li>Usługi</li></a>
@@ -21,6 +16,11 @@
         @endauth
     </nav>
     <section id=home>
+        @foreach (["success", "error"] as $status)
+        @if (session($status))
+            <x-alert :status="$status" />
+        @endif
+        @endforeach
         <ul class="shoutoutlist">
             <li class="disguised1 disguised2 animatable">Potrzebujesz aranżu lub podkładu do swojej ulubionej piosenki?</li>
             <li class="disguised1 disguised2 animatable">Planujesz nagrywać swoją muzykę lub szukasz muzyka na swój występ?</li>
@@ -403,6 +403,13 @@
                 <input type="email" id="m_mail" name="email" placeholder="jankowalski@poczta.pl" class="animatable"></input>
                 <input type="tel" id="m_tel" name="phone" placeholder="123456789" class="animatable"></input>
                 <input type="text" id="m_other" name="other_medium" placeholder="inna forma kontaktu" class="animatable"></input>
+                <label for="contact_preference">Preferowana forma kontaktu</label>
+                <select name="contact_preference" id="contact_preference">
+                    <option value="email">email</option>
+                    <option value="telefon">telefon</option>
+                    <option value="sms">SMS</option>
+                    <option value="inne">inne</option>
+                </select>
                 <label for="m_test">Cztery razy pięć?</label>
                 <input type="number" id="m_test" name="m_test" required></input>
                 <input type="submit" name="m_sub" value="Wyślij" class="animatable"></input>

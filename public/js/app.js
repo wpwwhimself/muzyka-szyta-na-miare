@@ -1,6 +1,7 @@
 /**
  * Ukrywanie alertów
  */
+const TOAST_TIMEOUT = 4000;
 if($(".alert").length){ //if exists
     //appear
     setTimeout(() => {
@@ -9,5 +10,5 @@ if($(".alert").length){ //if exists
     //disappear
     setTimeout(() => {
         $(".alert").removeClass("in");
-    }, 2000);
+    }, TOAST_TIMEOUT);
 }

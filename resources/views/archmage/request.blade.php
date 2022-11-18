@@ -18,7 +18,7 @@
             $("#step-1").hide();
             $("#quest-calendar").hide();
         };
-        if([1,6,9].includes(status)){
+        if([1,9].includes(status)){
             $("#step-2").hide();
         }
     });
@@ -33,7 +33,7 @@
     <div id="quest-box">
         <section class="input-group">
             <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
-            <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" />
+            <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
             <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" value="{{ $request->client_name }}" />
             <x-input type="email" name="email" label="Adres e-mail" value="{{ $request->email }}" />
             <x-input type="tel" name="phone" label="Numer telefonu" value="{{ $request->phone }}" />
@@ -90,7 +90,7 @@
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
-            <x-input type="text" name="artist" label="Oryginalny wykonawca" value="{{ $request->artist }}" />
+            <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
             <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
@@ -212,9 +212,17 @@
             />
     </div>
     <div id="step-2" class="flexright">
-        <a href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" class="submit hover-lift">
-            <i class="fa-solid fa-file-contract"></i> Potwierdź jako klient
-        </a>
+        <x-button
+            label="Zatwierdź w imieniu klienta" icon="9"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
+            />
     </div>
 </form>
+
+<script>
+$(document).ready(function(){
+$("#client_id").select2();
+$("#song_id").select2();
+});
+</script>
 @endsection

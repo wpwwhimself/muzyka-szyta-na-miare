@@ -80,7 +80,7 @@ class BackController extends Controller
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = $client["client_name"];
+                $clients[$client["id"]] = $client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")";
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
@@ -108,7 +108,7 @@ class BackController extends Controller
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = $client["client_name"];
+                $clients[$client["id"]] = $client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")";
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
@@ -145,6 +145,7 @@ class BackController extends Controller
                 $request->email = $rq->email;
                 $request->phone = $rq->phone;
                 $request->other_medium = $rq->other_medium;
+                $request->contact_preference = $rq->contact_preference;
             }
             if($request->made_by_me === null) $request->made_by_me = false;
             $request->quest_type_id = $rq->quest_type;
@@ -192,7 +193,6 @@ class BackController extends Controller
             $request->price = price_calc($rq->price_code, $rq->client_id)[0];
         }
         $request->deadline = $rq->deadline;
-        $request->hard_deadline = $rq->hard_deadline;
 
         if($rq->questioning) $request->status_id = 6;
         else $request->status_id = (Auth::id() == 1) ? 5 : 1;
@@ -275,9 +275,18 @@ class BackController extends Controller
         $request->save();
 
         $this->statusHistory($id, $status, null);
+        if($status == 9){
+            //added song
+            $this->statusHistory($request->quest_id, 11, null);
+            //add client ID to history
+            StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
+        }
 
         if(!Auth::check()){
             return redirect()->route("request-finalized", ["status" => $status]);
+        }
+        if($status == 9){
+            return redirect()->route("quests")->with("success", "Dodano nowe zlecenie");
         }
         return redirect()->route("requests")->with("success", "Zapytanie zmienione");
     }
@@ -289,6 +298,7 @@ class BackController extends Controller
         $row->new_status_id = $new_status_id;
         $row->changed_by = Auth::id();
         $row->comment = $comment;
+        $row->date = now();
 
         $row->save();
     }

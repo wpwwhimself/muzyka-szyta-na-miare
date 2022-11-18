@@ -20,7 +20,7 @@ class QuestHistory extends Component
     public function __construct($quest)
     {
         $this->quest = $quest;
-        $this->history = DB::table("status_changes")->whereIn("re_quest_id", [$quest->id, Request::where("quest_id", $quest->id)->value("id")])->orderBy("date", "desc")->get();
+        $this->history = DB::table("status_changes")->whereIn("re_quest_id", [$quest->id, Request::where("quest_id", $quest->id)->value("id")])->orderBy("date", "desc")->orderBy("new_status_id", "desc")->get();
     }
 
     public function statusName($id){

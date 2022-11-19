@@ -141,6 +141,16 @@ if(!function_exists("pricing")){
     }
 }
 
+if(!function_exists("quest_paid")){
+    function quest_paid($id, $price){
+        $sum = 0;
+        foreach(Quest::find($id)->payments as $payment){
+            $sum += $payment->payment;
+        }
+        return ($sum >= $price);
+    }
+}
+
 if(!function_exists("to_base36")){
     function to_base36($number, $pad = 2){
         $code = "";

@@ -1,9 +1,9 @@
-@props(['label', 'icon', 'danger' => false, 'action'])
+@props(['label', 'icon', 'danger' => false, 'action', "id" => null])
 
 @if ($action == "submit")
-<button type="submit" class="hover-lift {{ $danger ? "danger" : "" }}">
+<button type="submit" class="hover-lift {{ $danger ? "danger" : "" }}" {{ $attributes->merge(['id' => $id]) }}>
 @else
-<a href="{{ $action }}" class="submit hover-lift {{ $danger ? "danger" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!}>
+<a href="{{ $action }}" class="submit hover-lift {{ $danger ? "danger" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ $attributes->merge(['id' => $id]) }}>
 @endif
     @if (is_numeric($icon))
         @if ($icon >= 100)

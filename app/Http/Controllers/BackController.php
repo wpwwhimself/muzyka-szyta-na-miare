@@ -25,8 +25,7 @@ class BackController extends Controller
         $quests = Quest::whereNotIn("status_id", [18, 19])
             ->orderBy("status_id")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderBy("deadline")
-            ->orderBy("paid", "desc");
+            ->orderBy("deadline");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
@@ -73,7 +72,9 @@ class BackController extends Controller
     public function quest($id){
         $quest = Quest::findOrFail($id);
 
-        return view(user_role().".quest", array_merge(["title" => "Zlecenie"], compact("quest")));
+        $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
+
+        return view(user_role().".quest", array_merge(["title" => "Zlecenie"], compact("quest", "prices")));
     }
     public function request($id){
         $request = Request::findOrFail($id);
@@ -319,5 +320,9 @@ class BackController extends Controller
 
         $where_to = (!Auth::check()) ? "home" : "dashboard";
         return redirect()->route($where_to)->with("success", "Komentarz dodany");
+    }
+
+    public function modQuestBack(HttpRequest $rq){
+        return redirect()->route("quest", ["id" => $rq->id])->with("success", "zmianyy");
     }
 }

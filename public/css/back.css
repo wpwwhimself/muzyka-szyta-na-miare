@@ -240,6 +240,7 @@ form, .login-grid-container, .input-container{
 .p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }
 .p-7, .p-8, .p-18{ --q-clr: 175, 175, 175; }
 .p-9, .p-19{ --q-clr: 57, 196, 57; }
+.p-31{ --q-clr: 46, 151, 192; }
 
 /************************MOBILITY**************/
 @media screen and (max-width: 960px){

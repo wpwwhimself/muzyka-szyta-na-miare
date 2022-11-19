@@ -12,6 +12,8 @@ class Quest extends Model
     public $incrementing = false;
     protected $keyType = "string";
 
+    protected $fillable = ["price_code_override", "price"];
+
     public function client(){
         return $this->belongsTo(Client::class);
     }
@@ -23,5 +25,8 @@ class Quest extends Model
     }
     public function quest_type(){
         return $this->belongsTo(QuestType::class);
+    }
+    public function payments(){
+        return $this->hasMany(Payment::class);
     }
 }

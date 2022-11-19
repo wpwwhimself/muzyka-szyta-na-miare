@@ -45,7 +45,11 @@
             type="{{ $type }}"
             name="{{ $name }}"
             id="{{ $name }}"
-            {!! $value ? "value=\"$value\"" : "" !!}
+            @if ($type == "checkbox" && $value)
+            checked
+            @else
+            {{ $attributes->merge(["value" => $value]) }}
+            @endif
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}

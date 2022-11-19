@@ -5,6 +5,7 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\HomeController;
 use App\Models\Client;
 use App\Models\Genre;
+use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Song;
 use Illuminate\Http\Request;
@@ -63,6 +64,9 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
     ));
 })->name("request-finalized");
 
+/**
+ * for AJAX purposes
+ */
 Route::get('/client_data', function(Request $request){ 
     return Client::find($request->id)->toJson();
 });
@@ -76,10 +80,15 @@ Route::get('/song_data', function(Request $request){
         )
     );
 });
-
 Route::post('/price_calc', function(Request $request){ 
     return price_calc($request->labels, $request->price_schema, $request->veteran_discount); 
 });
 Route::get('/quest_type_from_id', function(Request $request){ 
     return QuestType::where("code", $request->initial)->first()->toJson(); 
+});
+Route::post('/quest_price_update', function(Request $rq){
+    $quest = Quest::findOrFail($rq->id);
+    $price_before = $quest->price;
+    $quest->update(["price_code_override" => $rq->code, "price" => price_calc($rq->code, $quest->client_id)[0]]);
+    app("App\Http\Controllers\BackController")->statusHistory($rq->id, 31, json_encode(["price" => $price_before . " → " . $quest->price]));
 });

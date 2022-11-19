@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Payment;
 use App\Models\Quest;
 use App\Models\Request;
 use App\Models\Song;
@@ -23,27 +24,51 @@ class DummyQuestsSeeder extends Seeder
                 "artist" => "Jon Bovi",
                 "link" => "http://wpww.pl",
                 "price_code" => "c",
+                "genre_id" => 1
             ],
             [
                 "id" => "P001",
                 "title" => "Double Trouble",
                 "artist" => "Evanescence",
                 "link" => "http://wpww.pl",
-                "price_code" => "bxa"
+                "price_code" => "bxa",
+                "genre_id" => 2
             ]
         ]);
         Quest::insert([
             [
                 "id" => "P22-00",
-                "song_id" => "P002",
+                "song_id" => "P001",
                 "client_id" => 2,
                 "status_id" => 11,
                 "price_code_override" => "c",
                 "price" => 70,
-                "paid" => 0,
                 "deadline" => "2022-12-31",
                 "created_at" => "2022-11-18 15:15:18",
                 "updated_at" => "2022-11-18 15:15:18"
+            ],
+            [
+                "id" => "P22-01",
+                "song_id" => "P000",
+                "client_id" => 2,
+                "status_id" => 12,
+                "price_code_override" => "cc",
+                "price" => 140,
+                "deadline" => "2022-12-30",
+                "created_at" => "2022-11-19 15:15:18",
+                "updated_at" => "2022-11-19 15:15:18"
+            ]
+        ]);
+        Payment::insert([
+            [
+                "client_id" => 2,
+                "quest_id" => "P22-00",
+                "payment" => 40
+            ],
+            [
+                "client_id" => 2,
+                "quest_id" => "P22-00",
+                "payment" => 20
             ]
         ]);
     }

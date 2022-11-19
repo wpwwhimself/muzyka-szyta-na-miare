@@ -23,7 +23,7 @@
 
             @if ($quest->price)
             <i class="fa-solid fa-sack-dollar"></i>
-            <p class={{ $quest->paid ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
+            <p class={{ quest_paid($quest->id, $quest->price) ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
             @endif
 
             @if ($quest->deadline)

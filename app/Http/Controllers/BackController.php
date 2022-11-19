@@ -25,7 +25,8 @@ class BackController extends Controller
         $quests = Quest::whereNotIn("status_id", [18, 19])
             ->orderBy("status_id")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderBy("deadline");
+            ->orderBy("deadline")
+            ->orderBy("paid", "desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
@@ -210,7 +211,7 @@ class BackController extends Controller
         return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
 
-    public function requestFinal($id, $status){
+    public function requestFinal($id, $status, $comment = null){
         $request = Request::findOrFail($id);
 
         $request->status_id = $status;
@@ -274,7 +275,7 @@ class BackController extends Controller
 
         $request->save();
 
-        $this->statusHistory($id, $status, null);
+        $this->statusHistory($id, $status, $comment);
         if($status == 9){
             //added song
             $this->statusHistory($request->quest_id, 11, null);

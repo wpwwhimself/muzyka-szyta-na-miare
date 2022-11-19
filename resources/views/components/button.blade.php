@@ -3,7 +3,7 @@
 @if ($action == "submit")
 <button type="submit" class="hover-lift {{ $danger ? "danger" : "" }}">
 @else
-<a href="{{ $action }}" class="submit hover-lift {{ $danger ? "danger" : "" }}">
+<a href="{{ $action }}" class="submit hover-lift {{ $danger ? "danger" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!}>
 @endif
     @if (is_numeric($icon))
         @if ($icon >= 100)

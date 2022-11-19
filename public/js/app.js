@@ -12,3 +12,13 @@ if($(".alert").length){ //if exists
         $(".alert").removeClass("in");
     }, TOAST_TIMEOUT);
 }
+
+/**
+ * Niebezpieczne guziki
+ */
+function dangerConfirm(){
+    let x = confirm("Ostrożnie! Czy na pewno chcesz to zrobić?");
+    if(!x){
+        event.preventDefault();
+    }
+}

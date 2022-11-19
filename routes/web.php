@@ -53,9 +53,15 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/ads', "ads")->middleware("auth")->name("ads");
     Route::get('/messages', "messages")->middleware("auth")->name("messages");
 
+    Route::get("/request-finalized-sub", "questReject")->name("quest-reject");
 });
 
-Route::get('/request-finalized/{status}', function($status){ return view("request-finalized", ["title" => "Gotowe", "status" => $status]); })->name("request-finalized");
+Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){
+    return view("request-finalized", array_merge(
+        ["title" => "Zapytanie zamknięte"],
+        compact("id", "status", "is_new_client")
+    ));
+})->name("request-finalized");
 
 Route::get('/client_data', function(Request $request){ 
     return Client::find($request->id)->toJson();
@@ -70,6 +76,7 @@ Route::get('/song_data', function(Request $request){
         )
     );
 });
+
 Route::post('/price_calc', function(Request $request){ 
     return price_calc($request->labels, $request->price_schema, $request->veteran_discount); 
 });

@@ -211,10 +211,12 @@ class BackController extends Controller
         return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
 
-    public function requestFinal($id, $status, $comment = null){
+    public function requestFinal($id, $status){
         $request = Request::findOrFail($id);
 
         $request->status_id = $status;
+
+        $is_new_client = false;
 
         // adding new quest
         if($status == 9){
@@ -234,6 +236,7 @@ class BackController extends Controller
             }
             //add new client if not exists
             if(!$request->client_id){
+                $is_new_client = true;
                 $user = new User;
                 $user->password = generate_password();
                 $user->save();
@@ -275,7 +278,7 @@ class BackController extends Controller
 
         $request->save();
 
-        $this->statusHistory($id, $status, $comment);
+        $this->statusHistory($id, $status, null);
         if($status == 9){
             //added song
             $this->statusHistory($request->quest_id, 11, null);
@@ -283,13 +286,7 @@ class BackController extends Controller
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         }
 
-        if(!Auth::check()){
-            return redirect()->route("request-finalized", ["status" => $status]);
-        }
-        if($status == 9){
-            return redirect()->route("quests")->with("success", "Dodano nowe zlecenie");
-        }
-        return redirect()->route("requests")->with("success", "Zapytanie zmienione");
+        return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment){
@@ -302,5 +299,8 @@ class BackController extends Controller
         $row->date = now();
 
         $row->save();
+    }
+    public function questReject(HttpRequest $rq){
+        return redirect()->route("dashboard")->with("success", "Komentarz dodany");
     }
 }

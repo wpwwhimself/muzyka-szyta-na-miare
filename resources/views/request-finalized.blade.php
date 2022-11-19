@@ -2,7 +2,6 @@
 
 @section('content')
     <h2>Zapytanie zostało pomyślnie przeniesione do fazy <span class="quest-status p-{{ $status }}">{{ DB::table("statuses")->where("id", $status)->value("status_name") }}</span></h2>
-    <p class="grayed-out">ID zapytania: {{ $id }}</p>
     
     @if ($status == 9)
         <p>Wkrótce będę się kontaktował ponownie w sprawie postępów w pracach.</p>
@@ -22,7 +21,9 @@
         <form method="POST" action="{{ route("quest-reject") }}">
             @csrf
             <x-input type="TEXT" name="comment" label="" />
-            <x-button action="submit" label="Prześlij" icon="fa-paper-plane" />
+            <input type="hidden" name="id" value="{{ $id }}" />
+            <input type="hidden" name="status" value="{{ $status }}" />
+            <x-button action="submit" label="Prześlij" icon="paper-plane" />
         </form>
     @endif
 @endsection

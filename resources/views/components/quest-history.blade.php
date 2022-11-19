@@ -7,7 +7,7 @@
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
             <ul>
             @foreach (json_decode($item->comment) ?? [] as $key=>$val)
-            <li>{{ $key }} → {{ $val }}</li>
+            <li>{{ $key }}: {{ $val }}</li>
             @endforeach
             </ul>
         </span>

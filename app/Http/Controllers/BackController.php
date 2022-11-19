@@ -198,13 +198,21 @@ class BackController extends Controller
         if($rq->questioning) $request->status_id = 6;
         else $request->status_id = (Auth::id() == 1) ? 5 : 1;
 
-        $request->save();
-
+        //zbierz zmiany przed dodaniem
         $comment = null;
         if(in_array($request->status_id, [5, 6])){
-            $comment = json_encode(Arr::where($request->getChanges(), fn($val, $key) => ($key != "updated_at" && $key != "status_id")));
+            $changes = [];
+            $keys = array_keys(Arr::except($request->getDirty(), ["updated_at", "status_id"]));
+            $pre = $request->getOriginal();
+            $post = $request->getDirty();
+            foreach($keys as $key){
+                $changes[$key] = $pre[$key] . " → " . $post[$key];
+            }
+            $comment = json_encode($changes);
             if($comment == "[]") $comment = null;
         }
+
+        $request->save();
 
         $this->statusHistory($request->id, $request->status_id, $comment);
 
@@ -216,7 +224,7 @@ class BackController extends Controller
 
         $request->status_id = $status;
 
-        $is_new_client = false;
+        $is_new_client = 0;
 
         // adding new quest
         if($status == 9){
@@ -236,7 +244,7 @@ class BackController extends Controller
             }
             //add new client if not exists
             if(!$request->client_id){
-                $is_new_client = true;
+                $is_new_client = 1;
                 $user = new User;
                 $user->password = generate_password();
                 $user->save();
@@ -301,6 +309,15 @@ class BackController extends Controller
         $row->save();
     }
     public function questReject(HttpRequest $rq){
-        return redirect()->route("dashboard")->with("success", "Komentarz dodany");
+        //adding comment
+        $history = StatusChange::where("re_quest_id", $rq->id)
+            ->where("new_status_id", $rq->status)
+            ->first();
+
+        $history->comment = json_encode(["powód" => $rq->comment]);
+        $history->save();
+
+        $where_to = (!Auth::check()) ? "home" : "dashboard";
+        return redirect()->route($where_to)->with("success", "Komentarz dodany");
     }
 }

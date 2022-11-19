@@ -53,7 +53,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/ads', "ads")->middleware("auth")->name("ads");
     Route::get('/messages', "messages")->middleware("auth")->name("messages");
 
-    Route::get("/request-finalized-sub", "questReject")->name("quest-reject");
+    Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 });
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){

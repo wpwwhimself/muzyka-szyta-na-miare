@@ -18,7 +18,7 @@
             $("#step-1").hide();
             $("#quest-calendar").hide();
         };
-        if([1,7,8,9].includes(status)){
+        if([1,6,7,8,9].includes(status)){
             $("#step-2").hide();
         }
     });

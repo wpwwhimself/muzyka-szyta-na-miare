@@ -28,7 +28,7 @@ class StatusesSeeder extends Seeder
             ["id" => 16, "status_name" => "oddane do poprawki", "status_symbol" => "fa-people-pulling"],
             ["id" => 18, "status_name" => "odrzucone", "status_symbol" => "fa-dumpster-fire"],
             ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
-            ["id" => 26, "status_name" => "oddane do poprawki po terminie", "status_symbol" => "fa-recycle"],
+            ["id" => 26, "status_name" => "oddane do poprawki po akceptacji", "status_symbol" => "fa-recycle"],
             ["id" => 100, "status_name" => "analiza i wstępna obróbka", "status_symbol" => "🔍"],
             ["id" => 101, "status_name" => "nagrania: perkusja", "status_symbol" => "🥁"],
             ["id" => 102, "status_name" => "nagrania: gitary", "status_symbol" => "🎸"],

@@ -23,7 +23,7 @@ class GenresSeeder extends Seeder
             ["name" => "elektro"],
             ["name" => "orkiestra"],
             ["name" => "jazz"],
-            ["name" => "ludowe"],
+            ["name" => "folk"],
         ]);
     }
 }

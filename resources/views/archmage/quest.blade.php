@@ -1,4 +1,4 @@
-@extends('layouts.app', ["title" => $quest->song->title." | $quest->id"])
+@extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
 
 @section('content')
 @foreach (["success", "error"] as $status)

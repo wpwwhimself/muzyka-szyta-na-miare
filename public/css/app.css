@@ -42,6 +42,13 @@ h1, h2, h3, h4{
 .grayed-out::before, .grayed-out::after, .yellowed-out::before, .yellowed-out::after{
     content: " — ";
 }
+.tutorial{
+    color: rgb(47, 184, 47);
+    font-style: italic;
+    text-align: left;
+}
+.tutorial ul{ margin: 0; }
+.tutorial p{ margin: 0.2em auto; }
 
 /* CLICKABLE */
 a{
@@ -153,7 +160,6 @@ body{
 
 .main-wrapper{
     width: 90vw;
-    max-width: 1200px;
     margin: 0 auto; padding: 2em;
 }
 

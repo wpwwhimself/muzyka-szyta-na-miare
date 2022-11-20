@@ -18,7 +18,7 @@
             $("#step-1").hide();
             $("#quest-calendar").hide();
         };
-        if([1,6,7,8,9].includes(status)){
+        if([1,7,8,9].includes(status)){
             $("#step-2").hide();
         }
     });
@@ -27,7 +27,7 @@
     <x-phase-indicator :status-id="$request->status_id" />
     
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem <a href={{ route("quest", ["id" => $request->quest_id]) }}>{{ $request->quest_id }}</a></h2>
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }} → <a href={{ route("quest", ["id" => $request->quest_id]) }}>przejdź do zlecenia</a></h2>
     @endif
     
     <div id="quest-box">

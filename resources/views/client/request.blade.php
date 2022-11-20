@@ -7,6 +7,28 @@
 @endif
 @endforeach
 
+<x-tutorial-control :is-veteran="intval(is_veteran($request->client_id))" />
+
+<p class="tutorial"><i class="fa-brands fa-envira"></i>
+@switch($request->status_id)
+    @case(1)
+        Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.</p>
+        @break
+    @case(5)
+        Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – poprawić odpowiednie pola i przesłać mi do ponownej wyceny. W ostateczności możesz odrzucić zapytanie.
+        @break
+    @case(6)
+        Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.
+        @break
+    @case(7)
+        Nie podejmę się wykonania tego zlecenia. Prawdopobodmie jest ono dla mnie niewykonalne.
+        @break
+    @case(9)
+        Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
+        @break        
+@endswitch
+</p>
+
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <script>
@@ -20,6 +42,9 @@
     </script>
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
+    @if ($request->quest_id)
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }} → <a href={{ route("quest", ["id" => $request->quest_id]) }}>przejdź do zlecenia</a></h2>
+    @endif
     <div id="quest-box">
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
@@ -77,6 +102,19 @@
             </script>
             @if ($request->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
+            @endif
+            @if ($request->price && $request->status_id == 5)
+            <div class="tutorial">
+                <p><i class="fa-brands fa-envira"></i>Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <ul>
+                    <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
+                        (w tytule ID zlecenia),</li>
+                    <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
+                </ul>
+                <p>Nie jest ona wymagana do przeglądania plików,<br>
+                    ale będzie potrzebna do ich pobrania.</p>
+                <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+            </div>
             @endif
         </section>
 

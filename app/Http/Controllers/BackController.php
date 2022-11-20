@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Payment;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -271,16 +272,18 @@ class BackController extends Controller
             $quest->status_id = 11;
             $quest->price_code_override = $request->price_code;
             $quest->price = $request->price;
-            if($client->budget >= $request->price){
-                $quest->paid = 1;
-                $client->budget -= $request->price;
-                $client->save();
-            }else{
-                $quest->paid = 0;
-            }
             $quest->deadline = $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
             $quest->save();
+            if($client->budget >= $request->price){
+                $client->budget -= $request->price;
+                $client->save();
+                Payment::insert([
+                    "client_id" => $client->id,
+                    "quest_id" => $quest->id,
+                    "payment" => $request->price
+                ]);
+            }
 
             $request->quest_id = $quest->id;
         }

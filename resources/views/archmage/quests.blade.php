@@ -14,7 +14,8 @@
                 </div>
             </div>
             <style>
-            .table-row{ grid-template-columns: 3em 3fr 1fr 11em; }
+            .table-row{ grid-template-columns: 3em 3fr 1fr 11em 2em; }
+            .table-row span:nth-child(5){ text-align: center; }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">
@@ -22,6 +23,7 @@
                     <span>Tytuł<br>Wykonawca</span>
                     <span>Klient</span>
                     <span><i class="fa-solid fa-traffic-light"></i> Status</span>
+                    <span @popper(Czy opłacony)><i class="fa-solid fa-sack-dollar"></i></span>
                 </div>
                 <hr />
                 @forelse ($quests as $quest)
@@ -50,6 +52,11 @@
                     </span>
                     <span class="quest-status">
                         <x-phase-indicator :status-id="$quest->status_id" :small="true" />
+                    </span>
+                    <span>
+                    @if (quest_paid($quest->id, $quest->price))
+                    <i class="quest-paid fa-solid fa-check"></i>
+                    @endif
                     </span>
                 </a>
                 @empty

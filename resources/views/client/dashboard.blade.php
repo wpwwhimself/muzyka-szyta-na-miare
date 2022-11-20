@@ -12,10 +12,21 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
             </div>
-            <h2>{{ Auth::user()->client->client_name ?? "anonimowy klient" }}</h2>
+            <h2>{{ Auth::user()->client->client_name }}</h2>
             <div class="hint-table">
+                <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
-                    <span>Ukończonych zleceń</span><span>🚧 TBD 🚧</span>
+                    <span>Ukończonych zleceń</span>
+                    <span>{{ DB::table("quests")->where("client_id", Auth::id())->whereNotIn("status_id", [19, 18])->count() }}</span>
+                    <span>Status klienta</span>
+                    <span>
+                    @if (is_veteran(Auth::id()))
+                    stały klient
+                    @else
+                    klient zwykły<br>
+                    <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - DB::table("quests")->where("client_id", Auth::id())->whereNotIn("status_id", [19, 18])->count() }}</i>
+                    @endif
+                    </span>
                 </div>
             </div>
         </section>

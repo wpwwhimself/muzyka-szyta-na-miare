@@ -219,8 +219,7 @@ nav .active{
 
 /**********************FOOTER***************/
 footer{
-    background: linear-gradient(to bottom right, #333, dimgray);
-    background-image: url('/background.jpg');
+    background: linear-gradient(to right, transparent, #000000aa), url('/background.jpg');
     padding: 1em 5em;
     position: absolute; bottom: 0;
     width: calc(100vw - 2*5em);

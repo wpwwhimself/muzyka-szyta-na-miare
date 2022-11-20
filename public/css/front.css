@@ -244,6 +244,7 @@ nav .active{
     width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
 }
+.imageinhere img{ width: 100%; }
 .animatable{
     transition-duration: 0.3s;
     transition-timing-function: ease-out;
@@ -398,7 +399,7 @@ układ dla FAQ: nieparzyste kropki pogrubione */
 }
 
 #contact{
-    background: url('/background.jpg');
+    background: linear-gradient(to right, transparent, #000000aa), url('/background.jpg');
     color: white;
     padding-bottom: 7em;
 }

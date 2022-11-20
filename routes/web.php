@@ -63,6 +63,10 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
         compact("id", "status", "is_new_client")
     ));
 })->name("request-finalized");
+Route::get("/patron-mode/{id}", function($id){
+    Client::findOrFail($id)->update(["helped_showcasing" => 1]);
+    return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
+})->name("patron-mode");
 
 /**
  * for AJAX purposes

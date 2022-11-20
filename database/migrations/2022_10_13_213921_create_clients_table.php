@@ -24,6 +24,7 @@ class CreateClientsTable extends Migration
             $table->float("budget")->default(0);
             $table->text("default_wishes")->nullable();
             $table->text("special_prices")->nullable();
+            $table->integer("helped_showcasing")->default(0)->comment("0: no, 1: pending, 2: yes");
             $table->timestamps();
         });
     }

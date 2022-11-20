@@ -98,11 +98,19 @@ if(!function_exists("price_calc")){
 
         $price *= $multiplier;
 
+        $post_discount_value = 0;
         if(is_veteran($client_id)){
-            $discount_value = ($price_schema == "A") ? 0.3 : 0.15;
-            $price *= (1 - $discount_value);
-            array_push($positions, ["zniżka stałego klienta", "-".($discount_value*100)."%"]);
+            $veteran_disc = ($price_schema == "A") ? 0.3 : 0.15;
+            $post_discount_value += $veteran_disc;
+            array_push($positions, ["zniżka stałego klienta", "-".($veteran_disc*100)."%"]);
         }
+        if(is_patron($client_id)){
+            $patron_disc = 0.05;
+            $post_discount_value += $patron_disc;
+            array_push($positions, ["zniżka za opinię", "-".($patron_disc*100)."%"]);
+
+        }
+        $price *= (1 - $post_discount_value);
 
         // price override
         $override = false;
@@ -121,6 +129,12 @@ if(!function_exists("is_veteran")){
         $veteran_from = DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
         $quest_count = Client::find($client_id)->quests->where("status_id", 19)->count();
         return $quest_count >= $veteran_from;
+    }
+}
+if(!function_exists("is_patron")){
+    function is_patron($client_id){
+        if($client_id == "") return false;
+        return Client::find($client_id)->helped_showcasing == 2;
     }
 }
 

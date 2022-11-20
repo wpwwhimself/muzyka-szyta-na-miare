@@ -12,23 +12,49 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
             </div>
-            <h2>{{ Auth::user()->client->client_name }}</h2>
+            <h2>
+                @if (is_veteran(Auth::id()))
+                <i class="fa-solid fa-user-shield" @popper(stały klient)></i>
+                @else
+                <i class="fa-solid fa-user" @popper(zwykły klient)></i>
+                @endif
+                {{ Auth::user()->client->client_name }}
+            </h2>
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
                     <span>Ukończonych zleceń</span>
-                    <span>{{ DB::table("quests")->where("client_id", Auth::id())->whereNotIn("status_id", [19, 18])->count() }}</span>
+                    <span>{{ $quests_total }}</span>
                     <span>Status klienta</span>
                     <span>
                     @if (is_veteran(Auth::id()))
                     stały klient
                     @else
                     klient zwykły<br>
-                    <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - DB::table("quests")->where("client_id", Auth::id())->whereNotIn("status_id", [19, 18])->count() }}</i>
+                    <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
                     @endif
                     </span>
+                    @if (is_patron(Auth::id()))
+                    <span>Pomoc w reklamie</span>
+                    <span>odnotowana</span>
+                    @endif
                 </div>
             </div>
+            
+            @if ($quests_total && !is_patron(Auth::id()))
+            <br>
+            <div class="section-header showcase-highlight">
+                <h1><i class="fa-solid fa-award"></i> Jak Ci się podoba współpraca?</h1>
+            </div>
+            <p>Recenzje pomagają mi pozyskiwać nowych klientów. Jeśli i Tobie przypadły do gustu efekty moich prac, możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!</p>
+            <h4><a class="showcase-highlight" href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Przejdź do mojego fanpage'a</a></h4>
+            <form>
+                <x-button
+                    label="Opinia wystawiona" icon="fa-signature"
+                    action="{{ route('patron-mode', ['id' => Auth::id()]) }}"
+                    />
+            </form>
+            @endif
         </section>
 
         <section id="dashboard-finances">

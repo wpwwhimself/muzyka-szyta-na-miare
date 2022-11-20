@@ -20,6 +20,9 @@ section{
     margin: 1em 1em 0;
     padding: 1em;
 }
+p{
+    margin-top: 0;
+}
 .grid-2, .grid-3{ display: grid; }
 .grid-2{ grid-template-columns: 1fr 1fr; }
 .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
@@ -39,6 +42,10 @@ form, .login-grid-container, .input-container{
 }
 .login-grid-container{
     padding: 0 2em;
+}
+
+.showcase-highlight{
+    color: rgb(196, 135, 23);
 }
 
 .section-header{
@@ -200,6 +207,9 @@ form, .login-grid-container, .input-container{
 }
 .hint-table .grayed-out{
     grid-column: span 1/1;
+}
+.hint-table .positions span{
+    padding: 0.2em;
 }
 .hint-table .positions span:nth-child(4n+3), .hint-table .positions span:nth-child(4n){
     background-color: #ffffff22;

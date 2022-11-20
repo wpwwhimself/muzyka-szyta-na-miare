@@ -30,15 +30,16 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
+            $quests_total = DB::table("quests")->where("client_id", Auth::id())->where("status_id", 19)->count();
         }
         $requests = $requests->get();
         $quests = $quests->get();
 
-        return view(user_role().".dashboard", [
-            "title" => (Auth::id() == 1) ? "Szpica arcymaga" : "Pulpit",
-            "quests" => $quests,
-            "requests" => $requests
-        ]);
+        return view(user_role().".dashboard", array_merge(
+            ["title" => (Auth::id() == 1) ? "Szpica arcymaga" : "Pulpit"],
+            compact("quests", "requests"),
+            (isset($quests_total) ? ["quests_total" => $quests_total] : [])
+        ));
     }
 
     public function quests(){

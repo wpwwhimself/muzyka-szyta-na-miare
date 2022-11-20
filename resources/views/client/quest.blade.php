@@ -19,30 +19,10 @@
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />
-            <x-input type="text" name="genre_id" label="Gatunek" value="{{ $quest->song->genre->name }}" :disabled="true" :small="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" :disabled="true" />
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
-            <x-input type="text" name="price_code_override" label="Kod wyceny" value="{{ $quest->price_code_override }}" :hint="$prices" />
-            <script>
-            $(document).ready(function(){
-                $("#price_code_override").change(function(){
-                    $.ajax({
-                        url: "{{ url('quest_price_update') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            id: '{{ $quest->id }}',
-                            code: $("#price_code_override").val()
-                        },
-                        success: function(){
-                            location.reload();
-                        }
-                    })
-                });
-            });
-            </script>
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
@@ -85,7 +65,7 @@
             <x-input type="checkbox" name="paid" label="Opłacono" value="{{ quest_paid($quest->id, $quest->price) }}" :disabled="true" />
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
             @if ($quest->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
+            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline }}" :disabled="true" />
             @endif
         </section>
 
@@ -100,14 +80,10 @@
     </div>
 
     <div class="flexright">
-        <x-button 
+        {{-- <x-button 
             label="Rozpocznij prace" icon="12" id="phase-start"
             action="{{ route('mod-quest-back', ['id' => $quest->id, 'status' => 12]) }}"
-            />
-        <x-button
-            label="Oddaj do recenzji" icon="15" id="phase-review"
-            action="{{ route('mod-quest-back', ['id' => $quest->id, 'status' => 15]) }}"
-            />
+            /> --}}
     </div>
 </div>
 

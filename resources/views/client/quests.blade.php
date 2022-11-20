@@ -14,14 +14,13 @@
                 </div>
             </div>
             <style>
-            .table-row{ grid-template-columns: 3em 3fr 1fr 11em 2em; }
+            .table-row{ grid-template-columns: 3em 3fr 11em 2em; }
             .table-row span:nth-child(5){ text-align: center; }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">
                     <span>Typ</span>
                     <span>Tytuł<br>Wykonawca</span>
-                    <span>Klient</span>
                     <span><i class="fa-solid fa-traffic-light"></i> Status</span>
                     <span @popper(Czy opłacony)><i class="fa-solid fa-sack-dollar"></i></span>
                 </div>
@@ -38,17 +37,6 @@
                     <span>
                         <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
                         <span class="song-artist">{{ $quest->song->artist }}</span>
-                    </span>
-                    <span>
-                    @if ($quest->client?->client_name)
-                        @if (is_veteran($quest->client->id))
-                        <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
-                        @else
-                        <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
-                        @endif
-                    @else
-                        <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
-                    @endif
                     </span>
                     <span class="quest-status">
                         <x-phase-indicator :status-id="$quest->status_id" :small="true" />

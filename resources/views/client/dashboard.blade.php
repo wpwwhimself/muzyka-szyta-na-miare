@@ -41,7 +41,7 @@
                 </div>
             </div>
             
-            @if ($quests_total && !is_patron(Auth::id()))
+            @if ($quests_total && !is_patron(Auth::id()) && DB::table("clients")->find(Auth::id())->helped_showcasing != 1)
             <br>
             <div class="section-header showcase-highlight">
                 <h1><i class="fa-solid fa-award"></i> Jak Ci się podoba współpraca?</h1>
@@ -51,7 +51,7 @@
             <form>
                 <x-button
                     label="Opinia wystawiona" icon="fa-signature"
-                    action="{{ route('patron-mode', ['id' => Auth::id()]) }}"
+                    action="{{ route('patron-mode', ['id' => Auth::id(), 'level' => 1]) }}"
                     />
             </form>
             @endif

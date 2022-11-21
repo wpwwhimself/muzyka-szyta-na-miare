@@ -31,6 +31,8 @@ class BackController extends Controller
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
             $quests_total = DB::table("quests")->where("client_id", Auth::id())->where("status_id", 19)->count();
+        }else{
+            $patrons_adepts = Client::where("helped_showcasing", 1)->get();
         }
         $requests = $requests->get();
         $quests = $quests->get();
@@ -38,7 +40,8 @@ class BackController extends Controller
         return view(user_role().".dashboard", array_merge(
             ["title" => (Auth::id() == 1) ? "Szpica arcymaga" : "Pulpit"],
             compact("quests", "requests"),
-            (isset($quests_total) ? ["quests_total" => $quests_total] : [])
+            (isset($quests_total) ? compact("quests_total") : []),
+            (isset($patrons_adepts) ? compact("patrons_adepts") : [])
         ));
     }
 

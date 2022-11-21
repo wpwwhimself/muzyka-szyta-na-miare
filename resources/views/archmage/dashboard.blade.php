@@ -57,4 +57,23 @@
         @endforelse
         </div>
     </section>
+
+    @if (count($patrons_adepts) > 0)
+    <section id="patrons-adepts">
+        <div class="section-header">
+            <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
+            <div>
+                <a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje <i class="fa-solid fa-angles-right"></i></a>
+            </div>
+        </div>
+        <div class="dashboard-mini-wrapper">
+            @foreach ($patrons_adepts as $patron)
+            <x-button
+                label="{{ $patron->client_name }}" icon="{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"
+                action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}"
+                />
+            @endforeach
+        </div>
+    </section>
+    @endif
 @endsection

@@ -80,6 +80,9 @@ if(!function_exists("price_calc")){
             ->select(["indicator", "service", "operation", "price_$price_schema AS price"])
             ->get();
 
+        if(is_veteran($client_id)) $labels .= "=";
+        if(is_patron($client_id)) $labels .= "-";
+
         foreach($price_list as $cat){
             preg_match_all("/$cat->indicator/", $labels, $matches);
             if(count($matches[0]) > 0):
@@ -97,20 +100,6 @@ if(!function_exists("price_calc")){
         }
 
         $price *= $multiplier;
-
-        $post_discount_value = 0;
-        if(is_veteran($client_id)){
-            $veteran_disc = ($price_schema == "A") ? 0.3 : 0.15;
-            $post_discount_value += $veteran_disc;
-            array_push($positions, ["zniżka stałego klienta", "-".($veteran_disc*100)."%"]);
-        }
-        if(is_patron($client_id)){
-            $patron_disc = 0.05;
-            $post_discount_value += $patron_disc;
-            array_push($positions, ["zniżka za opinię", "-".($patron_disc*100)."%"]);
-
-        }
-        $price *= (1 - $post_discount_value);
 
         // price override
         $override = false;

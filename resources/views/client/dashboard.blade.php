@@ -43,7 +43,14 @@
 
                     <span>Łącznie zniżek</span>
                     <span>
-                        {{ Auth::user()->client->client_name }}
+                        {{
+                            Auth::user()->client->special_prices ? "spersonalizowany cennik"
+                            : (
+                                is_veteran(Auth::id()) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+                                + 
+                                is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+                            )*100 . "%"
+                        }}
                     </span>
                 </div>
             </div>

@@ -98,7 +98,16 @@ class PricesSeeder extends Seeder
             [
                 "indicator" => "g", "service" => "mixing i mastering", "quest_type_id" => 3,
                 "operation" => "+", "price_a" => 50, "price_b" => 50
-            ]
+            ],
+            /* zniżki specjalne -- zawsze na końcu */
+            [
+                "indicator" => "=", "service" => "zniżka stałego klienta", "quest_type_id" => null,
+                "operation" => "*", "price_a" => -0.3, "price_b" => -0.15
+            ],
+            [
+                "indicator" => "-", "service" => "zniżka za opinię", "quest_type_id" => null,
+                "operation" => "*", "price_a" => -0.05, "price_b" => -0.05
+            ],
         ]);
     }
 }

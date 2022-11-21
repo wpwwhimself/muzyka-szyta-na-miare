@@ -206,7 +206,7 @@ class BackController extends Controller
 
         //zbierz zmiany przed dodaniem
         $comment = null;
-        if(in_array($request->status_id, [5, 6])){
+        if(in_array($request->status_id, [5, 6]) && $modifying){
             $changes = [];
             $keys = array_keys(Arr::except($request->getDirty(), ["updated_at", "status_id"]));
             $pre = $request->getOriginal();

@@ -27,7 +27,7 @@
     <x-phase-indicator :status-id="$request->status_id" />
     
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }} → <a href={{ route("quest", ["id" => $request->quest_id]) }}>przejdź do zlecenia</a></h2>
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href='{{ route("quest", ["id" => $request->quest_id]) }}'>Przejdź do zlecenia</x-a></h2>
     @endif
     
     <div id="quest-box">

@@ -43,7 +43,7 @@
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href={{ route("quest", ["id" => $request->quest_id]) }}>Przejdź do zlecenia</x-a></h2>
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a></h2>
     @endif
     <div id="quest-box">
         <section class="input-group">
@@ -105,7 +105,8 @@
             @endif
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
-                <p><i class="fa-brands fa-envira"></i>Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <p><i class="fa-brands fa-envira"></i> Termin oddania jest liczony do podanego dnia włącznie.</p>
+                <p><i class="fa-brands fa-envira"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
                         (w tytule ID zlecenia),</li>
@@ -113,7 +114,7 @@
                 </ul>
                 <p>Nie jest ona wymagana do przeglądania plików,<br>
                     ale będzie potrzebna do ich pobrania.</p>
-                <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+                <p><i class="fa-brands fa-envira"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>
             @endif
         </section>

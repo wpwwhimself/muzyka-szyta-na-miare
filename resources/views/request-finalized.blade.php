@@ -1,7 +1,10 @@
 @extends("layouts.app")
 
 @section('content')
-    <h2>Zapytanie zostało pomyślnie przeniesione do fazy <span class="quest-status p-{{ $status }}">{{ DB::table("statuses")->where("id", $status)->value("status_name") }}</span></h2>
+    <h2>
+        Zapytanie zostało pomyślnie przeniesione do nowej fazy.
+    </h2>
+    <x-phase-indicator :status-id="$status" />
     
     @if ($status == 9)
         <p>Wkrótce będę się kontaktował ponownie w sprawie postępów w pracach.</p>

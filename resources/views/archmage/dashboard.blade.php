@@ -29,8 +29,8 @@
         <div class="section-header">
             <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
             <div>
-                <a href="{{ route("quests") }}">Wszystkie <i class="fa-solid fa-angles-right"></i></a>
-                <a href="{{ route("add-request") }}">Dodaj nowe <i class="fa-solid fa-plus"></i></a>
+                <x-a href="{{ route('requests') }}">Wszystkie</x-a>
+                <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
@@ -46,7 +46,7 @@
         <div class="section-header">
             <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
             <div>
-                <a href="{{ route("quests") }}">Wszystkie <i class="fa-solid fa-angles-right"></i></a>
+                <x-a href="{{ route('quests') }}">Wszystkie</x-a>
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
@@ -63,7 +63,7 @@
         <div class="section-header">
             <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
             <div>
-                <a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje <i class="fa-solid fa-angles-right"></i></a>
+                <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
             </div>
         </div>
         <div class="dashboard-mini-wrapper">

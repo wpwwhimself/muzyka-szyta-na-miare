@@ -10,7 +10,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-boxes-stacked"></i> Lista zleceń</h1>
                 <div>
-                    <a href="{{ route("add-request") }}">Dodaj nowe zapytanie <i class="fa-solid fa-plus"></i></a>
+                    <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe zapytanie</x-a>
                 </div>
             </div>
             <style>
@@ -26,7 +26,7 @@
                 </div>
                 <hr />
                 @forelse ($quests as $quest)
-                <a href="{{ route("quest", $quest->id) }}" class="table-row p-{{ $quest->status_id }}">
+                <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }}">
                     <span>
                         <x-quest-type
                             :id="song_quest_type($quest->song_id)->id ?? 0"

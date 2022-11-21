@@ -10,7 +10,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-envelope-open-text"></i> Lista zapytań</h1>
                 <div>
-                    <a href="{{ route("add-request") }}">Dodaj nowe <i class="fa-solid fa-plus"></i></a>
+                    <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
                 </div>
             </div>
             <style>

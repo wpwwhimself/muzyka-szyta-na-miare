@@ -25,23 +25,30 @@
                 <div class="positions">
                     <span>Ukończonych zleceń</span>
                     <span>{{ $quests_total }}</span>
+
                     <span>Status klienta</span>
                     <span>
-                    @if (is_veteran(Auth::id()))
-                    stały klient
-                    @else
-                    klient zwykły<br>
-                    <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
-                    @endif
+                        @if (is_veteran(Auth::id()))
+                        stały klient
+                        @else
+                        klient zwykły<br>
+                        <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
+                        @endif
                     </span>
+
                     @if (is_patron(Auth::id()))
                     <span>Pomoc w reklamie</span>
                     <span>odnotowana</span>
                     @endif
+
+                    <span>Łącznie zniżek</span>
+                    <span>
+                        {{ Auth::user()->client->client_name }}
+                    </span>
                 </div>
             </div>
             
-            @if ($quests_total && !is_patron(Auth::id()) && DB::table("clients")->find(Auth::id())->helped_showcasing != 1)
+            @if ($quests_total && !is_patron(Auth::id()) && Auth::user()->client->helped_showcasing != 1)
             <br>
             <div class="section-header showcase-highlight">
                 <h1><i class="fa-solid fa-award"></i> Jak Ci się podoba współpraca?</h1>

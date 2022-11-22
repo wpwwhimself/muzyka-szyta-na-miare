@@ -12,6 +12,28 @@
     
     <x-phase-indicator :status-id="$quest->status_id" />
     
+    @if ($quest->status_id == 12)
+        
+    <div id="stats">
+        <div id="stats-buttons">
+            @foreach ($stats_statuses as $option)
+            <x-button
+                label="{{ $option->status_name }}" icon="{{ $option->id }}"
+                action="#"
+                />
+            @endforeach
+            <x-button
+                label="stop" icon="circle-pause" :danger="true"
+                action="#"
+                />
+        </div>
+        <section id="stats-log">
+            <h2><i class="fa-solid fa-snowplow"></i> Historia tworzenia</h2>
+            {{-- TODO historia tworzenia --}}
+        </section>
+    </div>
+    @endif
+
     <div id="quest-box">
         <section class="input-group">
             <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>

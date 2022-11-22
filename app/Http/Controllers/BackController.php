@@ -45,20 +45,6 @@ class BackController extends Controller
         ));
     }
 
-    public function quests(){
-        $client = Auth::user()->client;
-
-        $quests = Quest::orderBy("quests.created_at", "desc");
-        if(Auth::id() != 1){
-            $quests = $quests->where("client_id", $client->id);
-        }
-        $quests = $quests->paginate(25);
-
-        return view(user_role().".quests", [
-            "title" => "Lista zleceń",
-            "quests" => $quests
-        ]);
-    }
     public function requests(){
         $client = Auth::user()->client;
 
@@ -72,14 +58,6 @@ class BackController extends Controller
             "title" => "Lista zapytań",
             "requests" => $requests,
         ]);
-    }
-
-    public function quest($id){
-        $quest = Quest::findOrFail($id);
-
-        $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
-
-        return view(user_role().".quest", array_merge(["title" => "Zlecenie"], compact("quest", "prices")));
     }
     public function request($id){
         $request = Request::findOrFail($id);
@@ -110,7 +88,6 @@ class BackController extends Controller
             "title" => "Zapytanie",
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres")));
     }
-
     public function addRequest(){
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
@@ -329,6 +306,36 @@ class BackController extends Controller
         return redirect()->route($where_to)->with("success", "Komentarz dodany");
     }
 
+    public function quests(){
+        $client = Auth::user()->client;
+
+        $quests = Quest::orderBy("quests.created_at", "desc");
+        if(Auth::id() != 1){
+            $quests = $quests->where("client_id", $client->id);
+        }
+        $quests = $quests->paginate(25);
+
+        return view(user_role().".quests", [
+            "title" => "Lista zleceń",
+            "quests" => $quests
+        ]);
+    }
+    public function quest($id){
+        $quest = Quest::findOrFail($id);
+
+        $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
+        if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
+        //TODO historia tworzenia
+
+        return view(
+            user_role().".quest",
+            array_merge(
+                ["title" => "Zlecenie"],
+                compact("quest", "prices"),
+                compact("stats_statuses") ?? []
+            )
+        );
+    }
     public function modQuestBack(HttpRequest $rq){
         $quest = Quest::findOrFail($rq->quest_id);
 

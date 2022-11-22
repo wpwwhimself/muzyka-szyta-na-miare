@@ -242,6 +242,15 @@ form, .login-grid-container, .input-container{
 #quest-history .history-position .client-name{ color: dimgray; font-style: italic; }
 #quest-history .history-position ul{ margin: 0; padding-left: 1em; color: silver; }
 
+#stats{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+}
+#stats-buttons .submit{
+    font-size: 1em;
+    border-radius: 0.5em;
+}
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 125, 230, 230; }

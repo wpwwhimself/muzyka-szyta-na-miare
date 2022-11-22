@@ -330,6 +330,22 @@ class BackController extends Controller
     }
 
     public function modQuestBack(HttpRequest $rq){
-        return redirect()->route("quest", ["id" => $rq->id])->with("success", "zmianyy");
+        $quest = Quest::findOrFail($rq->quest_id);
+
+        $quest->status_id = $rq->status_id;
+        $quest->save();
+
+        $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
+        
+        if($rq->status_id == 12) return redirect()->route("focus-booth", ["id" => $rq->quest_id]);
+        return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Faza zmieniona");
+    }
+
+    public function focusBooth($id){
+        $quest = Quest::findOrFail($id);
+
+        return view("archmage.focus-booth", array_merge(
+            compact("id", "quest")
+        ));
     }
 }

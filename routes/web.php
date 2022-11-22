@@ -35,16 +35,17 @@ Route::controller(AuthController::class)->group(function(){
 Route::controller(BackController::class)->group(function(){
     Route::get('/dashboard', "dashboard")->middleware("auth")->name("dashboard");
 
-    Route::get('/quests', "quests")->middleware("auth")->name("quests");
-    Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
-    Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
-    Route::post('/quests/add-back', "addQuestBack")->middleware("auth")->name("add-quest-back");
-    Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
-
     Route::get('/requests', "requests")->middleware("auth")->name("requests");
     Route::get('/requests/view/{id}', "request")->name("request");
     Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
+
+    Route::get('/quests', "quests")->middleware("auth")->name("quests");
+    Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
+    Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
+    Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
+
+    Route::get('/quests/focus-booth/{id}', "focusBooth")->middleware("auth")->name("focus-booth");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
 

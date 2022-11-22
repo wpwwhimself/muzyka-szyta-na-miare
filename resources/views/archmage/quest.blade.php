@@ -99,16 +99,21 @@
         </section>
     </div>
 
-    <div class="flexright">
-        <x-button 
-            label="Rozpocznij prace" icon="12" id="phase-start"
-            action="{{ route('mod-quest-back', ['id' => $quest->id, 'status' => 12]) }}"
-            />
-        <x-button
-            label="Oddaj do recenzji" icon="15" id="phase-review"
-            action="{{ route('mod-quest-back', ['id' => $quest->id, 'status' => 15]) }}"
-            />
-    </div>
+    <form action="{{ route('mod-quest-back') }}" method="POST">
+        <script>
+        $(document).ready(function(){
+            $('button[value={{ $quest->status_id }}]').hide();
+        });
+        </script>
+        <div class="flexright">
+            @csrf
+            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
+            <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+            <x-button action="submit" name="status_id" icon="11" value="11" label="Zuruck" />
+            <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
+            <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
+        </div>
+    </form>
 </div>
 
 @endsection

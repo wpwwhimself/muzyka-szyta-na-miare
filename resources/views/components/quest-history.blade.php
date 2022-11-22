@@ -6,9 +6,11 @@
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
             <ul>
-            @foreach (json_decode($item->comment) ?? [] as $key=>$val)
+            @forelse (json_decode($item->comment) ?? [] as $key=>$val)
             <li>{{ $key }}: {{ $val }}</li>
-            @endforeach
+            @empty
+            {{ $item->comment }}
+            @endforelse
             </ul>
         </span>
         <span>{!! str_replace(" ", "<br>", $item->date) !!}</span>

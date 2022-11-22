@@ -30,7 +30,7 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests = $quests->where("client_id", $client->id);
-            $quests_total = DB::table("quests")->where("client_id", Auth::id())->where("status_id", 19)->count();
+            $quests_total = client_exp(Auth::id());
         }else{
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
         }
@@ -42,6 +42,34 @@ class BackController extends Controller
             compact("quests", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : [])
+        ));
+    }
+
+    public function clients(){
+        $clients_raw = Client::all();
+        $max_exp = 0;
+        $classes = ["Weterani", "Biegli", "Zainteresowani", "Nowicjusze", "Debiutanci"];
+
+        foreach($clients_raw as $client){
+            $client->exp = client_exp($client->id);
+            if($client->exp > $max_exp) $max_exp = $client->exp;
+
+            if(is_veteran($client->id)) $class = 0;
+            elseif(client_exp($client->id) >= 4) $class = 1;
+            elseif(client_exp($client->id) >= 2) $class = 2;
+            elseif(client_exp($client->id) >= 1) $class = 3;
+            else $class = 4;
+
+            $clients[$class][] = $client;
+        }
+        ksort($clients);
+        foreach($clients as $k => $v){
+            $clients[$k] = collect($v)->sortBy([['exp', "desc"], ['client_name', 'asc']]);
+        }
+
+        return view(user_role().".clients", array_merge(
+            ["title" => "Klienci"],
+            compact("clients", "max_exp","classes")
         ));
     }
 

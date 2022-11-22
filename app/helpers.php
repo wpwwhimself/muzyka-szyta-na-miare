@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * "CONSTANTS"
+ */
+if(!function_exists("VETERAN_FROM")){
+    function VETERAN_FROM(){
+        return DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
+    }
+}
+
+/**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)
  */
 if(!function_exists("user_role")){
@@ -115,15 +124,25 @@ if(!function_exists("price_calc")){
 if(!function_exists("is_veteran")){
     function is_veteran($client_id){
         if($client_id == "") return false;
-        $veteran_from = DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
-        $quest_count = Client::find($client_id)->quests->where("status_id", 19)->count();
-        return $quest_count >= $veteran_from;
+        return client_exp($client_id) >= VETERAN_FROM();
     }
 }
 if(!function_exists("is_patron")){
     function is_patron($client_id){
         if($client_id == "") return false;
         return Client::find($client_id)->helped_showcasing == 2;
+    }
+}
+if(!function_exists("client_exp")){
+    function client_exp($client_id){
+        if($client_id == "") return 0;
+        return Client::find($client_id)->quests->where("status_id", 19)->count();
+    }
+}
+if(!function_exists("upcoming_quests")){
+    function upcoming_quests($client_id){
+        if($client_id == "") return 0;
+        return Client::find($client_id)->quests->whereIn("status_id", [11, 12, 15, 16, 26])->count();
     }
 }
 

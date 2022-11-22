@@ -10,6 +10,7 @@ use App\Models\QuestType;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -44,8 +45,6 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
-
-    Route::get('/quests/focus-booth/{id}', "focusBooth")->middleware("auth")->name("focus-booth");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
 

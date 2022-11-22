@@ -310,7 +310,7 @@ class BackController extends Controller
 
         $row->re_quest_id = $re_quest_id;
         $row->new_status_id = $new_status_id;
-        $row->changed_by = Auth::id();
+        $row->changed_by = (in_array($new_status_id, [11])) ? 1 : Auth::id();
         $row->comment = $comment;
         $row->date = now();
 
@@ -337,15 +337,6 @@ class BackController extends Controller
 
         $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
         
-        if($rq->status_id == 12) return redirect()->route("focus-booth", ["id" => $rq->quest_id]);
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Faza zmieniona");
-    }
-
-    public function focusBooth($id){
-        $quest = Quest::findOrFail($id);
-
-        return view("archmage.focus-booth", array_merge(
-            compact("id", "quest")
-        ));
     }
 }

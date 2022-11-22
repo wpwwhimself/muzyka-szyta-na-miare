@@ -6,11 +6,13 @@
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
             <ul>
-            @forelse (json_decode($item->comment) ?? [] as $key=>$val)
+            @if (substr($item->comment, 0, 1) != "{")
+            {{ $item->comment }}{{ $item->new_status_id != 32 ? "" : " zł" }}
+            @else
+            @foreach (json_decode($item->comment) ?? [] as $key=>$val)
             <li>{{ $key }}: {{ $val }}</li>
-            @empty
-            {{ $item->comment }}
-            @endforelse
+            @endforeach
+            @endif
             </ul>
         </span>
         <span>{!! str_replace(" ", "<br>", $item->date) !!}</span>

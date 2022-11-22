@@ -10,7 +10,10 @@
 
 <section id="clients-stats">
     <div class="section-header">
-        <h1><i class="fa-solid fa-chart-pie"></i> Statystyki klientów</h1>
+        <h1>
+            <i class="fa-solid fa-chart-pie"></i> Statystyki klientów
+            <small class="ghost">Łącznie {{ $clients_count }}</small>
+        </h1>
     </div>
     <div id="clients-stats-graph">
         @foreach (array_reverse($clients) as $k => $v)
@@ -19,6 +22,7 @@
         <div class="value">{{ count($v) }}</div>
         @endforeach
     </div>
+    
 </section>
 
 <section id="clients-list">

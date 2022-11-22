@@ -1,8 +1,8 @@
 @media (prefers-color-scheme: dark){
-    body{ --bg: #222; --fg: #eee; }
+    body{ --bg: #222; --fg: #eee; --hd: var(--ui-clr-1) }
 }
 @media (prefers-color-scheme: light){
-    body{ --bg: white; --fg: black; }
+    body{ --bg: white; --fg: black; --hd: var(--ui-clr-2) }
 }
 
 body{
@@ -11,7 +11,7 @@ body{
     background-color: var(--bg); color: var(--fg);
 }
 h2{
-    color: var(--ui-clr-1);
+    color: var(--hd);
     font-size: 1.35em;
 }
 section{
@@ -92,7 +92,7 @@ form, .login-grid-container, .input-container{
 .quest-mini:hover{
     box-shadow: 0 0 1em var(--ui-clr-2);
 }
-.quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; }
+.quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; color: var(--fg); }
 .quest-mini .song-title{ padding: 0.2em 0.6em; }
 
 .quest-details{
@@ -249,7 +249,7 @@ form, .login-grid-container, .input-container{
 #quest-history .history-position.by-me{ margin-left: 2em; }
 #quest-history .history-position span:nth-child(1){ text-align: left; }
 #quest-history .history-position .client-name{ color: dimgray; font-style: italic; }
-#quest-history .history-position ul{ margin: 0; padding-left: 1em; color: silver; }
+#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; }
 
 #stats{
     display: grid;
@@ -298,11 +298,10 @@ form, .login-grid-container, .input-container{
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 125, 230, 230; }
 .p-13{ --q-clr: 163, 124, 87; }
-.p-5, .p-15{ --q-clr: 145, 87, 168; }
+.p-5, .p-15, .p-31{ --q-clr: 145, 87, 168; }
 .p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }
 .p-7, .p-8, .p-18{ --q-clr: 175, 175, 175; }
-.p-9, .p-19{ --q-clr: 57, 196, 57; }
-.p-31{ --q-clr: 46, 151, 192; }
+.p-9, .p-19, .p-32{ --q-clr: 57, 196, 57; }
 
 /************************MOBILITY**************/
 @media screen and (max-width: 960px){

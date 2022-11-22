@@ -59,17 +59,5 @@ class DummyQuestsSeeder extends Seeder
                 "updated_at" => "2022-11-19 15:15:18"
             ]
         ]);
-        Payment::insert([
-            [
-                "client_id" => 2,
-                "quest_id" => "P22-00",
-                "payment" => 40
-            ],
-            [
-                "client_id" => 2,
-                "quest_id" => "P22-00",
-                "payment" => 20
-            ]
-        ]);
     }
 }

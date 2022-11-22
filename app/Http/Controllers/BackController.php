@@ -47,6 +47,7 @@ class BackController extends Controller
 
     public function clients(){
         $clients_raw = Client::all();
+        $clients_count = count($clients_raw);
         $max_exp = 0;
         $classes = ["Weterani", "Biegli", "Zainteresowani", "Nowicjusze", "Debiutanci"];
 
@@ -69,7 +70,7 @@ class BackController extends Controller
 
         return view(user_role().".clients", array_merge(
             ["title" => "Klienci"],
-            compact("clients", "max_exp","classes")
+            compact("clients", "max_exp","classes", "clients_count")
         ));
     }
 

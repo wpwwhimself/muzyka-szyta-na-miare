@@ -32,7 +32,8 @@ class StatusesSeeder extends Seeder
             ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
             ["id" => 26, "status_name" => "oddane do poprawki po akceptacji", "status_symbol" => "fa-recycle"],
             /* statusy techniczne */
-            ["id" => 31, "status_name" => "zmieniono wycenę", "status_symbol" => "fa-cash-register"],
+            ["id" => 31, "status_name" => "zmieniono wycenę", "status_symbol" => "fa-comment-dollar"],
+            ["id" => 32, "status_name" => "dokonano wpłaty", "status_symbol" => "fa-cash-register"],
             /* statusy pracy nad questem */
             ["id" => 100, "status_name" => "analiza i wstępna obróbka", "status_symbol" => "🔍"],
             ["id" => 101, "status_name" => "nagrania: perkusja", "status_symbol" => "🥁"],

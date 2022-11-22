@@ -10,7 +10,7 @@
 
 <section id="clients-stats">
     <div class="section-header">
-        <h1><i class="fa-solid fa-clipboard-user"></i> Statystyki klientów</h1>
+        <h1><i class="fa-solid fa-chart-pie"></i> Statystyki klientów</h1>
     </div>
     <div id="clients-stats-graph">
         @foreach (array_reverse($clients) as $k => $v)

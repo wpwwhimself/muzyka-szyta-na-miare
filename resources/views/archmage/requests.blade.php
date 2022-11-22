@@ -36,7 +36,7 @@
                     />
             </span>
             <span>
-                <h3 class="song-title">{{ $request->title }}</h3>
+                <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
                 <span class="song-artist">{{ $request->artist }}</span>
             </span>
             <span>

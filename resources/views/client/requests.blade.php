@@ -31,8 +31,8 @@
                 <x-quest-type :id="$request->quest_type_id" :label="$request->quest_type->type" />
             </span>
             <span>
-                <h3 class="song-title">{{ $request->title }}</h3>
-                <span class="song-artist">{{ $request->cover_artist ?? $request->artist }}</span>
+                <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
+                <span class="song-artist">{{ $request->artist }}</span>
             </span>
             <span class="quest-status">
                 <x-phase-indicator :status-id="$request->status_id" :small="true" />

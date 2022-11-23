@@ -1,7 +1,8 @@
 @props(['quest'])
 
-<a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="quest-mini hover-lift q-container p-{{ $quest->status_id }}">
+<a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="quest-mini hover-lift q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
     <div class="song-title-artist">
+        <p class="song-artist"><i class="fa-solid fa-traffic-light"></i> {{ $quest->status->status_name }}</p>
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
     </div>
@@ -41,8 +42,7 @@
             <i class="fa-solid fa-hashtag"></i>
             @endunless
 
-            <p class="quest-status">{{ $quest->status->status_name }}</p>
-            <i class="fa-solid fa-traffic-light"></i>
+            
         </div>
     </div>
 </a>

@@ -368,6 +368,13 @@ class BackController extends Controller
     public function modQuestBack(HttpRequest $rq){
         $quest = Quest::findOrFail($rq->quest_id);
 
+        // wpisywanie wpłaty za zlecenie
+        if($rq->status_id == 32){
+            if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
+            $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
+            return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Cena wpisana");
+        }
+
         $quest->status_id = $rq->status_id;
         $quest->save();
 

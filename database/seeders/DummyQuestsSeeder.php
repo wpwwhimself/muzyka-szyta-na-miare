@@ -42,7 +42,7 @@ class DummyQuestsSeeder extends Seeder
                 "client_id" => 2,
                 "status_id" => 11,
                 "price_code_override" => "c",
-                "price" => 70,
+                "price" => 50,
                 "deadline" => "2022-12-31",
                 "created_at" => "2022-11-18 15:15:18",
                 "updated_at" => "2022-11-18 15:15:18"
@@ -53,7 +53,7 @@ class DummyQuestsSeeder extends Seeder
                 "client_id" => 2,
                 "status_id" => 12,
                 "price_code_override" => "cc",
-                "price" => 140,
+                "price" => 100,
                 "deadline" => "2022-12-30",
                 "created_at" => "2022-11-19 15:15:18",
                 "updated_at" => "2022-11-19 15:15:18"

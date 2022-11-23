@@ -3,6 +3,7 @@
 use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
+use App\Models\Request;
 use App\Models\Song;
 use App\Models\User;
 use Carbon\Carbon;
@@ -118,6 +119,18 @@ if(!function_exists("price_calc")){
         }
 
         return [$price, $positions, $override];
+    }
+}
+
+if(!function_exists("is_priority")){
+    function is_priority($quest_id){
+        //requesty mają UUID
+        $is_request = strlen($quest_id) == 36;
+
+        return preg_match(
+            "/z/",
+            ($is_request ? Request::findOrFail($quest_id)->price_code : Quest::findOrFail($quest_id)->price_code_override)
+        );
     }
 }
 

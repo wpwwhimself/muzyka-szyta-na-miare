@@ -29,7 +29,7 @@
         </div>
         <hr />
         @forelse ($quests as $quest)
-        <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }}">
+        <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
             <span>
                 <x-quest-type
                     :id="song_quest_type($quest->song_id)->id ?? 0"
@@ -40,6 +40,9 @@
             <span>
                 <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
                 <span class="song-artist">{{ $quest->song->artist }}</span>
+                @if (is_priority($quest->id))
+                • <b>Priorytet</b>
+                @endif
             </span>
             <span>
             @if ($quest->client?->client_name)

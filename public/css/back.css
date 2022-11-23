@@ -3,6 +3,7 @@
 }
 @media (prefers-color-scheme: light){
     body{ --bg: white; --fg: black; --hd: var(--ui-clr-2) }
+    .quest-phase-label{ text-shadow: 0 0 3px black; }
 }
 
 body{
@@ -51,6 +52,12 @@ form, .login-grid-container, .input-container{
 .ghost{
     opacity: 0.4;
 }
+a.priority{
+    border: 5px solid var(--ui-clr-1);
+}
+b.priority, .priority b{
+    color: var(--ui-clr-1);
+}
 
 .section-header{
     display: flex;
@@ -84,9 +91,9 @@ form, .login-grid-container, .input-container{
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 5px solid rgb(var(--q-clr));
+    /* border: 5px solid rgb(var(--q-clr)); */
     box-sizing: border-box;
-    background-color: #ffffff44;
+    background-color: #ffffff22;
     /* background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5)); */
 }
 .quest-mini:hover{
@@ -187,6 +194,7 @@ form, .login-grid-container, .input-container{
 }
 .quest-phase-bars div{
     background-color: #ffffff44;
+    border: 1px solid #00000044;
     margin: 0 0.1em;
     height: 0.7em;
     border-radius: 1em;

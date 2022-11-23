@@ -134,6 +134,9 @@
             <x-button action="submit" name="status_id" icon="11" value="11" label="Zuruck" />
             <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
             <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
+            @if (!quest_paid($quest->id, $quest->price))
+            <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :danger="true" />
+            @endif
         </div>
     </form>
 </div>

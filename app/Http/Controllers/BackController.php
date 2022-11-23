@@ -55,11 +55,11 @@ class BackController extends Controller
             $client->exp = client_exp($client->id);
             if($client->exp > $max_exp) $max_exp = $client->exp;
 
-            if(is_veteran($client->id)) $class = 0;
-            elseif(client_exp($client->id) >= 4) $class = 1;
-            elseif(client_exp($client->id) >= 2) $class = 2;
-            elseif(client_exp($client->id) >= 1) $class = 3;
-            else $class = 4;
+            if(is_veteran($client->id)) $class = $classes[0];
+            elseif(client_exp($client->id) >= 4) $class = $classes[1];
+            elseif(client_exp($client->id) >= 2) $class = $classes[2];
+            elseif(client_exp($client->id) >= 1) $class = $classes[3];
+            else $class = $classes[4];
 
             $clients[$class][] = $client;
         }

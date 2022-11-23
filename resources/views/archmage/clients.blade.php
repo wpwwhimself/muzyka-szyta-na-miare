@@ -16,9 +16,9 @@
         </h1>
     </div>
     <div id="clients-stats-graph">
-        @foreach (array_reverse($clients) as $k => $v)
+        @foreach ($clients as $k => $v)
         <div class="bar-container"><div class="bar" style='height:{{ count($v)*2 }}px'></div></div>
-        <div class="label">{{ $classes[count($clients) - $k - 1] }}</div>
+        <div class="label">{{ $k }}</div>
         <div class="value">{{ count($v) }}</div>
         @endforeach
     </div>
@@ -45,20 +45,20 @@
         @forelse ($clients as $name => $client_class)
             <h2>
             @switch($name)
-                @case(0)
-                    <i class="fa-solid fa-user-shield"></i> {{ $classes[0] }} <small class="ghost">{{ VETERAN_FROM() }}+ zleceń</small>
+                @case($classes[0])
+                    <i class="fa-solid fa-user-shield"></i> {{ $name }} <small class="ghost">{{ VETERAN_FROM() }}+ zleceń</small>
                     @break
-                @case(1)
-                    <i class="fa-solid fa-user"></i> {{ $classes[1] }} <small class="ghost">4+ zleceń</small>
+                @case($classes[1])
+                    <i class="fa-solid fa-user"></i> {{ $name }} <small class="ghost">4+ zleceń</small>
                     @break
-                @case(2)
-                    <i class="fa-solid fa-user"></i> {{ $classes[2] }} <small class="ghost">2-3 zlecenia</small>
+                @case($classes[2])
+                    <i class="fa-solid fa-user"></i> {{ $name }} <small class="ghost">2-3 zlecenia</small>
                     @break
-                @case(3)
-                    <i class="fa-solid fa-user"></i> {{ $classes[3] }} <small class="ghost">1 zlecenie</small>
+                @case($classes[3])
+                    <i class="fa-solid fa-user"></i> {{ $name }} <small class="ghost">1 zlecenie</small>
                     @break
-                @case(4)
-                    <i class="fa-regular fa-user"></i> {{ $classes[4] }} <small class="ghost">0 zleceń</small>
+                @case($classes[4])
+                    <i class="fa-regular fa-user"></i> {{ $name }} <small class="ghost">0 zleceń</small>
                     @break
                 @default
             @endswitch

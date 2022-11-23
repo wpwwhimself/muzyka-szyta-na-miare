@@ -354,14 +354,13 @@ class BackController extends Controller
 
         $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
-        //TODO historia tworzenia
-
+        
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
                 compact("quest", "prices"),
-                compact("stats_statuses") ?? []
+                (isset($stats_statuses) ? compact("stats_statuses") : [])
             )
         );
     }

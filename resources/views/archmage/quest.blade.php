@@ -112,6 +112,18 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
+            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                <input type="file" name="file" label="Dodaj pliki" />
+                <x-button action="submit" label="Dodaj" icon="circle-plus" />
+            </form>
+
+            @forelse ($files as $file)
+            <a href="{{ route('download', ['name' => $file]) }}">{{ $file }}</a><br>
+            @empty
+            <p class="grayed-out">Brak plików</p>
+            @endforelse
         </section>
 
         <section class="input-group">

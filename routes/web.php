@@ -2,16 +2,18 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Models\Client;
 use App\Models\Genre;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Song;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,3 +99,6 @@ Route::post('/quest_price_update', function(Request $rq){
     $quest->update(["price_code_override" => $rq->code, "price" => price_calc($rq->code, $quest->client_id)[0]]);
     app("App\Http\Controllers\BackController")->statusHistory($rq->id, 31, json_encode(["price" => $price_before . " → " . $quest->price]));
 });
+
+Route::post('/safe/upload', [FileController::class, 'fileUpload'])->name('upload');
+Route::get('/safe/download/{name}', [FileController::class, 'fileDownload'])->name('download');

@@ -14,6 +14,7 @@ use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BackController extends Controller
 {
@@ -354,12 +355,14 @@ class BackController extends Controller
 
         $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
-        
+
+        $files = Storage::files('safe/'.$id);
+
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices"),
+                compact("quest", "prices", "files"),
                 (isset($stats_statuses) ? compact("stats_statuses") : [])
             )
         );

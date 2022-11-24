@@ -20,6 +20,7 @@ class FileController extends Controller
     public function show($id, $filename)
     {
         $path = storage_path("safe/$id/$filename");
+        dd($path);
 
         if(!File::exists($path)) abort(404);
 

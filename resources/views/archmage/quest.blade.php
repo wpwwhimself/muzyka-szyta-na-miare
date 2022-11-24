@@ -125,14 +125,14 @@
         $(document).ready(function(){
             $('#phases button').hide();
             const whatCanBeSeen = {
-                11: [12],
-                12: [13, 15],
-                13: [12, 15],
-                15: [16, 18, 19],
-                16: [12, 18],
-                18: [],
-                19: [26],
-                26: [12]
+                11: [12, 32],
+                12: [13, 15, 32],
+                13: [12, 15, 32],
+                15: [16, 18, 19, 32],
+                16: [12, 18, 32],
+                18: [32],
+                19: [26, 32],
+                26: [12, 32]
             }
             if(whatCanBeSeen[{{ $quest->status_id }}].length == 0){
                 $(`textarea[name='comment']`).parent().hide();

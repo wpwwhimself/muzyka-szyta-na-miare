@@ -120,7 +120,12 @@
             </form>
 
             @forelse ($files as $file)
-            <a href="{{ route('download', ['name' => $file]) }}">{{ $file }}</a><br>
+                <a href="{{ route('download', ['id' => $quest->id, 'filename' => basename($file)]) }}">{{ $file }}</a><br>
+                @if (pathinfo($file)['extension'] == "mp3")
+                <audio controls>
+                    <source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" />
+                </audio>
+                @endif
             @empty
             <p class="grayed-out">Brak plików</p>
             @endforelse

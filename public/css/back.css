@@ -1,11 +1,3 @@
-@media (prefers-color-scheme: dark){
-    body{ --bg: #222; --fg: #eee; --hd: var(--ui-clr-1) }
-}
-@media (prefers-color-scheme: light){
-    body{ --bg: white; --fg: black; --hd: var(--ui-clr-2) }
-    .quest-phase-label{ text-shadow: 0 0 3px black; }
-}
-
 body{
     padding-bottom: 7em;
     min-height: calc(100vh - 7em);
@@ -17,8 +9,7 @@ h2{
 }
 section{
     border-radius: 2em;
-    background-color: #00000033;
-    /* box-shadow: 2px 2px 5px #00000044; */
+    background-color: var(--bg1);
     margin: 1em 1em 0;
     padding: 1em;
 }
@@ -53,7 +44,7 @@ form, .login-grid-container, .input-container{
     opacity: 0.4;
 }
 a.priority{
-    border: 5px solid var(--ui-clr-1);
+    border: 3px solid var(--ui-clr-1);
 }
 b.priority, .priority b{
     color: var(--ui-clr-1);
@@ -93,7 +84,7 @@ b.priority, .priority b{
     justify-content: space-between;
     /* border: 5px solid rgb(var(--q-clr)); */
     box-sizing: border-box;
-    background-color: #ffffff22;
+    background-color: var(--bg2);
     /* background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5)); */
 }
 .quest-mini:hover{

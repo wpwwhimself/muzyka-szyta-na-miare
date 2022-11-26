@@ -8,6 +8,27 @@
     --danger: 218, 69, 69;
 }
 
+@media (prefers-color-scheme: dark){
+    :root{
+        --bg: #222;
+        --bg1: #333;
+        --bg2: #444;
+        --fg: #eee;
+        --hd: var(--ui-clr-1);
+        --hd1: #5d476b;
+    }
+}
+@media (prefers-color-scheme: light){
+    :root{
+        --bg: white;
+        --bg1: #eee;
+        --bg2: #ddd;
+        --fg: black;
+        --hd: var(--ui-clr-2);
+        --hd1: #fffdd1;
+    }
+}
+
 /*****************UNIVERSALS****************/
 *{
     transition-duration: 0.3s;
@@ -168,16 +189,15 @@ header{
     padding: 2em 4em;
     display: flex; flex-direction: row;
     align-items: center;
-    background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1));
+    background: var(--hd1);
+    /* background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1)); */
     box-shadow: 0 0 50px #00000077;
-    color: black;
+    /* color: black; */
 }
 header h1{
     margin: 0 0.5em 0 0;
 }
 header h2{
-    color: dimgray;
-    opacity: 0.6;
     font-family: "Raleway";
     margin: 0;
     text-align: center;
@@ -201,8 +221,8 @@ nav li{
     list-style-type: none;
 }
 nav .active{
-    background-color: var(--ui-clr-1);
-    color: black;
+    background-color: var(--hd);
+    color:var(--bg);
 }
 
 .pagination{

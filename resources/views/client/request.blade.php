@@ -9,7 +9,7 @@
 
 <x-tutorial-control :is-veteran="intval(is_veteran($request->client_id))" />
 
-<p class="tutorial"><i class="fa-brands fa-envira"></i>
+<p class="tutorial"><i class="fa-solid fa-circle-question"></i>
 @switch($request->status_id)
     @case(1)
         Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.</p>
@@ -105,8 +105,8 @@
             @endif
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
-                <p><i class="fa-brands fa-envira"></i> Termin oddania jest liczony do podanego dnia włącznie.</p>
-                <p><i class="fa-brands fa-envira"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <p><i class="fa-solid fa-circle-question"></i> Termin oddania jest liczony do podanego dnia włącznie.</p>
+                <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
                         (w tytule ID zlecenia),</li>
@@ -114,7 +114,7 @@
                 </ul>
                 <p>Nie jest ona wymagana do przeglądania plików,<br>
                     ale będzie potrzebna do ich pobrania.</p>
-                <p><i class="fa-brands fa-envira"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
+                <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>
             @endif
         </section>

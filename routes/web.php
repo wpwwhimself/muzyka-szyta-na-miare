@@ -101,7 +101,7 @@ Route::post('/quest_price_update', function(Request $rq){
 });
 
 Route::controller(FileController::class)->group(function(){
-    Route::post('/safe-u', 'fileUpload')->name('upload');
-    Route::get('/safe-d/{id}/{filename}', 'fileDownload')->name('download');
-    Route::get('/safe/{id}/{filename}', 'show')->name('safe-show');
+    Route::post('/safe-u', 'fileUpload')->middleware("auth")->name('upload');
+    Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
+    Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
 });

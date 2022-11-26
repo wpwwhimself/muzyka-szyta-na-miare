@@ -50,7 +50,7 @@ class BackController extends Controller
         $clients_raw = Client::all();
         $clients_count = count($clients_raw);
         $max_exp = 0;
-        $classes = ["Weterani", "Biegli", "Zainteresowani", "Nowicjusze", "Debiutanci"];
+        $classes = ["1. Weterani", "2. Biegli", "3. Zainteresowani", "4. Nowicjusze", "5. Debiutanci"];
 
         foreach($clients_raw as $client){
             $client->exp = client_exp($client->id);
@@ -356,13 +356,24 @@ class BackController extends Controller
         $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
 
-        $files = Storage::files('safe/'.$id);
+        $files_raw = Storage::files('safe/'.$id);
+        if(empty($files_raw)){
+            $files = [];
+            $last_mod = [];
+        }else{
+            foreach($files_raw as $file){
+                $name = preg_split('/(\-|\_)/', pathinfo($file, PATHINFO_FILENAME));
+                if(!isset($name[2])) $name[2] = "wersja zero";
+                $files[$name[0]][$name[1]][$name[2]][] = $file;
+                $last_mod[$name[1]][$name[2]] = Storage::lastModified($file);
+            }
+        }
 
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices", "files"),
+                compact("quest", "prices", "files", "last_mod"),
                 (isset($stats_statuses) ? compact("stats_statuses") : [])
             )
         );

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&family=Krona+One&display=swap');
 :root{
-    --ui-clr-1: #fffaa1;
-    --ui-clr-2: #926fa8;
+    /* --ui-clr-1: 240, 229, 19; */
+    /* --ui-clr-2: 92, 117, 92; */
 
     --ok: 46, 184, 46;
     --warning: 247, 167, 20;
@@ -14,8 +14,8 @@
         --bg1: #333;
         --bg2: #444;
         --fg: #eee;
-        --hd: var(--ui-clr-1);
-        --hd1: #5d476b;
+        --acc: hsl(47, 100%, 62%);
+        --bas: hsl(39, 24%, 73%);
     }
 }
 @media (prefers-color-scheme: light){
@@ -24,8 +24,8 @@
         --bg1: #eee;
         --bg2: #ddd;
         --fg: black;
-        --hd: var(--ui-clr-2);
-        --hd1: #fffdd1;
+        --acc: hsl(271, 58%, 59%);
+        --bas: hsl(0, 0%, 88%);
     }
 }
 
@@ -49,8 +49,12 @@ h1, h2, h3, h4{
     color: inherit;
     box-shadow: 0 0 1rem #00000044;
 }
+.hover-light:hover{
+    color: inherit;
+    box-shadow: 0 0 0.5em var(--acc);
+}
 .auth-link{
-    border: solid 2px var(--ui-clr-2);
+    border: solid 2px var(--acc);
 }
 .grayed-out{
     font-style: italic;
@@ -58,7 +62,7 @@ h1, h2, h3, h4{
 }
 .yellowed-out{
     font-style: italic;
-    color: var(--ui-clr-1);
+    color: rgb(190, 190, 77);
 }
 .grayed-out::before, .grayed-out::after, .yellowed-out::before, .yellowed-out::after{
     content: " — ";
@@ -78,7 +82,7 @@ a{
     transition-duration: 0.3s;
 }
 a:hover{
-    color: var(--ui-clr-2);
+    color: var(--acc);
 }
 
 /* FORM */
@@ -117,21 +121,21 @@ label{
 }
 input[type="checkbox"]{
     height: 1.2em;
-    accent-color: var(--ui-clr-2);
+    accent-color: var(--acc);
 }
 *[type="submit"], .submit{
     display: inline-block;
     width: fit-content;
     padding: 0.5em 1.5em; margin: 0.5em auto 0;
-    border: 2px solid var(--bg2);
+    border: 2px solid var(--acc);
     border-radius: 2em;
     transition-duration: 0.3s;
-    background-color: var(--ui-clr-1); color: black;
+    background-color: var(--bg1);
 }
 *[type="submit"]:hover, .submit:hover{
-    background-color: var(--ui-clr-2);
-    color: white;
-    border-color: white;
+    background-color: var(--acc);
+    color: var(--bg);
+    border-color: var(--bg);
 }
 *[type="submit"]:active, .submit:active{
     background-color: white;
@@ -189,9 +193,8 @@ header{
     padding: 2em 4em;
     display: flex; flex-direction: row;
     align-items: center;
-    background: var(--hd1);
-    /* background: linear-gradient(to bottom right, lightgray, var(--ui-clr-1)); */
-    box-shadow: 0 0 50px #00000077;
+    background: var(--bg2);
+    /* box-shadow: 0 0 50px #00000077; */
     /* color: black; */
 }
 header h1{
@@ -221,8 +224,8 @@ nav li{
     list-style-type: none;
 }
 nav .active{
-    background-color: var(--hd);
-    color:var(--bg);
+    background-color: var(--acc);
+    color: var(--bg);
 }
 
 .pagination{

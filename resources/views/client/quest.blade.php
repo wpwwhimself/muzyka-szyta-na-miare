@@ -64,7 +64,7 @@
             </script>
             <x-input type="checkbox" name="paid" label="Opłacono" value="{{ quest_paid($quest->id, $quest->price) }}" :disabled="true" />
             <div class="tutorial">
-                <p><i class="fa-brands fa-envira"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
                         (w tytule ID zlecenia),</li>
@@ -84,9 +84,11 @@
 
             {{-- jeśli pusty --}}
             <p class="tutorial">
-                <i class="fa-brands fa-envira"></i>
-                Tutaj pojawią się pliki związane z przygotowywanym dla Ciebie zleceniem.
-                Będzie możliwość ich przejrzenia, a po dokonaniu wpłaty – pobrania.
+                <i class="fa-solid fa-circle-question"></i>
+                Tutaj pojawią się pliki związane<br>
+                z przygotowywanym dla Ciebie zleceniem.<br>
+                Będzie możliwość ich przejrzenia i odsłuchania,<br>
+                a po dokonaniu wpłaty – również pobrania.
             </p>
         </section>
 
@@ -122,7 +124,7 @@
         <div class="flexright">
             @csrf
             <p class="tutorial">
-                <i class="fa-brands fa-envira"></i>
+                <i class="fa-solid fa-circle-question"></i>
                 Jeśli nie podoba Ci się to, co dla Ciebie przygotowałem, w polu poniżej możesz napisać, co dokładnie.
                 Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
             </p>

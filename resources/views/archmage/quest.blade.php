@@ -112,20 +112,39 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
-            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data" class="file-adder">
                 @csrf
                 <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                <input type="file" name="file" label="Dodaj pliki" />
+                <input type="file" name="files" label="Dodaj pliki" multiple />
                 <x-button action="submit" label="Dodaj" icon="circle-plus" />
             </form>
 
-            @forelse ($files as $file)
-                <a href="{{ route('download', ['id' => $quest->id, 'filename' => basename($file)]) }}">{{ $file }}</a><br>
-                @if (pathinfo($file)['extension'] == "mp3")
-                <audio controls>
-                    <source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" />
-                </audio>
-                @endif
+            @forelse ($files as $ver_super => $ver_mains)
+                @foreach ($ver_mains as $ver_main => $ver_subs)
+                <div class="file-container-a">
+                    <h3>{{ $ver_super }}-{{ $ver_main }}</h3>
+                    @foreach ($ver_subs as $ver_sub => $ver_bots)
+                    <div class="file-container-b">
+                        <h4>
+                            {{ $ver_sub }}
+                            <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
+                        </h4>
+                        <div class="file-container-c">
+                        @foreach ($ver_bots as $file)
+                            @if (pathinfo($file)['extension'] == "mp4")
+                            <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                            @elseif (pathinfo($file)['extension'] == "mp3")
+                            <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                            @endif
+                        @endforeach
+                        @if (quest_paid($quest->id, $quest->price)) @foreach ($ver_bots as $file)
+                            <x-file-tile :id="$quest->id" :file="$file" />
+                        @endforeach @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endforeach
             @empty
             <p class="grayed-out">Brak plików</p>
             @endforelse
@@ -175,7 +194,7 @@
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
             <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />
             @if (!quest_paid($quest->id, $quest->price))
-            <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :danger="true" />
+            <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
             @endif
         </div>
     </form>

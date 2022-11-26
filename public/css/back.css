@@ -4,7 +4,7 @@ body{
     background-color: var(--bg); color: var(--fg);
 }
 h2{
-    color: var(--hd);
+    color: var(--acc);
     font-size: 1.35em;
 }
 section{
@@ -38,16 +38,16 @@ form, .login-grid-container, .input-container{
 }
 
 .showcase-highlight{
-    color: rgb(196, 135, 23);
+    color: rgb(36, 172, 250);
 }
 .ghost{
     opacity: 0.4;
 }
 a.priority{
-    border: 3px solid var(--ui-clr-1);
+    border: 3px solid rgb(var(--danger));
 }
 b.priority, .priority b{
-    color: var(--ui-clr-1);
+    color: rgb(var(--danger));
 }
 
 .section-header{
@@ -82,13 +82,8 @@ b.priority, .priority b{
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    /* border: 5px solid rgb(var(--q-clr)); */
     box-sizing: border-box;
     background-color: var(--bg2);
-    /* background: linear-gradient(to bottom right, rgba(var(--q-clr), 0.5), white, rgba(var(--q-clr), 0.5)); */
-}
-.quest-mini:hover{
-    box-shadow: 0 0 1em var(--ui-clr-2);
 }
 .quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; color: var(--fg); }
 .quest-mini .song-title{ padding: 0.2em 0.6em; }
@@ -241,7 +236,6 @@ b.priority, .priority b{
 #quest-history .history-position{
     border-radius: 1em;
     background: rgba(var(--q-clr), 0.5);
-    /* background: linear-gradient(to bottom right, transparent, rgba(var(--q-clr), 0.5)); */
     margin: 0.3em; padding: 0.3em 0.5em;
     display: grid; grid-template-columns: 2.5fr 1fr; column-gap: 0.5em;
 }
@@ -268,7 +262,7 @@ b.priority, .priority b{
     font-weight: bold;
 }
 .upcoming-quests{
-    color: var(--ui-clr-2);
+    color: var(--acc);
 }
 .contact-info{
     display: flex;
@@ -282,7 +276,8 @@ b.priority, .priority b{
     text-align: center;
 }
 #clients-stats-graph .bar{
-    background: linear-gradient(to bottom, var(--ui-clr-1), lightgray);
+    background: var(--acc);
+    /* background: linear-gradient(to bottom, rgb(var(--ui-clr-1)), var(--fg)); */
     width: 90%;
     border-radius: 0.5em;
 }
@@ -294,9 +289,54 @@ b.priority, .priority b{
     font-size: 1.2em;
 }
 
+.file-adder{
+    font-size: 0.7em;
+    flex-direction: row; align-items: center;
+}
+.file-container-a{
+    text-align: left;
+    background-color: var(--bg2);
+    border-radius: 2em;
+    padding: 1em; margin: 0.5em 0;
+}
+.file-container-a h3{
+    margin: 0;
+    border-bottom: 2px solid var(--acc);
+}
+.file-container-b h4{
+    margin: 0.5em;
+}
+.file-container-c{
+    display: flex;
+    align-items: center; justify-content: center;
+}
+.file-tile{
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    width: 3em; height: 4.5em;
+    margin: 0.2em;
+    border-radius: 1em;
+    background-color: var(--bg1);
+}
+.file-tile .container{
+    position: relative;
+    width: 2em; height: 2em;
+}
+.file-tile i{ 
+    font-size: 2em;
+    position: absolute; top: 0; left: 0;
+    display: block; width: 100%;
+}
+.file-tile:hover i:first-child{ opacity: 0; }
+.file-tile i:last-child{ opacity: 0; }
+.file-tile:hover i:last-child{ opacity: 1; }
+.mp3{ color: rgba(39, 197, 0, 0.8); }
+.mp4, .mid{ color: rgba(255, 0, 0, 0.8); }
+.wav, .flac{ color: rgba(0, 162, 255, 0.8); }
+.pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
-.p-12{ --q-clr: 125, 230, 230; }
+.p-12{ --q-clr: 27, 113, 242; }
 .p-13{ --q-clr: 163, 124, 87; }
 .p-5, .p-15, .p-31{ --q-clr: 145, 87, 168; }
 .p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }

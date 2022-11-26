@@ -10,13 +10,13 @@ h2{
 section{
     border-radius: 2em;
     background-color: var(--bg1);
-    margin: 1em 1em 0;
+    margin: 1em 0 0;
     padding: 1em;
 }
 p{
     margin-top: 0;
 }
-.grid-2, .grid-3{ display: grid; }
+.grid-2, .grid-3{ display: grid; column-gap: 1em; }
 .grid-2{ grid-template-columns: 1fr 1fr; }
 .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
 
@@ -64,6 +64,7 @@ b.priority, .priority b{
     flex-direction: column;
     text-align: right;
 }
+
 
 
 #dashboard-quests{
@@ -228,9 +229,7 @@ b.priority, .priority b{
 }
 
 #quest-box{
-    display: flex;
     justify-content: center;
-    flex-wrap: wrap;
 }
 
 #quest-history .history-position{
@@ -336,7 +335,7 @@ b.priority, .priority b{
 
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
-.p-12{ --q-clr: 27, 113, 242; }
+.p-12{ --q-clr: 50, 127, 226; }
 .p-13{ --q-clr: 163, 124, 87; }
 .p-5, .p-15, .p-31{ --q-clr: 145, 87, 168; }
 .p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }

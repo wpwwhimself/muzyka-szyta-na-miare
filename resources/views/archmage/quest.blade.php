@@ -33,7 +33,7 @@
     </div>
     @endif
 
-    <div id="quest-box">
+    <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>
             <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />

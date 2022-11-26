@@ -45,7 +45,7 @@
     @if ($request->quest_id)
     <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a></h2>
     @endif
-    <div id="quest-box">
+    <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />

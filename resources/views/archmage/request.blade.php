@@ -30,7 +30,7 @@
     <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href='{{ route("quest", ["id" => $request->quest_id]) }}'>Przejdź do zlecenia</x-a></h2>
     @endif
     
-    <div id="quest-box">
+    <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />

@@ -2,6 +2,7 @@
 :root{
     /* --ui-clr-1: 240, 229, 19; */
     /* --ui-clr-2: 92, 117, 92; */
+    --acc: #60cc89;
 
     --ok: 46, 184, 46;
     --warning: 247, 167, 20;
@@ -14,7 +15,7 @@
         --bg1: #333;
         --bg2: #444;
         --fg: #eee;
-        --acc: hsl(47, 100%, 62%);
+        /* --acc: hsl(47, 100%, 62%); */
         --bas: hsl(39, 24%, 73%);
     }
 }
@@ -24,7 +25,7 @@
         --bg1: #eee;
         --bg2: #ddd;
         --fg: black;
-        --acc: hsl(271, 58%, 59%);
+        /* --acc: hsl(271, 58%, 59%); */
         --bas: hsl(0, 0%, 88%);
     }
 }
@@ -39,11 +40,14 @@ h1, h2, h3, h4{
 }
 .logo{
     height: 5em;
+    /* color set to --acc if it was black pic */
+    /* filter: invert(70%) sepia(4%) saturate(5329%) hue-rotate(91deg) brightness(101%) contrast(84%); */
 }
 .flex-right{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 1em;
 }
 .hover-lift:hover{
     color: inherit;

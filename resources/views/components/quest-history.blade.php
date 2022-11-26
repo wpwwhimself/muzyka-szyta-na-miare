@@ -2,7 +2,7 @@
     @forelse ($history as $item)
     <div class="history-position p-{{ $item->new_status_id }} {{ $item->changed_by == 1 ? "by-me" : "by-client" }}">
         <span>
-            <span class="client-name">{{ $clientName($item->changed_by) }}</span>
+            <span class="client-name ghost">{{ $clientName($item->changed_by) }}</span>
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
             <ul>

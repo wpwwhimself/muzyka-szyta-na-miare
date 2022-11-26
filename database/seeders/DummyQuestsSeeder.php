@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Payment;
 use App\Models\Quest;
 use App\Models\Request;
 use App\Models\Song;

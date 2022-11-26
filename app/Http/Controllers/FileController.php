@@ -25,7 +25,6 @@ class FileController extends Controller
     {
         $path = storage_path("app/safe/$id/$filename");
 
-        //if(!quest_paid($id, Quest::find($id)->price)) abort(403, "Projekt nie został opłacony");
         if(!File::exists($path)) abort(404,"Plik nie istnieje");
         
         $file = Storage::get("safe/$id/$filename");

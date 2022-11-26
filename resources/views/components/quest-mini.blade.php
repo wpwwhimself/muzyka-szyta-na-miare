@@ -1,11 +1,11 @@
 @props(['quest'])
 
-<a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
-    <div class="song-title-artist">
+<div class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
+    <a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="song-title-artist">
         <p class="song-artist"><i class="fa-solid fa-traffic-light"></i> {{ $quest->status->status_name }}</p>
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
-    </div>
+    </a>
     <div class="quest-details">
         <div class="quest-meta">
             @if (Auth::id() == 1)
@@ -15,7 +15,11 @@
                     @else
                     <i class="fa-solid fa-user"></i>
                     @endif
-                <p class="client-name">{{ $quest->client->client_name }}</p>
+                <p class="client-name">
+                    <a href="{{ route('clients') }}#client{{ $quest->client_id }}">
+                    {{ $quest->client->client_name }}
+                    </a>
+                </p>
                 @else
                 <i class="fa-regular fa-user"></i>
                 <p class="client-name">{{ $quest->client_name }}</p>
@@ -24,7 +28,7 @@
 
             @if ($quest->price)
             <i class="fa-solid fa-sack-dollar"></i>
-            <p class={{ quest_paid($quest->id, $quest->price) ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
+            <p class={{ $quest->paid ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
             @endif
 
             @if ($quest->deadline)
@@ -45,4 +49,4 @@
             
         </div>
     </div>
-</a>
+</div>

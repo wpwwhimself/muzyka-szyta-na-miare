@@ -10,16 +10,8 @@
     <div class="grid-2">
         <section id="who-am-i">
             <div class="section-header">
-                <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
+                <h1><i class="fa-solid fa-user-check"></i> {{ Auth::user()->client->client_name }}</h1>
             </div>
-            <h2>
-                @if (is_veteran(Auth::id()))
-                <i class="fa-solid fa-user-shield" @popper(stały klient)></i>
-                @else
-                <i class="fa-solid fa-user" @popper(zwykły klient)></i>
-                @endif
-                {{ Auth::user()->client->client_name }}
-            </h2>
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
@@ -29,9 +21,9 @@
                     <span>Status klienta</span>
                     <span>
                         @if (is_veteran(Auth::id()))
-                        stały klient
+                        <i class="fa-solid fa-user-shield" @popper(stały klient)></i> stały klient
                         @else
-                        klient zwykły<br>
+                        <i class="fa-solid fa-user" @popper(zwykły klient)></i> klient zwykły<br>
                         <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
                         @endif
                     </span>
@@ -61,10 +53,13 @@
                 <h1><i class="fa-solid fa-award"></i> Jak Ci się podoba współpraca?</h1>
             </div>
             <p>Recenzje pomagają mi pozyskiwać nowych klientów. Jeśli i Tobie przypadły do gustu efekty moich prac, możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!</p>
-            <h4><a class="showcase-highlight" href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Przejdź do mojego fanpage'a</a></h4>
             <form>
                 <x-button
-                    label="Opinia wystawiona" icon="fa-signature"
+                    label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
+                    action="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews"
+                    />
+                <x-button
+                    label="Opinia wystawiona" icon="signature"
                     action="{{ route('patron-mode', ['id' => Auth::id(), 'level' => 1]) }}"
                     />
             </form>
@@ -75,9 +70,25 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
             </div>
-            <div class="dashboard-mini-wrapper">
-                🚧 TBD 🚧
+            
+            <h2>Do zapłacenia za zlecenia</h2>
+            <div class="hint-table">
+                <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
+                <div class="positions">
+                    <span>Zaakceptowane</span>
+                    <span>{{ quests_unpaid(Auth::id()) }} zł</span>
+
+                    <span>Wszystkie</span>
+                    <span>{{ quests_unpaid(Auth::id(), true) }} zł</span>
+                </div>
             </div>
+
+            <h2>Stan konta</h2>
+            <p class="tutorial">
+                <i class="fa-solid fa-circle-question"></i>
+                Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
+            </p>
+            <h3>{{ Auth::user()->client->budget }} zł</h3>
         </section>
     </div>
 

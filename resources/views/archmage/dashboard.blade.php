@@ -19,8 +19,22 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
             </div>
-            <div class="dashboard-mini-wrapper">
-                🚧 TBD 🚧
+            
+            <div class="hint-table">
+                <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
+                <div class="positions">
+                    <span>Zaakceptowane do zapłacenia</span>
+                    <span>{{ quests_unpaid(1) }} zł</span>
+
+                    <span>Wszystkie do zapłacenia</span>
+                    <span>{{ quests_unpaid(1, true) }} zł</span>
+
+                    <span>Zarobki w tym miesiącu</span>
+                    <span>{{ $gains["this_month"] }} zł</span>
+
+                    <span>Zarobki razem</span>
+                    <span>{{ $gains["total"] }} zł</span>
+                </div>
             </div>
         </section>
     </div>
@@ -76,4 +90,17 @@
         </div>
     </section>
     @endif
+
+    <section id="dashboard-unpaids">
+        <div class="section-header">
+            <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
+        </div>
+        <div class="dashboard-mini-wrapper">
+        @forelse ($unpaids as $quest)
+            <x-quest-mini :quest="$quest" />
+        @empty
+            <p class="grayed-out">O kurczę, wszyscy zapłacili</p>
+        @endforelse
+        </div>
+    </section>
 @endsection

@@ -21,6 +21,7 @@ class CreateQuestsTable extends Migration
             $table->foreignId("status_id")->constrained("statuses");
             $table->string("price_code_override")->nullable();
             $table->float("price");
+            $table->boolean("paid")->default(0);
             $table->date("deadline")->nullable();
             $table->date("hard_deadline")->nullable();
             $table->timestamps();

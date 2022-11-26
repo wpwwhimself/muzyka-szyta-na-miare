@@ -216,7 +216,7 @@ b.priority, .priority b{
     padding: 0.2em;
 }
 .hint-table .positions span:nth-child(4n+3), .hint-table .positions span:nth-child(4n){
-    background-color: #ffffff22;
+    background-color: var(--bg2);
 }
 .hint-table div span:nth-child(even){
     text-align: right;
@@ -267,6 +267,9 @@ b.priority, .priority b{
     display: flex;
     flex-direction: column;
     text-align: left;
+}
+.client-budget input{
+    width: 4em;
 }
 #clients-stats-graph{
     display: grid;

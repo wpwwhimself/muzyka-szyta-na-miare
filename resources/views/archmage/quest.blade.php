@@ -103,7 +103,7 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="checkbox" name="paid" label="Opłacono" value="{{ quest_paid($quest->id, $quest->price) }}" :disabled="true" />
+            <x-input type="checkbox" name="paid" label="Opłacono" value="{{ $quest->paid }}" :disabled="true" />
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
             @if ($quest->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
@@ -137,7 +137,7 @@
                             <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                             @endif
                         @endforeach
-                        @if (quest_paid($quest->id, $quest->price)) @foreach ($ver_bots as $file)
+                        @if ($quest->paid) @foreach ($ver_bots as $file)
                             <x-file-tile :id="$quest->id" :file="$file" />
                         @endforeach @endif
                         </div>
@@ -163,7 +163,7 @@
             const whatCanBeSeen = {
                 11: [12, 32],
                 12: [13, 15, 32],
-                13: [12, 15, 32],
+                13: [12, 15, 18, 32],
                 15: [16, 18, 19, 32],
                 16: [12, 18, 32],
                 18: [32],
@@ -193,7 +193,7 @@
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
             <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />
-            @if (!quest_paid($quest->id, $quest->price))
+            @if ($quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
             @endif
         </div>

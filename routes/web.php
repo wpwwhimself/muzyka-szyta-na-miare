@@ -13,7 +13,6 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +97,10 @@ Route::post('/quest_price_update', function(Request $rq){
     $price_before = $quest->price;
     $quest->update(["price_code_override" => $rq->code, "price" => price_calc($rq->code, $quest->client_id)[0]]);
     app("App\Http\Controllers\BackController")->statusHistory($rq->id, 31, json_encode(["price" => $price_before . " → " . $quest->price]));
+});
+Route::post('/budget_update', function(Request $rq){
+    $client = Client::findOrFail($rq->client_id);
+    $client->update(["budget" => $rq->new_budget]);
 });
 
 Route::controller(FileController::class)->group(function(){

@@ -44,7 +44,7 @@
                 <x-phase-indicator :status-id="$quest->status_id" :small="true" />
             </span>
             <span>
-            @if (quest_paid($quest->id, $quest->price))
+            @if ($quest->paid)
             <i class="quest-paid fa-solid fa-check"></i>
             @endif
             </span>

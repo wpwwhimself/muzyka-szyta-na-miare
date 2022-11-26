@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use App\Models\Payment;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
 use App\Models\StatusChange;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +34,11 @@ class BackController extends Controller
             $quests_total = client_exp(Auth::id());
         }else{
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
+            $unpaids = Quest::where("paid", 0)->whereNotIn("status_id", [18])->orderBy("updated_at")->get();
+            $gains = [
+                "this_month" => StatusChange::where("new_status_id", 32)->whereMonth("date", Carbon::today()->month)->sum("comment"),
+                "total" => StatusChange::where("new_status_id", 32)->sum("comment"),
+            ];
         }
         $requests = $requests->get();
         $quests = $quests->get();
@@ -42,7 +47,9 @@ class BackController extends Controller
             ["title" => (Auth::id() == 1) ? "Szpica arcymaga" : "Pulpit"],
             compact("quests", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
-            (isset($patrons_adepts) ? compact("patrons_adepts") : [])
+            (isset($patrons_adepts) ? compact("patrons_adepts") : []),
+            (isset($unpaids) ? compact("unpaids") : []),
+            (isset($gains) ? compact("gains") : []),
         ));
     }
 
@@ -289,11 +296,7 @@ class BackController extends Controller
             if($client->budget >= $request->price){
                 $client->budget -= $request->price;
                 $client->save();
-                Payment::insert([
-                    "client_id" => $client->id,
-                    "quest_id" => $quest->id,
-                    "payment" => $request->price
-                ]);
+                $this->statusHistory($quest->id, 32, $request->price, $client->id);
             }
 
             $request->quest_id = $quest->id;
@@ -304,7 +307,7 @@ class BackController extends Controller
         $this->statusHistory($id, $status, null);
         if($status == 9){
             //added song
-            $this->statusHistory($request->quest_id, 11, null);
+            $this->statusHistory($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         }
@@ -312,12 +315,12 @@ class BackController extends Controller
         return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
-    public function statusHistory($re_quest_id, $new_status_id, $comment){
+    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null){
         $row = new StatusChange;
 
         $row->re_quest_id = $re_quest_id;
         $row->new_status_id = $new_status_id;
-        $row->changed_by = (in_array($new_status_id, [11])) ? 1 : Auth::id();
+        $row->changed_by = ($changed_by != null) ? $changed_by : Auth::id();
         $row->comment = $comment;
         $row->date = now();
 
@@ -384,7 +387,7 @@ class BackController extends Controller
         // wpisywanie wpłaty za zlecenie
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
-            $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
+            $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
             return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Cena wpisana");
         }
 

@@ -38,7 +38,7 @@
             <span>Nazwisko</span>
             <span>Dane kontaktowe</span>
             <span>Klient od</span>
-            <span @popper(budżet)><i class="fa-solid fa-vault"></i></span>
+            <span>Budżet</span>
             <span>Wyjątki</span>
         </div>
         <hr />
@@ -65,7 +65,7 @@
             </h2>
 
             @foreach ($client_class as $client)
-            <div class="table-row">
+            <div class="table-row" id="client{{ $client->id }}">
                 <span class="client-exp">
                     {{ $client->exp }} @if (upcoming_quests($client->id))
                     <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>
@@ -83,7 +83,27 @@
                     <span {{ !in_array($client->contact_preference, ["email", "telefon", "sms"]) ?: "class=ghost" }}>{{ $client->other_medium }}</span>
                 </span>
                 <span>{{ $client->created_at->toDateString() }}</span>
-                <span {{ $client->budget ?: "class=ghost" }}>{{ $client->budget }} zł</span>
+                <span class="client-budget {{ $client->budget ?: 'ghost' }}">
+                    <x-input type="number" name="budget_mod_{{ $client->id }}" label="" value="{{ $client->budget }}" :small="true" />
+                    <script>
+                    $(document).ready(function(){
+                        $("#budget_mod_{{ $client->id }}").change(function(){
+                            $.ajax({
+                                url: "{{ url('budget_update') }}",
+                                type: "post",
+                                data: {
+                                    _token: '{{ csrf_token() }}',
+                                    client_id: '{{ $client->id }}',
+                                    new_budget: $("#budget_mod_{{ $client->id }}").val()
+                                },
+                                success: function(){
+                                    location.reload();
+                                }
+                            })
+                        });
+                    });
+                    </script>
+                </span>
                 <span>
                     @switch($client->trust)
                         @case(1)

@@ -5,6 +5,7 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
+use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -176,13 +177,17 @@ if(!function_exists("pricing")){
     }
 }
 
-if(!function_exists("quest_paid")){
-    function quest_paid($id, $price){
-        $sum = 0;
-        foreach(Quest::find($id)->payments as $payment){
-            $sum += $payment->comment;
+if(!function_exists("quests_unpaid")){
+    function quests_unpaid($client_id, $all = false){
+        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18]) : [19];
+
+        $quests_val = Quest::where("paid", 0)->whereIn("status_id", $allowed_statuses);
+        if($client_id != 1){
+            $quests_val = $quests_val->where("client_id", $client_id);
         }
-        return ($sum >= $price);
+        $quests_val = $quests_val->sum("price");
+
+        return $quests_val;
     }
 }
 

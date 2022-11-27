@@ -14,21 +14,44 @@
     
     @if ($quest->status_id == 12)
     <div id="stats">
-        <div id="stats-buttons">
+        <form method="POST" action="{{ route("work-clock") }}" id="stats-buttons" class="flex-right">
+            @csrf
+            <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
             @foreach ($stats_statuses as $option)
             <x-button
                 label="{{ $option->status_name }}" icon="{{ $option->id }}"
-                action="#"
+                action="submit" value="{{ $option->id }}" name="status_id"
                 />
             @endforeach
             <x-button
                 label="stop" icon="circle-pause" :danger="true"
-                action="#"
+                action="submit" value="13" name="status_id"
                 />
-        </div>
+        </form>
         <section id="stats-log">
-            <h2><i class="fa-solid fa-snowplow"></i> Historia tworzenia</h2>
-            {{-- TODO historia tworzenia --}}
+            <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
+            <div class="table">
+                <span class="header">Etap</span>
+                <span class="header">Czas</span>
+                @forelse ($workhistory as $entry)
+                    <span>
+                        {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
+                        {{ DB::table("statuses")->find($entry->status_id)->status_name }}
+                        @if ($entry->now_working)
+                        <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
+                        @endif
+                    </span>
+                    <span>{{ $entry->time_spent }}</span>
+                @empty
+                <p class="grayed-out">Prace jeszcze nie zaczęte</p>
+                @endforelse
+                <span class="footer">Razem</span>
+                <span class="footer">{{
+                    gmdate("H:i:s", DB::table("song_work_times")
+                        ->where("song_id", $quest->song_id)
+                        ->sum(DB::raw("TIME_TO_SEC(time_spent)")))
+                }}</span>
+            </div>
         </section>
     </div>
     @endif

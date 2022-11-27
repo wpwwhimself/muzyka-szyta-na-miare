@@ -20,7 +20,7 @@ class CreateQuestWorkTimesTable extends Migration
             $table->foreignId("status_id")->constrained("statuses");
             $table->time("time_spent")->default(0);
             $table->boolean("now_working")->default(false);
-            $table->timestamps();
+            $table->timestamp("since");
         });
     }
 

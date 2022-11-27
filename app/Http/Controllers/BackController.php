@@ -7,6 +7,7 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
+use App\Models\SongWorkTime;
 use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
@@ -372,17 +373,23 @@ class BackController extends Controller
             }
         }
 
+        $workhistory = SongWorkTime::where("song_id", $quest->song_id)->orderBy("status_id")->get();
+
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
                 compact("quest", "prices", "files", "last_mod"),
-                (isset($stats_statuses) ? compact("stats_statuses") : [])
+                (isset($stats_statuses) ? compact("stats_statuses") : []),
+                (isset($workhistory) ? compact("workhistory") : []),
             )
         );
     }
     public function modQuestBack(HttpRequest $rq){
         $quest = Quest::findOrFail($rq->quest_id);
+        if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
+            return back()->with("error", "Zatrzymaj zegar");
+        }
 
         // wpisywanie wpłaty za zlecenie
         if($rq->status_id == 32){
@@ -397,5 +404,29 @@ class BackController extends Controller
         $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
         
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Faza zmieniona");
+    }
+
+    public function workClock(HttpRequest $rq){
+        $now_working = SongWorkTime::where("now_working", 1)->first();
+
+        if($now_working){
+            $now_working->update([
+                "now_working" => 0,
+                "time_spent" => Carbon::createFromTimeString($now_working->time_spent)
+                        ->addSeconds(Carbon::createFromTimeString($now_working->since)->diffInSeconds(now()))
+                        ->format("H:i:s")
+            ]);
+        }
+
+        if($rq->status_id != 13){
+            SongWorkTime::updateOrCreate(["status_id" => $rq->status_id], [
+                "song_id" => $rq->song_id,
+                "status_id" => $rq->status_id,
+                "now_working" => 1,
+                "since" => now(),
+            ]);
+        }
+
+        return back()->with("success", "Praca zalogowana");
     }
 }

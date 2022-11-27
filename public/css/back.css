@@ -248,9 +248,21 @@ b.priority, .priority b{
     display: grid;
     grid-template-columns: 3fr 2fr;
 }
-#stats-buttons .submit{
+#stats-buttons{
+    margin-top: 1em;
+}
+#stats-buttons button{
     font-size: 1em;
-    border-radius: 0.5em;
+    margin: 0;
+}
+#stats-log .table{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+#stats-log .table span:nth-child(2n - 1){ text-align: left; }
+.table .header, .table .footer{
+    font-weight: bold;
+    border: 1px solid var(--acc); border-left: none; border-right: none;
 }
 
 #clients-list .table-row{

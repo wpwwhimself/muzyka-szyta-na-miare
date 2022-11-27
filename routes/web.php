@@ -46,6 +46,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
+    Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
 

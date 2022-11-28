@@ -6,22 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <meta name=author content="Wojciech Przybyła, Wesoły Wojownik">
-	<meta name=description content="Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz nut, podkładu lub muzyka? Napisz do WPWW.">
-	<meta name=keywords content="Wojciech Przybyła, Wesoły Wojownik, fajna strona, Lightstream, WPWW, podkłady, nuty, transkrypcja, patrytury, nagrania, studio, muzyka">
+	<meta name=description content="Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.">
+	<meta name=keywords content="Wojciech Przybyła, Wesoły Wojownik, fajna strona, WPWW, podkłady, nuty, transkrypcja, patrytury, studio, muzyka">
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
-	<meta property='og:image' content='http://hire.wpww.pl/media/thumbnail.jpg' />
+	<meta property='og:image' content='http://msznm.wpww.pl/media/thumbnail.jpg' />
 	<meta property='og:type' content='website' />
-	<meta property='og:url' content='http://hire.wpww.pl/' />
-	<meta property='og:title' content='WPWW – Muzyka szyta na miarę – podkłady, transkrypcje, aranże, kompozycje' />
-	<meta property='og:description' content='Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz nut, podkładu lub muzyka? Napisz do WPWW.' />
+	<meta property='og:url' content='http://msznm.wpww.pl/' />
+	<meta property='og:title' content='{{ config("app.name") }} – podkłady, transkrypcje, aranże, kompozycje' />
+	<meta property='og:description' content='Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.' />
 
-    <link rel="icon" href="{{ URL::asset("logo.png") }}">
+    <link rel="icon" href="{{ URL::asset("mintgreen.png") }}">
     <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
     <link rel="stylesheet" href="{{ URL::asset("css/front.css") }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
     <script src="{{ asset("js/front.js") }}" defer></script>
+    <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@sidsbrmnn/scrollspy@1.x/dist/scrollspy.min.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73695122-4"></script>
@@ -33,9 +35,14 @@
     gtag('config', 'UA-73695122-4');
     </script>
 
-    <title>WPWW Muzyka Szyta Na Miarę ✂🎵 Podkłady i usługi muzyczne</title>
+    <title>WPWW Muzyka Szyta Na Miarę ✂🎵 Podkłady i aranże dopasowane do Twoich potrzeb</title>
 </head>
 <body>
+    @foreach (["success", "error"] as $status)
+    @if (session($status))
+        <x-alert :status="$status" />
+    @endif
+    @endforeach
     @yield('everything')
 </body>
 </html>

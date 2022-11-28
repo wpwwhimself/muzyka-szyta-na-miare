@@ -1,12 +1,6 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-    @foreach (["success", "error"] as $status)
-        @if (session($status))
-            <x-alert :status="$status" />
-        @endif
-    @endforeach
-
     <div class="grid-2">
         <section id="who-am-i">
             <div class="section-header">

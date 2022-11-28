@@ -1,12 +1,6 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
-@foreach (["success", "error"] as $status)
-@if (session($status))
-    <x-alert :status="$status" />
-@endif
-@endforeach
-
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <script>

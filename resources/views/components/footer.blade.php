@@ -2,7 +2,7 @@
   <x-logo />
   <div>
     <h2>{{ config("app.name") }}</h2>
-    <p>Meticulously designed and furiously crafted by <a href="http://wpww.pl">WPWW himself</a></p>
-    <p>&copy; 2019 – {{ date("Y") }}</p>
+    <p>Stronę własnoręcznie zbudował <a href="http://wpww.pl">WPWW</a></p>
+    <p><a href="https://creativecommons.org/licenses/by-sa/3.0/pl/">&copy; CC BY-SA 3.0</a> 2019 – {{ date("Y") }}</p>
   </div>
 </footer>

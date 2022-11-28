@@ -1,12 +1,6 @@
 @extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
 
 @section('content')
-@foreach (["success", "error"] as $status)
-@if (session($status))
-    <x-alert :status="$status" />
-@endif
-@endforeach
-
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
     

@@ -1,14 +1,6 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
-@foreach (["success", "error"] as $status)
-@if (session($status))
-    <x-alert :status="$status" />
-@endif
-@endforeach
-
-<x-tutorial-control :is-veteran="intval(is_veteran($request->client_id))" />
-
 <p class="tutorial"><i class="fa-solid fa-circle-question"></i>
 @switch($request->status_id)
     @case(1)

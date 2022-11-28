@@ -1,13 +1,6 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-
-@foreach (["success", "error"] as $status)
-@if (session($status))
-    <x-alert :status="$status" />
-@endif
-@endforeach
-
 <section id="requests-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-envelope-open-text"></i> Lista zapytań</h1>

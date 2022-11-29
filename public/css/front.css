@@ -69,3 +69,19 @@ h1{
 #recomms .section-like img{
     width: 10em;
 }
+
+.cookie-consent{
+    position: fixed; bottom: 5em;
+    width: 100vw;
+}
+.cookie-consent div{
+    width: max-content;
+    margin: 0 auto; padding: 0.5em;
+    background-color: var(--acc); color: black;
+    display: flex; flex-direction: row;
+    justify-content: center; align-items: center;
+    box-shadow: 0 0 1em var(--bg);
+}
+.cookie-consent p{
+    margin: 0;
+}

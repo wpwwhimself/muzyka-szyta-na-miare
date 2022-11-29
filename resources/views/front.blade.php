@@ -63,7 +63,7 @@
             </ul>
         </div>
 
-        <div id="offer-other">
+        <div id="offer-other" class="flex-right">
             <span>
                 Schematy akordowe
                 <i class="fa-solid fa-circle-info" @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)></i>

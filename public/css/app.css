@@ -56,6 +56,9 @@ section{
     margin: 1em 0 0;
     padding: 1em;
 }
+section:hover{
+    border-color: var(--fg);
+}
 .section-header{
     display: flex;
     justify-content: space-between;
@@ -77,7 +80,7 @@ small{
     font-family: Raleway;
     font-weight: bold;
 }
-div{
+div, form{
     border-radius: 1em;
 }
 .logo{
@@ -183,7 +186,7 @@ input:disabled, select:disabled, textarea:disabled{
     border-color: #aaaaaa22;
 }
 input:focus, textarea:focus, select:focus{
-    box-shadow: 0 0 15px #926fa8; border-bottom: 2px solid white;
+    box-shadow: 0 0 15px var(--acc); border-bottom: 2px solid white;
 }
 option{
     background-color: var(--bg);
@@ -326,6 +329,10 @@ footer h2, footer p{
 }
 footer>img{
     justify-self: center;
+}
+footer .contact-info{
+    display: flex;
+    margin-right: auto;
 }
 
 /************************MOBILITY**************/

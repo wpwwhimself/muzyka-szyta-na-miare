@@ -17,8 +17,8 @@ class CreateShowcasesTable extends Migration
             $table->id();
             $table->string("quest_id");
                 $table->foreign("quest_id")->references("id")->on("quests");
-            $table->string("link_fb")->nullable();
-            $table->string("link_ig")->nullable();
+            $table->string("link_fb", 512)->nullable();
+            $table->string("link_ig", 512)->nullable();
             $table->timestamps();
         });
     }

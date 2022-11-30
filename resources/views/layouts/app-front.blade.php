@@ -35,7 +35,7 @@
     gtag('config', 'UA-73695122-4');
     </script>
 
-    <title>WPWW Muzyka Szyta Na Miarę ✂🎵 Podkłady i aranże dopasowane do Twoich potrzeb</title>
+    <title>{{ config("app.name") }} ✂🎵 Podkłady i aranże dopasowane do Twoich potrzeb</title>
 </head>
 <body>
     @foreach (["success", "error"] as $status)

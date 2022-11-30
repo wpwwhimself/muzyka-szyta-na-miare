@@ -2,20 +2,13 @@ header{
     padding: 0.5em 4em;
     justify-content: space-between;
     position: sticky; top: 0;
-    z-index: 99;
+    z-index: 15;
 }
 header .logo{
     height: 3em;
 }
 b, strong{
     color: var(--acc);
-}
-
-img:not(.logo){
-    filter: grayscale(1);
-}
-img:not(.logo):hover{
-    filter: grayscale(0.2);
 }
 
 section{
@@ -43,8 +36,26 @@ h1{
     justify-content: center;
 }
 
-#home .logo{
-    height: 50vh;
+#home{
+    font-size: 1.25em;
+    /* height: calc(80vh); */
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
+}
+#home li{
+    list-style-type: none;
+}
+.company-name{
+    align-items: center;
+    text-align: left;
+}
+.company-name .logo{
+    height: 12em;
+}
+.company-name h1{
+    margin: 0;
+}
+.company-name p{
+    margin-bottom: 0;
 }
 
 #offer .main{
@@ -79,6 +90,10 @@ h1{
 }
 #recomms-other img{
     width: 10em;
+    filter: grayscale(0.7);
+}
+#recomms-other img:hover{
+    filter: grayscale(0.2);
 }
 
 .sampleproj{

@@ -226,10 +226,23 @@ input[type="checkbox"]{
     background-color: rgb(var(--danger));
 }
 
+/* NOŻYCZKI */
+.sc-line{
+    border: 7px dashed var(--bg2);
+    position: relative;
+}
+.sc-line .sc-scissors{
+    --height: 42px;
+    position: absolute;
+    top: calc(-1 * var(--height) - 10px); right: 100px;
+    height: var(--height);
+}
+
 /* ALERTS */
 .alert{
     border-radius: 1em;
     position: absolute; right: 3em; top: 3em;
+    z-index: 99;
     border: 2px solid gray;
     box-shadow: 0.5em 0.5em 1.5em #00000044;
     padding: 1em;

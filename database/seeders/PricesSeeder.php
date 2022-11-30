@@ -72,11 +72,11 @@ class PricesSeeder extends Seeder
                 "operation" => "*", "price_a" => 0.07, "price_b" => 0.07
             ],
             [
-                "indicator" => "n", "service" => "nagrania do własnego podkładu", "quest_type_id" => 3,
+                "indicator" => "n", "service" => "nagrania do własnego podkładu", "quest_type_id" => null,
                 "operation" => "+", "price_a" => 25, "price_b" => 100
             ],
             [
-                "indicator" => "p", "service" => "nagrania do mojego podkładu", "quest_type_id" => 3,
+                "indicator" => "p", "service" => "nagrania do mojego podkładu", "quest_type_id" => null,
                 "operation" => "+", "price_a" => 0, "price_b" => 0
             ],
             [

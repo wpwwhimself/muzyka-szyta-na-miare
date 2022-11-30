@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
 
-    <title>{{ $title != null ? "$title | " : "" }}WPWW Muzyka Szyta Na Miarę</title>
+    <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>
 </head>
 <body>
     <x-header :title="$title" />

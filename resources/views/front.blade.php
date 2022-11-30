@@ -8,20 +8,23 @@
 </header>
 
 <div class="main-wrapper">
-    <section id="home">
-        <ul>
+    <section id="home" class="sc-line">
+        <img class="sc-scissors" src="{{ asset("assets/sc-line.svg") }}" alt="nożyczki" />
+        <div class="company-name flex-right">
+            <img src="{{ asset("mintgreen.png") }}" alt="logo" class="logo">
+            <div>
+                <h1>{{ config("app.name") }}</h1>
+                <p>Wojciech Przybyła</p>
+                <h2>Podkłady i aranże dopasowane do Twoich potrzeb</h2>
+            </div>
+        </div>
+        
+        <ul class="section-like">
             <li>Nie możesz znaleźć dobrego podkładu muzycznego do swojej ulubionej piosenki?</li>
             <li>Szukasz nut lub partytury dla siebie i swojego zespołu?</li>
             <li>Masz pomysł na własny utwór i chcesz go wcielić w życie?</li>
+            <strong>Jesteś we właściwym miejscu!</strong>
         </ul>
-
-        <img src="{{ asset("mintgreen.png") }}" alt="logo" class="logo">
-        <div>
-            <h1>{{ config("app.name") }}</h1>
-            <h2>Podkłady i aranże dopasowane do Twoich potrzeb</h2>
-        </div>
-
-        <p></p> <!-- TODO COPYWRITING -->
     </section>
 
     <section id="offer">
@@ -35,7 +38,7 @@
             <ul>
                 <li><b>Żywe instrumenty</b> i wysokiej jakości syntezatory</li>
                 <li>Formaty <b>MP3, WAV, FLAC, MID</b></li>
-                <li>Niemal <b>identyczne</b> z oryginałem</li>
+                <li>Brzmienie niemal <b>identyczne</b> z oryginałem</li>
             </ul>
         </div>
         <div class="main black-back">
@@ -59,20 +62,21 @@
             <ul>
                 <li>Każdy aspekt projektu <b>dostosowany do Twoich wymagań</b> – od wykorzystanych instrumentów do budowy utworu</li>
                 <li><b>Szybki</b> czas realizacji – od 1 dnia</li>
-                <li>Darmowe <b>poprawki na gorąco</b>, żeby było idealnie</li>
+                <li>Darmowe <b>poprawki na bieżąco</b>, żeby było idealnie</li>
             </ul>
         </div>
 
+        <h2>A także:</h2>
         <div id="offer-other" class="flex-right">
-            <span>
+            <span class="section-like">
                 Schematy akordowe
                 <i class="fa-solid fa-circle-info" @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)></i>
             </span>
-            <span>
+            <span class="section-like">
                 Osadzenie partii wokalnej
                 <i class="fa-solid fa-circle-info" @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)></i>
             </span>
-            <span>
+            <span class="section-like">
                 Korekcja dźwiękowa
                 <i class="fa-solid fa-circle-info" @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)></i>
             </span>
@@ -181,7 +185,7 @@
             </div>
         </div>
 
-        <div id="showcase-fbs">
+        <div id="showcase-fbs" class="flex-right">
         @foreach ($showcases as $showcase)
         {!! $showcase->link_fb !!}
         @endforeach
@@ -219,19 +223,23 @@
                 <li>Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
     
                 <li>Jakie materiały muszę przygotować?</li>
-                <li>Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii, samych wskazówek stylistycznych. W skrajnych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
+                <li>Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
     
                 <li>Czy mój podkład będzie miał linię melodyczną?</li>
-                <li><strong>Z reguły nie</strong>, ale jeśli jesteś zainteresowany takową, proszę o dodatkową informację.</li>
+                <li><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
     
                 <li>Jak szybko można się spodziewać gotowego podkładu?</li>
-                <li><!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->Zwykle projekty jestem w stanie wykonać w 1-3 dni, choć wszystko zależy od tego, jak mi studia pozwolą pracować. <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję na odpowiedź na każdego wysłanego przeze mnie maila.</li>
+                <li>
+                    <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
+                    Zwykle projekty jestem w stanie wykonać w 1-3 dni, choć wszystko zależy od wielu czynników.
+                    <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
+                </li>
     
                 <li>Czy możliwe są poprawki w przygotowywanych aranżach?</li>
                 <li>Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
     
                 <li>Co z zapłatą za utwór?</li>
-                <li>Wycena zlecenia zostanie przesłana do Ciebie mailem przed jego podjęciem. Otrzymasz także numer konta do przelewu. <i>Nie musisz płacić od razu!</i> Wpłata jest potrzebna jedynie do możliwości pobrania plików.</li>
+                <li>Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
             </ul>
         </div>
     </section>
@@ -241,10 +249,19 @@
         <div class="flex-right">
             <img src="{{ asset("assets/front/img/dixie_kontent.jpg") }}" alt="me!">
             <p>
-                Mam na imię Wojtek i&nbsp;jestem muzykiem z&nbsp;ponaddziesięcioletnim doświadczeniem instrumentalnym, aranżerskim i&nbsp;kompozytorskim.
-                Moim głównym instrumentem jest gitara, ale często pracuję też z&nbsp;klawiszami i&nbsp;perkusją, czasami udzielając się również na instrumentach dętych.
-                Kiedy nie tworzę podkładów, pracuję nad własną twórczością i&nbsp;zajmuję się programowaniem.
+                WSTĘP -- MAM NA IMIĘ... Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati sapiente quibusdam ipsam, nemo ratione animi accusamus nam deleniti doloribus. Debitis distinctio iure ut neque. Fugiat est adipisci quisquam eligendi maxime.
             </p>
+            <div class="flex-right">
+                <div class="section-like">
+                    okienka z: ile robię podkłady + muzyczna
+                </div>
+                <div class="section-like">
+                    zespoły
+                </div>
+                <div class="section-like">
+                    wykształcenie
+                </div>
+            </div>
         </div>
     </section>
 
@@ -269,7 +286,7 @@
                 <x-input type="tel" name="phone" label="Numer telefonu" />
                 <x-input type="text" name="other_medium" label="Inna forma kontaktu" />
                 <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
-                <x-input type="number" name="m_test" label="Cztery razy pięć?" :required="true" />
+                <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
             </div>
             <button type="submit" name="m_sub">
                 Wyślij

@@ -30,7 +30,7 @@ class StatusesSeeder extends Seeder
             ["id" => 16, "status_name" => "oddane do poprawki", "status_symbol" => "fa-people-pulling"],
             ["id" => 18, "status_name" => "odrzucone", "status_symbol" => "fa-dumpster-fire"],
             ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
-            ["id" => 26, "status_name" => "oddane po akceptacji", "status_symbol" => "fa-recycle"],
+            ["id" => 26, "status_name" => "oddane po zamknięciu", "status_symbol" => "fa-recycle"],
             /* statusy techniczne */
             ["id" => 31, "status_name" => "zmieniono wycenę", "status_symbol" => "fa-comment-dollar"],
             ["id" => 32, "status_name" => "dokonano wpłaty", "status_symbol" => "fa-cash-register"],

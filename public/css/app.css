@@ -125,6 +125,7 @@ b.priority, .priority b{
 .grayed-out{
     font-style: italic;
     color: gray;
+    grid-column: 1 / span 2;
 }
 .yellowed-out{
     font-style: italic;

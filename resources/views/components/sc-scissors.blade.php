@@ -1,0 +1,1 @@
+<img class="sc-scissors" src="{{ asset("assets/sc-line.svg") }}" alt="nożyczki" />

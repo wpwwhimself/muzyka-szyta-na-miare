@@ -14,6 +14,7 @@ b, strong{
 section{
     border: none;
     text-align: center;
+    max-width: 90vw; margin: 1em auto;
 }
 section>div{
     margin-bottom: 1em;
@@ -25,7 +26,7 @@ section>div{
 }
 .black-back{
     background-color: var(--bg1);
-    padding: 1em; margin: 1em;
+    padding: 1em;
 }
 
 h1{
@@ -38,7 +39,7 @@ h1{
 
 #home{
     font-size: 1.25em;
-    /* height: calc(80vh); */
+    margin: 3em auto; padding: 3em 10em;
     display: flex; justify-content: center; align-items: center; flex-direction: column;
 }
 #home li{
@@ -89,8 +90,8 @@ h1{
     font-style: italic;
 }
 #recomms-other img{
-    width: 10em;
-    filter: grayscale(0.7);
+    width: 8em;
+    filter: grayscale(1);
 }
 #recomms-other img:hover{
     filter: grayscale(0.2);
@@ -142,6 +143,7 @@ h1{
 #about div{
     --a-width: 15em;
     align-items: center;
+    text-align: left;
 }
 #about img{
     border-radius: 1em;
@@ -175,9 +177,20 @@ form button{
     background-color: var(--acc); color: black;
     display: flex; flex-direction: row;
     justify-content: center; align-items: center;
+    border-radius: 2em;
 }
 .cookie-consent p{
     margin: 0;
+}
+.cookie-consent button{
+    margin-left: 1em; padding: 0.5em 1em;
+    border: 2px solid var(--bg); border-radius: 1em;
+    background: var(--bg1);
+    color: var(--fg);
+}
+.cookie-consent button:hover{
+    background: var(--acc);
+    color: black;
 }
 
 /* shadows */

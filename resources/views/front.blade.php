@@ -7,9 +7,9 @@
     <div><x-nav /></div>
 </header>
 
-<div class="main-wrapper">
+{{-- <div class="main-wrapper"> --}}
     <section id="home" class="sc-line">
-        <img class="sc-scissors" src="{{ asset("assets/sc-line.svg") }}" alt="nożyczki" />
+        <x-sc-scissors />
         <div class="company-name flex-right">
             <img src="{{ asset("mintgreen.png") }}" alt="logo" class="logo">
             <div>
@@ -83,6 +83,8 @@
         </div>
     </section>
 
+    <x-sc-hr />
+
     <section id="recomms">
         <h1>Kto już skorzystał?</h1>
         <div class="grid-3">
@@ -115,6 +117,12 @@
 
     <section id="showcase">
         <h1>Co już udało mi się wykonać?</h1>
+
+        <div id="showcase-yts" class="flex-right">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/RRGUBczaxQc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/4l0n_VqYBUk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/Z01Bga583P4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
 
         <div id="showcase-mp3s" class="flex-right">
             <div class="sampleproj section-like">
@@ -216,7 +224,8 @@
             </div>
         </div>
 
-        <div class="black-back">
+        <div class="sc-line">
+            <x-sc-scissors />
             <h1>FAQ</h1>
             <ul id="faq">
                 <li>Jak tworzone są utwory?</li>
@@ -248,20 +257,20 @@
         <h1>O mnie</h1>
         <div class="flex-right">
             <img src="{{ asset("assets/front/img/dixie_kontent.jpg") }}" alt="me!">
-            <p>
-                WSTĘP -- MAM NA IMIĘ... Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati sapiente quibusdam ipsam, nemo ratione animi accusamus nam deleniti doloribus. Debitis distinctio iure ut neque. Fugiat est adipisci quisquam eligendi maxime.
-            </p>
-            <div class="flex-right">
-                <div class="section-like">
-                    okienka z: ile robię podkłady + muzyczna
-                </div>
-                <div class="section-like">
-                    zespoły
-                </div>
-                <div class="section-like">
-                    wykształcenie
-                </div>
-            </div>
+            <ul>
+                <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
+                <li>Moje usługi prowadzę od <b>{{ date("Y") - 2018 }} lat</b> i wykonałem już <b>??? zleceń</b></li>
+                <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
+                <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
+                <li>Jestem stałym członkiem <b>3 zespołów muzycznych</b>:
+                    <a href="#">Dixie Kings</a>,
+                    <a href="#">Orkiestry Tanecznej Wihajster</a>
+                    oraz
+                    <a href="#">Powiatowej Wolsztyńskiej Orkiestry Dętej</a>
+                </li>
+                <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako web developer</li>
+                <li>Mam za sobą <b>studia matematyczne</b> i jestem w trakcie studiów <b>magisterskich</b> na Uniwersytecie Ekonomicznym w Poznaniu</li>
+            </ul>
         </div>
     </section>
 
@@ -293,7 +302,7 @@
             </button>
         </form>
     </section>
-</div>
+{{-- </div> --}}
 <x-footer />
 
 @include("popper::assets")

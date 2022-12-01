@@ -228,8 +228,11 @@ input[type="checkbox"]{
 
 /* NOŻYCZKI */
 .sc-line{
-    border: 7px dashed var(--bg2);
+    border: 5px dashed var(--bg2);
     position: relative;
+}
+.sc-line.top-only{
+    border-left: none; border-bottom: none; border-right: none;
 }
 .sc-line .sc-scissors{
     --height: 42px;

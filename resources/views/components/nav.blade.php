@@ -12,6 +12,7 @@
     <a href="{{ route("dashboard") }}"><li><i class="fa-solid fa-house-chimney-user"></i> Pulpit</li></a>
     <a href="{{ route("quests") }}"><li><i class="fa-solid fa-boxes-stacked"></i> Zlecenia</li></a>
     <a href="{{ route("requests") }}"><li><i class="fa-solid fa-envelope-open-text"></i> Zapytania</li></a>
+    <a href="{{ route("prices") }}"><li><i class="fa-solid fa-barcode"></i> Cennik</li></a>
     @if (Auth::id() == 1)
         <a href="#"><li><i class="fa-solid fa-compact-disc"></i> Utwory</li></a>
         <a href="{{ route("clients") }}"><li><i class="fa-solid fa-users"></i> Klienci</li></a>

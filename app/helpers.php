@@ -19,6 +19,11 @@ if(!function_exists("VETERAN_FROM")){
         return DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
     }
 }
+if(!function_exists("CURRENT_PRICING")){
+    function CURRENT_PRICING(){
+        return DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)
@@ -162,18 +167,17 @@ if(!function_exists("upcoming_quests")){
 
 if(!function_exists("pricing")){
     function pricing($client_id){
-        $current_pricing = DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
-        if($client_id == "") return $current_pricing;
+        if($client_id == "") return CURRENT_PRICING();
         else{
             $client_since = Client::find($client_id)->created_at;
             //loop for cycling through pricing schemas
-            for($letter = "A"; $letter != $current_pricing; $letter = $next_letter){
+            for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);
                 $this_pricing_since = Carbon::parse(DB::table("settings")->where("setting_name", "pricing_".$next_letter."_since")->value("value_str"));
                 if($client_since->lt($this_pricing_since)) return $letter;
             }
         }
-        return $current_pricing;
+        return CURRENT_PRICING();
     }
 }
 

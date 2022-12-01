@@ -26,28 +26,45 @@
         </form>
         <section id="stats-log">
             <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
-            <div class="table">
-                <span class="header">Etap</span>
-                <span class="header">Czas</span>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Etap</th>
+                        <th>Czas</th>
+                    </tr>
+                </thead>
+                <tbody>
                 @forelse ($workhistory as $entry)
-                    <span>
-                        {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
-                        {{ DB::table("statuses")->find($entry->status_id)->status_name }}
-                        @if ($entry->now_working)
-                        <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
-                        @endif
-                    </span>
-                    <span>{{ $entry->time_spent }}</span>
+                    <tr>
+                        <td>
+                            {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
+                            {{ DB::table("statuses")->find($entry->status_id)->status_name }}
+                            @if ($entry->now_working)
+                            <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
+                            @endif
+                        </td>
+                        <td>{{ $entry->time_spent }}</td>
+                    </tr>
                 @empty
-                <p class="grayed-out">Prace jeszcze nie zaczęte</p>
+                <tr>
+                    <td colspan=2 class="grayed-out">
+                        Prace jeszcze nie zaczęte
+                    </td>
+                </tr>
                 @endforelse
-                <span class="footer">Razem</span>
-                <span class="footer">{{
-                    gmdate("H:i:s", DB::table("song_work_times")
-                        ->where("song_id", $quest->song_id)
-                        ->sum(DB::raw("TIME_TO_SEC(time_spent)")))
-                }}</span>
-            </div>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Razem</th>
+                        <th>
+                        {{ gmdate("H:i:s", DB::table("song_work_times")
+                                ->where("song_id", $quest->song_id)
+                                ->sum(DB::raw("TIME_TO_SEC(time_spent)"))) }}
+                        </th>
+                    </tr>
+                </tfoot>
+                </tbody>
+            </table>
         </section>
     </div>
     @endif

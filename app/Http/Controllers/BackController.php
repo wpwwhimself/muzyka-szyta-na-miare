@@ -54,6 +54,15 @@ class BackController extends Controller
         ));
     }
 
+    public function prices(){
+        $prices = DB::table("prices")->get();
+
+        return view(user_role().".prices", array_merge(
+            ["title" => "Cennik"],
+            compact("prices")
+        ));
+    }
+
     public function clients(){
         $clients_raw = Client::all();
         $clients_count = count($clients_raw);

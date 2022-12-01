@@ -36,6 +36,7 @@ Route::controller(AuthController::class)->group(function(){
 
 Route::controller(BackController::class)->group(function(){
     Route::get('/dashboard', "dashboard")->middleware("auth")->name("dashboard");
+    Route::get('/prices', "prices")->middleware("auth")->name("prices");
 
     Route::get('/requests', "requests")->middleware("auth")->name("requests");
     Route::get('/requests/view/{id}', "request")->name("request");
@@ -49,6 +50,7 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
+    Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 
     Route::get('/clients', "clients")->middleware("auth")->name("clients");
     Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
@@ -56,7 +58,6 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/ads', "ads")->middleware("auth")->name("ads");
     Route::get('/messages', "messages")->middleware("auth")->name("messages");
 
-    Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 });
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){

@@ -271,6 +271,26 @@ input[type="checkbox"]{
     background-color: var(--clr-wh);
 }
 
+/* TABLES */
+table{
+    width: 100%;
+    border-spacing: 0;
+    text-align: right;
+}
+td:first-child, th:first-child{
+    text-align: left;
+}
+tr:hover{
+    background-color: var(--bg2);
+}
+.table{
+    display: grid;
+}
+.table .header, .table .footer, th{
+    font-weight: bold;
+    border: 1px solid var(--acc); border-left: none; border-right: none;
+}
+
 /**********************BODY*****************/
 
 .main-wrapper{
@@ -581,14 +601,9 @@ footer .contact-info{
     margin: 0;
 }
 #stats-log .table{
-    display: grid;
     grid-template-columns: 2fr 1fr;
 }
 #stats-log .table span:nth-child(2n - 1){ text-align: left; }
-.table .header, .table .footer{
-    font-weight: bold;
-    border: 1px solid var(--acc); border-left: none; border-right: none;
-}
 
 #clients-list .table-row{
     --q-clr: 255, 255, 255;

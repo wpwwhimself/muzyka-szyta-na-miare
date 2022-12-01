@@ -1,7 +1,8 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="clients-stats">
+<section id="clients-stats" class="sc-line">
+    <x-sc-scissors />
     <div class="section-header">
         <h1>
             <i class="fa-solid fa-chart-pie"></i> Statystyki klientów

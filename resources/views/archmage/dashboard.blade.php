@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="grid-2">
-        <section id="who-am-i">
+        <section id="who-am-i" class="sc-line">
+            <x-sc-scissors />
             <div class="section-header">
                 <h1><i class="fa-solid fa-user-check"></i> Zalogowany jako</h1>
             </div>

@@ -6,6 +6,7 @@ use App\Models\Quest;
 use Illuminate\Http\Request;
 use App\Models\QuestType;
 use App\Models\Showcase;
+use App\Models\Song;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -22,7 +23,7 @@ class HomeController extends Controller
 
         $average_quest_done = 3; //TODO obliczyć średni czas wykonania questa
         $quests_completed = Quest::where("status_id", 19)->count();
-        $quests_originals_completed = 0; //TODO policzyć oryginalne piosenki
+        $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();
 
         $songs = null; //TODO ZEBRAĆ I PRZEDSTAWIĆ PIOSENKI
 
@@ -33,6 +34,14 @@ class HomeController extends Controller
             "inne" => "inne"
         ];
 
-        return view("front", compact("showcases", "prices", "quest_types", "contact_preferences", "average_quest_done", "quests_completed"));
+        return view("front", compact(
+            "showcases",
+            "prices",
+            "quest_types",
+            "contact_preferences",
+            "average_quest_done",
+            "quests_completed",
+            "quests_originals_completed"
+        ));
     }
 }

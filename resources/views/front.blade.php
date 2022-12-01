@@ -240,7 +240,7 @@
                 <li>Jak szybko można się spodziewać gotowego podkładu?</li>
                 <li>
                     <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
-                    Zwykle projekty jestem w stanie wykonać w 1-{{ $average_quest_done }} dni, choć wszystko zależy od wielu czynników.
+                    Zwykle projekty jestem w stanie wykonać <b>w 1-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
                     <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
                 </li>
     
@@ -259,7 +259,7 @@
             <img src="{{ asset("assets/front/img/dixie_kontent.jpg") }}" alt="me!">
             <ul>
                 <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
-                <li>Moje usługi prowadzę od <b>{{ date("Y") - 2018 }} lat</b> i wykonałem już <b>{{ $quests_completed }} zleceń</b></li>
+                <li>Moje usługi prowadzę od <b>{{ date("Y") - 2018 }} lat</b> i wykonałem już <b>{{ $quests_completed }} zleceń</b>, z czego <b>{{ $quests_originals_completed }} to autorskie kompozycje</b></li>
                 <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
                 <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
                 <li>Jestem stałym członkiem <b>3 zespołów muzycznych</b>:

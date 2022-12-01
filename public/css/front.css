@@ -10,6 +10,9 @@ header .logo{
 b, strong{
     color: var(--acc);
 }
+.flex-right{
+    flex-wrap: nowrap;
+}
 
 section{
     border: none;
@@ -97,6 +100,9 @@ h1{
     filter: grayscale(0.2);
 }
 
+#showcase-mp3s{
+    flex-wrap: wrap;
+}
 .sampleproj{
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;

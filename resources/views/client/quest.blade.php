@@ -73,7 +73,8 @@
             @endif
         </section>
 
-        <section class="input-group">
+        <section class="input-group sc-line">
+            <x-sc-scissors />
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
 
             {{-- jeśli pusty --}}

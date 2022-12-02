@@ -657,8 +657,16 @@ footer .contact-info{
     margin: 0;
     border-bottom: 2px solid var(--acc);
 }
+.file-container-b{
+    position: relative;
+}
 .file-container-b h4{
     margin: 0.5em;
+}
+.file-container-b>.submit{
+    position: absolute; right: 0; top: 0;
+    margin: 0;
+    font-size: 0.8em;
 }
 .file-container-c{
     display: flex;

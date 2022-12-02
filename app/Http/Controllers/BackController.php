@@ -370,15 +370,15 @@ class BackController extends Controller
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
 
         $files_raw = Storage::files('safe/'.$id);
-        if(empty($files_raw)){
-            $files = [];
-            $last_mod = [];
-        }else{
+        $files = []; $last_mod = []; $desc = [];
+
+        if(!empty($files_raw)){
             foreach($files_raw as $file){
                 $name = preg_split('/(\-|\_)/', pathinfo($file, PATHINFO_FILENAME));
                 if(!isset($name[2])) $name[2] = "wersja zero";
                 $files[$name[0]][$name[1]][$name[2]][] = $file;
                 $last_mod[$name[1]][$name[2]] = Storage::lastModified($file);
+                if(pathinfo($file, PATHINFO_EXTENSION) == "md") $desc[$name[1]][$name[2]] = $file;
             }
         }
 
@@ -388,7 +388,7 @@ class BackController extends Controller
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "last_mod"),
+                compact("quest", "prices", "files", "last_mod", "desc"),
                 (isset($stats_statuses) ? compact("stats_statuses") : []),
                 (isset($workhistory) ? compact("workhistory") : []),
             )
@@ -404,6 +404,7 @@ class BackController extends Controller
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
+            $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
             return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Cena wpisana");
         }
 

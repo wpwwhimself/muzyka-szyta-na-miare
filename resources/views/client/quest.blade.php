@@ -56,7 +56,9 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="checkbox" name="paid" label="Opłacono" value="{{ $quest->paid }}" :disabled="true" />
+            <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+            <label for="payments">Opłacono: {{ $quest->payments->sum("comment") }} zł</label>
+            @unless ($quest->paid)
             <div class="tutorial">
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
@@ -67,6 +69,7 @@
                 <p>Nie jest ona wymagana do przeglądania plików,<br>
                     ale będzie potrzebna do ich pobrania.</p>
             </div>
+            @endunless
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
             @if ($quest->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline }}" :disabled="true" />
@@ -77,7 +80,39 @@
             <x-sc-scissors />
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
 
-            {{-- jeśli pusty --}}
+            @forelse ($files as $ver_super => $ver_mains)
+                @foreach ($ver_mains as $ver_main => $ver_subs)
+                <div class="file-container-a">
+                    <h3>{{ $ver_super }}-{{ $ver_main }}</h3>
+                    @foreach ($ver_subs as $ver_sub => $ver_bots)
+                    <div class="file-container-b">
+                        <h4>
+                            {{ $ver_sub }}
+                            <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
+                        </h4>
+                        <div class="ver_desc">
+                            {{ isset($desc[$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_main][$ver_sub])) : "" }}
+                        </div>
+                        <div class="file-container-c">
+                        @foreach ($ver_bots as $file)
+                            @if (pathinfo($file)['extension'] == "mp4")
+                            <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                            @elseif (pathinfo($file)['extension'] == "mp3")
+                            <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                            @endif
+                        @endforeach
+                        @if ($quest->paid) @foreach ($ver_bots as $file)
+                            @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
+                            <x-file-tile :id="$quest->id" :file="$file" />
+                            @endunless
+                        @endforeach @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endforeach
+            @empty
+            <p class="grayed-out">Brak plików</p>
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Tutaj pojawią się pliki związane<br>
@@ -85,6 +120,7 @@
                 Będzie możliwość ich przejrzenia i odsłuchania,<br>
                 a po dokonaniu wpłaty – również pobrania.
             </p>
+            @endforelse
         </section>
 
         <section class="input-group">
@@ -118,11 +154,13 @@
         </script>
         <div class="flexright">
             @csrf
+            @if (in_array($quest->status_id, [15]))
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Jeśli nie podoba Ci się to, co dla Ciebie przygotowałem, w polu poniżej możesz napisać, co dokładnie.
                 Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
             </p>
+            @endif
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />

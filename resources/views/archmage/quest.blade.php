@@ -139,7 +139,8 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="checkbox" name="paid" label="Opłacono" value="{{ $quest->paid }}" :disabled="true" />
+            <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+            <label for="payments">Opłacono: {{ $quest->payments->sum("comment") }} zł</label>
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
             @if ($quest->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
@@ -166,6 +167,13 @@
                             {{ $ver_sub }}
                             <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
                         </h4>
+                        <x-button
+                            action="#ver_desc_form" label="" icon="note-sticky"
+                            value='{{ pathinfo($ver_bots[0], PATHINFO_FILENAME) }}'
+                            />
+                        <div class="ver_desc">
+                            {{ isset($desc[$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_main][$ver_sub])) : "" }}
+                        </div>
                         <div class="file-container-c">
                         @foreach ($ver_bots as $file)
                             @if (pathinfo($file)['extension'] == "mp4")
@@ -175,7 +183,9 @@
                             @endif
                         @endforeach
                         @if ($quest->paid) @foreach ($ver_bots as $file)
+                            @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
                             <x-file-tile :id="$quest->id" :file="$file" />
+                            @endunless
                         @endforeach @endif
                         </div>
                     </div>
@@ -185,6 +195,35 @@
             @empty
             <p class="grayed-out">Brak plików</p>
             @endforelse
+
+            <form id="ver_desc_form" action="{{ route('ver-desc-mod') }}" method="POST" style="display:none;">
+                @csrf
+                <input type="hidden" name="ver" value="0" />
+                <x-input type="TEXT" name="desc" label="Opis wersji XXX" />
+                <x-button action="submit" label="Popraw opis" icon="pen-to-square" />
+            </form>
+
+            <script>
+            $(document).ready(function(){
+                $(".file-container-b .submit").click(function(){
+                    const ver = $(this).attr("value");
+                    $("#ver_desc_form").show();
+                    $("#ver_desc_form label").text("Opis wersji " + ver);
+                    $("#ver_desc_form input[name=ver]").val("{{ $quest->id }}/" + ver);
+                    $.ajax({
+                        url: "{{ url('get_ver_desc') }}",
+                        type: "get",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            path: '/safe/{{ $quest->id }}/' + ver + '.md'
+                        },
+                        success: function(res){
+                            $("#ver_desc_form textarea").text(res).focus();
+                        }
+                    });
+                });
+            });
+            </script>
         </section>
 
         <section class="input-group">
@@ -230,7 +269,7 @@
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
             <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />
-            @if ($quest->paid)
+            @if (!$quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
             @endif
         </div>

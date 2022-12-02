@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Quest;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -13,7 +12,7 @@ class FileController extends Controller
 {
     public function fileUpload(Request $rq){
         foreach($rq->files as $file){
-            $file = $rq->file("file");
+            $file = $rq->file("files");
             $filename = $file->getClientOriginalName();
             $file->storeAs("safe/$rq->quest_id", $filename);
         }
@@ -46,5 +45,16 @@ class FileController extends Controller
 
     public function fileDownload($id, $filename){
         return Storage::download("safe/$id/$filename");
+    }
+
+    public function verDescMod(Request $rq){
+        $path = "/safe/$rq->ver.md";
+        if($rq->desc == ""){
+            Storage::delete($path);
+            return back()->with("success", "Opis usunięty");
+        }
+
+        Storage::put($path, $rq->desc);
+        return back()->with("success", "Opis dodany");
     }
 }

@@ -9,10 +9,12 @@ use App\Models\Genre;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Song;
+use App\Models\StatusChange;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +61,12 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/messages', "messages")->middleware("auth")->name("messages");
 
 });
+Route::controller(FileController::class)->group(function(){
+    Route::post('/safe-u', 'fileUpload')->middleware("auth")->name('upload');
+    Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
+    Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
+    Route::post('/safe/ver-desc-mod', "verDescMod")->middleware("auth")->name("ver-desc-mod");
+});
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){
     return view("request-finalized", array_merge(
@@ -97,16 +105,17 @@ Route::get('/quest_type_from_id', function(Request $request){
 Route::post('/quest_price_update', function(Request $rq){
     $quest = Quest::findOrFail($rq->id);
     $price_before = $quest->price;
-    $quest->update(["price_code_override" => $rq->code, "price" => price_calc($rq->code, $quest->client_id)[0]]);
+    $quest->update([
+        "price_code_override" => $rq->code,
+        "price" => price_calc($rq->code, $quest->client_id)[0],
+        "paid" => ($quest->payments->sum("comment") >= price_calc($rq->code, $quest->client_id)[0])
+    ]);
     app("App\Http\Controllers\BackController")->statusHistory($rq->id, 31, json_encode(["price" => $price_before . " → " . $quest->price]));
 });
 Route::post('/budget_update', function(Request $rq){
     $client = Client::findOrFail($rq->client_id);
     $client->update(["budget" => $rq->new_budget]);
 });
-
-Route::controller(FileController::class)->group(function(){
-    Route::post('/safe-u', 'fileUpload')->middleware("auth")->name('upload');
-    Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
-    Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
+Route::get("/get_ver_desc", function(Request $rq){
+    return Storage::get($rq->path) ?? "";
 });

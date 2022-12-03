@@ -65,7 +65,7 @@
                     <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>
                     @endif
                 </span>
-                <span>
+                <span class="client-main-data">
                     <h3 class="song-title">{{ $client->client_name }}</h3>
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
                     <br />

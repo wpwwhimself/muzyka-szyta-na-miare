@@ -132,7 +132,7 @@ h1{
 
 .front-table{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 4fr 1fr;
 }
 .front-table span{ padding: 0.2em 0.5em; }
 .front-table span:nth-of-type(odd){ text-align: left;}
@@ -204,4 +204,50 @@ form button{
 .cookie-consent div,
 #showcase-scores img:hover{
     box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.3);
+}
+
+@media screen and (max-width: 600px){
+    header{
+        flex-direction: row;;
+        padding: 0.5em 1em;
+    }
+    iframe{
+        width: 100%; height: 100%;
+    }
+
+    #home{
+        padding: 1em;
+    }
+    .company-name{
+        text-align: center;
+    }
+    
+    #offer .main{
+        max-width: 100%;
+    }
+    #offer div{
+        margin-left: initial !important;
+    }
+
+    #showcase-mp3s{
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        justify-content: left;
+    }
+    #showcase-scores img{
+        width: 100%;
+    }
+
+    /* flex mods */
+    #offer .main,
+    #offer-other span,
+    #showcase-scores
+    {
+        display: flex; flex-direction: column;
+    }
+    #recomms-other,
+    #showcase-mp3s
+    {
+        flex-direction: row;
+    }
 }

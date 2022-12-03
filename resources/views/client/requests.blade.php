@@ -9,23 +9,26 @@
         </div>
     </div>
     <style>
-    .table-row{ grid-template-columns: 3em 4fr 11em; }
+    .table-row{ grid-template-columns: 4fr 11em; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
-            <span>Typ</span>
-            <span>Tytuł<br>Wykonawca</span>
+            <span>Piosenka</span>
             <span><i class="fa-solid fa-traffic-light"></i> Status</span>
         </div>
         <hr />
         @forelse ($requests as $request)
         <a href="{{ route("request", $request->id) }}" class="table-row p-{{ $request->status_id }}">
-            <span>
-                <x-quest-type :id="$request->quest_type_id" :label="$request->quest_type->type" />
-            </span>
-            <span>
-                <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
-                <span class="song-artist">{{ $request->artist }}</span>
+            <span class="quest-main-data">
+                <x-quest-type
+                    :id="$request->quest_type_id"
+                    :label="$request->quest_type->type" 
+                    :fa-symbol="$request->quest_type->fa_symbol"
+                    />
+                <span>
+                    <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
+                    <span class="song-artist">{{ $request->artist }}</span>
+                </span>
             </span>
             <span class="quest-status">
                 <x-phase-indicator :status-id="$request->status_id" :small="true" />

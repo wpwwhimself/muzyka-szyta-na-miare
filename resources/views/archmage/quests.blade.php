@@ -9,33 +9,31 @@
         </div>
     </div>
     <style>
-    .table-row{ grid-template-columns: 3em 3fr 1fr 11em 2em; }
-    .table-row span:nth-child(5){ text-align: center; }
+    .table-row{ grid-template-columns: 3fr 1fr 2em 11em; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
-            <span>Typ</span>
-            <span>Tytuł<br>Wykonawca</span>
+            <span>Piosenka</span>
             <span>Klient</span>
-            <span><i class="fa-solid fa-traffic-light"></i> Status</span>
             <span @popper(Czy opłacony)><i class="fa-solid fa-sack-dollar"></i></span>
+            <span><i class="fa-solid fa-traffic-light"></i> Status</span>
         </div>
         <hr />
         @forelse ($quests as $quest)
         <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
-            <span>
+            <span class="quest-main-data">
                 <x-quest-type
                     :id="song_quest_type($quest->song_id)->id ?? 0"
                     :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
                     :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
                     />
-            </span>
-            <span>
-                <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
-                <span class="song-artist">{{ $quest->song->artist }}</span>
-                @if (is_priority($quest->id))
-                • <b>Priorytet</b>
-                @endif
+                <span>
+                    <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
+                    <span class="song-artist">{{ $quest->song->artist }}</span>
+                    @if (is_priority($quest->id))
+                    • <b>Priorytet</b>
+                    @endif
+                </span>
             </span>
             <span>
             @if ($quest->client?->client_name)
@@ -48,13 +46,13 @@
                 <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
             @endif
             </span>
-            <span class="quest-status">
-                <x-phase-indicator :status-id="$quest->status_id" :small="true" />
-            </span>
             <span>
             @if ($quest->paid)
-            <i class="quest-paid fa-solid fa-check"></i>
+            <i class="quest-paid fa-solid fa-circle-dollar-to-slot"></i>
             @endif
+            </span>
+            <span class="quest-status">
+                <x-phase-indicator :status-id="$quest->status_id" :small="true" />
             </span>
         </a>
         @empty

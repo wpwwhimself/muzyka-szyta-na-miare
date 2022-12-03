@@ -241,6 +241,20 @@ input[type="checkbox"]{
     top: calc(-1 * var(--height) - 10px); right: 100px;
     height: var(--height);
 }
+.sc-line .sc-note1,
+.sc-line .sc-note2{
+    filter: invert(100%) sepia(62%) saturate(2055%) hue-rotate(64deg) brightness(93%) contrast(69%);
+    position: absolute;
+}
+.sc-line .sc-note1{
+    top: -45px; right: 65px;
+    height: 30px;
+}
+.sc-line .sc-note2{
+    top: -40px; right: 35px;
+    height: 35px;
+}
+
 
 /* ALERTS */
 .alert{
@@ -268,7 +282,7 @@ input[type="checkbox"]{
 }
 .alert.success, .alert.error{
     border-color: currentColor;
-    background-color: var(--clr-wh);
+    background-color: var(--bg1);
 }
 
 /* TABLES */
@@ -495,10 +509,10 @@ footer .contact-info{
     margin-bottom: 3.5em;
 }
 
-.quests-table .table-row>span:first-child{
-    text-align: center;
+.quests-table .quest-main-data{
+    display: flex;
+    gap: 1em;
 }
-
 .song-title, .song-artist{
     text-align: center;
     margin: 0;
@@ -715,19 +729,65 @@ footer .contact-info{
 }
 
 @media screen and (max-width: 600px){
+    body{
+        padding-bottom: 0;
+    }
+    header h1{
+        margin: 0;
+    }
     section{
         margin: 1em 0;
     }
-    .grid-3{
+    nav a{
+        margin: 0.2em;
+    }
+    footer .contact-info{
+        margin: auto;
+    }
+    
+    #stats-buttons{
+        flex-direction: row;
+    }
+
+    .file-adder{
+        display: none;
+    }
+
+    .quests-table .table-row, .quests-table .table-header{
+        display: flex; flex-wrap: wrap; justify-content: space-between;
+    }
+    .quests-table .quest-status,
+    .quests-table .quest-main-data,
+    .quests-table .contact-info
+    {
+        flex-basis: 100%;
+        text-align: center;
+    }
+    .client-exp{ flex-basis: 15%; }
+    .client-main-data{ flex-basis: 85% }
+    #clients-stats-graph{
+        grid-template-columns: repeat(5, 20%);
+    }
+    #clients-stats-graph .label{
+        rotate: -60deg;
+        transform-origin: 0 0;
+        white-space: nowrap;
+    }
+
+    .flex-right{
+        gap: 0.2em;
+    }
+    .grid-2, #stats{
+        display: block;
+    }
+    .grid-3,
+    .quest-mini{
         flex-direction: column;
     }
     .login-grid-container{
         padding: 0.5em 0;
     }
-
-    .quest-mini{
-        flex-direction: column;
-    }
+    
     .quest-meta{
         align-self: flex-end;
     }

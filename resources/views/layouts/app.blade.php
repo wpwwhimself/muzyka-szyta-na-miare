@@ -11,6 +11,13 @@
     @if (isset($extraCss))
     <link rel="stylesheet" href="{{ asset("css/$extraCss.css") }}">
     @endif
+    @env("local")
+    <style>
+    :root{
+        --acc: hsl(268, 76%, 65%);
+    }
+    </style>
+    @endenv
 
     <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

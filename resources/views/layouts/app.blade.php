@@ -25,12 +25,10 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
 
-    @unless (Auth::id() == 1)
     <script>
     const USER_ID = {{ Auth::id() ?? 'null' }};
-    const IS_VETERAN = {{ intval(is_veteran(Auth::id() ?? "")) }};
+    const IS_VETERAN = {{ Auth::id() == 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
     </script>
-    @endunless
 
     <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>
 </head>

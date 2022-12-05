@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuestUpdated;
+use App\Mail\RequestQuoted;
 use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
@@ -15,6 +17,7 @@ use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class BackController extends Controller
@@ -162,6 +165,7 @@ class BackController extends Controller
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
+
     public function modRequestBack(HttpRequest $rq){
         $modifying = $rq->modifying; //insert -- 0; update -- request_id
         $request = ($modifying != 0) ? Request::find($modifying) : new Request;
@@ -242,9 +246,18 @@ class BackController extends Controller
             if($comment == "[]") $comment = null;
         }
 
+        // sending mail
+        $mailing = false;
+        switch($request->status_id){
+            case 5:
+                Mail::to($request->client->email)->send(new RequestQuoted($request));
+                $mailing = true;
+                break;
+        }
+
         $request->save();
 
-        $this->statusHistory($request->id, $request->status_id, $comment);
+        $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
     }
@@ -325,13 +338,14 @@ class BackController extends Controller
         return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
-    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null){
+    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = false){
         $row = new StatusChange;
 
         $row->re_quest_id = $re_quest_id;
         $row->new_status_id = $new_status_id;
         $row->changed_by = ($changed_by != null) ? $changed_by : Auth::id();
         $row->comment = $comment;
+        $row->mail_sent = $mailing;
         $row->date = now();
 
         $row->save();
@@ -411,8 +425,17 @@ class BackController extends Controller
         $quest->status_id = $rq->status_id;
         $quest->save();
 
-        $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment);
-        
+        // sending mail
+        $mailing = false;
+        switch($quest->status_id){
+            case 15:
+                Mail::to($quest->client->email)->send(new QuestUpdated($quest));
+                $mailing = true;
+                break;
+        }
+
+        $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, null, $mailing);
+
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Faza zmieniona");
     }
 

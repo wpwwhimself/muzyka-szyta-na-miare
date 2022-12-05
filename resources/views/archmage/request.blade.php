@@ -211,6 +211,10 @@
             action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
             />
     </div>
+    <x-button
+        label="Jako nowe" icon="1"
+        action="{{ route('request-final', ['id' => $request->id, 'status' => 1]) }}"
+        />
 </form>
 
 <script>

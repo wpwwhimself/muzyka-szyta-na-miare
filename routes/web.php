@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Genre;
 use App\Models\Quest;
 use App\Models\QuestType;
+use App\Models\Request as ModelsRequest;
 use App\Models\Song;
 use App\Models\StatusChange;
 use Illuminate\Http\Client\Response;
@@ -81,17 +82,16 @@ Route::get("/patron-mode/{id}/{level}", function($id, $level){
 })->name("patron-mode");
 
 //TODO usunąć po testach
-Route::get("/mp-a/{id}", function($id){
-    return new App\Mail\RequestQuoted(Request::findOrFail($id));
-});
+Route::get("/mp-a/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); });
+Route::get("/mp-b/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); });
 
 /**
  * for AJAX purposes
  */
-Route::get('/client_data', function(Request $request){ 
+Route::get('/client_data', function(Request $request){
     return Client::find($request->id)->toJson();
 });
-Route::get('/song_data', function(Request $request){ 
+Route::get('/song_data', function(Request $request){
     $song = Song::findOrFail($request->id);
     return json_encode(
         array_merge(
@@ -101,11 +101,11 @@ Route::get('/song_data', function(Request $request){
         )
     );
 });
-Route::post('/price_calc', function(Request $request){ 
-    return price_calc($request->labels, $request->price_schema, $request->veteran_discount); 
+Route::post('/price_calc', function(Request $request){
+    return price_calc($request->labels, $request->price_schema, $request->veteran_discount);
 });
-Route::get('/quest_type_from_id', function(Request $request){ 
-    return QuestType::where("code", $request->initial)->first()->toJson(); 
+Route::get('/quest_type_from_id', function(Request $request){
+    return QuestType::where("code", $request->initial)->first()->toJson();
 });
 Route::post('/quest_price_update', function(Request $rq){
     $quest = Quest::findOrFail($rq->id);

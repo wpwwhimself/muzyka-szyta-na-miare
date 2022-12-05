@@ -19,6 +19,7 @@ class CreateStatusChangesTable extends Migration
             $table->foreignId("new_status_id")->constrained("statuses");
             $table->foreignId("changed_by")->nullable()->references("id")->on("users");
             $table->text("comment")->nullable();
+            $table->boolean("mail_sent")->nullable();
             $table->dateTime("date");
         });
     }

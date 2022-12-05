@@ -9,7 +9,7 @@
         </div>
     </div>
     <style>
-    .table-row{ grid-template-columns: 3fr 11em 2em; }
+    .table-row{ grid-template-columns: 3fr 2em 11em; }
     .table-row span:nth-child(5){ text-align: center; }
     </style>
     <div class="quests-table">

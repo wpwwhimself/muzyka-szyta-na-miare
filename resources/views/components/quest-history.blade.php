@@ -5,6 +5,9 @@
             <span class="client-name ghost">{{ $clientName($item->changed_by) }}</span>
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
+            @if ($item->mail_sent)
+            <i class="fa-solid fa-envelope-circle-check" @popper(Mail wysłany)></i>
+            @endif
             <ul>
             @if (substr($item->comment, 0, 1) != "{")
             {{ $item->comment }}{{ $item->new_status_id != 32 ? "" : " zł" }}

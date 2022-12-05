@@ -226,6 +226,15 @@ input[type="checkbox"]{
 .danger{
     background-color: rgb(var(--danger));
 }
+.section-like{
+    border: 3px solid var(--bg2);
+    border-radius: 1em;
+    padding: 1em;
+}
+.black-back{
+    background-color: var(--bg1);
+    padding: 1em;
+}
 
 /* NOŻYCZKI */
 .sc-line{
@@ -490,6 +499,8 @@ footer .contact-info{
 
 .quests-table .quest-type{
     font-size: 2em;
+    width: 1em;
+    text-align: center;
 }
 .quests-table .table-row{
     display: grid;
@@ -512,6 +523,7 @@ footer .contact-info{
 .quests-table .quest-main-data{
     display: flex;
     gap: 1em;
+    align-items: center;
 }
 .song-title, .song-artist{
     text-align: center;
@@ -521,6 +533,9 @@ footer .contact-info{
     margin-bottom: 0.5em;
     background-color: rgba(var(--q-clr), 0.5);
     border-radius: 1em;
+}
+.song-title-artist:hover{
+    color: inherit;
 }
 .song-title{
     font-size: 1.25rem;
@@ -697,7 +712,7 @@ footer .contact-info{
     position: relative;
     width: 2em; height: 2em;
 }
-.file-tile i{ 
+.file-tile i{
     font-size: 2em;
     position: absolute; top: 0; left: 0;
     display: block; width: 100%;
@@ -744,7 +759,7 @@ footer .contact-info{
     footer .contact-info{
         margin: auto;
     }
-    
+
     #stats-buttons{
         flex-direction: row;
     }
@@ -787,7 +802,7 @@ footer .contact-info{
     .login-grid-container{
         padding: 0.5em 0;
     }
-    
+
     .quest-meta{
         align-self: flex-end;
     }

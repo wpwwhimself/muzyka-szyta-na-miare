@@ -32,7 +32,7 @@ class QuestHistory extends Component
         return "<i class='fa-solid $symbol'></i>";
     }
     public function clientName($id){
-        if($id == 1) return "WPWW";
+        if($id == 1) return "Wojciech Przybyła";
         if($id == null) return $this->quest->client_name;
         return Client::find($id)->client_name;
     }

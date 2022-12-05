@@ -22,15 +22,6 @@ section{
 section>div{
     margin-bottom: 1em;
 }
-.section-like{
-    border: 3px solid var(--bg2);
-    border-radius: 1em;
-    padding: 1em;
-}
-.black-back{
-    background-color: var(--bg1);
-    padding: 1em;
-}
 
 h1{
     font-size: 2em;

@@ -248,19 +248,24 @@ class BackController extends Controller
         }
 
         // sending mail
-        $mailing = false;
-        switch($request->status_id){
-            case 5:
-                Mail::to($request->client->email)->send(new RequestQuoted($request));
+        $flash_content = "Zapytanie gotowe";
+        $mailing = null;
+        if($request->status_id == 5){
+            if($request->email){
+                Mail::to($request->email)->send(new RequestQuoted($request));
                 $mailing = true;
-                break;
+                $flash_content .= ", mail wysłany";
+            }else{
+                $mailing = false;
+                $flash_content .= ", ale wyślij wiadomość";
+            }
         }
 
         $request->save();
 
         $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
 
-        return redirect()->route("request", ["id" => $request->id])->with("success", "Zapytanie gotowe");
+        return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
 
     public function requestFinal($id, $status){
@@ -417,29 +422,44 @@ class BackController extends Controller
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
-            $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
+            $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
+
+            // sending mail
+            $flash_content = "Cena wpisana";
             if($quest->paid){
-                Mail::to($quest->client->email)->send(new PaymentReceived($quest));
-                StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
+                if($quest->client->email){
+                    Mail::to($quest->client->email)->send(new PaymentReceived($quest));
+                    StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
+                    $flash_content .= ", mail wysłany";
+                }else{
+                    StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
+                    $flash_content .= ", ale wyślij wiadomość";
+                }
             }
-            return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Cena wpisana");
+
+            return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
         }
 
         $quest->status_id = $rq->status_id;
         $quest->save();
 
         // sending mail
-        $mailing = false;
-        switch($quest->status_id){
-            case 15:
+        $flash_content = "Faza zmieniona";
+        $mailing = null;
+        if($quest->status_id == 15){
+            if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestUpdated($quest));
                 $mailing = true;
-                break;
+                $flash_content .= ", mail wysłany";
+            }else{
+                $mailing = false;
+                $flash_content .= ", ale wyślij wiadomość";
+            }
         }
 
         $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, null, $mailing);
 
-        return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Faza zmieniona");
+        return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }
 
     public function workClock(HttpRequest $rq){
@@ -464,5 +484,14 @@ class BackController extends Controller
         }
 
         return back()->with("success", "Praca zalogowana");
+    }
+
+    public function songs(){
+        $songs = Song::all();
+
+        return view(user_role().".songs", array_merge(
+            ["title" => "Lista utworów"],
+            compact("songs")
+        ));
     }
 }

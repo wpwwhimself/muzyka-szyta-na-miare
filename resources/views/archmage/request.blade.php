@@ -15,6 +15,9 @@
         if([1,7,8,9].includes(status)){
             $("#step-2").hide();
         }
+        if([7, 8, 9].includes(status)){
+            $("#mail-prev").hide();
+        }
     });
     </script>
     <h1>Szczegóły zapytania</h1>
@@ -195,14 +198,14 @@
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
+    <x-button
+        label="Podgląd maila do oddania" icon="square-envelope" id="mail-prev"
+        action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank"
+        />
     <div id="step-1" class="flexright">
         <x-button
             label="Popraw i oddaj do wyceny" icon="5"
             action="submit"
-            />
-        <x-button
-            label="Podgląd maila do oddania" icon="square-envelope"
-            action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank"
             />
         <x-button
             label="Nie podejmę się" icon="7" :danger="true"
@@ -215,10 +218,6 @@
             action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
             />
     </div>
-    <x-button
-        label="Jako nowe" icon="1"
-        action="{{ route('request-final', ['id' => $request->id, 'status' => 1]) }}"
-        />
 </form>
 
 <script>

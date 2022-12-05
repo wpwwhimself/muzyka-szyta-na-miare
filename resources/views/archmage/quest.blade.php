@@ -253,22 +253,25 @@
                 $(`button[value=${button}]`).show();
             }
             $('button[value={{ $quest->status_id }}]').hide();
+            if([17,18,19,26].includes({{ $quest->status_id }})){
+                $("#mail-prev").hide();
+            }
         });
         </script>
         <div class="flexright">
             @csrf
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+            <x-button
+                label="Podgląd maila do oddania" icon="square-envelope" id="mail-prev"
+                action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
+                />
             @if (App::environment() != "dev")
             <x-button action="submit" name="status_id" icon="11" value="11" label="Zuruck" />
             @endif
             <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
             <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" />
             <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
-            <x-button
-                label="Podgląd maila do oddania" icon="square-envelope"
-                action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
-                />
             <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" />
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />

@@ -5,8 +5,10 @@
             <span class="client-name ghost">{{ $clientName($item->changed_by) }}</span>
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
-            @if ($item->mail_sent)
+            @if ($item->mail_sent === true)
             <i class="fa-solid fa-envelope-circle-check" @popper(Mail wysłany)></i>
+            @elseif ($item->mail_sent === false)
+            <i class="fa-solid fa-comment" @popper(Wiadomość wysłana pozamailowo)></i>
             @endif
             <ul>
             @if (substr($item->comment, 0, 1) != "{")

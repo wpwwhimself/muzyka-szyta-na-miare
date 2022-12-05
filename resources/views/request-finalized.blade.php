@@ -5,13 +5,13 @@
         Zapytanie zostało pomyślnie przeniesione do nowej fazy.
     </h2>
     <x-phase-indicator :status-id="$status" />
-    
+
     @if ($status == 9)
         <p>Wkrótce będę się kontaktował ponownie w sprawie postępów w pracach.</p>
-        @if ($is_new_client)    
+        @if ($is_new_client)
         <p>Utworzyłem dla Ciebie konto, gdzie będą umieszczone wszystkie informacje dotyczące nie tylko tego zlecenia, ale także całej współpracy ze mną. Hasło do tego konta to</p>
         <h3 style="text-align: center;">{{ DB::table("requests")->join("users", "requests.client_id", "=", "users.id")->where("requests.id", $id)->value("users.password"); }}</h3>
-        <p>Szczegóły znajdziesz w wiadomości, którą wkrótce powinieneś otrzymać.</p>
+        <p>Zachowaj je, bo będzie przydatne. Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.</p>
         @endif
     @endif
 

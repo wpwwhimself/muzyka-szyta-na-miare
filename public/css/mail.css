@@ -22,3 +22,9 @@ footer .contact-info{
 #quote-summary p{
     margin: 0;
 }
+
+#client-pass-hint{
+    margin-top: 1em;
+    text-align: center;
+    color: var(--bg2);
+}

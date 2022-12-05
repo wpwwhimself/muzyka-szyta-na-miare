@@ -231,4 +231,39 @@ if(!function_exists("from_base36")){
         return $number;
     }
 }
-?>
+
+/**
+ * Odmienianie imion klientów
+ */
+if(!function_exists("client_polonize")){
+    function client_polonize($name){
+        $imie = (strpos($name, " ") == FALSE) ? $name : substr($name, 0, strpos($name, " "));
+        $kobieta = (substr($imie, -1) == "a") ? true : false;
+
+        //odmieniacz imion
+        $imiewolacz = $imie; //failsafe
+        if(preg_match("/a$/", $imie)) $imiewolacz = substr($imie, 0, -1)."o";
+        if(!$kobieta){
+            if(preg_match("/r$/", $imie)) $imiewolacz = $imie."ze";
+                if(preg_match("/er$/", $imie)) $imiewolacz = substr($imie, 0, -2)."rze";
+            if(preg_match("/d$/", $imie)) $imiewolacz = $imie."zie";
+            if(preg_match("/t$/", $imie)) $imiewolacz = substr($imie, 0, -1)."cie";
+                if(preg_match("/st$/", $imie)) $imiewolacz = substr($imie, 0, -2)."ście";
+            if(preg_match("/[bzmnsfwp]$/", $imie)) $imiewolacz = $imie."ie";
+            if(preg_match("/(l|j|h|k|g|sz|cz|rz)$/", $imie)) $imiewolacz = $imie."u";
+            if(preg_match("/v$/", $imie)) $imiewolacz = substr($imie, 0, -1)."wie";
+            if(preg_match("/x$/", $imie)) $imiewolacz = substr($imie, 0, -1)."ksie";
+            if(preg_match("/(ei|ai)$/", $imie)) $imiewolacz = substr($imie, 0, -1)."ju";
+            if(preg_match("/(ek|eg)$/", $imie)) $imiewolacz = substr($imie, 0, -2)."ku";
+            if(preg_match("/niec$/", $imie)) $imiewolacz = substr($imie, 0, -4)."ńcu";
+            if(preg_match("/yk$/", $imie)) $imiewolacz = $imie."u";
+            if(preg_match("/ł$/", $imie)) $imiewolacz = substr($imie, 0, -1)."le";
+                if(preg_match("/eł$/", $imie)) $imiewolacz = substr($imie, 0, -3)."le";
+        }
+
+        return [
+            'imiewolacz' => $imiewolacz,
+            'kobieta' => $kobieta,
+        ];
+    }
+}

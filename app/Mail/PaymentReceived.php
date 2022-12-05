@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class QuestUpdated extends Mailable
+class PaymentReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class QuestUpdated extends Mailable
     public function build()
     {
         return $this
-            ->subject("[WPWW] Twoje zlecenie zostało zaktualizowane")
-            ->view('emails.quest-updated');
+            ->subject("[WPWW] Wpłata zarejestrowana")
+            ->view('emails.payment-received');
     }
 }

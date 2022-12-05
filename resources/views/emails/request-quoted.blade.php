@@ -3,12 +3,13 @@
 ])
 
 @section('content')
-    <h2>Szanowny Panie XYZ,</h2>
+    <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
         uprzejmie dziękuję za zainteresowanie moimi usługami.
-        Poniżej prezentuję skrót wyceny zlecenia. Pełną jej wersję można znaleźć, klikając w link poniżej.
+        Poniżej prezentuję skrót wyceny zlecenia.
     </p>
 
+    <x-quest-mini :quest="$request" />
     <div id="quote-summary" class="flex-right">
         @foreach ([
             "Cena" => $request->price . " zł",

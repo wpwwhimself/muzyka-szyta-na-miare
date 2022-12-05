@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentReceived;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
@@ -339,16 +340,14 @@ class BackController extends Controller
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = false){
-        $row = new StatusChange;
-
-        $row->re_quest_id = $re_quest_id;
-        $row->new_status_id = $new_status_id;
-        $row->changed_by = ($changed_by != null) ? $changed_by : Auth::id();
-        $row->comment = $comment;
-        $row->mail_sent = $mailing;
-        $row->date = now();
-
-        $row->save();
+        StatusChange::insert([
+            "re_quest_id" => $re_quest_id,
+            "new_status_id" => $new_status_id,
+            "changed_by" => ($changed_by != null) ? $changed_by : Auth::id(),
+            "comment" => $comment,
+            "mail_sent" => $mailing,
+            "date" => now(),
+        ]);
     }
     public function questReject(HttpRequest $rq){
         //adding comment
@@ -419,6 +418,10 @@ class BackController extends Controller
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
+            if($quest->paid){
+                Mail::to($quest->client->email)->send(new PaymentReceived($quest));
+                StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
+            }
             return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", "Cena wpisana");
         }
 

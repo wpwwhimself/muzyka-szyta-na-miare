@@ -19,11 +19,11 @@
     </script>
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
-    
+
     @if ($request->quest_id)
     <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href='{{ route("quest", ["id" => $request->quest_id]) }}'>Przejdź do zlecenia</x-a></h2>
     @endif
-    
+
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
@@ -199,6 +199,10 @@
         <x-button
             label="Popraw i oddaj do wyceny" icon="5"
             action="submit"
+            />
+        <x-button
+            label="Podgląd maila do oddania" icon="square-envelope"
+            action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank"
             />
         <x-button
             label="Nie podejmę się" icon="7" :danger="true"

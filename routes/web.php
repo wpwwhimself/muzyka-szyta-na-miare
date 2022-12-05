@@ -82,8 +82,9 @@ Route::get("/patron-mode/{id}/{level}", function($id, $level){
 })->name("patron-mode");
 
 //TODO usunąć po testach
-Route::get("/mp-a/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); });
-Route::get("/mp-b/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); });
+Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); })->name("mp-rq");
+Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
+Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
 
 /**
  * for AJAX purposes

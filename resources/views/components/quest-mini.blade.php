@@ -2,7 +2,7 @@
 
 <div class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
     <a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="song-title-artist">
-        <p class="song-artist"><i class="fa-solid fa-traffic-light"></i> {{ $quest->status->status_name }}</p>
+        <p class="song-artist"><i class="fa-solid {{ $quest->status->status_symbol }}"></i> {{ $quest->status->status_name }}</p>
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
     </a>
@@ -46,7 +46,7 @@
             <i class="fa-solid fa-hashtag"></i>
             @endunless
 
-            
+
         </div>
     </div>
 </div>

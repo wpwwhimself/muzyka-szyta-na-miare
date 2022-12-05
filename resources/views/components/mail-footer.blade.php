@@ -25,4 +25,6 @@
         </a>
     </div>
     <x-logo />
+
+    <p class="grayed-out">Wiadomość wysłana automatycznie. Odpowiedź na nią zostanie przekazana na mój adres mailowy podany wyżej.</p>
 </footer>

@@ -5,9 +5,9 @@
 @section('content')
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
-    
+
     <x-phase-indicator :status-id="$quest->status_id" />
-    
+
     @if ($quest->status_id == 12)
     <div id="stats">
         <form method="POST" action="{{ route("work-clock") }}" id="stats-buttons" class="flex-right">
@@ -265,6 +265,10 @@
             <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
             <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" />
             <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
+            <x-button
+                label="Podgląd maila do oddania" icon="square-envelope"
+                action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
+                />
             <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" />
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />

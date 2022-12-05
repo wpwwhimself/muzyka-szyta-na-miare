@@ -22,3 +22,12 @@ function dangerConfirm(){
         event.preventDefault();
     }
 }
+
+/**
+ * Wyłacznik tutoriali
+ */
+$(document).ready(()=>{
+    if(IS_VETERAN){
+        $(".tutorial").hide();
+    }
+});

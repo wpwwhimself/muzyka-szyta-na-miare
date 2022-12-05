@@ -22,6 +22,10 @@
         @endforeach
     </div>
 
+    @if ($request->hard_deadline)
+    <p>Termin wykonania został dopasowany do moich możliwości przerobowych. Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiednią zmianę daty w wycenie, a przekalkuluję jeszcze raz.</p>
+    @endif
+
     <p>Proszę o potwierdzenie warunków przyciskiem poniżej. Po otrzymaniu pozytywnej odpowiedzi przystąpię do realizacji projektu.</p>
 
     <x-button

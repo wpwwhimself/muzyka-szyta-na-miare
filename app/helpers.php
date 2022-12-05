@@ -41,7 +41,9 @@ if(!function_exists("user_role")){
 
 if(!function_exists("song_quest_type")){
     function song_quest_type($song_id){
-        return QuestType::where("code", substr($song_id, 0, 1))->first();
+        $type_letter = substr($song_id, 0, 1);
+        if($type_letter == "A") return "nie ustalono (archiwalne)";
+        return QuestType::where("code", $type_letter)->first();
     }
 }
 

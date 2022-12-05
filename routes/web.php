@@ -80,6 +80,11 @@ Route::get("/patron-mode/{id}/{level}", function($id, $level){
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
 })->name("patron-mode");
 
+//TODO usunąć po testach
+Route::get("/mp-a/{id}", function($id){
+    return new App\Mail\RequestQuoted(Request::findOrFail($id));
+});
+
 /**
  * for AJAX purposes
  */
@@ -87,10 +92,10 @@ Route::get('/client_data', function(Request $request){
     return Client::find($request->id)->toJson();
 });
 Route::get('/song_data', function(Request $request){ 
-    $song = Song::find($request->id);
+    $song = Song::findOrFail($request->id);
     return json_encode(
         array_merge(
-            song_quest_type($song->id)->toArray(),
+            ["type" => song_quest_type($song->id)],
             ["genre" => Genre::find($song->genre_id)->name],
             $song->toArray()
         )

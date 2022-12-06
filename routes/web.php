@@ -58,9 +58,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/clients', "clients")->middleware("auth")->name("clients");
     Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
 
-    Route::get('/ads', "ads")->middleware("auth")->name("ads");
-    Route::get('/messages', "messages")->middleware("auth")->name("messages");
-
+    Route::get('/showcases', "showcases")->middleware("auth")->name("showcases");
+    Route::get("/songs", "songs")->middleware("auth")->name("songs");
 });
 Route::controller(FileController::class)->group(function(){
     Route::post('/safe-u', 'fileUpload')->middleware("auth")->name('upload');
@@ -81,7 +80,7 @@ Route::get("/patron-mode/{id}/{level}", function($id, $level){
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
 })->name("patron-mode");
 
-//TODO usunąć po testach
+
 Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); })->name("mp-rq");
 Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");

@@ -20,9 +20,6 @@
     h2{
         color: #60cc89
     }
-    img{
-        height: 4em;
-    }
     table{
         margin: 0 auto;
     }

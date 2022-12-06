@@ -1,9 +1,9 @@
 <header>
-    <x-logo />
-    <div>
-        <div class="flex-right">
-            <h1>{{  $title == null ? config("app.name") : $title }}</h1>
-            <h2>{{ $title != null ? config("app.name") : "" }}</h2>
-        </div>
-    </div>
+    <table>
+        <tr>
+            <td><x-logo /></td>
+            <td><h1>{{ $title }}</h1></td>
+            <td><x-logo /></td>
+        </tr>
+    </table>
 </header>

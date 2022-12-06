@@ -9,32 +9,48 @@
         Poniżej prezentuję skrót wyceny zlecenia.
     </p>
 
-    <x-quest-mini :quest="$request" />
-    <div id="quote-summary" class="flex-right">
-        @foreach ([
-            "Cena" => $request->price . " zł",
-            "Termin oddania pierwszej wersji" => gmdate("d.m.Y", strtotime($request->deadline)),
-        ] as $key => $val)
-        <div class="section-like">
-            <p>{{ $key }}</p>
-            <h2>{{ $val }}</h2>
-        </div>
-        @endforeach
-    </div>
+    <x-mail-quest-mini :quest="$request" />
+
+    <table>
+        <tr>
+            @foreach ([
+                "Cena" => $request->price . " zł",
+                "Termin oddania pierwszej wersji" => gmdate("d.m.Y", strtotime($request->deadline)),
+            ] as $key => $val)
+            <td class="framed-cell">
+                <p>{{ $key }}</p>
+                <h2>{{ $val }}</h2>
+            </td>
+            @endforeach
+        </tr>
+    </table>
 
     @if ($request->hard_deadline)
-    <p>Termin wykonania został dopasowany do moich możliwości przerobowych. Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiednią zmianę daty w wycenie, a przekalkuluję jeszcze raz.</p>
+    <p>
+        Termin wykonania został dopasowany do moich możliwości przerobowych.
+        Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiednią zmianę daty w wycenie, a przekalkuluję wszystko jeszcze raz.
+        Należy się przy tym jednak liczyć z możliwymi większymi kosztami.
+    </p>
     @endif
 
-    <p>Proszę o potwierdzenie warunków przyciskiem poniżej. Po otrzymaniu pozytywnej odpowiedzi przystąpię do realizacji projektu.</p>
+    <p>
+        Proszę o potwierdzenie warunków przyciskiem poniżej.
+    </p>
 
-    <x-button
-            label="Potwierdź warunki" icon="9"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
-            />
-    <x-button
-        label="Szczegóły" icon="circle-info"
-        action="{{ route('request', ['id' => $request->id]) }}"
-        />
+    <h3>
+        <a
+            class="button"
+            href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
+            >
+            Potwierdź warunki
+        </a>
+        •
+        <a
+            class="button"
+            href="{{ route('request', ['id' => $request->id]) }}"
+            >
+            Szczegóły zlecenia
+        </a>
+    </h3>
 
 @endsection

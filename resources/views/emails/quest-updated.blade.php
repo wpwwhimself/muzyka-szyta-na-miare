@@ -8,15 +8,18 @@
         wprowadziłem zmiany w {{ $pl["kobieta"] ? "Pani" : "Pana" }} zleceniu:
     </p>
 
-    <x-quest-mini :quest="$quest" />
+    <x-mail-quest-mini :quest="$quest" />
+
+    <h3>
+        <a
+            class="button"
+            href="{{ route('quest', ['id' => $quest->id]) }}"
+            >
+            Szczegóły zlecenia
+        </a>
+    </h3>
 
     <p>
-        Aby przejrzeć szczegóły zlecenia, proszę o kliknięcie linku poniżej.
         Uprzejmie proszę o wyrażenie opinii lub ewentualnych uwag celem wprowadzenia poprawek.
     </p>
-
-    <x-button
-        label="Szczegóły" icon="circle-info"
-        action="{{ route('quest', ['id' => $quest->id]) }}"
-        />
 @endsection

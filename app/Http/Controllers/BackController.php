@@ -271,6 +271,9 @@ class BackController extends Controller
     public function requestFinal($id, $status){
         $request = Request::findOrFail($id);
 
+        if(in_array($request->status_id == $status, [7,8,9]))
+            return redirect()->route("dashboard")->with("error", "Zapytanie już zamknięte");
+
         $request->status_id = $status;
 
         $is_new_client = 0;

@@ -122,7 +122,7 @@ if(!function_exists("price_calc")){
         // price override
         $override = false;
         if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
-            $price = floatval(str_replace(",",".",$matches[0][0]));
+            $price = round(floatval(str_replace(",",".",$matches[0][0])), 2);
             $override = true;
         }
 

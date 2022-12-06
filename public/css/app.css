@@ -604,6 +604,7 @@ footer .contact-info{
 
 #quest-box{
     justify-content: center;
+    align-items: flex-start;
 }
 
 #quest-history .history-position{

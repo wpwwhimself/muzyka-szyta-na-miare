@@ -150,7 +150,13 @@
             });
             </script>
             <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
-            <label for="payments">Opłacono: {{ $quest->payments->sum("comment") }} zł</label>
+            <label for="payments">
+                Opłacono: {{ $quest->payments->sum("comment") }} zł
+                @unless ($quest->paid)
+                •
+                Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
+                @endunless
+            </label>
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
             @if ($quest->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />

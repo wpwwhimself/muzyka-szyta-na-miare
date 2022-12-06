@@ -1,3 +1,6 @@
+*{
+    font-size: 16px;
+}
 header{
     padding: 0.5em 4em;
     justify-content: space-between;
@@ -198,6 +201,9 @@ form button{
 }
 
 @media screen and (max-width: 600px){
+    *{
+        font-size: 12px;
+    }
     header{
         flex-direction: row;;
         padding: 0.5em 1em;
@@ -212,7 +218,7 @@ form button{
     .company-name{
         text-align: center;
     }
-    
+
     #offer .main{
         max-width: 100%;
     }
@@ -240,5 +246,14 @@ form button{
     #showcase-mp3s
     {
         flex-direction: row;
+    }
+
+    .cookie-consent div{
+        width: 90vw;
+        flex-direction: column;
+        text-align: center;
+    }
+    .cookie-consent button{
+        margin: 0 auto;
     }
 }

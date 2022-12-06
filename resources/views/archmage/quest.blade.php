@@ -71,13 +71,23 @@
 
     <div id="quest-box" class="flex-right">
         <section class="input-group">
-            <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>
-            <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
+            <h2>
+                <i class="fa-solid fa-compact-disc"></i>
+                Utwór
+                <a href="{{ route('songs') }}#song{{ $quest->song_id }}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i></a>
+            </h2>
+            <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />
-            <x-input type="text" name="genre_id" label="Gatunek" value="{{ $quest->song->genre->name }}" :disabled="true" :small="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" :disabled="true" />
+
+            <h2>
+                <i class="fa-solid fa-user"></i>
+                Klient
+                <a href="{{ route('clients') }}#client{{ $quest->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+            </h2>
+            <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>

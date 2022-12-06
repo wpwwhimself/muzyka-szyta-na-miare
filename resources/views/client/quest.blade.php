@@ -3,13 +3,13 @@
 @section('content')
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
-    
+
     <x-phase-indicator :status-id="$quest->status_id" />
-    
+
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>
-            <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
+            <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />

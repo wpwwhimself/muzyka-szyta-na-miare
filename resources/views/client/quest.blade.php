@@ -57,7 +57,13 @@
             });
             </script>
             <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
-            <label for="payments">Opłacono: {{ $quest->payments->sum("comment") }} zł</label>
+            <label for="payments">
+                Opłacono: {{ $quest->payments->sum("comment") }} zł
+                @unless ($quest->paid)
+                •
+                Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
+                @endunless
+            </label>
             @unless ($quest->paid)
             <div class="tutorial">
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>

@@ -37,9 +37,8 @@
             id="{{ $name }}"
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
-            {{ $disabled ? "disabled" : "" }}
             {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
-            >{{ $value }}</textarea>
+            >{{ html_entity_decode($value) }}</textarea>
     @else
         <input
             type="{{ $type }}"
@@ -48,7 +47,7 @@
             @if ($type == "checkbox" && $value)
             checked
             @else
-            {{ $attributes->merge(["value" => $value]) }}
+            {{ $attributes->merge(["value" => html_entity_decode($value)]) }}
             @endif
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}

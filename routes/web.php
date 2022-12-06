@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Mail\QuestUpdated;
 use App\Models\Client;
 use App\Models\Genre;
 use App\Models\Quest;
@@ -15,6 +16,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 /*
@@ -115,7 +117,22 @@ Route::post('/quest_price_update', function(Request $rq){
         "price" => price_calc($rq->code, $quest->client_id)[0],
         "paid" => ($quest->payments->sum("comment") >= price_calc($rq->code, $quest->client_id)[0])
     ]);
-    app("App\Http\Controllers\BackController")->statusHistory($rq->id, 31, json_encode(["price" => $price_before . " → " . $quest->price]));
+
+    // sending mail
+    $mailing = null;
+    if($quest->client->email){
+        Mail::to($quest->client->email)->send(new QuestUpdated($quest));
+        $mailing = true;
+    }else{
+        $mailing = false;
+    }
+    app("App\Http\Controllers\BackController")->statusHistory(
+        $rq->id,
+        31,
+        json_encode(["price" => $price_before . " → " . $quest->price]),
+        null,
+        $mailing
+    );
 });
 Route::post('/budget_update', function(Request $rq){
     $client = Client::findOrFail($rq->client_id);

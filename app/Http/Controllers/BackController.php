@@ -247,6 +247,8 @@ class BackController extends Controller
             if($comment == "[]") $comment = null;
         }
 
+        $request->save();
+
         // sending mail
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
@@ -260,8 +262,6 @@ class BackController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }
-
-        $request->save();
 
         $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
 

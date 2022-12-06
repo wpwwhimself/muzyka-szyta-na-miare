@@ -37,6 +37,7 @@
             id="{{ $name }}"
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
+            {{ $disabled ? "disabled" : "" }}
             {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
             >{{ html_entity_decode($value) }}</textarea>
     @else

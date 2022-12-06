@@ -6,6 +6,12 @@
     <a href="#prices"><li>Cennik</li></a>
     <a href="#about"><li>O mnie</li></a>
     <a href="#contact"><li>Kontakt</li></a>
+    @guest
+    <a href="{{ route("login") }}" class="auth-link"><li><i class="fa-solid fa-circle-user"></i> Zaloguj się</li></a>
+    @endguest
+    @auth
+    <a href="{{ route("dashboard") }}" class="auth-link"><li><i class="fa-solid fa-user"></i> Moje konto</li></a>
+    @endauth
 @else
 
     @auth
@@ -20,10 +26,10 @@
     @endif
     <a href="{{ route("logout") }}" class="auth-link"><li><i class="fa-solid fa-power-off"></i> Wyloguj się</li></a>
     @endauth
-@endif
     @guest
     <a href="{{ route("login") }}" class="auth-link"><li><i class="fa-solid fa-circle-user"></i> Zaloguj się</li></a>
     @endguest
+@endif
     <script>
     $('a[href="{{ URL::current() }}"]').addClass("active");
     </script>

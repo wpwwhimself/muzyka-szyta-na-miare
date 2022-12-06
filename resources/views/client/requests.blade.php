@@ -39,6 +39,7 @@
         @endforelse
         </tbody>
     </div>
+    {{ $requests->links() }}
 </section>
 
 @endsection

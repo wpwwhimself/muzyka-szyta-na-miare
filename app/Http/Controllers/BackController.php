@@ -103,7 +103,7 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
         }
-        $requests = $requests->paginate(25);
+        if($requests->paginate(25)->isNotEmpty()) $requests = $requests->paginate(25);
 
         return view(user_role().".requests", [
             "title" => "Lista zapytań",
@@ -369,7 +369,7 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $quests = $quests->where("client_id", $client->id);
         }
-        $quests = $quests->paginate(25);
+        if($quests->paginate(25)->isNotEmpty()) $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [
             "title" => "Lista zleceń",

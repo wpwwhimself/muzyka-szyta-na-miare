@@ -281,15 +281,15 @@
             <div>
                 <h2>Szczegóły zlecenia</h2>
                 <x-select name="quest_type" label="Rodzaj zlecenia" :options="$quest_types" />
-                <x-input type="text" name="m_title" label="Tytuł utworu" />
-                <x-input type="text" name="m_artist" label="Wykonawca" />
+                <x-input type="text" name="title" label="Tytuł utworu" />
+                <x-input type="text" name="artist" label="Wykonawca" />
                 <x-input type="text" name="link" label="Linki do nagrań (oddzielone przecinkiem)" :small="true" />
                 <x-input type="TEXT" name="wishes" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
                 <x-input type="date" name="hard_deadline" label="Na kiedy jest potrzebne? (opcjonalnie)" />
             </div>
             <div>
                 <h2>Twoje dane</h2>
-                <x-input type="text" name="m_name" label="Imię i nazwisko" placeholder="Jan Kowalski" />
+                <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" />
                 <label>Jak mogę do Ciebie dotrzeć?<br><i>(wypełnij co najmniej jedno, choć zachęcam do podania maila)</i></label>
                 <x-input type="email" name="email" label="Email" />
                 <x-input type="tel" name="phone" label="Numer telefonu" />

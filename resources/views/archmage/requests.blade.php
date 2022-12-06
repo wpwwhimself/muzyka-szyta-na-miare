@@ -50,6 +50,7 @@
         <p class="grayed-out">brak zapytań</p>
         @endforelse
     </div>
+    {{ $requests->links() }}
 </section>
 
 @endsection

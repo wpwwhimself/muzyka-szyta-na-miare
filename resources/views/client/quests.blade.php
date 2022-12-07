@@ -1,6 +1,17 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+<div class="tutorial">
+    <i class="fa-solid fa-circle-question"></i>
+    <p>
+        To jest lista wykonywanych dla Ciebie zleceń.
+        Zleceniem jest każda usługa, jaką dla Ciebie wykonuję – podkład muzyczny, nuty itp.
+        Nowe zlecenia powstają w wyniku akceptacji warunków przedstawionych w zapytaniu.
+    </p>
+    <p>
+        Na liście poniżej znajdziesz nie tylko aktualne zlecenia, ale też wcześniejsze.
+    </p>
+</div>
 <section id="quests-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-boxes-stacked"></i> Lista zleceń</h1>

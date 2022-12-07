@@ -1,6 +1,19 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+<div class="tutorial">
+    <i class="fa-solid fa-circle-question"></i>
+    <p>
+        To jest lista złożonych przez Ciebie zapytań.
+        Każde zlecenie zaczyna się od złożenia zapytania, w którym trzeba zawrzeć, co będzie przedmiotem prac (podkład muzyczny, nuty itp.).
+        Następnie ja przygotowuję wycenę, tj. wyznaczam cenę zlecenia oraz termin jego wykonania.
+        Zaakceptowana wycena automatycznie sprawia, że zapytanie staje się nowym zleceniem.
+    </p>
+    <p>
+        Zapytania mają na celu zebrać potrzebne informacje przed rozpoczęciem prac nad faktycznym zleceniem.
+        Na liście poniżej znajdziesz nie tylko aktualne zapytania, ale też wcześniejsze.
+    </p>
+</div>
 <section id="requests-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-envelope-open-text"></i> Lista zapytań</h1>
@@ -22,7 +35,7 @@
             <span class="quest-main-data">
                 <x-quest-type
                     :id="$request->quest_type_id"
-                    :label="$request->quest_type->type" 
+                    :label="$request->quest_type->type"
                     :fa-symbol="$request->quest_type->fa_symbol"
                     />
                 <span>

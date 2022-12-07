@@ -10,14 +10,21 @@ use Illuminate\Support\Facades\File;
 
 class FileController extends Controller
 {
-    public function fileUpload(Request $rq){
-        foreach($rq->files as $file){
-            $file = $rq->file("files");
-            $filename = $file->getClientOriginalName();
-            $file->storeAs("safe/$rq->quest_id", $filename);
+    // https://gist.github.com/zahidhasanemon/afbbf65918703f0e897db518dd77f2ce, modified
+    public function fileUpload(Request $rq, $quest_id){
+        foreach ($rq->file('file') as $key => $value) {
+            $filename = $value->getClientOriginalName();
+            $name[] = $filename;
+            $value->storeAs("safe/$quest_id", $filename);
         }
 
-        return back()->with("success", "Pliki wgrane");
+        return response()->json([
+            'name' => $name,
+        ]);
+    }
+
+    public function fileStore(Request $rq){
+        return back()->with('success', 'Pliki wgrane');
     }
 
     public function show($id, $filename)

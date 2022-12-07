@@ -64,6 +64,7 @@
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" />
                 <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" :required="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia" />
+                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
 
                 <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
                 <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" />
@@ -110,7 +111,6 @@
                     $("#song_id").change(function (e) { loadSong() });
                 });
                 </script>
-                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" />
             </section>
 
             <section class="input-group">

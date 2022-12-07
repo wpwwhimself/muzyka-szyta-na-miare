@@ -15,7 +15,7 @@
         if([1,7,8,9].includes(status)){
             $("#step-2").hide();
         }
-        if([7, 8, 9].includes(status)){
+        if(![5].includes(status)){
             $("#mail-prev").hide();
         }
     });
@@ -92,6 +92,7 @@
             <x-link-interpreter :raw="$request->link" />
             <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
+            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
 
             <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
             <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" />
@@ -99,7 +100,6 @@
                 <div class="positions"></div>
             </div>
             <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" />
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" :disabled="true" />
             <script>
             function loadSong(){
                 const song_id = $("#song_id").val();
@@ -199,7 +199,7 @@
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <x-button
-        label="Podgląd maila do oddania" icon="square-envelope" id="mail-prev"
+        label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev"
         action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank"
         />
     <div id="step-1" class="flexright">

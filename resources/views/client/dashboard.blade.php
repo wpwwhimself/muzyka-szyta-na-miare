@@ -87,6 +87,22 @@
         </section>
     </div>
 
+    <section id="dashboard-quests">
+        <div class="section-header">
+            <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
+            <div>
+                <x-a href="{{ route('quests') }}">Wszystkie</x-a>
+            </div>
+        </div>
+        <div class="dashboard-mini-wrapper">
+        @forelse ($quests as $quest)
+            <x-quest-mini :quest="$quest" />
+        @empty
+            <p class="grayed-out">brak aktywnych zleceń</p>
+        @endforelse
+        </div>
+    </section>
+
     <section id="dashboard-requests">
         <div class="section-header">
             <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
@@ -100,22 +116,6 @@
             <x-quest-mini :quest="$request" />
         @empty
             <p class="grayed-out">brak aktywnych zapytań</p>
-        @endforelse
-        </div>
-    </section>
-
-    <section id="dashboard-quests">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
-            <div>
-                <x-a href="{{ route('quests') }}">Wszystkie</x-a>
-            </div>
-        </div>
-        <div class="dashboard-mini-wrapper">
-        @forelse ($quests as $quest)
-            <x-quest-mini :quest="$quest" />
-        @empty
-            <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse
         </div>
     </section>

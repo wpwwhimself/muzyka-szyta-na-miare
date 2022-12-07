@@ -88,6 +88,7 @@
                 <a href="{{ route('clients') }}#client{{ $quest->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
+            <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
@@ -166,17 +167,65 @@
         <section class="input-group sc-line">
             <x-sc-scissors />
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
-            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data" class="file-adder">
+            
+            {{-- dropzone css --}}
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
+
+            <form class="" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <div class="position-relative form-group">
+                            <div class="needsclick dropzone" id="document-dropzone"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+            <script>
+                let uploadedDocumentMap = {};
+                Dropzone.autoDiscover = false;
+                let myDropzone = new Dropzone("div#document-dropzone",{
+                    url: '{{ route('upload', ["id" => $quest->id]) }}',
+                    autoProcessQueue: true,
+                    uploadMultiple: true,
+                    addRemoveLinks: true,
+                    parallelUploads: 10,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    successmultiple: function(data, response) {
+                        $.each(response['name'], function (key, val) {
+                            $('form').append('<input type="hidden" name="images[]" value="' + val + '">');
+                            uploadedDocumentMap[data[key].name] = val;
+                        });
+                    },
+                    removedfile: function (file) {
+                        file.previewElement.remove()
+                        let name = '';
+                        if (typeof file.file_name !== 'undefined') {
+                            name = file.file_name;
+                        } else {
+                            name = uploadedDocumentMap[file.name];
+                        }
+                        $('form').find('input[name="images[]"][value="' + name + '"]').remove()
+                    }
+                });
+            </script>
+            {{-- dropzone end --}}
+
+            {{-- <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data" class="file-adder">
                 @csrf
                 <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
                 <input type="file" name="files" label="Dodaj pliki" multiple />
                 <x-button action="submit" label="Dodaj" icon="circle-plus" />
-            </form>
+            </form> --}}
 
             @forelse ($files as $ver_super => $ver_mains)
                 @foreach ($ver_mains as $ver_main => $ver_subs)
                 <div class="file-container-a">
-                    <h3>{{ $ver_super }}-{{ $ver_main }}</h3>
+                    <h3>{{ $ver_super }}={{ $ver_main }}</h3>
                     @foreach ($ver_subs as $ver_sub => $ver_bots)
                     <div class="file-container-b">
                         <h4>
@@ -269,8 +318,11 @@
                 $(`button[value=${button}]`).show();
             }
             $('button[value={{ $quest->status_id }}]').hide();
-            if([17,18,19,26].includes({{ $quest->status_id }})){
-                $("#mail-prev").hide();
+            if(![15].includes({{ $quest->status_id }})){
+                $("#mail-mod-prev").hide();
+            }
+            if({{ intval($quest->paid) }} == 0){
+                $("#mail-paid-prev").hide();
             }
         });
         </script>
@@ -279,7 +331,7 @@
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             <x-button
-                label="Podgląd maila do oddania" icon="square-envelope" id="mail-prev"
+                label="Podgląd maila o zmianie" icon="comment-dots" id="mail-mod-prev"
                 action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
                 />
             @if (App::environment() != "dev")
@@ -295,6 +347,10 @@
             @if (!$quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
             @endif
+            <x-button
+                label="Podgląd maila o płatności" icon="comment-dollar" id="mail-paid-prev"
+                action="{{ route('mp-q-p', ['id' => $quest->id]) }}" target="_blank"
+                />
         </div>
     </form>
 </div>

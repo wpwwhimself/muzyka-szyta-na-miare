@@ -63,8 +63,10 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/showcases', "showcases")->middleware("auth")->name("showcases");
     Route::get("/songs", "songs")->middleware("auth")->name("songs");
 });
+
 Route::controller(FileController::class)->group(function(){
-    Route::post('/safe-u', 'fileUpload')->middleware("auth")->name('upload');
+    Route::post('/safe-u/{id}', 'fileUpload')->middleware("auth")->name('upload');
+    Route::post('/safe-s', 'fileStore')->middleware("auth")->name('store');
     Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
     Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
     Route::post('/safe/ver-desc-mod', "verDescMod")->middleware("auth")->name("ver-desc-mod");

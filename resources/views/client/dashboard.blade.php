@@ -16,9 +16,9 @@
                     <span>Status klienta</span>
                     <span>
                         @if (is_veteran(Auth::id()))
-                        <i class="fa-solid fa-user-shield" @popper(stały klient)></i> stały klient
+                        <i class="fa-solid fa-user-shield"></i> stały klient
                         @else
-                        <i class="fa-solid fa-user" @popper(zwykły klient)></i> klient zwykły<br>
+                        <i class="fa-solid fa-user"></i> klient początkujący<br>
                         <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
                         @endif
                     </span>
@@ -34,14 +34,14 @@
                             Auth::user()->client->special_prices ? "spersonalizowany cennik"
                             : (
                                 is_veteran(Auth::id()) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
-                                + 
+                                +
                                 is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
                             )*100 . "%"
                         }}
                     </span>
                 </div>
             </div>
-            
+
             @if ($quests_total && !is_patron(Auth::id()) && Auth::user()->client->helped_showcasing != 1)
             <br>
             <div class="section-header showcase-highlight">
@@ -65,7 +65,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
             </div>
-            
+
             <h2>Do zapłacenia za zlecenia</h2>
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
@@ -86,6 +86,11 @@
             <h3>{{ Auth::user()->client->budget }} zł</h3>
         </section>
     </div>
+
+    <p class="tutorial">
+        <i class="fa-solid fa-circle-question"></i>
+        Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia.
+    </p>
 
     <section id="dashboard-quests">
         <div class="section-header">
@@ -108,7 +113,6 @@
             <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
             <div>
                 <x-a href="{{ route('quests') }}">Wszystkie</x-a>
-                <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
@@ -119,4 +123,11 @@
         @endforelse
         </div>
     </section>
+
+    <div class="flex-right">
+        <x-button
+            action="{{ route('add-request') }}"
+            label="Dodaj nowe zapytanie" icon="plus"
+            />
+    </div>
 @endsection

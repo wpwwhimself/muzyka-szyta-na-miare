@@ -74,7 +74,7 @@ if(!function_exists("next_song_id")){
 if(!function_exists("generate_password")){
     function generate_password(){
         $existing_passwords = User::pluck("password")->toArray();
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         do{
             //sprawdź unikatowość
             $flag = false;

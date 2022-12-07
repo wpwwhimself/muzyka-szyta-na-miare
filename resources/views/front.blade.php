@@ -18,7 +18,7 @@
                 <h2>Podkłady i aranże dopasowane do Twoich potrzeb</h2>
             </div>
         </div>
-        
+
         <ul class="section-like">
             <li>Nie możesz znaleźć dobrego podkładu muzycznego do swojej ulubionej piosenki?</li>
             <li>Szukasz nut lub partytury dla siebie i swojego zespołu?</li>
@@ -230,23 +230,23 @@
             <ul id="faq">
                 <li>Jak tworzone są utwory?</li>
                 <li>Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
-    
+
                 <li>Jakie materiały muszę przygotować?</li>
                 <li>Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
-    
+
                 <li>Czy mój podkład będzie miał linię melodyczną?</li>
                 <li><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
-    
+
                 <li>Jak szybko można się spodziewać gotowego podkładu?</li>
                 <li>
                     <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
                     Zwykle projekty jestem w stanie wykonać <b>w 1-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
                     <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
                 </li>
-    
+
                 <li>Czy możliwe są poprawki w przygotowywanych aranżach?</li>
                 <li>Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
-    
+
                 <li>Co z zapłatą za utwór?</li>
                 <li>Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
             </ul>
@@ -293,7 +293,7 @@
                 <label>Jak mogę do Ciebie dotrzeć?<br><i>(wypełnij co najmniej jedno, choć zachęcam do podania maila)</i></label>
                 <x-input type="email" name="email" label="Email" />
                 <x-input type="tel" name="phone" label="Numer telefonu" />
-                <x-input type="text" name="other_medium" label="Inna forma kontaktu" />
+                <x-input type="text" name="other_medium" label="Inna forma kontaktu (np. Whatsapp)" />
                 <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
                 <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
             </div>

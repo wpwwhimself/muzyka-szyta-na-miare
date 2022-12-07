@@ -17,7 +17,7 @@
         @break
     @case(9)
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
-        @break        
+        @break
 @endswitch
 </p>
 
@@ -124,7 +124,7 @@
             action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
             />
         <x-button
-            label="Popraw i zakwestionuj" icon="6"
+            label="Poproś o ponowną wycenę" icon="6"
             action="submit"
             />
         <x-button

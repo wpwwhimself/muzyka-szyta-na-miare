@@ -9,9 +9,15 @@
     @if ($status == 9)
         <p>Wkrótce będę się kontaktował ponownie w sprawie postępów w pracach.</p>
         @if ($is_new_client)
-        <p>Utworzyłem dla Ciebie konto, gdzie będą umieszczone wszystkie informacje dotyczące nie tylko tego zlecenia, ale także całej współpracy ze mną. Hasło do tego konta to</p>
+        <p>
+            Utworzyłem dla Ciebie konto, gdzie będą umieszczone wszystkie informacje dotyczące nie tylko tego zlecenia, ale także całej współpracy ze mną.
+            Aby się zalogować, kliknij poniższy przycisk. Do logowania potrzebne jest jedynie następujące hasło:
+        </p>
         <h3 style="text-align: center;">{{ DB::table("requests")->join("users", "requests.client_id", "=", "users.id")->where("requests.id", $id)->value("users.password"); }}</h3>
         <p>Zachowaj je, bo będzie przydatne. Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.</p>
+        <x-button
+            action="{{ route("auth") }}" label="Zaloguj się" icon="user-circle"
+            />
         @endif
     @endif
 

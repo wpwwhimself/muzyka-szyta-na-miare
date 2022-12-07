@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="tutorial">
-    <i class="fa-solid fa-circle-question"></i>
     <p>
+        <i class="fa-solid fa-circle-question"></i>
         To jest lista wykonywanych dla Ciebie zleceń.
         Zleceniem jest każda usługa, jaką dla Ciebie wykonuję – podkład muzyczny, nuty itp.
         Nowe zlecenia powstają w wyniku akceptacji warunków przedstawionych w zapytaniu.

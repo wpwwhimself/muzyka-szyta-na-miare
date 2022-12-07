@@ -52,7 +52,7 @@
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             @unless ($request->price)
-            <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> Wycena w toku</p>
+            <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
             @endunless
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>

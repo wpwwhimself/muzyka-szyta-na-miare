@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="tutorial">
-    <i class="fa-solid fa-circle-question"></i>
     <p>
+        <i class="fa-solid fa-circle-question"></i>
         To jest lista złożonych przez Ciebie zapytań.
         Każde zlecenie zaczyna się od złożenia zapytania, w którym trzeba zawrzeć, co będzie przedmiotem prac (podkład muzyczny, nuty itp.).
         Następnie ja przygotowuję wycenę, tj. wyznaczam cenę zlecenia oraz termin jego wykonania.

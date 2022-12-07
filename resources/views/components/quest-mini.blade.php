@@ -11,9 +11,9 @@
             @if (Auth::id() == 1)
                 @if ($quest->client_id)
                     @if (is_veteran($quest->client_id))
-                    <i class="fa-solid fa-user-shield"></i>
+                    <i class="fa-solid fa-user-shield" @popper(Klient)></i>
                     @else
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-user" @popper(Klient)></i>
                     @endif
                 <p class="client-name">
                     <a href="{{ route('clients') }}#client{{ $quest->client_id }}">
@@ -21,29 +21,29 @@
                     </a>
                 </p>
                 @else
-                <i class="fa-regular fa-user"></i>
+                <i class="fa-regular fa-user" @popper(Klient)></i>
                 <p class="client-name">{{ $quest->client_name }}</p>
                 @endif
             @endif
 
             @if ($quest->price)
-            <i class="fa-solid fa-sack-dollar"></i>
+            <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
             <p class={{ $quest->paid ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
             @endif
 
             @if ($quest->deadline)
-            <i class="fa-solid fa-calendar"></i>
+            <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
             <p class="quest-deadline">{{ $quest->deadline }}</p>
             @endif
             @if ($quest->hard_deadline)
-            <i class="fa-solid fa-calendar-xmark"></i>
+            <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
             <p class="quest-deadline">{{ $quest->hard_deadline }}</p>
             @endif
         </div>
         <div class="quest-meta">
             @unless (strlen($quest->id) > 10)
             <p class="quest-id">{{ $quest->id }}</p>
-            <i class="fa-solid fa-hashtag"></i>
+            <i class="fa-solid fa-hashtag" @popper(Identyfikator zlecenia)></i>
             @endunless
 
 

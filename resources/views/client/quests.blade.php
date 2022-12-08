@@ -16,7 +16,9 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-boxes-stacked"></i> Lista zleceń</h1>
         <div>
+            @unless (Auth::user()->client->trust == -1)
             <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe zapytanie</x-a>
+            @endunless
         </div>
     </div>
     <style>

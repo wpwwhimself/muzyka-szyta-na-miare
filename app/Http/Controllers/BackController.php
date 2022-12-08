@@ -61,9 +61,15 @@ class BackController extends Controller
     public function prices(){
         $prices = DB::table("prices")->get();
 
+        $discount = (Auth::id() == 1) ? null : (
+            is_veteran(Auth::id()) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            +
+            is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+        );
+
         return view(user_role().".prices", array_merge(
             ["title" => "Cennik"],
-            compact("prices")
+            compact("prices", "discount")
         ));
     }
 

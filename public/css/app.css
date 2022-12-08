@@ -223,6 +223,9 @@ input[type="checkbox"]{
     background-color: white;
     border: inset 2px black;
 }
+*[type="submit"].small, .submit.small{
+    font-size: 1em; margin: 0.2em;
+}
 .danger{
     background-color: rgb(var(--danger));
 }

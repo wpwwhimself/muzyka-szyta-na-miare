@@ -7,6 +7,10 @@
         <h1><i class="fa-solid fa-barcode"></i> Cennik</h1>
     </div>
 
+    @if ($discount != 0)
+    <p>Podane ceny uwzględniają zniżkę w wysokości {{ $discount * 100 }}%</p>
+    @endif
+
     <table>
         <thead>
             <tr>
@@ -30,7 +34,7 @@
                 <tr>
                     <td>{{ $price->service }}</td>
                     @if ($price->operation == "+")
-                    <td>{{ $price->{"price_".strtolower(pricing(Auth::id()))} }} zł</td>
+                    <td>{{ $price->{"price_".strtolower(pricing(Auth::id()))} * (1+$discount) }} zł</td>
                     @else
                     <td>{{ $price->{"price_".strtolower(pricing(Auth::id()))} * 100 }}%</td>
                     @endif

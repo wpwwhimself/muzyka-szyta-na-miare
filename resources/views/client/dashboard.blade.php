@@ -15,7 +15,9 @@
 
                     <span>Status klienta</span>
                     <span>
-                        @if (is_veteran(Auth::id()))
+                        @if (Auth::user()->client->trust == -1)
+                        <i class="fa-solid fa-user-ninja error"></i> krętacz i oszust
+                        @elseif (is_veteran(Auth::id()))
                         <i class="fa-solid fa-user-shield"></i> stały klient
                         @else
                         <i class="fa-solid fa-user"></i> klient początkujący<br>
@@ -42,10 +44,21 @@
                 </div>
             </div>
 
+            @if (Auth::user()->client->trust == -1)
+            <br>
+            <div class="section-header error">
+                <h1><i class="fa-solid fa-user-ninja"></i> Jesteś w niełasce!</h1>
+            </div>
+            <p>
+                W obecnej chwili masz status krętacza i oszusta, a to z tego powodu, że posiadasz nieopłacone przez bardzo długi czas projekty.
+                Do momentu ich opłacenia masz ograniczone możliwości korzystania z tej strony, a przez to też z moich usług.
+            </p>
+            @endif
+
             @if ($quests_total && !is_patron(Auth::id()) && Auth::user()->client->helped_showcasing != 1)
             <br>
             <div class="section-header showcase-highlight">
-                <h1><i class="fa-solid fa-award"></i> Jak Ci się podoba współpraca?</h1>
+                <h1><i class="fa-solid fa-award"></i> Oceń naszą współpracę</h1>
             </div>
             <p>Recenzje pomagają mi pozyskiwać nowych klientów. Jeśli i Tobie przypadły do gustu efekty moich prac, możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!</p>
             <form>
@@ -66,7 +79,7 @@
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
             </div>
 
-            <h2>Do zapłacenia za zlecenia</h2>
+            <h2 @if(Auth::user()->client->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
@@ -125,9 +138,11 @@
     </section>
 
     <div class="flex-right">
+        @unless (Auth::user()->client->trust == -1)
         <x-button
             action="{{ route('add-request') }}"
             label="Dodaj nowe zapytanie" icon="plus"
             />
+        @endunless
     </div>
 @endsection

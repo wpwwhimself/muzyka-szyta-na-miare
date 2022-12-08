@@ -164,7 +164,7 @@
         </div>
         <input type="hidden" name="modifying" value="0" />
         <x-button
-            label="Oddaj do wyceny" icon="5"
+            label="Oddaj do wyceny" icon="5" name="new_status" value="5"
             action="submit"
             />
     </form>

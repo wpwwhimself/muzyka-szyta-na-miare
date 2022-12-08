@@ -619,6 +619,10 @@ footer .contact-info{
 #quest-history .history-position .client-name{ font-style: italic; }
 #quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; }
 
+#document-dropzone{
+    background: none;
+}
+
 #stats{
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -732,7 +736,7 @@ footer .contact-info{
 .p-13{ --q-clr: 163, 124, 87; }
 .p-5, .p-15, .p-31{ --q-clr: 145, 87, 168; }
 .p-6, .p-16, .p-26{ --q-clr: 207, 60, 60; }
-.p-7, .p-8, .p-18{ --q-clr: 175, 175, 175; }
+.p-4, .p-7, .p-8, .p-17, .p-18{ --q-clr: 175, 175, 175; }
 .p-9, .p-19, .p-32{ --q-clr: 57, 196, 57; }
 
 /************************MOBILITY**************/

@@ -16,8 +16,9 @@
             </section>
         </div>
         <input type="hidden" name="modifying" value="0" />
-        <button type="submit" class="hover-lift">
-            <i class="fa-solid fa-check"></i> Dodaj
-        </button>
+        <x-button
+            label="Wyślij zapytanie" icon="1" name="new_status" value="1"
+            action="submit"
+            />
     </form>
 @endsection

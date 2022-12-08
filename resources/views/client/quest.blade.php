@@ -69,7 +69,7 @@
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
-                        (w tytule ID zlecenia),</li>
+                        (w tytule ID zlecenia, tj. <i>{{ $quest->id }}</i>),</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>Nie jest ona wymagana do przeglądania plików,<br>

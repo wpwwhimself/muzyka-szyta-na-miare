@@ -10,6 +10,10 @@ class Request extends Model
 {
     use HasFactory, Uuids;
 
+    protected $fillable = [
+        "status"
+    ];
+
     public function client(){
         return $this->belongsTo(Client::class);
     }

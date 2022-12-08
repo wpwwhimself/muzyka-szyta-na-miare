@@ -7,7 +7,7 @@
     $(document).ready(function(){
         const status = parseInt($(".quest-phase").attr("status"));
         //disabling inputs if no change is allowed
-        if([5, 7, 8, 9].includes(status)){
+        if([4, 5, 7, 8, 9].includes(status)){
             $("input, select, textarea").prop("disabled", true);
             $("#step-1").hide();
             $("#quest-calendar").hide();
@@ -24,7 +24,8 @@
     <x-phase-indicator :status-id="$request->status_id" />
 
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href='{{ route("quest", ["id" => $request->quest_id]) }}'>Przejdź do zlecenia</x-a></h2>
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}</h2>
+    <x-a href='{{ route("quest", ["id" => $request->quest_id]) }}'>Przejdź do zlecenia</x-a>
     @endif
 
     <div id="quest-box" class="flex-right">
@@ -204,18 +205,22 @@
         />
     <div id="step-1" class="flexright">
         <x-button
-            label="Popraw i oddaj do wyceny" icon="5"
+            label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5"
             action="submit"
             />
         <x-button
-            label="Nie podejmę się" icon="7" :danger="true"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 7]) }}"
+            label="Nie podejmę się" icon="4" :danger="true"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 4]) }}"
             />
     </div>
     <div id="step-2" class="flexright">
         <x-button
             label="Zatwierdź w imieniu klienta" icon="9"
             action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
+            />
+        <x-button
+            label="Odrzuć w imieniu klienta" icon="8"
+            action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}"
             />
     </div>
 </form>

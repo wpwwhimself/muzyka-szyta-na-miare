@@ -5,8 +5,10 @@
             <span class="client-name ghost">{{ $clientName($item->changed_by) }}</span>
             <br>
             {!! $statusSymbol($item->new_status_id) !!} {{ $statusName($item->new_status_id) }}
-            @if ($item->mail_sent === 1)
-            <i class="fa-solid fa-envelope-circle-check" @popper(Mail wysłany)></i>
+            @if ($item->mail_sent >= 1)
+                @for ($i = 0; $i < $item->mail_sent; $i++)
+                <i class="fa-solid fa-envelope-circle-check" @popper(Mail wysłany)></i>
+                @endfor
             @elseif ($item->mail_sent === 0)
             <i class="fa-solid fa-comment" @popper(Wiadomość wysłana pozamailowo)></i>
             @endif

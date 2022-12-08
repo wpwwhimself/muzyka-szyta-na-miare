@@ -26,7 +26,19 @@ class SettingsSeeder extends Seeder
             [
                 "setting_name" => "pricing_B_since",
                 "value_str" => "2022-09-09"
-            ]
+            ],
+            [
+                "setting_name" => "request_expired_after",
+                "value_str" => 5
+            ],
+            [
+                "setting_name" => "quest_expired_after",
+                "value_str" => 30
+            ],
+            [
+                "setting_name" => "quest_reminder_time",
+                "value_str" => 5
+            ],
         ]);
     }
 }

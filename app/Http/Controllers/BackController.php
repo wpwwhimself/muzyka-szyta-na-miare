@@ -26,7 +26,7 @@ class BackController extends Controller
     public function dashboard(){
         $client = Auth::user()->client;
 
-        $requests = Request::whereNotIn("status_id", [7, 8, 9])
+        $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         $quests = Quest::whereNotIn("status_id", [18, 19])
@@ -190,6 +190,10 @@ class BackController extends Controller
             $request->link = $rq->link;
             $request->wishes = $rq->wishes;
             $request->hard_deadline = $rq->hard_deadline;
+            if($rq->new_status == 1){
+                $request->price_code = null;
+                $request->price = null;
+            }
         }else{
             // składanie requesta przeze mnie
             if($request->made_by_me === null) $request->made_by_me = true;
@@ -225,13 +229,12 @@ class BackController extends Controller
                 $request->genre_id = $rq->genre_id;
                 $request->wishes = $rq->wishes;
             }
-            $request->price_code = $rq->price_code;
-            $request->price = price_calc($rq->price_code, $rq->client_id)[0];
+            $request->price_code = ($rq->new_status != 1) ? $rq->price_code : null;
+            $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id)[0] : null;
         }
-        $request->deadline = $rq->deadline;
+        $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
 
-        if($rq->questioning) $request->status_id = 6;
-        else $request->status_id = (Auth::id() == 1) ? 5 : 1;
+        $request->status_id = $rq->new_status;
 
         //zbierz zmiany przed dodaniem
         $comment = null;
@@ -271,8 +274,8 @@ class BackController extends Controller
     public function requestFinal($id, $status){
         $request = Request::findOrFail($id);
 
-        if(in_array($request->status_id == $status, [7,8,9]))
-            return redirect()->route("dashboard")->with("error", "Zapytanie już zamknięte");
+        if(in_array($request->status_id, [4,7,8,9]))
+            return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
 
         $request->status_id = $status;
 
@@ -343,6 +346,11 @@ class BackController extends Controller
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         }
+        if($status == 8){
+            //add client ID to history
+            StatusChange::where("re_quest_id", $request->id)->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
+        }
+
 
         return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }

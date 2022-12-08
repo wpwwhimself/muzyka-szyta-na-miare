@@ -17,9 +17,10 @@ class StatusesSeeder extends Seeder
         DB::table("statuses")->insert([
             /* statusy requestów */
             ["id" => 1, "status_name" => "nowe", "status_symbol" => "fa-star"],
+            ["id" => 4, "status_name" => "nie podejmę się", "status_symbol" => "fa-trash"],
             ["id" => 5, "status_name" => "wycena do akceptacji", "status_symbol" => "fa-clipboard-question"],
             ["id" => 6, "status_name" => "wycena zakwestionowana", "status_symbol" => "fa-delete-left"],
-            ["id" => 7, "status_name" => "nie podejmę się", "status_symbol" => "fa-trash"],
+            ["id" => 7, "status_name" => "wygasłe", "status_symbol" => "fa-hourglass-end"],
             ["id" => 8, "status_name" => "wycena odrzucona", "status_symbol" => "fa-fire"],
             ["id" => 9, "status_name" => "przyjęte", "status_symbol" => "fa-clipboard-check"],
             /* statusy questów */
@@ -28,6 +29,7 @@ class StatusesSeeder extends Seeder
             ["id" => 13, "status_name" => "prace przerwane", "status_symbol" => "fa-pause"],
             ["id" => 15, "status_name" => "czeka na recenzję", "status_symbol" => "fa-truck-ramp-box"],
             ["id" => 16, "status_name" => "oddane do poprawki", "status_symbol" => "fa-people-pulling"],
+            ["id" => 17, "status_name" => "wygasłe", "status_symbol" => "fa-wind"],
             ["id" => 18, "status_name" => "odrzucone", "status_symbol" => "fa-dumpster-fire"],
             ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
             ["id" => 26, "status_name" => "oddane po zamknięciu", "status_symbol" => "fa-recycle"],

@@ -167,7 +167,7 @@
         <section class="input-group sc-line">
             <x-sc-scissors />
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
-            
+
             {{-- dropzone css --}}
             <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
 
@@ -304,9 +304,10 @@
             const whatCanBeSeen = {
                 11: [12, 32],
                 12: [13, 15, 32],
-                13: [12, 15, 18, 32],
-                15: [16, 18, 19, 32],
+                13: [12, 15, 18, 17, 32],
+                15: [16, 18, 19, 17, 32],
                 16: [12, 18, 32],
+                17: [26],
                 18: [26],
                 19: [26, 32],
                 26: [12, 32]
@@ -344,6 +345,7 @@
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
             <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />
+            <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" />
             @if (!$quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
             @endif

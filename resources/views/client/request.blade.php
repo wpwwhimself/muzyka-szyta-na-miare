@@ -6,6 +6,9 @@
     @case(1)
         Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.</p>
         @break
+    @case(4)
+        Nie podejmę się wykonania tego zlecenia. Prawdopobodmie jest ono dla mnie niewykonalne.
+        @break
     @case(5)
         Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – poprawić odpowiednie pola i przesłać mi do ponownej wyceny. W ostateczności możesz odrzucić zapytanie.
         @break
@@ -13,7 +16,8 @@
         Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.
         @break
     @case(7)
-        Nie podejmę się wykonania tego zlecenia. Prawdopobodmie jest ono dla mnie niewykonalne.
+        Termin ważności wyceny minął. Jeśli nadal chcesz zrealizować to zlecenie, kliknij przycisk poniżej.
+        Jeżeli coś się zmieniło w Twoich warunkach zapytania, możesz to poprawić teraz przed ponownym wysłaniem.
         @break
     @case(9)
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
@@ -23,19 +27,11 @@
 
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
-    <script>
-    $(document).ready(function(){
-        //disabling inputs if no change is allowed
-        if([1, 6, 7, 8, 9].includes(parseInt($(".quest-phase").attr("status")))){
-            $("button, .submit").hide();
-            $("input, textarea, select").prop("disabled", true);
-        };
-    });
-    </script>
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}. <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a></h2>
+    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}</h2>
+    <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a>
     @endif
     <div id="quest-box" class="flex-right">
         <section class="input-group">
@@ -101,7 +97,7 @@
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
-                        (w tytule ID zlecenia),</li>
+                        (w tytule ID zlecenia, zostanie ono przyznane po akceptacji),</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>Nie jest ona wymagana do przeglądania plików,<br>
@@ -117,19 +113,38 @@
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
-    <input type="hidden" name="questioning" value="1" />
+    <script>
+    $(document).ready(function(){
+        const status = parseInt($(".quest-phase").attr("status"));
+        //disabling inputs if no change is allowed
+        if([1, 4, 6, 8, 9].includes(status)){
+            $("input, textarea, select").prop("disabled", true);
+            $("button, .submit").hide();
+        };
+        if(status == 7){
+            $("button:not([value=1]), .submit:not([value=1])").hide();
+        }else{
+            $("button[value=1]").hide();
+        }
+
+    });
+    </script>
     <div class="flexright">
         <x-button
             label="Potwierdź" icon="9"
             action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
             />
         <x-button
-            label="Poproś o ponowną wycenę" icon="6"
+            label="Poproś o ponowną wycenę" icon="6" name="new_status" value="6"
             action="submit"
             />
         <x-button
             label="Odrzuć" icon="8" :danger="true"
             action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}"
+            />
+        <x-button
+            label="Odnów" icon="1" name="new_status" value="1"
+            action="submit"
             />
     </div>
 </form>

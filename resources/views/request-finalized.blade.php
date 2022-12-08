@@ -23,12 +23,12 @@
         @endif
     @endif
 
-    @if (in_array($status, [7, 8]))
+    @if (in_array($status, [4, 8]))
         <p>
             @if ($status == 8)
             Przykro mi, że nie spodobało Ci się to, co dla Ciebie przygotowałem.
             @endif
-        Zostaw, proszę, kilka słów komentarza, dlaczego odrzucasz projekt.
+            Zostaw, proszę, kilka słów komentarza, dlaczego odrzucasz projekt. Wpis będzie widoczny w historii zapytania.
         </p>
 
         <form method="POST" action="{{ route("quest-reject") }}">

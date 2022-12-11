@@ -12,16 +12,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * SETTING GETTER
+ */
+if(!function_exists("setting")){
+    function setting($setting_name){
+        return DB::table("settings")->where("setting_name", $setting_name)->value("value_str");
+    }
+}
+
+/**
  * "CONSTANTS"
  */
 if(!function_exists("VETERAN_FROM")){
     function VETERAN_FROM(){
-        return DB::table("settings")->where("setting_name", "veteran_from")->value("value_str");
+        return setting("veteran_from");
     }
 }
 if(!function_exists("CURRENT_PRICING")){
     function CURRENT_PRICING(){
-        return DB::table("settings")->where("setting_name", "current_pricing")->value("value_str");
+        return setting("current_pricing");
     }
 }
 
@@ -42,7 +51,7 @@ if(!function_exists("user_role")){
 if(!function_exists("song_quest_type")){
     function song_quest_type($song_id){
         $type_letter = substr($song_id, 0, 1);
-        if($type_letter == "A") return "nie ustalono (archiwalne)";
+        if($type_letter == "A") return collect(["id" => 0, "type" => "nie ustalono (archiwalne)", "code" => "A", "fa_symbol" => "fa-circle-question"]);
         return QuestType::where("code", $type_letter)->first();
     }
 }
@@ -134,7 +143,6 @@ if(!function_exists("is_priority")){
     function is_priority($quest_id){
         //requesty mają UUID
         $is_request = strlen($quest_id) == 36;
-
         return preg_match(
             "/z/",
             ($is_request ? Request::findOrFail($quest_id)->price_code : Quest::findOrFail($quest_id)->price_code_override)
@@ -175,7 +183,7 @@ if(!function_exists("pricing")){
             //loop for cycling through pricing schemas
             for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);
-                $this_pricing_since = Carbon::parse(DB::table("settings")->where("setting_name", "pricing_".$next_letter."_since")->value("value_str"));
+                $this_pricing_since = Carbon::parse(setting("pricing_".$next_letter."_since"));
                 if($client_since->lt($this_pricing_since)) return $letter;
             }
         }
@@ -265,5 +273,19 @@ if(!function_exists("client_polonize")){
             'imiewolacz' => $imiewolacz,
             'kobieta' => $kobieta,
         ];
+    }
+}
+
+/**
+ * Klasy dni pracujących
+ */
+if(!function_exists("workday_type")){
+    function workday_type($day_no){
+        $workdays_free = explode(",", setting("workdays_free"));
+        $weekend = [0, 6];
+
+        if(in_array($day_no, $workdays_free)) return "free";
+        else if(in_array($day_no, $weekend)) return "weekend";
+        else return "";
     }
 }

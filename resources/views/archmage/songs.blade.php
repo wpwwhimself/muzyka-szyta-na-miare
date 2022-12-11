@@ -6,32 +6,41 @@
     <div class="section-header">
         <h1>
             <i class="fa-solid fa-chart-pie"></i> Statystyki utworów
+            <small class="ghost">Łącznie {{ $songs_count }}</small>
         </h1>
     </div>
     {{-- TODO --}}
 </section>
 
-<section id="clients-list">
+<section id="songs-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 4fr 4fr 8em 1fr 1fr; }
+    .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
             <span>Tytuł<br>Wykonawca</span>
             <span>Gatunek</span>
+            <span>Uwagi</span>
+            <span>Wycena</span>
         </div>
         <hr />
         @forelse ($songs as $song)
         <div class="table-row">
             <span>
-                <h3 class="song-title">{{ $song->title }}</h3>
+                <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>
                 <p class="song-artist">{{ $song->artist }}</p>
             </span>
             <span>
-                {{ $song->genre_id }}
+                {{ $song->genre->name }}
+            </span>
+            <span>
+                {{ Illuminate\Mail\Markdown::parse($song->notes ?? "") }}
+            </span>
+            <span>
+                {{ $song->price_code }}
             </span>
         </div>
         @empty

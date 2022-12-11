@@ -147,7 +147,7 @@
             }
             $(document).ready(function(){
                 calcPriceNow();
-                $("#price_code").change(function (e) { calcPriceNow() });
+                $("#price_code_override").change(function (e) { calcPriceNow() });
             });
             </script>
             <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
@@ -214,13 +214,6 @@
                 });
             </script>
             {{-- dropzone end --}}
-
-            {{-- <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data" class="file-adder">
-                @csrf
-                <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                <input type="file" name="files" label="Dodaj pliki" multiple />
-                <x-button action="submit" label="Dodaj" icon="circle-plus" />
-            </form> --}}
 
             @forelse ($files as $ver_super => $ver_mains)
                 @foreach ($ver_mains as $ver_main => $ver_subs)

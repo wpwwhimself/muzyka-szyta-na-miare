@@ -117,7 +117,7 @@ div, form{
 .ghost{
     opacity: 0.4;
 }
-a.priority{
+div.priority{
     border: 3px solid rgb(var(--danger));
 }
 b.priority, .priority b{
@@ -588,7 +588,8 @@ footer .contact-info{
     grid-template-columns: 3fr 1fr;
 }
 .hint-table .grayed-out{
-    grid-column: span 1/1;
+    grid-column: 1 / span 2;
+    text-align: center;
 }
 .hint-table .positions span{
     padding: 0.2em;
@@ -733,6 +734,20 @@ footer .contact-info{
 .mp4, .mid{ color: rgba(255, 0, 0, 0.8); }
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }
 .pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
+
+.cal-row.free{
+    color: gray;
+}
+.cal-row.weekend{
+    color: goldenrod;
+}
+.cal-row.suggest{
+    color:hsl(108, 100%, 39%);
+}
+
+#songs-list .song-artist{
+    text-align: left;
+}
 
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }

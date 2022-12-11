@@ -31,9 +31,11 @@ class BackController extends Controller
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
-            ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
-            ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderBy("deadline");
+        ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
+        ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
+        ->orderByRaw("case when deadline is null then 1 else 0 end")
+        ->orderBy("deadline")
+            ;
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
@@ -224,7 +226,7 @@ class BackController extends Controller
                 $request->other_medium = $rq->other_medium;
                 $request->contact_preference = $rq->contact_preference ?? "email";
             }
-            if($rq->bind_with_song == "on"){
+            if($rq->has("bind_with_song")){
                 $request->song_id = $rq->song_id;
                 $song = Song::find($rq->song_id);
                 $request->quest_type_id = song_quest_type($rq->song_id)->id;
@@ -510,11 +512,13 @@ class BackController extends Controller
     }
 
     public function songs(){
-        $songs = Song::all();
+        $songs = Song::orderBy("title")
+            ->get();
+        $songs_count = count($songs);
 
         return view(user_role().".songs", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs")
+            compact("songs", "songs_count")
         ));
     }
 }

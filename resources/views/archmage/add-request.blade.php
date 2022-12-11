@@ -157,9 +157,11 @@
                 });
                 </script>
                 <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" :required="true" />
+            </section>
 
+            <section>
                 <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
-                🚧 TBD 🚧
+                <x-calendar />
             </section>
         </div>
         <input type="hidden" name="modifying" value="0" />

@@ -39,6 +39,22 @@ class SettingsSeeder extends Seeder
                 "setting_name" => "quest_reminder_time",
                 "value_str" => 5
             ],
+            [
+                "setting_name" => "calendar_length",
+                "value_str" => 14
+            ],
+            [
+                "setting_name" => "workdays_free",
+                "value_str" => "2,5"
+            ],
+            [
+                "setting_name" => "available_days_needed",
+                "value_str" => 2
+            ],
+            [
+                "setting_name" => "available_day_until",
+                "value_str" => 3
+            ],
         ]);
     }
 }

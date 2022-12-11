@@ -18,7 +18,7 @@ foreach([
   "quest_reminder_time",
   "request_expired_after"
   ] as $name){
-  $$name = DB::table("settings")->where("setting_name", $name)->value("value_str");
+  $$name = setting($name);
 }
 
 /**

@@ -21,7 +21,7 @@
                         <i class="fa-solid fa-user-shield"></i> stały klient
                         @else
                         <i class="fa-solid fa-user"></i> klient początkujący<br>
-                        <i>pozostało zleceń: {{ DB::table("settings")->where("setting_name", "veteran_from")->value("value_str") - $quests_total }}</i>
+                        <i>pozostało zleceń: {{ setting("veteran_from") - $quests_total }}</i>
                         @endif
                     </span>
 

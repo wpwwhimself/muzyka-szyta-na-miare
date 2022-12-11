@@ -99,7 +99,7 @@ Route::get('/song_data', function(Request $request){
     $song = Song::findOrFail($request->id);
     return json_encode(
         array_merge(
-            ["type" => song_quest_type($song->id)],
+            ["type" => song_quest_type($song->id)->type],
             ["genre" => Genre::find($song->genre_id)->name],
             $song->toArray()
         )

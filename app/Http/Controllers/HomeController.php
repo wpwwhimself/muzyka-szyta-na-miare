@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     public function index(){
-        $showcases = Showcase::orderBy("quest_id", "desc")->orderBy("updated_at", "desc")->limit(3)->get();
+        $showcases = Showcase::orderBy("song_id", "desc")->orderBy("updated_at", "desc")->limit(3)->get();
 
         $prices = DB::table("prices")->where("operation", "+")->get(["service", "quest_type_id", "price_".strtolower(CURRENT_PRICING())." AS price"]);
-        
+
         $quest_types_raw = QuestType::all()->toArray();
         foreach($quest_types_raw as $val){
             $quest_types[$val["id"]] = $val["type"];

@@ -72,6 +72,7 @@ section:hover{
     display: flex;
     flex-direction: column;
     text-align: right;
+    align-items: flex-end;
 }
 p{
     margin-top: 0;
@@ -466,8 +467,8 @@ footer .contact-info{
     justify-content: space-between;
 }
 .quest-meta{
-    width: fit-content;
     align-self: flex-end;
+    white-space: nowrap;
     display: grid;
     grid-template-columns: 2em 1fr;
 }

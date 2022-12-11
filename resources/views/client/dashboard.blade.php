@@ -113,8 +113,10 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @forelse ($quests as $quest)
-            <x-quest-mini :quest="$quest" />
+        @forelse ($quests as $key => $quest)
+            @if ($quest->client_id == Auth::id())
+            <x-quest-mini :quest="$quest" :queue="$key + 1" />
+            @endif
         @empty
             <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse

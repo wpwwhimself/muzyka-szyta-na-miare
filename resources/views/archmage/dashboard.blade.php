@@ -14,7 +14,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
             </div>
-            
+
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
@@ -59,8 +59,8 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @forelse ($quests as $quest)
-            <x-quest-mini :quest="$quest" />
+        @forelse ($quests as $key => $quest)
+            <x-quest-mini :quest="$quest" :queue="$key + 1" />
         @empty
             <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse

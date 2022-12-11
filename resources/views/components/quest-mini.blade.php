@@ -1,4 +1,4 @@
-@props(['quest'])
+@props(['quest', "queue" => null])
 
 <div class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
     <a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="song-title-artist">
@@ -33,20 +33,26 @@
 
             @if ($quest->deadline)
             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
-            <p class="quest-deadline">{{ $quest->deadline }}</p>
+            <p class="quest-deadline {{ \Carbon\Carbon::parse($quest->deadline)->isPast() ? "error" : "" }}">
+                {{ \Carbon\Carbon::parse($quest->deadline)->diffForHumans() }}
+            </p>
             @endif
             @if ($quest->hard_deadline)
             <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
-            <p class="quest-deadline">{{ $quest->hard_deadline }}</p>
+            <p class="quest-deadline {{ \Carbon\Carbon::parse($quest->hard_deadline)->isPast() ? "error" : "" }}">
+                {{ \Carbon\Carbon::parse($quest->hard_deadline)->diffForHumans() }}
+            </p>
             @endif
         </div>
         <div class="quest-meta">
+            @if ($queue !== null)
+            <p class="">{{ $queue }}</p>
+            <i class="fa-solid fa-signal" @popper(Pozycja zlecenia w kolejce)></i>
+            @endif
             @unless (strlen($quest->id) > 10)
             <p class="quest-id">{{ $quest->id }}</p>
             <i class="fa-solid fa-hashtag" @popper(Identyfikator zlecenia)></i>
             @endunless
-
-
         </div>
     </div>
 </div>

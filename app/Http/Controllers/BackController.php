@@ -14,6 +14,7 @@ use App\Models\SongWorkTime;
 use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -29,17 +30,22 @@ class BackController extends Controller
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
-        $quests = Quest::whereNotIn("status_id", [18, 19])
-            ->orderBy("status_id")
+        $quests = Quest::whereNotIn("status_id", [17, 18, 19])
+            ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
-            $quests = $quests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
         }else{
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
-            $unpaids = Quest::where("paid", 0)->whereNotIn("status_id", [18])->orderBy("updated_at")->get();
+            $unpaids = Quest::where("paid", 0)
+                ->whereNotIn("status_id", [18])
+                ->whereHas("client", function(Builder $query){
+                    $query->where("trust", ">", -1);
+                })
+                ->orderBy("quests.updated_at")
+                ->get();
             $gains = [
                 "this_month" => StatusChange::where("new_status_id", 32)->whereMonth("date", Carbon::today()->month)->sum("comment"),
                 "total" => StatusChange::where("new_status_id", 32)->sum("comment"),

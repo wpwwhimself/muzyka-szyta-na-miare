@@ -745,8 +745,12 @@ footer .contact-info{
     color:hsl(108, 100%, 39%);
 }
 
-#songs-list .song-artist{
+.quests-table .song-artist{
     text-align: left;
+}
+
+#showcases-list iframe{
+    height: 5em;
 }
 
 /* quest and request phases */

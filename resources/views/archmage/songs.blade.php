@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="clients-stats" class="sc-line">
+<section id="songs-stats" class="sc-line">
     <x-sc-scissors />
     <div class="section-header">
         <h1>

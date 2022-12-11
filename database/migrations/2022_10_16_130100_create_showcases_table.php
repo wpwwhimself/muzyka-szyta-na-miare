@@ -15,8 +15,8 @@ class CreateShowcasesTable extends Migration
     {
         Schema::create('showcases', function (Blueprint $table) {
             $table->id();
-            $table->string("quest_id");
-                $table->foreign("quest_id")->references("id")->on("quests");
+            $table->string("song_id");
+                $table->foreign("song_id")->references("id")->on("songs");
             $table->string("link_fb", 512)->nullable();
             $table->string("link_ig", 512)->nullable();
             $table->timestamps();

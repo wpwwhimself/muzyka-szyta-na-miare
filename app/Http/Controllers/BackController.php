@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
+use App\Models\Showcase;
 use App\Models\Song;
 use App\Models\SongWorkTime;
 use App\Models\StatusChange;
@@ -520,5 +521,30 @@ class BackController extends Controller
             ["title" => "Lista utworów"],
             compact("songs", "songs_count")
         ));
+    }
+
+    public function showcases(){
+        $showcases = Showcase::orderBy("song_id", "desc")->get();
+        $showcases_count = count($showcases);
+
+        $songs_raw = Song::all()->toArray();
+        foreach($songs_raw as $song){
+            $songs[$song["id"]] = "$song[title] ($song[artist]) [$song[id]]";
+        }
+
+        return view(user_role().".showcases", array_merge(
+            ["title" => "Lista reklam"],
+            compact("showcases", "showcases_count", "songs")
+        ));
+    }
+
+    public function addShowcase(HttpRequest $rq){
+        Showcase::insert([
+            "song_id" => $rq->song_id,
+            "link_fb" => $rq->link_fb,
+            "link_ig" => $rq->link_ig,
+        ]);
+
+        return back()->with("success", "Dodano pozycję");
     }
 }

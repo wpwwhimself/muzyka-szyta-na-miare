@@ -61,6 +61,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
 
     Route::get('/showcases', "showcases")->middleware("auth")->name("showcases");
+    Route::post('/showcases/add', "addShowcase")->middleware("auth")->name("add-showcase");
+
     Route::get("/songs", "songs")->middleware("auth")->name("songs");
 });
 

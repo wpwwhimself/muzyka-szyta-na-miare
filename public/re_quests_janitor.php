@@ -25,7 +25,8 @@ foreach([
  * expiring requests
  */
 $requests = Request::where("status_id", 5)
-  ->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateTimeString())
+  ->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateString())
+  ->orWhere("deadline", "<=", Carbon::today()->toDateString())
   ->get();
 foreach($requests as $request){
   $request->update(["status_id", 7]);
@@ -36,7 +37,7 @@ foreach($requests as $request){
  * expiring unreviewed quests
  */
 $quests = Quest::where("status_id", 15)
-  ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateTimeString())
+  ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
   ->get();
 foreach($quests as $quest){
   $quest->update(["status_id", 17]);
@@ -48,7 +49,7 @@ foreach($quests as $quest){
  */
 $quests = Quest::where("paid", 0)
   ->where("status_id", 19)
-  ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateTimeString())
+  ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
   ->get();
 foreach($quests as $quest){
   $quest->update(["status_id", 17]);

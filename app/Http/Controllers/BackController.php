@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ArchmageQuestMod;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
@@ -271,6 +272,7 @@ class BackController extends Controller
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
         if($request->status_id == 5){
+            //mail do klienta, bo wycena oddana
             if($request->email){
                 Mail::to($request->email)->send(new RequestQuoted($request));
                 $mailing = true;
@@ -279,6 +281,11 @@ class BackController extends Controller
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
+        }else{
+            //mail do mnie, bo zmiany w zapytaniu
+            Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($request));
+            $mailing = true;
+            $flash_content .= ", mail wysłany";
         }
 
         $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
@@ -353,10 +360,15 @@ class BackController extends Controller
         }
 
         $request->save();
-
-        $this->statusHistory($id, $status, null);
+        
+        //mail do mnie, bo zmiany w zapytaniu
+        $mailing = null;
+        Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($request));
+        $mailing = true;
+        $this->statusHistory($id, $status, null, null, $mailing);
+        
         if($status == 9){
-            //added song
+            //added quest
             $this->statusHistory($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
@@ -366,11 +378,10 @@ class BackController extends Controller
             StatusChange::where("re_quest_id", $request->id)->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         }
 
-
         return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
-    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = false){
+    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null){
         StatusChange::insert([
             "re_quest_id" => $re_quest_id,
             "new_status_id" => $new_status_id,
@@ -473,6 +484,7 @@ class BackController extends Controller
         $flash_content = "Faza zmieniona";
         $mailing = null;
         if($quest->status_id == 15){
+            //mail do klienta, bo oddaję zlecenie
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestUpdated($quest));
                 $mailing = true;
@@ -481,6 +493,11 @@ class BackController extends Controller
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
+        }else{
+            //mail do mnie, bo zmiany w zleceniu
+            Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($quest));
+            $mailing = true;
+            $flash_content .= ", mail wysłany";
         }
 
         $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, null, $mailing);

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RequestQuoted extends Mailable
+class AccountCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,12 +16,9 @@ class RequestQuoted extends Mailable
      *
      * @return void
      */
-    public $request;
-    public $pl;
-    public function __construct($request)
+    public function __construct()
     {
-        $this->request = $request;
-        $this->pl = client_polonize($request->client_name);
+        //
     }
 
     /**
@@ -31,8 +28,6 @@ class RequestQuoted extends Mailable
      */
     public function build()
     {
-        return $this
-            ->subject("[MSZNM] Wycena zapytania | ".($this->request->title ?? "utwór bez tytułu"))
-            ->view('emails.request-quoted');
+        return $this->view('view.name');
     }
 }

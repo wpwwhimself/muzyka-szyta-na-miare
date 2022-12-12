@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RequestQuoted extends Mailable
+class ArchmageQuestMod extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,12 +16,10 @@ class RequestQuoted extends Mailable
      *
      * @return void
      */
-    public $request;
-    public $pl;
-    public function __construct($request)
+    public $quest;
+    public function __construct($quest)
     {
-        $this->request = $request;
-        $this->pl = client_polonize($request->client_name);
+        $this->quest = $quest;
     }
 
     /**
@@ -32,7 +30,8 @@ class RequestQuoted extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Wycena zapytania | ".($this->request->title ?? "utwór bez tytułu"))
-            ->view('emails.request-quoted');
+            ->from('contact@wpww.pl', 'Goniec MSZNM')
+            ->subject("[MSZNM] ".$this->quest->id." ".$this->quest->song->title." => ".$this->quest->status->status_name)
+            ->view('emails.archmage-quest-mod');
     }
 }

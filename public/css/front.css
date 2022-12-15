@@ -221,19 +221,13 @@ h2.hidden,
 #offer-other span:nth-of-type(2),
 #recomms .section-like:nth-of-type(2),
 #recomms-other img:nth-of-type(2),
-#showcase-mp3s .sampleproj:nth-of-type(4n+2),
 #about ul
 { transition-delay: 200ms; }
 
 #offer .main:nth-of-type(3),
 #offer-other span:nth-of-type(3),
-#recomms .section-like:nth-of-type(3),
-#showcase-mp3s .sampleproj:nth-of-type(4n+3)
+#recomms .section-like:nth-of-type(3)
 { transition-delay: 400ms; }
-
-#showcase-mp3s .sampleproj:nth-of-type(4n+4)
-{ transition-delay: 600ms; }
-
 
 
 @media screen and (max-width: 600px){

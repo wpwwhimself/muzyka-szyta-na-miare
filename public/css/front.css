@@ -124,6 +124,10 @@ h1{
     scale: 2;
     z-index: 10;
 }
+#songs ul{
+    text-align: left;
+    list-style-type: none;
+}
 
 .front-table{
     display: grid;

@@ -204,6 +204,24 @@
             <img src="{{ asset("assets/front/nutki$i.jpg") }}" alt="sheet music example {{ $i }}">
             @endfor
         </div>
+
+        <div id="songs">
+            <h2>Utwory, których się podjąłem</h2>
+            <ul>
+            @forelse ($songs as $song)
+                <li>
+                    <x-quest-type
+                        :id="song_quest_type($song->id)->id ?? 0"
+                        :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
+                        :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
+                        />
+                    {{ $song->artist ? $song->artist." – " : "" }}{{ $song->title }}
+                </li>
+            @empty
+                <p>Lista zostanie uzupełniona wkrótce</p>
+            @endforelse
+            </ul>
+        </div>
     </section>
 
     <section id="prices" class="grid-2">

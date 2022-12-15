@@ -265,7 +265,7 @@ if(!function_exists("quests_unpaid")){
 if(!function_exists("client_polonize")){
     function client_polonize($name){
         $imie = (strpos($name, " ") == FALSE) ? $name : substr($name, 0, strpos($name, " "));
-        $kobieta = (substr($imie, -1) == "a") ? true : false;
+        $kobieta = (substr($imie, -1) == "a" || in_array($imie, ["Agnes"])) ? true : false;
 
         //odmieniacz imion
         $imiewolacz = $imie; //failsafe

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Mail\_Welcome;
 use App\Mail\QuestUpdated;
 use App\Models\Client;
 use App\Models\Genre;
@@ -89,6 +90,36 @@ Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(Model
 Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
 Route::get("/mp-w/{id}", function($id){ return new App\Mail\_Welcome(Client::findOrFail($id)); })->name("mp-w");
+
+//TODO GREENLIGHT -- po wdrożeniu usunąć
+Route::get("/greenlight", function(Request $rq){
+    $clients_with_email = Client::whereNotNull("email")->get();
+    $output = "";
+
+    if($rq->ready != 1){
+        $tyle = $clients_with_email->count();
+        $output = <<<EOS
+<p>Za chwilę oficjalnie ruszy nowa strona i powiadomimy $tyle ludzi o fakcie, że mają u mnie konto. Chcesz kontynuować?</p>
+<a href="?ready=1">TAK!</a>
+EOS;
+    }else{
+        $output = <<<EOS
+<p>No to jazda!</p>
+<ol>
+EOS;
+        foreach($clients_with_email as $client){
+            $output .= "<li>Mail do: $client->client_name ($client->email)</li>";
+            Mail::to($client->email)->send(new _Welcome($client));
+        }
+        
+        $output .= <<<EOS
+</ol>
+<p>Dobra robota!</p>
+EOS;
+    }
+    
+    return $output;
+})->middleware("auth");
 
 /**
  * for AJAX purposes

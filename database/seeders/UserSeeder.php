@@ -16,22 +16,63 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table("users")->insert([
-            [
-                "id" => 1,
-                "password" => "kalafior"
-            ],
-            [
-                "id" => 2,
-                "password" => "marchewka"
-            ]
+            ["password" => "kalafior"],
+            ["password" => "marchewka"],
+            ["password" => "marchewkb"],
+            ["password" => "marchewkc"],
+            ["password" => "marchewkd"],
+            ["password" => "marchewke"],
+            ["password" => "marchewkf"],
         ]);
         DB::table("clients")->insert([
-            "id" => 2,
-            "client_name" => "Jan Testowy",
-            "email" => "bob@gmail.com",
-            "phone" => 123456789,
-            "created_at" => "2022-01-01",
-            "updated_at" => "2022-01-01"
+            [
+                "id" => 2,
+                "client_name" => "Jan Testowy",
+                "email" => "bob@gmail.com",
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
+            [
+                "id" => 3,
+                "client_name" => "Monika Testowy",
+                "email" => "cob@gmail.com",
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
+            [
+                "id" => 4,
+                "client_name" => "Andrzej Testowy",
+                "email" => "dob@gmail.com",
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
+            [
+                "id" => 5,
+                "client_name" => "Szczepan Testowy",
+                "email" => null,
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
+            [
+                "id" => 6,
+                "client_name" => "Jadwiga Testowy",
+                "email" => "fob@gmail.com",
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
+            [
+                "id" => 7,
+                "client_name" => "Agnes Testowy",
+                "email" => "uob@gmail.com",
+                "phone" => 123456789,
+                "created_at" => "2022-01-01",
+                "updated_at" => "2022-01-01"
+            ],
         ]);
     }
 }

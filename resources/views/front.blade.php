@@ -297,9 +297,10 @@
                 <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
                 <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
             </div>
-            <button type="submit" name="m_sub">
-                Wyślij
-            </button>
+            <x-button
+                label="Wyślij zapytanie" icon="1" name="new_status" value="1"
+                action="submit"
+                />
         </form>
     </section>
 {{-- </div> --}}

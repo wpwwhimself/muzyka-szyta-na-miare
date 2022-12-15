@@ -17,9 +17,11 @@ class ArchmageQuestMod extends Mailable
      * @return void
      */
     public $quest;
+    public $isRequest;
     public function __construct($quest)
     {
         $this->quest = $quest;
+        $this->isRequest = strlen($quest->id) == 36;
     }
 
     /**
@@ -29,7 +31,13 @@ class ArchmageQuestMod extends Mailable
      */
     public function build()
     {
-        return $this
+        return ($this->isRequest) ?
+            $this
+            ->from('contact@wpww.pl', 'Goniec MSZNM')
+            ->subject("[MSZNM] ".$this->quest->id." ".$this->quest->title." => ".$this->quest->status->status_name)
+            ->view('emails.archmage-quest-mod')
+            :
+            $this
             ->from('contact@wpww.pl', 'Goniec MSZNM')
             ->subject("[MSZNM] ".$this->quest->id." ".$this->quest->song->title." => ".$this->quest->status->status_name)
             ->view('emails.archmage-quest-mod');

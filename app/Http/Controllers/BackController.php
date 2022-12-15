@@ -35,6 +35,7 @@ class BackController extends Controller
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
         ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
         ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
+        ->orderByRaw("paid desc")
         ->orderByRaw("case when deadline is null then 1 else 0 end")
         ->orderBy("deadline")
             ;
@@ -360,13 +361,13 @@ class BackController extends Controller
         }
 
         $request->save();
-        
+
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
         Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($request));
         $mailing = true;
         $this->statusHistory($id, $status, null, null, $mailing);
-        
+
         if($status == 9){
             //added quest
             $this->statusHistory($request->quest_id, 11, null, $request->client_id);

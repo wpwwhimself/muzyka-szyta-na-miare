@@ -28,7 +28,7 @@
         </div>
         <hr />
         @forelse ($songs as $song)
-        <div class="table-row">
+        <div id="song{{ $song->id }}" class="table-row">
             <span>
                 <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>
                 <p class="song-artist">{{ $song->artist }}</p>

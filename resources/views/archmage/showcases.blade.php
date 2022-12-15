@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="showcases-stats" class="sc-line">
+{{-- <section id="showcases-stats" class="sc-line">
     <x-sc-scissors />
     <div class="section-header">
         <h1>
@@ -9,8 +9,7 @@
             <small class="ghost">Łącznie {{ $showcases_count }}</small>
         </h1>
     </div>
-    {{-- TODO --}}
-</section>
+</section> --}}
 
 <section id="add-showcase">
     <div class="section-header">

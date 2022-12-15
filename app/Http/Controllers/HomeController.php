@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quest;
-use Illuminate\Http\Request;
 use App\Models\QuestType;
 use App\Models\Showcase;
-use App\Models\Song;
+use App\Models\StatusChange;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -21,14 +21,21 @@ class HomeController extends Controller
             $quest_types[$val["id"]] = $val["type"];
         }
 
-        $average_quest_done = 3; //TODO obliczyć średni czas wykonania questa
+        foreach(StatusChange::whereIn("new_status_id", [11, 15])->orderBy("date")->get() as $stts){
+            $diffs[$stts->re_quest_id] =
+                (isset($diffs[$stts->re_quest_id])) ?
+                (
+                    (is_numeric($diffs[$stts->re_quest_id])) ?
+                    $diffs[$stts->re_quest_id] : //jeśli już jest policzone, to zostaw
+                    $diffs[$stts->re_quest_id]->diffInDays(Carbon::parse($stts->date)) + 1
+                ) :
+                Carbon::parse($stts->date);
+        }
+        $diffs = array_filter($diffs, function($val){ return is_numeric($val); });
+        $average_quest_done = round(array_sum($diffs)/count($diffs));
+
         $quests_completed = Quest::where("status_id", 19)->count();
         $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();
-
-        $songs = Song::orderByRaw("ISNULL(title)")
-            ->orderBy("title")
-            ->orderBy("artist")
-            ->get();
 
         $contact_preferences = [
             "email" => "email",
@@ -40,7 +47,6 @@ class HomeController extends Controller
         return view("front", compact(
             "showcases",
             "prices",
-            "songs",
             "quest_types",
             "contact_preferences",
             "average_quest_done",

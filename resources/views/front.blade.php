@@ -61,7 +61,7 @@
             </div>
             <ul>
                 <li>Każdy aspekt projektu <b>dostosowany do Twoich wymagań</b> – od wykorzystanych instrumentów do budowy utworu</li>
-                <li><b>Szybki</b> czas realizacji – od 1 dnia</li>
+                <li><b>Szybki</b> czas realizacji – od 1-{{ $average_quest_done }} dni</li>
                 <li>Darmowe <b>poprawki na bieżąco</b>, żeby było idealnie</li>
             </ul>
         </div>
@@ -207,22 +207,7 @@
 
         <div id="songs">
             <h2>Utwory, których się podjąłem</h2>
-            <ul>
-            @forelse ($songs as $song)
-                <li>
-                    <x-quest-type
-                        :id="song_quest_type($song->id)->id ?? 0"
-                        :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
-                        :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
-                        />
-                    {{ $song->title ?? "utwór bez tytułu" }}
-                    {{ $song->artist }}
-                </li>
-            @empty
-                <p>Lista zostanie uzupełniona wkrótce</p>
-            @endforelse
-            </ul>
-            <p>Razem: {{ count($songs) }}</p>
+            <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
         </div>
     </section>
 

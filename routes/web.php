@@ -111,13 +111,13 @@ EOS;
             $output .= "<li>Mail do: $client->client_name ($client->email)</li>";
             Mail::to($client->email)->send(new _Welcome($client));
         }
-        
+
         $output .= <<<EOS
 </ol>
 <p>Dobra robota!</p>
 EOS;
     }
-    
+
     return $output;
 })->middleware("auth");
 
@@ -174,4 +174,10 @@ Route::post('/budget_update', function(Request $rq){
 });
 Route::get("/get_ver_desc", function(Request $rq){
     return Storage::get($rq->path) ?? "";
+});
+Route::get("/songs_info", function(Request $rq){
+    return Song::orderByRaw("ISNULL(title)")
+            ->orderBy("title")
+            ->orderBy("artist")
+            ->get();
 });

@@ -29,7 +29,7 @@
 
     <section id="offer">
         <h1>Co mogę dla Ciebie zrobić?</h1>
-        <div class="main black-back">
+        <div class="main black-back hidden">
             <i class="fa-solid fa-volume-up"></i>
             <div>
                 <h2>Podkłady muzyczne</h2>
@@ -41,7 +41,7 @@
                 <li>Brzmienie niemal <b>identyczne</b> z oryginałem</li>
             </ul>
         </div>
-        <div class="main black-back">
+        <div class="main black-back hidden">
             <i class="fa-solid fa-music"></i>
             <div>
                 <h2>Nuty i partytury</h2>
@@ -53,7 +53,7 @@
                 <li><b>Dowolny zakres instrumentów</b> – od partii solowej po orkiestrę</li>
             </ul>
         </div>
-        <div class="main black-back">
+        <div class="main black-back hidden">
             <i class="fa-solid fa-user"></i>
             <div>
                 <h2>Z myślą o Tobie</h2>
@@ -68,15 +68,15 @@
 
         <h2>A także:</h2>
         <div id="offer-other" class="flex-right">
-            <span class="section-like">
+            <span class="section-like hidden">
                 Schematy akordowe
                 <i class="fa-solid fa-circle-info" @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)></i>
             </span>
-            <span class="section-like">
+            <span class="section-like hidden">
                 Osadzenie partii wokalnej
                 <i class="fa-solid fa-circle-info" @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)></i>
             </span>
-            <span class="section-like">
+            <span class="section-like hidden">
                 Korekcja dźwiękowa
                 <i class="fa-solid fa-circle-info" @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)></i>
             </span>
@@ -88,30 +88,30 @@
     <section id="recomms">
         <h1>Kto już skorzystał?</h1>
         <div class="grid-3">
-            <div class="section-like">
+            <div class="section-like hidden">
                 <img src="{{ asset("assets/front/img/recomms/1.jpg") }}" alt="main3">
                 <h2>Ewelina Spławska</h2><h3>wokalistka</h3>
                 <p>Mega polecam tego pana. Wszystko brzmi <b>genialnie i profesjonalnie</b>. Polecam z całego serduszka.</p>
             </div>
-            <div class="section-like">
+            <div class="section-like hidden">
                 <img src="{{ asset("assets/front/img/recomms/2.jpg") }}" alt="main3">
                 <h2>Krzysztof Bajeński</h2><h3>muzyk, producent</h3>
                 <p>Pełen profesjonalizm – tak określiłbym współpracę z Wojtkiem. Człowiek gotowy zawsze do pracy i w pełni zaangażowany. Rzeczy, które wychodzą spod jego ręki są <b>na bardzo wysokim poziomie</b>. Za nami bardzo dużo ciekawych projektów, myślę jednak, że przed nami jeszcze więcej.</p>
             </div>
-            <div class="section-like">
+            <div class="section-like hidden">
                 <img src="{{ asset("assets/front/img/recomms/0.png") }}" alt="main3">
                 <h2>Grzegorz Bednarczyk</h2><h3>klient, zamówił podkład do studia</h3>
                 <p>Córka wyszła właśnie ze studia nagrań; pan nagrywający jest pełen podziwu podkładu i <b>jakości wykonania</b>. Sami pewnie jeszcze nie raz skorzystamy z usług.</p>
             </div>
         </div>
-        <div>
+        <div class="hidden">
             <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fjedrek.kocjan%2Fposts%2F1882616848543669&show_text=true&width=500" width="500" height="188" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FwpwwMuzykaSzytaNaMiare%2Fposts%2F862916034490127&show_text=true&width=500" width="500" height="169" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
         </div>
         <h2>Współpracuję również z:</h2>
         <div id="recomms-other" class="flex-right">
-            <img src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
-            <img src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
+            <img class="hidden" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
+            <img class="hidden" src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
         </div>
     </section>
 
@@ -125,67 +125,67 @@
         </div>
 
         <div id="showcase-mp3s" class="flex-right">
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Solo fortepian</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4O.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z94.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/piano_ZCJ.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Piosenka aktorska</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4E.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z97.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/aktorska_ZC1.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Dla dzieci</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z3M.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/kids_Z9K.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Ballada</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4T.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z98.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/ballad_ZCT.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Rock</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z34.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z91.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/rock_ZCK.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Metal</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4F.mp3") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Reggae</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4M.mp3") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Biesiadne</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4P.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9N.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/biesiada_ZCQ.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Disco polo</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4Q.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9G.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/discopolo_ZCN.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Country</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z45.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z92.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/country_ZCS.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Jazz</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z33.mp3") }}"></audio>
                 <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/jazz_ZCW.ogg") }}"></audio>
             </div>
-            <div class="sampleproj section-like">
+            <div class="sampleproj section-like hidden">
                 <p>Blues</p>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z3N.mp3") }}"></audio>
                 <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9E.mp3") }}"></audio>
@@ -215,10 +215,10 @@
                     "2" => "Nuty",
                     "3" => "Nagrania"
                 ] as $i => $header)
-                    <h2 class="header">{{ $header }}</h2>
+                    <h2 class="header hidden">{{ $header }}</h2>
                     @foreach ($prices->where("quest_type_id", $i) as $price)
-                    <span>{{ $price->service }}</span>
-                    <span>{{ $price->price }} zł</span>
+                    <span class="hidden">{{ $price->service }}</span>
+                    <span class="hidden">{{ $price->price }} zł</span>
                     @endforeach
                 @endforeach
             </div>
@@ -228,27 +228,27 @@
             <x-sc-scissors />
             <h1>FAQ</h1>
             <ul id="faq">
-                <li>Jak tworzone są utwory?</li>
-                <li>Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
+                <li class="hidden">Jak tworzone są utwory?</li>
+                <li class="hidden">Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
 
-                <li>Jakie materiały muszę przygotować?</li>
-                <li>Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
+                <li class="hidden">Jakie materiały muszę przygotować?</li>
+                <li class="hidden">Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
 
-                <li>Czy mój podkład będzie miał linię melodyczną?</li>
-                <li><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
+                <li class="hidden">Czy mój podkład będzie miał linię melodyczną?</li>
+                <li class="hidden"><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
 
-                <li>Jak szybko można się spodziewać gotowego podkładu?</li>
-                <li>
+                <li class="hidden">Jak szybko można się spodziewać gotowego podkładu?</li>
+                <li class="hidden">
                     <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
                     Zwykle projekty jestem w stanie wykonać <b>w 1-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
                     <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
                 </li>
 
-                <li>Czy możliwe są poprawki w przygotowywanych aranżach?</li>
-                <li>Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
+                <li class="hidden">Czy możliwe są poprawki w przygotowywanych aranżach?</li>
+                <li class="hidden">Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
 
-                <li>Co z zapłatą za utwór?</li>
-                <li>Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
+                <li class="hidden">Co z zapłatą za utwór?</li>
+                <li class="hidden">Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
             </ul>
         </div>
     </section>
@@ -256,8 +256,8 @@
     <section id="about">
         <h1>O mnie</h1>
         <div class="flex-right">
-            <img src="{{ asset("assets/front/img/dixie_kontent.jpg") }}" alt="me!">
-            <ul>
+            <img class="hidden" src="{{ asset("assets/front/img/dixie_kontent.jpg") }}" alt="me!">
+            <ul class="hidden">
                 <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
                 <li>Moje usługi prowadzę od <b>{{ date("Y") - 2018 }} lat</b> i wykonałem już <b>{{ $quests_completed }} zleceń</b>, z czego <b>{{ $quests_originals_completed }} to autorskie kompozycje</b></li>
                 <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
@@ -274,9 +274,11 @@
         </div>
     </section>
 
+    <x-sc-hr />
+
     <section id="contact">
         <h1>Napisz już teraz</h1>
-        <form method="post" action="{{ route("mod-request-back") }}" id='contactform' class="black-back grid-2">
+        <form method="post" action="{{ route("mod-request-back") }}" id='contactform' class="black-back grid-2 hidden">
             @csrf
             <div>
                 <h2>Szczegóły zlecenia</h2>

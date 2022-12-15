@@ -48,6 +48,9 @@ if(!function_exists("user_role")){
     }
 }
 
+/**
+ * Given song ID, returns type of quest it is based on
+ */
 if(!function_exists("song_quest_type")){
     function song_quest_type($song_id){
         $type_letter = substr($song_id, 0, 1);
@@ -56,6 +59,9 @@ if(!function_exists("song_quest_type")){
     }
 }
 
+/**
+ * If you wish to add a new quest/song, what's its ID gonna be?
+ */
 if(!function_exists("next_quest_id")){
     function next_quest_id($quest_type_id){
         $letter = QuestType::find($quest_type_id)->value("code");
@@ -79,7 +85,44 @@ if(!function_exists("next_song_id")){
         return $letter . to_base36(from_base36($newest_id_last) + 1, 3);
     }
 }
+if(!function_exists("to_base36")){
+    function to_base36($number, $pad = 2){
+        $code = "";
+        if($number == 0) $code = $number;
+        while($number > 0){
+            $remainder = $number % 36;
+            if($remainder <= 9){
+                $code = $remainder . $code;
+            }else{
+                //number dictates ascii code
+                $remainder += 55; //shift to ASCII A-Z
+                $code = chr($remainder) . $code;
+            }
+            $number = intdiv($number, 36);
+        }
+        return str_pad($code, $pad, "0", STR_PAD_LEFT);
+    }
+}
+if(!function_exists("from_base36")){
+    function from_base36($code){
+        $number = 0; $multiplier = 1;
 
+        while($code != ""){
+            $digit = substr($code, -1);
+            if(!is_numeric($digit)){
+                $digit = ord($digit) - 55;
+            }
+            $number += $digit * $multiplier;
+            $multiplier *= 36;
+            $code = substr($code, 0, -1);
+        }
+        return $number;
+    }
+}
+
+/**
+ * Password generation for new clients
+ */
 if(!function_exists("generate_password")){
     function generate_password(){
         $existing_passwords = User::pluck("password")->toArray();
@@ -96,6 +139,9 @@ if(!function_exists("generate_password")){
     }
 }
 
+/**
+ * Big ol' calculation of quests' prices
+ */
 if(!function_exists("price_calc")){
     function price_calc($labels, $client_id){
         if($client_id == null) $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
@@ -139,6 +185,13 @@ if(!function_exists("price_calc")){
     }
 }
 
+/*************************
+ * DETECTIVE FUNCTIONS
+ */
+
+/**
+ * for quests
+ */
 if(!function_exists("is_priority")){
     function is_priority($quest_id){
         //requesty mają UUID
@@ -150,6 +203,9 @@ if(!function_exists("is_priority")){
     }
 }
 
+/**
+ * for clients
+ */
 if(!function_exists("is_veteran")){
     function is_veteran($client_id){
         if($client_id == "") return false;
@@ -174,7 +230,6 @@ if(!function_exists("upcoming_quests")){
         return Client::find($client_id)->quests->whereIn("status_id", [11, 12, 15, 16, 26])->count();
     }
 }
-
 if(!function_exists("pricing")){
     function pricing($client_id){
         if($client_id == "") return CURRENT_PRICING();
@@ -190,7 +245,6 @@ if(!function_exists("pricing")){
         return CURRENT_PRICING();
     }
 }
-
 if(!function_exists("quests_unpaid")){
     function quests_unpaid($client_id, $all = false){
         $allowed_statuses = ($all) ? array_diff(range(11, 26), [18]) : [19];
@@ -202,41 +256,6 @@ if(!function_exists("quests_unpaid")){
         $quests_val = $quests_val->sum("price");
 
         return $quests_val;
-    }
-}
-
-if(!function_exists("to_base36")){
-    function to_base36($number, $pad = 2){
-        $code = "";
-        if($number == 0) $code = $number;
-        while($number > 0){
-            $remainder = $number % 36;
-            if($remainder <= 9){
-                $code = $remainder . $code;
-            }else{
-                //number dictates ascii code
-                $remainder += 55; //shift to ASCII A-Z
-                $code = chr($remainder) . $code;
-            }
-            $number = intdiv($number, 36);
-        }
-        return str_pad($code, $pad, "0", STR_PAD_LEFT);
-    }
-}
-if(!function_exists("from_base36")){
-    function from_base36($code){
-        $number = 0; $multiplier = 1;
-
-        while($code != ""){
-            $digit = substr($code, -1);
-            if(!is_numeric($digit)){
-                $digit = ord($digit) - 55;
-            }
-            $number += $digit * $multiplier;
-            $multiplier *= 36;
-            $code = substr($code, 0, -1);
-        }
-        return $number;
     }
 }
 

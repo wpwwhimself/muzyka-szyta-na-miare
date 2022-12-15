@@ -11,8 +11,6 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request as ModelsRequest;
 use App\Models\Song;
-use App\Models\StatusChange;
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;

@@ -215,12 +215,14 @@
                         :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
                         :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
                         />
-                    {{ $song->artist ? $song->artist." – " : "" }}{{ $song->title }}
+                    {{ $song->title ?? "utwór bez tytułu" }}
+                    {{ $song->artist }}
                 </li>
             @empty
                 <p>Lista zostanie uzupełniona wkrótce</p>
             @endforelse
             </ul>
+            <p>Razem: {{ count($songs) }}</p>
         </div>
     </section>
 

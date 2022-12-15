@@ -25,7 +25,10 @@ class HomeController extends Controller
         $quests_completed = Quest::where("status_id", 19)->count();
         $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();
 
-        $songs = Song::orderBy("artist")->get(); //TODO ZEBRAĆ I PRZEDSTAWIĆ PIOSENKI
+        $songs = Song::orderByRaw("ISNULL(title)")
+            ->orderBy("title")
+            ->orderBy("artist")
+            ->get();
 
         $contact_preferences = [
             "email" => "email",

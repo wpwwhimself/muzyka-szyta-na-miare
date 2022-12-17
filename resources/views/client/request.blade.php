@@ -19,6 +19,9 @@
         Termin ważności wyceny minął. Jeśli nadal chcesz zrealizować to zlecenie, kliknij przycisk poniżej.
         Jeżeli coś się zmieniło w Twoich warunkach zapytania, możesz to poprawić teraz przed ponownym wysłaniem.
         @break
+    @case(8)
+        Ta wycena została przez Ciebie odrzucona. Coś musiało pójść nie tak lub coś Ci się nie spodobało.
+        @break
     @case(9)
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
         @break
@@ -29,10 +32,14 @@
     @csrf
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
+
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem {{ $request->quest_id }}</h2>
-    <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a>
+    <h2>
+        Zlecenie przepisane z numerem {{ $request->quest_id }}
+        <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a>
+    </h2>
     @endif
+
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
@@ -115,12 +122,22 @@
     <script>
     $(document).ready(function(){
         const status = parseInt($(".quest-phase").attr("status"));
-        //disabling inputs if no change is allowed
         if([1, 4, 6, 8, 9].includes(status)){
             $("input, textarea, select").prop("disabled", true);
-            $("button, .submit").hide();
         };
-        if(status == 7){
+        switch(status){
+            case 1:
+            case 8:
+            case 9:
+                $("button[value=1]").hide();
+            case 4:
+            case 6:
+            case 7:
+                $("button[value=6]").hide();
+                $(".submit:not(h2 > a)").hide();
+                break;
+        }
+        if(status == 7 || status == 4){
             $("button:not([value=1]), .submit:not([value=1])").hide();
         }else{
             $("button[value=1]").hide();
@@ -128,6 +145,12 @@
 
     });
     </script>
+    @if ($request->status_id == 5)
+    <p class="tutorial">
+        <i class="fa-solid fa-circle-question"></i>
+        Przed poproszeniem o nową wycenę zwróć uwagę, czy poprawione zostały przez Ciebie szczegóły zlecenia powyżej.
+    </p>
+    @endif
     <div class="flexright">
         <x-button
             label="Potwierdź" icon="9"

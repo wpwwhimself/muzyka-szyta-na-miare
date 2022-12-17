@@ -150,7 +150,7 @@ class BackController extends Controller
             $questTypes[$val["id"]] = $val["type"];
         }
 
-        $prices = DB::table("prices")->pluck("service", "indicator")->toArray();
+        $prices = DB::table("prices")->where("quest_type_id", $request->quest_type_id)->orWhereNull("quest_type_id")->orderBy("indicator")->pluck("service", "indicator")->toArray();
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
         return view(user_role().".request", array_merge([
@@ -423,7 +423,7 @@ class BackController extends Controller
     public function quest($id){
         $quest = Quest::findOrFail($id);
 
-        $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
+        $prices = DB::table("prices")->where("quest_type_id", song_quest_type($quest->song_id)->id)->orWhereNull("quest_type_id")->orderBy("indicator")->pluck("service", "indicator")->toArray();
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
         else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
 

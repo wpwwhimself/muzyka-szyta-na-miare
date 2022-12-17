@@ -13,7 +13,7 @@
     <h3>
         <a
             class="button"
-            href="{{ route('quest', ['id' => $quest->id]) }}"
+            href="{{ route($isRequest ? 'request' : 'quest', ['id' => $quest->id]) }}"
             >
             Szczegóły zlecenia
         </a>

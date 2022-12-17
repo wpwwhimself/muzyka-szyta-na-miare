@@ -206,6 +206,13 @@ if(!function_exists("is_priority")){
 /**
  * for clients
  */
+if(!function_exists("can_see_files")){
+    function can_see_files($client_id){
+        if($client_id == "") return false;
+        $trust = Client::findOrFail($client_id)->trust;
+        return $trust >= 0 && (is_veteran($client_id) || $trust == 1);
+    }
+}
 if(!function_exists("is_veteran")){
     function is_veteran($client_id){
         if($client_id == "") return false;

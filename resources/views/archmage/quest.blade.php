@@ -166,7 +166,15 @@
 
         <section class="input-group sc-line">
             <x-sc-scissors />
-            <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
+            <h2>
+                <i class="fa-solid fa-file-waveform"></i>
+                Pliki
+                @if ($quest->paid || can_see_files($quest->client_id))
+                    <i class="success fa-solid fa-check" @popper(Uprawniony do pobierania)></i>
+                @else
+                    <i class="error fa-solid fa-xmark" @popper(Klient nic nie widzi)></i>
+                @endif
+            </h2>
 
             {{-- dropzone css --}}
             <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
@@ -240,11 +248,11 @@
                             <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                             @endif
                         @endforeach
-                        @if ($quest->paid) @foreach ($ver_bots as $file)
+                        @foreach ($ver_bots as $file)
                             @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
                             <x-file-tile :id="$quest->id" :file="$file" />
                             @endunless
-                        @endforeach @endif
+                        @endforeach
                         </div>
                     </div>
                     @endforeach

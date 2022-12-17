@@ -100,8 +100,7 @@
                         (w tytule ID zlecenia, zostanie ono przyznane po akceptacji),</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
-                <p>Nie jest ona wymagana do przeglądania plików,<br>
-                    ale będzie potrzebna do ich pobrania.</p>
+                <p>Jest ona potrzebna do przeglądania i pobierania plików,<br>chyba, że zaskarbisz sobie moje zaufanie.</p>
                 <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>
             @endif

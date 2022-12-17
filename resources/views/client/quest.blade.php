@@ -72,8 +72,10 @@
                         (w tytule ID zlecenia, tj. <i>{{ $quest->id }}</i>),</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
-                <p>Nie jest ona wymagana do przeglądania plików,<br>
-                    ale będzie potrzebna do ich pobrania.</p>
+                <p>
+                    Jest ona wymagana do przeglądania i pobierania plików,<br>
+                    chyba że zaskarbisz sobie moje zaufanie.
+                </p>
             </div>
             @endunless
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
@@ -100,18 +102,22 @@
                             {{ isset($desc[$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_main][$ver_sub])) : "" }}
                         </div>
                         <div class="file-container-c">
-                        @foreach ($ver_bots as $file)
-                            @if (pathinfo($file)['extension'] == "mp4")
-                            <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
-                            @elseif (pathinfo($file)['extension'] == "mp3")
-                            <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
-                            @endif
-                        @endforeach
-                        @if ($quest->paid) @foreach ($ver_bots as $file)
-                            @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                            <x-file-tile :id="$quest->id" :file="$file" />
-                            @endunless
-                        @endforeach @endif
+                        @if ($quest->paid || can_see_files($quest->client_id))
+                            @foreach ($ver_bots as $file)
+                                @if (pathinfo($file)['extension'] == "mp4")
+                                <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                                @elseif (pathinfo($file)['extension'] == "mp3")
+                                <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                                @endif
+                            @endforeach
+                            @foreach ($ver_bots as $file)
+                                @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
+                                <x-file-tile :id="$quest->id" :file="$file" />
+                                @endunless
+                            @endforeach
+                        @else
+                            <p class="grayed-out">Opłać zlecenie, aby otrzymać dostęp</p>
+                        @endif
                         </div>
                     </div>
                     @endforeach

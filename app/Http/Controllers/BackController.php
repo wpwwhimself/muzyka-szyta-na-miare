@@ -140,6 +140,7 @@ class BackController extends Controller
                 $songs[$song["id"]] = "$song[title] ($song[artist])";
             }
         }else{
+            if($request->client_id != Auth::id()) abort(403, "To nie jest Twoje zapytanie");
             $clients = [];
             $songs = [];
         }
@@ -424,6 +425,7 @@ class BackController extends Controller
 
         $prices = DB::table("prices")->orderBy("quest_type_id")->pluck("service", "indicator")->toArray();
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
+        else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
 
         $files_raw = Storage::files('safe/'.$id);
         $files = []; $last_mod = []; $desc = [];

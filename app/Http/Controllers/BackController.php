@@ -283,9 +283,9 @@ class BackController extends Controller
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else{
+        }else if($request->status_id != 4){
             //mail do mnie, bo zmiany w zapytaniu
-            Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($request));
+            Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($request));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
@@ -496,9 +496,9 @@ class BackController extends Controller
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else{
+        }else if(Auth::id() != 1){
             //mail do mnie, bo zmiany w zleceniu
-            Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($quest));
+            Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($quest));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }

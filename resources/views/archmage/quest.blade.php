@@ -335,6 +335,7 @@
             <x-button
                 label="Podgląd maila o zmianie" icon="comment-dots" id="mail-mod-prev"
                 action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
+                :small="true"
                 />
             @if (App::environment() != "dev")
             <x-button action="submit" name="status_id" icon="11" value="11" label="Zuruck" />
@@ -353,6 +354,7 @@
             <x-button
                 label="Podgląd maila o płatności" icon="comment-dollar" id="mail-paid-prev"
                 action="{{ route('mp-q-p', ['id' => $quest->id]) }}" target="_blank"
+                :small="true"
                 />
         </div>
     </form>

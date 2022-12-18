@@ -23,10 +23,6 @@ class QuestTypesSeeder extends Seeder
                 "code" => "N", "type" => "nuty",
                 "fa_symbol" => "fa-music"
             ],
-            // [
-            //     "code" => "W", "type" => "występ",
-            //     "fa_symbol" => "fa-guitar"
-            // ],
             [
                 "code" => "O", "type" => "obróbka",
                 "fa_symbol" => "fa-screwdriver-wrench"

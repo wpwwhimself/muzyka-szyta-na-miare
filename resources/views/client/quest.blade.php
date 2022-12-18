@@ -1,6 +1,38 @@
 @extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
 
 @section('content')
+<p class="tutorial"><i class="fa-solid fa-circle-question"></i>
+@switch($quest->status_id)
+    @case(11)
+        Twoje zlecenie zostało przyjęte. Wkrótce rozpocznę nad nim pracę.
+        @break
+    @case(12)
+        Dobre wyczucie, właśnie prowadzę prace nad Twoim zleceniem. W ciągu kolejnych godzin możesz spodziewać się wiadomości na temat postępów.
+        @break
+    @case(13)
+        Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.
+        @break
+    @case(15)
+        Do Twojego zlecenia zostały dodane nowe pliki. Poniżej (jeśli spełniasz warunki), możesz je przeglądać i wyrazić swoją opinię na ich temat.
+        @break
+    @case(16)
+        Twoje uwagi zostały przekazane. Odniosę się do nich i przygotuję coś nowego wkrótce.
+        @break
+    @case(17)
+        Twoje zlecenie wygasło z powodu zbyt powolnych postępów.
+        @break
+    @case(18)
+        Zlecenie zostało przez Ciebie odrzucone. Coś musiało pójść nie tak lub coś Ci się nie spodobało.
+        @break
+    @case(19)
+        Zlecenie zostało przez Ciebie przyjęte bez zarzutów. Cieszę się, że mogłem coś dla Ciebie przygotować i polecam się do dalszych zleceń.
+        @break
+    @case(26)
+        Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.
+        @break
+@endswitch
+</p>
+
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
 
@@ -129,8 +161,8 @@
                 <i class="fa-solid fa-circle-question"></i>
                 Tutaj pojawią się pliki związane<br>
                 z przygotowywanym dla Ciebie zleceniem.<br>
-                Będzie możliwość ich przejrzenia i odsłuchania,<br>
-                a po dokonaniu wpłaty – również pobrania.
+                Po dokonaniu wpłaty będzie możliwość<br>
+                ich pobrania lub odsłuchania.
             </p>
             @endforelse
         </section>
@@ -172,13 +204,19 @@
                 Jeśli nie podoba Ci się to, co dla Ciebie przygotowałem, w polu poniżej możesz napisać, co dokładnie.
                 Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
             </p>
+            @elseif ($quest->status_id == 19)
+            <p class="tutorial">
+                <i class="fa-solid fa-circle-question"></i>
+                Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
+                Miej jednak na uwadze, że jeśli zmiany będą duże lub długo po terminie, mogę zmienić wycenę zlecenia.
+            </p>
             @endif
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
             <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" />
             <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
-            <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" />
+            <x-button action="submit" name="status_id" icon="16" value="16" label="Poproś o poprawki" />
             <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
             <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
             <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />

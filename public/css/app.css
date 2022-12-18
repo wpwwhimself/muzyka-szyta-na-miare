@@ -70,7 +70,7 @@ section:hover{
 }
 .section-header>div{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     text-align: right;
     align-items: flex-end;
 }
@@ -153,6 +153,10 @@ a:hover{
 }
 
 /* FORM */
+.login-box{
+    max-width: 500px;
+    margin: 0 auto;
+}
 form, .login-grid-container, .input-container{
     display: flex;
     flex-direction: column;

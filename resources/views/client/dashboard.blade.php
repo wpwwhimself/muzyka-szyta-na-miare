@@ -1,6 +1,10 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+    <p class="tutorial">
+        <i class="fa-solid fa-circle-question"></i>
+        To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.
+    </p>
     <div class="grid-2">
         <section id="who-am-i" class="sc-line">
             <x-sc-scissors />
@@ -103,6 +107,7 @@
     <p class="tutorial">
         <i class="fa-solid fa-circle-question"></i>
         Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia.
+        Możesz najechać na większość symboli, aby pokazać ich znaczenie.
     </p>
 
     <section id="dashboard-quests">

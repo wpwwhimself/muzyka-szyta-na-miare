@@ -4,7 +4,7 @@
     <form class="login-form" method="post" action="{{ route("authenticate") }}">
         @csrf
         <h1>Zaloguj się</h1>
-        <div class="grid-2">
+        <div class="login-box">
             {{-- <x-input class="login-grid-container"
                 type="text" name="login" label="Login"
                 :autofocus="true" :required="true" /> --}}

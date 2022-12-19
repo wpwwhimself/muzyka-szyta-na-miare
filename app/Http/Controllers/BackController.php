@@ -567,4 +567,15 @@ class BackController extends Controller
 
         return back()->with("success", "Dodano pozycję");
     }
+
+    public function janitorLog(){
+        $logs = StatusChange::whereIn("new_status_id", [7, 17, 33])
+            ->whereDate('date', '>=', now()->subDays(5)->setTime(0,0,0)->toDateTimeString())
+            ->get();
+
+        return view(user_role().".janitor-log", array_merge(
+            ["title" => "Logi Sprzątacza"],
+            compact("logs")
+        ));
+    }
 }

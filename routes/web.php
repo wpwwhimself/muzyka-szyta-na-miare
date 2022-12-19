@@ -63,6 +63,8 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/showcases/add', "addShowcase")->middleware("auth")->name("add-showcase");
 
     Route::get("/songs", "songs")->middleware("auth")->name("songs");
+
+    Route::get("/janitor-log", "janitorLog")->middleware("auth")->name("janitor-log");
 });
 
 Route::controller(FileController::class)->group(function(){

@@ -2,12 +2,10 @@
 
 use App\Mail\QuestAwaitingPayment;
 use App\Mail\QuestAwaitingReview;
-use App\Models\Client;
 use App\Models\Quest;
 use App\Models\Request;
 use App\Models\StatusChange;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -30,7 +28,7 @@ $requests = Request::where("status_id", 5)
   ->get();
 foreach($requests as $request){
   $request->update(["status_id", 7]);
-  app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "wygaszono z powodu braku opinii", 1, null);
+  app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak opinii", 1, null);
 }
 
 /**
@@ -41,7 +39,7 @@ $quests = Quest::where("status_id", 15)
   ->get();
 foreach($quests as $quest){
   $quest->update(["status_id", 17]);
-  app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "wygaszono z powodu braku opinii", 1, null);
+  app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
 }
 
 /**
@@ -54,7 +52,7 @@ $quests = Quest::where("paid", 0)
 foreach($quests as $quest){
   $quest->update(["status_id", 17]);
   $quest->client->update("trust", -1);
-  app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "wygaszono z powodu braku wpłaty", 1, null);
+  app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
 }
 
 /**
@@ -69,7 +67,7 @@ foreach($quests as $quest){
   ){
     if($quest->client->email){
       Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
-      StatusChange::where("re_quest_id", $quest->id)->where("status_id", 15)->orderByDesc("date")->first()->increnment("mail_sent");
+      StatusChange::where("re_quest_id", $quest->id)->where("status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
     }
   }
 }
@@ -86,6 +84,13 @@ foreach($quests as $quest){
   ){
     if($quest->client->email){
       Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
+      //status
+      $status = StatusChange::where("re_quest_id", $quest->id)->where("status_id", 33)->first();
+      if($status){
+        $status->increment("mail_sent");
+      }else{
+        app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
+      }
     }
   }
 }

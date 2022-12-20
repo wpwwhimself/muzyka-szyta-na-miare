@@ -21,6 +21,7 @@ class HomeController extends Controller
             $quest_types[$val["id"]] = $val["type"];
         }
 
+        $diffs = [];
         foreach(StatusChange::whereIn("new_status_id", [11, 15])->orderBy("date")->get() as $stts){
             $diffs[$stts->re_quest_id] =
                 (isset($diffs[$stts->re_quest_id])) ?
@@ -32,7 +33,7 @@ class HomeController extends Controller
                 Carbon::parse($stts->date);
         }
         $diffs = array_filter($diffs, function($val){ return is_numeric($val); });
-        $average_quest_done = round(array_sum($diffs)/count($diffs));
+        $average_quest_done = (count($diffs) == 0) ? 0 : round(array_sum($diffs)/count($diffs));
 
         $quests_completed = Quest::where("status_id", 19)->count();
         $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();

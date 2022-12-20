@@ -757,6 +757,12 @@ footer .contact-info{
     height: 5em;
 }
 
+#ppp{
+    display: grid; gap: 0.5em;
+    grid-template-columns: 1fr 2fr;
+    white-space: wrap;
+}
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 50, 127, 226; }

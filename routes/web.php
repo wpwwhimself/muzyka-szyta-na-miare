@@ -65,6 +65,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get("/songs", "songs")->middleware("auth")->name("songs");
 
     Route::get("/janitor-log", "janitorLog")->middleware("auth")->name("janitor-log");
+
+    Route::get("/ppp", "ppp")->middleware("auth")->name("ppp");
 });
 
 Route::controller(FileController::class)->group(function(){

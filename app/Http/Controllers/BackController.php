@@ -578,4 +578,16 @@ class BackController extends Controller
             compact("logs")
         ));
     }
+
+    public function ppp(){
+        $questions = [
+            // "Duże poprawki po terminie" => ""
+        ];
+        ksort($questions);
+
+        return view(user_role().".ppp", array_merge(
+            ["title" => "Poradnik Przyszłych Pokoleń"],
+            compact("questions")
+        ));
+    }
 }

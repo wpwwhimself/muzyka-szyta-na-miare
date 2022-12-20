@@ -581,7 +581,7 @@ class BackController extends Controller
 
     public function ppp(){
         $questions = [
-            // "Duże poprawki po terminie" => ""
+            "Podkład MIDI" => "Podkłady MIDI traktuję jako **nuty**"
         ];
         ksort($questions);
 

@@ -17,7 +17,7 @@
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr; }
+    .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
@@ -25,6 +25,7 @@
             <span>Gatunek</span>
             <span>Uwagi</span>
             <span>Wycena</span>
+            <span @popper(Czas wykonania)>Czas wyk.</span>
         </div>
         <hr />
         @forelse ($songs as $song)
@@ -41,6 +42,9 @@
             </span>
             <span>
                 {{ $song->price_code }}
+            </span>
+            <span @popper($song_work_times[$song->id]["parts"])>
+                {{ $song_work_times[$song->id]["total"] }}
             </span>
         </div>
         @empty

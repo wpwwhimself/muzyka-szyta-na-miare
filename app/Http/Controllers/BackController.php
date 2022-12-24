@@ -13,6 +13,7 @@ use App\Models\Request;
 use App\Models\Showcase;
 use App\Models\Song;
 use App\Models\SongWorkTime;
+use App\Models\Status;
 use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
@@ -537,9 +538,25 @@ class BackController extends Controller
             ->get();
         $songs_count = count($songs);
 
+        $song_work_times = [];
+        foreach($songs as $song){
+            $song_work_times[$song->id] = [
+                "total" => gmdate("H:i:s", DB::table("song_work_times")
+                    ->where("song_id", $song->id)
+                    ->sum(DB::raw("TIME_TO_SEC(time_spent)"))),
+                "parts" => DB::table("song_work_times")
+                    ->where("song_id", $song->id)
+                    ->get()
+                    ->toArray()
+            ];
+            $song_work_times[$song->id]["parts"] = implode("\n", array_map(function($x){
+                return Status::find($x->status_id)->status_name . " → " . $x->time_spent;
+            }, $song_work_times[$song->id]["parts"]));
+        }
+
         return view(user_role().".songs", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs", "songs_count")
+            compact("songs", "songs_count", "song_work_times")
         ));
     }
 

@@ -41,9 +41,9 @@
                 {{ Illuminate\Mail\Markdown::parse($song->notes ?? "") }}
             </span>
             <span>
-                {{ $song->price_code }}
+                {!! $price_codes[$song->id] !!}
             </span>
-            <span @popper($song_work_times[$song->id]["parts"])>
+            <span {{ Popper::pop($song_work_times[$song->id]["parts"]) }}>
                 {{ $song_work_times[$song->id]["total"] }}
             </span>
         </div>

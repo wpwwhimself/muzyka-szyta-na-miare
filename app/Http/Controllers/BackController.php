@@ -539,7 +539,17 @@ class BackController extends Controller
         $songs_count = count($songs);
 
         $song_work_times = [];
+        $price_codes = [];
         foreach($songs as $song){
+            $price_codes[$song->id] = [];
+            for($i = 0; $i < strlen($song->price_code); $i++){
+                $letter = $song->price_code[$i];
+                if(preg_match('/[a-z]/', $song->price_code[$i])){
+                    $price_codes[$song->id][] = DB::table("prices")->where("indicator", $letter)->value("service");
+                }
+            }
+            $price_codes[$song->id] = implode("<br>", $price_codes[$song->id]);
+
             $song_work_times[$song->id] = [
                 "total" => gmdate("H:i:s", DB::table("song_work_times")
                     ->where("song_id", $song->id)
@@ -549,14 +559,14 @@ class BackController extends Controller
                     ->get()
                     ->toArray()
             ];
-            $song_work_times[$song->id]["parts"] = implode("\n", array_map(function($x){
+            $song_work_times[$song->id]["parts"] = implode("<br>", array_map(function($x){
                 return Status::find($x->status_id)->status_name . " → " . $x->time_spent;
             }, $song_work_times[$song->id]["parts"]));
         }
 
         return view(user_role().".songs", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs", "songs_count", "song_work_times")
+            compact("songs", "songs_count", "song_work_times", "price_codes")
         ));
     }
 

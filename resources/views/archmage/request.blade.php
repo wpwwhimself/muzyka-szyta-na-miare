@@ -9,15 +9,7 @@
         //disabling inputs if no change is allowed
         if([4, 5, 7, 8, 9].includes(status)){
             $("input, select, textarea").prop("disabled", true);
-            $("#step-1").hide();
-            $("#quest-calendar").hide();
         };
-        if([1,7,8,9].includes(status)){
-            $("#step-2").hide();
-        }
-        if(![5].includes(status)){
-            $("#mail-prev").hide();
-        }
     });
     </script>
     <h1>Szczegóły zapytania</h1>
@@ -189,10 +181,12 @@
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" :required="true" />
         </section>
 
+        @if (in_array($request->status_id, [1, 6]))
         <section class="input-group" id="quest-calendar">
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             <x-calendar />
         </section>
+        @endif
 
         <section class="input-group">
             <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
@@ -200,29 +194,12 @@
         </section>
     </div>
     <input type="hidden" name="modifying" value="{{ $request->id }}" />
-    <x-button
-        label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev"
-        action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank"
-        />
     <div id="step-1" class="flexright">
-        <x-button
-            label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5"
-            action="submit"
-            />
-        <x-button
-            label="Nie podejmę się" icon="4" :danger="true"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 4]) }}"
-            />
-    </div>
-    <div id="step-2" class="flexright">
-        <x-button
-            label="Zatwierdź w imieniu klienta" icon="9"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
-            />
-        <x-button
-            label="Odrzuć w imieniu klienta" icon="8"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}"
-            />
+        @if ($request->status_id != 9) <x-button label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev" action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank" :small="true" /> @endif
+        @if (in_array($request->status_id, [1, 6])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
+        @if (in_array($request->status_id, [1, 5, 6])) <x-button label="Nie podejmę się" icon="4" :danger="true" action="{{ route('request-final', ['id' => $request->id, 'status' => 4]) }}" /> @endif
+        @if (in_array($request->status_id, [5])) <x-button label="Zatwierdź w imieniu klienta" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
+        @if (in_array($request->status_id, [5])) <x-button label="Odrzuć w imieniu klienta" icon="8" action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" /> @endif
     </div>
 </form>
 

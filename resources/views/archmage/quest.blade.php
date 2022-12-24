@@ -299,63 +299,37 @@
     </div>
 
     <form action="{{ route('mod-quest-back') }}" method="POST" id="phases">
-        <script>
-        $(document).ready(function(){
-            $('#phases button').hide();
-            const whatCanBeSeen = {
-                11: [12, 32],
-                12: [13, 15, 32],
-                13: [12, 15, 18, 17, 32],
-                15: [16, 18, 19, 17, 32],
-                16: [12, 18, 32],
-                17: [26],
-                18: [26],
-                19: [26, 32],
-                26: [12, 32]
-            }
-            if(whatCanBeSeen[{{ $quest->status_id }}].length == 0){
-                $(`textarea[name='comment']`).parent().hide();
-            }
-            for(button of whatCanBeSeen[{{ $quest->status_id }}]){
-                $(`button[value=${button}]`).show();
-            }
-            $('button[value={{ $quest->status_id }}]').hide();
-            if(![15].includes({{ $quest->status_id }})){
-                $("#mail-mod-prev").hide();
-            }
-            if({{ intval($quest->paid) }} == 0){
-                $("#mail-paid-prev").hide();
-            }
-        });
-        </script>
         <div class="flexright">
             @csrf
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+            @if ($quest->status_id != 15)
             <x-button
                 label="Podgląd maila o zmianie" icon="comment-dots" id="mail-mod-prev"
                 action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
                 :small="true"
                 />
-            @if (App::environment() != "dev")
-            <x-button action="submit" name="status_id" icon="11" value="11" label="Zuruck" />
             @endif
-            <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" />
-            <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" />
-            <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" />
-            <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" />
-            <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" />
-            <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  />
-            <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" />
-            <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" />
+            @if (App::environment() != "dev")
+            <x-button action="submit" name="status_id" icon="11" value="11" label="Jako nowe" />
+            @endif
+            @if (in_array($quest->status_id, [11, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
+            @if (in_array($quest->status_id, [12])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
+            @if (in_array($quest->status_id, [12, 13])) <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" /> @endif
+            @if (in_array($quest->status_id, [13, 15, 16])) <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  /> @endif
+            @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Przywróć" /> @endif
+            @if (in_array($quest->status_id, [13, 15])) <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" /> @endif
             @if (!$quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
-            @endif
+            @else
             <x-button
                 label="Podgląd maila o płatności" icon="comment-dollar" id="mail-paid-prev"
                 action="{{ route('mp-q-p', ['id' => $quest->id]) }}" target="_blank"
                 :small="true"
                 />
+            @endif
         </div>
     </form>
 </div>

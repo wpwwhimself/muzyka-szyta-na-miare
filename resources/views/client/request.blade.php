@@ -152,22 +152,10 @@
     </p>
     @endif
     <div class="flexright">
-        <x-button
-            label="Potwierdź" icon="9"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
-            />
-        <x-button
-            label="Poproś o ponowną wycenę" icon="6" name="new_status" value="6"
-            action="submit"
-            />
-        <x-button
-            label="Odrzuć" icon="8" :danger="true"
-            action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}"
-            />
-        <x-button
-            label="Odnów" icon="1" name="new_status" value="1"
-            action="submit"
-            />
+        @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
+        @if (in_array($request->status_id, [5])) <x-button label="Poproś o ponowną wycenę" icon="6" name="new_status" value="6" action="submit" /> @endif
+        @if (in_array($request->status_id, [5])) <x-button label="Odrzuć" icon="8" :danger="true" action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" /> @endif
+        @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Odnów" icon="1" name="new_status" value="1" action="submit" /> @endif
     </div>
 </form>
 @endsection

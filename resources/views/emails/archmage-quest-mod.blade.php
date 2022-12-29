@@ -5,7 +5,7 @@
 @section('content')
     <h2>Zmiana statusu zlecenia</h2>
     <p>
-        {{ $isRequest ? $quest->client_name : $quest->client->client_name }} zmienił(a) status zlecenia:
+        {{ $isRequest ? ($quest->client_name ?? $quest->client->client_name) : $quest->client->client_name }} zmienił(a) status zlecenia:
     </p>
 
     <x-mail-quest-mini :quest="$quest" />

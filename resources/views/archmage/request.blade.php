@@ -198,7 +198,7 @@
         @if ($request->status_id != 9) <x-button label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev" action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank" :small="true" /> @endif
         @if (in_array($request->status_id, [1, 6])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
         @if (in_array($request->status_id, [1, 5, 6])) <x-button label="Nie podejmę się" icon="4" :danger="true" action="{{ route('request-final', ['id' => $request->id, 'status' => 4]) }}" /> @endif
-        @if (in_array($request->status_id, [5])) <x-button label="Zatwierdź w imieniu klienta" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
+        @if (in_array($request->status_id, [5, 6])) <x-button label="Zatwierdź w imieniu klienta" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Odrzuć w imieniu klienta" icon="8" action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" /> @endif
     </div>
 </form>

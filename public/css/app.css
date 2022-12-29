@@ -616,6 +616,10 @@ footer .contact-info{
     align-items: flex-start;
 }
 
+#quest-history{
+    max-height: 30vh;
+    overflow: auto;
+}
 #quest-history .history-position{
     border-radius: 1em;
     background: rgba(var(--q-clr), 0.5);
@@ -640,7 +644,6 @@ footer .contact-info{
     margin-top: 1em;
 }
 #stats-buttons button{
-    font-size: 1em;
     margin: 0;
 }
 #stats-log .table{

@@ -17,11 +17,13 @@
             <x-button
                 label="{{ $option->status_name }}" icon="{{ $option->id }}"
                 action="submit" value="{{ $option->id }}" name="status_id"
+                :small="true"
                 />
             @endforeach
             <x-button
                 label="stop" icon="circle-pause" :danger="true"
                 action="submit" value="13" name="status_id"
+                :small="true"
                 />
         </form>
         <section id="stats-log">

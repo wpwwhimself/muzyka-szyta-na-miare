@@ -7,7 +7,7 @@
         Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.</p>
         @break
     @case(4)
-        Nie podejmę się wykonania tego zlecenia. Prawdopobodmie jest ono dla mnie niewykonalne.
+        Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.
         @break
     @case(5)
         Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – poprawić odpowiednie pola i przesłać mi do ponownej wyceny. W ostateczności możesz odrzucić zapytanie.
@@ -155,7 +155,7 @@
         @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Poproś o ponowną wycenę" icon="6" name="new_status" value="6" action="submit" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Odrzuć" icon="8" :danger="true" action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" /> @endif
-        @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Odnów" icon="1" name="new_status" value="1" action="submit" /> @endif
+        {{-- @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Odnów" icon="1" name="new_status" value="1" action="submit" /> @endif --}}
     </div>
 </form>
 @endsection

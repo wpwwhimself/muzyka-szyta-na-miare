@@ -5,7 +5,7 @@
 @section('content')
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
-        uprzejmie dziękuję za zainteresowanie moimi usługami.
+        uprzejmie dziękuję za @if ($request->client_id) ponowne @endif zainteresowanie moimi usługami.
         Poniżej prezentuję skrót wyceny zlecenia.
     </p>
 

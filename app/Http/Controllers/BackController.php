@@ -366,7 +366,7 @@ class BackController extends Controller
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
-        Mail::to("contac@wpww.pl")->send(new ArchmageQuestMod($request));
+        Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($request));
         $mailing = true;
         $this->statusHistory($id, $status, null, null, $mailing);
 

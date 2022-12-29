@@ -837,7 +837,7 @@ footer .contact-info{
         display: block;
     }
     .grid-3,
-    .quest-mini{
+    .quest-mini, .section-header{
         flex-direction: column;
     }
     .login-grid-container{

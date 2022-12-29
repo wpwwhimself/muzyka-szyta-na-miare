@@ -184,5 +184,7 @@ Route::get("/songs_info", function(Request $rq){
     return Song::orderByRaw("ISNULL(title)")
             ->orderBy("title")
             ->orderBy("artist")
+            ->select(["title", "artist"])
+            ->distinct()
             ->get();
 });

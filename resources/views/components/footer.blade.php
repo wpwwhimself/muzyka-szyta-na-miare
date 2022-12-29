@@ -16,7 +16,7 @@
     </a>
     <a href="https://www.instagram.com/muzykaszytanamiarepl/">
         <i class="fa-brands fa-instagram"></i>
-        muuzykaszytanamiarepl
+        muzykaszytanamiarepl
     </a>
     <a href="callto:+48530268000">
         <i class="fa-solid fa-phone"></i>

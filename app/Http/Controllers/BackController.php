@@ -286,7 +286,7 @@ class BackController extends Controller
             }
         }else if($request->status_id != 4){
             //mail do mnie, bo zmiany w zapytaniu
-            Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($request));
+            Mail::to("goniec+kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
@@ -366,7 +366,7 @@ class BackController extends Controller
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
-        Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($request));
+        Mail::to("goniec+kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
         $mailing = true;
         $this->statusHistory($id, $status, null, null, $mailing);
 
@@ -499,7 +499,7 @@ class BackController extends Controller
             }
         }else if(Auth::id() != 1){
             //mail do mnie, bo zmiany w zleceniu
-            Mail::to("contact@wpww.pl")->send(new ArchmageQuestMod($quest));
+            Mail::to("goniec+kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }

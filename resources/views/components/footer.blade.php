@@ -6,17 +6,17 @@
     <p><a href="https://creativecommons.org/licenses/by-sa/3.0/pl/">&copy; CC BY-SA 3.0</a> 2019 – {{ date("Y") }}</p>
   </div>
   <div class="contact-info">
-    <a href="mailto:contact@wpww.pl">
+    <a href="mailto:kontakt@muzykaszytanamiare.pl">
         <i class="fa-solid fa-envelope"></i>
-        contact@wpww.pl
+        kontakt@muzykaszytanamiare.pl
     </a>
-    <a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare">
+    <a href="https://www.facebook.com/muzykaszytanamiarepl">
         <i class="fa-brands fa-facebook"></i>
-        wpwwMuzykaSzytaNaMiare
+        muzykaszytanamiarepl
     </a>
-    <a href="https://www.instagram.com/wpwwmuzykaszytanamiare/">
+    <a href="https://www.instagram.com/muzykaszytanamiarepl/">
         <i class="fa-brands fa-instagram"></i>
-        wpwwmuzykaszytanamiare
+        muuzykaszytanamiarepl
     </a>
     <a href="callto:+48530268000">
         <i class="fa-solid fa-phone"></i>

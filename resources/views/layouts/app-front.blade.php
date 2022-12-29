@@ -9,9 +9,9 @@
 	<meta name=description content="Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.">
 	<meta name=keywords content="Wojciech Przybyła, Wesoły Wojownik, fajna strona, WPWW, podkłady, nuty, transkrypcja, patrytury, studio, muzyka">
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
-	<meta property='og:image' content='http://msznm.wpww.pl/media/thumbnail.jpg' />
+	<meta property='og:image' content='https://muzykaszytanamiare.pl/media/thumbnail.jpg' />
 	<meta property='og:type' content='website' />
-	<meta property='og:url' content='http://msznm.wpww.pl/' />
+	<meta property='og:url' content='https://muzykaszytanamiare.pl/' />
 	<meta property='og:title' content='{{ config("app.name") }} – podkłady, transkrypcje, aranże, kompozycje' />
 	<meta property='og:description' content='Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.' />
 

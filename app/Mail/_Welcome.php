@@ -32,7 +32,7 @@ class _Welcome extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Nowa strona internetowa i logowanie")
+            ->subject("Nowa strona internetowa i logowanie")
             ->view('emails._welcome');
     }
 }

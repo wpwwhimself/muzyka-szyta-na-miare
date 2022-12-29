@@ -32,7 +32,7 @@ class QuestUpdated extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Zlecenie nr ".$this->quest->id." zostało zaktualizowane")
+            ->subject("Zlecenie nr ".$this->quest->id." zostało zaktualizowane")
             ->view('emails.quest-updated');
     }
 }

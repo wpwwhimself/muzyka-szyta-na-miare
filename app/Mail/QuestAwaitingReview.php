@@ -32,7 +32,7 @@ class QuestAwaitingReview extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Zlecenie nr ".$this->quest->id." oczekuje na opinię")
+            ->subject("Zlecenie nr ".$this->quest->id." oczekuje na opinię")
             ->view('emails.quest-awaiting-review');
     }
 }

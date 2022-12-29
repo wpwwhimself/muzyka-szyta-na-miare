@@ -35,12 +35,12 @@ class ArchmageQuestMod extends Mailable
         return ($this->isRequest) ?
             $this
             ->from('kontakt@muzykaszytanamiare.pl', 'Goniec MSZNM')
-            ->subject("[MSZNM] [".$this->quest->status->status_name."] ".$this->quest->title)
+            ->subject("[".$this->quest->status->status_name."] ".$this->quest->title)
             ->view('emails.archmage-quest-mod')
             :
             $this
             ->from('kontakt@muzykaszytanamiare.pl', 'Goniec MSZNM')
-            ->subject("[MSZNM] [".$this->quest->status->status_name."] ".$this->quest->id." | ".$this->quest->song->title)
+            ->subject("[".$this->quest->status->status_name."] ".$this->quest->id." | ".$this->quest->song->title)
             ->view('emails.archmage-quest-mod');
     }
 }

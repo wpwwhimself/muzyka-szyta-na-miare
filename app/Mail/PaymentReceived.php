@@ -32,7 +32,7 @@ class PaymentReceived extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Wpłata zarejestrowana za zlecenie ".$this->quest->id)
+            ->subject("Wpłata zarejestrowana za zlecenie ".$this->quest->id)
             ->view('emails.payment-received');
     }
 }

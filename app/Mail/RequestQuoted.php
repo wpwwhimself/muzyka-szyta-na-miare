@@ -32,7 +32,7 @@ class RequestQuoted extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Wycena zapytania | ".($this->request->title ?? "utwór bez tytułu"))
+            ->subject("Wycena zapytania | ".($this->request->title ?? "utwór bez tytułu"))
             ->view('emails.request-quoted');
     }
 }

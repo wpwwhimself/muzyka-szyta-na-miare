@@ -32,7 +32,7 @@ class QuestAwaitingPayment extends Mailable
     public function build()
     {
         return $this
-            ->subject("[MSZNM] Zlecenie nr ".$this->quest->id." oczekuje na opłacenie")
+            ->subject("Zlecenie nr ".$this->quest->id." oczekuje na opłacenie")
             ->view('emails.quest-awaiting-payment');
     }
 }

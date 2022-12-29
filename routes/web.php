@@ -95,7 +95,7 @@ Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
 Route::get("/mp-w/{id}", function($id){ return new App\Mail\_Welcome(Client::findOrFail($id)); })->name("mp-w");
 
-//TODO GREENLIGHT -- po wdrożeniu usunąć
+/*
 Route::get("/greenlight", function(Request $rq){
     $clients_with_email = Client::whereNotNull("email")->get();
     $output = "";
@@ -124,6 +124,7 @@ EOS;
 
     return $output;
 })->middleware("auth");
+*/
 
 /**
  * for AJAX purposes

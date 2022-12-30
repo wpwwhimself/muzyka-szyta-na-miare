@@ -95,24 +95,6 @@
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             <x-input type="text" name="price_code_override" label="Kod wyceny" value="{{ $quest->price_code_override }}" :hint="$prices" />
-            <script>
-            $(document).ready(function(){
-                $("#price_code_override").change(function(){
-                    $.ajax({
-                        url: "{{ url('quest_price_update') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            id: '{{ $quest->id }}',
-                            code: $("#price_code_override").val()
-                        },
-                        success: function(){
-                            location.reload();
-                        }
-                    })
-                });
-            });
-            </script>
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
@@ -160,10 +142,29 @@
                 Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
                 @endunless
             </label>
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" :disabled="true" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" />
             @if ($quest->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
             @endif
+            <script>
+            $(document).ready(function(){
+                $("#price_code_override, #deadline").change(function(){
+                    $.ajax({
+                        url: "{{ url('quest_quote_update') }}",
+                        type: "post",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            id: '{{ $quest->id }}',
+                            price: $("#price_code_override").val(),
+                            deadline: $("#deadline").val()
+                        },
+                        success: function(){
+                            location.reload();
+                        }
+                    })
+                });
+            });
+            </script>
         </section>
 
         <section class="input-group sc-line">

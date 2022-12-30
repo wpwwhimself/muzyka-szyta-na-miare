@@ -148,13 +148,15 @@ Route::post('/price_calc', function(Request $request){
 Route::get('/quest_type_from_id', function(Request $request){
     return QuestType::where("code", $request->initial)->first()->toJson();
 });
-Route::post('/quest_price_update', function(Request $rq){
+Route::post('/quest_quote_update', function(Request $rq){
     $quest = Quest::findOrFail($rq->id);
     $price_before = $quest->price;
+    $deadline_before = $quest->deadline;
     $quest->update([
-        "price_code_override" => $rq->code,
-        "price" => price_calc($rq->code, $quest->client_id)[0],
-        "paid" => ($quest->payments->sum("comment") >= price_calc($rq->code, $quest->client_id)[0])
+        "price_code_override" => $rq->price,
+        "price" => price_calc($rq->price, $quest->client_id)[0],
+        "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price, $quest->client_id)[0]),
+        "deadline" => $rq->deadline,
     ]);
 
     // sending mail
@@ -165,10 +167,21 @@ Route::post('/quest_price_update', function(Request $rq){
     }else{
         $mailing = false;
     }
+
+    // zbierz zmiany
+    $comment = [];
+    foreach([
+        "price" => [$price_before, $quest->price],
+        "deadline" => [$deadline_before, $quest->deadline],
+    ] as $attr => $value){
+        if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
+    }
+    if ($comment == []) $comment = "";
+
     app("App\Http\Controllers\BackController")->statusHistory(
         $rq->id,
         31,
-        json_encode(["price" => $price_before . " → " . $quest->price]),
+        json_encode($comment),
         null,
         $mailing
     );

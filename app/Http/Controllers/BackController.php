@@ -36,9 +36,9 @@ class BackController extends Controller
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
         ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
         ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
-        ->orderByRaw("paid desc")
-        ->orderByRaw("case when deadline is null then 1 else 0 end")
         ->orderBy("deadline")
+        ->orderByRaw("paid desc")
+        // ->orderByRaw("case when deadline is null then 1 else 0 end")
             ;
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);

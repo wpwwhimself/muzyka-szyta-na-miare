@@ -86,6 +86,7 @@ div, form{
 }
 .logo{
     height: 5em;
+    margin: 0.5em;
     /* color set to --acc if it was black pic */
     /* filter: invert(70%) sepia(4%) saturate(5329%) hue-rotate(91deg) brightness(101%) contrast(84%); */
 }

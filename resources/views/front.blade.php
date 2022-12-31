@@ -11,7 +11,7 @@
     <section id="home" class="sc-line">
         <x-sc-scissors />
         <div class="company-name flex-right">
-            <img src="{{ asset("mintgreen.png") }}" alt="logo" class="logo">
+            <img src="{{ asset("msznm.svg") }}" alt="logo" class="logo">
             <div>
                 <h1>{{ config("app.name") }}</h1>
                 <p>Wojciech Przybyła</p>

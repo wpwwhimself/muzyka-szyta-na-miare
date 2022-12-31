@@ -15,7 +15,7 @@
 	<meta property='og:title' content='{{ config("app.name") }} – podkłady, transkrypcje, aranże, kompozycje' />
 	<meta property='og:description' content='Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.' />
 
-    <link rel="icon" href="{{ URL::asset("mintgreen.png") }}">
+    <link rel="icon" href="{{ URL::asset("msznm.svg") }}">
     <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
     <link rel="stylesheet" href="{{ URL::asset("css/front.css") }}">
 

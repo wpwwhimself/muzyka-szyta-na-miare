@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JanitorController;
 use App\Mail\_Welcome;
 use App\Mail\QuestUpdated;
 use App\Models\Client;
@@ -89,7 +90,7 @@ Route::get("/patron-mode/{id}/{level}", function($id, $level){
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
 })->name("patron-mode");
 
-
+/* MAILING */
 Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); })->name("mp-rq");
 Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
@@ -201,3 +202,5 @@ Route::get("/songs_info", function(Request $rq){
             ->distinct()
             ->get();
 });
+
+Route::get("/re_quests_janitor", [JanitorController::class, "index"]);

@@ -16,7 +16,7 @@
         <h1><i class="fa-solid fa-add"></i> Dodaj reklamę</h1>
     </div>
 
-    <form action="{{ route('add-showcase') }}" class="flex-right">
+    <form action="{{ route('add-showcase') }}" class="flex-right" method="post">
         @csrf
         <x-select name="song_id" label="Utwór" :options="$songs" :small="true" />
         <x-input type="text" name="link_fb" label="Embed Facebooka" :small="true" />

@@ -571,7 +571,7 @@ class BackController extends Controller
     }
 
     public function showcases(){
-        $showcases = Showcase::orderBy("song_id", "desc")->get();
+        $showcases = Showcase::orderBy("song_id", "desc")->paginate(10);
         $showcases_count = count($showcases);
 
         $songs_raw = Song::all()->toArray();

@@ -52,6 +52,7 @@
         <p class="grayed-out">Nie ma żadnych reklam</p>
         @endforelse
     </div>
+    {{ $showcases->links() }}
 </section>
 
 @endsection

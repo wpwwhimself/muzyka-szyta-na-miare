@@ -11,7 +11,7 @@ class Request extends Model
     use HasFactory, Uuids;
 
     protected $fillable = [
-        "status"
+        "status_id"
     ];
 
     public function client(){

@@ -65,8 +65,6 @@ Route::controller(BackController::class)->group(function(){
 
     Route::get("/songs", "songs")->middleware("auth")->name("songs");
 
-    Route::get("/janitor-log", "janitorLog")->middleware("auth")->name("janitor-log");
-
     Route::get("/ppp", "ppp")->middleware("auth")->name("ppp");
 });
 
@@ -203,4 +201,7 @@ Route::get("/songs_info", function(Request $rq){
             ->get();
 });
 
-Route::get("/re_quests_janitor", [JanitorController::class, "index"]);
+Route::controller(JanitorController::class)->group(function(){
+    Route::get("/re_quests_janitor", "index");
+    Route::get("/janitor-log", "log")->middleware("auth")->name("janitor-log");
+});

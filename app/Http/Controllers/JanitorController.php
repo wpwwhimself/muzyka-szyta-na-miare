@@ -67,14 +67,14 @@ class JanitorController extends Controller
         $quests = Quest::where("status_id", 15)->get();
         foreach($quests as $quest){
             if(
-            $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
-            &&
-            !$quest->updated_at->isToday()
+                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
+                &&
+                !$quest->updated_at->isToday()
             ){
-            if($quest->client->email){
-                Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
-                StatusChange::where("re_quest_id", $quest->id)->where("status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
-            }
+                if($quest->client->email){
+                    Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
+                    StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
+                }
             }
         }
 
@@ -84,21 +84,32 @@ class JanitorController extends Controller
         $quests = Quest::where("paid", 0)->where("status_id", 19)->get();
         foreach($quests as $quest){
             if(
-            $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
-            &&
-            !$quest->updated_at->isToday()
+                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
+                &&
+                !$quest->updated_at->isToday()
             ){
-            if($quest->client->email){
-                Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
-                //status
-                $status = StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 33)->first();
-                if($status){
-                $status->increment("mail_sent");
-                }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
+                if($quest->client->email){
+                    Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
+                    //status
+                    $status = StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 33)->first();
+                    if($status){
+                        $status->increment("mail_sent");
+                    }else{
+                        app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
+                    }
                 }
             }
-            }
         }
+    }
+
+    public function log(){
+        $logs = StatusChange::whereRaw("new_status_id = 15 AND mail_sent > 1 OR new_status_id IN (7,17,33)")
+            ->whereDate('date', '>=', now()->subDays(5)->setTime(0,0,0)->toDateTimeString())
+            ->get();
+
+        return view(user_role().".janitor-log", array_merge(
+            ["title" => "Logi Sprzątacza"],
+            compact("logs")
+        ));
     }
 }

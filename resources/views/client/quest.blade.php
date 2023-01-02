@@ -105,8 +105,9 @@
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>
-                    Jest ona wymagana do przeglądania i pobierania plików,<br>
-                    chyba że zaskarbisz sobie moje zaufanie.
+                    Jest ona potrzebna do przeglądania i pobierania plików,<br>
+                    chyba, że zaskarbisz sobie moje zaufanie<br>
+                    (np. będąc stałym klientem)
                 </p>
             </div>
             @endunless

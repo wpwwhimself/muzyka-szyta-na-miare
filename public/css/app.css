@@ -625,7 +625,7 @@ footer .contact-info{
     border-radius: 1em;
     background: rgba(var(--q-clr), 0.5);
     margin: 0.3em; padding: 0.3em 0.5em;
-    display: grid; grid-template-columns: 18em 6em; column-gap: 0.5em;
+    display: grid; grid-template-columns: 3fr 1fr; column-gap: 0.5em;
 }
 #quest-history .history-position.by-client{ margin-right: 2em; }
 #quest-history .history-position.by-me{ margin-left: 2em; }
@@ -800,6 +800,10 @@ footer .contact-info{
     }
     footer .contact-info{
         margin: auto;
+    }
+
+    #quest-box{
+        align-items: stretch;
     }
 
     #stats-buttons{

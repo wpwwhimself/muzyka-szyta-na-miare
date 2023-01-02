@@ -522,9 +522,11 @@ class BackController extends Controller
         }
 
         if($rq->status_id != 13){
-            SongWorkTime::updateOrCreate(["status_id" => $rq->status_id], [
-                "song_id" => $rq->song_id,
+            SongWorkTime::updateOrCreate([
                 "status_id" => $rq->status_id,
+                "song_id" => $rq->song_id,
+            ],
+            [
                 "now_working" => 1,
                 "since" => now(),
             ]);

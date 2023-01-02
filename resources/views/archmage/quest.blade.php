@@ -8,70 +8,6 @@
 
     <x-phase-indicator :status-id="$quest->status_id" />
 
-    <div id="stats">
-        @if ($quest->status_id == 12)
-        <form method="POST" action="{{ route("work-clock") }}" id="stats-buttons" class="flex-right">
-            @csrf
-            <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
-            @foreach ($stats_statuses as $option)
-            <x-button
-                label="{{ $option->status_name }}" icon="{{ $option->id }}"
-                action="submit" value="{{ $option->id }}" name="status_id"
-                :small="true"
-                />
-            @endforeach
-            <x-button
-                label="stop" icon="circle-pause" :danger="true"
-                action="submit" value="13" name="status_id"
-                :small="true"
-                />
-        </form>
-        @endif
-
-        <section id="stats-log">
-            <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Etap</th>
-                        <th>Czas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @forelse ($workhistory as $entry)
-                    <tr>
-                        <td>
-                            {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
-                            {{ DB::table("statuses")->find($entry->status_id)->status_name }}
-                            @if ($entry->now_working)
-                            <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
-                            @endif
-                        </td>
-                        <td>{{ $entry->time_spent }}</td>
-                    </tr>
-                @empty
-                <tr>
-                    <td colspan=2 class="grayed-out">
-                        Prace jeszcze nie zaczęte
-                    </td>
-                </tr>
-                @endforelse
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Razem</th>
-                        <th>
-                        {{ gmdate("H:i:s", DB::table("song_work_times")
-                                ->where("song_id", $quest->song_id)
-                                ->sum(DB::raw("TIME_TO_SEC(time_spent)"))) }}
-                        </th>
-                    </tr>
-                </tfoot>
-                </tbody>
-            </table>
-        </section>
-    </div>
-
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2>
@@ -174,6 +110,68 @@
                 });
                 </script> --}}
                 <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>            </form>
+        </section>
+
+        <section id="stats-log">
+            <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Etap</th>
+                        <th>Czas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse ($workhistory as $entry)
+                    <tr>
+                        <td>
+                            {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
+                            {{ DB::table("statuses")->find($entry->status_id)->status_name }}
+                            @if ($entry->now_working)
+                            <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
+                            @endif
+                        </td>
+                        <td>{{ $entry->time_spent }}</td>
+                    </tr>
+                @empty
+                <tr>
+                    <td colspan=2 class="grayed-out">
+                        Prace jeszcze nie zaczęte
+                    </td>
+                </tr>
+                @endforelse
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Razem</th>
+                        <th>
+                        {{ gmdate("H:i:s", DB::table("song_work_times")
+                                ->where("song_id", $quest->song_id)
+                                ->sum(DB::raw("TIME_TO_SEC(time_spent)"))) }}
+                        </th>
+                    </tr>
+                </tfoot>
+                </tbody>
+            </table>
+
+            @if ($quest->status_id == 12)
+            <form method="POST" action="{{ route("work-clock") }}" id="stats-buttons" class="flex-right">
+                @csrf
+                <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
+                @foreach ($stats_statuses as $option)
+                <x-button
+                    label="{{ $option->status_name }}" icon="{{ $option->id }}"
+                    action="submit" value="{{ $option->id }}" name="status_id"
+                    :small="true"
+                    />
+                @endforeach
+                <x-button
+                    label="stop" icon="circle-pause" :danger="true"
+                    action="submit" value="13" name="status_id"
+                    :small="true"
+                    />
+            </form>
+            @endif
         </section>
 
         <section class="input-group sc-line">

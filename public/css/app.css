@@ -616,6 +616,9 @@ footer .contact-info{
     justify-content: center;
     align-items: flex-start;
 }
+#quest-box section{
+    max-width: 600px;
+}
 
 #quest-history{
     max-height: 30vh;
@@ -838,7 +841,7 @@ footer .contact-info{
     .flex-right{
         gap: 0.2em;
     }
-    .grid-2, #stats{
+    .grid-2{
         display: block;
     }
     .grid-3,

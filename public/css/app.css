@@ -340,7 +340,7 @@ header{
     /* color: black; */
 }
 header h1{
-    margin: 0 0.5em 0 0;
+    margin: 0;
 }
 header h2{
     font-family: "Raleway";
@@ -349,6 +349,7 @@ header h2{
 }
 header .flex-right{
     align-items: baseline;
+    gap: 0 0.5em;
 }
 
 /**********************NAV******************/
@@ -404,45 +405,6 @@ footer .contact-info{
     margin-right: auto;
 }
 
-/************************MOBILITY**************/
-@media screen and (max-width: 600px){
-    .flex-right{
-        flex-direction: column;
-    }
-    .main-wrapper{
-        padding: 2em 1em;
-        margin: 1em auto;
-    }
-
-    header{
-        padding: 2em 1em;
-        flex-direction: column;
-    }
-    header h1{
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
-    header .flex-right{
-        align-items: center;
-    }
-
-    nav{
-        justify-content: center;
-    }
-    nav a{
-        margin: 0.2em 1em;
-    }
-
-    footer{
-        position: static;
-        width: auto;
-        margin-top: 3em; padding: 1em;
-        flex-direction: column-reverse;
-        text-align: center;
-    }
-}
-
 /*****************/
 
 #dashboard-quests{
@@ -452,12 +414,12 @@ footer .contact-info{
 
 .dashboard-mini-wrapper{
     display: flex;
+    gap: 1em;
     overflow-x: auto;
 }
 .quest-mini{
     border-radius: 2em;
-    margin: 1em; padding: 1em;
-    width: fit-content;
+    padding: 1em;
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
@@ -792,17 +754,68 @@ footer .contact-info{
     body{
         padding-bottom: 0;
     }
+    .flex-right{
+        flex-direction: column;
+    }
+    .main-wrapper{
+        padding: 2em 1em;
+        margin: 1em auto;
+    }
+
+    header{
+        flex-direction: row;
+        padding: 0.5em 1em;
+    }
+    header .logo{
+        height: 3em;
+    }
     header h1{
         margin: 0;
+        font-size: 1.25em;
+    }
+    header h2{
+        font-size: 1em;
     }
     section{
         margin: 1em 0;
     }
+    .section-header h1{
+        font-size: 1.25em;
+    }
+
+    header nav{
+        width: calc(90vw - 6em);
+        overflow-x: scroll;
+        flex-wrap: nowrap; white-space: nowrap;
+        justify-content: left;
+    }
+    nav{
+        justify-content: center;
+    }
     nav a{
         margin: 0.2em;
     }
+    footer{
+        position: static;
+        width: auto;
+        margin-top: 3em; padding: 1em;
+        flex-direction: column-reverse;
+        text-align: center;
+    }
     footer .contact-info{
-        margin: auto;
+        margin: 1em auto;
+    }
+
+    .dashboard-mini-wrapper{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .quest-mini{
+        margin: 0;
+    }
+    .quest-mini .song-title{
+        font-size: 1em;
+        white-space: normal;
     }
 
     #quest-box{
@@ -844,8 +857,7 @@ footer .contact-info{
     .grid-2{
         display: block;
     }
-    .grid-3,
-    .quest-mini, .section-header{
+    .grid-3, .section-header{
         flex-direction: column;
     }
     .login-grid-container{

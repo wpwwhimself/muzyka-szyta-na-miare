@@ -53,6 +53,8 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
     Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
+    Route::post("/quest-song-update", "questSongUpdate")->middleware("auth")->name("quest-song-update");
+    Route::post("/quest-quote-update", "questQuoteUpdate")->middleware("auth")->name("quest-quote-update");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
@@ -147,44 +149,6 @@ Route::post('/price_calc', function(Request $request){
 Route::get('/quest_type_from_id', function(Request $request){
     return QuestType::where("code", $request->initial)->first()->toJson();
 });
-Route::post('/quest_quote_update', function(Request $rq){
-    $quest = Quest::findOrFail($rq->id);
-    $price_before = $quest->price;
-    $deadline_before = $quest->deadline;
-    $quest->update([
-        "price_code_override" => $rq->price,
-        "price" => price_calc($rq->price, $quest->client_id)[0],
-        "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price, $quest->client_id)[0]),
-        "deadline" => $rq->deadline,
-    ]);
-
-    // sending mail
-    $mailing = null;
-    if($quest->client->email){
-        Mail::to($quest->client->email)->send(new QuestUpdated($quest));
-        $mailing = true;
-    }else{
-        $mailing = false;
-    }
-
-    // zbierz zmiany
-    $comment = [];
-    foreach([
-        "price" => [$price_before, $quest->price],
-        "deadline" => [$deadline_before, $quest->deadline],
-    ] as $attr => $value){
-        if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
-    }
-    if ($comment == []) $comment = "";
-
-    app("App\Http\Controllers\BackController")->statusHistory(
-        $rq->id,
-        31,
-        json_encode($comment),
-        null,
-        $mailing
-    );
-});
 Route::post('/budget_update', function(Request $rq){
     $client = Client::findOrFail($rq->client_id);
     $client->update(["budget" => $rq->new_budget]);
@@ -203,5 +167,5 @@ Route::get("/songs_info", function(Request $rq){
 
 Route::controller(JanitorController::class)->group(function(){
     Route::get("/re_quests_janitor", "index");
-    Route::get("/janitor-log", "log")->middleware("auth")->name("janitor-log");
+    // Route::get("/janitor-log", "log")->middleware("auth")->name("janitor-log");
 });

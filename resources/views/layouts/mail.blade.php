@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link rel="icon" href="{{ asset("msznm.svg") }}">
+    <link rel="icon" href="{{ asset("mintgreen_tiny.png") }}">
     <link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <style>
@@ -36,9 +36,6 @@
     }
     footer .contact-info{
         margin: 1em 0;
-    }
-    .logo{
-        height: 5em;
     }
     </style>
     <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>

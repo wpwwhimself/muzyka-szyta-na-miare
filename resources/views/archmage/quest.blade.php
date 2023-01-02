@@ -8,8 +8,8 @@
 
     <x-phase-indicator :status-id="$quest->status_id" />
 
-    @if ($quest->status_id == 12)
     <div id="stats">
+        @if ($quest->status_id == 12)
         <form method="POST" action="{{ route("work-clock") }}" id="stats-buttons" class="flex-right">
             @csrf
             <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
@@ -26,6 +26,8 @@
                 :small="true"
                 />
         </form>
+        @endif
+
         <section id="stats-log">
             <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
             <table>
@@ -69,7 +71,6 @@
             </table>
         </section>
     </div>
-    @endif
 
     <div id="quest-box" class="flex-right">
         <section class="input-group">
@@ -78,12 +79,16 @@
                 Utwór
                 <a href="{{ route('songs') }}#song{{ $quest->song_id }}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i></a>
             </h2>
-            <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
-            <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
-            <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
-            <x-link-interpreter :raw="$quest->song->link" />
-            <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" :disabled="true" />
-
+            <form action="{{ route("quest-song-update") }}" method="post">
+                @csrf
+                <input type="hidden" name="id" value="{{ $quest->song->id }}" />
+                <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
+                <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
+                <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
+                <x-link-interpreter :raw="$quest->song->link" />
+                <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" />
+                <div class="flexright"><x-button label="Popraw utwór" icon="pen" action="submit" :small="true" /></div>
+            </form>
             <h2>
                 <i class="fa-solid fa-user"></i>
                 Klient
@@ -94,77 +99,81 @@
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
-            <x-input type="text" name="price_code_override" label="Kod wyceny" value="{{ $quest->price_code_override }}" :hint="$prices" />
-            <div id="price-summary" class="hint-table">
-                <div class="positions"></div>
-                <hr />
-                <div class="summary"><span>Razem:</span><span>0 zł</span></div>
-            </div>
-            <script>
-            function calcPriceNow(){
-                const labels = "{{ $quest->price_code_override }}";
-                const client_id = "{{ $quest->client_id }}";
-                const positions_list = $("#price-summary .positions");
-                const sum_row = $("#price-summary .summary");
-                if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
-                else{
-                    $.ajax({
-                        url: "{{ url('price_calc') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            labels: labels,
-                            client_id: client_id
-                        },
-                        success: function(res){
-                            let content = ``;
-                            for(line of res[1]){
-                                content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+            <form action="{{ route("quest-quote-update") }}" method="post">
+                @csrf
+                <input type="hidden" name="id" value="{{ $quest->id }}" />
+                <x-input type="text" name="price_code_override" label="Kod wyceny" value="{{ $quest->price_code_override }}" :hint="$prices" />
+                <div id="price-summary" class="hint-table">
+                    <div class="positions"></div>
+                    <hr />
+                    <div class="summary"><span>Razem:</span><span>0 zł</span></div>
+                </div>
+                <script>
+                function calcPriceNow(){
+                    const labels = "{{ $quest->price_code_override }}";
+                    const client_id = "{{ $quest->client_id }}";
+                    const positions_list = $("#price-summary .positions");
+                    const sum_row = $("#price-summary .summary");
+                    if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
+                    else{
+                        $.ajax({
+                            url: "{{ url('price_calc') }}",
+                            type: "post",
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                labels: labels,
+                                client_id: client_id
+                            },
+                            success: function(res){
+                                let content = ``;
+                                for(line of res[1]){
+                                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+                                }
+                                positions_list.html(content);
+                                sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
+                                if(res[2]) positions_list.addClass("overridden");
+                                    else positions_list.removeClass("overridden");
                             }
-                            positions_list.html(content);
-                            sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
-                            if(res[2]) positions_list.addClass("overridden");
-                                else positions_list.removeClass("overridden");
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-            $(document).ready(function(){
-                calcPriceNow();
-                $("#price_code_override").change(function (e) { calcPriceNow() });
-            });
-            </script>
-            <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
-            <label for="payments">
-                Opłacono: {{ $quest->payments->sum("comment") }} zł
-                @unless ($quest->paid)
-                •
-                Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
-                @endunless
-            </label>
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" />
-            @if ($quest->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
-            @endif
-            <script>
-            $(document).ready(function(){
-                $("#price_code_override, #deadline").change(function(){
-                    $.ajax({
-                        url: "{{ url('quest_quote_update') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            id: '{{ $quest->id }}',
-                            price: $("#price_code_override").val(),
-                            deadline: $("#deadline").val()
-                        },
-                        success: function(){
-                            location.reload();
-                        }
-                    })
+                $(document).ready(function(){
+                    calcPriceNow();
+                    $("#price_code_override").change(function (e) { calcPriceNow() });
                 });
-            });
-            </script>
+                </script>
+                <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                <label for="payments">
+                    Opłacono: {{ $quest->payments->sum("comment") }} zł
+                    @unless ($quest->paid)
+                    •
+                    Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
+                    @endunless
+                </label>
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" />
+                @if ($quest->hard_deadline)
+                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
+                @endif
+                {{-- <script>
+                $(document).ready(function(){
+                    $("#price_code_override, #deadline").change(function(){
+                        $.ajax({
+                            url: "{{ url('quest_quote_update') }}",
+                            type: "post",
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                id: '{{ $quest->id }}',
+                                price: $("#price_code_override").val(),
+                                deadline: $("#deadline").val()
+                            },
+                            success: function(){
+                                location.reload();
+                            }
+                        })
+                    });
+                });
+                </script> --}}
+                <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>            </form>
         </section>
 
         <section class="input-group sc-line">

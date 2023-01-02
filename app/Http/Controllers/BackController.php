@@ -508,6 +508,53 @@ class BackController extends Controller
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }
+    public function questSongUpdate(HttpRequest $rq){
+        $song = Song::findOrFail($rq->id);
+        $song->update([
+            "artist" => $rq->artist,
+            "notes" => $rq->wishes,
+        ]);
+        return back()->with("success", "Utwór zmodyfikowany");
+    }
+    public function questQuoteUpdate(HttpRequest $rq){
+        $quest = Quest::findOrFail($rq->id);
+        $price_before = $quest->price;
+        $deadline_before = $quest->deadline;
+        $quest->update([
+            "price_code_override" => $rq->price_code_override,
+            "price" => price_calc($rq->price_code_override, $quest->client_id)[0],
+            "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)[0]),
+            "deadline" => $rq->deadline,
+        ]);
+
+        // sending mail
+        $mailing = null;
+        if($quest->client->email){
+            Mail::to($quest->client->email)->send(new QuestUpdated($quest));
+            $mailing = true;
+        }else{
+            $mailing = false;
+        }
+
+        // zbierz zmiany
+        $comment = [];
+        foreach([
+            "price" => [$price_before, $quest->price],
+            "deadline" => [$deadline_before, $quest->deadline],
+        ] as $attr => $value){
+            if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
+        }
+        if ($comment == []) $comment = "";
+
+        app("App\Http\Controllers\BackController")->statusHistory(
+            $rq->id,
+            31,
+            json_encode($comment),
+            null,
+            $mailing
+        );
+        return back()->with("success", "Wycena zapytania zmodyfikowana");
+    }
 
     public function workClock(HttpRequest $rq){
         $now_working = SongWorkTime::where("now_working", 1)->first();

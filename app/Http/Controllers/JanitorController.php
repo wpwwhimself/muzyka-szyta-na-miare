@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ArchmageJanitorReport;
 use App\Mail\QuestAwaitingPayment;
 use App\Mail\QuestAwaitingReview;
 use App\Models\Quest;
@@ -13,10 +14,11 @@ use Illuminate\Support\Facades\Mail;
 class JanitorController extends Controller
 {
     public function index(){
+        $summary = [];
+
         /**
          * constants
          */
-
         foreach([
             "quest_reminder_time",
             "request_expired_after",
@@ -34,7 +36,11 @@ class JanitorController extends Controller
             ->get();
         foreach($requests as $request){
             $request->update(["status_id", 7]);
-            app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak opinii", 1, null);
+            app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
+            $summary[] = [
+                "re_quest" => $request, "is_request" => true,
+                "operation" => "Zapytanie wygaszone - brak reakcji",
+            ];
         }
 
         /**
@@ -46,6 +52,10 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             $quest->update(["status_id", 17]);
             app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
+            $summary[] = [
+                "re_quest" => $quest, "is_request" => false,
+                "operation" => "Zlecenie wygaszone - brak opinii",
+            ];
         }
 
         /**
@@ -59,6 +69,10 @@ class JanitorController extends Controller
             $quest->update(["status_id", 17]);
             $quest->client->update(["trust" => -1]);
             app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
+            $summary[] = [
+                "re_quest" => $quest, "is_request" => false,
+                "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane",
+            ];
         }
 
         /**
@@ -74,6 +88,15 @@ class JanitorController extends Controller
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
                     StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
+                    $summary[] = [
+                        "re_quest" => $quest, "is_request" => false,
+                        "operation" => "Przypomnienie o recenzji - mail wysłany",
+                    ];
+                }else{
+                    $summary[] = [
+                        "re_quest" => $quest, "is_request" => false,
+                        "operation" => "Przypomnienie o recenzji - WYMAGA KONTAKTU",
+                    ];
                 }
             }
         }
@@ -97,19 +120,35 @@ class JanitorController extends Controller
                     }else{
                         app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
                     }
+                    $summary[] = [
+                        "re_quest" => $quest, "is_request" => false,
+                        "operation" => "Przypomnienie o opłacie - mail wysłany",
+                    ];
+                }else{
+                    $summary[] = [
+                        "re_quest" => $quest, "is_request" => false,
+                        "operation" => "Przypomnienie o opłacie - WYMAGA KONTAKTU",
+                    ];
                 }
             }
         }
+
+        /**
+         * summary and report
+         */
+        if(count($summary) > 0){
+            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
+        }
     }
 
-    public function log(){
-        $logs = StatusChange::whereRaw("new_status_id = 15 AND mail_sent > 1 OR new_status_id IN (7,17,33)")
-            ->whereDate('date', '>=', now()->subDays(5)->setTime(0,0,0)->toDateTimeString())
-            ->get();
+    // public function log(){
+    //     $logs = StatusChange::whereRaw("new_status_id = 15 AND mail_sent > 1 OR new_status_id IN (7,17,33)")
+    //         ->whereDate('date', '>=', now()->subDays(5)->setTime(0,0,0)->toDateTimeString())
+    //         ->get();
 
-        return view(user_role().".janitor-log", array_merge(
-            ["title" => "Logi Sprzątacza"],
-            compact("logs")
-        ));
-    }
+    //     return view(user_role().".janitor-log", array_merge(
+    //         ["title" => "Logi Sprzątacza"],
+    //         compact("logs")
+    //     ));
+    // }
 }

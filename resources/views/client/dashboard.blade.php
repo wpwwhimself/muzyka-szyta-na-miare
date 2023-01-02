@@ -51,7 +51,7 @@
             @if (Auth::user()->client->trust == -1)
             <br>
             <div class="section-header error">
-                <h1><i class="fa-solid fa-user-ninja"></i> Jesteś w niełasce!</h1>
+                <h1><i class="fa-solid fa-user-ninja"></i> Jesteś na czarnej liście!</h1>
             </div>
             <p>
                 W obecnej chwili masz status krętacza i oszusta, a to z tego powodu, że posiadasz nieopłacone przez bardzo długi czas projekty.
@@ -68,7 +68,7 @@
             <form>
                 <x-button
                     label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
-                    action="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews"
+                    action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
                     />
                 <x-button
                     label="Opinia wystawiona" icon="signature"

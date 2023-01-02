@@ -23,7 +23,7 @@
         <a href="{{ route("songs") }}"><li><i class="fa-solid fa-compact-disc"></i> Utwory</li></a>
         <a href="{{ route("clients") }}"><li><i class="fa-solid fa-users"></i> Klienci</li></a>
         <a href="{{ route("showcases") }}"><li><i class="fa-solid fa-bullhorn"></i> Reklama</li></a>
-        <a href="{{ route("janitor-log") }}"><li><i class="fa-solid fa-broom"></i> Sprzątacz</li></a>
+        {{-- <a href="{{ route("janitor-log") }}"><li><i class="fa-solid fa-broom"></i> Sprzątacz</li></a> --}}
         <a href="{{ route("ppp") }}"><li><i class="fa-solid fa-circle-question"></i> PPP</li></a>
     @endif
     <a href="{{ route("logout") }}" class="auth-link"><li><i class="fa-solid fa-power-off"></i> Wyloguj się</li></a>

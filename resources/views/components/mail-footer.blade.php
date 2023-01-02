@@ -19,6 +19,6 @@
             muzykaszytanamiarepl
         </a>
     </div>
-    <img src="{{ URL::asset("msznm.svg") }}" alt="Logo" class="logo">
+    <img src="{{ URL::asset("mintgreen_tiny.png") }}" alt="Logo" class="logo">
     <p><i>Wiadomość wysłana automatycznie. Odpowiedź na nią zostanie przekazana na mój adres mailowy podany wyżej.</i></p>
 </footer>

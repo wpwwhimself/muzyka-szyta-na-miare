@@ -192,7 +192,7 @@
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             @if (in_array($quest->status_id, [15, 18, 19])) <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Poproś o poprawki" /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="18" value="18" label="Odrzuć" :danger="true" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="18" value="18" label="Zrezygnuj ze zlecenia" :danger="true" /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  /> @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" /> @endif
         </div>

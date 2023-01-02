@@ -18,7 +18,7 @@
         <hr />
         @forelse ($logs as $log)
         <div class="table-row">
-            <span>{{ $log->date->format("Y-m-d") }}</span>
+            <span>{{ explode(" ", $log->date)[0] }}</span>
             <span><a href="{{ route(strlen($log->re_quest_id) == 36 ? "request" : "quest", ["id" => $log->re_quest_id]) }}">{{ $log->re_quest_id }}</a></span>
             <span>{{ DB::table("statuses")->find($log->new_status_id)->status_name }} - {{ $log->comment }}</span>
             <span>{{ $log->mail_sent }}</span>

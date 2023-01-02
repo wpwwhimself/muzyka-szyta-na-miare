@@ -46,7 +46,7 @@ class BackController extends Controller
         }else{
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
             $unpaids = Quest::where("paid", 0)
-                ->whereNotIn("status_id", [18])
+                ->whereNotIn("status_id", [17, 18])
                 ->whereHas("client", function(Builder $query){
                     $query->where("trust", ">", -1);
                 })

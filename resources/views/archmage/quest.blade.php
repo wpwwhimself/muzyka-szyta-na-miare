@@ -17,8 +17,15 @@
             </h2>
             <form action="{{ route("quest-song-update") }}" method="post">
                 @csrf
-                <x-input type="text" name="id" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
-                <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
+                <div id="quest-song-id">
+                    <x-quest-type
+                        :id="song_quest_type($quest->song_id)->id ?? 0"
+                        :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
+                        :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                        />
+                    <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
+                    <input type="hidden" name="id" value="{{ $quest->song->id }}" />
+                </div>
                 <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
                 <x-link-interpreter :raw="$quest->song->link" />
@@ -90,25 +97,6 @@
                 @if ($quest->hard_deadline)
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
                 @endif
-                {{-- <script>
-                $(document).ready(function(){
-                    $("#price_code_override, #deadline").change(function(){
-                        $.ajax({
-                            url: "{{ url('quest_quote_update') }}",
-                            type: "post",
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                id: '{{ $quest->id }}',
-                                price: $("#price_code_override").val(),
-                                deadline: $("#deadline").val()
-                            },
-                            success: function(){
-                                location.reload();
-                            }
-                        })
-                    });
-                });
-                </script> --}}
                 <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>            </form>
         </section>
 
@@ -123,15 +111,15 @@
                 </thead>
                 <tbody>
                 @forelse ($workhistory as $entry)
-                    <tr>
+                    <tr @if($entry->now_working) class="active" @endif>
                         <td>
                             {{ DB::table("statuses")->find($entry->status_id)->status_symbol }}
                             {{ DB::table("statuses")->find($entry->status_id)->status_name }}
-                            @if ($entry->now_working)
-                            <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
-                            @endif
                         </td>
-                        <td>{{ $entry->time_spent }}</td>
+                        <td>
+                            @if ($entry->now_working) <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i> @endif
+                            {{ $entry->time_spent }}
+                        </td>
                     </tr>
                 @empty
                 <tr>
@@ -166,7 +154,7 @@
                     />
                 @endforeach
                 <x-button
-                    label="stop" icon="circle-pause" :danger="true"
+                    label="stop" icon="circle-pause"
                     action="submit" value="13" name="status_id"
                     :small="true"
                     />
@@ -321,16 +309,6 @@
             @csrf
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if ($quest->status_id != 15)
-            <x-button
-                label="Podgląd maila o zmianie" icon="comment-dots" id="mail-mod-prev"
-                action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
-                :small="true"
-                />
-            @endif
-            @if (App::environment() != "dev")
-            <x-button action="submit" name="status_id" icon="11" value="11" label="Jako nowe" />
-            @endif
             @if (in_array($quest->status_id, [11, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
             @if (in_array($quest->status_id, [12])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
             @if (in_array($quest->status_id, [12, 13])) <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" /> @endif
@@ -339,9 +317,19 @@
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  /> @endif
             @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Przywróć" /> @endif
             @if (in_array($quest->status_id, [13, 15])) <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" /> @endif
-            @if (!$quest->paid)
+            @unless ($quest->paid)
             <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
-            @else
+            @endunless
+        </div>
+        <div class="flexright">
+            @if ($quest->status_id != 15)
+            <x-button
+                label="Podgląd maila o zmianie" icon="comment-dots" id="mail-mod-prev"
+                action="{{ route('mp-q', ['id' => $quest->id]) }}" target="_blank"
+                :small="true"
+                />
+            @endif
+            @if ($quest->paid)
             <x-button
                 label="Podgląd maila o płatności" icon="comment-dollar" id="mail-paid-prev"
                 action="{{ route('mp-q-p', ['id' => $quest->id]) }}" target="_blank"

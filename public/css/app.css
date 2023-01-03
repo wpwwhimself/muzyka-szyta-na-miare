@@ -184,6 +184,9 @@ input, select, textarea, button, .submit{
     border-left: none; border-right: none; border-top: none;
     outline: none;
 }
+textarea{
+    height: 3em;
+}
 .select2-dropdown, .select2-selection--single{ background-color: var(--bg) !important; color: var(--fg) !important; }
 input, select, button, .submit{
     font-size: 1.5em;
@@ -468,7 +471,7 @@ footer .contact-info{
     color: rgb(var(--ok));
 }
 
-.quests-table .quest-type{
+.quest-type{
     font-size: 2em;
     width: 1em;
     text-align: center;
@@ -582,6 +585,13 @@ footer .contact-info{
     max-width: 600px;
 }
 
+#quest-song-id{
+    display: grid;
+    gap: 2em;
+    grid-template-columns: 1em 1fr;
+    align-items: center;
+}
+
 #quest-history{
     max-height: 30vh;
     overflow: auto;
@@ -608,6 +618,7 @@ footer .contact-info{
 }
 #stats-buttons{
     margin-top: 1em;
+    gap: 0.2em;
 }
 #stats-buttons button{
     margin: 0;
@@ -616,6 +627,10 @@ footer .contact-info{
     grid-template-columns: 2fr 1fr;
 }
 #stats-log .table span:nth-child(2n - 1){ text-align: left; }
+#stats-log .active{
+    color: var(--acc);
+    font-weight: bold;
+}
 
 #clients-list .table-row{
     --q-clr: 255, 255, 255;
@@ -730,6 +745,13 @@ footer .contact-info{
     display: grid; gap: 0.5em;
     grid-template-columns: 1fr 2fr;
     white-space: wrap;
+}
+
+#phases{
+    margin-top: 2em;
+}
+#phases textarea[name="comment"]{
+    border-top-style: solid;
 }
 
 /* quest and request phases */

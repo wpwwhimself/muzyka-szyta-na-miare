@@ -124,7 +124,7 @@
             @forelse ($files as $ver_super => $ver_mains)
                 @foreach ($ver_mains as $ver_main => $ver_subs)
                 <div class="file-container-a">
-                    <h3>{{ $ver_super }}-{{ $ver_main }}</h3>
+                    <h3>{{ $ver_super }}={{ $ver_main }}</h3>
                     @foreach ($ver_subs as $ver_sub => $ver_bots)
                     <div class="file-container-b">
                         <h4>

@@ -38,18 +38,19 @@ class StatusesSeeder extends Seeder
             ["id" => 32, "status_name" => "dokonano wpłaty", "status_symbol" => "fa-cash-register"],
             ["id" => 33, "status_name" => "przypomnienie o wpłacie", "status_symbol" => "fa-comment-dollar"],
             /* statusy pracy nad questem */
-            ["id" => 100, "status_name" => "analiza i wstępna obróbka", "status_symbol" => "🔍"],
-            ["id" => 101, "status_name" => "nagrania: perkusja", "status_symbol" => "🥁"],
-            ["id" => 102, "status_name" => "nagrania: gitary", "status_symbol" => "🎸"],
-            ["id" => 103, "status_name" => "nagrania: fortepiany", "status_symbol" => "🎹"],
-            ["id" => 104, "status_name" => "nagrania: syntezatory", "status_symbol" => "⚡"],
-            ["id" => 105, "status_name" => "nagrania: dęte", "status_symbol" => "🎺"],
-            ["id" => 106, "status_name" => "nagrania: smyczki", "status_symbol" => "🎻"],
-            ["id" => 107, "status_name" => "nagrania: wokale", "status_symbol" => "🎙"],
-            ["id" => 108, "status_name" => "nagrania: inne", "status_symbol" => "🌊"],
+            ["id" => 100, "status_name" => "wstępna obróbka", "status_symbol" => "🔍"],
+            ["id" => 101, "status_name" => "nagr: perkusja", "status_symbol" => "🟦"],
+            ["id" => 102, "status_name" => "nagr: gitary", "status_symbol" => "🟥"],
+            ["id" => 103, "status_name" => "nagr: fortepiany", "status_symbol" => "🟧"],
+            ["id" => 104, "status_name" => "nagr: syntezatory", "status_symbol" => "⬛"],
+            ["id" => 105, "status_name" => "nagr: dęte", "status_symbol" => "🟩"],
+            ["id" => 106, "status_name" => "nagr: smyczki", "status_symbol" => "🟫"],
+            ["id" => 107, "status_name" => "nagr: wokale", "status_symbol" => "🟪"],
+            ["id" => 108, "status_name" => "inne", "status_symbol" => "🌊"],
             ["id" => 109, "status_name" => "mix i mastering", "status_symbol" => "🎛"],
             ["id" => 110, "status_name" => "pisanie nut", "status_symbol" => "🎵"],
-            ["id" => 111, "status_name" => "przygotowanie filmu", "status_symbol" => "🎬"]
+            ["id" => 111, "status_name" => "przygotowanie filmu", "status_symbol" => "🎬"],
+            ["id" => 112, "status_name" => "nagr: basy", "status_symbol" => "🟨"],
         ]);
     }
 }

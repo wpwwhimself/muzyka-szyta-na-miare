@@ -425,7 +425,7 @@ class BackController extends Controller
         $quest = Quest::findOrFail($id);
 
         $prices = DB::table("prices")->where("quest_type_id", song_quest_type($quest->song_id)->id)->orWhereNull("quest_type_id")->orderBy("indicator")->pluck("service", "indicator")->toArray();
-        if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->get()->toArray();
+        if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->orderByDesc("status_name")->get()->toArray();
         else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
 
         $files_raw = Storage::files('safe/'.$id);

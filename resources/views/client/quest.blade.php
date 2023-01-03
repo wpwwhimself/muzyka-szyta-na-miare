@@ -106,8 +106,7 @@
                 </ul>
                 <p>
                     Jest ona potrzebna do przeglądania i pobierania plików,<br>
-                    chyba, że zaskarbisz sobie moje zaufanie<br>
-                    (np. będąc stałym klientem)
+                    chyba, że jesteś np. stałym klientem
                 </p>
             </div>
             @endunless
@@ -175,12 +174,14 @@
     </div>
 
     <form action="{{ route('mod-quest-back') }}" method="POST" id="phases">
+        @csrf
         <div class="flexright">
-            @csrf
             @if (in_array($quest->status_id, [15]))
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
-                Jeśli nie podoba Ci się to, co dla Ciebie przygotowałem, w polu poniżej możesz napisać, co dokładnie.
+                Za pomocą poniższych przycisków możesz przyjąć zlecenie lub,
+                jeśli coś Ci się nie podoba w przygotowanych przeze mnie materiałach, poprosić o przygotowanie poprawek.
+                Instrukcje do tego celu możesz umieścić w oknie, które pojawi się po wybraniu jednej z poniższych opcji.
                 Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
             </p>
             @elseif ($quest->status_id == 19)
@@ -191,12 +192,37 @@
             </p>
             @endif
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [15, 18, 19])) <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" placeholder="Tu wpisz komentarz, który chcesz dodać, zanim wciśniesz jeden z przycisków poniżej..." /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Poproś o poprawki" /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="18" value="18" label="Zrezygnuj ze zlecenia" :danger="true" /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Zaakceptuj"  /> @endif
-            @if (in_array($quest->status_id, [18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Powróć" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="19" icon="19" label="Zaakceptuj"  /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (in_array($quest->status_id, [18, 19])) <x-button action="#phases" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
         </div>
+        <div id="statuschanger">
+            @if (in_array($quest->status_id, [15, 18, 19]))
+            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
+                placeholder="Tutaj wpisz swój komentarz..."
+                />
+            @endif
+            <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" :danger="true" />
+        </div>
+        <script>
+        $(document).ready(function(){
+            $("#statuschanger").hide();
+
+            $("a[statuschanger]").click(function(){
+                /*wyczyść możliwe ghosty*/
+                $("a[statuschanger].ghost").removeClass("ghost");
+
+                let status = $(this).attr("statuschanger");
+                $(`#phases button[type="submit"]`).val(status);
+                $("#statuschanger").show();
+                for(i of [19, 16, 18, 26]){
+                    if(i == status) continue;
+                    $(`a[statuschanger="${i}"]`).addClass("ghost");
+                }
+            });
+        });
+        </script>
     </form>
 </div>
 

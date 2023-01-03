@@ -547,6 +547,10 @@ footer .contact-info{
     color: rgb(var(--q-clr));
 }
 
+#dashboard-unpaids .quest-list a{
+    display: block;
+}
+
 .hint-table div{
     display: grid;
     text-align: left;
@@ -750,8 +754,9 @@ footer .contact-info{
 #phases{
     margin-top: 2em;
 }
-#phases textarea[name="comment"]{
+#phases textarea{
     border-top-style: solid;
+    border-top-color: rgb(227, 227, 227);
 }
 
 /* quest and request phases */

@@ -109,8 +109,7 @@
                 </ul>
                 <p>
                     Jest ona potrzebna do przeglądania i pobierania plików,<br>
-                    chyba, że zaskarbisz sobie moje zaufanie<br>
-                    (np. będąc stałym klientem)
+                    chyba, że jesteś np. stałym klientem
                 </p>
                 <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>

@@ -10,12 +10,14 @@
 
     <x-mail-quest-mini :quest="$quest" />
     <h3>
+        Kliknij
         <a
             class="button"
             href="{{ route('quest', ['id' => $quest->id]) }}"
             >
-            Szczegóły zlecenia
+            tutaj,
         </a>
+        aby zobaczyć szczegóły zlecenia
     </h3>
 
     <p>

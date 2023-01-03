@@ -90,12 +90,33 @@
         <div class="section-header">
             <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
         </div>
-        <div class="dashboard-mini-wrapper">
-        @forelse ($unpaids as $quest)
-            <x-quest-mini :quest="$quest" />
-        @empty
-            <p class="grayed-out">O kurczę, wszyscy zapłacili</p>
-        @endforelse
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Klient</th>
+                    <th>Zaległe projekty</th>
+                    <th>Razem do zapłaty</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($unpaids as $client_id => $quests)
+                <tr>
+                    <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
+                    <td class="quest-list">
+                        @php $amount_to_pay = 0 @endphp
+                        @foreach ($quests as $quest)
+                        <a href="{{ route("quest", ["id" => $quest->id]) }}">{{ $quest->song->title }} - {{ $quest->price }} zł</a>
+                        @php $amount_to_pay += $quest->price @endphp
+                        @endforeach
+                    </td>
+                    <td>
+                        {{ $amount_to_pay }} zł
+                    </td>
+                </tr>
+                @empty
+                <p class="grayed-out">O kurczę, wszyscy zapłacili</p>
+                @endforelse
+            </tbody>
+        </table>
     </section>
 @endsection

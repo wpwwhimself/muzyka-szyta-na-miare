@@ -309,7 +309,7 @@
             @csrf
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [11, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
+            @if (in_array($quest->status_id, [11, 16, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
             @if (in_array($quest->status_id, [12])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
             @if (in_array($quest->status_id, [12, 13])) <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" /> @endif

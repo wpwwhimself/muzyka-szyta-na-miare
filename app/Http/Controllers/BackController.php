@@ -34,24 +34,30 @@ class BackController extends Controller
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderBy("deadline");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
-        ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
-        ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
-        ->orderBy("deadline")
-        ->orderByRaw("paid desc")
-        // ->orderByRaw("case when deadline is null then 1 else 0 end")
+            ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
+            ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
+            ->orderBy("deadline")
+            ->orderByRaw("paid desc")
+            // ->orderByRaw("case when deadline is null then 1 else 0 end")
             ;
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
         }else{
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
-            $unpaids = Quest::where("paid", 0)
+            $unpaids_raw = Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("client", function(Builder $query){
                     $query->where("trust", ">", -1);
                 })
                 ->orderBy("quests.updated_at")
                 ->get();
+            $unpaids = [];
+            if(count($unpaids_raw) > 0){
+                foreach($unpaids_raw as $quest){
+                    $unpaids[$quest->client->id][] = $quest;
+                };
+            }
             $gains = [
                 "this_month" => StatusChange::where("new_status_id", 32)->whereMonth("date", Carbon::today()->month)->sum("comment"),
                 "total" => StatusChange::where("new_status_id", 32)->sum("comment"),

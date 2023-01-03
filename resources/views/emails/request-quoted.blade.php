@@ -38,19 +38,24 @@
     </p>
 
     <h3>
+        Kliknij
         <a
             class="button"
             href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
             >
-            Potwierdź warunki
+            tutaj,
         </a>
-        •
+        aby potwierdzić warunki
+    </h3>
+    <h3>
+        Kliknij
         <a
             class="button"
             href="{{ route('request', ['id' => $request->id]) }}"
             >
-            Szczegóły zlecenia
+            tutaj,
         </a>
+        aby zobaczyć szczegóły zapytania
     </h3>
 
 @endsection

@@ -14,7 +14,7 @@
             Aby się zalogować, kliknij poniższy przycisk. Do logowania potrzebne jest jedynie następujące hasło:
         </p>
         <h3 style="text-align: center;">{{ DB::table("requests")->join("users", "requests.client_id", "=", "users.id")->where("requests.id", $id)->value("users.password"); }}</h3>
-        <p>Zachowaj je, bo będzie przydatne. Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.</p>
+        <p><b>Zachowaj je, bo będzie przydatne!</b> Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.</p>
         <div class="flex-right">
             <x-button
                 action="{{ route('login') }}" label="Zaloguj się" icon="user-circle"

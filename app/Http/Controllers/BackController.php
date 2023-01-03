@@ -646,7 +646,12 @@ class BackController extends Controller
 
     public function ppp(){
         $questions = [
-            "Podkład MIDI" => "Podkłady MIDI traktuję jako **nuty**"
+            "Podkład MIDI" => "Podkłady MIDI traktuję jako **nuty**",
+            "Auto-maile do klientów" => "Maile do klientów są wysyłane:
+* dla requestów: w momencie odesłania do akceptacji,
+* dla questów: w momencie odesłania do akceptacji, zmiany wyceny i zarejestrowania jakiejkolwiek wpłaty.
+
+Sprzątacz natomiast wysyła maile przypominające o recenzji i płatnościach."
         ];
         ksort($questions);
 

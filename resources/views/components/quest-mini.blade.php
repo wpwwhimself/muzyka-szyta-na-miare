@@ -33,13 +33,13 @@
             @if ($quest->deadline)
             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
             <p class="quest-deadline {{ \Carbon\Carbon::parse($quest->deadline)->isPast() ? "error" : "" }}">
-                {{ \Carbon\Carbon::parse($quest->deadline)->diffForHumans() }}
+                {{ \Carbon\Carbon::parse($quest->deadline)->addDay()->diffForHumans() }}
             </p>
             @endif
             @if ($quest->hard_deadline)
             <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
             <p class="quest-deadline {{ \Carbon\Carbon::parse($quest->hard_deadline)->isPast() ? "error" : "" }}">
-                {{ \Carbon\Carbon::parse($quest->hard_deadline)->diffForHumans() }}
+                {{ \Carbon\Carbon::parse($quest->hard_deadline)->addDay()->diffForHumans() }}
             </p>
             @endif
         </div>

@@ -17,7 +17,7 @@
             </h2>
             <form action="{{ route("quest-song-update") }}" method="post">
                 @csrf
-                <input type="hidden" name="id" value="{{ $quest->song->id }}" />
+                <x-input type="text" name="id" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
                 <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
                 <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />

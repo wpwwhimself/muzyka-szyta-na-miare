@@ -81,7 +81,7 @@ class JanitorController extends Controller
         $quests = Quest::where("status_id", 15)->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
+                $quest->updated_at->diffInDays(Carbon::now()) > $quest_reminder_time
                 &&
                 !$quest->updated_at->isToday()
             ){
@@ -107,7 +107,7 @@ class JanitorController extends Controller
         $quests = Quest::where("paid", 0)->where("status_id", 19)->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == 0
+                $quest->updated_at->diffInDays(Carbon::now()) > $quest_reminder_time
                 &&
                 !$quest->updated_at->isToday()
             ){

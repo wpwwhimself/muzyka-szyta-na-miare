@@ -147,7 +147,10 @@ class BackController extends Controller
                 $songs[$song["id"]] = "$song[title] ($song[artist])";
             }
         }else{
-            if($request->client_id != Auth::id()) abort(403, "To nie jest Twoje zapytanie");
+            if($request->client_id != Auth::id()){
+                if(Auth::id()) abort(403, "To nie jest Twoje zapytanie");
+                else redirect()->route("login")->with("error", "Zaloguj się, jeśli to Twoje zapytanie");
+            };
             $clients = [];
             $songs = [];
         }

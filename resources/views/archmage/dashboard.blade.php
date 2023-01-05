@@ -25,10 +25,15 @@
                     <span>{{ quests_unpaid(1, true) }} zł</span>
 
                     <span>Zarobki w tym miesiącu</span>
-                    <span>{{ $gains["this_month"] }} zł</span>
+                    <span>
+                        {{ $gains["this_month"] }} zł
+                        <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
+                            ({{ sprintf("%+d", $gains["monthly_diff"]) }})
+                        </small>
+                    </span>
 
                     <span>Zarobki razem</span>
-                    <span>{{ $gains["total"] }} zł</span>
+                    <span>{{ number_format($gains["total"], 2, ",", " ") }} zł</span>
                 </div>
             </div>
         </section>

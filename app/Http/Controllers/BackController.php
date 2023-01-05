@@ -59,9 +59,18 @@ class BackController extends Controller
                 };
             }
             $gains = [
-                "this_month" => StatusChange::where("new_status_id", 32)->whereMonth("date", Carbon::today()->month)->sum("comment"),
-                "total" => StatusChange::where("new_status_id", 32)->sum("comment"),
+                "this_month" => StatusChange::where("new_status_id", 32)
+                    ->whereMonth("date", Carbon::today()->month)
+                    ->whereYear("date", Carbon::today()->year)
+                    ->sum("comment"),
+                "last_month" => StatusChange::where("new_status_id", 32)
+                    ->whereMonth("date", Carbon::today()->subMonth()->month)
+                    ->whereYear("date", Carbon::today()->month != 1 ? Carbon::today()->year : Carbon::today()->subYear()->year)
+                    ->sum("comment"),
+                "total" => StatusChange::where("new_status_id", 32)
+                    ->sum("comment"),
             ];
+            $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
         }
         $requests = $requests->get();
         $quests = $quests->get();

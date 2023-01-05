@@ -253,12 +253,18 @@ if(!function_exists("pricing")){
 }
 if(!function_exists("quests_unpaid")){
     function quests_unpaid($client_id, $all = false){
-        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18]) : [19];
+        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18, 17]) : [19];
 
-        $quests_val = Quest::where("paid", 0)->whereIn("status_id", $allowed_statuses);
+        $quests_val = Quest::where("paid", 0)
+            ->whereIn("status_id", $allowed_statuses)
+            ->whereHas("client", function($query){
+                $query->where("trust", ">", -1);
+            });
+            ;
         if($client_id != 1){
             $quests_val = $quests_val->where("client_id", $client_id);
         }
+        // if($all) dd(...($quests_val->get()->toArray()));
         $quests_val = $quests_val->sum("price");
 
         return $quests_val;

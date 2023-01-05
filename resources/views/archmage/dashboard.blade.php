@@ -105,7 +105,11 @@
                     <td class="quest-list">
                         @php $amount_to_pay = 0 @endphp
                         @foreach ($quests as $quest)
-                        <a href="{{ route("quest", ["id" => $quest->id]) }}">{{ $quest->song->title }} - {{ $quest->price }} zł</a>
+                        <a href="{{ route("quest", ["id" => $quest->id]) }}">
+                            {{ $quest->song->title }}
+                            <i class="fa-solid {{ $quest->status->status_symbol }}" {{ Popper::pop($quest->status->status_name) }}></i>
+                            {{ $quest->price }} zł
+                        </a>
                         @php $amount_to_pay += $quest->price @endphp
                         @endforeach
                     </td>

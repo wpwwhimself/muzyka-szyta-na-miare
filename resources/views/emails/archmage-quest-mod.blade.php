@@ -10,6 +10,10 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
+    <p>
+        Teraz w statusie: <b>{{ $quest->status->status_name }}</b>
+    </p>
+
     <h3>
         <a
             class="button"

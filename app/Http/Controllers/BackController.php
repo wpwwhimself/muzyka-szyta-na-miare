@@ -149,7 +149,7 @@ class BackController extends Controller
         }else{
             if($request->client_id != Auth::id()){
                 if(Auth::id()) abort(403, "To nie jest Twoje zapytanie");
-                else redirect()->route("login")->with("error", "Zaloguj się, jeśli to Twoje zapytanie");
+                else return redirect()->route("login")->with("error", "Zaloguj się, jeśli to Twoje zapytanie");
             };
             $clients = [];
             $songs = [];

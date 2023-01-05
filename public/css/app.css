@@ -856,6 +856,12 @@ footer .contact-info{
     .file-adder{
         display: none;
     }
+    .file-container-c{
+        flex-wrap: wrap;
+    }
+    .file-container-c audio, .file-container-c video{
+        flex-basis: 100%;
+    }
 
     .quests-table .table-row, .quests-table .table-header{
         display: flex; flex-wrap: wrap; justify-content: space-between;

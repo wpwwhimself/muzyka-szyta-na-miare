@@ -31,11 +31,13 @@ class JanitorController extends Controller
          * expiring requests
          */
         $requests = Request::where("status_id", 5)
-            ->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateString())
-            ->orWhere("deadline", "<=", Carbon::today()->toDateString())
+            ->where(function ($query) use ($request_expired_after){
+                $query->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateString())
+                ->orWhere("deadline", "<=", Carbon::today()->toDateString());
+            })
             ->get();
         foreach($requests as $request){
-            $request->update(["status_id", 7]);
+            $request->update(["status_id" => 7]);
             app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
             $summary[] = [
                 "re_quest" => $request, "is_request" => true,
@@ -50,7 +52,7 @@ class JanitorController extends Controller
             ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
             ->get();
         foreach($quests as $quest){
-            $quest->update(["status_id", 17]);
+            $quest->update(["status_id" => 17]);
             app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
             $summary[] = [
                 "re_quest" => $quest, "is_request" => false,
@@ -66,7 +68,7 @@ class JanitorController extends Controller
             ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
             ->get();
         foreach($quests as $quest){
-            $quest->update(["status_id", 17]);
+            $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
             app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
             $summary[] = [
@@ -81,7 +83,7 @@ class JanitorController extends Controller
         $quests = Quest::where("status_id", 15)->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) > $quest_reminder_time
+                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
             ){
@@ -107,7 +109,7 @@ class JanitorController extends Controller
         $quests = Quest::where("paid", 0)->where("status_id", 19)->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) > $quest_reminder_time
+                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
             ){
@@ -138,17 +140,7 @@ class JanitorController extends Controller
          */
         if(count($summary) > 0){
             Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
+            return "Raport wysłany";
         }
     }
-
-    // public function log(){
-    //     $logs = StatusChange::whereRaw("new_status_id = 15 AND mail_sent > 1 OR new_status_id IN (7,17,33)")
-    //         ->whereDate('date', '>=', now()->subDays(5)->setTime(0,0,0)->toDateTimeString())
-    //         ->get();
-
-    //     return view(user_role().".janitor-log", array_merge(
-    //         ["title" => "Logi Sprzątacza"],
-    //         compact("logs")
-    //     ));
-    // }
 }

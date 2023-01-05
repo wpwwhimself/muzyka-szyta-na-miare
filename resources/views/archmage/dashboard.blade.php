@@ -91,6 +91,7 @@
     </section>
     @endif
 
+    @if (count($unpaids) > 0)
     <section id="dashboard-unpaids">
         <div class="section-header">
             <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
@@ -104,7 +105,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($unpaids as $client_id => $quests)
+                @foreach ($unpaids as $client_id => $quests)
                 <tr>
                     <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
                     <td class="quest-list">
@@ -122,10 +123,9 @@
                         {{ $amount_to_pay }} zł
                     </td>
                 </tr>
-                @empty
-                <p class="grayed-out">O kurczę, wszyscy zapłacili</p>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </section>
+    @endif
 @endsection

@@ -277,7 +277,11 @@ class BackController extends Controller
         $comment = null;
         if(in_array($request->status_id, [5, 6]) && $modifying){
             $changes = [];
-            $keys = array_keys(Arr::except($request->getDirty(), ["updated_at", "status_id"]));
+            $keys = array_keys(Arr::except($request->getDirty(), [
+                "updated_at", "status_id", "genre_id",
+                "client_name", "email", "phone", "other_medium", "contact_preference",
+                "price_code",
+            ]));
             $pre = $request->getOriginal();
             $post = $request->getDirty();
             foreach($keys as $key){

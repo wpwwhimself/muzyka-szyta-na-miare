@@ -5,6 +5,7 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
+use App\Http\Controllers\StatsController;
 use App\Mail\_Welcome;
 use App\Mail\QuestUpdated;
 use App\Models\Client;
@@ -76,6 +77,10 @@ Route::controller(FileController::class)->group(function(){
     Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
     Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
     Route::post('/safe/ver-desc-mod', "verDescMod")->middleware("auth")->name("ver-desc-mod");
+});
+
+Route::controller(StatsController::class)->group(function(){
+    Route::get("/stats", "dashboard")->middleware("auth")->name("stats");
 });
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){

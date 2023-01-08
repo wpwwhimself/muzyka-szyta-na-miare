@@ -13,6 +13,9 @@
         <section id="dashboard-finances">
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
+                <div>
+                    <x-a href="{{ route('stats') }}">Więcej</x-a>
+                </div>
             </div>
 
             <div class="hint-table">
@@ -31,9 +34,6 @@
                             ({{ sprintf("%+d", $gains["monthly_diff"]) }})
                         </small>
                     </span>
-
-                    <span>Zarobki razem</span>
-                    <span>{{ number_format($gains["total"], 2, ",", " ") }} zł</span>
                 </div>
             </div>
         </section>

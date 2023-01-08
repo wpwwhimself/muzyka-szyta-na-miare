@@ -16,6 +16,23 @@
         <h1><i class="fa-solid fa-add"></i> Dodaj reklamę</h1>
     </div>
 
+    <div id="quick-add-showcase" class="flex-right">
+    @foreach ($potential_showcases as $song)
+        <x-button action="#add-showcase" :small="true"
+            label="{!! $song->title !!} ({{ $song->artist }})"
+            icon="{{ substr(song_quest_type($song->id)->fa_symbol, 3) }}"
+            value="{{ $song->id }}"
+            />
+    @endforeach
+    </div>
+    <script>
+    $(document).ready(function(){
+        $("#quick-add-showcase a").click(function(){
+            $("select[name='song_id']").val($(this).attr("value"));
+        });
+    });
+    </script>
+
     <form action="{{ route('add-showcase') }}" class="flex-right" method="post">
         @csrf
         <x-select name="song_id" label="Utwór" :options="$songs" :small="true" />

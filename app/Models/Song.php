@@ -20,4 +20,10 @@ class Song extends Model
     public function genre(){
         return $this->belongsTo(Genre::class);
     }
+    public function showcase(){
+        return $this->hasOne(Showcase::class);
+    }
+    public function quest(){
+        return $this->hasMany(Quest::class);
+    }
 }

@@ -643,16 +643,25 @@ class BackController extends Controller
 
     public function showcases(){
         $showcases = Showcase::orderBy("song_id", "desc")->paginate(10);
-        $showcases_count = count($showcases);
 
-        $songs_raw = Song::all()->toArray();
+        $songs_raw = Song::whereDoesntHave('showcase')
+            ->whereHas('quest', function($q){
+                $q->where('status_id', 19);
+            })
+            ->orderByDesc("created_at")
+            ;
+
+        $potential_showcases = clone $songs_raw;
+        $potential_showcases = $potential_showcases->whereDate('created_at', '>', Carbon::today()->subMonth()->format("Y-m-d H:i:s"))->get();
+
+        $songs_raw = $songs_raw->get()->toArray();
         foreach($songs_raw as $song){
             $songs[$song["id"]] = "$song[title] ($song[artist]) [$song[id]]";
         }
 
         return view(user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],
-            compact("showcases", "showcases_count", "songs")
+            compact("showcases", "songs", "potential_showcases")
         ));
     }
 

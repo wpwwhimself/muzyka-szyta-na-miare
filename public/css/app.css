@@ -741,6 +741,10 @@ footer .contact-info{
     text-align: left;
 }
 
+#quick-add-showcase{
+    justify-content: center;
+    gap: 0.2em;
+}
 #showcases-list iframe{
     height: 5em;
 }

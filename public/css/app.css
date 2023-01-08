@@ -611,6 +611,7 @@ footer .contact-info{
 #quest-history .history-position span:nth-child(1){ text-align: left; }
 #quest-history .history-position .client-name{ font-style: italic; }
 #quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; }
+#quest-history .history-position li{ font-size: 0.8em; }
 
 #document-dropzone{
     background: none;
@@ -812,6 +813,9 @@ footer .contact-info{
     }
     .section-header h1{
         font-size: 1.25em;
+    }
+    audio, video{
+        width: calc(100% - 4em);
     }
 
     header nav{

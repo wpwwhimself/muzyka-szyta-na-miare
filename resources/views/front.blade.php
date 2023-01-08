@@ -195,7 +195,7 @@
 
         <div id="showcase-fbs" class="flex-right">
         @foreach ($showcases as $showcase)
-        {!! $showcase->link_fb !!}
+        {!! $showcase->link_ig ?? $showcase->link_fb !!}
         @endforeach
         </div>
 

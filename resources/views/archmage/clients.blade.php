@@ -16,7 +16,7 @@
         <div class="value">{{ count($v) }}</div>
         @endforeach
     </div>
-    
+
 </section>
 
 <section id="clients-list">
@@ -61,9 +61,12 @@
             @foreach ($client_class as $client)
             <div class="table-row" id="client{{ $client->id }}">
                 <span class="client-exp">
-                    {{ $client->exp }} @if (upcoming_quests($client->id))
-                    <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>
-                    @endif
+                    <a href="{{ route('quests', ["client_id" => $client->id]) }}">
+                        {{ $client->exp }}
+                        @if (upcoming_quests($client->id))
+                        <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>
+                        @endif
+                    </a>
                 </span>
                 <span class="client-main-data">
                     <h3 class="song-title">{{ $client->client_name }}</h3>

@@ -429,11 +429,12 @@ class BackController extends Controller
         return redirect()->route($where_to)->with("success", "Komentarz dodany");
     }
 
-    public function quests(){
-        $client = Auth::user()->client;
+    public function quests($client_id = null){
+        $client = Client::find($client_id) ?? Auth::user()->client;
+        if($client_id && $client_id != Auth::id() && Auth::id() != 1) abort(403);
 
         $quests = Quest::orderBy("quests.created_at", "desc");
-        if(Auth::id() != 1){
+        if($client){
             $quests = $quests->where("client_id", $client->id);
         }
         $quests = $quests->paginate(25);

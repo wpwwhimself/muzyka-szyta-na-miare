@@ -71,7 +71,7 @@ class BackController extends Controller
                     ->sum("comment"),
             ];
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
-            $janitor_log = json_decode(Storage::get("/janitor_log.json")) ?? [];
+            $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
         }
         $requests = $requests->get();
         $quests = $quests->get();

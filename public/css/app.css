@@ -105,7 +105,7 @@ div, form{
 }
 .hover-light:hover{
     color: inherit;
-    box-shadow: 0 0 0.5em var(--acc);
+    box-shadow: 0 0 1em inset var(--acc);
 }
 .auth-link{
     border: solid 2px var(--acc);
@@ -549,6 +549,8 @@ footer .contact-info{
 
 #dashboard-unpaids .quest-list a{
     display: block;
+    width: fit-content;
+    margin-left: auto;
 }
 
 .hint-table div{
@@ -604,14 +606,13 @@ footer .contact-info{
     border-radius: 1em;
     background: rgba(var(--q-clr), 0.5);
     margin: 0.3em; padding: 0.3em 0.5em;
-    display: grid; grid-template-columns: 3fr 1fr; column-gap: 0.5em;
+    display: grid; grid-template-columns: 3fr auto; column-gap: 0.5em;
 }
 #quest-history .history-position.by-client{ margin-right: 2em; }
 #quest-history .history-position.by-me{ margin-left: 2em; }
 #quest-history .history-position span:nth-child(1){ text-align: left; }
 #quest-history .history-position .client-name{ font-style: italic; }
-#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; }
-#quest-history .history-position li{ font-size: 0.8em; }
+#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; }
 
 #document-dropzone{
     background: none;

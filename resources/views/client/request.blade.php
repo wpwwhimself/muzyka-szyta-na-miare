@@ -48,7 +48,8 @@
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
-            <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $request->wishes }}" />
+            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" />
+            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" />
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline }}" />
         </section>
 

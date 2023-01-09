@@ -12,7 +12,7 @@ class Quest extends Model
     public $incrementing = false;
     protected $keyType = "string";
 
-    protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline"];
+    protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline", "wishes"];
 
     public function client(){
         return $this->belongsTo(Client::class);

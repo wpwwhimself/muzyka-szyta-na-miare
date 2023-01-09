@@ -45,7 +45,12 @@
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />
-            <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" :disabled="true" />
+            @if ($quest->song->notes)
+            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" :disabled="true" />
+            @endif
+            @if ($quest->wishes)
+            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $quest->wishes }}" :disabled="true" />
+            @endif
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>

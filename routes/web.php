@@ -55,6 +55,7 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
     Route::post("/quest-song-update", "questSongUpdate")->middleware("auth")->name("quest-song-update");
     Route::post("/quest-quote-update", "questQuoteUpdate")->middleware("auth")->name("quest-quote-update");
+    Route::post("/quest-wishes-update", "questWishesUpdate")->middleware("auth")->name("quest-wishes-update");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");

@@ -29,8 +29,14 @@
                 <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
                 <x-link-interpreter :raw="$quest->song->link" />
-                <x-input type="TEXT" name="wishes" label="Życzenia" value="{{ $quest->song->notes }}" />
+                <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" />
                 <div class="flexright"><x-button label="Popraw utwór" icon="pen" action="submit" :small="true" /></div>
+            </form>
+            <form action="{{ route("quest-wishes-update") }}" method="post">
+                @csrf
+                <input type="hidden" name="id" value="{{ $quest->id }}"></input>
+                <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $quest->wishes }}" />
+                <div class="flexright"><x-button label="Popraw zlecenie" icon="pen" action="submit" :small="true" /></div>
             </form>
             <h2>
                 <i class="fa-solid fa-user"></i>

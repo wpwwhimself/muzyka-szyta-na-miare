@@ -228,6 +228,7 @@ class BackController extends Controller
             $request->artist = $rq->artist;
             $request->link = $rq->link;
             $request->wishes = $rq->wishes;
+            $request->wishes_quest = $rq->wishes_quest;
             $request->hard_deadline = $rq->hard_deadline;
             if($rq->new_status == 1){
                 $request->price_code = null;
@@ -268,6 +269,7 @@ class BackController extends Controller
                 $request->genre_id = $rq->genre_id;
                 $request->wishes = $rq->wishes;
             }
+            $request->wishes_quest = $rq->wishes_quest;
             $request->price_code = ($rq->new_status != 1) ? $rq->price_code : null;
             $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id)[0] : null;
         }
@@ -376,6 +378,7 @@ class BackController extends Controller
             $quest->price = $request->price;
             $quest->deadline = $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
+            $quest->wishes = $request->wishes_quest;
             $quest->save();
             if($client->budget >= $request->price){
                 $client->budget -= $request->price;
@@ -540,6 +543,13 @@ class BackController extends Controller
             "notes" => $rq->wishes,
         ]);
         return back()->with("success", "Utwór zmodyfikowany");
+    }
+    public function questWishesUpdate(HttpRequest $rq){
+        $quest = Quest::findOrFail($rq->id);
+        $quest->update([
+            "wishes" => $rq->wishes_quest,
+        ]);
+        return back()->with("success", "Zlecenie zmodyfikowane");
     }
     public function questQuoteUpdate(HttpRequest $rq){
         $quest = Quest::findOrFail($rq->id);

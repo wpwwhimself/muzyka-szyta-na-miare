@@ -442,7 +442,7 @@ class BackController extends Controller
         $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [
-            "title" => "Lista zleceń",
+            "title" => $client_id ? "$client->client_name – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);
     }

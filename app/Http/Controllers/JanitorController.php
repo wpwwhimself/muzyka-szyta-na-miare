@@ -149,7 +149,7 @@ class JanitorController extends Controller
             // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
             // return "Raport wysłany";
         }
-        Storage::put("/janitor_log.json", json_encode($summary));
+        Storage::put("janitor_log.json", json_encode($summary));
         return "Report ready";
     }
 }

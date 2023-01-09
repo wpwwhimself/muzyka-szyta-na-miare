@@ -14,7 +14,7 @@
             @endif
             <ul>
             @if (substr($item->comment, 0, 1) != "{")
-            {{ $item->comment }}{{ $item->new_status_id != 32 ? "" : " zł" }}
+            {!! str_replace("\n", "<br>", $item->comment) !!}{{ $item->new_status_id != 32 ? "" : " zł" }}
             @else
             @foreach (json_decode($item->comment) ?? [] as $key=>$val)
             <li>{{ $key }}: {{ $val }}</li>

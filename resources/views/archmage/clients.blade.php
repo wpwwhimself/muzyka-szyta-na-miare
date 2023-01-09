@@ -75,11 +75,14 @@
                     <span class="ghost">{{ $client->id }} • {{ $client->user->password }}</span>
                 </span>
                 <span class="contact-info">
-                    <span {{ in_array($client->contact_preference, ["email"]) ? : "class=ghost" }}>{{ $client->email }}</span>
+                    <span {{ in_array($client->contact_preference, ["email"]) ? : "class=ghost" }}><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></span>
                     <span {{ in_array($client->contact_preference, ["telefon", "sms"]) ?: "class=ghost" }}>{{ implode(" ", str_split($client->phone, 3)) }}</span>
                     <span {{ !in_array($client->contact_preference, ["email", "telefon", "sms"]) ?: "class=ghost" }}>{{ $client->other_medium }}</span>
                 </span>
-                <span>{{ $client->created_at->toDateString() }}</span>
+                <span>
+                    {{ $client->created_at->diffForHumans() }}<br>
+                    {{ $client->created_at->toDateString() }}
+                </span>
                 <span class="client-budget {{ $client->budget ?: 'ghost' }}">
                     <x-input type="number" name="budget_mod_{{ $client->id }}" label="" value="{{ $client->budget }}" :small="true" />
                     <script>

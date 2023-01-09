@@ -72,60 +72,92 @@
         </div>
     </section>
 
-    @if (count($patrons_adepts) > 0)
-    <section id="patrons-adepts">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
-            <div>
-                <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
+    <div class="grid-2">
+        @if (count($patrons_adepts) > 0)
+        <section id="patrons-adepts">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
+                <div>
+                    <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
+                </div>
             </div>
-        </div>
-        <div class="dashboard-mini-wrapper">
-            @foreach ($patrons_adepts as $patron)
-            <x-button
-                label="{{ $patron->client_name }}" icon="{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"
-                action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}"
-                />
-            @endforeach
-        </div>
-    </section>
-    @endif
-
-    @if (count($unpaids) > 0)
-    <section id="dashboard-unpaids">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Klient</th>
-                    <th>Zaległe projekty</th>
-                    <th>Razem do zapłaty</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($unpaids as $client_id => $quests)
-                <tr>
-                    <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
-                    <td class="quest-list">
-                        @php $amount_to_pay = 0 @endphp
-                        @foreach ($quests as $quest)
-                        <a href="{{ route("quest", ["id" => $quest->id]) }}">
-                            {{ $quest->song->title }}
-                            <i class="fa-solid {{ $quest->status->status_symbol }}" {{ Popper::pop($quest->status->status_name) }}></i>
-                            {{ $quest->price }} zł
-                        </a>
-                        @php $amount_to_pay += $quest->price @endphp
-                        @endforeach
-                    </td>
-                    <td>
-                        {{ $amount_to_pay }} zł
-                    </td>
-                </tr>
+            <div class="dashboard-mini-wrapper">
+                @foreach ($patrons_adepts as $patron)
+                <x-button
+                    label="{{ $patron->client_name }}" icon="{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"
+                    action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}"
+                    />
                 @endforeach
-            </tbody>
-        </table>
-    </section>
-    @endif
+            </div>
+        </section>
+        @endif
+
+        @if (count($unpaids) > 0)
+        <section id="dashboard-unpaids">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Klient</th>
+                        <th>Zaległe projekty</th>
+                        <th>Razem do zapłaty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($unpaids as $client_id => $quests)
+                    <tr>
+                        <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
+                        <td class="quest-list">
+                            @php $amount_to_pay = 0 @endphp
+                            @foreach ($quests as $quest)
+                            <a href="{{ route("quest", ["id" => $quest->id]) }}">
+                                {{ $quest->song->title }}
+                                <i class="fa-solid {{ $quest->status->status_symbol }}" {{ Popper::pop($quest->status->status_name) }}></i>
+                                {{ $quest->price }} zł
+                            </a>
+                            @php $amount_to_pay += $quest->price @endphp
+                            @endforeach
+                        </td>
+                        <td>
+                            {{ $amount_to_pay }} zł
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+        @endif
+
+        @if (!empty($janitor_log))
+        <section id="dashboard-janitor-log">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-broom"></i> Raport Sprzątacza</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ReQuest</th>
+                        <th>Wykonano</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($janitor_log as $i)
+                    <tr>
+                        <td>
+                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}">
+                            {{ $i->is_request ? $i->re_quest->title : $i->re_quest->song->title }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ $i->operation }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+        @endif
+    </div>
 @endsection

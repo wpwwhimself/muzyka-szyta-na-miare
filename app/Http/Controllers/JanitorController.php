@@ -10,6 +10,7 @@ use App\Models\Request;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class JanitorController extends Controller
 {
@@ -145,8 +146,10 @@ class JanitorController extends Controller
          * summary and report
          */
         if(count($summary) > 0){
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
-            return "Raport wysłany";
+            // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
+            // return "Raport wysłany";
         }
+        Storage::put("/janitor_log.json", json_encode($summary));
+        return "Report ready";
     }
 }

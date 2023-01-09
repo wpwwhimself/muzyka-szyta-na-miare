@@ -71,6 +71,7 @@ class BackController extends Controller
                     ->sum("comment"),
             ];
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
+            $janitor_log = json_decode(Storage::get("/janitor_log.json")) ?? [];
         }
         $requests = $requests->get();
         $quests = $quests->get();
@@ -82,6 +83,7 @@ class BackController extends Controller
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
             (isset($unpaids) ? compact("unpaids") : []),
             (isset($gains) ? compact("gains") : []),
+            (isset($janitor_log) ? compact("janitor_log") : []),
         ));
     }
 

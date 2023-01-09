@@ -97,7 +97,16 @@
                 @if ($quest->hard_deadline)
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
                 @endif
-                <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>            </form>
+                <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>
+            </form>
+            @unless ($quest->paid)
+            <form action="{{ route("mod-quest-back") }}" method="post" class="sc-line">
+                @csrf
+                <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
+                <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price }}" />
+            </form>
+            @endunless
         </section>
 
         <section id="stats-log">
@@ -317,9 +326,6 @@
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Klient akceptuje"  /> @endif
             @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Przywróć" /> @endif
             @if (in_array($quest->status_id, [13, 15])) <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" /> @endif
-            @unless ($quest->paid)
-            <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
-            @endunless
         </div>
         <div class="flexright">
             @if ($quest->status_id != 15)

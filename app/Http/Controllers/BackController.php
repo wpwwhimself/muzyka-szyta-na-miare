@@ -73,7 +73,7 @@ class BackController extends Controller
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
-                $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest_id);
+                $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest->id);
             }
         }
         $requests = $requests->get();

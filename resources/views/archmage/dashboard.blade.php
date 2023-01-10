@@ -147,7 +147,7 @@
                     <tr>
                         <td>
                             <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}">
-                            {{ $i->is_request ? $i->re_quest->title : $i->re_quest->song->title }}
+                            {{ $i->is_request ? $i->re_quest->title : Song::findOrFail($i->re_quest->song_id)->title }}
                             </a>
                         </td>
                         <td>

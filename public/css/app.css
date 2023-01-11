@@ -285,7 +285,7 @@ input[type="checkbox"]{
     border: 2px solid gray;
     box-shadow: 0.5em 0.5em 1.5em #00000044;
     padding: 1em;
-    opacity: 0; translate: 0 -50px;
+    opacity: 0; translate: 0 -100px;
     transition-duration: 0.3s;
     font-weight: bold;
 }

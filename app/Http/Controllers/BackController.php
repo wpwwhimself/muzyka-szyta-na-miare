@@ -107,7 +107,6 @@ class BackController extends Controller
 
     public function clients(){
         $clients_raw = Client::all();
-        $clients_count = count($clients_raw);
         $max_exp = 0;
         $classes = ["1. Weterani", "2. Biegli", "3. Zainteresowani", "4. Nowicjusze", "5. Debiutanci"];
 
@@ -130,7 +129,7 @@ class BackController extends Controller
 
         return view(user_role().".clients", array_merge(
             ["title" => "Klienci"],
-            compact("clients", "max_exp","classes", "clients_count")
+            compact("clients", "max_exp","classes")
         ));
     }
 
@@ -635,7 +634,6 @@ class BackController extends Controller
     public function songs(){
         $songs = Song::orderBy("title")
             ->get();
-        $songs_count = count($songs);
 
         $song_work_times = [];
         $price_codes = [];
@@ -665,7 +663,7 @@ class BackController extends Controller
 
         return view(user_role().".songs", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs", "songs_count", "song_work_times", "price_codes")
+            compact("songs", "song_work_times", "price_codes")
         ));
     }
 

@@ -662,24 +662,38 @@ footer .contact-info{
 .client-budget input{
     width: 4em;
 }
-#clients-stats-graph{
+#clients-stats-graph, .plot{
     display: grid;
     grid-auto-flow: column;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: 1fr auto;
     text-align: center;
 }
-#clients-stats-graph .bar{
+#clients-stats-graph{
+    grid-template-rows: 1fr auto auto;
+}
+.bar{
     background: var(--acc);
     /* background: linear-gradient(to bottom, rgb(var(--ui-clr-1)), var(--fg)); */
     width: 90%;
     border-radius: 0.5em;
 }
-#clients-stats-graph .bar-container{
-    display: flex; justify-content: center; align-items: flex-end;
+.bar-container{
+    display: flex; justify-content: center; align-items: flex-end; position: relative;
 }
-#clients-stats-graph .value{
+#clients-stats-graph .value, .bar-container .value{
     font-family: "Krona One";
     font-size: 1.2em;
+}
+.bar-container .value{
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; text-align: center;
+    font-size: 0.8em;
+}
+.plot .label.vertical{
+    rotate: 90deg;
+    transform-origin: 0 0;
+    translate: 2em 0.5em;
 }
 
 .file-adder{

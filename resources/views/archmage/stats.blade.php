@@ -32,6 +32,13 @@
         <div class="value">{{ $value }}</div>
         @endforeach
     </div>
+    <x-barplot title="Nowi klienci w ostatnich miesiącach" :data="$new_clients" />
+</section>
+
+<section>
+    <div class="section-header">
+        <h1><i class="fa-solid fa-boxes"></i> Zlecenia</h1>
+    </div>
 </section>
 
 @endsection

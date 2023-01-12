@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Quest;
 use App\Models\StatusChange;
+use Carbon\Carbon;
 
 class StatsController extends Controller
 {
@@ -18,6 +19,7 @@ class StatsController extends Controller
             "łącznie" => Client::count(),
             "zaufanych" => Client::where("trust", 1)->count(),
             "krętaczy" => Client::where("trust", -1)->count(),
+            "patronów" => Client::where("helped_showcasing", 2)->count(),
         ];
         $clients_counts = [
             "weteranów" => Client::whereHas("quests", function($q){
@@ -36,12 +38,15 @@ class StatsController extends Controller
                 $q->where("status_id", 19);
             }, 0)->count(),
         ];
+        $new_clients = array_count_values(Client::whereDate("created_at", ">=", Carbon::now()->subYear())->get("created_at")->map(function($date){
+            return($date->created_at->format("Y-m"));
+        })->toArray());
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact(
                 "big_summary",
-                "clients_summary", "clients_counts"
+                "clients_summary", "clients_counts", "new_clients"
             ),
         ));
     }

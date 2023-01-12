@@ -26,7 +26,7 @@
                     <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
                     <input type="hidden" name="id" value="{{ $quest->song->id }}" />
                 </div>
-                <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
+                <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" />
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
                 <x-link-interpreter :raw="$quest->song->link" />
                 <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" />

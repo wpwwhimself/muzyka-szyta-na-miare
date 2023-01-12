@@ -10,14 +10,14 @@
         Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.
         @break
     @case(5)
-        Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – poprawić odpowiednie pola i przesłać mi do ponownej wyceny. W ostateczności możesz odrzucić zapytanie.
+        Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – przesłać mi do ponownej wyceny z opisem, co się nie zgadza.
+        Ostatecznie możesz zupełnie odrzucić warunki.
         @break
     @case(6)
         Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.
         @break
     @case(7)
         Termin ważności wyceny minął. Jeśli nadal chcesz zrealizować to zlecenie, kliknij przycisk poniżej.
-        Jeżeli coś się zmieniło w Twoich warunkach zapytania, możesz to poprawić teraz przed ponownym wysłaniem.
         @break
     @case(8)
         Ta wycena została przez Ciebie odrzucona. Coś musiało pójść nie tak lub coś Ci się nie spodobało.
@@ -43,21 +43,21 @@
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
-            <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
-            <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
-            <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
-            <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
+            <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" :disabled="true" />
+            <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" :disabled="true" />
+            <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" :disabled="true" />
+            <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" :disabled="true" />
             <x-link-interpreter :raw="$request->link" />
-            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" />
-            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" />
-            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline }}" />
+            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
+            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
+            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline }}" :disabled="true" />
         </section>
 
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
-            @unless ($request->price)
+            @if (!$request->price && $request->status_id == 1)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
-            @endunless
+            @endif
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
@@ -97,7 +97,7 @@
             });
             </script>
             @if ($request->deadline)
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" :disabled="true" />
             @endif
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
@@ -122,44 +122,56 @@
             <x-quest-history :quest="$request" />
         </section>
     </div>
-    <input type="hidden" name="modifying" value="{{ $request->id }}" />
-    <script>
-    $(document).ready(function(){
-        const status = parseInt($(".quest-phase").attr("status"));
-        if([1, 4, 6, 8, 9].includes(status)){
-            $("input, textarea, select").prop("disabled", true);
-        };
-        switch(status){
-            case 1:
-            case 8:
-            case 9:
-                $("button[value=1]").hide();
-            case 4:
-            case 6:
-            case 7:
-                $("button[value=6]").hide();
-                $(".submit:not(h2 > a)").hide();
-                break;
-        }
-        if(status == 7 || status == 4){
-            $("button:not([value=1]), .submit:not([value=1])").hide();
-        }else{
-            $("button[value=1]").hide();
-        }
-
-    });
-    </script>
     @if ($request->status_id == 5)
     <p class="tutorial">
         <i class="fa-solid fa-circle-question"></i>
-        Przed poproszeniem o nową wycenę zwróć uwagę, czy poprawione zostały przez Ciebie szczegóły zlecenia powyżej.
+        Za pomocą poniższych przycisków możesz zaakceptować warunki zlecenia lub,
+        jeśli coś Ci się nie podoba w przygotowanej przeze mnie wycenie, poprosić o wprowadzenie zmian.
+        Instrukcje do tego celu możesz umieścić w oknie, które pojawi się po wybraniu jednej z poniższych opcji.
+        Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
+    </p>
+    @elseif (in_array($request->status_id, [4, 7, 8]))
+    <p class="tutorial">
+        <i class="fa-solid fa-circle-question"></i>
+        Zapytanie zostało zamknięte, ale nadal możesz je przywrócić w celu ponownego złożenia zamówienia.
     </p>
     @endif
-    <div class="flexright">
-        @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
-        @if (in_array($request->status_id, [5])) <x-button label="Poproś o ponowną wycenę" icon="6" name="new_status" value="6" action="submit" /> @endif
-        @if (in_array($request->status_id, [5])) <x-button label="Odrzuć" icon="8" :danger="true" action="{{ route('request-final', ['id' => $request->id, 'status' => 8]) }}" /> @endif
-        {{-- @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Odnów" icon="1" name="new_status" value="1" action="submit" /> @endif --}}
+    <div id="phases">
+        <div class="flexright">
+            <input type="hidden" name="id" value="{{ $request->id }}" />
+            <input type="hidden" name="modifying" value="{{ $request->id }}" />
+            <input type="hidden" name="reviewing" value="{{ $request->id }}" />
+            @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
+            @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
+            @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#phases" statuschanger="1" icon="1" label="Odnów" /> @endif
+        </div>
+        <div id="statuschanger">
+            @if (in_array($request->status_id, [4, 5, 7, 8]))
+            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
+                placeholder="Tutaj wpisz swój komentarz..."
+                />
+            @endif
+            <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" :danger="true" />
+        </div>
+        <script>
+        $(document).ready(function(){
+            $("#statuschanger").hide();
+
+            $("a[statuschanger]").click(function(){
+                /*wyczyść możliwe ghosty*/
+                $("a[statuschanger].ghost").removeClass("ghost");
+
+                let status = $(this).attr("statuschanger"); if(status == 9) return;
+                $(`#phases button[type="submit"]`).val(status);
+                $("#statuschanger").show();
+                for(i of [9, 6, 8]){
+                    if(i == status) continue;
+                    $(`a[statuschanger="${i}"]`).addClass("ghost");
+                }
+            });
+        });
+        </script>
     </div>
 </form>
 @endsection

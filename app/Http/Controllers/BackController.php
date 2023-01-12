@@ -211,31 +211,37 @@ class BackController extends Controller
 
     public function modRequestBack(HttpRequest $rq){
         $modifying = $rq->modifying; //insert -- 0; update -- request_id
-        $request = ($modifying != 0) ? Request::find($modifying) : new Request;
+        $reviewing = $rq->reviewing; //phase change only -- request_id; total redaction -- null
+        $request = ($modifying != 0 || $reviewing) ? Request::find($modifying) : new Request;
 
         if(Auth::id() != 1){
-            // składanie requesta przez klienta
-            if(Auth::check()){
-                $request->client_id = Auth::user()->client->id;
-            }else if(!$modifying){
-                if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
-                $request->client_name = $rq->client_name;
-                $request->email = $rq->email;
-                $request->phone = $rq->phone;
-                $request->other_medium = $rq->other_medium;
-                $request->contact_preference = $rq->contact_preference;
+            if(!$reviewing){
+                // składanie requesta przez klienta
+                if(Auth::check()){
+                    $request->client_id = Auth::user()->client->id;
+                }else if(!$modifying){
+                    if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
+                    $request->client_name = $rq->client_name;
+                    $request->email = $rq->email;
+                    $request->phone = $rq->phone;
+                    $request->other_medium = $rq->other_medium;
+                    $request->contact_preference = $rq->contact_preference;
+                }
+                // if($request->made_by_me === null) $request->made_by_me = false;
+                $request->made_by_me ??= false;
+                $request->quest_type_id = $rq->quest_type;
+                $request->title = $rq->title;
+                $request->artist = $rq->artist;
+                $request->link = $rq->link;
+                $request->wishes = $rq->wishes;
+                $request->wishes_quest = $rq->wishes_quest;
+                $request->hard_deadline = $rq->hard_deadline;
             }
-            if($request->made_by_me === null) $request->made_by_me = false;
-            $request->quest_type_id = $rq->quest_type;
-            $request->title = $rq->title;
-            $request->artist = $rq->artist;
-            $request->link = $rq->link;
-            $request->wishes = $rq->wishes;
-            $request->wishes_quest = $rq->wishes_quest;
-            $request->hard_deadline = $rq->hard_deadline;
             if($rq->new_status == 1){
                 $request->price_code = null;
                 $request->price = null;
+                $request->deadline = null;
+                $request->hard_deadline = null;
             }
         }else{
             // składanie requesta przeze mnie
@@ -276,7 +282,9 @@ class BackController extends Controller
             $request->price_code = ($rq->new_status != 1) ? $rq->price_code : null;
             $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id)[0] : null;
         }
-        $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
+        if(!$reviewing){
+            $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
+        }
 
         $request->status_id = $rq->new_status;
 
@@ -296,6 +304,9 @@ class BackController extends Controller
             }
             $comment = json_encode($changes);
             if($comment == "[]") $comment = null;
+        }
+        if($reviewing){
+            $comment = $rq->comment;
         }
 
         $request->save();

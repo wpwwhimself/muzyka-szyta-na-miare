@@ -2,6 +2,7 @@
     'type', 'name', 'label',
     'autofocus' => false,
     'required' => false,
+    "disabled" => false,
     'options',
     'emptyOption' => false,
     'value' => null,
@@ -17,6 +18,7 @@
         name="{{ $name }}"
         id="{{ $name }}"
         {{ $autofocus ? "autofocus" : "" }}
+        {{ $disabled ? "disabled" : "" }}
         {{ $required ? "required" : "" }}
         >
         @if ($emptyOption)

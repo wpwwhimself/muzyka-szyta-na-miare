@@ -22,21 +22,4 @@
         </div>
         @endif
     @endif
-
-    @if (in_array($status, [4, 8]))
-        <p>
-            @if ($status == 8)
-            Przykro mi, że nie spodobało Ci się to, co dla Ciebie przygotowałem.
-            @endif
-            Zostaw, proszę, kilka słów komentarza, dlaczego odrzucasz projekt. Wpis będzie widoczny w historii zapytania.
-        </p>
-
-        <form method="POST" action="{{ route("quest-reject") }}">
-            @csrf
-            <x-input type="TEXT" name="comment" label="" />
-            <input type="hidden" name="id" value="{{ $id }}" />
-            <input type="hidden" name="status" value="{{ $status }}" />
-            <x-button action="submit" label="Prześlij" icon="paper-plane" />
-        </form>
-    @endif
 @endsection

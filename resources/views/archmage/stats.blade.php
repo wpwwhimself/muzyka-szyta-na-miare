@@ -15,6 +15,23 @@
     </div>
 </section>
 
+<section class="sc-line">
+    <x-sc-scissors />
+    <div class="section-header">
+        <h1><i class="fa-solid fa-calendar"></i> Ostatni miesiąc</h1>
+    </div>
+    {{-- nowych zleceń ostatnio --}}
+    {{-- ukończonych zleceń ostatnio --}}
+    {{-- debiutanckich zleceń ostatnio --}}
+</section>
+
+<section>
+    <div class="section-header">
+        <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
+    </div>
+    {{-- zarobki z ostatniego roku na miesiące --}}
+</section>
+
 <section>
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Klienci</h1>
@@ -25,13 +42,7 @@
         <h2>{{ $val }}</h2>
         @endforeach
     </div>
-    <div id="clients-stats-graph">
-        @foreach ($clients_counts as $label => $value)
-        <div class="bar-container"><div class="bar" style='height:{{ $value*2 }}px'></div></div>
-        <div class="label">{{ $label }}</div>
-        <div class="value">{{ $value }}</div>
-        @endforeach
-    </div>
+    <x-barplot title="Podział klientów wg doświadczenia" :data="$clients_counts" />
     <x-barplot title="Nowi klienci w ostatnich miesiącach" :data="$new_clients" />
 </section>
 
@@ -39,6 +50,15 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-boxes"></i> Zlecenia</h1>
     </div>
+    {{-- zlecenia w podziale na typy (prices) --}}
+    {{-- zlecenia oddane n przed deadlinem --}}
+</section>
+
+<section>
+    <div class="section-header">
+        <h1><i class="fa-solid fa-compact-disc"></i> Utwory</h1>
+    </div>
+    {{-- czas spędzony nad utworami --}}
 </section>
 
 @endsection

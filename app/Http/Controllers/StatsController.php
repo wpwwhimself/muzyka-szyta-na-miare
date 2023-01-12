@@ -22,19 +22,19 @@ class StatsController extends Controller
             "patronów" => Client::where("helped_showcasing", 2)->count(),
         ];
         $clients_counts = [
-            "weteranów" => Client::whereHas("quests", function($q){
+            "weterani (".VETERAN_FROM()."+)" => Client::whereHas("quests", function($q){
                 $q->where("status_id", 19);
             }, ">=", VETERAN_FROM())->count(),
-            "biegłych" => Client::whereHas("quests", function($q){
+            "biegli (4-".(VETERAN_FROM()-1).")" => Client::whereHas("quests", function($q){
                 $q->where("status_id", 19)->selectRaw("count(*) as count")->havingBetween("count", [4, VETERAN_FROM()-1]);
             })->count(),
-            "zainteresowanych" => Client::whereHas("quests", function($q){
+            "zainteresowani (2-3)" => Client::whereHas("quests", function($q){
                 $q->where("status_id", 19)->selectRaw("count(*) as count")->havingBetween("count", [2, 4-1]);
             })->count(),
-            "nowicjuszy" => Client::whereHas("quests", function($q){
+            "nowicjusze (1)" => Client::whereHas("quests", function($q){
                 $q->where("status_id", 19);
             }, 1)->count(),
-            "debiutantów" => Client::whereHas("quests", function($q){
+            "debiutanci (0)" => Client::whereHas("quests", function($q){
                 $q->where("status_id", 19);
             }, 0)->count(),
         ];

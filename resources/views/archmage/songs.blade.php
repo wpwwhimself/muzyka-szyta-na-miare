@@ -1,17 +1,6 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="songs-stats" class="sc-line">
-    <x-sc-scissors />
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-chart-pie"></i> Statystyki utworów
-            <small class="ghost">Łącznie {{ $songs_count }}</small>
-        </h1>
-    </div>
-    {{-- TODO --}}
-</section>
-
 <section id="songs-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>

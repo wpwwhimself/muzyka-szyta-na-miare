@@ -106,10 +106,10 @@
                 <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>
             </form>
             @unless ($quest->paid)
-            <form action="{{ route("mod-quest-back") }}" method="post" class="sc-line">
+            <form action="{{ route("mod-quest-back") }}" method="post" class="sc-line" id="quest-pay">
                 @csrf
                 <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" />
+                <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :small="true" />
                 <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price }}" />
             </form>
             @endunless

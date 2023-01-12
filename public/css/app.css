@@ -590,6 +590,14 @@ footer .contact-info{
 #quest-box section{
     max-width: 600px;
 }
+#quest-pay{
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 1em 0; margin-top: 1em;
+}
+#quest-pay input[type='number']{
+    width: 5em;
+}
 
 #quest-song-id{
     display: grid;

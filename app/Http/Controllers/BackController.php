@@ -227,7 +227,6 @@ class BackController extends Controller
                     $request->other_medium = $rq->other_medium;
                     $request->contact_preference = $rq->contact_preference;
                 }
-                // if($request->made_by_me === null) $request->made_by_me = false;
                 $request->made_by_me ??= false;
                 $request->quest_type_id = $rq->quest_type;
                 $request->title = $rq->title;
@@ -245,7 +244,7 @@ class BackController extends Controller
             }
         }else{
             // składanie requesta przeze mnie
-            if($request->made_by_me === null) $request->made_by_me = true;
+            $request->made_by_me ??= true;
             if($rq->client_id){
                 $request->client_id = $rq->client_id;
                 $client = Client::find($rq->client_id);
@@ -305,7 +304,7 @@ class BackController extends Controller
             $comment = json_encode($changes);
             if($comment == "[]") $comment = null;
         }
-        if($reviewing){
+        if($reviewing || $request->status_id == 4){
             $comment = $rq->comment;
         }
 

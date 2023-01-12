@@ -1,24 +1,6 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="clients-stats" class="sc-line">
-    <x-sc-scissors />
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-chart-pie"></i> Statystyki klientów
-            <small class="ghost">Łącznie {{ $clients_count }}</small>
-        </h1>
-    </div>
-    <div id="clients-stats-graph">
-        @foreach ($clients as $k => $v)
-        <div class="bar-container"><div class="bar" style='height:{{ count($v)*2 }}px'></div></div>
-        <div class="label">{{ $k }}</div>
-        <div class="value">{{ count($v) }}</div>
-        @endforeach
-    </div>
-    
-</section>
-
 <section id="clients-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Lista klientów</h1>

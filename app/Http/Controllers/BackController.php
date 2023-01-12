@@ -283,6 +283,7 @@ class BackController extends Controller
         }
         if(!$reviewing){
             $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
+            $request->hard_deadline = ($rq->new_status != 1) ? $rq->hard_deadline : null;
         }
 
         $request->status_id = $rq->new_status;

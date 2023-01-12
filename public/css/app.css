@@ -637,6 +637,13 @@ footer .contact-info{
     font-weight: bold;
 }
 
+.stats-highlight-h{
+    display: grid;
+    grid-template-rows: 1em 3em;
+    grid-auto-flow: column;
+    text-align: center;
+}
+
 #clients-list .table-row{
     --q-clr: 255, 255, 255;
 }

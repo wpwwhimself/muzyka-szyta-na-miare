@@ -81,14 +81,23 @@
                     <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
                 </div>
             </div>
-            <div class="dashboard-mini-wrapper">
-                @foreach ($patrons_adepts as $patron)
-                <x-button
-                    label="{{ $patron->client_name }}" icon="{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"
-                    action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}"
-                    />
-                @endforeach
-            </div>
+            <table>
+                <thead>
+                    <th>Klient</th>
+                    <th>Decyzja</th>
+                </thead>
+                <tbody>
+                    @foreach ($patrons_adepts as $patron)
+                    <tr>
+                        <td><i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i> {{ $patron->client_name }}</td>
+                        <td>
+                            <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
+                            <x-button label="" icon="x" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 0]) }}" :small="true" />
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </section>
         @endif
 

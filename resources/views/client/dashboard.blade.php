@@ -70,8 +70,9 @@
                     label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
                     action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
                     />
+                <p>Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.</p>
                 <x-button
-                    label="Opinia wystawiona" icon="signature"
+                    label="Właśnie wystawił{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                     action="{{ route('patron-mode', ['id' => Auth::id(), 'level' => 1]) }}"
                     />
             </form>
@@ -100,7 +101,7 @@
                 <i class="fa-solid fa-circle-question"></i>
                 Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
             </p>
-            <h3>{{ Auth::user()->client->budget }} zł</h3>
+            <h3>{{ number_format(Auth::user()->client->budget, 2, ",", " ") }} zł</h3>
         </section>
     </div>
 

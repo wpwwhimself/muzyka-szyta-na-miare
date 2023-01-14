@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\ArchmageJanitorReport;
 use App\Mail\QuestAwaitingPayment;
 use App\Mail\QuestAwaitingReview;
+use App\Mail\QuestExpired;
+use App\Mail\RequestExpired;
 use App\Models\Quest;
 use App\Models\Request;
 use App\Models\StatusChange;
@@ -39,11 +41,20 @@ class JanitorController extends Controller
             ->get();
         foreach($requests as $request){
             $request->update(["status_id" => 7]);
-            app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
-            $summary[] = [
-                "re_quest" => $request, "is_request" => true,
-                "operation" => "Zapytanie wygaszone - brak reakcji",
-            ];
+            if($request->client->email || $request->email){
+                Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request));
+                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, 1);
+                $summary[] = [
+                    "re_quest" => $request, "is_request" => true,
+                    "operation" => "Zapytanie wygaszone - brak reakcji - mail wysłany",
+                ];
+            }else{
+                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
+                $summary[] = [
+                    "re_quest" => $request, "is_request" => true,
+                    "operation" => "Zapytanie wygaszone - brak reakcji - WYMAGA KONTAKTU",
+                ];
+            }
         }
 
         /**
@@ -57,11 +68,20 @@ class JanitorController extends Controller
             ->get();
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
-            app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
-            $summary[] = [
-                "re_quest" => $quest, "is_request" => false,
-                "operation" => "Zlecenie wygaszone - brak opinii",
-            ];
+            if($quest->client->email){
+                Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, 1);
+                $summary[] = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "operation" => "Zlecenie wygaszone - brak opinii - mail wysłany",
+                ];
+            }else{
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
+                $summary[] = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "operation" => "Zlecenie wygaszone - brak opinii - WYMAGA KONTAKTU",
+                ];
+            }
         }
 
         /**
@@ -77,11 +97,20 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
-            app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
-            $summary[] = [
-                "re_quest" => $quest, "is_request" => false,
-                "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane",
-            ];
+            if($quest->client->email){
+                Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak wpłaty"));
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, 1);
+                $summary[] = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - mail wysłany",
+                ];
+            }else{
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
+                $summary[] = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - WYMAGA KONTAKTU",
+                ];
+            }
         }
 
         /**
@@ -145,10 +174,6 @@ class JanitorController extends Controller
         /**
          * summary and report
          */
-        if(count($summary) > 0){
-            // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageJanitorReport($summary));
-            // return "Raport wysłany";
-        }
         Storage::put("janitor_log.json", json_encode($summary, JSON_PRETTY_PRINT));
         return "Report ready";
     }

@@ -277,8 +277,8 @@ class BackController extends Controller
                 $request->wishes = $rq->wishes;
             }
             $request->wishes_quest = $rq->wishes_quest;
-            $request->price_code = ($rq->new_status != 1) ? $rq->price_code : null;
-            $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id)[0] : null;
+            $request->price_code = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id, true)[3] : null;
+            $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id, true)[0] : null;
         }
         if(!$reviewing){
             $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
@@ -355,7 +355,7 @@ class BackController extends Controller
                 $song->artist = $request->artist;
                 $song->link = $request->link;
                 $song->genre_id = $request->genre_id;
-                $song->price_code = $request->price_code;
+                $song->price_code = preg_replace("/[=-]/", "", $request->price_code);
                 $song->notes = $request->wishes;
                 $song->save();
 
@@ -393,10 +393,11 @@ class BackController extends Controller
             $quest->hard_deadline = $request->hard_deadline;
             $quest->wishes = $request->wishes_quest;
             $quest->save();
-            if($client->budget >= $request->price){
-                $client->budget -= $request->price;
+            if($client->budget){
+                $sub_amount = min([$request->price, $client->budget]);
+                $client->budget -= $sub_amount;
                 $client->save();
-                $this->statusHistory($quest->id, 32, $request->price);
+                $this->statusHistory($quest->id, 32, $sub_amount);
             }
 
             $request->quest_id = $quest->id;

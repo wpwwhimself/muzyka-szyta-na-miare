@@ -150,7 +150,7 @@ Route::get('/song_data', function(Request $request){
     );
 });
 Route::post('/price_calc', function(Request $request){
-    return price_calc($request->labels, $request->price_schema, $request->veteran_discount);
+    return price_calc($request->labels, $request->price_schema, $request->quoting);
 });
 Route::get('/quest_type_from_id', function(Request $request){
     return QuestType::where("code", $request->initial)->first()->toJson();

@@ -142,7 +142,7 @@ if(!function_exists("generate_password")){
  * Big ol' calculation of quests' prices
  */
 if(!function_exists("price_calc")){
-    function price_calc($labels, $client_id){
+    function price_calc($labels, $client_id, $quoting = false){
         if($client_id == null) $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
         $price_schema = pricing($client_id);
 
@@ -152,8 +152,10 @@ if(!function_exists("price_calc")){
             ->select(["indicator", "service", "operation", "price_$price_schema AS price"])
             ->get();
 
-        if(is_veteran($client_id)) $labels .= "=";
-        if(is_patron($client_id)) $labels .= "-";
+        if($quoting){
+            if(is_veteran($client_id) && !preg_match_all("/=/", $labels)) $labels .= "=";
+            if(is_patron($client_id) && !preg_match_all("/-/", $labels)) $labels .= "-";
+        }
 
         foreach($price_list as $cat){
             preg_match_all("/$cat->indicator/", $labels, $matches);
@@ -180,7 +182,7 @@ if(!function_exists("price_calc")){
             $override = true;
         }
 
-        return [round($price, 2), $positions, $override];
+        return [round($price, 2), $positions, $override, $labels];
     }
 }
 

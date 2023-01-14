@@ -31,6 +31,9 @@
     td.framed-cell h2, td.framed-cell p{
         margin: 0.2em;
     }
+    i{
+        color: gray;
+    }
     footer h2, footer h3{
         margin: 0;
     }

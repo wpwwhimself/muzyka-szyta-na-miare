@@ -28,7 +28,7 @@
     @if ($request->hard_deadline)
     <p>
         Termin wykonania został dopasowany do moich możliwości przerobowych.
-        Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiednią zmianę daty w wycenie, a przekalkuluję wszystko jeszcze raz.
+        Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiedni komentarz w wycenie, a przekalkuluję wszystko jeszcze raz.
         Należy się przy tym jednak liczyć z możliwymi większymi kosztami.
     </p>
     @endif
@@ -57,5 +57,13 @@
         </a>
         aby zobaczyć szczegóły zapytania
     </h3>
+
+    @if ($request->client)
+    <p>
+        <i>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->client->user->password }}</b>
+        </i>
+    </p>
+    @endif
 
 @endsection

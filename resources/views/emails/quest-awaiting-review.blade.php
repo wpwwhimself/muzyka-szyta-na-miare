@@ -25,4 +25,9 @@
         Uprzejmie proszę o wyrażenie opinii lub ewentualnych uwag celem wprowadzenia poprawek.
         Są one dla mnie bardzo ważne, a wręcz kluczowe do płynnego zarządzania zleceniami.
     </p>
+    <p>
+        <i>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->user->password }}</b>
+        </i>
+    </p>
 @endsection

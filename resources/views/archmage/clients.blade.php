@@ -1,6 +1,27 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+
+<section class="sc-line">
+    <x-sc-scissors />
+    <div class="section-header">
+        <h1><i class="fa-solid fa-filter"></i> Filtruj listę</h1>
+    </div>
+    <div>
+        @foreach ([
+            ["wszyscy", "users", null, null],
+            ["krętacze", "user-ninja", "trust", -1],
+            ["zaufani", "hand-holding-heart", "trust", 1],
+            ["z budżetem", "sack-dollar", "budget", 0],
+            ["(prawie) patroni", "award", "helped_showcasing", 0],
+            ["wolący telefon", "phone", "contact_preference", "telefon"],
+        ] as [$label, $icon, $param, $value])
+            @unless (url()->current() == route("clients", compact('param', 'value')))
+            <x-button label="{{ $label }}" icon="{{ $icon }}" action="{{ route('clients', compact('param', 'value')) }}" :small="true" />
+            @endunless
+        @endforeach
+    </div>
+</section>
 <section id="clients-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Lista klientów</h1>

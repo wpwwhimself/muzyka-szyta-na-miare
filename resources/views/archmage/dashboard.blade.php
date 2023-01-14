@@ -122,7 +122,7 @@
                             @php $amount_to_pay = 0 @endphp
                             @foreach ($quests as $quest)
                             <a href="{{ route("quest", ["id" => $quest->id]) }}">
-                                {{ $quest->song->title }}
+                                {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <i class="fa-solid {{ $quest->status->status_symbol }}" {{ Popper::pop($quest->status->status_name) }}></i>
                                 {{ $quest->price }} zł
                             </a>

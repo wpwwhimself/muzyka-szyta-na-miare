@@ -49,7 +49,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
-    Route::get('/quests/{client_id?}', "quests")->middleware("auth")->name("quests");
+    Route::get('/quests/by/{client_id?}', "quests")->middleware("auth")->name("quests");
     Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
@@ -61,8 +61,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 
-    Route::get('/clients', "clients")->middleware("auth")->name("clients");
-    Route::get('/clients/view/{id}', "client")->middleware("auth")->name("client");
+    Route::get('/clients/{param?}/{value?}', "clients")->middleware("auth")->name("clients");
 
     Route::get('/showcases', "showcases")->middleware("auth")->name("showcases");
     Route::post('/showcases/add', "addShowcase")->middleware("auth")->name("add-showcase");

@@ -105,11 +105,15 @@ class BackController extends Controller
         ));
     }
 
-    public function clients(){
-        $clients_raw = Client::all();
+    public function clients($param = null, $value = 0){
+        $clients_raw = ($param) ?
+            Client::where($param, (in_array($param, ["budget", "helped_showcasing"]) ? ">" : "="), $value)->get() :
+            Client::all()
+        ;
         $max_exp = 0;
         $classes = ["1. Weterani", "2. Biegli", "3. Zainteresowani", "4. Nowicjusze", "5. Debiutanci"];
 
+        $clients = [];
         foreach($clients_raw as $client){
             $client->exp = client_exp($client->id);
             if($client->exp > $max_exp) $max_exp = $client->exp;
@@ -122,7 +126,7 @@ class BackController extends Controller
 
             $clients[$class][] = $client;
         }
-        ksort($clients);
+        if($clients) ksort($clients);
         foreach($clients as $k => $v){
             $clients[$k] = collect($v)->sortBy([['exp', "desc"], ['client_name', 'asc']]);
         }

@@ -456,10 +456,6 @@ footer .contact-info{
     text-align: center;
 }
 
-.quest-links{
-    font-size: 1.5em;
-}
-
 .quest-status{
     color: rgb(var(--q-clr));
     font-weight: bold;

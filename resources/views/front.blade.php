@@ -105,9 +105,11 @@
             </div>
         </div>
         <div class="hidden">
-            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fjedrek.kocjan%2Fposts%2F1882616848543669&show_text=true&width=500" width="500" height="188" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FwpwwMuzykaSzytaNaMiare%2Fposts%2F862916034490127&show_text=true&width=500" width="500" height="169" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Falicja.stefanowska.12%2Fposts%2Fpfbid0xko4oooyuc2DAWa7k9jKBMSFcgcDgCpZKmzupUP4Qr2yVdffR8ZEvo7zvUTQD6RTl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fjedrek.kocjan%2Fposts%2Fpfbid0swytWPyMnBMWJYvyRGQvdG2uiq1fog43dusgEA7bFAdDyqTGfiwcgnzQHudYApD1l&show_text=true&width=500" width="500" height="189" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fwiktoria.matysik.20%2Fposts%2Fpfbid026nuNco26BqXk7eBhnEhRmDFLtJWbBGNtcsgsw4QXJpCWjenySHkKz9gcgAc6t8rAl&show_text=true&width=500" width="500" height="166" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
         </div>
+        <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Więcej recenzji</x-a>
         <h2>Współpracuję również z:</h2>
         <div id="recomms-other" class="flex-right">
             <img class="hidden" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
@@ -198,6 +200,7 @@
         {!! $showcase->link_ig ?? $showcase->link_fb !!}
         @endforeach
         </div>
+        <x-a href="https://www.instagram.com/muzykaszytanamiarepl/" target="_blank">Inne prezentacje</x-a>
 
         <div id="showcase-scores">
             @for ($i = 1; $i <= 3; $i++)

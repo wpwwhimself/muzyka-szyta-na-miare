@@ -7,12 +7,7 @@
             <i class="fa-solid fa-chart-pie"></i> Podsumowanie całego dorobku
         </h1>
     </div>
-    <div class="stats-highlight-h" style="grid-template-columns: repeat({{ count($big_summary) }}, 1fr);">
-        @foreach ($big_summary as $name => $val)
-        <p>{{ $name }}</p>
-        <h2>{{ $val }}</h2>
-        @endforeach
-    </div>
+    <x-stats-highlight-h :data="$big_summary" />
 </section>
 
 <section class="sc-line">
@@ -20,28 +15,21 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-calendar"></i> Ostatni miesiąc</h1>
     </div>
-    {{-- nowych zleceń ostatnio --}}
-    {{-- ukończonych zleceń ostatnio --}}
-    {{-- debiutanckich zleceń ostatnio --}}
+    <x-stats-highlight-h :data="$last_month" />
 </section>
 
 <section>
     <div class="section-header">
         <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
     </div>
-    {{-- zarobki z ostatniego roku na miesiące --}}
+    <x-barplot title="Zarobki w ostatnich miesiącach" :data="$income" />
 </section>
 
 <section>
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Klienci</h1>
     </div>
-    <div class="stats-highlight-h" style="grid-template-columns: repeat({{ count($clients_summary) }}, 1fr);">
-        @foreach ($clients_summary as $name => $val)
-        <p>{{ $name }}</p>
-        <h2>{{ $val }}</h2>
-        @endforeach
-    </div>
+    <x-stats-highlight-h :data="$clients_summary" />
     <x-barplot title="Podział klientów wg doświadczenia" :data="$clients_counts" />
     <x-barplot title="Nowi klienci w ostatnich miesiącach" :data="$new_clients" />
 </section>

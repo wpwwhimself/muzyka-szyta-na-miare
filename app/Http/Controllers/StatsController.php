@@ -42,10 +42,26 @@ class StatsController extends Controller
             return($date->created_at->format("Y-m"));
         })->toArray());
 
+        $last_month = [
+            "nowych zleceń" => Quest::whereDate("created_at", ">", Carbon::today()->subMonth())->count(),
+            "ukończonych zleceń" => StatusChange::where("new_status_id", 19)->whereDate("date", ">", Carbon::today()->subMonth())->count(),
+            "debiutanckich zleceń" => Client::whereDate("created_at", ">", Carbon::today()->subMonth())->count(),
+        ];
+
+        $income = StatusChange::where("new_status_id", 32)
+            ->whereDate("date", ">=", Carbon::now()->subYear())
+            ->groupByRaw("YEAR(date), MONTH(date)")
+            ->selectRaw("DATE_FORMAT(date, '%Y-%m') as date, sum(comment) as amount")
+            ->pluck("amount", "date")
+            ->toArray()
+        ;
+
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact(
                 "big_summary",
+                "last_month",
+                "income",
                 "clients_summary", "clients_counts", "new_clients"
             ),
         ));

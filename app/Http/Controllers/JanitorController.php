@@ -41,7 +41,7 @@ class JanitorController extends Controller
             ->get();
         foreach($requests as $request){
             $request->update(["status_id" => 7]);
-            if($request->client->email || $request->email){
+            if($request->client?->email || $request->email){
                 Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request));
                 app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, 1);
                 $summary[] = [

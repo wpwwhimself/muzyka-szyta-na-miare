@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     public function index(){
-        $showcases = Showcase::orderBy("song_id", "desc")->orderBy("updated_at", "desc")->limit(3)->get();
+        $showcases = Showcase::orderBy("updated_at", "desc")->limit(3)->get();
 
         $prices = DB::table("prices")->where("operation", "+")->get(["service", "quest_type_id", "price_".strtolower(CURRENT_PRICING())." AS price"]);
 

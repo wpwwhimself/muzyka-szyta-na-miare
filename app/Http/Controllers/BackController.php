@@ -673,7 +673,7 @@ class BackController extends Controller
     }
 
     public function showcases(){
-        $showcases = Showcase::orderBy("song_id", "desc")->paginate(10);
+        $showcases = Showcase::orderBy("updated_at", "desc")->paginate(10);
 
         $songs_raw = Song::whereDoesntHave('showcase')
             ->whereHas('quest', function($q){
@@ -697,7 +697,7 @@ class BackController extends Controller
     }
 
     public function addShowcase(HttpRequest $rq){
-        Showcase::insert([
+        Showcase::create([
             "song_id" => $rq->song_id,
             "link_fb" => $rq->link_fb,
             "link_ig" => $rq->link_ig,

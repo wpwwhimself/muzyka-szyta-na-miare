@@ -753,6 +753,10 @@ footer .contact-info{
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }
 .pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
 
+.cal-row{
+    user-select: none;
+    cursor: pointer;
+}
 .cal-row.free{
     color: gray;
 }

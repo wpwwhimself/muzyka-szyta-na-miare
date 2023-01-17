@@ -72,47 +72,41 @@
         </div>
     </section>
 
-    <section>
-        <div class="section-header">
-            <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie 5 zleceń</h1>
-        </div>
-        <div class="dashboard-mini-wrapper">
-        @forelse ($recent as $key => $quest)
-            <x-quest-mini :quest="$quest" />
-        @empty
-            <p class="grayed-out">brak ostatnich zleceń</p>
-        @endforelse
-        </div>
-    </section>
-
     <div class="grid-2">
-        @if (count($patrons_adepts) > 0)
-        <section id="patrons-adepts">
+        <section>
             <div class="section-header">
-                <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
-                <div>
-                    <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
-                </div>
+                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie 5 zleceń</h1>
             </div>
             <table>
                 <thead>
-                    <th>Klient</th>
-                    <th>Decyzja</th>
+                    <tr>
+                        <th>Zlecenie</th>
+                        <th>Klient</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    @foreach ($patrons_adepts as $patron)
+                    @forelse ($recent as $quest)
                     <tr>
-                        <td><i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i> {{ $patron->client_name }}</td>
                         <td>
-                            <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
-                            <x-button label="" icon="x" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 0]) }}" :small="true" />
+                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                                {{ $quest->song->title ?? "utwór bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>{{ $quest->client->client_name }}</td>
+                        <td>
+                            @if ($quest->paid)
+                            <i class="fa-solid fa-sack-dollar success" {{ Popper::pop("opłacone") }}></i>
+                            @endif
+                            <x-phase-indicator-mini :status="$quest->status" />
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                        <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
+                    @endforelse
                 </tbody>
             </table>
         </section>
-        @endif
 
         @if (count($unpaids) > 0)
         <section id="dashboard-unpaids">
@@ -136,7 +130,7 @@
                             @foreach ($quests as $quest)
                             <a href="{{ route("quest", ["id" => $quest->id]) }}">
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
-                                <i class="fa-solid {{ $quest->status->status_symbol }}" {{ Popper::pop($quest->status->status_name) }}></i>
+                                <x-phase-indicator-mini :status="$quest->status" />
                                 {{ $quest->price }} zł
                             </a>
                             @php $amount_to_pay += $quest->price @endphp
@@ -174,6 +168,34 @@
                         </td>
                         <td>
                             {{ $i->operation }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+        @endif
+
+        @if (count($patrons_adepts) > 0)
+        <section id="patrons-adepts">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
+                <div>
+                    <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <th>Klient</th>
+                    <th>Decyzja</th>
+                </thead>
+                <tbody>
+                    @foreach ($patrons_adepts as $patron)
+                    <tr>
+                        <td><i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i> {{ $patron->client_name }}</td>
+                        <td>
+                            <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
+                            <x-button label="" icon="x" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 0]) }}" :small="true" />
                         </td>
                     </tr>
                     @endforeach

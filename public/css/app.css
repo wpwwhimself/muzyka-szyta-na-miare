@@ -301,6 +301,10 @@ input[type="checkbox"]{
     --clr-wh: rgba(var(--danger), 0.4);
     color: rgb(var(--danger));
 }
+.warning{
+    --clr-wh: rgba(var(--warning), 0.4);
+    color: rgb(var(--warning));
+}
 .alert.success, .alert.error{
     border-color: currentColor;
     background-color: var(--bg1);

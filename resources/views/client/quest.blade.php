@@ -13,7 +13,7 @@
         Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.
         @break
     @case(15)
-        Do Twojego zlecenia zostały dodane nowe pliki. Poniżej (jeśli spełniasz warunki), możesz je przeglądać i wyrazić swoją opinię na ich temat.
+        Do Twojego zlecenia zostały dodane nowe pliki. Poniżej możesz je przeglądać i wyrazić swoją opinię na ich temat.
         @break
     @case(16)
         Twoje uwagi zostały przekazane. Odniosę się do nich i przygotuję coś nowego wkrótce.
@@ -110,7 +110,7 @@
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>
-                    Jest ona potrzebna do przeglądania i pobierania plików,<br>
+                    Jest ona potrzebna do pobierania plików,<br>
                     chyba, że jesteś np. stałym klientem
                 </p>
             </div>
@@ -147,11 +147,13 @@
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                                 @endif
                             @endforeach
-                            @foreach ($ver_bots as $file)
-                                @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                                <x-file-tile :id="$quest->id" :file="$file" />
-                                @endunless
-                            @endforeach
+                            @if (can_download_files($quest->client_id))
+                                @foreach ($ver_bots as $file)
+                                    @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
+                                    <x-file-tile :id="$quest->id" :file="$file" />
+                                    @endunless
+                                @endforeach
+                            @endif
                         @else
                             <p class="grayed-out">Opłać zlecenie, aby otrzymać dostęp</p>
                         @endif

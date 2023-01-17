@@ -29,7 +29,7 @@
 
                     <span>Zarobki z ostatnich 30 dni</span>
                     <span>
-                        {{ $gains["this_month"] }} zł
+                        {{ number_format($gains["this_month"], 2, ",", " ") }} zł
                         <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
                             ({{ sprintf("%+d", $gains["monthly_diff"]) }})
                         </small>

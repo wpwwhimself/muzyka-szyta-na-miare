@@ -182,8 +182,10 @@
             <h2>
                 <i class="fa-solid fa-file-waveform"></i>
                 Pliki
-                @if ($quest->paid || can_see_files($quest->client_id))
+                @if ($quest->paid || can_download_files($quest->client_id))
                     <i class="success fa-solid fa-check" @popper(Uprawniony do pobierania)></i>
+                @elseif (can_see_files($quest->client_id))
+                    <i class="warning fa-solid fa-eye" @popper(Widzi podglądy)></i>
                 @else
                     <i class="error fa-solid fa-xmark" @popper(Klient nic nie widzi)></i>
                 @endif

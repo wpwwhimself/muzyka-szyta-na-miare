@@ -54,8 +54,8 @@
                 <h1><i class="fa-solid fa-user-ninja"></i> Jesteś na czarnej liście!</h1>
             </div>
             <p>
-                W obecnej chwili masz status krętacza i oszusta, a to z tego powodu, że posiadasz nieopłacone przez bardzo długi czas projekty.
-                Do momentu ich opłacenia masz ograniczone możliwości korzystania z tej strony, a przez to też z moich usług.
+                Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
+                Do momentu ich opłacenia nie możesz przeglądać udostępnionych plików.
             </p>
             @endif
 

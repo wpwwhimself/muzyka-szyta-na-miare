@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\StatsController;
 use App\Mail\_Welcome;
-use App\Mail\QuestUpdated;
 use App\Models\Client;
 use App\Models\Genre;
 use App\Models\Quest;
@@ -49,7 +48,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
-    Route::get('/quests/by/{client_id?}', "quests")->middleware("auth")->name("quests");
+    Route::get('/quests/{client_id?}', "quests")->middleware("auth")->name("quests");
     Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");

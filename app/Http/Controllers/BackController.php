@@ -37,13 +37,15 @@ class BackController extends Controller
             ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
             ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 when 13 then 6 else 7 end")
             ->orderBy("deadline")
-            ->orderByRaw("paid desc")
-            // ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ;
+            ->orderByRaw("paid desc");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
         }else{
+            $recent = Quest::whereDate("updated_at", ">", Carbon::now()->subMonth())
+                ->orderByDesc("updated_at")
+                ->limit(5)
+                ->get();
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
             $unpaids_raw = Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
@@ -86,6 +88,7 @@ class BackController extends Controller
             (isset($unpaids) ? compact("unpaids") : []),
             (isset($gains) ? compact("gains") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
+            (isset($recent) ? compact("recent") : []),
         ));
     }
 

@@ -58,7 +58,7 @@
 
     <section id="dashboard-quests">
         <div class="section-header">
-            <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
+            <h1><i class="fa-solid fa-signal"></i> Kolejka zleceń</h1>
             <div>
                 <x-a href="{{ route('quests') }}">Wszystkie</x-a>
             </div>
@@ -68,6 +68,19 @@
             <x-quest-mini :quest="$quest" :queue="$key + 1" />
         @empty
             <p class="grayed-out">brak aktywnych zleceń</p>
+        @endforelse
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie 5 zleceń</h1>
+        </div>
+        <div class="dashboard-mini-wrapper">
+        @forelse ($recent as $key => $quest)
+            <x-quest-mini :quest="$quest" :queue="$key + 1" />
+        @empty
+            <p class="grayed-out">brak ostatnich zleceń</p>
         @endforelse
         </div>
     </section>

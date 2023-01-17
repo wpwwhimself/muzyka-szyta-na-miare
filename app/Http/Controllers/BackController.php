@@ -400,6 +400,7 @@ class BackController extends Controller
             if($client->budget){
                 $sub_amount = min([$request->price, $client->budget]);
                 $client->budget -= $sub_amount;
+                if($sub_amount == $request->price) $quest->paid = true;
                 $client->save();
                 $this->statusHistory($quest->id, 32, $sub_amount);
             }

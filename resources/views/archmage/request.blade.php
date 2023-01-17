@@ -159,7 +159,8 @@
                         data: {
                             _token: '{{ csrf_token() }}',
                             labels: labels,
-                            client_id: client_id
+                            client_id: client_id,
+                            quoting: {{ $request->status_id == 1 ? "true" : "false" }}
                         },
                         success: function(res){
                             let content = ``;

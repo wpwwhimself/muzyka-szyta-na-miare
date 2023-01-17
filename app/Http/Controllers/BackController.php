@@ -63,7 +63,8 @@ class BackController extends Controller
                     ->whereDate("date", ">=", Carbon::today()->subMonth())
                     ->sum("comment"),
                 "last_month" => StatusChange::where("new_status_id", 32)
-                    ->whereBetween("date", [Carbon::today()->subMonth(), Carbon::today()->subMonths(2)])
+                    ->whereDate("date", "<", Carbon::today()->subMonth())
+                    ->whereDate("date", ">=", Carbon::today()->subMonths(2))
                     ->sum("comment"),
                 "total" => StatusChange::where("new_status_id", 32)
                     ->sum("comment"),

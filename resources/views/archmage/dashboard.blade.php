@@ -27,7 +27,7 @@
                     <span>Wszystkie do zapłacenia</span>
                     <span>{{ quests_unpaid(1, true) }} zł</span>
 
-                    <span>Zarobki w tym miesiącu</span>
+                    <span>Zarobki z ostatnich 30 dni</span>
                     <span>
                         {{ $gains["this_month"] }} zł
                         <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">

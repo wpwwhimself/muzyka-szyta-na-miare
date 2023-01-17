@@ -60,12 +60,10 @@ class BackController extends Controller
             }
             $gains = [
                 "this_month" => StatusChange::where("new_status_id", 32)
-                    ->whereMonth("date", Carbon::today()->month)
-                    ->whereYear("date", Carbon::today()->year)
+                    ->whereDate("date", ">=", Carbon::today()->subMonth())
                     ->sum("comment"),
                 "last_month" => StatusChange::where("new_status_id", 32)
-                    ->whereMonth("date", Carbon::today()->subMonth()->month)
-                    ->whereYear("date", Carbon::today()->month != 1 ? Carbon::today()->year : Carbon::today()->subYear()->year)
+                    ->whereBetween("date", [Carbon::today()->subMonth(), Carbon::today()->subMonths(2)])
                     ->sum("comment"),
                 "total" => StatusChange::where("new_status_id", 32)
                     ->sum("comment"),

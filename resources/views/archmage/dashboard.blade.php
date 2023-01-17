@@ -78,7 +78,7 @@
         </div>
         <div class="dashboard-mini-wrapper">
         @forelse ($recent as $key => $quest)
-            <x-quest-mini :quest="$quest" :queue="$key + 1" />
+            <x-quest-mini :quest="$quest" />
         @empty
             <p class="grayed-out">brak ostatnich zleceń</p>
         @endforelse

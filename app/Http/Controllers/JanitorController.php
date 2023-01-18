@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ArchmageJanitorReport;
 use App\Mail\QuestAwaitingPayment;
 use App\Mail\QuestAwaitingReview;
 use App\Mail\QuestExpired;

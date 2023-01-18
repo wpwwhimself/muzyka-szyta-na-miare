@@ -42,10 +42,13 @@ class BackController extends Controller
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
         }else{
-            $recent = Quest::whereDate("updated_at", ">", Carbon::now()->subMonth())
-                ->orderByDesc("updated_at")
-                ->limit(5)
-                ->get();
+            $recent = StatusChange::orderByDesc("date")->limit(10)->get();
+            foreach($recent as $change){
+                $change->is_request = (strlen($change->re_quest_id) == 36);
+                $change->re_quest = ($change->is_request) ?
+                    Request::find($change->re_quest_id) :
+                    Quest::find($change->re_quest_id);
+            }
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
             $unpaids_raw = Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])

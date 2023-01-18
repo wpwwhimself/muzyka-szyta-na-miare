@@ -75,30 +75,35 @@
     <div class="grid-2">
         <section>
             <div class="section-header">
-                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie 5 zleceń</h1>
+                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie zmiany</h1>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>Zlecenie</th>
+                        <th>ReQuest</th>
+                        <th @popper(zapytanie czy zlecenie)>R/Q</th>
                         <th>Klient</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($recent as $quest)
+                    @forelse ($recent as $change)
                     <tr>
                         <td>
-                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
-                                {{ $quest->song->title ?? "utwór bez tytułu" }}
+                            <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                                {{ ($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title }}
                             </a>
                         </td>
-                        <td>{{ $quest->client->client_name }}</td>
                         <td>
-                            @if ($quest->paid)
-                            <i class="fa-solid fa-sack-dollar success" {{ Popper::pop("opłacone") }}></i>
+                            @if ($change->is_request)
+                            <i class="fa-solid fa-envelope-open-text" @popper(zapytanie)></i>
+                            @else
+                            <i class="fa-solid fa-boxes-stacked" @popper(zlecenie)></i>
                             @endif
-                            <x-phase-indicator-mini :status="$quest->status" />
+                        </td>
+                        <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
+                        <td>
+                            <x-phase-indicator-mini :status="$change->re_quest->status" />
                         </td>
                     </tr>
                     @empty

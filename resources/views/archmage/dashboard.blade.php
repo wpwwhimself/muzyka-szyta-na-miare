@@ -92,7 +92,7 @@
                         <td>
                             <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
                                 @if ($change->is_request)
-                                <i class="fa-solid fa-square" @popper(zapytanie)></i>
+                                <i class="fa-regular fa-square" @popper(zapytanie)></i>
                                 @else
                                 <i class="fa-solid fa-square-check" @popper(zlecenie)></i>
                                 @endif

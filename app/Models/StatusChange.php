@@ -17,6 +17,7 @@ class StatusChange extends Model
         "mail_sent",
         "date",
     ];
+    protected $dates = ["date"];
     // const CREATED_AT = "date";
     // const UPDATED_AT = "date";
     public $timestamps = false;

@@ -84,6 +84,7 @@
                         <th @popper(zapytanie czy zlecenie)>R/Q</th>
                         <th>Klient</th>
                         <th>Status</th>
+                        <th>Kiedy</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,7 +92,7 @@
                     <tr>
                         <td>
                             <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                                {{ ($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title }}
+                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
                             </a>
                         </td>
                         <td>
@@ -103,7 +104,10 @@
                         </td>
                         <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
                         <td>
-                            <x-phase-indicator-mini :status="$change->re_quest->status" />
+                            <x-phase-indicator-mini :status="$change->new_status" />
+                        </td>
+                        <td>
+                            {{ $change->date->diffForHumans() }}
                         </td>
                     </tr>
                     @empty

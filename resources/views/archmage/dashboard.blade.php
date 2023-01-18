@@ -81,7 +81,6 @@
                 <thead>
                     <tr>
                         <th>ReQuest</th>
-                        <th @popper(zapytanie czy zlecenie)>R/Q</th>
                         <th>Klient</th>
                         <th>Status</th>
                         <th>Kiedy</th>
@@ -92,15 +91,13 @@
                     <tr>
                         <td>
                             <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                                @if ($change->is_request)
+                                <i class="fa-solid fa-square" @popper(zapytanie)></i>
+                                @else
+                                <i class="fa-solid fa-square-check" @popper(zlecenie)></i>
+                                @endif
                                 {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
                             </a>
-                        </td>
-                        <td>
-                            @if ($change->is_request)
-                            <i class="fa-solid fa-envelope-open-text" @popper(zapytanie)></i>
-                            @else
-                            <i class="fa-solid fa-boxes-stacked" @popper(zlecenie)></i>
-                            @endif
                         </td>
                         <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
                         <td>

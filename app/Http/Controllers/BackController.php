@@ -252,43 +252,50 @@ class BackController extends Controller
                 $request->hard_deadline = null;
             }
         }else{
-            // składanie requesta przeze mnie
-            $request->made_by_me ??= true;
-            if($rq->client_id){
-                $request->client_id = $rq->client_id;
-                $client = Client::find($rq->client_id);
-                $request->client_name = $client->client_name;
-                $request->email = $client->email;
-                $request->phone = $client->phone;
-                $request->other_medium = $client->other_medium;
-                $request->contact_preference = $client->contact_preference;
+            if(!$reviewing){
+                // składanie requesta przeze mnie
+                $request->made_by_me ??= true;
+                if($rq->client_id){
+                    $request->client_id = $rq->client_id;
+                    $client = Client::find($rq->client_id);
+                    $request->client_name = $client->client_name;
+                    $request->email = $client->email;
+                    $request->phone = $client->phone;
+                    $request->other_medium = $client->other_medium;
+                    $request->contact_preference = $client->contact_preference;
+                }else{
+                    $request->client_name = $rq->client_name;
+                    $request->email = $rq->email;
+                    $request->phone = $rq->phone;
+                    $request->other_medium = $rq->other_medium;
+                    $request->contact_preference = $rq->contact_preference ?? "email";
+                }
+                if($rq->has("bind_with_song")){
+                    $request->song_id = $rq->song_id;
+                    $song = Song::find($rq->song_id);
+                    $request->quest_type_id = song_quest_type($rq->song_id)->id;
+                    $request->title = $song->title;
+                    $request->artist = $song->artist;
+                    $request->link = $song->link;
+                    $request->genre_id = $song->genre_id;
+                    $request->wishes = $song->wishes;
+                }else{
+                    $request->quest_type_id = $rq->quest_type;
+                    $request->title = $rq->title;
+                    $request->artist = $rq->artist;
+                    $request->link = $rq->link;
+                    $request->genre_id = $rq->genre_id;
+                    $request->wishes = $rq->wishes;
+                }
+                $request->wishes_quest = $rq->wishes_quest;
+                $request->price_code = price_calc($rq->price_code, $rq->client_id, true)[3];
+                $request->price = price_calc($rq->price_code, $rq->client_id, true)[0];
             }else{
-                $request->client_name = $rq->client_name;
-                $request->email = $rq->email;
-                $request->phone = $rq->phone;
-                $request->other_medium = $rq->other_medium;
-                $request->contact_preference = $rq->contact_preference ?? "email";
+                if($rq->new_status == 1){
+                    $request->price_code = null;
+                    $request->price = null;
+                }
             }
-            if($rq->has("bind_with_song")){
-                $request->song_id = $rq->song_id;
-                $song = Song::find($rq->song_id);
-                $request->quest_type_id = song_quest_type($rq->song_id)->id;
-                $request->title = $song->title;
-                $request->artist = $song->artist;
-                $request->link = $song->link;
-                $request->genre_id = $song->genre_id;
-                $request->wishes = $song->wishes;
-            }else{
-                $request->quest_type_id = $rq->quest_type;
-                $request->title = $rq->title;
-                $request->artist = $rq->artist;
-                $request->link = $rq->link;
-                $request->genre_id = $rq->genre_id;
-                $request->wishes = $rq->wishes;
-            }
-            $request->wishes_quest = $rq->wishes_quest;
-            $request->price_code = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id, true)[3] : null;
-            $request->price = ($rq->new_status != 1) ? price_calc($rq->price_code, $rq->client_id, true)[0] : null;
         }
         if(!$reviewing){
             $request->deadline = ($rq->new_status != 1) ? $rq->deadline : null;
@@ -340,7 +347,9 @@ class BackController extends Controller
             $flash_content .= ", mail wysłany";
         }
 
-        $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
+        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 8, 9])) ? $rq->client_id : null;
+
+        $this->statusHistory($request->id, $request->status_id, $comment, $changed_by, $mailing);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
@@ -420,7 +429,8 @@ class BackController extends Controller
         $mailing = null;
         Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
         $mailing = true;
-        $this->statusHistory($id, $status, null, null, $mailing);
+
+        $this->statusHistory($id, $status, null, (Auth::id() == 1) ? $request->client_id : null, $mailing);
 
         if($status == 9){
             //added quest
@@ -428,19 +438,20 @@ class BackController extends Controller
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         }
-        if($status == 8){
-            //add client ID to history
-            StatusChange::where("re_quest_id", $request->id)->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
-        }
 
-        return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
+        if(Auth::id() == 1) return redirect()->route("request", ["id" => $request->id]);
+        else return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null){
+        $client_id = (strlen($re_quest_id) == 36) ?
+            Request::find($re_quest_id)->client_id :
+            Quest::find($re_quest_id)->client_id;
+        
         StatusChange::insert([
             "re_quest_id" => $re_quest_id,
             "new_status_id" => $new_status_id,
-            "changed_by" => ($changed_by != null) ? $changed_by : Auth::id(),
+            "changed_by" => ($client_id == null && in_array($new_status_id, [1, 8, 9])) ? null : $changed_by ?? Auth::id(),
             "comment" => $comment,
             "mail_sent" => $mailing,
             "date" => now(),

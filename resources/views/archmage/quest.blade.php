@@ -326,13 +326,13 @@
             @csrf
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [11, 16, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
-            @if (in_array($quest->status_id, [12])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
+            @if (in_array($quest->status_id, [11, 13, 16, 26])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
+            @if (in_array($quest->status_id, [12, 16])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
             @if (in_array($quest->status_id, [12, 13, 16, 26])) <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Recenzja negatywna" /> @endif
+            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Klient cofa" /> @endif
             @if (in_array($quest->status_id, [11, 12, 13, 15, 16])) <x-button action="submit" name="status_id" icon="18" value="18" label="Klient odrzuca" :danger="true" /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="19" value="19" label="Klient akceptuje"  /> @endif
-            @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Przywróć" /> @endif
+            @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Klient przywraca" /> @endif
             @if (in_array($quest->status_id, [13, 15])) <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" /> @endif
         </div>
         <div class="flexright">

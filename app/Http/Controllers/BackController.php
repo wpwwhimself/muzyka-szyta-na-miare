@@ -568,7 +568,13 @@ class BackController extends Controller
             $flash_content .= ", mail wysłany";
         }
 
-        $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, null, $mailing);
+        $this->statusHistory(
+            $rq->quest_id,
+            $rq->status_id,
+            $rq->comment,
+            (Auth::id() == 1 && in_array($rq->status_id, [16, 18, 19, 26])) ? $quest->client_id : null,
+            $mailing
+        );
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }

@@ -88,7 +88,11 @@
                 </thead>
                 <tbody>
                     @forelse ($recent as $change)
+                    @if ($change->date->isToday())
                     <tr>
+                    @else
+                    <tr class="ghost">
+                    @endif
                         <td>
                             <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
                                 @if ($change->is_request)

@@ -41,6 +41,10 @@ class BackController extends Controller
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
+            $unpaids = Quest::where("client_id", Auth::id())
+                ->whereNotIn("status_id", [18])
+                ->where("paid", 0)
+                ->get();
         }else{
             $recent = StatusChange::where("new_status_id", "!=", 9)->orderByDesc("date")->limit(10)->get();
             foreach($recent as $change){
@@ -89,7 +93,7 @@ class BackController extends Controller
             compact("quests", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
-            (isset($unpaids) ? compact("unpaids") : []),
+            compact("unpaids"),
             (isset($gains) ? compact("gains") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
             (isset($recent) ? compact("recent") : []),
@@ -447,7 +451,7 @@ class BackController extends Controller
         $client_id = (strlen($re_quest_id) == 36) ?
             Request::find($re_quest_id)->client_id :
             Quest::find($re_quest_id)->client_id;
-        
+
         StatusChange::insert([
             "re_quest_id" => $re_quest_id,
             "new_status_id" => $new_status_id,

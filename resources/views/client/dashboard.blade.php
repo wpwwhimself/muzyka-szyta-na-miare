@@ -20,7 +20,7 @@
                     <span>Status klienta</span>
                     <span>
                         @if (Auth::user()->client->trust == -1)
-                        <i class="fa-solid fa-user-ninja error"></i> krętacz i oszust
+                        <i class="fa-solid fa-user-ninja error"></i> niezaufany
                         @elseif (is_veteran(Auth::id()))
                         <i class="fa-solid fa-user-shield"></i> stały klient
                         @else
@@ -57,6 +57,27 @@
                 Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
                 Do momentu ich opłacenia nie możesz przeglądać udostępnionych plików.
             </p>
+            <h2 class="error">Nieopłacone zlecenia</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tytuł</th>
+                        <th>Kwota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($unpaids as $quest)
+                    <tr>
+                        <td>
+                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                            {{ $quest->song->title ?? "utwór bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>{{ $quest->price }} zł</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
             @endif
 
             @if ($quests_total && !is_patron(Auth::id()) && Auth::user()->client->helped_showcasing != 1)

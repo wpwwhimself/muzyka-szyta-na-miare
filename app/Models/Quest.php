@@ -11,6 +11,7 @@ class Quest extends Model
 
     public $incrementing = false;
     protected $keyType = "string";
+    protected $dates = ["deadline", "hard_deadline"];
 
     protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline", "wishes"];
 

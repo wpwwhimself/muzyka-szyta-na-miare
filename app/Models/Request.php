@@ -11,6 +11,7 @@ class Request extends Model
     use HasFactory, Uuids;
 
     protected $fillable = ["status_id"];
+    protected $dates = ["deadline", "hard_deadline"];
 
     public function client(){
         return $this->belongsTo(Client::class);

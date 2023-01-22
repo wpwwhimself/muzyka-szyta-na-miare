@@ -88,7 +88,7 @@
             <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" />
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline }}" />
+            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline->format('Y-m-d') }}" />
 
             <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
             <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" />
@@ -180,7 +180,7 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline->format('Y-m-d') }}" />
         </section>
 
         @if (in_array($request->status_id, [1, 6]))

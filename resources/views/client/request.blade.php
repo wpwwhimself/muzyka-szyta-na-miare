@@ -51,7 +51,7 @@
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
             @if ($request->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline }}" :disabled="true" />
+            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline->format('Y-m-d') }}" :disabled="true" />
             @endif
         </section>
 
@@ -99,7 +99,7 @@
             });
             </script>
             @if ($request->deadline)
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" :disabled="true" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline->format('Y-m-d') }}" :disabled="true" />
             @endif
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">

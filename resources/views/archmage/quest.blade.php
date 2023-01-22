@@ -99,9 +99,7 @@
                     Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
                     @endunless
                 </label>
-                @if ($quest->deadline)
                 <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline }}" />
-                @endif
                 @if ($quest->hard_deadline)
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline }}" :disabled="true" />
                 @endif

@@ -22,7 +22,7 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->password;
-        $remember = $request->input('remember') == "on";
+        $remember = $request->has("remember");
 
         $users = User::all();
         foreach($users as $user){

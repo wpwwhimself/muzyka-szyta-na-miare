@@ -158,7 +158,7 @@
                     $("#price_code").change(function (e) { calcPriceNow() });
                 });
                 </script>
-                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" :required="true" />
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
             </section>
 
             <section>

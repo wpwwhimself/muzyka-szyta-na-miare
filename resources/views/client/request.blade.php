@@ -50,7 +50,9 @@
             <x-link-interpreter :raw="$request->link" />
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
+            @if ($request->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline }}" :disabled="true" />
+            @endif
         </section>
 
         <section class="input-group">
@@ -101,7 +103,9 @@
             @endif
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
+                @if ($request->deadline)
                 <p><i class="fa-solid fa-circle-question"></i> Termin oddania jest liczony do podanego dnia włącznie.</p>
+                @endif
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>53 1090 1607 0000 0001 1633 2919</b><br>
@@ -109,7 +113,7 @@
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>
-                    Jest ona potrzebna do przeglądania i pobierania plików,<br>
+                    Jest ona potrzebna do pobierania plików,<br>
                     chyba, że jesteś np. stałym klientem
                 </p>
                 <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>

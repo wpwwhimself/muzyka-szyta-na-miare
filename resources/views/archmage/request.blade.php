@@ -180,7 +180,7 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" :required="true" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline }}" />
         </section>
 
         @if (in_array($request->status_id, [1, 6]))

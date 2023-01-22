@@ -32,14 +32,14 @@
 
             @if ($quest->deadline)
             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
-            <p class="quest-deadline {{ ($quest->deadline->isPast() && in_array($quest->status_id, [11, 12])) ? "error" : "" }}">
-                {{ $quest->deadline->addDay()->diffForHumans() }}
+            <p class="quest-deadline {{ ($quest->deadline?->isPast() && in_array($quest->status_id, [11, 12])) ? "error" : "" }}">
+                {{ $quest->deadline?->addDay()->diffForHumans() }}
             </p>
             @endif
             @if ($quest->hard_deadline)
             <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
-            <p class="quest-deadline {{ $quest->hard_deadline->isPast() ? "error" : "" }}">
-                {{ $quest->hard_deadline->addDay()->diffForHumans() }}
+            <p class="quest-deadline {{ $quest->hard_deadline?->isPast() ? "error" : "" }}">
+                {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
             </p>
             @endif
         </div>

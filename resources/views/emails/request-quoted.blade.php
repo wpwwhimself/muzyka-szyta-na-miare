@@ -15,7 +15,7 @@
         <tr>
             @foreach ([
                 "Cena" => $request->price . " zł",
-                "Termin oddania pierwszej wersji" => date_create_from_format("Y-m-d", $request->deadline)->format("d.m.Y"),
+                "Termin oddania pierwszej wersji" => $request->deadline?->format("d.m.Y") ?? "brak",
             ] as $key => $val)
             <td class="framed-cell">
                 <p>{{ $key }}</p>

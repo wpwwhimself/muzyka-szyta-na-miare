@@ -99,9 +99,9 @@
                     Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
                     @endunless
                 </label>
-                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline->format('Y-m-d') }}" />
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" />
                 @if ($quest->hard_deadline)
-                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline->format('Y-m-d') }}" :disabled="true" />
+                <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
                 @endif
                 <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>
             </form>

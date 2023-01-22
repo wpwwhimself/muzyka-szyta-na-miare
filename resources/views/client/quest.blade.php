@@ -116,10 +116,10 @@
             </div>
             @endunless
             @if ($quest->deadline)
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline->format('Y-m-d') }}" :disabled="true" />
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
             @if ($quest->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline->format('Y-m-d') }}" :disabled="true" />
+            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
         </section>
 

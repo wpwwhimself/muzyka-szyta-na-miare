@@ -346,10 +346,10 @@ class BackController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if($request->status_id != 4){
-            //mail do mnie, bo zmiany w zapytaniu
-            // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
-            // $mailing = true;
-            // $flash_content .= ", mail wysłany";
+            // mail do mnie, bo zmiany w zapytaniu
+            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+            $mailing = true;
+            $flash_content .= ", mail wysłany";
         }
 
         $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 8, 9])) ? $rq->client_id : null;
@@ -432,8 +432,8 @@ class BackController extends Controller
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
-        // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
-        // $mailing = true;
+        Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+        $mailing = true;
 
         $this->statusHistory($id, $status, null, (Auth::id() == 1) ? $request->client_id : null, $mailing);
 
@@ -568,9 +568,9 @@ class BackController extends Controller
             }
         }else if(Auth::id() != 1){
             //mail do mnie, bo zmiany w zleceniu
-            // Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
-            // $mailing = true;
-            // $flash_content .= ", mail wysłany";
+            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
+            $mailing = true;
+            $flash_content .= ", mail wysłany";
         }
 
         $this->statusHistory(

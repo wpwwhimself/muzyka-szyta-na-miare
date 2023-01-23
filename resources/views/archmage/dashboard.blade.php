@@ -88,7 +88,7 @@
                 </thead>
                 <tbody>
                     @forelse ($recent as $change)
-                    @if ($change->date->isToday())
+                    @if ($change->date->gt(now()->subDay()))
                     <tr>
                     @else
                     <tr class="ghost">

@@ -118,7 +118,7 @@
                         @default
                     @endswitch
                     @if ($client->special_prices)
-                    <i class="success fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>".client->special_prices) }}></i>
+                    <i class="success fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>".$client->special_prices) }}></i>
                     @endif
                     @if ($client->default_wishes)
                     <i class="fa-solid fa-cloud" {{ Popper::pop("Domyślne życzenia:<br>".$client->default_wishes) }}></i>

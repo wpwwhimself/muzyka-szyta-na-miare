@@ -24,7 +24,15 @@
 
     <div id="quest-box" class="flex-right">
         <section class="input-group">
-            <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
+            <h2>
+                <i class="fa-solid fa-user"></i>
+                Dane klienta
+                @if ($request->client_id)
+                <a href="{{ route('quests', ['client_id' => $request->client_id]) }}" @popper(zlecenia klienta) target="_blank">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                </a>
+                @endif
+            </h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
             <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" value="{{ $request->client_name }}" />
             <x-input type="email" name="email" label="Adres e-mail" value="{{ $request->email }}" />

@@ -6,7 +6,13 @@
         <h1>Dodaj nowe zapytanie</h1>
         <div id="quest-box" class="flex-right">
             <section class="input-group">
-                <h2><i class="fa-solid fa-user"></i> Dane klienta</h2>
+                <h2>
+                    <i class="fa-solid fa-user"></i>
+                    Dane klienta
+                    <a href="#" @popper(zlecenia klienta) target="_blank" id="client_quests_list">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                </h2>
                 <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" :small="true" />
                 <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" />
                 <x-input type="email" name="email" label="Adres e-mail" />
@@ -36,6 +42,7 @@
                                 $("#contact_preference").val(res.contact_preference);
                                 $("#wishes").html(res.default_wishes);
                                 if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
+                                $("#client_quests_list").attr("href", "{{ route('quests') }}/" + $("#client_id").val()).show();
                             }
                         });
                     }else{
@@ -47,6 +54,7 @@
                         $("#contact_preference").val("");
                         $("#wishes").html("");
                         $("#special-prices-warning").html("");
+                        $("#client_quests_list").hide().attr("href", "");
                     }
                 }
                 $(document).ready(function(){

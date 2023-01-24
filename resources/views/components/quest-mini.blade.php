@@ -49,7 +49,15 @@
             <i class="fa-solid fa-signal" @popper(Pozycja zlecenia w kolejce)></i>
             @endif
             @unless (strlen($quest->id) > 10)
-            <p class="quest-id">{{ $quest->id }}</p>
+            <p class="quest-id">
+                <x-quest-type
+                    :id="song_quest_type($quest->song_id)->id ?? 0"
+                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                    :small="true"
+                    />
+                {{ $quest->id }}
+            </p>
             <i class="fa-solid fa-hashtag" @popper(Identyfikator zlecenia)></i>
             @endunless
         </div>

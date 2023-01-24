@@ -1,3 +1,3 @@
-@props(['id', 'label', 'fa-symbol'])
+@props(['id', 'label', 'fa-symbol', 'small' => false])
 
-<i class="quest-type fa-solid {{ $faSymbol }}" {{ Popper::pop($label) }}></i>
+<i class="quest-type {{ $small ? 'small' : '' }} fa-solid {{ $faSymbol }}" {{ Popper::pop($label) }}></i>

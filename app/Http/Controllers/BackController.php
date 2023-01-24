@@ -586,7 +586,6 @@ class BackController extends Controller
     }
     public function questSongUpdate(HttpRequest $rq){
         $song = Song::findOrFail($rq->id);
-        dd($rq->title);
         $song->update([
             "title" => $rq->title,
             "artist" => $rq->artist,

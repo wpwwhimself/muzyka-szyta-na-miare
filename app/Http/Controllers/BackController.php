@@ -496,6 +496,7 @@ class BackController extends Controller
             "quests" => $quests
         ]);
     }
+
     public function quest($id){
         $quest = Quest::findOrFail($id);
 
@@ -503,7 +504,8 @@ class BackController extends Controller
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->orderByDesc("status_name")->get()->toArray();
         else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
 
-        $files_raw = Storage::files('safe/'.$id);
+        $files_raw = collect(Storage::files('safe/'.$id))
+            ->sortByDesc(function($file){return Storage::lastModified($file);});
         $files = []; $last_mod = []; $desc = [];
 
         if(!empty($files_raw)){
@@ -528,6 +530,7 @@ class BackController extends Controller
             )
         );
     }
+
     public function modQuestBack(HttpRequest $rq){
         $quest = Quest::findOrFail($rq->quest_id);
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){

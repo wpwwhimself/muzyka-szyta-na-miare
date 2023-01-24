@@ -511,6 +511,7 @@ class BackController extends Controller
         if(!empty($files_raw)){
             foreach($files_raw as $file){
                 $name = preg_split('/(\=|\_)/', pathinfo($file, PATHINFO_FILENAME));
+                if(!isset($name[1])) $name[1] = "x";
                 if(!isset($name[2])) $name[2] = "wersja zero";
                 $files[$name[0]][$name[1]][$name[2]][] = $file;
                 $last_mod[$name[1]][$name[2]] = Storage::lastModified($file);

@@ -41,7 +41,7 @@ body{
     min-height: calc(100vh - 7em);
     background-color: var(--bg); color: var(--fg);
 }
-h1, h2, h3, h4{
+h1, h2, h3, h4, h5{
     font-family: "Krona One";
     font-weight: normal;
 }
@@ -720,14 +720,21 @@ footer .contact-info{
     border-radius: 2em;
     padding: 1em; margin: 0.5em 0;
 }
-.file-container-a h3{
+.file-container-a h4{
     margin: 0;
     border-bottom: 2px solid var(--acc);
+}
+.pre-file-container-a{
+    margin-bottom: 0;
+}
+.pre-file-container-a::after, .pre-file-container-a::before{
+    content: "–";
+    margin: 0 1em;
 }
 .file-container-b{
     position: relative;
 }
-.file-container-b h4{
+.file-container-b h5{
     margin: 0.5em;
 }
 .file-container-b>.submit{

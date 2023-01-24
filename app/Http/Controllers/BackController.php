@@ -39,7 +39,8 @@ class BackController extends Controller
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 else 7 end")
             ->orderBy("deadline")
-            ->orderByRaw("paid desc");
+            ->orderByRaw("paid desc")
+            ->orderBy("created_at");
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());

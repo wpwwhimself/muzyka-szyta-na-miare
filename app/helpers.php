@@ -63,7 +63,7 @@ if(!function_exists("song_quest_type")){
  */
 if(!function_exists("next_quest_id")){
     function next_quest_id($quest_type_id){
-        $letter = QuestType::find($quest_type_id)->value("code");
+        $letter = QuestType::find($quest_type_id)->code;
         $newest_id = Quest::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
         if(!$newest_id || date("y") != substr($newest_id, 1, 2)){
             return $letter . date("y") . "-00";

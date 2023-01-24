@@ -49,7 +49,11 @@ class BackController extends Controller
                 ->where("paid", 0)
                 ->get();
         }else{
-            $recent = StatusChange::where("new_status_id", "!=", 9)->orderByDesc("date")->limit(10)->get();
+            $recent = StatusChange::where("new_status_id", "!=", 9)
+                ->where("changed_by", "!=", 1)
+                ->orderByDesc("date")
+                ->limit(10)
+                ->get();
             foreach($recent as $change){
                 $change->is_request = (strlen($change->re_quest_id) == 36);
                 $change->re_quest = ($change->is_request) ?

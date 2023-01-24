@@ -14,7 +14,9 @@ class Song extends Model
     protected $keyType = "string";
 
     protected $fillable = [
-        "title", "artist", "notes",
+        "title", "artist",
+        "link",
+        "notes",
     ];
 
     public function genre(){

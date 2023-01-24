@@ -706,6 +706,10 @@ footer .contact-info{
     translate: 2em 0.5em;
 }
 
+.quest-links>a:not(:first-child){
+    scale: 0.75;
+}
+
 .file-adder{
     font-size: 0.7em;
     flex-direction: row; align-items: center;

@@ -597,6 +597,7 @@ class BackController extends Controller
         $song->update([
             "title" => $rq->title,
             "artist" => $rq->artist,
+            "link" => $rq->link,
             "notes" => $rq->wishes,
         ]);
         return back()->with("success", "Utwór zmodyfikowany");

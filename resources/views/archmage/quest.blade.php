@@ -28,6 +28,7 @@
                 </div>
                 <x-input type="text" name="title" label="Tytuł" value="{{ $quest->song->title }}" />
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
+                <x-input type="text" name="link" label="Linki" value="{{ $quest->song->link }}" :small="true" />
                 <x-link-interpreter :raw="$quest->song->link" />
                 <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" />
                 <div class="flexright"><x-button label="Popraw utwór" icon="pen" action="submit" :small="true" /></div>

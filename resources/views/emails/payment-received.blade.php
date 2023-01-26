@@ -9,6 +9,13 @@
     </p>
 
     <x-mail-quest-mini :quest="$quest" />
+
+    @if (!(is_veteran($quest->client_id) || $quest->client->trust == 1))
+    <p>
+        Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniem za pomocą odpowiednich przycisków w widoku zlecenia.
+    </p>
+    @endif
+
     <h3>
         Kliknij
         <a
@@ -22,5 +29,10 @@
 
     <p>
         Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
+    </p>
+    <p>
+        <i>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->user->password }}</b>
+        </i>
     </p>
 @endsection

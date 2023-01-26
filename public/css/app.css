@@ -233,7 +233,10 @@ input[type="checkbox"]{
     border: inset 2px black;
 }
 .small{
-    font-size: 1em !important; margin: 0.2em;
+    font-size: 1em; margin: 0.2em;
+}
+.quest-mini .small{
+    font-size: 1em; margin: 0;
 }
 .danger{
     background-color: rgb(var(--danger));

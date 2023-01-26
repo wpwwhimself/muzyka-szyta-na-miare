@@ -43,6 +43,26 @@
             @endforeach
         </tbody>
     </table>
+
+    <h2>Jak naliczam ceny?</h2>
+    <p>
+        Wszystkie wielkości podane w procentach naliczane są w ostatniej kolejności.
+        Jeżeli cena posiada kilka takich składników, procenty są sumowane a następnie mnożone przez kwotę.
+    </p>
+    <p>
+        Na przykład dla zestawu:
+    </p>
+    <ul>
+        <li>50 zł,</li>
+        <li>30%,</li>
+        <li>15 zł,</li>
+        <li>-5%</li>
+    </ul>
+    <p>
+        W pierwszej kolejności dodawane są złotówki (50 + 15 zł),
+        a następnie tę kwotę mnoży się przez procenty ((100 + 30 - 5)%),
+        otrzymując razem: 65 × 125% = 81,25 zł
+    </p>
 </section>
 
 @endsection

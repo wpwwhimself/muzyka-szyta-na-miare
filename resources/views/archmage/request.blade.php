@@ -8,7 +8,7 @@
         const status = parseInt($(".quest-phase").attr("status"));
         //disabling inputs if no change is allowed
         if([4, 5, 7, 8, 9].includes(status)){
-            $("input:not(input[type=hidden]), select, textarea").prop("disabled", true);
+            $("input:not(input[type=hidden]), select:not(#comment), textarea").prop("disabled", true);
         };
     });
     </script>

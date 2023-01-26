@@ -522,6 +522,10 @@ footer .contact-info{
     font-size: 1.1em;
 }
 
+.bulk-box{
+    padding: 1em; margin-bottom: 1em;
+}
+
 .quest-phase-bars{
     display: grid;
     grid-template-columns: repeat(9, 1fr);

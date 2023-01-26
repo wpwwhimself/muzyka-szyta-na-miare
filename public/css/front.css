@@ -170,13 +170,8 @@ form button{
     grid-column: 1 / span 2;
 }
 
-#contact a{
-    display: flex; flex-direction: column;
+#contact .flex-right{
     justify-content: center; align-items: center;
-    font-size: 2em;
-}
-#contact a i{
-    font-size: 3.5em;
 }
 
 .cookie-consent{

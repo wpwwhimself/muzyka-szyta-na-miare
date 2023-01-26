@@ -20,7 +20,7 @@
                 <x-input type="date" name="hard_deadline" label="Opcjonalny termin wykonania" :hint="$hint['deadline']" />
             </section>
         </div>
-        <input type="hidden" name="modifying" value="0" />
+        <input type="hidden" name="intent" value="new" />
         <x-button
             label="Wyślij zapytanie" icon="1" name="new_status" value="1"
             action="submit"

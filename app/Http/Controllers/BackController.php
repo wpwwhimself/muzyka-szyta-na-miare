@@ -230,13 +230,26 @@ class BackController extends Controller
     }
 
     public function modRequestBack(HttpRequest $rq){
-        $modifying = $rq->modifying; //insert -- 0; update -- request_id
-        $reviewing = $rq->reviewing; //phase change only -- request_id; total redaction -- null
-        $request = ($modifying != 0 || $reviewing) ? Request::find($modifying) : new Request;
+        // identyfikacja klienta
+        switch(Auth::id()){
+            case 1:    $client = "archmage"; break;
+            case null: $client = "new"; break;
+            default:   $client = Auth::user()->client;
+        }
+        
+        // identyfikacja zamiarów
+        $bulk = (is_array($rq->quest_type) ? count($rq->quest_type) > 1 : false);
+        $intent = $rq->intent;
+
+        //? TO BE FINISHED LATER ?//
 
         if(Auth::id() != 1){
             if(!$reviewing){
                 // składanie requesta przez klienta
+                Request::updateOrCreate(
+                    [
+                    ]
+                );
                 if(Auth::check()){
                     $request->client_id = Auth::user()->client->id;
                 }else if(!$modifying){

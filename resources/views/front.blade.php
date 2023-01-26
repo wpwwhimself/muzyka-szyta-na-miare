@@ -290,13 +290,24 @@
             @csrf
             <div>
                 <h2>Szczegóły zlecenia</h2>
-                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$quest_types" />
-                <x-input type="text" name="title" label="Tytuł utworu" />
-                <x-input type="text" name="artist" label="Wykonawca" />
-                <x-input type="text" name="link" label="Link do oryginalnych nagrań wybranego utworu" :small="true" />
-                <x-input type="TEXT" name="wishes" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
-                <x-input type="date" name="hard_deadline" label="Na kiedy jest potrzebne? (opcjonalnie)" />
+                <div class="bulk-box sc-line">
+                    <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$quest_types" />
+                    <x-input type="text" name="title[]" label="Tytuł utworu" />
+                    <x-input type="text" name="artist[]" label="Wykonawca" />
+                    <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" />
+                    <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
+                    <x-input type="date" name="hard_deadline[]" label="Na kiedy jest potrzebne? (opcjonalnie)" />
+                </div>
+                <x-button action="#contactform" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
             </div>
+            <script>
+            $(document).ready(function(){
+                $("#request_bulk_add").click(function(){
+                    $(".bulk-box:first-of-type").clone().insertBefore($(this));
+                    $(".bulk-box:last-of-type :is(input, textarea)").val("");
+                });
+            });
+            </script>
             <div>
                 <h2>Twoje dane</h2>
                 <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" />
@@ -307,6 +318,7 @@
                 <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
                 <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
             </div>
+            <input type="hidden" name="intent" value="new" />
             <x-button
                 label="Wyślij zapytanie" icon="1" name="new_status" value="1"
                 action="submit"

@@ -343,7 +343,7 @@ class BackController extends Controller
         $mailing = null;
         if($request->status_id == 5){
             //mail do klienta, bo wycena oddana
-            if($request->email){
+            if($request->email && $request->contact_preference == "email"){
                 Mail::to($request->email)->send(new RequestQuoted($request));
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
@@ -547,7 +547,7 @@ class BackController extends Controller
             // sending mail
             $flash_content = "Cena wpisana";
             if($quest->paid){
-                if($quest->client->email){
+                if($quest->client->email && $quest->client->contact_preference == "email"){
                     Mail::to($quest->client->email)->send(new PaymentReceived($quest));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
@@ -568,7 +568,7 @@ class BackController extends Controller
         $mailing = null;
         if($quest->status_id == 15){
             //mail do klienta, bo oddaję zlecenie
-            if($quest->client->email){
+            if($quest->client->email && $quest->client->contact_preference == "email"){
                 Mail::to($quest->client->email)->send(new QuestUpdated($quest));
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
@@ -623,7 +623,7 @@ class BackController extends Controller
 
         // sending mail
         $mailing = null;
-        if($quest->client->email){
+        if($quest->client->email && $quest->client->contact_preference == "email"){
             Mail::to($quest->client->email)->send(new QuestUpdated($quest));
             $mailing = true;
         }else{

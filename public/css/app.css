@@ -267,7 +267,6 @@ input[type="checkbox"]{
 }
 .sc-line .sc-note1,
 .sc-line .sc-note2{
-    filter: invert(100%) sepia(62%) saturate(2055%) hue-rotate(64deg) brightness(93%) contrast(69%);
     position: absolute;
 }
 .sc-line .sc-note1{

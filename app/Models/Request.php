@@ -10,7 +10,13 @@ class Request extends Model
 {
     use HasFactory, Uuids;
 
-    protected $fillable = ["status_id"];
+    protected $fillable = [
+        "made_by_me",
+        "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",
+        "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes",
+        "price_code", "price", "deadline", "hard_deadline",
+        "status_id", "quest_id"
+    ];
     protected $dates = ["deadline", "hard_deadline"];
 
     public function client(){

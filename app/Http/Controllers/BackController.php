@@ -41,6 +41,7 @@ class BackController extends Controller
             ->orderBy("deadline")
             ->orderByRaw("paid desc")
             ->orderBy("created_at");
+
         if(Auth::id() != 1){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = client_exp(Auth::id());
@@ -62,19 +63,6 @@ class BackController extends Controller
                 $change->new_status = Status::find($change->new_status_id);
             }
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
-            $unpaids_raw = Quest::where("paid", 0)
-                ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", function(Builder $query){
-                    $query->where("trust", ">", -1);
-                })
-                ->orderBy("quests.updated_at")
-                ->get();
-            $unpaids = [];
-            if(count($unpaids_raw) > 0){
-                foreach($unpaids_raw as $quest){
-                    $unpaids[$quest->client->id][] = $quest;
-                };
-            }
             $gains = [
                 "this_month" => StatusChange::where("new_status_id", 32)
                     ->whereDate("date", ">=", Carbon::today()->subMonth())
@@ -100,7 +88,7 @@ class BackController extends Controller
             compact("quests", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
-            compact("unpaids"),
+            (isset($unpaids) ? compact("unpaids") : []),
             (isset($gains) ? compact("gains") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
             (isset($recent) ? compact("recent") : []),

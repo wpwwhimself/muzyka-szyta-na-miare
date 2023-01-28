@@ -118,45 +118,6 @@
             </table>
         </section>
 
-        @if (count($unpaids) > 0)
-        <section id="dashboard-unpaids">
-            <div class="section-header">
-                <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
-                <x-a href="{{ route('finance') }}">Przeglądaj</x-a>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Klient</th>
-                        <th>Zaległe projekty</th>
-                        <th>Razem do zapłaty</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($unpaids as $client_id => $quests)
-                    <tr>
-                        <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
-                        <td class="quest-list">
-                            @php $amount_to_pay = 0 @endphp
-                            @foreach ($quests as $quest)
-                            <a href="{{ route("quest", ["id" => $quest->id]) }}">
-                                {{ $quest->song->title ?? "utwór bez tytułu" }}
-                                <x-phase-indicator-mini :status="$quest->status" />
-                                {{ $quest->price }} zł
-                            </a>
-                            @php $amount_to_pay += $quest->price @endphp
-                            @endforeach
-                        </td>
-                        <td>
-                            {{ $amount_to_pay }} zł
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
-        @endif
-
         @if (!empty($janitor_log))
         <section id="dashboard-janitor-log">
             <div class="section-header">

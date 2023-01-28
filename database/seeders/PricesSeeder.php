@@ -72,28 +72,12 @@ class PricesSeeder extends Seeder
                 "operation" => "*", "price_a" => 0.07, "price_b" => 0.07
             ],
             [
-                "indicator" => "n", "service" => "nagrania do własnego podkładu", "quest_type_id" => null,
-                "operation" => "+", "price_a" => 25, "price_b" => 100
-            ],
-            [
-                "indicator" => "p", "service" => "nagrania do mojego podkładu", "quest_type_id" => null,
-                "operation" => "+", "price_a" => 0, "price_b" => 0
-            ],
-            [
                 "indicator" => "q", "service" => "przygotowanie filmu", "quest_type_id" => null,
                 "operation" => "+", "price_a" => 20, "price_b" => 60
             ],
             [
                 "indicator" => "r", "service" => "przygotowanie napisów do filmu", "quest_type_id" => null,
                 "operation" => "+", "price_a" => 20, "price_b" => 60
-            ],
-            [
-                "indicator" => "v", "service" => "występ jako akompaniator (godz.)", "quest_type_id" => null,
-                "operation" => "+", "price_a" => 60, "price_b" => 250
-            ],
-            [
-                "indicator" => "w", "service" => "występ w zespole (godz.)", "quest_type_id" => null,
-                "operation" => "+", "price_a" => 80, "price_b" => 300
             ],
             [
                 "indicator" => "g", "service" => "mixing i mastering", "quest_type_id" => 3,

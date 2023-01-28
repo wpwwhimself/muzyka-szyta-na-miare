@@ -385,7 +385,7 @@ class BackController extends Controller
                 $song->artist = $request->artist;
                 $song->link = $request->link;
                 $song->genre_id = $request->genre_id;
-                $song->price_code = preg_replace("/[=-]/", "", $request->price_code);
+                $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
                 $song->notes = $request->wishes;
                 $song->save();
 

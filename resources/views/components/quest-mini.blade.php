@@ -5,26 +5,27 @@
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
     </a>
+    @if (Auth::id() == 1)
+    <div class="quest-client">
+        @if ($quest->client_id)
+            @if (is_veteran($quest->client_id))
+            <i class="fa-solid fa-user-shield" @popper(Klient)></i>
+            @else
+            <i class="fa-solid fa-user" @popper(Klient)></i>
+            @endif
+        <p class="client-name">
+            <a href="{{ route('clients') }}#client{{ $quest->client_id }}">
+            {{ $quest->client->client_name }}
+            </a>
+        </p>
+        @else
+        <i class="fa-regular fa-user" @popper(Klient)></i>
+        <p class="client-name">{{ $quest->client_name }}</p>
+        @endif
+    @endif
+    </div>
     <div class="quest-details">
         <div class="quest-meta">
-            @if (Auth::id() == 1)
-                @if ($quest->client_id)
-                    @if (is_veteran($quest->client_id))
-                    <i class="fa-solid fa-user-shield" @popper(Klient)></i>
-                    @else
-                    <i class="fa-solid fa-user" @popper(Klient)></i>
-                    @endif
-                <p class="client-name">
-                    <a href="{{ route('clients') }}#client{{ $quest->client_id }}">
-                    {{ $quest->client->client_name }}
-                    </a>
-                </p>
-                @else
-                <i class="fa-regular fa-user" @popper(Klient)></i>
-                <p class="client-name">{{ $quest->client_name }}</p>
-                @endif
-            @endif
-
             @if ($quest->price)
             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
             <p class={{ $quest->paid ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
@@ -32,13 +33,17 @@
 
             @if ($quest->deadline)
             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
-            <p class="quest-deadline {{ ($quest->deadline?->isPast() && in_array($quest->status_id, [11, 12])) ? "error" : "" }}">
+            <p class="quest-deadline {{ ($quest->deadline?->isPast() && in_array($quest->status_id, [11, 12])) ? "error" : "" }}"
+                {{ Popper::pop($quest->deadline->format("Y-m-d")) }}
+                >
                 {{ $quest->deadline?->addDay()->diffForHumans() }}
             </p>
             @endif
             @if ($quest->hard_deadline)
             <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
-            <p class="quest-deadline {{ $quest->hard_deadline?->isPast() ? "error" : "" }}">
+            <p class="quest-deadline {{ $quest->hard_deadline?->isPast() ? "error" : "" }}"
+                {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }}
+                >
                 {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
             </p>
             @endif

@@ -442,6 +442,14 @@ footer .contact-info{
     display: flex;
     justify-content: space-between;
 }
+.quest-client{
+    display: flex;
+    justify-content: center;
+    column-gap: 0.5em;
+}
+.quest-client .client-name{
+    margin-bottom: 0.25em;
+}
 .quest-meta{
     align-self: flex-end;
     white-space: nowrap;

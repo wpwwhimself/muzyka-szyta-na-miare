@@ -92,7 +92,7 @@
                     <a href="{{ route('quest', ['id' => $item->re_quest_id]) }}">
                         {{ $item->quest->song->title ?? "utwór bez tytułu" }}
                     </a>
-                    <x-phase-indicator-mini :status="$item->new_status" />
+                    <x-phase-indicator-mini :status="$item->quest->status" />
                 </td>
                 <td>
                     {{ $item->comment }} zł

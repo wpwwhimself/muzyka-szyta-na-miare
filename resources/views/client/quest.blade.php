@@ -128,15 +128,21 @@
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
 
             @forelse ($files as $ver_super => $ver_mains)
+                @if (count($files) > 1)
+                <h3 class="pre-file-container-a">{{ $ver_super }}</h3>
+                @endif
                 @foreach ($ver_mains as $ver_main => $ver_subs)
                 <div class="file-container-a">
-                    <h3>{{ $ver_super }}={{ $ver_main }}</h3>
+                    <h4>
+                        <small>wariant:</small>
+                        {{ $ver_main }}
+                    </h4>
                     @foreach ($ver_subs as $ver_sub => $ver_bots)
                     <div class="file-container-b">
-                        <h4>
+                        <h5>
                             {{ $ver_sub }}
                             <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
-                        </h4>
+                        </h5>
                         <div class="ver_desc">
                             {{ isset($desc[$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_main][$ver_sub])) : "" }}
                         </div>

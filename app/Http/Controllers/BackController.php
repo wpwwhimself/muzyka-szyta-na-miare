@@ -504,7 +504,7 @@ class BackController extends Controller
         if(Auth::id() == 1) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->orderByDesc("status_name")->get()->toArray();
         else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
 
-        $files_raw = collect(Storage::files('safe/'.$id))
+        $files_raw = collect(Storage::files('safe/'.$quest->song_id))
             ->sortByDesc(function($file){return Storage::lastModified($file);});
         $files = []; $last_mod = []; $desc = [];
 

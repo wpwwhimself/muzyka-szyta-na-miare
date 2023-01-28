@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\File;
 class FileController extends Controller
 {
     // https://gist.github.com/zahidhasanemon/afbbf65918703f0e897db518dd77f2ce, modified
-    public function fileUpload(Request $rq, $quest_id){
+    public function fileUpload(Request $rq, $id){
         foreach ($rq->file('file') as $key => $value) {
             $filename = $value->getClientOriginalName();
             $name[] = $filename;
-            $value->storeAs("safe/$quest_id", $filename);
+            $value->storeAs("safe/$id", $filename);
         }
 
         return response()->json([
@@ -32,11 +32,11 @@ class FileController extends Controller
         $path = storage_path("app/safe/$id/$filename");
 
         if(!File::exists($path)) abort(404,"Plik nie istnieje");
-        
+
         $file = Storage::get("safe/$id/$filename");
         $type = File::mimeType($path);
-        $filesize = Storage::size("safe/$id/$filename");   
-        
+        $filesize = Storage::size("safe/$id/$filename");
+
         $headers = [
             'Content-Description' => 'File Transfer',
             'Content-Type' => $type,

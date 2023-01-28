@@ -211,7 +211,7 @@
                 let uploadedDocumentMap = {};
                 Dropzone.autoDiscover = false;
                 let myDropzone = new Dropzone("div#document-dropzone",{
-                    url: '{{ route('upload', ["id" => $quest->id]) }}',
+                    url: '{{ route('upload', ["id" => $quest->song_id]) }}',
                     autoProcessQueue: true,
                     uploadMultiple: true,
                     addRemoveLinks: true,
@@ -273,14 +273,14 @@
                         <div class="file-container-c">
                         @foreach ($ver_bots as $file)
                             @if (pathinfo($file)['extension'] == "mp4")
-                            <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                            <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
                             @elseif (pathinfo($file)['extension'] == "mp3")
-                            <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                            <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                             @endif
                         @endforeach
                         @foreach ($ver_bots as $file)
                             @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                            <x-file-tile :id="$quest->id" :file="$file" />
+                            <x-file-tile :id="$quest->song->id" :file="$file" />
                             @endunless
                         @endforeach
                         </div>

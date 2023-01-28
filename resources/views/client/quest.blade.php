@@ -150,15 +150,15 @@
                         @if ($quest->paid || can_see_files($quest->client_id))
                             @foreach ($ver_bots as $file)
                                 @if (pathinfo($file)['extension'] == "mp4")
-                                <video controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                                <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
                                 @elseif (pathinfo($file)['extension'] == "mp3")
-                                <audio controls><source src="{{ route('safe-show', ["id" => $quest->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                                <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                                 @endif
                             @endforeach
                             @if (can_download_files($quest->client_id))
                                 @foreach ($ver_bots as $file)
                                     @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                                    <x-file-tile :id="$quest->id" :file="$file" />
+                                    <x-file-tile :id="$quest->song->id" :file="$file" />
                                     @endunless
                                 @endforeach
                             @endif

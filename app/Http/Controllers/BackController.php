@@ -285,9 +285,9 @@ class BackController extends Controller
                     $request->song_id = $rq->song_id;
                     $song = Song::find($rq->song_id);
                     $request->quest_type_id = song_quest_type($rq->song_id)->id;
-                    $request->title = $song->title;
-                    $request->artist = $song->artist;
-                    $request->link = $song->link;
+                    $request->title = $song->title ?? $rq->title;
+                    $request->artist = $song->artist ?? $rq->artist;
+                    $request->link = $song->link ?? $rq->link;
                     $request->genre_id = $song->genre_id;
                     $request->wishes = $song->wishes;
                 }else{

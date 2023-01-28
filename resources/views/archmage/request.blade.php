@@ -99,11 +99,11 @@
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline?->format('Y-m-d') }}" />
 
             <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
-            <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" />
+            <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" value="{{ $request->song_id }}" />
             <div id="song-summary" class="hint-table">
                 <div class="positions"></div>
             </div>
-            <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" />
+            <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" value="{{ $request->song_id }}" />
             <script>
             function loadSong(){
                 const song_id = $("#song_id").val();
@@ -122,9 +122,15 @@
                         },
                         success: function(res){
                             res = JSON.parse(res);
+                            res.link = res.link.split(",");
                             let content = ``;
                             content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                             content += `<span>Artysta</span><span>${res.artist}</span>`;
+                            content += `<span>Link</span><span>`;
+                                res.link.forEach(link => {
+                                    content += `<a href="${link}" target="_blank">Link</a>`;
+                                });
+                            content += `</span>`;
                             content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
                             content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
                             content += `<span>Uwagi</span><span>${res.notes}</span>`;

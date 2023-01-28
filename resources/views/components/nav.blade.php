@@ -22,6 +22,7 @@
     @if (Auth::id() == 1)
         <a href="{{ route("songs") }}"><li><i class="fa-solid fa-compact-disc"></i> Utwory</li></a>
         <a href="{{ route("clients") }}"><li><i class="fa-solid fa-users"></i> Klienci</li></a>
+        <a href="{{ route('finance') }}"><li><i class="fa-solid fa-sack-dollar"></i> Finanse</li></a>
         <a href="{{ route("showcases") }}"><li><i class="fa-solid fa-bullhorn"></i> Reklama</li></a>
         <a href="{{ route("stats") }}"><li><i class="fa-solid fa-chart-line"></i> Statystyki</li></a>
         <a href="{{ route("ppp") }}"><li><i class="fa-solid fa-circle-question"></i> PPP</li></a>

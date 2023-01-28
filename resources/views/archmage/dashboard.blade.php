@@ -14,7 +14,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
                 <div>
-                    <x-a href="{{ route('stats') }}">Więcej</x-a>
+                    <x-a href="{{ route('finance') }}">Więcej</x-a>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
                         <td>
                             <x-phase-indicator-mini :status="$change->new_status" />
                         </td>
-                        <td>
+                        <td {{ Popper::pop($change->date) }}>
                             {{ $change->date->diffForHumans() }}
                         </td>
                     </tr>
@@ -122,6 +122,7 @@
         <section id="dashboard-unpaids">
             <div class="section-header">
                 <h1><i class="fa-solid fa-receipt"></i> Nadal nie zapłacili</h1>
+                <x-a href="{{ route('finance') }}">Przeglądaj</x-a>
             </div>
             <table>
                 <thead>

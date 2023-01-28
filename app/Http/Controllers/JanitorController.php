@@ -71,7 +71,7 @@ class JanitorController extends Controller
             ->get();
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
-            if($quest->client->email && $quest->client->contact_preference == "email"){
+            if($quest->client->isMailable()){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, 1);
                 $summary[] = [
@@ -100,7 +100,7 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
-            if($quest->client->email && $quest->client->contact_preference == "email"){
+            if($quest->client->isMailable()){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak wpłaty"));
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, 1);
                 $summary[] = [
@@ -126,7 +126,7 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
             ){
-                if($quest->client->email && $quest->client->contact_preference == "email"){
+                if($quest->client->isMailable()){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
                     StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
                     $summary[] = [
@@ -152,7 +152,7 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
             ){
-                if($quest->client->email && $quest->client->contact_preference == "email"){
+                if($quest->client->isMailable()){
                     Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
                     //status
                     $status = StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 33)->first();

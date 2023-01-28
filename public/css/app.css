@@ -549,10 +549,14 @@ footer .contact-info{
     color: rgb(var(--q-clr));
 }
 
-#dashboard-unpaids .quest-list a{
-    display: block;
+#dashboard-unpaids .quest-list a, #finance-unpaids .quest-list>div{
+    display: flex;
     width: fit-content;
     margin-left: auto;
+    align-items: center;
+}
+#finance-unpaids input[type='checkbox']{
+    height: auto;
 }
 
 .hint-table div{

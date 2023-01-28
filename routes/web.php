@@ -80,6 +80,8 @@ Route::controller(FileController::class)->group(function(){
 
 Route::controller(StatsController::class)->group(function(){
     Route::get("/stats", "dashboard")->middleware("auth")->name("stats");
+    Route::get("/finance", "financeDashboard")->middleware("auth")->name("finance");
+    Route::post("/finance/pay", "financePay")->middleware("auth")->name("finance-pay");
 });
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){
@@ -99,37 +101,6 @@ Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(Model
 Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
 Route::get("/mp-w/{id}", function($id){ return new App\Mail\_Welcome(Client::findOrFail($id)); })->name("mp-w");
-
-/*
-Route::get("/greenlight", function(Request $rq){
-    $clients_with_email = Client::whereNotNull("email")->get();
-    $output = "";
-
-    if($rq->ready != 1){
-        $tyle = $clients_with_email->count();
-        $output = <<<EOS
-<p>Za chwilę oficjalnie ruszy nowa strona i powiadomimy $tyle ludzi o fakcie, że mają u mnie konto. Chcesz kontynuować?</p>
-<a href="?ready=1">TAK!</a>
-EOS;
-    }else{
-        $output = <<<EOS
-<p>No to jazda!</p>
-<ol>
-EOS;
-        foreach($clients_with_email as $client){
-            $output .= "<li>Mail do: $client->client_name ($client->email)</li>";
-            Mail::to($client->email)->send(new _Welcome($client));
-        }
-
-        $output .= <<<EOS
-</ol>
-<p>Dobra robota!</p>
-EOS;
-    }
-
-    return $output;
-})->middleware("auth");
-*/
 
 /**
  * for AJAX purposes
@@ -173,3 +144,35 @@ Route::controller(JanitorController::class)->group(function(){
     Route::get("/re_quests_janitor", "index");
     // Route::get("/janitor-log", "log")->middleware("auth")->name("janitor-log");
 });
+
+
+/*
+Route::get("/greenlight", function(Request $rq){
+    $clients_with_email = Client::whereNotNull("email")->get();
+    $output = "";
+
+    if($rq->ready != 1){
+        $tyle = $clients_with_email->count();
+        $output = <<<EOS
+<p>Za chwilę oficjalnie ruszy nowa strona i powiadomimy $tyle ludzi o fakcie, że mają u mnie konto. Chcesz kontynuować?</p>
+<a href="?ready=1">TAK!</a>
+EOS;
+    }else{
+        $output = <<<EOS
+<p>No to jazda!</p>
+<ol>
+EOS;
+        foreach($clients_with_email as $client){
+            $output .= "<li>Mail do: $client->client_name ($client->email)</li>";
+            Mail::to($client->email)->send(new _Welcome($client));
+        }
+
+        $output .= <<<EOS
+</ol>
+<p>Dobra robota!</p>
+EOS;
+    }
+
+    return $output;
+})->middleware("auth");
+*/

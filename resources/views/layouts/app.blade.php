@@ -23,6 +23,14 @@
     const IS_VETERAN = {{ Auth::id() == 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
     </script>
 
+    @env("local")
+    <style>
+    :root{
+        --acc: rgb(235, 34, 235) !important;
+    }
+    </style>
+    @endenv
+
     <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>
 </head>
 <body>

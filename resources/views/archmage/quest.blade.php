@@ -311,7 +311,7 @@
                         type: "get",
                         data: {
                             _token: '{{ csrf_token() }}',
-                            path: '/safe/{{ $quest->id }}/' + ver + '.md'
+                            path: '/safe/{{ $quest->song->id }}/' + ver + '.md'
                         },
                         success: function(res){
                             $("#ver_desc_form textarea").text(res).focus();

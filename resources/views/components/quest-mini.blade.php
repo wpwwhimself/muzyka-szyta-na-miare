@@ -33,17 +33,31 @@
 
             @if ($quest->deadline)
             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
-            <p class="quest-deadline {{ ($quest->deadline?->isPast() && in_array($quest->status_id, [11, 12])) ? "error" : "" }}"
-                {{ Popper::pop($quest->deadline->format("Y-m-d")) }}
-                >
+            <p
+                @if(in_array($quest->status_id, [11, 12]))
+                    @if ($quest->deadline?->addDay()->subDays(1)->lte(now()))
+                    class="quest-deadline error"
+                    @elseif ($quest->deadline?->addDay()->subDays(3)->lte(now()))
+                    class="quest-deadline warning"
+                    @endif
+                @else
+                    class="quest-deadline"
+                @endif
+                {{ Popper::pop($quest->deadline->format("Y-m-d")) }} >
                 {{ $quest->deadline?->addDay()->diffForHumans() }}
             </p>
             @endif
             @if ($quest->hard_deadline)
             <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
-            <p class="quest-deadline {{ $quest->hard_deadline?->isPast() ? "error" : "" }}"
-                {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }}
-                >
+            <p
+                @if ($quest->hard_deadline?->addDay()->subDays(1)->lte(now()))
+                class="quest-deadline error"
+                @elseif ($quest->hard_deadline?->addDay()->subDays(3)->lte(now()))
+                class="quest-deadline warning"
+                @else
+                class="quest-deadline"
+                @endif
+                {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }} >
                 {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
             </p>
             @endif

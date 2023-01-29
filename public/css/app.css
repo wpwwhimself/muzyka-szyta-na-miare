@@ -557,6 +557,10 @@ footer .contact-info{
     color: rgb(var(--q-clr));
 }
 
+.ver_desc p{
+    margin: 0;
+}
+
 #dashboard-unpaids .quest-list a, #finance-unpaids .quest-list>div{
     display: flex;
     width: fit-content;

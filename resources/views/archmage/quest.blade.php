@@ -268,7 +268,7 @@
                             value='{{ pathinfo($ver_bots[0], PATHINFO_FILENAME) }}'
                             />
                         <div class="ver_desc">
-                            {{ isset($desc[$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_main][$ver_sub])) : "" }}
+                            {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}
                         </div>
                         <div class="file-container-c">
                         @foreach ($ver_bots as $file)
@@ -305,7 +305,7 @@
                     const ver = $(this).attr("value");
                     $("#ver_desc_form").show();
                     $("#ver_desc_form label").text("Opis wersji " + ver);
-                    $("#ver_desc_form input[name=ver]").val("{{ $quest->id }}/" + ver);
+                    $("#ver_desc_form input[name=ver]").val("{{ $quest->song->id }}/" + ver);
                     $.ajax({
                         url: "{{ url('get_ver_desc') }}",
                         type: "get",

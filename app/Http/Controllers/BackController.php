@@ -229,151 +229,68 @@ class BackController extends Controller
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
 
+    public function addRequestBack(HttpRequest $rq){
+        if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
+
+        for($i = 0; $i < count($rq->quest_type); $i++){
+            if(Auth::id() == 1){
+                $song = ($rq->has("bind_with_song")) ? Song::find($rq->song_id[$i]) : null;
+
+                Request::create([
+                    "made_by_me" => true,
+
+                    "client_id" => $rq->client_id,
+                    "client_name" => $rq->client_name,
+                    "email" => $rq->email,
+                    "phone" => $rq->phone,
+                    "other_medium" => $rq->other_medium,
+                    "contact_preference" => $rq->contact_preference,
+                    
+                    "song_id" => $rq->song_id[$i],
+                    "quest_type_id" => ($song) ? song_quest_type($rq->song_id[$i])->id : $rq->quest_type[$i],
+                    "title" => ($song) ? $song->title : $rq->title[$i],
+                    "artist" => ($song) ? $song->artist : $rq->artist[$i],
+                    "link" => ($song) ? $song->link : $rq->link[$i],
+                    "wishes" => ($song) ? $song->wishes : $rq->wishes[$i],
+                    "wishes_quest" => $rq->wishes_quest[$i],
+
+                    "price_code" => price_calc($rq->price_code[$i], $rq->client_id, true)[3],
+                    "price" => price_calc($rq->price_code[$i], $rq->client_id, true)[0],
+                    "deadline" => $rq->deadline[$i],
+                    "hard_deadline" => $rq->hard_deadline[$i],
+                    "status_id" => 5,
+                ]);
+            }else{
+                Request::create([
+                    "made_by_me" => false,
+
+                    "client_id" => (Auth::check()) ? Auth::id() : null,
+                    "client_name" => (Auth::check()) ? Auth::user()->client->client_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->client->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->client->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->client->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->client->contact_preference : $rq->contact_preference,
+                    
+                    "quest_type_id" => $rq->quest_type[$i],
+                    "title" => $rq->title[$i],
+                    "artist" => $rq->artist[$i],
+                    "link" => $rq->link[$i],
+                    "wishes" => $rq->wishes[$i],
+
+                    "hard_deadline" => $rq->hard_deadline[$i],
+                    "status_id" => 1,
+                ]);
+            }
+        }
+
+        return redirect()->route("dashboard")->with("success", "Zapytania dodane");
+    }
+
     public function modRequestBack(HttpRequest $rq){
-        // identyfikacja klienta
-        switch(Auth::id()){
-            case 1:    $client = "archmage"; break;
-            case null: $client = "new"; break;
-            default:   $client = Auth::user()->client;
-        }
-        
-        // identyfikacja zamiarów
-        // $bulk = (is_array($rq->quest_type) ? count($rq->quest_type) > 1 : false);
         $intent = $rq->intent;
-
-        //? TO BE FINISHED LATER ?//
-        if($intent == "new"){
-            // składanie requesta -- bulk
-            if($client == "new"){
-                if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
-            }
-            $requests_created = [];
-            for($i = 0; $i < count($rq->quest_type); $i++){
-                $request = new Request;
-                $request->made_by_me = false;
-                $request->client_id = $client->id ?? $rq->client_id;
-                $request->client_name = $client->client_name ?? $rq->client_name;
-                $request->email = $client->email ?? $rq->email;
-                $request->phone = $client->phone ?? $rq->phone;
-                $request->other_medium = $client->other_medium ?? $rq->other_medium;
-                $request->contact_preference = $client->contact_preference ?? $rq->contact_preference;
-                $request->quest_type_id = $rq->quest_type[$i];
-                $request->title = $rq->title[$i];
-                $request->artist = $rq->artist[$i];
-                $request->link = $rq->link[$i];
-                $request->wishes = $rq->wishes[$i];
-                $request->hard_deadline = $rq->hard_deadline[$i];
-                $request->status_id = 1;
-                $request->save();
-                $requests_created[] = $request;
-                $this->statusHistory($request->id, $request->status_id, null, null, ($request->email && $request->contact_preference == "email"));
-            }
-            // zbiorczy mail potwierdzający nowe zlecenie
-            $flash_content = "Zapytanie gotowe";
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageHugeRequest($requests_created, "new"));
-        }
-
-        if($intent == "change"){
-            // wycena requesta -- single
-            $request = Request::findOrFail($rq->id);
-            $request->made_by_me ??= true;
-            if($rq->client_id){
-                $request->client_id = $rq->client_id;
-                $client = Client::find($rq->client_id);
-                $request->client_name = $client->client_name;
-                $request->email = $client->email;
-                $request->phone = $client->phone;
-                $request->other_medium = $client->other_medium;
-                $request->contact_preference = $client->contact_preference;
-            }else{
-                $request->client_name = $rq->client_name;
-                $request->email = $rq->email;
-                $request->phone = $rq->phone;
-                $request->other_medium = $rq->other_medium;
-                $request->contact_preference = $rq->contact_preference ?? "email";
-            }
-            if($rq->has("bind_with_song")){
-                $request->song_id = $rq->song_id;
-                $song = Song::find($rq->song_id);
-                $request->quest_type_id = song_quest_type($rq->song_id)->id;
-                $request->title = $song->title;
-                $request->artist = $song->artist;
-                $request->link = $song->link;
-                $request->genre_id = $song->genre_id;
-                $request->wishes = $song->wishes;
-            }else{
-                $request->quest_type_id = $rq->quest_type;
-                $request->title = $rq->title;
-                $request->artist = $rq->artist;
-                $request->link = $rq->link;
-                $request->genre_id = $rq->genre_id;
-                $request->wishes = $rq->wishes;
-            }
-            $request->wishes_quest = $rq->wishes_quest;
-            $request->price_code = price_calc($rq->price_code, $rq->client_id, true)[3];
-            $request->price = price_calc($rq->price_code, $rq->client_id, true)[0];
-            $request->status_id = $rq->new_status;
-
-            // zebranie zmian
-            $comment = null;
-            $changes = [];
-            if($request->status_id == 5){
-                $keys = array_keys(Arr::except($request->getDirty(), [
-                    "updated_at", "status_id", "genre_id",
-                    "client_name", "email", "phone", "other_medium", "contact_preference",
-                    "price_code",
-                ]));
-                $pre = $request->getOriginal();
-                $post = $request->getDirty();
-                foreach($keys as $key){
-                    $changes[$key] = $pre[$key] . " → " . $post[$key];
-                }
-                $comment = json_encode($changes);
-                if($comment == "[]") $comment = null;
-            }else if($request->status_id == 4){
-                $comment = $rq->comment;
-            }
-
-            $request->save();
-
-            // sending mail
-            $flash_content = "Zapytanie gotowe";
-            $mailing = null;
-            if($request->status_id == 5){
-                //mail do klienta, bo wycena oddana
-                if($request->email && $request->contact_preference == "email"){
-                    Mail::to($request->email)->send(new RequestQuoted($request));
-                    $mailing = true;
-                    $flash_content .= ", mail wysłany";
-                }else{
-                    $mailing = false;
-                    $flash_content .= ", ale wyślij wiadomość";
-                }
-            }else if($request->status_id != 4){
-                // mail do mnie, bo zmiany w zapytaniu
-                Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
-                $mailing = true;
-                $flash_content .= ", mail wysłany";
-            }
-            
-            $this->statusHistory($request->id, $request->status_id, $comment, null, $mailing);
-            
-        }
-
-        if($intent == "review"){
-            $request = Request::findOrFail($rq->id);
-
-            if($rq->new_status == 1){
-                $request->price_code = null;
-                $request->price = null;
-                $request->deadline = null;
-            }
-            $request->status_id = $rq->new_status;
-
-            $request->save();
-            $this->statusHistory($request->id, $request->status_id, null);
-        }
-        /*
+        $request = Request::find($rq->id);
+        
+        //todo uzupełnić
         if(Auth::id() != 1){
             if(!$reviewing){
                 // składanie requesta przez klienta
@@ -501,7 +418,7 @@ class BackController extends Controller
         $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 8, 9])) ? $rq->client_id : null;
 
         $this->statusHistory($request->id, $request->status_id, $comment, $changed_by, $mailing);
-        */
+
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
 

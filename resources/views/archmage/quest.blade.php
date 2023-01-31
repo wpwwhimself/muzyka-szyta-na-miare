@@ -133,6 +133,9 @@
                             {{ DB::table("statuses")->find($entry->status_id)->status_name }}
                         </td>
                         <td>
+                            <a class="log-delete" href="{{ route('work-clock-remove', ['status_id' => $entry->status_id, 'song_id' => $entry->song_id]) }}">
+                                <i class="fa-solid fa-trash" @popper(usuń wpis)></i>
+                            </a>
                             @if ($entry->now_working) <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i> @endif
                             {{ $entry->time_spent }}
                         </td>

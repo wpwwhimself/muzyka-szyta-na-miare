@@ -665,6 +665,12 @@ footer .contact-info{
     color: var(--acc);
     font-weight: bold;
 }
+#stats-log .log-delete{
+    display: none;
+}
+#stats-log tr:hover .log-delete{
+    display: inline;
+}
 
 .stats-highlight-h{
     display: grid;

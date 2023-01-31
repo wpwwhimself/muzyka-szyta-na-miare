@@ -663,6 +663,10 @@ class BackController extends Controller
 
         return back()->with("success", "Praca zalogowana");
     }
+    public function workClockRemove($song_id, $status_id){
+        SongWorkTime::where("song_id", $song_id)->where("status_id", $status_id)->first()->delete();
+        return back()->with("success", "Wpis pracy usunięty");
+    }
 
     public function songs(){
         $songs = Song::orderBy("title")

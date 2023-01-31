@@ -53,6 +53,7 @@ Route::controller(BackController::class)->group(function(){
     Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
     Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
     Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
+    Route::get('/quests/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->middleware("auth")->name("work-clock-remove");
     Route::post("/quest-song-update", "questSongUpdate")->middleware("auth")->name("quest-song-update");
     Route::post("/quest-quote-update", "questQuoteUpdate")->middleware("auth")->name("quest-quote-update");
     Route::post("/quest-wishes-update", "questWishesUpdate")->middleware("auth")->name("quest-wishes-update");

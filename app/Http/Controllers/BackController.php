@@ -283,7 +283,7 @@ class BackController extends Controller
             }
         }
 
-        return redirect()->route("dashboard")->with("success", "Zapytania dodane");
+        return back()->with("success", "Zapytania dodane");
     }
 
     public function modRequestBack(HttpRequest $rq){

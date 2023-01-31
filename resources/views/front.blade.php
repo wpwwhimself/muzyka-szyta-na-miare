@@ -286,7 +286,7 @@
 
     <section id="contact">
         <h1>Napisz już teraz</h1>
-        <form method="post" action="{{ route("mod-request-back") }}" id='contactform' class="black-back grid-2 hidden">
+        <form method="post" action="{{ route("add-request-back") }}" id='contactform' class="black-back grid-2 hidden">
             @csrf
             <div>
                 <h2>Szczegóły zlecenia</h2>

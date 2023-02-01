@@ -175,6 +175,9 @@ form, .login-grid-container, .input-container{
     display: flex;
     flex-direction: column;
 }
+.input-group a{
+    align-self: center;
+}
 .login-grid-container{
     padding: 0 2em;
 }
@@ -530,6 +533,10 @@ footer .contact-info{
     margin: 0;
     background: none;
     font-size: 1.1em;
+}
+
+.bulk-box{
+    padding: 1em; margin-bottom: 1em;
 }
 
 .quest-phase-bars{

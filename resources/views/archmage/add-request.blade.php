@@ -174,7 +174,7 @@
                 <x-calendar />
             </section>
         </div>
-        <input type="hidden" name="modifying" value="0" />
+        <input type="hidden" name="intent" value="new" />
         <x-button
             label="Oddaj do wyceny" icon="5" name="new_status" value="5"
             action="submit"

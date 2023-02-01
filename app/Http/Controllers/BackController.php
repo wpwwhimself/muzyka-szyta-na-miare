@@ -31,8 +31,7 @@ class BackController extends Controller
         $client = Auth::user()->client;
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
-            ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderBy("deadline");
+            ->orderByDesc("updated_at");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
             ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")
@@ -217,11 +216,70 @@ class BackController extends Controller
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
 
-    public function modRequestBack(HttpRequest $rq){
-        $modifying = $rq->modifying; //insert -- 0; update -- request_id
-        $reviewing = $rq->reviewing; //phase change only -- request_id; total redaction -- null
-        $request = ($modifying != 0 || $reviewing) ? Request::find($modifying) : new Request;
+    public function addRequestBack(HttpRequest $rq){
+        if(isset($rq->m_test) && $rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
 
+        for($i = 0; $i < count($rq->quest_type); $i++){
+            if(Auth::id() == 1){
+                $song = ($rq->has("bind_with_song")) ? Song::find($rq->song_id[$i]) : null;
+
+                Request::create([
+                    "made_by_me" => true,
+
+                    "client_id" => $rq->client_id,
+                    "client_name" => $rq->client_name,
+                    "email" => $rq->email,
+                    "phone" => $rq->phone,
+                    "other_medium" => $rq->other_medium,
+                    "contact_preference" => $rq->contact_preference,
+                    
+                    "song_id" => $rq->song_id[$i],
+                    "quest_type_id" => ($song) ? song_quest_type($rq->song_id[$i])->id : $rq->quest_type[$i],
+                    "title" => ($song) ? $song->title : $rq->title[$i],
+                    "artist" => ($song) ? $song->artist : $rq->artist[$i],
+                    "link" => ($song) ? $song->link : $rq->link[$i],
+                    "genre_id" => ($song) ? $song->genre_id : $rq->genre_id[$i],
+                    "wishes" => ($song) ? $song->wishes : $rq->wishes[$i],
+                    "wishes_quest" => $rq->wishes_quest[$i],
+
+                    "price_code" => price_calc($rq->price_code[$i], $rq->client_id, true)[3],
+                    "price" => price_calc($rq->price_code[$i], $rq->client_id, true)[0],
+                    "deadline" => $rq->deadline[$i],
+                    "hard_deadline" => $rq->hard_deadline[$i],
+                    "status_id" => 5,
+                ]);
+            }else{
+                Request::create([
+                    "made_by_me" => false,
+
+                    "client_id" => (Auth::check()) ? Auth::id() : null,
+                    "client_name" => (Auth::check()) ? Auth::user()->client->client_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->client->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->client->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->client->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->client->contact_preference : $rq->contact_preference,
+                    
+                    "quest_type_id" => $rq->quest_type[$i],
+                    "title" => $rq->title[$i],
+                    "artist" => $rq->artist[$i],
+                    "link" => $rq->link[$i],
+                    "wishes" => $rq->wishes[$i],
+
+                    "hard_deadline" => $rq->hard_deadline[$i],
+                    "status_id" => 1,
+                ]);
+            }
+        }
+
+        if(Auth::check()) return redirect()->route("dashboard")->with("success", "Zapytania dodane");
+        return back()->with("success", "Zapytania dodane");
+    }
+
+    public function modRequestBack(HttpRequest $rq){
+        $intent = $rq->intent;
+        $request = Request::find($rq->id);
+        
+        //todo uzupełnić
         if(Auth::id() != 1){
             if(!$reviewing){
                 // składanie requesta przez klienta

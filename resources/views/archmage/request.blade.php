@@ -209,15 +209,15 @@
             <x-quest-history :quest="$request" />
         </section>
     </div>
-    <input type="hidden" name="modifying" value="{{ $request->id }}" />
     <div id="step-1" class="flexright">
         <x-input type="TEXT" name="comment" label="Komentarz do odrzucenia" />
+        <input type="hidden" name="id" value="{{ $request->id }}" />
+        <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8]) ? 'review' : 'change' }}" />
         @if ($request->status_id != 9) <x-button label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev" action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank" :small="true" /> @endif
         @if (in_array($request->status_id, [1, 6])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
         @if (in_array($request->status_id, [1, 6])) <x-button label="Nie podejmę się" icon="4" name="new_status" value="4" :danger="true" action="submit" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Zatwierdź w imieniu klienta" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Odrzuć w imieniu klienta" name="new_status" value="8" icon="8" :danger="true" action="submit" /> @endif
-        @if (in_array($request->status_id, [4, 5, 7, 8])) <input type="hidden" name="reviewing" value="1" /> @endif
         @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Odnów w imieniu klienta" icon="26" name="new_status" value="1" action="submit" /> @endif
     </div>
 </form>

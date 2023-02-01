@@ -175,6 +175,9 @@ form, .login-grid-container, .input-container{
     display: flex;
     flex-direction: column;
 }
+.input-group a{
+    align-self: center;
+}
 .login-grid-container{
     padding: 0 2em;
 }

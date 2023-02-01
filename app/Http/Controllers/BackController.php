@@ -31,8 +31,7 @@ class BackController extends Controller
         $client = Auth::user()->client;
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
-            ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderBy("deadline");
+            ->orderByDesc("updated_at");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
             ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")
@@ -230,7 +229,7 @@ class BackController extends Controller
     }
 
     public function addRequestBack(HttpRequest $rq){
-        if($rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
+        if(isset($rq->m_test) && $rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
 
         for($i = 0; $i < count($rq->quest_type); $i++){
             if(Auth::id() == 1){
@@ -251,6 +250,7 @@ class BackController extends Controller
                     "title" => ($song) ? $song->title : $rq->title[$i],
                     "artist" => ($song) ? $song->artist : $rq->artist[$i],
                     "link" => ($song) ? $song->link : $rq->link[$i],
+                    "genre_id" => ($song) ? $song->genre_id : $rq->genre_id[$i],
                     "wishes" => ($song) ? $song->wishes : $rq->wishes[$i],
                     "wishes_quest" => $rq->wishes_quest[$i],
 
@@ -283,6 +283,7 @@ class BackController extends Controller
             }
         }
 
+        if(Auth::check()) return redirect()->route("dashboard")->with("success", "Zapytania dodane");
         return back()->with("success", "Zapytania dodane");
     }
 

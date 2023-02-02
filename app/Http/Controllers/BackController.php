@@ -51,7 +51,7 @@ class BackController extends Controller
             $recent = StatusChange::where("new_status_id", "!=", 9)
                 ->where("changed_by", "!=", 1)
                 ->orderByDesc("date")
-                ->limit(10)
+                ->limit(5)
                 ->get();
             foreach($recent as $change){
                 $change->is_request = (strlen($change->re_quest_id) == 36);
@@ -236,7 +236,7 @@ class BackController extends Controller
                     "phone" => $rq->phone,
                     "other_medium" => $rq->other_medium,
                     "contact_preference" => $rq->contact_preference,
-                    
+
                     "song_id" => $rq->song_id[$i],
                     "quest_type_id" => ($song) ? song_quest_type($rq->song_id[$i])->id : $rq->quest_type[$i],
                     "title" => ($song) ? $song->title : $rq->title[$i],
@@ -262,7 +262,7 @@ class BackController extends Controller
                     "phone" => (Auth::check()) ? Auth::user()->client->phone : $rq->phone,
                     "other_medium" => (Auth::check()) ? Auth::user()->client->other_medium : $rq->other_medium,
                     "contact_preference" => (Auth::check()) ? Auth::user()->client->contact_preference : $rq->contact_preference,
-                    
+
                     "quest_type_id" => $rq->quest_type[$i],
                     "title" => $rq->title[$i],
                     "artist" => $rq->artist[$i],
@@ -282,7 +282,7 @@ class BackController extends Controller
     public function modRequestBack(HttpRequest $rq){
         $intent = $rq->intent;
         $request = Request::find($rq->id);
-        
+
         //todo uzupełnić
         if(Auth::id() != 1){
             if(!$reviewing){

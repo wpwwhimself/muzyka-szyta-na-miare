@@ -63,10 +63,11 @@ section:hover{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 1em;
 }
 .section-header h1{
-    margin-top: 0;
     font-size: 1.6em;
+    margin: 0;
 }
 .section-header>div{
     display: flex;

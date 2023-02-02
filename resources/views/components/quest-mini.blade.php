@@ -22,8 +22,8 @@
         <i class="fa-regular fa-user" @popper(Klient)></i>
         <p class="client-name">{{ $quest->client_name }}</p>
         @endif
-    @endif
     </div>
+    @endif
     <div class="quest-details">
         <div class="quest-meta">
             @if ($quest->price)

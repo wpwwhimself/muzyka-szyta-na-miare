@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-    <form method="post" action={{ route("mod-request-back") }}>
+    <form method="post" action={{ route("add-request-back") }}>
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
         <div id="quest-box" class="flex-right">

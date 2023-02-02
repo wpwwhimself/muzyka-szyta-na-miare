@@ -210,7 +210,7 @@
         </section>
     </div>
     <div id="step-1" class="flexright">
-        <x-input type="TEXT" name="comment" label="Komentarz do odrzucenia" />
+        <x-input type="TEXT" name="comment" label="Komentarz do zmiany" />
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8]) ? 'review' : 'change' }}" />
         @if ($request->status_id != 9) <x-button label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev" action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank" :small="true" /> @endif

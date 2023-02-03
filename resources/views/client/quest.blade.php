@@ -155,7 +155,7 @@
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                                 @endif
                             @endforeach
-                            @if (can_download_files($quest->client_id))
+                            @if ($quest->paid || can_download_files($quest->client_id))
                                 @foreach ($ver_bots as $file)
                                     @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
                                     <x-file-tile :id="$quest->song->id" :file="$file" />

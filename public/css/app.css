@@ -256,9 +256,7 @@ input[type="checkbox"]{
 }
 
 /* NOŻYCZKI */
-.sc-line{
-    border: 5px dashed var(--bg2);
-    position: relative;
+e{
 }
 .sc-line.top-only{
     border-left: none; border-bottom: none; border-right: none;
@@ -817,9 +815,7 @@ footer .contact-info{
 }
 .cal-row a{
     display: inline-block;
-    border: 1px dashed currentColor;
-    border-radius: 3px;
-    padding: 2px; margin: 2px;
+    margin: 2px;
 }
 
 .quests-table .song-artist{

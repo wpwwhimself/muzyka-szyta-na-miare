@@ -27,7 +27,8 @@ class Calendar extends Component
         for($i = ($withToday ? 0 : 1); $i < $length; $i++){
             $date = strtotime("+$i day");
             $workday_type = workday_type(date("w", $date));
-            $quests = Quest::where("deadline", date("Y-m-d", $date))->get();
+            $quests = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [11, 12, 16, 26])->get();
+            $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [11, 12, 16, 26])->get();
             $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
 
             $items_count = count($quests) + count($requests);
@@ -38,6 +39,7 @@ class Calendar extends Component
                 "day_type" => $workday_type,
                 "date_val" => date("Y-m-d", $date),
                 "quests" => $quests,
+                "quests_done" => $quests_done,
                 "requests" => $requests,
                 "suggest_date" => ($suggestion_ready == 1),
             ];

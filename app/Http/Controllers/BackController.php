@@ -32,7 +32,7 @@ class BackController extends Controller
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderByDesc("updated_at");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
-            ->orderByRaw("price_code_override not regexp 'z'") //najpierw priorytety
+            ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26) then 0 else 1 end") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderByRaw("case status_id when 12 then 1 when 16 then 2 when 11 then 3 when 26 then 4 when 15 then 5 else 7 end")

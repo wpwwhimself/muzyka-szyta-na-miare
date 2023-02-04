@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 class StatsController extends Controller
 {
     public function dashboard(){
-        $stats = json_decode(file_get_contents(public_path("stats.json")));
+        $stats = json_decode(file_get_contents(public_path("stats/stats.json")));
 
         $last_updated = Carbon::parse($stats->today)->diffForHumans();
 

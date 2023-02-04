@@ -7,7 +7,7 @@
     </thead>
     <tbody>
     @foreach ($calendar as $date => $meta)
-        <tr class="cal-row {{ $meta['day_type'] }} {{ $meta['suggest_date'] ? 'suggest' : '' }}" date="{{ $meta['date_val'] }}">
+        <tr class="cal-row {{ $clickDays ? "clickable" : "" }} {{ $meta['day_type'] }} {{ $meta['suggest_date'] ? 'suggest' : '' }}" date="{{ $meta['date_val'] }}">
             <td>{{ $date }}</td>
             <td>
                 @foreach ($meta["quests"] as $quest)
@@ -28,10 +28,12 @@
     </tbody>
 </table>
 
+@if ($clickDays)
 <script>
-$(document).ready(function(){
-    $("tr[date]").click((el)=>{
-        $("#deadline").val($(el.currentTarget).attr("date"));
-    });
+    $(document).ready(function(){
+        $("tr[date]").click((el)=>{
+            $("#deadline").val($(el.currentTarget).attr("date"));
+        });
 });
 </script>
+@endif

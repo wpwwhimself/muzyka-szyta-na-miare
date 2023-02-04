@@ -40,10 +40,6 @@ class SettingsSeeder extends Seeder
                 "value_str" => 5
             ],
             [
-                "setting_name" => "calendar_length",
-                "value_str" => 14
-            ],
-            [
                 "setting_name" => "workdays_free",
                 "value_str" => "2,5"
             ],

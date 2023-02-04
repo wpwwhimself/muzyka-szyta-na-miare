@@ -4,7 +4,6 @@ namespace App\View\Components;
 
 use App\Models\Quest;
 use App\Models\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
 class Calendar extends Component
@@ -15,12 +14,17 @@ class Calendar extends Component
      * @return void
      */
     public $calendar;
-    public function __construct()
+    public $withToday;
+    public $clickDays;
+    public $length;
+    public function __construct($withToday = false, $clickDays = true, $length = 14)
     {
+        $this->clickDays = $clickDays;
+
         $available_days_needed = setting("available_days_needed");
         $available_days_count = 0;
         $suggestion_ready = 0;
-        for($i = 1; $i < setting("calendar_length"); $i++){
+        for($i = ($withToday ? 0 : 1); $i < $length; $i++){
             $date = strtotime("+$i day");
             $workday_type = workday_type(date("w", $date));
             $quests = Quest::where("deadline", date("Y-m-d", $date))->get();

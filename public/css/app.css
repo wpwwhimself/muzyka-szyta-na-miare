@@ -802,7 +802,7 @@ footer .contact-info{
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }
 .pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
 
-.cal-row{
+.clickable{
     user-select: none;
     cursor: pointer;
 }
@@ -814,6 +814,12 @@ footer .contact-info{
 }
 .cal-row.suggest{
     color:hsl(108, 100%, 39%);
+}
+.cal-row a{
+    display: inline-block;
+    border: 1px dashed currentColor;
+    border-radius: 3px;
+    padding: 2px; margin: 2px;
 }
 
 .quests-table .song-artist{

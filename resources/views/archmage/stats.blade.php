@@ -1,6 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+<p>Ostatnia aktualizacja: {{ $last_updated }}</p>
 <section>
     <div class="section-header">
         <h1>

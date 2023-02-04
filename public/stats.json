@@ -1,0 +1,17 @@
+{
+ "today":"2023-02-04",
+ "summary":{
+  "elapsed":"3 lat, 1 mies. i 3 dni",
+  "quest_count":  590,
+  "gains_total":"30 344,61 z\u0142"
+ },
+ "recent":{
+  "new":24,
+  "done":21,
+  "fresh":3
+ },
+ "clients_gender":{
+  "f":89,
+  "m":51
+ }
+}

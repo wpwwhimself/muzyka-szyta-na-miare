@@ -14,11 +14,16 @@ use Illuminate\Support\Facades\Mail;
 class StatsController extends Controller
 {
     public function dashboard(){
+        $stats = json_decode(file_get_contents(public_path("stats.json")));
+
+        $last_updated = Carbon::parse($stats->today)->diffForHumans();
+
         $big_summary = [
-            "biznes kręci się od" => date_diff(date_create('2020-01-01'), date_create())->format("%y lat, %m miesięcy i %d dni"),
-            "liczba skończonych questów" => Quest::where("status_id", 19)->count(),
-            "zarobiono w sumie" => number_format(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " ")." zł",
+            "biznes kręci się od" => $stats->summary->elapsed,
+            "liczba skończonych questów" => $stats->summary->quest_count,
+            "zarobiono w sumie" => $stats->summary->gains_total,
         ];
+        //todo wypełnić dane R'a i pouzupełniać dane tutaj
         $clients_summary = [
             "łącznie" => Client::count(),
             "zaufanych" => Client::where("trust", 1)->count(),
@@ -63,6 +68,7 @@ class StatsController extends Controller
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact(
+                "last_updated",
                 "big_summary",
                 "last_month",
                 "income",

@@ -99,11 +99,11 @@
                             },
                             success: function(res){
                                 res = JSON.parse(res);
+                                if(res.link) res.link = res.link.substring(0, res.link.indexOf(","));
                                 let content = ``;
                                 content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                                 content += `<span>Artysta</span><span>${res.artist}</span>`;
-                                content += `<span>Rodzaj zlecenia</span><span>${res.type}</span>`;
-                                content += `<span>Gatunek</span><span>${res.genre}</span>`;
+                                content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
                                 content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
                                 content += `<span>Uwagi</span><span>${res.notes}</span>`;
                                 positions_list.html(content);
@@ -115,9 +115,20 @@
                         bind_checkbox.hide();
                     }
                 }
+                function ghostBind(){
+                    for(let id of ["quest_type", "title", "artist", "link", "genre_id", "wishes"]){
+                        if ($("#bind_with_song")[0].checked){
+                            $(`#${id}`).addClass("ghost");
+                        }else{
+                            $(`#${id}`).removeClass("ghost");
+                        }
+                    }
+                }
                 $(document).ready(function(){
                     loadSong();
+                    ghostBind();
                     $("#song_id").change(function (e) { loadSong() });
+                    $("#bind_with_song").change(function(){ ghostBind() });
                 });
                 </script>
             </section>

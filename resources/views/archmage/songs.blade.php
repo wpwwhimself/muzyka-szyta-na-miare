@@ -6,10 +6,11 @@
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr 1fr; }
+    .table-row{ grid-template-columns: 4em 2fr 1fr 2fr 1fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
+            <span>ID</span>
             <span>Tytuł<br>Wykonawca</span>
             <span>Gatunek</span>
             <span>Uwagi</span>
@@ -19,6 +20,9 @@
         <hr />
         @forelse ($songs as $song)
         <div id="song{{ $song->id }}" class="table-row">
+            <span>
+                {{ $song->id }}
+            </span>
             <span>
                 <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>
                 <p class="song-artist">{{ $song->artist }}</p>

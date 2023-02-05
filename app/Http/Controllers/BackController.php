@@ -198,7 +198,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = "$song[title] ($song[artist])";
+                $songs[$song["id"]] = "$song[title] – $song[artist] ($song[id])";
             }
         }else{
             $clients = [];

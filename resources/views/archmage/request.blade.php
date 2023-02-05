@@ -122,7 +122,7 @@
                         },
                         success: function(res){
                             res = JSON.parse(res);
-                            res.link = res.link.split(",");
+                            res.link = res.link.substring(0, res.link.indexOf(","));
                             let content = ``;
                             content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                             content += `<span>Artysta</span><span>${res.artist}</span>`;

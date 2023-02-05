@@ -28,7 +28,7 @@ class Calendar extends Component
             $date = strtotime("+$i day");
             $workday_type = workday_type(date("w", $date));
             $quests = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [11, 12, 16, 26])->get();
-            $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [11, 12, 16, 26])->get();
+            $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
             $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
 
             $items_count = count($quests) + count($requests);

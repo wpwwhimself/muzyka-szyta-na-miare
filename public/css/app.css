@@ -65,8 +65,7 @@ section:hover{
     align-items: flex-start;
     margin-bottom: 1em;
 }
-.section-header h1{
-    font-size: 1.6em;
+.section-header h1, .section-header h2, .section-header h3{
     margin: 0;
 }
 .section-header>div{
@@ -248,15 +247,18 @@ input[type="checkbox"]{
 .section-like{
     border: 3px solid var(--bg2);
     border-radius: 1em;
-    padding: 1em;
+    padding: 1em; margin-bottom: 1em;
 }
+.section-like:last-child{ margin-bottom: 0; }
 .black-back{
     background-color: var(--bg1);
     padding: 1em;
 }
 
 /* NOŻYCZKI */
-e{
+.sc-line{
+    border-style: dashed; border-width: 5px;
+    position: relative;
 }
 .sc-line.top-only{
     border-left: none; border-bottom: none; border-right: none;
@@ -680,9 +682,21 @@ footer .contact-info{
 
 .stats-highlight-h{
     display: grid;
-    grid-template-rows: 1em 3em;
+    grid-template-rows: auto auto;
     grid-auto-flow: column;
     text-align: center;
+    border-top: 1px solid var(--bg2);
+    border-bottom: 1px solid var(--bg2);
+    border-radius: 0;
+    padding: 0.5em 0;
+}
+.stats-highlight-h p, .stats-highlight-h h3{
+    margin: 0;
+    display: flex; justify-content: center; align-items: center;
+    gap: 0.2em;
+}
+.stats-highlight-h h3{
+    font-size: 1.5rem;
 }
 
 #clients-list .table-row{

@@ -7,6 +7,15 @@ as.pln <- function(x){
     format(nsmall = 2, big.mark = " ", decimal.mark = ",") %>%
     paste("zł")
 }
+percentage <- function(number, total){
+    paste(
+        number,
+        " <small>(",
+        round(number / total * 100),
+        "%)</small>",
+        sep = ""
+    )
+}
 
 #### połączenie ####
 dotenv::load_dot_env(".env")
@@ -29,48 +38,154 @@ for (i in seq_along(tables)) {
     tables[i],
     tbl(conn, tables[i]) %>%
       collect() %>%
-      mutate(across(matches(c("created_at", "updated_at", "date"))))
+      mutate(across(matches(c("date")), as_date)) %>%
+      mutate(across(matches(c("created_at", "updated_at")), as_datetime)) %>%
+      mutate(across(matches(c("time_spent")), hms))
   )
 }
 
 #### pre calc ####
 
 summary_elapsed <- interval(as.Date("2020-01-01"), as.Date(today())) %>% as.period()
-summary_elapsed <- paste(year(summary_elapsed), "lat,", month(summary_elapsed), "mies. i", day(summary_elapsed), "dni")
-quest_count <- quests %>% filter(status_id == 19) %>% count() %>% as.numeric()
-gains_total <- status_changes %>%
-    filter(new_status_id == 32) %>%
+recent_income <- status_changes %>%
+    filter(
+        date >= today() - years(1) &
+        new_status_id == 32
+    ) %>%
     mutate(comment = as.numeric(comment)) %>%
-    summarise(sum = sum(comment)) %>%
-    as.pln()
-summary <- list(elapsed = summary_elapsed, quest_count = quest_count, gains_total = gains_total)
+    group_by(month = floor_date(date, "month")) %>%
+    summarise(
+        sum = sum(comment),
+        mean = mean(comment)
+    ) %>%
+    mutate(month = paste(
+        month(month),
+        substr(year(month), 3, 4),
+        sep = "-"
+    ))
 
-recent <- c(
-    new = quests %>% filter(created_at >= today() - months(1)) %>% count() %>% as.numeric(),
-    done = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% count() %>% as.numeric(),
-    fresh = clients %>% filter(created_at >= today() - months(1)) %>% count() %>% as.numeric()
-)
-
-clients_exp <- quests %>%
-  filter(status_id == 19) %>%
-  left_join(clients, c(client_id = "id")) %>%
-  group_by(client_name) %>%
-  count() %>%
-  arrange(-n)
-
-clients_gender <- clients %>%
-  select(client_name) %>%
-  tidyr::separate(client_name, c("first_name", "last_name"), " ") %>%
-  mutate(gender = if_else(str_sub(first_name, -1) == "a", "f", "m") %>% as.factor()) %>%
-  group_by(gender) %>%
-  count() %>%
-  pull(n, name = "gender")
+#### actual list ####
 
 list(
     today = today() %>% as.character(),
-    summary = summary,
-    recent = recent,
-    clients_gender = clients_gender
+    summary = list(
+        general = list(
+            "biznes kręci się od" = paste(
+                year(summary_elapsed), "y ",
+                month(summary_elapsed), "m ",
+                day(summary_elapsed), "d",
+                sep = ""
+            ),
+            "skończone questy" = quests %>%
+                filter(status_id == 19) %>%
+                nrow(),
+            "poznani klienci" = clients %>% nrow(),
+            "zarobki w sumie" = status_changes %>%
+                filter(new_status_id == 32) %>%
+                mutate(comment = as.numeric(comment)) %>%
+                summarise(sum = sum(comment)) %>%
+                as.pln()
+        ),
+        quest_types = list(
+            split = quests %>%
+                mutate(song_type = substr(song_id, 1, 1)) %>%
+                left_join(quest_types, c("song_type" = "code")) %>%
+                count(type, sort = TRUE) %>%
+                pull(name = type),
+            total = quests %>% nrow()
+        ),
+        quest_pricings = list(
+            split = prices %>%
+                pull(indicator, indicator) %>%
+                map( #zebranie utworów posiadających dany indicator
+                    ~ songs %>%
+                    filter(str_detect(price_code, .x)) %>%
+                    nrow()
+                ) %>%
+                unlist() %>%
+                mutate(prices, songs_count = .) %>%
+                arrange(-songs_count) %>%
+                head() %>%
+                pull(songs_count, service),
+            total = songs %>%
+                filter(str_detect(price_code, "^\\d*\\.\\d*$", negate = TRUE)) %>%
+                nrow()
+        )
+    ),
+    recent = list(
+        quests = c(
+            "nowe" = quests %>% filter(created_at >= today() - months(1)) %>% nrow(),
+            "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% nrow(),
+            "debiutanckie" = clients %>% filter(created_at >= today() - months(1)) %>% nrow()
+        )
+    ),
+    clients = list(
+        summary = list(
+            split = list(
+                "zaufani" = clients %>% filter(trust == 1) %>% nrow(),
+                "krętacze" = clients %>% filter(trust == -1) %>% nrow(),
+                "patroni" = clients %>% filter(helped_showcasing == 2) %>% nrow(),
+                "bez zleceń" = clients %>%
+                    anti_join(quests %>% filter(status_id == 19), c("id" = "client_id")) %>%
+                    nrow(),
+                "kobiety" = clients %>%
+                    tidyr::separate(client_name, c("first_name", "last_name"), " ") %>%
+                    mutate(gender = if_else(str_sub(first_name, -1) == "a", "f", "m") %>% as.factor()) %>%
+                    count(gender) %>%
+                    filter(gender == "f") %>%
+                    pull(n)
+            ),
+            total = clients %>% nrow()
+        ),
+        exp = list(
+            split = clients %>%
+                left_join(quests, c("id" = "client_id"), keep = TRUE) %>%
+                filter(status_id == 19) %>%
+                count(client_id) %>%
+                mutate(exp = if_else(
+                        n >= 10, 1, if_else(
+                        n >= 4, 2, if_else(
+                        n >= 2, 3, if_else(
+                        n >= 1, 4, 5
+                        )))
+                    ) %>%
+                    factor(1:5, c("weterani (10+)", "biegli (4-9)", "zainteresowani (2-3)", "nowicjusze (1)", "debiutanci (0)"))
+                ) %>%
+                count(exp) %>%
+                pull(n, exp),
+            total = clients %>% nrow()
+        ),
+        new = clients %>%
+            filter(created_at >= today() - years(1)) %>%
+            count(month = floor_date(created_at, "month")) %>%
+            mutate(month = paste(
+                month(month),
+                substr(year(month), 3, 4),
+                sep = "-"
+            )) %>%
+            pull(n, month)
+    ),
+    income = list(
+        total = recent_income %>% pull(sum, month),
+        prop = recent_income %>% pull(mean, month) %>% round(2)
+    ),
+    songs = list(
+        time_summary = list(
+            "średnio na całość" = song_work_times %>%
+                group_by(song_id) %>%
+                mutate(time_spent = time_spent %>% period_to_seconds()) %>%
+                summarise(time_spent = sum(time_spent)) %>%
+                summarise(mean = mean(time_spent)) %>%
+                seconds_to_period() %>%
+                round() %>%
+                as.character(),
+            "średnio elementów" = song_work_times %>%
+                count(song_id) %>%
+                summarise(mean = mean(n)) %>%
+                as.numeric() %>%
+                round(2)
+        )
+    )
 ) %>%
     toJSON(indent = "1") %>%
     write("app/R/stats.json")

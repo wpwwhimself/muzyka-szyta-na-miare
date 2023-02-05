@@ -1,0 +1,6 @@
+linters: linters_with_defaults(
+    line_length_linter(255),
+    T_and_F_symbol_linter = NULL,
+    commented_code_linter = NULL,
+    semicolon_linter = NULL
+  )

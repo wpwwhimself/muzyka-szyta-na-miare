@@ -1,17 +1,108 @@
 {
  "today":"2023-02-05",
  "summary":{
-  "elapsed":"3 lat, 1 mies. i 4 dni",
-  "quest_count":  596,
-  "gains_total":"30 344,61 z\u0142"
+  "general":{
+   "biznes kr\u0119ci si\u0119 od":"3y 1m 4d",
+   "sko\u0144czone questy":   598,
+   "poznani klienci":   140,
+   "zarobki w sumie":"30 344,61 z\u0142"
+  },
+  "quest_types":{
+   "split":{
+    "podk\u0142ad muzyczny":620,
+    "nuty":10,
+    "obr\u00f3bka":8
+   },
+   "total":   638
+  },
+  "quest_pricings":{
+   "split":{
+    "podk\u0142ad typowy":18,
+    "przer\u00f3bka gotowego podk\u0142adu":5,
+    "wysoka trudno\u015b\u0107":4,
+    "podk\u0142ad kameralny":2,
+    "podk\u0142ad skomponowany od podstaw":2,
+    "przearan\u017cowanie podk\u0142adu":1
+   },
+   "total":   27
+  }
  },
  "recent":{
-  "new":24,
-  "done":26,
-  "fresh":3
+  "quests":{
+   "nowe":24,
+   "uko\u0144czone":28,
+   "debiutanckie":3
+  }
  },
- "clients_gender":{
-  "f":89,
-  "m":51
+ "clients":{
+  "summary":{
+   "split":{
+    "zaufani":    6,
+    "kr\u0119tacze":    8,
+    "patroni":    1,
+    "bez zlece\u0144":    12,
+    "kobiety":    89
+   },
+   "total":   140
+  },
+  "exp":{
+   "split":{
+    "weterani (10+)":15,
+    "biegli (4-9)":19,
+    "zainteresowani (2-3)":32,
+    "nowicjusze (1)":62
+   },
+   "total":   140
+  },
+  "new":{
+   "2-22":2,
+   "3-22":2,
+   "4-22":2,
+   "5-22":5,
+   "6-22":7,
+   "7-22":3,
+   "8-22":3,
+   "9-22":5,
+   "10-22":5,
+   "11-22":4,
+   "12-22":2,
+   "1-23":3
+  }
+ },
+ "income":{
+  "total":{
+   "2-22":1545,
+   "3-22":594.5,
+   "4-22":1130,
+   "5-22":1010.5,
+   "6-22":1130,
+   "7-22":1135,
+   "8-22":1135,
+   "9-22":915,
+   "10-22":1185,
+   "11-22":1445,
+   "12-22":1175,
+   "1-23":1170.5
+  },
+  "prop":{
+   "2-22":55.18,
+   "3-22":49.54,
+   "4-22":47.08,
+   "5-22":56.14,
+   "6-22":51.36,
+   "7-22":59.74,
+   "8-22":54.05,
+   "9-22":57.19,
+   "10-22":56.43,
+   "11-22":65.68,
+   "12-22":78.33,
+   "1-23":46.82
+  }
+ },
+ "songs":{
+  "time_summary":{
+   "\u015brednio na ca\u0142o\u015b\u0107":"56M 17S",
+   "\u015brednio element\u00f3w":   1.35
+  }
  }
 }

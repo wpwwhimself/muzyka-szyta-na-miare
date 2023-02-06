@@ -60,7 +60,7 @@
                 </div>
                 <script>
                 function calcPriceNow(){
-                    const labels = "{{ $quest->price_code_override }}";
+                    const labels = document.querySelector("#price_code_override").value;
                     const client_id = "{{ $quest->client_id }}";
                     const positions_list = $("#price-summary .positions");
                     const sum_row = $("#price-summary .summary");

@@ -111,7 +111,7 @@
                 @csrf
                 <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
                 <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :small="true" />
-                <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price }}" />
+                <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price - $quest->payments->sum('comment') }}" />
             </form>
             @endunless
         </section>

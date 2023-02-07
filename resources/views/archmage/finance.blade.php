@@ -33,11 +33,14 @@
                             <a href="{{ route("quest", ["id" => $quest->id]) }}">
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <x-phase-indicator-mini :status="$quest->status" />
-                                {{ $quest->price }} zł
+                                {{ $quest->price - $quest->payments->sum("comment") }} zł
                             </a>
                             <input type="checkbox" name="{{ $quest->id }}" />
                         </div>
-                        @php $amount_to_pay += $quest->price; $amount_total += $quest->price @endphp
+                        @php
+                        $amount_to_pay += $quest->price - $quest->payments->sum("comment");
+                        $amount_total += $quest->price - $quest->payments->sum("comment")
+                        @endphp
                         @endforeach
                     </td>
                     <td>

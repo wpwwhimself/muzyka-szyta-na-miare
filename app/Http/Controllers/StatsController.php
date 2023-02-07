@@ -60,7 +60,13 @@ class StatsController extends Controller
 
             // opłać zlecenia
             // na razie wpłaca całą kwotę //TODO podawanie konkretnych kwot
-            app("App\Http\Controllers\BackController")->statusHistory($id, 32, $quest->price, $quest->client_id, $quest->client->isMailable());
+            app("App\Http\Controllers\BackController")->statusHistory(
+                $id,
+                32,
+                $quest->price - $quest->payments->sum("comment"),
+                $quest->client_id,
+                $quest->client->isMailable()
+            );
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
             // zbierz zlecenia dla konkretnych adresatów

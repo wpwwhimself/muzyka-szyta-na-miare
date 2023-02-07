@@ -47,7 +47,7 @@
             </span>
             <span>
             @if ($quest->paid)
-            <i class="quest-paid fa-solid fa-circle-dollar-to-slot"></i>
+            <i class="success fa-solid fa-circle-dollar-to-slot"></i>
             @endif
             </span>
             <span class="quest-status">

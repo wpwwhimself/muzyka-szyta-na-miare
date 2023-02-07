@@ -481,10 +481,6 @@ footer .contact-info{
     white-space: nowrap;
 }
 
-.quest-paid{
-    color: rgb(var(--ok));
-}
-
 .quest-type{
     font-size: 2em;
     width: 1em;

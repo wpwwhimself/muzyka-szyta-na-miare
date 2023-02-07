@@ -25,7 +25,7 @@ class Song extends Model
     public function showcase(){
         return $this->hasOne(Showcase::class);
     }
-    public function quest(){
+    public function quests(){
         return $this->hasMany(Quest::class);
     }
 }

@@ -188,4 +188,4 @@ list(
     )
 ) %>%
     toJSON(indent = "1") %>%
-    write("app/R/stats.json")
+    write("storage/app/stats.json")

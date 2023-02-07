@@ -1,7 +1,17 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<p>Ostatnia aktualizacja: {{ $stats->today }}</p>
+<form
+    action="{{ route('stats-import') }}"
+    method="post"
+    class="flex-right"
+    enctype="multipart/form-data"
+    >
+    @csrf
+    <p>Ostatnia aktualizacja: {{ $stats->today }}</p>
+    <x-input type="file" name="json" label="JSON z danymi" :small="true" />
+    <x-button action="submit" label="Wgraj" icon="upload" :small="true" />
+</form>
 <section>
     <div class="section-header">
         <h1>

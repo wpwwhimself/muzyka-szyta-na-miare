@@ -16,7 +16,6 @@ use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 /*
@@ -40,50 +39,58 @@ Route::controller(AuthController::class)->group(function(){
 });
 
 Route::controller(BackController::class)->group(function(){
-    Route::get('/dashboard', "dashboard")->middleware("auth")->name("dashboard");
-    Route::get('/prices', "prices")->middleware("auth")->name("prices");
-
-    Route::get('/requests', "requests")->middleware("auth")->name("requests");
     Route::get('/requests/view/{id}', "request")->name("request");
-    Route::get('/requests/add', "addRequest")->middleware("auth")->name("add-request");
     Route::post('/requests/add-back', "addRequestBack")->name("add-request-back");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
-
-    Route::get('/quests/{client_id?}', "quests")->middleware("auth")->name("quests");
-    Route::get('/quests/view/{id}', "quest")->middleware("auth")->name("quest");
-    Route::get('/quests/add', "addQuest")->middleware("auth")->name("add-quest");
-    Route::post('/quests/mod-back', "modQuestBack")->middleware("auth")->name("mod-quest-back");
-    Route::post('/quests/work-clock', "workClock")->middleware("auth")->name("work-clock");
-    Route::get('/quests/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->middleware("auth")->name("work-clock-remove");
-    Route::post("/quest-song-update", "questSongUpdate")->middleware("auth")->name("quest-song-update");
-    Route::post("/quest-quote-update", "questQuoteUpdate")->middleware("auth")->name("quest-quote-update");
-    Route::post("/quest-wishes-update", "questWishesUpdate")->middleware("auth")->name("quest-wishes-update");
 
     Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 
-    Route::get('/clients/{param?}/{value?}', "clients")->middleware("auth")->name("clients");
+    Route::middleware("auth")->group(function(){
+        Route::get('/dashboard', "dashboard")->name("dashboard");
+        Route::get('/prices', "prices")->name("prices");
 
-    Route::get('/showcases', "showcases")->middleware("auth")->name("showcases");
-    Route::post('/showcases/add', "addShowcase")->middleware("auth")->name("add-showcase");
+        Route::get('/requests', "requests")->name("requests");
+        Route::get('/requests/add', "addRequest")->name("add-request");
 
-    Route::get("/songs", "songs")->middleware("auth")->name("songs");
+        Route::get('/quests/{client_id?}', "quests")->name("quests");
+        Route::get('/quests/view/{id}', "quest")->name("quest");
+        Route::get('/quests/add', "addQuest")->name("add-quest");
+        Route::post('/quests/mod-back', "modQuestBack")->name("mod-quest-back");
+        Route::post('/quests/work-clock', "workClock")->name("work-clock");
+        Route::get('/quests/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
+        Route::post("/quest-song-update", "questSongUpdate")->name("quest-song-update");
+        Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
+        Route::post("/quest-wishes-update", "questWishesUpdate")->name("quest-wishes-update");
 
-    Route::get("/ppp", "ppp")->middleware("auth")->name("ppp");
+        Route::get('/clients/{param?}/{value?}', "clients")->name("clients");
+
+        Route::get('/showcases', "showcases")->name("showcases");
+        Route::post('/showcases/add', "addShowcase")->name("add-showcase");
+
+        Route::get("/songs", "songs")->name("songs");
+
+        Route::get("/ppp", "ppp")->name("ppp");
+    });
 });
 
 Route::controller(FileController::class)->group(function(){
-    Route::post('/safe-u/{id}', 'fileUpload')->middleware("auth")->name('upload');
-    Route::post('/safe-s', 'fileStore')->middleware("auth")->name('store');
-    Route::get('/safe-d/{id}/{filename}', 'fileDownload')->middleware("auth")->name('download');
-    Route::get('/safe/{id}/{filename}', 'show')->middleware("auth")->name('safe-show');
-    Route::post('/safe/ver-desc-mod', "verDescMod")->middleware("auth")->name("ver-desc-mod");
+    Route::middleware("auth")->group(function(){
+        Route::post('/safe-u/{id}', 'fileUpload')->name('upload');
+        Route::post('/safe-s', 'fileStore')->name('store');
+        Route::get('/safe-d/{id}/{filename}', 'fileDownload')->name('download');
+        Route::get('/safe/{id}/{filename}', 'show')->name('safe-show');
+        Route::post('/safe/ver-desc-mod', "verDescMod")->name("ver-desc-mod");
+    });
 });
 
 Route::controller(StatsController::class)->group(function(){
-    Route::get("/stats", "dashboard")->middleware("auth")->name("stats");
-    Route::get("/finance", "financeDashboard")->middleware("auth")->name("finance");
-    Route::post("/finance/pay", "financePay")->middleware("auth")->name("finance-pay");
+    Route::middleware("auth")->group(function(){
+        Route::get("/stats", "dashboard")->name("stats");
+        Route::post("/stats-import", "statsImport")->name("stats-import");
+        Route::get("/finance", "financeDashboard")->name("finance");
+        Route::post("/finance/pay", "financePay")->name("finance-pay");
+    });
 });
 
 Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){
@@ -135,16 +142,15 @@ Route::get("/get_ver_desc", function(Request $rq){
 });
 Route::get("/songs_info", function(Request $rq){
     return Song::orderByRaw("ISNULL(title)")
-            ->orderBy("title")
-            ->orderBy("artist")
-            ->select(["title", "artist"])
-            ->distinct()
-            ->get();
+        ->orderBy("title")
+        ->orderBy("artist")
+        ->select(["title", "artist"])
+        ->distinct()
+        ->get();
 });
 
 Route::controller(JanitorController::class)->group(function(){
     Route::get("/re_quests_janitor", "index");
-    // Route::get("/janitor-log", "log")->middleware("auth")->name("janitor-log");
 });
 
 

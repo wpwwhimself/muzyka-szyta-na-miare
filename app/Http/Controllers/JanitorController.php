@@ -70,19 +70,20 @@ class JanitorController extends Controller
             ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
             ->get();
         foreach($quests as $quest){
-            $quest->update(["status_id" => 17]);
+            [$new_status, $new_comment, $operation] = $quest->paid ? [19, "brak uwag", "Zlecenie zaakceptowane automatycznie"] : [17, "brak opinii", "Zlecenie wygaszone"];
+            $quest->update(["status_id" => $new_status]);
             if($quest->client->isMailable()){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, 1);
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, 1);
                 $summary[] = [
                     "re_quest" => $quest, "is_request" => false,
-                    "operation" => "Zlecenie wygaszone - brak opinii - mail wysłany",
+                    "operation" => "$operation - $new_comment - mail wysłany",
                 ];
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak opinii", 1, null);
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, null);
                 $summary[] = [
                     "re_quest" => $quest, "is_request" => false,
-                    "operation" => "Zlecenie wygaszone - brak opinii - WYMAGA KONTAKTU",
+                    "operation" => "$operation - $new_comment - WYMAGA KONTAKTU",
                 ];
             }
         }

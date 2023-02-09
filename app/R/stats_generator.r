@@ -113,10 +113,17 @@ list(
         )
     ),
     recent = list(
-        quests = c(
-            "nowe" = quests %>% filter(created_at >= today() - months(1)) %>% nrow(),
-            "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% nrow(),
-            "debiutanckie" = clients %>% filter(created_at >= today() - months(1)) %>% nrow()
+        quests = list(
+            main = c(
+                "nowe" = quests %>% filter(created_at >= today() - months(1)) %>% nrow(),
+                "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% nrow(),
+                "debiutanckie" = clients %>% filter(created_at >= today() - months(1)) %>% nrow()
+            ),
+            compared_to = c(
+                "nowe" = quests %>% filter(created_at >= today() - months(2) & created_at < today() - months(1)) %>% nrow(),
+                "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(2) & date < today() - months(1)) %>% nrow(),
+                "debiutanckie" = clients %>% filter(created_at >= today() - months(2) & created_at < today() - months(1)) %>% nrow()
+            )
         )
     ),
     clients = list(

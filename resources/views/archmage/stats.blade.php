@@ -47,19 +47,12 @@
     <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->income->prop" />
 </section>
 
-{{--
-<section>
-    <div class="section-header">
-        <h1><i class="fa-solid fa-boxes"></i> Zlecenia</h1>
-    </div>
-    {{-- zlecenia oddane n przed deadlinem --}}
-{{-- </section> --}}
-
 <section>
     <div class="section-header">
         <h1><i class="fa-solid fa-compact-disc"></i> Utwory</h1>
     </div>
     <x-stats-highlight-h title="Czas poświęcony na utwór" :data="$stats->songs->time_summary" />
+    <x-stats-highlight-h title="Średni czas z podziałem na gatunki" :data="$stats->songs->time_genres" />
 </section>
 
 @endsection

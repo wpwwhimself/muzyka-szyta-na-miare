@@ -729,7 +729,7 @@ class BackController extends Controller
         $showcases = Showcase::orderBy("updated_at", "desc")->paginate(10);
 
         $songs_raw = Song::whereDoesntHave('showcase')
-            ->whereHas('quest', function($q){
+            ->whereHas('quests', function($q){
                 $q->where('status_id', 19);
             })
             ->orderByDesc("created_at")

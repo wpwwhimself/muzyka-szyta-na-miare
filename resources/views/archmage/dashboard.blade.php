@@ -2,45 +2,32 @@
 
 @section('content')
     <div class="grid-2">
-        <section id="recent" class="sc-line">
-            <x-sc-scissors />
+        <section id="dashboard-finances">
             <div class="section-header">
-                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie zmiany</h1>
+                <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
+                <div>
+                    <x-a href="{{ route('finance') }}">Więcej</x-a>
+                </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ReQuest</th>
-                        <th>Klient</th>
-                        <th>Status</th>
-                        <th>Kiedy</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recent as $change)
-                    @if ($change->date->gt(now()->subDay()))
-                    <tr>
-                    @else
-                    <tr class="ghost">
-                    @endif
-                        <td>
-                            <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
-                            </a>
-                        </td>
-                        <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
-                        <td>
-                            <x-phase-indicator-mini :status="$change->new_status" />
-                        </td>
-                        <td {{ Popper::pop($change->date) }}>
-                            {{ $change->date->diffForHumans() }}
-                        </td>
-                    </tr>
-                    @empty
-                        <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+
+            <div class="hint-table">
+                <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
+                <div class="positions">
+                    <span>Zaakceptowane do zapłacenia</span>
+                    <span>{{ quests_unpaid(1) }} zł</span>
+
+                    <span>Wszystkie do zapłacenia</span>
+                    <span>{{ quests_unpaid(1, true) }} zł</span>
+
+                    <span>Zarobki z ostatnich 30 dni</span>
+                    <span>
+                        {{ number_format($gains["this_month"], 2, ",", " ") }} zł
+                        <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
+                            ({{ sprintf("%+d", $gains["monthly_diff"]) }})
+                        </small>
+                    </span>
+                </div>
+            </div>
         </section>
 
         <section id="dashboard-janitor-log">
@@ -80,35 +67,48 @@
             </table>
         </section>
 
-        <section id="dashboard-finances">
+        <section id="recent">
             <div class="section-header">
-                <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
-                <div>
-                    <x-a href="{{ route('finance') }}">Więcej</x-a>
-                </div>
+                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie zmiany</h1>
             </div>
-
-            <div class="hint-table">
-                <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
-                <div class="positions">
-                    <span>Zaakceptowane do zapłacenia</span>
-                    <span>{{ quests_unpaid(1) }} zł</span>
-
-                    <span>Wszystkie do zapłacenia</span>
-                    <span>{{ quests_unpaid(1, true) }} zł</span>
-
-                    <span>Zarobki z ostatnich 30 dni</span>
-                    <span>
-                        {{ number_format($gains["this_month"], 2, ",", " ") }} zł
-                        <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
-                            ({{ sprintf("%+d", $gains["monthly_diff"]) }})
-                        </small>
-                    </span>
-                </div>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ReQuest</th>
+                        <th>Klient</th>
+                        <th>Status</th>
+                        <th>Kiedy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($recent as $change)
+                    @if ($change->date->gt(now()->subDay()))
+                    <tr>
+                    @else
+                    <tr class="ghost">
+                    @endif
+                        <td>
+                            <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
+                        <td>
+                            <x-phase-indicator-mini :status="$change->new_status" />
+                        </td>
+                        <td {{ Popper::pop($change->date) }}>
+                            {{ $change->date->diffForHumans() }}
+                        </td>
+                    </tr>
+                    @empty
+                        <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </section>
 
-        <section>
+        <section class="sc-line">
+            <x-sc-scissors />
             <div class="section-header">
                 <h1>
                     <i class="fa-solid fa-calendar"></i>

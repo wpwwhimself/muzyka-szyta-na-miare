@@ -113,10 +113,17 @@ list(
         )
     ),
     recent = list(
-        quests = c(
-            "nowe" = quests %>% filter(created_at >= today() - months(1)) %>% nrow(),
-            "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% nrow(),
-            "debiutanckie" = clients %>% filter(created_at >= today() - months(1)) %>% nrow()
+        quests = list(
+            main = c(
+                "nowe" = quests %>% filter(created_at >= today() - months(1)) %>% nrow(),
+                "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(1)) %>% nrow(),
+                "debiutanckie" = clients %>% filter(created_at >= today() - months(1)) %>% nrow()
+            ),
+            compared_to = c(
+                "nowe" = quests %>% filter(created_at >= today() - months(2) & created_at < today() - months(1)) %>% nrow(),
+                "ukończone" = status_changes %>% filter(new_status_id == 19, date >= today() - months(2) & date < today() - months(1)) %>% nrow(),
+                "debiutanckie" = clients %>% filter(created_at >= today() - months(2) & created_at < today() - months(1)) %>% nrow()
+            )
         )
     ),
     clients = list(
@@ -181,11 +188,37 @@ list(
                 as.character(),
             "średnio elementów" = song_work_times %>%
                 count(song_id) %>%
+                filter(n > 1) %>%
                 summarise(mean = mean(n)) %>%
                 as.numeric() %>%
                 round(2)
-        )
+        ),
+        time_genres = song_work_times %>%
+            left_join(songs, c("song_id" = "id")) %>%
+            group_by(song_id, genre_id) %>%
+            mutate(time_spent = time_spent %>% period_to_seconds()) %>%
+            summarise(time_spent = sum(time_spent)) %>%
+            group_by(genre_id) %>%
+            summarise(mean = mean(time_spent) %>% round() %>% seconds_to_period()) %>%
+            inner_join(genres, c("genre_id" = "id")) %>%
+            arrange(mean) %>%
+            mutate(mean = as.character(mean)) %>%
+            pull(mean, name)
     )
 ) %>%
     toJSON(indent = "1") %>%
-    write("app/R/stats.json")
+    write("storage/app/stats.json")
+
+#### plotting (not used) ####
+
+song_work_times %>%
+    left_join(songs, c("song_id" = "id")) %>%
+    group_by(song_id, genre_id) %>%
+    mutate(time_spent = time_spent %>% period_to_seconds()) %>%
+    summarise(
+        time_spent = sum(time_spent) / 60,
+        parts = n()
+    ) %>%
+    inner_join(genres, c("genre_id" = "id")) %>%
+    ggplot(aes(reorder(name, time_spent, FUN = median), time_spent, group = genre_id)) +
+    geom_boxplot()

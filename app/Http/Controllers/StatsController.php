@@ -10,17 +10,22 @@ use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class StatsController extends Controller
 {
     public function dashboard(){
-        $stats = json_decode(file_get_contents(app_path()."/R/stats.json"));
+        $stats = json_decode(Storage::get("/stats.json"));
         $stats->today = Carbon::parse($stats->today)->diffForHumans();
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact("stats"),
         ));
+    }
+    public function statsImport(Request $rq){
+        $rq->file("json")->storeAs("/", "stats.json");
+        return back()->with("success", "Dane zaktualizowane");
     }
 
     public function financeDashboard(){
@@ -60,7 +65,13 @@ class StatsController extends Controller
 
             // opłać zlecenia
             // na razie wpłaca całą kwotę //TODO podawanie konkretnych kwot
-            app("App\Http\Controllers\BackController")->statusHistory($id, 32, $quest->price, $quest->client_id, $quest->client->isMailable());
+            app("App\Http\Controllers\BackController")->statusHistory(
+                $id,
+                32,
+                $quest->price - $quest->payments->sum("comment"),
+                $quest->client_id,
+                $quest->client->isMailable()
+            );
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
             // zbierz zlecenia dla konkretnych adresatów

@@ -112,7 +112,7 @@
                 @csrf
                 <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
                 <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :small="true" />
-                <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price }}" />
+                <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price - $quest->payments->sum('comment') }}" />
             </form>
             @endunless
         </section>
@@ -265,7 +265,9 @@
                     <div class="file-container-b">
                         <h5>
                             {{ $ver_sub }}
-                            <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
+                            <small class="ghost" {{ Popper::pop($last_mod[$ver_main][$ver_sub]) }}>
+                                {{ $last_mod[$ver_main][$ver_sub]->diffForHumans() }}
+                            </small>
                         </h5>
                         <x-button
                             action="#ver_desc_form" label="" icon="note-sticky"

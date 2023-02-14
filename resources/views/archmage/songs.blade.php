@@ -6,7 +6,7 @@
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 4em 2fr 1fr 2fr 1fr 1fr; }
+    .table-row{ grid-template-columns: 4em 2fr 1fr 2fr 1fr 1fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
@@ -16,11 +16,17 @@
             <span>Uwagi</span>
             <span>Wycena</span>
             <span @popper(Czas wykonania)>Czas wyk.</span>
+            <span>Zlecenia</span>
         </div>
         <hr />
         @forelse ($songs as $song)
         <div id="song{{ $song->id }}" class="table-row">
             <span>
+                <x-quest-type
+                    :id="song_quest_type($song->id)->id ?? 0"
+                    :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
+                    />
                 {{ $song->id }}
             </span>
             <span>
@@ -38,6 +44,13 @@
             </span>
             <span {{ Popper::pop($song_work_times[$song->id]["parts"]) }}>
                 {{ $song_work_times[$song->id]["total"] }}
+            </span>
+            <span>
+            @foreach ($song->quests as $quest)
+                <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                    {{ $quest->id }}
+                </a>
+            @endforeach
             </span>
         </div>
         @empty

@@ -28,7 +28,9 @@
         <div class="quest-meta">
             @if ($quest->price)
             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
-            <p class={{ $quest->paid ? "quest-paid" : "" }}>{{ $quest->price }} zł</p>
+            <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
+                {{ $quest->price }} zł
+            </p>
             @endif
 
             @if ($quest->deadline)

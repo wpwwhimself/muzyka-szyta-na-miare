@@ -141,7 +141,9 @@
                     <div class="file-container-b">
                         <h5>
                             {{ $ver_sub }}
-                            <small class="ghost">{{ date("Y-m-d H:i", $last_mod[$ver_main][$ver_sub]) }}</small>
+                            <small class="ghost" {{ Popper::pop($last_mod[$ver_main][$ver_sub]) }}>
+                                {{ $last_mod[$ver_main][$ver_sub]->diffForHumans() }}
+                            </small>
                         </h5>
                         <div class="ver_desc">
                             {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}

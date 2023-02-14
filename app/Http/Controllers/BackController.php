@@ -52,7 +52,7 @@ class BackController extends Controller
             $recent = StatusChange::where("new_status_id", "!=", 9)
                 ->where("changed_by", "!=", 1)
                 ->orderByDesc("date")
-                ->limit(5)
+                ->limit(7)
                 ->get();
             foreach($recent as $change){
                 $change->is_request = (strlen($change->re_quest_id) == 36);
@@ -524,7 +524,7 @@ class BackController extends Controller
                 if(!isset($name[1])) $name[1] = "podstawowy";
                 if(!isset($name[2])) $name[2] = "wersja główna";
                 $files[$name[0]][$name[1]][$name[2]][] = $file;
-                $last_mod[$name[1]][$name[2]] = Storage::lastModified($file);
+                $last_mod[$name[1]][$name[2]] = Carbon::parse(Storage::lastModified($file));
                 if(pathinfo($file, PATHINFO_EXTENSION) == "md") $desc[$name[0]][$name[1]][$name[2]] = $file;
             }
         }
@@ -730,7 +730,7 @@ class BackController extends Controller
         $showcases = Showcase::orderBy("updated_at", "desc")->paginate(10);
 
         $songs_raw = Song::whereDoesntHave('showcase')
-            ->whereHas('quest', function($q){
+            ->whereHas('quests', function($q){
                 $q->where('status_id', 19);
             })
             ->orderByDesc("created_at")

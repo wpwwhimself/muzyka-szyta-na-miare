@@ -105,9 +105,9 @@
             </div>
         </div>
         <div class="hidden">
+            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FGosiaczekKr%2Fposts%2Fpfbid0KQJKXH8MTX9Wh396qfB58XF3whjLCSW3msdXKKXsyuK5HN1EG4cUniodKxYXDdtLl&show_text=true&width=500" width="500" height="170" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Falicja.stefanowska.12%2Fposts%2Fpfbid0xko4oooyuc2DAWa7k9jKBMSFcgcDgCpZKmzupUP4Qr2yVdffR8ZEvo7zvUTQD6RTl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fjedrek.kocjan%2Fposts%2Fpfbid0swytWPyMnBMWJYvyRGQvdG2uiq1fog43dusgEA7bFAdDyqTGfiwcgnzQHudYApD1l&show_text=true&width=500" width="500" height="189" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fwiktoria.matysik.20%2Fposts%2Fpfbid026nuNco26BqXk7eBhnEhRmDFLtJWbBGNtcsgsw4QXJpCWjenySHkKz9gcgAc6t8rAl&show_text=true&width=500" width="500" height="166" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
         </div>
         <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Więcej recenzji</x-a>
         <h2>Współpracuję również z:</h2>

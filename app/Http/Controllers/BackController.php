@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
 use App\Mail\PaymentReceived;
+use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
@@ -633,7 +634,7 @@ class BackController extends Controller
         // sending mail
         $mailing = null;
         if($quest->client->isMailable()){
-            Mail::to($quest->client->email)->send(new QuestUpdated($quest));
+            Mail::to($quest->client->email)->send(new QuestRequoted($quest, $rq->reason));
             $mailing = true;
         }else{
             $mailing = false;
@@ -642,12 +643,12 @@ class BackController extends Controller
         // zbierz zmiany
         $comment = [];
         foreach([
-            "price" => [$price_before, $quest->price],
-            "deadline" => [$deadline_before, $quest->deadline],
+            "cena" => [$price_before, $quest->price],
+            "termin oddania pierwszej wersji" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
         ] as $attr => $value){
             if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
         }
-        if ($comment == []) $comment = "";
+        $comment["zmiana z uwagi na"] = $rq->reason;
 
         app("App\Http\Controllers\BackController")->statusHistory(
             $rq->id,

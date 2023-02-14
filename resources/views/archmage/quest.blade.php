@@ -104,6 +104,7 @@
                 @if ($quest->hard_deadline)
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
                 @endif
+                <x-input type="text" name="reason" label="Powód zmiany (Z uwagi na...)" :small="true" :required="true" />
                 <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>
             </form>
             @unless ($quest->paid)

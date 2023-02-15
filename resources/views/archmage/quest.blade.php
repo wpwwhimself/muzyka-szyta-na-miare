@@ -245,7 +245,7 @@
 
             {{-- fallback wgrywania plików przez cPanel --}}
             <a
-                href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
+                href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
                 target="_blank"
                 >
                 Dodaj pliki ręcznie przez cPanel<br>

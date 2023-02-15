@@ -6,11 +6,10 @@
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 4em 2fr 1fr 2fr 1fr 1fr 1fr; }
+    .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
-            <span>ID</span>
             <span>Tytuł<br>Wykonawca</span>
             <span>Gatunek</span>
             <span>Uwagi</span>
@@ -21,17 +20,17 @@
         <hr />
         @forelse ($songs as $song)
         <div id="song{{ $song->id }}" class="table-row">
-            <span>
+            <span class="quest-main-data">
                 <x-quest-type
                     :id="song_quest_type($song->id)->id ?? 0"
                     :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
                     :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
                     />
-                {{ $song->id }}
-            </span>
-            <span>
-                <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>
-                <p class="song-artist">{{ $song->artist }}</p>
+                <span>
+                    <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>
+                    <span class="song-artist">{{ $song->artist }}</span>
+                    <span class="ghost">{{ $song->id }}</span>
+                </span>
             </span>
             <span>
                 {{ $song->genre->name }}

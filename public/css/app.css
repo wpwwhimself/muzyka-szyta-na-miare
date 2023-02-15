@@ -504,14 +504,27 @@ footer .contact-info{
     margin-bottom: 3.5em;
 }
 
+.quest-mini .song-title, .quest-mini .song-artist{
+    text-align: center;
+    margin: 0;
+}
+
 .quests-table .quest-main-data{
     display: flex;
     gap: 1em;
     align-items: center;
 }
-.song-title, .song-artist{
-    text-align: center;
+.quests-table .quest-main-data>span{
+    flex-basis: 100%;
+}
+.song-title{
+    font-size: 1.25rem;
+    background-color: rgb(var(--q-clr));
+}
+.quests-table .song-title{
     margin: 0;
+    background: none;
+    font-size: 1.1em;
 }
 .song-title-artist{
     margin-bottom: 0.5em;
@@ -520,16 +533,6 @@ footer .contact-info{
 }
 .song-title-artist:hover{
     color: inherit;
-}
-.song-title{
-    font-size: 1.25rem;
-    background-color: rgb(var(--q-clr));
-}
-.quests-table .song-title{
-    text-align: left;
-    margin: 0;
-    background: none;
-    font-size: 1.1em;
 }
 
 .bulk-box{
@@ -973,7 +976,7 @@ footer .contact-info{
     .quests-table .contact-info
     {
         flex-basis: 100%;
-        text-align: center;
+        /* text-align: center; */
     }
     .client-exp{ flex-basis: 15%; }
     .client-main-data{ flex-basis: 85% }
@@ -1001,5 +1004,9 @@ footer .contact-info{
 
     .quest-meta{
         align-self: flex-end;
+    }
+
+    #ppp{
+        grid-template-columns: auto;
     }
 }

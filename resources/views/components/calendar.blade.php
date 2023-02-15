@@ -7,7 +7,7 @@
     </thead>
     <tbody>
     @foreach ($calendar as $date => $meta)
-        <tr class="cal-row {{ $clickDays ? "clickable" : "" }} {{ $meta['day_type'] }} {{ $meta['suggest_date'] ? 'suggest' : '' }}" date="{{ $meta['date_val'] }}">
+        <tr class="cal-row {{ $clickDays ? "clickable" : "" }} {{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}" date="{{ $meta['date_val'] }}">
             <td>{{ $date }}</td>
             <td>
                 @foreach ($meta["quests"] as $quest)
@@ -31,7 +31,6 @@
                 </a>
                 @endforeach
             </td>
-            {{-- <span class="grayed-out">pusto</span> --}}
         </tr>
     @endforeach
     </tbody>

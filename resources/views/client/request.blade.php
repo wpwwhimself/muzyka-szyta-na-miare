@@ -98,6 +98,19 @@
                 calcPriceNow();
             });
             </script>
+            @if ($request->client?->budget)
+            <span class="{{ $request->client->budget > $request->price ? 'success' : 'warning' }}">
+                <i class="fa-solid fa-sack-dollar"></i>
+                Budżet w wysokości <b>{{ $request->client->budget }} zł</b> automatycznie
+                <br>
+                pokryje
+                @if ($request->client->budget > $request->price)
+                całą kwotę zlecenia
+                @else
+                część kwoty zlecenia
+                @endif
+            </span>
+            @endif
             @if ($request->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif

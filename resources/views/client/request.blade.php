@@ -98,7 +98,7 @@
                 calcPriceNow();
             });
             </script>
-            @if ($request->client?->budget)
+            @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
             <span class="{{ $request->client->budget > $request->price ? 'success' : 'warning' }}">
                 <i class="fa-solid fa-sack-dollar"></i>
                 Budżet w wysokości <b>{{ $request->client->budget }} zł</b> automatycznie

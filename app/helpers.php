@@ -149,7 +149,7 @@ if(!function_exists("price_calc")){
         $price = 0; $multiplier = 1; $positions = [];
 
         $price_list = DB::table("prices")
-            ->select(["indicator", "service", "operation", "price_$price_schema AS price"])
+            ->select(["indicator", "service", "quest_type_id", "operation", "price_$price_schema AS price"])
             ->get();
 
         if($quoting){
@@ -160,14 +160,19 @@ if(!function_exists("price_calc")){
         foreach($price_list as $cat){
             preg_match_all("/$cat->indicator/", $labels, $matches);
             if(count($matches[0]) > 0):
+                // nuty do innego typu zlecenia za pół ceny
+                $quest_type_present ??= $cat->quest_type_id;
+                $price_to_add = $cat->price;
+                if($cat->quest_type_id == 2 && $quest_type_present != 2) $price_to_add /= 2;
+
                 switch($cat->operation){
                     case "+":
-                        $price += $cat->price * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × ".$cat->price." zł"]);
+                        $price += $price_to_add * count($matches[0]);
+                        array_push($positions, [$cat->service, count($matches[0])." × ".$price_to_add." zł"]);
                         break;
                     case "*":
-                        $multiplier += $cat->price * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × ".($cat->price*100)."%"]);
+                        $multiplier += $price_to_add * count($matches[0]);
+                        array_push($positions, [$cat->service, count($matches[0])." × ".($price_to_add*100)."%"]);
                         break;
                 }
             endif;

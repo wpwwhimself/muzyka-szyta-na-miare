@@ -40,6 +40,14 @@
                     @endfor
                 </tr>
                 @endforeach
+                @if ($header == "Nuty")
+                <tr class="ghost">
+                    <td colspan={{ ord(CURRENT_PRICING()) - ord("A") + 2 }}>
+                        <i class="fa-solid fa-info-circle"></i>
+                        Nuty przygotowywane razem z podkładem muzycznym lub nagraniem są wyceniane o połowę taniej.
+                    </td>
+                </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

@@ -9,13 +9,13 @@
         </div>
     </div>
     <style>
-    .table-row{ grid-template-columns: 3fr 1fr 2em 11em; }
+    .table-row{ grid-template-columns: 3fr 1fr 5em 11em; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
             <span>Piosenka</span>
             <span>Klient</span>
-            <span @popper(Czy opłacony)><i class="fa-solid fa-sack-dollar"></i></span>
+            <span>Wycena</span>
             <span><i class="fa-solid fa-traffic-light"></i> Status</span>
         </div>
         <hr />
@@ -46,10 +46,10 @@
                 <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
             @endif
             </span>
-            <span>
-            @if ($quest->paid)
-            <i class="success fa-solid fa-circle-dollar-to-slot"></i>
-            @endif
+            <span @unless($quest->paid) class='error' @endif>
+                <span {{ Popper::pop($quest->price_code_override) }}>
+                    {{ $quest->price }} zł
+                </span>
             </span>
             <span class="quest-status">
                 <x-phase-indicator :status-id="$quest->status_id" :small="true" />

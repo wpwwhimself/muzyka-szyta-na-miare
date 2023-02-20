@@ -13,7 +13,7 @@ class Request extends Model
     protected $fillable = [
         "made_by_me",
         "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",
-        "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes",
+        "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes", "wishes_quest",
         "price_code", "price", "deadline", "hard_deadline",
         "status_id", "quest_id"
     ];

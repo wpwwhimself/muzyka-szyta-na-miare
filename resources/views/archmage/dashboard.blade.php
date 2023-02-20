@@ -158,7 +158,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
                 <div>
-                    <x-a href="https://www.facebook.com/wpwwMuzykaSzytaNaMiare/reviews" target="_blank">Recenzje</x-a>
+                    <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Recenzje</x-a>
                 </div>
             </div>
             <table>

@@ -5,11 +5,12 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-cog"></i> Ustawienia systemu</h1>
     </div>
-    <div class="flex-right">
-    @foreach ($settings as $name => $value)
+    <div class="grid-2">
+    @foreach ($settings as $setting)
+        <span>{{ $setting->desc }}</span>
         <x-input type="text"
-            name="{{ $name }}" value="{{ $value }}"
-            label="{{ $name }}"
+            name="{{ $setting->setting_name }}" value="{{ $setting->value_str }}"
+            label="{{ $setting->setting_name }}" :small="true"
             />
     @endforeach
     </div>

@@ -776,4 +776,13 @@ Sprzątacz natomiast wysyła maile przypominające o recenzji i płatnościach."
             compact("questions")
         ));
     }
+
+    public function settings(){
+        $settings = DB::table("settings")->get()->pluck("value_str", "setting_name")->toArray();
+
+        return view(user_role().".settings", array_merge(
+            ["title" => "Ustawienia"],
+            compact("settings")
+        ));
+    }
 }

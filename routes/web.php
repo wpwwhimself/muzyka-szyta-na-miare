@@ -16,6 +16,7 @@ use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 /*
@@ -71,6 +72,8 @@ Route::controller(BackController::class)->group(function(){
         Route::get("/songs", "songs")->name("songs");
 
         Route::get("/ppp", "ppp")->name("ppp");
+
+        Route::get("/settings", "settings")->name("settings");
     });
 });
 
@@ -151,6 +154,13 @@ Route::get("/songs_info", function(Request $rq){
 
 Route::controller(JanitorController::class)->group(function(){
     Route::get("/re_quests_janitor", "index");
+});
+
+Route::post("/settings_change", function(Request $rq){
+    DB::table("settings")
+        ->where("setting_name", $rq->setting_name)
+        ->update(["value_str" => $rq->value_str])
+    ;
 });
 
 

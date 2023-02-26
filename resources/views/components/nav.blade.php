@@ -26,6 +26,7 @@
         <a href="{{ route("showcases") }}"><li><i class="fa-solid fa-bullhorn"></i> Reklama</li></a>
         <a href="{{ route("stats") }}"><li><i class="fa-solid fa-chart-line"></i> Statystyki</li></a>
         <a href="{{ route("ppp") }}"><li><i class="fa-solid fa-circle-question"></i> PPP</li></a>
+        <a href="{{ route("settings") }}"><li><i class="fa-solid fa-cog"></i> Ustawienia</li></a>
     @endif
     <a href="{{ route("logout") }}" class="auth-link"><li><i class="fa-solid fa-power-off"></i> Wyloguj się</li></a>
     @endauth

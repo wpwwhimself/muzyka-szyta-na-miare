@@ -49,7 +49,7 @@ class BackController extends Controller
                 ->where("paid", 0)
                 ->get();
         }else{
-            $recent = StatusChange::where("new_status_id", "!=", 9)
+            $recent = StatusChange::whereNotIn("new_status_id", [9, 32])
                 ->where("changed_by", "!=", 1)
                 ->orderByDesc("date")
                 ->limit(7)

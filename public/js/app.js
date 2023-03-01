@@ -28,6 +28,6 @@ function dangerConfirm(){
  */
 $(document).ready(()=>{
     if(IS_VETERAN){
-        // $(".tutorial").hide(); //TODO włączyć 2022-03-01
+        $(".tutorial").hide();
     }
 });

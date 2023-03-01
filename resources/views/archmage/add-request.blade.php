@@ -136,7 +136,7 @@
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
                 <div id="special-prices-warning"></div>
-                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" :required="true" />
+                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" :required="false" />
                 <div id="price-summary" class="hint-table">
                     <div class="positions"></div>
                     <hr />
@@ -187,9 +187,13 @@
         </div>
         <input type="hidden" name="intent" value="new" />
         <x-button
-            label="Oddaj do wyceny" icon="5" name="new_status" value="5"
+            label="Dodaj do listy" icon="1" name="new_status" value="1"
             action="submit"
             />
+        {{-- <x-button
+            label="Oddaj do wyceny" icon="5" name="new_status" value="5"
+            action="submit"
+            /> --}}
     </form>
 
     <script>

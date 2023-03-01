@@ -252,25 +252,25 @@ class BackController extends Controller
                     "wishes" => ($song) ? $song->wishes : $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
-                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
-                    "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
-                    "deadline" => $rq->deadline,
+                    // "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
+                    // "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
+                    // "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
-                    "status_id" => 5,
+                    "status_id" => 1,
                 ]);
 
                 //mailing
                 $mailing = null;
-                if($request->email && $request->contact_preference == "email"){
-                    Mail::to($request->email)->send(new RequestQuoted($request));
-                    $mailing = true;
-                    $flash_content .= ", mail wysłany";
-                }else{
-                    $mailing = false;
-                    $flash_content .= ", ale wyślij wiadomość";
-                }
+                // if($request->email && $request->contact_preference == "email"){
+                //     Mail::to($request->email)->send(new RequestQuoted($request));
+                //     $mailing = true;
+                //     $flash_content .= ", mail wysłany";
+                // }else{
+                //     $mailing = false;
+                //     $flash_content .= ", ale wyślij wiadomość";
+                // }
 
-                $this->statusHistory($request->id, 5, $rq->comment, null, $mailing);
+                $this->statusHistory($request->id, 1, $rq->comment, null, $mailing);
             }else{
                 //bulk
                 $request = Request::create([

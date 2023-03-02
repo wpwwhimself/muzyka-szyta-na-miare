@@ -19,7 +19,7 @@ use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -157,15 +157,16 @@ class BackController extends Controller
     }
     public function request($id){
         $request = Request::findOrFail($id);
+        $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = $client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")";
+                $clients[$client["id"]] = Str::limit($client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")", $pad_size);
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = "$song[title] ($song[artist])";
+                $songs[$song["id"]] = Str::limit("$song[title] ($song[artist])", $pad_size);
             }
         }else{
             if($request->client_id != Auth::id()){

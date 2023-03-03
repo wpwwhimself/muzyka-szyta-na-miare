@@ -174,6 +174,12 @@
                 @endforeach
             @empty
             <p class="grayed-out">Brak plików</p>
+            @if (in_array($quest->status_id, [19]))
+            <p class="yellowed-out">
+                Przywróć zlecenie przyciskiem poniżej<br>
+                i poproś o ponowne wgranie
+            </p>
+            @endif
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Tutaj pojawią się pliki związane<br>

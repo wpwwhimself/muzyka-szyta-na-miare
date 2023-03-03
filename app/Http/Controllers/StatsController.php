@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\MassPayment;
 use App\Models\Client;
+use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -87,5 +88,17 @@ class StatsController extends Controller
         }
 
         return back()->with("success", "Zlecenia opłacone");
+    }
+
+    public function invoice($id){
+        $invoice = Invoice::findOrFail($id);
+        //TODO dane fakturowicza
+
+        return view(user_role().".invoice", array_merge(
+            ["title" => "Faktura nr ".$invoice->fullCode()],
+            compact(
+                "invoice", //dane fakturowicza
+            ),
+        ));
     }
 }

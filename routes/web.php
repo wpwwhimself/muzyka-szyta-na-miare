@@ -93,6 +93,8 @@ Route::controller(StatsController::class)->group(function(){
         Route::post("/stats-import", "statsImport")->name("stats-import");
         Route::get("/finance", "financeDashboard")->name("finance");
         Route::post("/finance/pay", "financePay")->name("finance-pay");
+
+        Route::get("/finance/invoice/{id}", "invoice")->name("invoice");
     });
 });
 

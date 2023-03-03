@@ -416,6 +416,15 @@ class BackController extends Controller
                 $client->save();
 
                 $request->client_id = $user->id;
+
+                //bind remaining anonymous quests from the same guy
+                Request::whereIn("status_id", [1, 5])
+                    ->where("client_name", $request->client_name)
+                    ->where("email", $request->email)
+                    ->where("phone", $request->phone)
+                    ->where("other_medium", $request->other_medium)
+                    ->where("contact_preference", $request->contact_preference)
+                    ->update(["client_id" => $user->id]);
             }else{
                 $client = Client::find($request->client_id);
             }

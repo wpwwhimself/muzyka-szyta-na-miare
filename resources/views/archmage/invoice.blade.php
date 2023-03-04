@@ -62,4 +62,14 @@
     icon="download" label="Pobierz PDF"
     />
 
+@if ($invoice->visible)
+<x-button action="#"
+    icon="eye-slash" label="Ukryj"
+    />
+@else
+<x-button action="#"
+    icon="eye" label="Pokaż"
+    />
+@endif
+
 @endsection

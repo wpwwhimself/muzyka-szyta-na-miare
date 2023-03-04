@@ -120,9 +120,9 @@
                 <i class="fa-solid fa-file-invoice-dollar"></i>
                 Dokumenty
             </h2>
-            @forelse($quest->invoices as $invoice)
+            @forelse($quest->allInvoices as $invoice)
             <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
-                icon="file-invoice" label="{{ $invoice->fullCode() }}" :small="true"
+                icon="{{ $invoice->visible ? "file-invoice" : "eye-slash" }}" label="{{ $invoice->fullCode() }}" :small="true"
                 />
             @empty
             <p class="grayed-out">Brak</p>

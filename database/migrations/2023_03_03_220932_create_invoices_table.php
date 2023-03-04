@@ -18,6 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->string("quest_id");
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->boolean("primary")->default(true);
+            $table->boolean("visible")->default(false);
             $table->float("amount");
             $table->float("paid")->default(0);
             $table->timestamps();

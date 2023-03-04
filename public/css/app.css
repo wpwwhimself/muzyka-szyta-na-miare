@@ -860,6 +860,33 @@ footer .contact-info{
     border-top-color: rgb(227, 227, 227);
 }
 
+#invoice{
+    position: relative;
+}
+#invoice .dates{
+    position: absolute; right: 0; top: 0;
+}
+#invoice .account h2,
+#invoice .account h3:not(:first-child){
+    margin: 0;
+}
+#invoice .account h3:first-child{
+    border-bottom: 2px solid var(--bg2);
+}
+#invoice .quests-table{
+    margin-top: 1em;
+}
+#invoice .summary{
+    text-align: right;
+}
+
+.name-value{
+    grid-template-columns: auto auto;
+}
+.name-value span:nth-child(even){
+    font-weight: bold;
+}
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 50, 127, 226; }

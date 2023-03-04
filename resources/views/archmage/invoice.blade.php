@@ -3,56 +3,71 @@
 @section('content')
 
 <div id="invoice">
-    <h1>Faktura nr {{ $invoice->fullCode() }}</h1>
-    <div class="dates">
-        <p><strong>Data wystawienia:</strong> {{ $invoice->created_at->format("Y-m-d") }}</p>
+    <h1>Dokument sprzedaży nr {{ $invoice->fullCode() }}</h1>
+    <div class="dates grid-2 name-value">
+        <span>Data wystawienia:</span>
+        <span>{{ $invoice->created_at->format("Y-m-d") }}</span>
     </div>
     <div class="grid-2">
-        <section>
+        <section class="account">
             <h3>Sprzedawca</h3>
             <h2>Wojciech Przybyła</h2>
             <h3>Muzyka Szyta Na Miarę</h3>
-            <p><strong>e-mail:</strong> {{ env("MAIL_FROM_ADDRESS") }}</p>
-            <p><strong>tel:</strong> 530 268 000</p>
-            <p><strong>nr konta:</strong> 53 1090 1607 0000 0001 1633 2919</p>
+            <div class="grid-2 name-value">
+                <span>e-mail:</span>
+                <span>{{ env("MAIL_FROM_ADDRESS") }}</span>
+                <span>tel:</span>
+                <span>530 268 000</span>
+                <span>nr konta:</span>
+                <span>53 1090 1607 0000 0001 1633 2919</span>
+            </div>
         </section>
-        <section>
+        <section class="account">
             <h3>Nabywca</h3>
             <h2>{{ $invoice->quest->client->client_name }}</h2>
-            @if($invoice->quest->client->email)
-            <p><strong>e-mail:</strong> {{ $invoice->quest->client->email }}</p>
-            @endif
-            @if($invoice->quest->client->phone)
-            <p><strong>tel:</strong> {{ $invoice->quest->client->phone }}</p>
-            @endif
+            <div class="grid-2 name-value">
+                @if($invoice->quest->client->email)
+                <span>e-mail:</span>
+                <span>{{ $invoice->quest->client->email }}</span>
+                @endif
+                @if($invoice->quest->client->phone)
+                <span>tel:</span>
+                <span>{{ number_format($invoice->quest->client->phone, 0, ",", " ") }}</span>
+                @endif
+            </div>
         </section>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nazwa usługi</th>
-                <th>Cena</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @switch(song_quest_type($invoice->quest->song_id)->id)
-                        @case(1) Przygotowanie podkładu muzycznego @break
-                        @case(2) Przygotowanie nut @break
-                        @case(3) Obróbka nagrania @break
-                        @default Przygotowanie materiałów muzycznych
-                    @endswitch
-                    do utworu
-                    „{{ $invoice->quest->song->title ?? "bez tytułu" }}”
-                </td>
-                <td>{{ number_format($invoice->amount, 2, ",", " ") }} zł</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="quests-table section-like">
+        <style>
+        .table-row{ grid-template-columns: auto auto; }
+        .table-row span:last-child{ text-align: right; }
+        </style>
+        <div class="table-header table-row">
+            <span>Nazwa usługi</span>
+            <span>Cena</span>
+        </div>
+        <div class="table-row">
+            <span>
+                @switch(song_quest_type($invoice->quest->song_id)->id)
+                    @case(1) Przygotowanie podkładu muzycznego @break
+                    @case(2) Przygotowanie nut @break
+                    @case(3) Obróbka nagrania @break
+                    @default Przygotowanie materiałów muzycznych
+                @endswitch
+                do utworu:
+                @if ($invoice->quest->song->artist)
+                {{ $invoice->quest->song->artist }} –
+                @endif
+                <em>{{ $invoice->quest->song->title ?? "bez tytułu" }}</em>
+            </span>
+            <span>
+                {{ number_format($invoice->amount, 2, ",", " ") }} zł
+            </span>
+        </div>
+    </div>
 
-    <h1>Razem do zapłaty: {{ number_format($invoice->amount, 2, ",", " ") }} zł</h1>
+    <h1 class="summary"><small>Razem do zapłaty:</small> {{ number_format($invoice->amount, 2, ",", " ") }} zł</h1>
 </div>
 
 <x-button action="{{ route('quest', ['id' => $invoice->quest_id]) }}"

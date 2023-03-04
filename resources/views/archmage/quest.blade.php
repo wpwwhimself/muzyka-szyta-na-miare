@@ -122,7 +122,7 @@
             </h2>
             @forelse($quest->allInvoices as $invoice)
             <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
-                icon="{{ $invoice->visible ? "file-invoice" : "eye-slash" }}" label="{{ $invoice->fullCode() }}" :small="true"
+                icon="{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}" label="{{ $invoice->fullCode() }}" :small="true"
                 />
             @empty
             <p class="grayed-out">Brak</p>

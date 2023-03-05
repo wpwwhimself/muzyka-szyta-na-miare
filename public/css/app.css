@@ -881,6 +881,12 @@ footer .contact-info{
     margin-left: auto; width: fit-content;
     font-size: 1.5em;
 }
+#invoice .summary .small{
+    margin: 0;
+    font-size: 0.75em;
+}
+
+/* TODO WYŚWIETLANIE FAKTUR DO DRUKU */
 
 .name-value{
     grid-template-columns: auto auto;

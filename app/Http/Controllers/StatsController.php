@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatsController extends Controller
 {
@@ -94,11 +95,10 @@ class StatsController extends Controller
 
     public function invoice($id){
         $invoice = Invoice::findOrFail($id);
-        //TODO dane fakturowicza
 
         return view(user_role().".invoice", array_merge(
             ["title" => "Faktura nr ".$invoice->fullCode()],
-            compact("invoice"/*, dane fakturowicza*/),
+            compact("invoice"),
         ));
     }
     public function invoiceVisibility(Request $rq){

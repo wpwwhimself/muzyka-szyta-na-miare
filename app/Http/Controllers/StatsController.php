@@ -101,6 +101,11 @@ class StatsController extends Controller
             compact("invoice"/*, dane fakturowicza*/),
         ));
     }
+    public function invoiceVisibility(Request $rq){
+        Invoice::find($rq->id)->update(["visible" => $rq->visible]);
+
+        return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
+    }
 
     public function costs(){
         $costs = Cost::orderByDesc("created_at")->paginate(25);

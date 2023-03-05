@@ -3,7 +3,7 @@
 @section('content')
 
 <div id="invoice">
-    <h1>Dokument sprzedaży nr {{ $invoice->fullCode() }}</h1>
+    <h1>Faktura nr {{ $invoice->fullCode() }}</h1>
     <div class="dates grid-2 name-value">
         <span>Data wystawienia:</span>
         <span>{{ $invoice->created_at->format("Y-m-d") }}</span>
@@ -74,21 +74,21 @@
     <h1 class="summary"><small>Razem do zapłaty:</small> {{ number_format($invoice->amount, 2, ",", " ") }} zł</h1>
 </div>
 
-<x-button action="{{ route('quest', ['id' => $invoice->quest_id]) }}"
-    icon="angles-left" label="Wróć do zlecenia"
-    />
-<x-button action="#"
-    icon="download" label="Pobierz PDF"
-    />
+<form action="{{ route('invoice-visibility') }}" method="post" class="flex-right">
+    @csrf
+    <input type="hidden" name="id" value="{{ $invoice->id }}" />
+    <input type="hidden" name="visible" value="{{ intval(!$invoice->visible) }}" />
+    <x-button action="submit"
+        icon="{{ $invoice->visible ? 'eye-slash' : 'eye' }}"
+        label="{{ $invoice->visible ? 'Ukryj' : 'Pokaż' }}"
+        />
 
-@if ($invoice->visible)
-<x-button action="#"
-    icon="eye-slash" label="Ukryj"
-    />
-@else
-<x-button action="#"
-    icon="eye" label="Pokaż"
-    />
-@endif
+    <x-button action="{{ route('quest', ['id' => $invoice->quest_id]) }}"
+        icon="angles-left" label="Wróć do zlecenia"
+        />
+    <x-button action="#"
+        icon="download" label="Pobierz PDF"
+        />
+</form>
 
 @endsection

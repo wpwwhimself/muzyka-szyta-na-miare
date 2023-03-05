@@ -186,14 +186,16 @@
             </section>
         </div>
         <input type="hidden" name="intent" value="new" />
-        <x-button
-            label="Dodaj do listy" icon="1" name="new_status" value="1"
-            action="submit"
-            />
-        {{-- <x-button
-            label="Oddaj do wyceny" icon="5" name="new_status" value="5"
-            action="submit"
-            /> --}}
+        <div class="flexright">
+            <x-button
+                label="Dodaj do listy" icon="1" name="new_status" value="1"
+                action="submit"
+                />
+            <x-button
+                label="Oddaj do wyceny" icon="5" name="new_status" value="5"
+                action="submit"
+                />
+        </div>
     </form>
 
     <script>

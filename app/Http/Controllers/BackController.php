@@ -229,7 +229,7 @@ class BackController extends Controller
         $loop_length = is_array($rq->quest_type) ? count($rq->quest_type) : 1;
 
         for($i = 0; $i < $loop_length; $i++){
-            if(Auth::id() == 1){
+            if(Auth::id() == 1){ // arcymag
                 //non-bulk
                 $song = ($rq->has("bind_with_song")) ? Song::find($rq->song_id) : null;
                 $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
@@ -253,26 +253,30 @@ class BackController extends Controller
                     "wishes" => ($song) ? $song->wishes : $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
-                    // "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
-                    // "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
-                    // "deadline" => $rq->deadline,
+                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
+                    "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
+                    "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
-                    "status_id" => 1,
+                    "status_id" => $rq->new_status,
                 ]);
 
                 //mailing
                 $mailing = null;
-                // if($request->email && $request->contact_preference == "email"){
-                //     Mail::to($request->email)->send(new RequestQuoted($request));
-                //     $mailing = true;
-                //     $flash_content .= ", mail wysłany";
-                // }else{
-                //     $mailing = false;
-                //     $flash_content .= ", ale wyślij wiadomość";
-                // }
+                if(
+                    $request->email && $request->contact_preference == "email" &&
+                    $rq->new_status == 5
+                ){
+                    Mail::to($request->email)->send(new RequestQuoted($request));
+                    $mailing = true;
+                    $flash_content .= ", mail wysłany";
+                }else{
+                    $mailing = false;
+                    $flash_content .= ", ale wyślij wiadomość";
+                }
 
-                $this->statusHistory($request->id, 1, $rq->comment, null, $mailing);
-            }else{
+                if($rq->new_status == 5) $this->statusHistory($request->id, 1, null);
+                $this->statusHistory($request->id, $rq->new_status, $rq->comment, null, $mailing);
+            }else{ // klient
                 //bulk
                 $request = Request::create([
                     "made_by_me" => false,
@@ -291,11 +295,11 @@ class BackController extends Controller
                     "wishes" => $rq->wishes[$i],
 
                     "hard_deadline" => $rq->hard_deadline[$i],
-                    "status_id" => 1,
+                    "status_id" => $rq->new_status,
                 ]);
 
                 //mailing do mnie na razie zbędny
-                $this->statusHistory($request->id, 1, null);
+                $this->statusHistory($request->id, $rq->new_status, null);
             }
         }
 
@@ -366,7 +370,7 @@ class BackController extends Controller
             $flash_content .= ", mail wysłany";
         }
 
-        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 8, 9])) ? $request->client_id : null;
+        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 6, 8, 9])) ? $request->client_id : null;
 
         $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by, $mailing);
 

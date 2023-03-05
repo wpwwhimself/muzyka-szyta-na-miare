@@ -878,6 +878,8 @@ footer .contact-info{
 }
 #invoice .summary{
     text-align: right;
+    margin-left: auto; width: fit-content;
+    font-size: 1.5em;
 }
 
 .name-value{
@@ -885,6 +887,9 @@ footer .contact-info{
 }
 .name-value span:nth-child(even){
     font-weight: bold;
+}
+.name-value.summary span:nth-child(even){
+    font-family: "Krona One";
 }
 
 /* quest and request phases */

@@ -71,7 +71,16 @@
         </div>
     </div>
 
-    <h1 class="summary"><small>Razem do zapłaty:</small> {{ number_format($invoice->amount, 2, ",", " ") }} zł</h1>
+    <div class="grid-2 name-value summary">
+        <span>Razem do zapłaty:</span>
+        <span>{{ number_format($invoice->amount, 2, ",", " ") }} zł</span>
+        @if ($invoice->paid)
+        <span>Płatność otrzymana:</span>
+        <span>{{ number_format($invoice->paid, 2, ",", " ") }} zł</span>
+        <span>Pozostało do zapłaty:</span>
+        <span @if ($invoice->isPaid()) class="success" @endif>{{ number_format($invoice->amount - $invoice->paid, 2, ",", " ") }} zł</span>
+        @endif
+    </div>
 </div>
 
 <form action="{{ route('invoice-visibility') }}" method="post" class="flex-right">

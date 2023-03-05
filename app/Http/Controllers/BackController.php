@@ -570,7 +570,12 @@ class BackController extends Controller
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
-            Invoice::where("quest_id", $rq->quest_id)->whereHas("isPaid", false)->first()->update(["paid" => $rq->comment]);
+
+            $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
+                return !($val->isPaid());
+            })->first();
+            $invoice->update(["paid" => $invoice->paid + $rq->comment]);
+
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
             // sending mail

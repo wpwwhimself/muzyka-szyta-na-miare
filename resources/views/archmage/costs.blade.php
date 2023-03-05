@@ -20,9 +20,9 @@
     <script>
         $(document).ready(function(){
             $(".table-row:not(.table-header)").click(function(){
-                $("#cost_type_id").val($(this).find("span:nth-child(2)").attr("data-typ"));
-                $("#desc").val($(this).find("span:nth-child(3)").text());
-                $("#amount").val($(this).find("span:nth-child(4)").attr("data-amount"));
+                $("#cost_type_id").val($(this).find(".cost-type").attr("data-typ"));
+                $("#desc").val($(this).find(".cost-desc").text());
+                $("#amount").val($(this).find(".cost-amount").attr("data-amount"));
                 $("input[name='id']").val($(this).attr("data-id"));
             });
         });
@@ -39,7 +39,7 @@
 
     <div class="quests-table">
         <style>
-        .table-row{ grid-template-columns: repeat(4, auto); }
+        .table-row{ grid-template-columns: 1fr 1fr 2fr 1fr; }
         .table-row span:last-child{ text-align: right; }
         </style>
         <div class="table-header table-row">
@@ -51,9 +51,9 @@
         @forelse ($costs as $cost)
         <div class="table-row" data-id="{{ $cost->id }}">
             <span {{ Popper::pop($cost->created_at) }}>{{ $cost->created_at->diffForHumans() }}</span>
-            <span data-typ="{{ $cost->cost_type_id }}">{{ $cost->type->name }}</span>
-            <span>{{ $cost->desc }}</span>
-            <span data-amount="{{ $cost->amount }}">{{ number_format($cost->amount, 2, ",", " ") }} zł</span>
+            <span class="cost-type" data-typ="{{ $cost->cost_type_id }}">{{ $cost->type->name }}</span>
+            <span class="cost-desc">{{ $cost->desc }}</span>
+            <span class="cost-amount" data-amount="{{ $cost->amount }}">{{ number_format($cost->amount, 2, ",", " ") }} zł</span>
         </div>
         @empty
         <p class="grayed-out">Brak danych</p>

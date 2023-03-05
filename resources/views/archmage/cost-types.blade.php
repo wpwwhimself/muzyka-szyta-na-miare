@@ -12,18 +12,16 @@
 
     <div class="quests-table">
         <style>
-        .table-row{ grid-template-columns: 2em 1fr 2fr }
+        .table-row{ grid-template-columns: 1fr 2fr }
         </style>
         <div class="table-header table-row">
-            <span>ID</span>
             <span>Nazwa</span>
             <span>Opis</span>
         </div>
         @forelse ($types as $type)
-        <div class="table-row">
-            <span>{{ $type->id }}</span>
-            <span>{{ $type->name }}</span>
-            <span>{{ $type->desc }}</span>
+        <div class="table-row" data-id="{{ $type->id }}">
+            <span class="cost-name">{{ $type->name }}</span>
+            <span class="cost-desc">{{ $type->desc }}</span>
         </div>
         @empty
         <p class="grayed-out">Brak typów</p>
@@ -48,9 +46,9 @@
     <script>
     $(document).ready(function(){
         $(".table-row:not(.table-header)").click(function(){
-            $("#name").val($(this).find("span:nth-child(2)").text());
-            $("#desc").val($(this).find("span:nth-child(3)").text());
-            $("input[name='id']").val($(this).find("span:nth-child(1)").text());
+            $("#name").val($(this).find(".cost-name").text());
+            $("#desc").val($(this).find(".cost-desc").text());
+            $("input[name='id']").val($(this).attr("data-id"))
         });
     });
     </script>

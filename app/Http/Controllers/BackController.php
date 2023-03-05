@@ -763,7 +763,8 @@ class BackController extends Controller
     public function addShowcase(HttpRequest $rq){
         Showcase::create([
             "song_id" => $rq->song_id,
-            "link_fb" => $rq->link_fb,
+            "link_fb" => (filter_var($rq->link_fb, FILTER_VALIDATE_URL)) ?
+                "<a target='_blank' href='$rq->link_fb'>$rq->link_fb</a>" : $rq->link_fb,
             "link_ig" => $rq->link_ig,
         ]);
 

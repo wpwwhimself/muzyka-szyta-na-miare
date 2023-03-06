@@ -883,10 +883,27 @@ footer .contact-info{
 }
 #invoice .summary .small{
     margin: 0;
-    font-size: 0.75em;
+    /* font-size: 0.75em; */
+    opacity: 0.5;
 }
 
-/* TODO WYŚWIETLANIE FAKTUR DO DRUKU */
+@media print{
+    @page {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    body {
+        --margin: 36px;
+        padding-top: var(--margin);
+        /* padding-bottom: var(--margin); */
+    }
+    .hide-for-print{
+        display: none;
+    }
+    #invoice{
+        font-size: 11px;
+    }
+}
 
 .name-value{
     grid-template-columns: auto auto;

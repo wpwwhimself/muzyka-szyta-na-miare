@@ -26,13 +26,16 @@ class Calendar extends Component
         $suggestion_ready = 0;
         for($i = ($withToday ? 0 : 1); $i < $length; $i++){
             $date = strtotime("+$i day");
-            $workday_type = workday_type(date("w", $date));
+            $workday_type = $this->workday_type(date("w", $date));
             $quests = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [11, 12, 16, 26])->get();
             $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
             $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
 
             $items_count = count($quests) + count($requests);
-            if($items_count < setting("available_day_until") && $workday_type == "") $available_days_count++;
+            if(
+                $items_count < setting("available_day_until") &&
+                ($workday_type == "" || ($workday_type == "weekend" && setting("work_on_weekends")))
+            ) $available_days_count++;
             if($available_days_count == $available_days_needed && $suggestion_ready === 0) $suggestion_ready = 1;
 
             $this->calendar[date("d.m", $date)] = [
@@ -47,6 +50,18 @@ class Calendar extends Component
             // if a suggestion is made, no more is needed
             if($suggestion_ready === 1) $suggestion_ready = 2;
         }
+    }
+
+    /**
+     * Klasy dni pracujących
+     */
+    private function workday_type($day_no){
+        $workdays_free = explode(",", setting("workdays_free"));
+        $weekend = [0, 6];
+
+        if(in_array($day_no, $workdays_free)) return "free";
+        else if(in_array($day_no, $weekend)) return "weekend";
+        else return "";
     }
 
     /**

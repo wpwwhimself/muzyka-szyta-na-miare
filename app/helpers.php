@@ -323,17 +323,3 @@ if(!function_exists("client_polonize")){
         ];
     }
 }
-
-/**
- * Klasy dni pracujących
- */
-if(!function_exists("workday_type")){
-    function workday_type($day_no){
-        $workdays_free = explode(",", setting("workdays_free"));
-        $weekend = [0, 6];
-
-        if(in_array($day_no, $workdays_free)) return "free";
-        else if(in_array($day_no, $weekend)) return "weekend";
-        else return "";
-    }
-}

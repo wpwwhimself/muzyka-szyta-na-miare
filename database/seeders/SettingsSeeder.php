@@ -60,6 +60,11 @@ class SettingsSeeder extends Seeder
                 "desc" => "Ile maksymalnie zleceń dziennie przyjmuję (dni z tyloma+ zleceniami nie są brane pod uwagę przy liczeniu deadline'u)",
                 "value_str" => 3
             ],
+            [
+                "setting_name" => "work_on_weekends",
+                "desc" => "Czy weekendy mają być traktowane jako dni pracujące",
+                "value_str" => 0
+            ],
         ]);
     }
 }

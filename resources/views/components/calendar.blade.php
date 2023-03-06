@@ -37,10 +37,26 @@
 </table>
 
 @if ($clickDays)
+<x-input type="checkbox" name="work_on_weekends" label="Licz weekendy" :small="true" value="{{ setting('work_on_weekends') }}" />
 <script>
     $(document).ready(function(){
         $("tr[date]").click((el)=>{
             $("#deadline").val($(el.currentTarget).attr("date"));
+        });
+
+        $("#work_on_weekends").change(function(){
+            $.ajax({
+                url: "{{ url('settings_change') }}",
+                type: "post",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    setting_name: $(this).attr("name"),
+                    value_str: +($(this).prop("checked")) //bool -> int
+                },
+                success: function(res){
+                    window.location.reload();
+                }
+            });
         });
 });
 </script>

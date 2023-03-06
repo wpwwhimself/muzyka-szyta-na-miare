@@ -122,7 +122,7 @@
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
 
-            @if ($quest->visibleInvoices)
+            @if (count($quest->visibleInvoices))
                 <h2>
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                     Dokumenty

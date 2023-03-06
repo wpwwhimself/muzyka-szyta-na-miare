@@ -123,6 +123,16 @@
                 Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
             </p>
             <h3>{{ number_format(Auth::user()->client->budget, 2, ",", " ") }} zł</h3>
+
+            <div class="section-header">
+                <h1>
+                    <i class="fa-solid fa-address-card"></i>
+                    Dane do przelewu
+                </h1>
+            </div>
+            <p>Numer konta:</p>
+            <h2>53 1090 1607 0000 0001 1633 2919</h2>
+            <p>W tytule proszę o wpisanie ID zlecenia, dla łatwiejszej identyfikacji wpłaty.</p>
         </section>
     </div>
 

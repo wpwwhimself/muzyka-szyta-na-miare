@@ -51,8 +51,15 @@
             @endforeach
         </tbody>
     </table>
+</section>
 
-    <h2>Jak naliczam ceny?</h2>
+<section>
+    <div class="section-header">
+        <h1>
+            <i class="fa-solid fa-circle-question"></i>
+            Jak naliczam ceny?
+        </h1>
+    </div>
     <p>
         Wszystkie wielkości podane w procentach naliczane są w ostatniej kolejności.
         Jeżeli cena posiada kilka takich składników, procenty są sumowane a następnie mnożone przez kwotę.

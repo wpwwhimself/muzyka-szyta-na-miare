@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\MassPayment;
 use App\Models\Client;
+use App\Models\Cost;
+use App\Models\CostType;
+use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -11,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatsController extends Controller
 {
@@ -87,5 +91,55 @@ class StatsController extends Controller
         }
 
         return back()->with("success", "Zlecenia opłacone");
+    }
+
+    public function invoice($id){
+        $invoice = Invoice::findOrFail($id);
+
+        return view(user_role().".invoice", array_merge(
+            ["title" => "Faktura nr ".$invoice->fullCode()],
+            compact("invoice"),
+        ));
+    }
+    public function invoiceVisibility(Request $rq){
+        Invoice::find($rq->id)->update(["visible" => $rq->visible]);
+
+        return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
+    }
+
+    public function costs(){
+        $costs = Cost::orderByDesc("created_at")->paginate(25);
+        $types = CostType::all()->pluck("name", "id");
+
+        return view(user_role().".costs", array_merge(
+            ["title" => "Lista kosztów"],
+            compact("costs", "types"),
+        ));
+    }
+    public function modCost(Request $rq){
+        $fields = [
+            "cost_type_id" => $rq->cost_type_id,
+            "desc" => $rq->desc,
+            "amount" => $rq->amount,
+        ];
+        if($rq->id) Cost::find($rq->id)->update($fields);
+        else Cost::create($fields);
+
+        return back()->with("success", "Gotowe");
+    }
+    public function costTypes(){
+        $types = CostType::all();
+
+        return view(user_role().".cost-types", array_merge(
+            ["title" => "Typy kosztów"],
+            compact("types"),
+        ));
+    }
+    public function modCostType(Request $rq){
+        $fields = ["name" => $rq->name, "desc" => $rq->desc];
+        if($rq->id) CostType::find($rq->id)->update($fields);
+        else CostType::create($fields);
+
+        return back()->with("success", "Gotowe");
     }
 }

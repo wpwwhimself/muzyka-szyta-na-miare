@@ -860,6 +860,61 @@ footer .contact-info{
     border-top-color: rgb(227, 227, 227);
 }
 
+#invoice{
+    position: relative;
+}
+#invoice .dates{
+    position: absolute; right: 0; top: 0;
+}
+#invoice .account h2,
+#invoice .account h3:not(:first-child){
+    margin: 0;
+}
+#invoice .account h3:first-child{
+    border-bottom: 2px solid var(--bg2);
+}
+#invoice .quests-table{
+    margin-top: 1em;
+}
+#invoice .summary{
+    text-align: right;
+    margin-left: auto; width: fit-content;
+    font-size: 1.5em;
+}
+#invoice .summary .small{
+    margin: 0;
+    /* font-size: 0.75em; */
+    opacity: 0.5;
+}
+
+@media print{
+    @page {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    body {
+        --margin: 36px;
+        padding-top: var(--margin);
+        /* padding-bottom: var(--margin); */
+    }
+    .hide-for-print{
+        display: none;
+    }
+    #invoice{
+        font-size: 11px;
+    }
+}
+
+.name-value{
+    grid-template-columns: auto auto;
+}
+.name-value span:nth-child(even){
+    font-weight: bold;
+}
+.name-value.summary span:nth-child(even){
+    font-family: "Krona One";
+}
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 50, 127, 226; }

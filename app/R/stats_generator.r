@@ -71,6 +71,7 @@ recent_income <- status_changes %>%
 # * średni czas z podziałem na gatunki z porównaniem sekund do zeszłego miesiąca
 # * na ile dni przed deadlinem oddaję pierwszą wersję
 # * jak często przekraczam termin klienta (zaakceptowany vs data hard deadline)
+# * koszty -- przychody, wydatki, dochody
 #TODO###############
 
 list(

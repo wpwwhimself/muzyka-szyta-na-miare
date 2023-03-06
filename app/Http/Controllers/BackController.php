@@ -8,6 +8,7 @@ use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
+use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -444,12 +445,19 @@ class BackController extends Controller
             $quest->hard_deadline = $request->hard_deadline;
             $quest->wishes = $request->wishes_quest;
             $quest->save();
+
+            $invoice = Invoice::create([
+                "quest_id" => $quest->id,
+                "amount" => $quest->price
+            ]);
+
             if($client->budget){
                 $sub_amount = min([$request->price, $client->budget]);
                 $client->budget -= $sub_amount;
                 if($sub_amount == $request->price) $quest->paid = true;
                 $client->save();
                 $this->statusHistory($quest->id, 32, $sub_amount);
+                $invoice->update(["paid" => $sub_amount]);
             }
 
             $request->quest_id = $quest->id;
@@ -566,6 +574,12 @@ class BackController extends Controller
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
+
+            $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
+                return !($val->isPaid());
+            })->first();
+            $invoice->update(["paid" => $invoice->paid + $rq->comment]);
+
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
             // sending mail

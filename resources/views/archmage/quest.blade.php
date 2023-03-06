@@ -115,6 +115,18 @@
                 <x-input type="number" name="comment" label="Kwota" :small="true" value="{{ $quest->price - $quest->payments->sum('comment') }}" />
             </form>
             @endunless
+
+            <h2>
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                Dokumenty
+            </h2>
+            @forelse($quest->allInvoices as $invoice)
+            <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
+                icon="{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}" label="{{ $invoice->fullCode() }}" :small="true"
+                />
+            @empty
+            <p class="grayed-out">Brak</p>
+            @endforelse
         </section>
 
         <section id="stats-log">

@@ -19,6 +19,10 @@ class Client extends Model
         return $this->hasMany(Quest::class);
     }
     public function isMailable(){
-        return ($this->email && $this->contact_preference == "email");
+        return (
+            $this->email
+            // &&
+            // $this->contact_preference == "email"*/
+        );
     }
 }

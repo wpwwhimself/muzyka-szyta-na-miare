@@ -51,12 +51,21 @@
         </div>
         <div class="table-row">
             <span>
-                @switch(song_quest_type($invoice->quest->song_id)->id)
-                    @case(1) Przygotowanie podkładu muzycznego @break
-                    @case(2) Przygotowanie nut @break
-                    @case(3) Obróbka nagrania @break
-                    @default Przygotowanie materiałów muzycznych
-                @endswitch
+                @if ($invoice->primary)
+                    @switch(song_quest_type($invoice->quest->song_id)->id)
+                        @case(1) Przygotowanie podkładu muzycznego @break
+                        @case(2) Przygotowanie nut @break
+                        @case(3) Obróbka nagrania @break
+                        @default Przygotowanie materiałów muzycznych
+                    @endswitch
+                @else
+                    @switch(song_quest_type($invoice->quest->song_id)->id)
+                        @case(1) Przygotowanie poprawek do podkładu muzycznego @break
+                        @case(2) Przygotowanie poprawek do nut @break
+                        @case(3) Dodatkowa obróbka nagrania @break
+                        @default Przygotowanie poprawek do materiałów muzycznych
+                    @endswitch
+                @endif
                 do utworu:
                 @if ($invoice->quest->song->artist)
                 {{ $invoice->quest->song->artist }} –

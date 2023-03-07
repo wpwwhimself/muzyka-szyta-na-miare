@@ -578,7 +578,7 @@ class BackController extends Controller
             $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
                 return !($val->isPaid());
             })->first();
-            $invoice->update(["paid" => $invoice->paid + $rq->comment]);
+            $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
 
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
@@ -658,6 +658,14 @@ class BackController extends Controller
             "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)[0]),
             "deadline" => $rq->deadline,
         ]);
+
+        if($price_before != $quest->price){
+            Invoice::create([
+                "quest_id" => $quest->id,
+                "amount" => $quest->price - $price_before,
+                "primary" => false,
+            ]);
+        }
 
         // sending mail
         $mailing = null;

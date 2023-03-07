@@ -356,7 +356,10 @@ class BackController extends Controller
         $mailing = null;
         if($request->status_id == 5){
             //mail do klienta, bo wycena oddana
-            if($request->email && $request->contact_preference == "email"){
+            if(
+                $request->email
+                // && $request->contact_preference == "email"
+            ){
                 Mail::to($request->email)->send(new RequestQuoted($request));
                 $mailing = true;
                 $flash_content .= ", mail wysłany";

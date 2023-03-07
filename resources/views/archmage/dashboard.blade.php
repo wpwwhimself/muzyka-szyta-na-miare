@@ -46,7 +46,7 @@
                     <tr>
                         <td>
                             <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}">
-                                {{ $i->is_request ? $i->re_quest->title : $i->re_quest->song->title }}
+                                {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
                             </a>
                         </td>
                         <td>

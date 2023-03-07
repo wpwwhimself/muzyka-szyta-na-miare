@@ -14,8 +14,8 @@
                         ({{ round($val / $data2 * 100) }}%)
                         @break
                     @case("comparison")
-                        <span class="{{ $val - $data2->{$name} > 0 ? 'success' : 'error' }}">
-                            {{ sprintf("%+d", $val - $data2->{$name}) }}
+                        <span class="{{ $data2->{$name} > 0 ? 'diff-hot' : 'diff-cold' }}">
+                            {{ sprintf("%+d", $data2->{$name}) }}
                         </span>
                         @break
                 @endswitch

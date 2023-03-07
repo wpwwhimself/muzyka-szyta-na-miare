@@ -316,6 +316,13 @@ input[type="checkbox"]{
     background-color: var(--bg1);
 }
 
+.diff-hot{
+    color: hsl(45, 100%, 50%)
+}
+.diff-cold{
+    color: hsl(225, 100%, 68%)
+}
+
 /* TABLES */
 table{
     width: 100%;
@@ -724,6 +731,7 @@ footer .contact-info{
     grid-auto-flow: column;
     grid-template-rows: 1fr auto;
     text-align: center;
+    gap: 0.5em;
 }
 #clients-stats-graph{
     grid-template-rows: 1fr auto auto;
@@ -731,7 +739,7 @@ footer .contact-info{
 .bar{
     background: var(--acc);
     /* background: linear-gradient(to bottom, rgb(var(--ui-clr-1)), var(--fg)); */
-    width: 90%;
+    width: 100%;
     border-radius: 0.5em;
 }
 .bar-container{

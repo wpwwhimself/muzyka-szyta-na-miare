@@ -27,7 +27,7 @@ class StatsHighlightH extends Component
                 break;
             case "comparison":
                 $this->data1 = $data->main;
-                $this->data2 = $data->compared_to;
+                $this->data2 = $data->difference;
                 break;
             default:
                 $this->data1 = $data;

@@ -68,7 +68,6 @@ class StatsController extends Controller
             $quest = Quest::find($id);
 
             // opłać zlecenia
-            // na razie wpłaca całą kwotę //TODO podawanie konkretnych kwot
             app("App\Http\Controllers\BackController")->statusHistory(
                 $id,
                 32,

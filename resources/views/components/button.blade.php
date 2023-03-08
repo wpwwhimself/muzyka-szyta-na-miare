@@ -1,7 +1,7 @@
-@props(['label', 'icon', 'danger' => false, 'action', "id" => null, 'small' => false])
+@props(['label', 'icon', 'danger' => false, 'action', "id" => null, 'small' => false, "pop" => null])
 
 @if ($action == "submit")
-<button type="submit" class="hover-lift {{ $danger ? "danger" : "" }} {{ $small ? "small" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ $attributes->merge(['id' => $id]) }}>
+<button type="submit" class="clickable hover-lift {{ $danger ? "danger" : "" }} {{ $small ? "small" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ $attributes->merge(['id' => $id]) }} {{ !$pop ?: Popper::pop($pop) }}>
 @else
 <a href="{{ $action }}" class="submit hover-lift {{ $danger ? "danger" : "" }} {{ $small ? "small" : "" }}" {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ $attributes->merge(['id' => $id]) }}>
 @endif

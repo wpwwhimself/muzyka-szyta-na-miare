@@ -135,7 +135,7 @@
                 <thead>
                     <tr>
                         <th>Etap</th>
-                        <th>Czas</th>
+                        <th colspan="2">Czas</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -149,13 +149,15 @@
                             <a class="log-delete" href="{{ route('work-clock-remove', ['status_id' => $entry->status_id, 'song_id' => $entry->song_id]) }}">
                                 <i class="fa-solid fa-trash" @popper(usuń wpis)></i>
                             </a>
+                        </td>
+                        <td>
                             @if ($entry->now_working) <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i> @endif
                             {{ $entry->time_spent }}
                         </td>
                     </tr>
                 @empty
                 <tr>
-                    <td colspan=2 class="grayed-out">
+                    <td colspan=3 class="grayed-out">
                         Prace jeszcze nie zaczęte
                     </td>
                 </tr>
@@ -164,7 +166,7 @@
                 <tfoot>
                     <tr>
                         <th>Razem</th>
-                        <th>
+                        <th colspan="2">
                         {{ gmdate("H:i:s", DB::table("song_work_times")
                                 ->where("song_id", $quest->song_id)
                                 ->sum(DB::raw("TIME_TO_SEC(time_spent)"))) }}
@@ -180,9 +182,9 @@
                 <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
                 @foreach ($stats_statuses as $option)
                 <x-button
-                    label="{{ $option->status_name }}" icon="{{ $option->id }}"
+                    label="{{-- $option->status_name --}}" icon="{{ $option->id }}"
                     action="submit" value="{{ $option->id }}" name="status_id"
-                    :small="true"
+                    :small="true" :pop="$option->status_name"
                     />
                 @endforeach
                 <x-button

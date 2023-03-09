@@ -33,6 +33,10 @@
     </p>
     @endif
 
+    @if ($comment = $request->changes->last()->comment)
+    <p>{{ $comment }}</p>
+    @endif
+
     <p>
         Proszę o potwierdzenie warunków przyciskiem poniżej.
     </p>

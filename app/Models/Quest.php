@@ -27,6 +27,9 @@ class Quest extends Model
     public function quest_type(){
         return $this->belongsTo(QuestType::class);
     }
+    public function changes(){
+        return $this->hasMany(StatusChange::class, "re_quest_id");
+    }
     public function payments(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->where("new_status_id", 32);
     }

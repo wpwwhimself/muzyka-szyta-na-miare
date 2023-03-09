@@ -31,4 +31,7 @@ class Request extends Model
     public function song(){
         return $this->belongsTo(Song::class);
     }
+    public function changes(){
+        return $this->hasMany(StatusChange::class, "re_quest_id");
+    }
 }

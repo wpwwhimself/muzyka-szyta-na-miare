@@ -12,6 +12,11 @@
 
     <p>
         Teraz w statusie: <b>{{ $quest->status->status_name }}</b>
+        @if ($comment = $quest->changes->last()->comment)
+        <br>
+        <b>Komentarz:</b>
+        {{ $comment }}
+        @endif
     </p>
 
     <h3>

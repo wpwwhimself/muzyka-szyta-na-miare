@@ -10,6 +10,13 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
+    @if ($comment = $quest->changes->last()->comment)
+    <p>
+        <b>Najnowszy komentarz:</b>
+        {{ $comment }}
+    </p>
+    @endif
+
     <h3>
         Kliknij
         <a

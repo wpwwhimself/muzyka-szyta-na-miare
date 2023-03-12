@@ -1,5 +1,5 @@
-library(stringr); library(lubridate); library(tidyverse)
-library(dotenv); library(RMySQL); library(rjson)
+library(stringr); library(lubridate); library(tidyverse);
+library(dotenv); library(RMySQL); library(rjson);
 
 as.pln <- function(x){
   x %>%

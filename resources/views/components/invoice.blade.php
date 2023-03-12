@@ -17,7 +17,7 @@
                 <span>tel:</span>
                 <span>530 268 000</span>
                 <span>nr konta:</span>
-                <span>53 1090 1607 0000 0001 1633 2919</span>
+                <span>53 1090 1607 0000 0001 5333 1539</span>
             </div>
         </section>
         <section class="account">

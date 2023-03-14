@@ -274,10 +274,10 @@
                 <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
                 <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
                 <li>Jestem stałym członkiem <b>3 zespołów muzycznych</b>:
-                    <a href="#">Dixie Kings</a>,
-                    <a href="#">Orkiestry Tanecznej Wihajster</a>
+                    <a href="https://www.facebook.com/profile.php?id=100060053047728">Dixie Kings</a>,
+                    <a href="https://www.facebook.com/orkiestrawihajster">Orkiestry Tanecznej Wihajster</a>
                     oraz
-                    <a href="#">Powiatowej Wolsztyńskiej Orkiestry Dętej</a>
+                    <a href="https://www.facebook.com/orkiestrawolsztyn">Powiatowej Wolsztyńskiej Orkiestry Dętej</a>
                 </li>
                 <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako web developer</li>
                 <li>Mam za sobą <b>studia matematyczne</b> i jestem w trakcie studiów <b>magisterskich</b> na Uniwersytecie Ekonomicznym w Poznaniu</li>

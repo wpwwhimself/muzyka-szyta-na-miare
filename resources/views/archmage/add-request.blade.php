@@ -9,7 +9,7 @@
                 <h2>
                     <i class="fa-solid fa-user"></i>
                     Dane klienta
-                    <a href="#" @popper(zlecenia klienta) target="_blank" id="client_quests_list">
+                    <a href="#/" @popper(zlecenia klienta) target="_blank" id="client_quests_list">
                         <i class="fa-solid fa-up-right-from-square"></i>
                     </a>
                 </h2>

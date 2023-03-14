@@ -9,7 +9,7 @@
         icon="angles-left" label="Wróć do zlecenia"
         />
 
-    <x-button action="#" id="print_invoice"
+    <x-button action="#/" id="print_invoice"
         icon="download" label="Drukuj"
         />
     <script>

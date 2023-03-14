@@ -127,6 +127,28 @@
             @empty
             <p class="grayed-out">Brak</p>
             @endforelse
+            <form action="{{ route('invoice-add') }}" method="post">
+                @csrf
+                <x-button action="#/" id="new_invoice_button" label="Nowy" icon="plus" :small="true" />
+                <div id="payer_details" class="sc-line">
+                    <x-input type="text" name="payer_name" value="{{ $quest->client->client_name }}" label="Nazwa płatnika" />
+                    <x-input type="text" name="payer_title" value="" label="Tytuł płatnika" :small="true" />
+                    <x-input type="TEXT" name="payer_address" value="" label="Adres" />
+                    <x-input type="text" name="payer_email" value="{{ $quest->client->email }}" label="E-mail" :small="true" />
+                    <x-input type="text" name="payer_phone" value="{{ $quest->client->phone }}" label="Telefon" :small="true" />
+                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                    <x-button action="submit" label="Dodaj" icon="check" :small="true" />
+                </div>
+                <script>
+                $(document).ready(() => {
+                    $("#payer_details").hide();
+                    $("#new_invoice_button").click(() => {
+                        $("#payer_details").show();
+                        $("#new_invoice_button").hide();
+                    });
+                });
+                </script>
+            </form>
         </section>
 
         <section id="stats-log">

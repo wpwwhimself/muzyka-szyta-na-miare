@@ -22,19 +22,20 @@
         </section>
         <section class="account">
             <h3>Nabywca</h3>
-            <h2>{{ $invoice->quest->client->client_name }}</h2>
+            <h2>{{ $invoice->payer_name ?? $invoice->quest->client->client_name }}</h2>
+            <h3>{{ $invoice->payer_title }}</h3>
             <div class="grid-2 name-value">
-                @if ($invoice->quest->client->invoice_address)
-                    <span>adres zamieszkania:</span>
-                    <span>{{ $invoice->quest->client->invoice_address }}</span>
+                @if ($invoice->payer_address)
+                    <span>adres:</span>
+                    <span>{{ $invoice->payer_address }}</span>
                 @endif
-                @if($invoice->quest->client->email)
+                @if($invoice->payer_email)
                     <span>e-mail:</span>
-                    <span>{{ $invoice->quest->client->email }}</span>
+                    <span>{{ $invoice->payer_email }}</span>
                 @endif
-                @if($invoice->quest->client->phone)
+                @if($invoice->payer_phone)
                     <span>tel:</span>
-                    <span>{{ number_format($invoice->quest->client->phone, 0, ",", " ") }}</span>
+                    <span>{{ number_format($invoice->payer_phone, 0, ",", " ") }}</span>
                 @endif
             </div>
         </section>

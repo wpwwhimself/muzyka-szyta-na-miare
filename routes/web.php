@@ -95,6 +95,7 @@ Route::controller(StatsController::class)->group(function(){
 
         Route::get("/finance/invoice/{id}", "invoice")->name("invoice");
         Route::post("/finance/invoice/visibility", "invoiceVisibility")->name("invoice-visibility");
+        Route::post("/finance/invoice/add", "invoiceAdd")->name("invoice-add");
 
         Route::get("/finance/costs", "costs")->name("costs");
         Route::post("/finance/costs/mod", "modCost")->name("mod-cost");

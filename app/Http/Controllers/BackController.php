@@ -449,10 +449,10 @@ class BackController extends Controller
             $quest->wishes = $request->wishes_quest;
             $quest->save();
 
-            $invoice = Invoice::create([
-                "quest_id" => $quest->id,
-                "amount" => $quest->price
-            ]);
+            // $invoice = Invoice::create([
+            //     "quest_id" => $quest->id,
+            //     "amount" => $quest->price
+            // ]);
 
             if($client->budget){
                 $sub_amount = min([$request->price, $client->budget]);
@@ -460,7 +460,7 @@ class BackController extends Controller
                 if($sub_amount == $request->price) $quest->paid = true;
                 $client->save();
                 $this->statusHistory($quest->id, 32, $sub_amount);
-                $invoice->update(["paid" => $sub_amount]);
+                // $invoice->update(["paid" => $sub_amount]);
             }
 
             $request->quest_id = $quest->id;

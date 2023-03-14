@@ -105,6 +105,24 @@ class StatsController extends Controller
 
         return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
     }
+    public function invoiceAdd(Request $rq){
+        $quest = Quest::find($rq->quest_id);
+
+        Invoice::create([
+            "quest_id" => $quest->id,
+            "primary" => ($quest->allInvoices()->count() == 0),
+            "visible" => false,
+            "amount" => $quest->price - $quest->payments->sum("comment"),
+            "paid" => $quest->payments->sum("comment"),
+            "payer_name" => $rq->payer_name,
+            "payer_title" => $rq->payer_title,
+            "payer_address" => $rq->payer_address,
+            "payer_email" => $rq->payer_email,
+            "payer_phone" => $rq->payer_phone,
+        ]);
+
+        return back()->with("success", "Dokument utworzony");
+    }
 
     public function costs(){
         $costs = Cost::orderByDesc("created_at")->paginate(25);

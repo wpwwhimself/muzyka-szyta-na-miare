@@ -662,13 +662,13 @@ class BackController extends Controller
             "deadline" => $rq->deadline,
         ]);
 
-        if($price_before != $quest->price){
-            Invoice::create([
-                "quest_id" => $quest->id,
-                "amount" => $quest->price - $price_before,
-                "primary" => false,
-            ]);
-        }
+        // if($price_before != $quest->price){
+        //     Invoice::create([
+        //         "quest_id" => $quest->id,
+        //         "amount" => $quest->price - $price_before,
+        //         "primary" => false,
+        //     ]);
+        // }
 
         // sending mail
         $mailing = null;

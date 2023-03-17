@@ -99,13 +99,13 @@
                             },
                             success: function(res){
                                 res = JSON.parse(res);
-                                if(res.link) res.link = res.link.substring(0, res.link.indexOf(","));
+                                if(res.link?.indexOf(",") > -1) res.link = res.link.substring(0, res.link.indexOf(","));
                                 let content = ``;
                                 content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                                 content += `<span>Artysta</span><span>${res.artist}</span>`;
-                                content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
+                                content += `<span>Rodzaj zlecenia</span><span>${res.type}</span>`;
                                 content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
-                                content += `<span>Uwagi</span><span>${res.notes}</span>`;
+                                content += `<span>Uwagi</span><span>${res.notes ?? "–"}</span>`;
                                 positions_list.html(content);
                                 bind_checkbox.show();
                             }

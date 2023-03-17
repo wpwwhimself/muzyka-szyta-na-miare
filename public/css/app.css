@@ -99,6 +99,10 @@ div, form{
     flex-wrap: wrap;
     gap: 1em;
 }
+.flex-down{
+    display: flex;
+    flex-direction: column;
+}
 .hover-lift:hover{
     color: inherit;
     box-shadow: 0 0 1rem #00000044;
@@ -518,8 +522,7 @@ footer .contact-info{
 
 .quests-table .quest-main-data{
     display: flex;
-    gap: 1em;
-    align-items: center;
+    column-gap: 1em;
 }
 .quests-table .quest-main-data>span{
     flex-basis: 100%;

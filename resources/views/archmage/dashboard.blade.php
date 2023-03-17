@@ -155,48 +155,45 @@
                 </div>
             </div>
             <style>
-            #dashboard-requests .table-row{ grid-template-columns: 1fr 1fr 1fr; }
+            #dashboard-requests .table-row{ grid-template-columns: 3fr 2fr; }
             .quest-type{ font-size: 1em; margin: 0; }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">
                     <span>Utwór/Klient</span>
-                    <span>Status</span>
                     <span>Meta</span>
                 </div>
             @forelse ($requests as $request)
             <a href="{{ route('request', $request->id) }}" class="table-row p-{{ $request->status_id }} {{ is_priority($request->id) ? "priority" : "" }}">
-                <span class="quest-main-data">
-                    <span>
-                        <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
-                        <span class="song-artist">{{ $request->artist }}</span>
-                        @if (is_priority($request->id))
-                        • <b>Priorytet</b>
-                        @endif
-                        <br>
-                        <span class="ghost">
-                            @if ($request->client?->client_name)
-                                @if (is_veteran($request->client->id))
-                                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
-                                @else
-                                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
-                                @endif
+                <span class="quest-main-data flex-down">
+                    <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
+                    @if($request->artist) <span class="song-artist">{{ $request->artist }}</span> @endif
+                    @if (is_priority($request->id))
+                    • <b>Priorytet</b>
+                    @endif
+                    <br>
+                    <span class="ghost">
+                        @if ($request->client?->client_name)
+                            @if (is_veteran($request->client->id))
+                            <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
                             @else
-                                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
+                            <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
                             @endif
-                        </span>
+                        @else
+                            <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
+                        @endif
                     </span>
                 </span>
-                <span class="quest-status">
-                    <x-phase-indicator :status-id="$request->status_id" :small="true" />
-                </span>
                 <span>
+                    <span class="quest-status">
+                        <x-phase-indicator :status-id="$request->status_id" :small="true" />
+                    </span>
                     <div class="quest-meta">
                         @if ($request->price)
                         <p>{{ $request->price }} zł</p>
                         <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                         @endif
-            
+
                         @if ($request->hard_deadline)
                         <p
                             @if ($request->hard_deadline?->addDay()->subDays(1)->lte(now()))
@@ -244,44 +241,40 @@
                 </div>
             </div>
             <style>
-            #dashboard-quests .table-row{ grid-template-columns: 2em 1fr 1fr 1fr; }
+            #dashboard-quests .table-row{ grid-template-columns: 2em 3fr 2fr; }
             .quest-type{ font-size: 1em; margin: 0; }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">
                     <span><i class="fa-solid fa-signal" @popper(Pozycja w kolejce)></i></span>
                     <span>Utwór/Klient</span>
-                    <span>Status</span>
                     <span>Meta</span>
                 </div>
             @forelse ($quests as $key => $quest)
                 <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
                     <span>{{ $key + 1 }}</span>
-                    <span class="quest-main-data">
-                        <span>
-                            <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
-                            <span class="song-artist">{{ $quest->song->artist }}</span>
-                            @if (is_priority($quest->id))
-                            • <b>Priorytet</b>
-                            @endif
-                            <br>
-                            <span class="ghost">
-                                @if ($quest->client?->client_name)
-                                    @if (is_veteran($quest->client->id))
-                                    <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
-                                    @else
-                                    <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
-                                    @endif
+                    <span class="quest-main-data flex-down">
+                        <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
+                        @if($quest->song->artist) <span class="song-artist">{{ $quest->song->artist }}</span> @endif
+                        @if (is_priority($quest->id))
+                        <b>Priorytet</b>
+                        @endif
+                        <span class="ghost">
+                            @if ($quest->client?->client_name)
+                                @if (is_veteran($quest->client->id))
+                                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
                                 @else
-                                    <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
+                                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
                                 @endif
-                            </span>
+                            @else
+                                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
+                            @endif
                         </span>
                     </span>
-                    <span class="quest-status">
-                        <x-phase-indicator :status-id="$quest->status_id" :small="true" />
-                    </span>
                     <span>
+                        <span class="quest-status">
+                            <x-phase-indicator :status-id="$quest->status_id" :small="true" />
+                        </span>
                         <div class="quest-meta">
                             @if ($quest->price)
                             <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
@@ -289,7 +282,7 @@
                             </p>
                             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                             @endif
-                
+
                             @if ($quest->hard_deadline)
                             <p
                                 @if ($quest->hard_deadline?->addDay()->subDays(1)->lte(now()))

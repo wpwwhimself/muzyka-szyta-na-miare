@@ -117,44 +117,9 @@
             </div>
             <x-calendar :click-days="false" :with-today="true" :length="7" />
         </section>
-    </div>
 
-    <section id="dashboard-requests">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
-            <div>
-                <x-a href="{{ route('requests') }}">Wszystkie</x-a>
-                <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
-            </div>
-        </div>
-        <div class="dashboard-mini-wrapper">
-        @forelse ($requests as $request)
-            <x-quest-mini :quest="$request" />
-        @empty
-            <p class="grayed-out">brak aktywnych zapytań</p>
-        @endforelse
-        </div>
-    </section>
-
-    <section id="dashboard-quests">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-signal"></i> Kolejka zleceń</h1>
-            <div>
-                <x-a href="{{ route('quests') }}">Wszystkie</x-a>
-            </div>
-        </div>
-        <div class="dashboard-mini-wrapper">
-        @forelse ($quests as $key => $quest)
-            <x-quest-mini :quest="$quest" :queue="$key + 1" />
-        @empty
-            <p class="grayed-out">brak aktywnych zleceń</p>
-        @endforelse
-        </div>
-    </section>
-
-    <div class="grid-2">
         @if (count($patrons_adepts) > 0)
-        <section id="patrons-adepts">
+        <section id="patrons-adepts" style="grid-column: 1 / span 2">
             <div class="section-header">
                 <h1><i class="fa-solid fa-chalkboard-user"></i> Potencjalni patroni</h1>
                 <div>
@@ -180,5 +145,200 @@
             </table>
         </section>
         @endif
+
+        <section id="dashboard-requests">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
+                <div>
+                    <x-a href="{{ route('requests') }}">Wszystkie</x-a>
+                    <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
+                </div>
+            </div>
+            <style>
+            #dashboard-requests .table-row{ grid-template-columns: 1fr 1fr 1fr; }
+            .quest-type{ font-size: 1em; margin: 0; }
+            </style>
+            <div class="quests-table">
+                <div class="table-header table-row">
+                    <span>Utwór/Klient</span>
+                    <span>Status</span>
+                    <span>Meta</span>
+                </div>
+            @forelse ($requests as $request)
+            <a href="{{ route('request', $request->id) }}" class="table-row p-{{ $request->status_id }} {{ is_priority($request->id) ? "priority" : "" }}">
+                <span class="quest-main-data">
+                    <span>
+                        <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
+                        <span class="song-artist">{{ $request->artist }}</span>
+                        @if (is_priority($request->id))
+                        • <b>Priorytet</b>
+                        @endif
+                        <br>
+                        <span class="ghost">
+                            @if ($request->client?->client_name)
+                                @if (is_veteran($request->client->id))
+                                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
+                                @else
+                                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
+                                @endif
+                            @else
+                                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
+                            @endif
+                        </span>
+                    </span>
+                </span>
+                <span class="quest-status">
+                    <x-phase-indicator :status-id="$request->status_id" :small="true" />
+                </span>
+                <span>
+                    <div class="quest-meta">
+                        @if ($request->price)
+                        <p>{{ $request->price }} zł</p>
+                        <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
+                        @endif
+            
+                        @if ($request->hard_deadline)
+                        <p
+                            @if ($request->hard_deadline?->addDay()->subDays(1)->lte(now()))
+                            class="quest-deadline error"
+                            @elseif ($request->hard_deadline?->addDay()->subDays(3)->lte(now()))
+                            class="quest-deadline warning"
+                            @else
+                            class="quest-deadline"
+                            @endif
+                            {{ Popper::pop($request->hard_deadline->format("Y-m-d")) }} >
+                            {{ $request->hard_deadline?->addDay()->diffForHumans() }}
+                        </p>
+                        <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
+                        @endif
+                        @if ($request->deadline)
+                        <p
+                            @if(in_array($request->status_id, [11, 12]))
+                                @if ($request->deadline?->addDay()->subDays(1)->lte(now()))
+                                class="quest-deadline error"
+                                @elseif ($request->deadline?->addDay()->subDays(3)->lte(now()))
+                                class="quest-deadline warning"
+                                @endif
+                            @else
+                                class="quest-deadline"
+                            @endif
+                            {{ Popper::pop($request->deadline->format("Y-m-d")) }} >
+                            {{ $request->deadline?->addDay()->diffForHumans() }}
+                        </p>
+                        <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
+                        @endif
+                    </div>
+                </span>
+            </a>
+            @empty
+                <p class="grayed-out">brak aktywnych zapytań</p>
+            @endforelse
+            </div>
+        </section>
+
+        <section id="dashboard-quests">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-signal"></i> Kolejka zleceń</h1>
+                <div>
+                    <x-a href="{{ route('quests') }}">Wszystkie</x-a>
+                </div>
+            </div>
+            <style>
+            #dashboard-quests .table-row{ grid-template-columns: 2em 1fr 1fr 1fr; }
+            .quest-type{ font-size: 1em; margin: 0; }
+            </style>
+            <div class="quests-table">
+                <div class="table-header table-row">
+                    <span><i class="fa-solid fa-signal" @popper(Pozycja w kolejce)></i></span>
+                    <span>Utwór/Klient</span>
+                    <span>Status</span>
+                    <span>Meta</span>
+                </div>
+            @forelse ($quests as $key => $quest)
+                <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
+                    <span>{{ $key + 1 }}</span>
+                    <span class="quest-main-data">
+                        <span>
+                            <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
+                            <span class="song-artist">{{ $quest->song->artist }}</span>
+                            @if (is_priority($quest->id))
+                            • <b>Priorytet</b>
+                            @endif
+                            <br>
+                            <span class="ghost">
+                                @if ($quest->client?->client_name)
+                                    @if (is_veteran($quest->client->id))
+                                    <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
+                                    @else
+                                    <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
+                                    @endif
+                                @else
+                                    <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
+                                @endif
+                            </span>
+                        </span>
+                    </span>
+                    <span class="quest-status">
+                        <x-phase-indicator :status-id="$quest->status_id" :small="true" />
+                    </span>
+                    <span>
+                        <div class="quest-meta">
+                            @if ($quest->price)
+                            <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
+                                {{ $quest->price }} zł
+                            </p>
+                            <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
+                            @endif
+                
+                            @if ($quest->hard_deadline)
+                            <p
+                                @if ($quest->hard_deadline?->addDay()->subDays(1)->lte(now()))
+                                class="quest-deadline error"
+                                @elseif ($quest->hard_deadline?->addDay()->subDays(3)->lte(now()))
+                                class="quest-deadline warning"
+                                @else
+                                class="quest-deadline"
+                                @endif
+                                {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }} >
+                                {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
+                            </p>
+                            <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
+                            @endif
+                            @if ($quest->deadline)
+                            <p
+                                @if(in_array($quest->status_id, [11, 12]))
+                                    @if ($quest->deadline?->addDay()->subDays(1)->lte(now()))
+                                    class="quest-deadline error"
+                                    @elseif ($quest->deadline?->addDay()->subDays(3)->lte(now()))
+                                    class="quest-deadline warning"
+                                    @endif
+                                @else
+                                    class="quest-deadline"
+                                @endif
+                                {{ Popper::pop($quest->deadline->format("Y-m-d")) }} >
+                                {{ $quest->deadline?->addDay()->diffForHumans() }}
+                            </p>
+                            <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
+                            @endif
+                            @unless (strlen($quest->id) > 10)
+                            <p class="quest-id">
+                                <x-quest-type
+                                    :id="song_quest_type($quest->song_id)->id ?? 0"
+                                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
+                                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                                    :small="true"
+                                    />
+                                {{ $quest->id }}
+                            </p>
+                            <i class="fa-solid fa-hashtag" @popper(Identyfikator zlecenia)></i>
+                            @endunless
+                        </div>
+                    </span>
+                </a>
+            @empty
+                <p class="grayed-out">brak aktywnych zleceń</p>
+            @endforelse
+            </div>
+        </section>
     </div>
 @endsection

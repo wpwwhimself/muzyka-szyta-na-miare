@@ -37,6 +37,14 @@
                     <span>tel:</span>
                     <span>{{ number_format($invoice->payer_phone, 0, ",", " ") }}</span>
                 @endif
+                @if($invoice->payer_nip)
+                    <span>NIP:</span>
+                    <span>{{ $invoice->payer_nip }}</span>
+                @endif
+                @if($invoice->payer_regon)
+                    <span>REGON:</span>
+                    <span>{{ $invoice->payer_regon }}</span>
+                @endif
             </div>
         </section>
     </div>

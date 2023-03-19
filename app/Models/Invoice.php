@@ -13,7 +13,8 @@ class Invoice extends Model
         "quest_id",
         "primary", "visible",
         "amount", "paid",
-        "payer_name", "payer_title", "payer_address", "payer_email", "payer_phone",
+        "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",
+        "payer_email", "payer_phone",
     ];
 
     public function fullCode(){

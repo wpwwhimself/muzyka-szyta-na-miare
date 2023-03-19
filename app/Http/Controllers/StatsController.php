@@ -117,6 +117,8 @@ class StatsController extends Controller
             "payer_name" => $rq->payer_name,
             "payer_title" => $rq->payer_title,
             "payer_address" => $rq->payer_address,
+            "payer_nip" => $rq->payer_nip,
+            "payer_regon" => $rq->payer_regon,
             "payer_email" => $rq->payer_email,
             "payer_phone" => $rq->payer_phone,
         ]);

@@ -167,7 +167,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = Str::limit("$song[title] ($song[artist])", $pad_size);
+                $songs[$song["id"]] = Str::limit("$song[title]", $pad_size);
             }
         }else{
             if($request->client_id != Auth::id()){
@@ -194,6 +194,8 @@ class BackController extends Controller
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres")));
     }
     public function addRequest(){
+        $pad_size = 30; // used by dropdowns for mobile preview fix
+
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
@@ -201,7 +203,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = "$song[title] – $song[artist] ($song[id])";
+                $songs[$song["id"]] = Str::limit("$song[title]", $pad_size);
             }
         }else{
             $clients = [];

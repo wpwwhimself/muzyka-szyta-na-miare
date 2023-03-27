@@ -263,6 +263,9 @@ class BackController extends Controller
                     "status_id" => $rq->new_status,
                 ]);
 
+                if($rq->new_status == 5) $this->statusHistory($request->id, 1, null);
+                $this->statusHistory($request->id, $rq->new_status, $rq->comment);
+
                 //mailing
                 $mailing = null;
                 if(
@@ -276,9 +279,7 @@ class BackController extends Controller
                     $mailing = false;
                     $flash_content .= ", ale wyślij wiadomość";
                 }
-
-                if($rq->new_status == 5) $this->statusHistory($request->id, 1, null);
-                $this->statusHistory($request->id, $rq->new_status, $rq->comment, null, $mailing);
+                if($mailing !== null) $request->changes->last()->update(["mail_sent" => $mailing]);
             }else{ // klient
                 //bulk
                 $request = Request::create([
@@ -353,6 +354,9 @@ class BackController extends Controller
             $request->save();
         }
 
+        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 6, 8, 9])) ? $request->client_id : null;
+        $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
+
         // sending mail
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
@@ -375,10 +379,7 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-
-        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 6, 8, 9])) ? $request->client_id : null;
-
-        $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by, $mailing);
+        if($mailing !== null) $request->changes->last()->update(["mail_sent" => $mailing]);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
@@ -609,6 +610,13 @@ class BackController extends Controller
         $quest->status_id = $rq->status_id;
         $quest->save();
 
+        $this->statusHistory(
+            $rq->quest_id,
+            $rq->status_id,
+            $rq->comment,
+            (Auth::id() == 1 && in_array($rq->status_id, [16, 18, 19, 26])) ? $quest->client_id : null
+        );
+
         // sending mail
         $flash_content = "Faza zmieniona";
         $mailing = null;
@@ -628,14 +636,8 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
+        if($mailing !== null) $quest->changes->last()->update(["mail_sent" => $mailing]);
 
-        $this->statusHistory(
-            $rq->quest_id,
-            $rq->status_id,
-            $rq->comment,
-            (Auth::id() == 1 && in_array($rq->status_id, [16, 18, 19, 26])) ? $quest->client_id : null,
-            $mailing
-        );
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }

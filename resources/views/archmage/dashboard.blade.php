@@ -157,6 +157,11 @@
             <style>
             #dashboard-requests .table-row{ grid-template-columns: 3fr 2fr; }
             .quest-type{ font-size: 1em; margin: 0; }
+            @media screen and (max-width: 600px){
+                #dashboard-requests .table-row{
+                    grid-template-columns: 1fr;
+                }
+            }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">
@@ -243,6 +248,14 @@
             <style>
             #dashboard-quests .table-row{ grid-template-columns: 2em 3fr 2fr; }
             .quest-type{ font-size: 1em; margin: 0; }
+            @media screen and (max-width: 600px){
+                #dashboard-quests .table-row{
+                    grid-template-columns: 2em 1fr;
+                }
+                .table-row span:has(.quest-status){
+                    grid-column: 1 / span 2;
+                }
+            }
             </style>
             <div class="quests-table">
                 <div class="table-header table-row">

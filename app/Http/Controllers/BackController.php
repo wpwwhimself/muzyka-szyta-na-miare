@@ -303,7 +303,7 @@ class BackController extends Controller
                 ]);
 
                 //mailing do mnie na razie zbędny
-                $this->statusHistory($request->id, $rq->new_status, null);
+                $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i]);
             }
         }
 

@@ -30,6 +30,7 @@
                 <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
                 <x-input type="text" name="link" label="Linki" value="{{ $quest->song->link }}" :small="true" />
                 <x-link-interpreter :raw="$quest->song->link" />
+                <x-input type="text" name="genre" label="Gatunek" value="{{ $quest->song->genre->name }}" :small="true" :disabled="true" />
                 <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" />
                 <div class="flexright"><x-button label="Popraw utwór" icon="pen" action="submit" :small="true" /></div>
             </form>
@@ -43,6 +44,7 @@
                 <i class="fa-solid fa-user"></i>
                 Klient
                 <a href="{{ route('clients') }}#client{{ $quest->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a href="{{ route('quests', ['client_id' => $quest->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />
@@ -104,8 +106,19 @@
                 @if ($quest->hard_deadline)
                 <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
                 @endif
-                <x-input type="text" name="reason" label="Powód zmiany (Z uwagi na...)" :small="true" :required="true" />
-                <div class="flexright"><x-button label="Popraw wycenę" icon="pen" action="submit" :small="true" /></div>
+                <div class="flexright"><x-button id="price-mod-trigger" label="Popraw wycenę" icon="pen" action="#/" :small="true" /></div>
+                <div id="price-mod-box" style="display: none">
+                    <x-input type="text" name="reason" label="Powód zmiany (Z uwagi na...)" :small="true" :required="true" />
+                    <div class="flexright"><x-button label="Zatwierdź" icon="check" action="submit" :small="true" :danger="true" /></div>
+                </div>
+                <script>
+                $(document).ready(() => {
+                    $("#price-mod-trigger").click(() => {
+                        $("#price-mod-trigger").hide();
+                        $("#price-mod-box").show();
+                    });
+                });
+                </script>
             </form>
             @unless ($quest->paid)
             <form action="{{ route("mod-quest-back") }}" method="post" class="sc-line" id="quest-pay">
@@ -120,13 +133,35 @@
                 <i class="fa-solid fa-file-invoice-dollar"></i>
                 Dokumenty
             </h2>
-            @forelse($quest->allInvoices as $invoice)
-            <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
-                icon="{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}" label="{{ $invoice->fullCode() }}" :small="true"
-                />
-            @empty
-            <p class="grayed-out">Brak</p>
-            @endforelse
+            <table>
+                <thead>
+                    <tr>
+                        <th>Numer</th>
+                        <th>Kwota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($quest->allInvoices as $invoice)
+                    <tr>
+                        <td>
+                            <a href="{{ route('invoice', ['id' => $invoice->id]) }}">
+                                <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
+                                {{ $invoice->fullCode() }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ number_format($invoice->amount, 2, ",", " ") }} zł
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan=2>
+                            <span class="grayed-out">Brak</span>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
             <form action="{{ route('invoice-add') }}" method="post">
                 @csrf
                 <x-button action="#/" id="new_invoice_button" label="Nowy" icon="plus" :small="true" />

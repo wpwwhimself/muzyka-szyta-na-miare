@@ -165,7 +165,7 @@
             <form action="{{ route('invoice-add') }}" method="post">
                 @csrf
                 <x-button action="#/" id="new_invoice_button" label="Nowy" icon="plus" :small="true" />
-                <div id="payer_details" class="sc-line">
+                <div id="payer_details" class="sc-line" style="display: none;">
                     <x-input type="text" name="payer_name" value="{{ $quest->client->client_name }}" label="Nazwa płatnika" />
                     <x-input type="text" name="payer_title" value="" label="Tytuł płatnika" :small="true" />
                     <x-input type="TEXT" name="payer_address" value="" label="Adres" />
@@ -178,7 +178,6 @@
                 </div>
                 <script>
                 $(document).ready(() => {
-                    $("#payer_details").hide();
                     $("#new_invoice_button").click(() => {
                         $("#payer_details").show();
                         $("#new_invoice_button").hide();

@@ -165,21 +165,24 @@ class StatsController extends Controller
 
     public function fileSizeReport(){
         $safes = Storage::disk()->directories("safe");
-        $sizes = [];
+        $sizes = []; $times = [];
         foreach($safes as $safe){
             $files = Storage::files($safe);
             $size = 0;
+            $modtime = 0;
             foreach($files as $file){
                 $size += Storage::size($file);
+                if(Storage::lastModified($file) > $modtime) $modtime = Storage::lastModified($file);
             }
             $sizes[$safe] = $size;
+            $times[$safe] = new Carbon($modtime);
         }
         arsort($sizes);
 
         return view(user_role().".file-size-report", array_merge(
             ["title" => "Raport zajętości serwera"],
             compact(
-                "sizes"
+                "sizes", "times",
             ),
         ));
     }

@@ -174,6 +174,7 @@ class StatsController extends Controller
             }
             $sizes[$safe] = $size;
         }
+        arsort($sizes);
 
         return view(user_role().".file-size-report", array_merge(
             ["title" => "Raport zajętości serwera"],

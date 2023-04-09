@@ -8,6 +8,7 @@ use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Invoice;
 use App\Models\Quest;
+use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
@@ -160,5 +161,25 @@ class StatsController extends Controller
         else CostType::create($fields);
 
         return back()->with("success", "Gotowe");
+    }
+
+    public function fileSizeReport(){
+        $safes = Storage::disk()->directories("safe");
+        $sizes = [];
+        foreach($safes as $safe){
+            $files = Storage::files($safe);
+            $size = 0;
+            foreach($files as $file){
+                $size += Storage::size($file);
+            }
+            $sizes[$safe] = $size;
+        }
+
+        return view(user_role().".file-size-report", array_merge(
+            ["title" => "Raport zajętości serwera"],
+            compact(
+                "sizes"
+            ),
+        ));
     }
 }

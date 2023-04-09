@@ -747,8 +747,16 @@ footer .contact-info{
     width: 100%;
     border-radius: 0.5em;
 }
+.horizontal .bar{
+    width: unset;
+    height: 100%;
+}
 .bar-container{
     display: flex; justify-content: center; align-items: flex-end; position: relative;
+}
+.bar-container.horizontal{
+    justify-content: left;
+    align-items: center;
 }
 #clients-stats-graph .value, .bar-container .value{
     font-family: "Krona One";
@@ -758,6 +766,11 @@ footer .contact-info{
     position: absolute;
     bottom: 0; left: 0;
     width: 100%; text-align: center;
+}
+.bar-container.horizontal .value{
+    text-align: left;
+    font-size: 1em;
+    left: 0.5em;
 }
 .plot .label.vertical{
     rotate: 90deg;

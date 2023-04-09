@@ -1,10 +1,13 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+<div class="flex-right center">
+    <x-button action="{{ route('file-size-report') }}" icon="weight-hanging" label="Raport wielkości sejfów" />
+</div>
 <form
   action="{{ route('stats-import') }}"
   method="post"
-  class="flex-right"
+  class="flex-right section-like"
   enctype="multipart/form-data"
   >
   @csrf

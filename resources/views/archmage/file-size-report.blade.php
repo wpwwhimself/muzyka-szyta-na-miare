@@ -27,7 +27,13 @@
                     {{ $safe }}
                 </a>
             </span>
-            <span {{ Popper::pop($times[$safe]) }}>{{ $times[$safe]->diffForHumans() }}</span>
+            <span {{ Popper::pop($times[$safe]) }}
+                @if ($times[$safe]->diffInDays() >= setting("safe_old_enough"))
+                class="success"
+                @endif
+                >
+                {{ $times[$safe]->diffForHumans() }}
+            </span>
             <div class="bar-container horizontal">
                 <div class="bar" style='width:{{ $size/max($sizes)*100 }}%'></div>
                 <span class="value">

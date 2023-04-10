@@ -65,6 +65,11 @@ class SettingsSeeder extends Seeder
                 "desc" => "Czy weekendy mają być traktowane jako dni pracujące",
                 "value_str" => 0
             ],
+            [
+                "setting_name" => "safe_old_enough",
+                "desc" => "Ile dni sejf musi leżeć odłogiem, żeby był oznaczony jako bezpieczny do usunięcia",
+                "value_str" => 120
+            ],
         ]);
     }
 }

@@ -247,7 +247,7 @@ class BackController extends Controller
                     "other_medium" => ($client) ? $client->other_medium : $rq->other_medium,
                     "contact_preference" => ($client) ? $client->contact_preference : $rq->contact_preference ?? "email",
 
-                    "song_id" => $rq->song_id,
+                    "song_id" => $song?->id,
                     "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
                     "title" => ($song) ? $song->title : $rq->title,
                     "artist" => ($song) ? $song->artist : $rq->artist,
@@ -327,7 +327,7 @@ class BackController extends Controller
                 "other_medium" => ($client) ? $client->other_medium : $rq->other_medium,
                 "contact_preference" => ($client) ? $client->contact_preference : $rq->contact_preference ?? "email",
 
-                "song_id" => $rq->song_id,
+                "song_id" => $song?->id,
                 "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
                 "title" => ($song) ? $song->title : $rq->title,
                 "artist" => ($song) ? $song->artist : $rq->artist,

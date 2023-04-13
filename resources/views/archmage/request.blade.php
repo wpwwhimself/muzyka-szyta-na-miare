@@ -126,7 +126,7 @@
                             let content = ``;
                             content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
                             content += `<span>Artysta</span><span>${res.artist}</span>`;
-                            content += `<span>Rodzaj zlecenia</span><span>${res.quest_type_id}</span>`;
+                            content += `<span>Rodzaj zlecenia</span><span>${res.genre}</span>`;
                             content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
                             content += `<span>Uwagi</span><span>${res.notes}</span>`;
                             positions_list.html(content);

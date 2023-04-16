@@ -75,7 +75,13 @@
                     <h3 class="song-title">{{ $client->client_name }}</h3>
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
                     <br />
-                    <span class="ghost">{{ $client->id }} • {{ $client->user->password }}</span>
+                    <span class="ghost">
+                        <span @popper(wybredność) class="{{ $client->pickiness() > 1 ? 'error' : 'success' }}">
+                            {{ round($client->pickiness() * 100) }}%
+                        </span>
+                        •
+                        {{ $client->user->password }}
+                    </span>
                 </span>
                 <span class="contact-info">
                     <span {{ in_array($client->contact_preference, ["email"]) ? : "class=ghost" }}><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></span>

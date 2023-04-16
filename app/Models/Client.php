@@ -25,4 +25,9 @@ class Client extends Model
             // $this->contact_preference == "email"*/
         );
     }
+    public function pickiness(){
+        $correction_requests = StatusChange::where("changed_by", $this->id)->whereIn("new_status_id", [16, 26])->count();
+        $quests_total = $this->quests->count();
+        return $correction_requests / $quests_total;
+    }
 }

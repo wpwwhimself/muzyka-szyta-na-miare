@@ -37,7 +37,7 @@ class SettingsSeeder extends Seeder
             ],
             [
                 "setting_name" => "quest_expired_after",
-                "desc" => "Po ilu dniach Sprzątacz wygasza porzucone zlecenia",
+                "desc" => "Po ilu dniach Sprzątacz wygasza porzucone zlecenia (opłacone wygaszane są 2× szybciej)",
                 "value_str" => 30
             ],
             [

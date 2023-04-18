@@ -659,7 +659,7 @@ footer .contact-info{
 #quest-history .history-position.by-me{ margin-left: 2em; }
 #quest-history .history-position span:nth-child(1){ text-align: left; }
 #quest-history .history-position .client-name{ font-style: italic; }
-#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; }
+#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; max-width: 250px; }
 
 #document-dropzone{
     background: none;

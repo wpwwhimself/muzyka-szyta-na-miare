@@ -90,6 +90,27 @@
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
+            <div id="song-summary" class="hint-table">
+                <h3><i class="fa-solid fa-compact-disc"></i> Sugestie</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Tytuł</th>
+                            <th>Gatunek</th>
+                            <th>Wycena</th>
+                            <th>Uwagi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="positions">
+                    @if ($request->song_id)
+                    <tr>
+                        <td><input type="radio" name="song_id" value="{{ $request->song_id }}" checked /></td>
+                    </tr>
+                    @endif
+                    </tbody>
+                </table>
+            </div>
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
             <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
             <x-link-interpreter :raw="$request->link" />
@@ -98,49 +119,10 @@
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" />
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline?->format('Y-m-d') }}" />
 
-            <h2><i class="fa-solid fa-compact-disc"></i> Porównanie</h2>
-            <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" value="{{ $request->song_id }}" />
-            <div id="song-summary" class="hint-table">
-                <div class="positions"></div>
-            </div>
-            <x-input type="checkbox" name="bind_with_song" label="Powiąż z tym utworem" value="{{ $request->song_id }}" />
             <script>
-            function loadSong(){
-                const song_id = $("#song_id").val();
-                const positions_list = $("#song-summary .positions");
-                const bind_checkbox = $("#bind_with_song").parent();
-                const empty = $("#song_id").val() == "";
-                let songdata = {};
-
-                if(!empty){
-                    $.ajax({
-                        url: "{{ url('song_data') }}",
-                        type: "get",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: $("#song_id").val()
-                        },
-                        success: function(res){
-                            res = JSON.parse(res);
-                            if(res.link) res.link = res.link.substring(0, res.link.indexOf(","));
-                            let content = ``;
-                            content += `<span>Tytuł</span><span><a href="${res.link}" target="_blank">${res.title}</a></span>`;
-                            content += `<span>Artysta</span><span>${res.artist}</span>`;
-                            content += `<span>Rodzaj zlecenia</span><span>${res.genre}</span>`;
-                            content += `<span>Kod cenowy</span><span id="#song_price_code">${res.price_code}</span>`;
-                            content += `<span>Uwagi</span><span>${res.notes}</span>`;
-                            positions_list.html(content);
-                            bind_checkbox.show();
-                        }
-                    });
-                }else{
-                    positions_list.html("");
-                    bind_checkbox.hide();
-                }
-            }
-            function ghostBind(){
+            function ghostBind(val = null){
                 for(let id of ["quest_type", "title", "artist", "link", "genre_id", "wishes"]){
-                    if ($("#bind_with_song")[0].checked){
+                    if (val){
                         $(`#${id}`).addClass("ghost");
                     }else{
                         $(`#${id}`).removeClass("ghost");
@@ -148,10 +130,36 @@
                 }
             }
             $(document).ready(function(){
-                loadSong();
-                ghostBind();
-                $("#song_id").change(function (e) { loadSong() });
-                $("#bind_with_song").change(function(){ ghostBind() });
+                $("#title").change(function (e) {
+                    if(e.target.value.length >= 2){
+                        $.ajax({
+                            type: "get",
+                            url: "/song_data",
+                            data: { title: e.target.value },
+                            success: function (res) {
+                                const positions_list = $("#song-summary .positions");
+                                res = JSON.parse(res);
+                                let content = ``;
+                                res.forEach(song => {
+                                    content += `<tr>`;
+                                    if(song.link?.indexOf(",") > -1) song.link = song.link.substring(0, song.link.indexOf(","));
+                                    content += `<td><input type='radio' name='song_id' value='${song.id}' onchange='ghostBind("${song.id}")' /></td>`;
+                                    content += `<td><a href="${song.link}" target="_blank">${song.title}</a></td>`;
+                                    content += `<td>${song.genre}</td>`;
+                                    content += `<td id="#song_price_code">${song.price_code}</td>`;
+                                    content += (song.notes) ? `<td class='clickable' title='${song.notes}'>są</td>` : `<td></td>`;
+                                    content += `</tr>`;
+                                });
+                                content += `<tr><td><input type='radio' name='song_id' value='0' onchange='ghostBind()' checked /></td><td colspan=4>Nowa piosenka</td></tr>`
+                                positions_list.html(content);
+                                $("#song-summary").show();
+                            }
+                        });
+                    }else{
+                        $("#song-summary .positions").html("");
+                        $("#song-summary").hide();
+                    }
+                });
             });
             </script>
         </section>

@@ -234,7 +234,7 @@ class BackController extends Controller
         for($i = 0; $i < $loop_length; $i++){
             if(Auth::id() == 1){ // arcymag
                 //non-bulk
-                $song = ($rq->has("bind_with_song")) ? Song::find($rq->song_id) : null;
+                $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
                 $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
 
                 $request = Request::create([
@@ -316,7 +316,7 @@ class BackController extends Controller
         $request = Request::find($rq->id);
 
         if($intent == "change"){
-            $song = ($rq->has("bind_with_song")) ? Song::find($rq->song_id) : null;
+            $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
             $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
 
             $request->update([

@@ -132,14 +132,12 @@ Route::get('/client_data', function(Request $request){
     return Client::find($request->id)->toJson();
 });
 Route::get('/song_data', function(Request $request){
-    $song = Song::findOrFail($request->id);
-    return json_encode(
-        array_merge(
-            ["type" => song_quest_type($song->id)->type],
-            ["genre" => Genre::find($song->genre_id)->name],
-            $song->toArray()
-        )
-    );
+    $title = $request->title;
+    $songs = Song::where("title", "like", "%$title%")
+        ->join("genres", "genres.id", "=", "songs.genre_id")
+        ->select(["songs.id", "title", "link", "name as genre", "price_code", "notes"])
+        ->get()->toJson();
+    return $songs;
 });
 Route::post('/price_calc', function(Request $request){
     return price_calc($request->labels, $request->price_schema, $request->quoting);
@@ -153,14 +151,6 @@ Route::post('/budget_update', function(Request $rq){
 });
 Route::get("/get_ver_desc", function(Request $rq){
     return Storage::get($rq->path) ?? "";
-});
-Route::get("/songs_info", function(Request $rq){
-    return Song::orderByRaw("ISNULL(title)")
-        ->orderBy("title")
-        ->orderBy("artist")
-        ->select(["title", "artist"])
-        ->distinct()
-        ->get();
 });
 
 Route::controller(JanitorController::class)->group(function(){

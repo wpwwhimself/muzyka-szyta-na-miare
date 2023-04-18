@@ -596,11 +596,8 @@ footer .contact-info{
     display: grid;
     text-align: left;
 }
-#song-summary.hint-table div{
-    grid-template-columns: auto auto;
-}
-#price-summary.hint-table div{
-    grid-template-columns: 3fr 1fr;
+#song-summary{
+    display: none;
 }
 .hint-table .grayed-out{
     grid-column: 1 / span 2;

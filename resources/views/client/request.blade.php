@@ -161,9 +161,10 @@
             @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#phases" statuschanger="1" icon="1" label="Odnów" /> @endif
+            @if (in_array($request->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
         </div>
         <div id="statuschanger">
-            @if (in_array($request->status_id, [4, 5, 7, 8]))
+            @if (in_array($request->status_id, [4, 5, 7, 8, 34]))
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
                 placeholder="Tutaj wpisz swój komentarz..."
                 />

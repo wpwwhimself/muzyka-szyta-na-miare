@@ -594,6 +594,7 @@ footer .contact-info{
 
 .hint-table div{
     display: grid;
+    grid-template-columns: auto auto;
     text-align: left;
 }
 #song-summary{

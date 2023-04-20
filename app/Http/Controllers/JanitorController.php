@@ -133,7 +133,7 @@ class JanitorController extends Controller
             ){
                 if($quest->client->isMailable()){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
-                    StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 15)->orderByDesc("date")->first()->increment("mail_sent");
+                    StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 34])->orderByDesc("date")->first()->increment("mail_sent");
                     $summary[] = [
                         "re_quest" => $quest, "is_request" => false,
                         "operation" => "Przypomnienie o działaniu - mail wysłany",

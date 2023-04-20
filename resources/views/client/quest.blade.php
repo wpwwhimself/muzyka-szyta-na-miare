@@ -231,8 +231,9 @@
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="19" icon="19" label="Zaakceptuj"  /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
-            @if (in_array($quest->status_id, [11, 12, 13, 15])) <x-button action="#phases" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (in_array($quest->status_id, [11, 12, 13, 15, 34])) <x-button action="#phases" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="#phases" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
+            @if (in_array($quest->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
         </div>
         <div id="statuschanger">
             @if (in_array($quest->status_id, [15, 18, 19]))

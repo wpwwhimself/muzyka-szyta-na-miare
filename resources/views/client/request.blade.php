@@ -159,7 +159,7 @@
             <input type="hidden" name="intent" value="review" />
             @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
-            @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (in_array($request->status_id, [5, 34])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#phases" statuschanger="1" icon="1" label="Odnów" /> @endif
             @if (in_array($request->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
         </div>

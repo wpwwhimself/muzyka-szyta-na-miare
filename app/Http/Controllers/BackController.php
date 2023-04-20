@@ -42,8 +42,8 @@ class BackController extends Controller
                 when 12 then 1
                 when 16 then 2
                 when 35 then 3
-                when 11 then 4
-                when 26 then 5
+                when 26 then 4
+                when 11 then 5
                 when 34 then 6
                 when 15 then 7
                 else 99

@@ -30,6 +30,12 @@
     @case(26)
         Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.
         @break
+    @case(34)
+        Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.
+        @break
+    @case(35)
+        Komentarz został przesłany. Odniosę się do niego i przygotuję coś nowego wkrótce.
+        @break
 @endswitch
 </p>
 
@@ -229,14 +235,14 @@
             </p>
             @endif
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="19" icon="19" label="Zaakceptuj"  /> @endif
+            @if (in_array($quest->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
+            @if (in_array($quest->status_id, [15, 34])) <x-button action="#phases" statuschanger="19" icon="19" label="Zaakceptuj"  /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="#phases" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
             @if (in_array($quest->status_id, [11, 12, 13, 15, 34])) <x-button action="#phases" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="#phases" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
-            @if (in_array($quest->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
         </div>
         <div id="statuschanger">
-            @if (in_array($quest->status_id, [15, 18, 19]))
+            @if (in_array($quest->status_id, [15, 18, 19, 34]))
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
                 placeholder="Tutaj wpisz swój komentarz..."
                 />
@@ -254,7 +260,7 @@
                 let status = $(this).attr("statuschanger");
                 $(`#phases button[type="submit"]`).val(status);
                 $("#statuschanger").show();
-                for(i of [19, 16, 18, 26]){
+                for(i of [19, 16, 18, 26, 35]){
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }

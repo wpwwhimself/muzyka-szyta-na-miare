@@ -6,13 +6,13 @@
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
         w nawiązaniu do złożonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} {{ $is_request ? "zapytania" : "zlecenia" }},
-        chciałbym doprecyzować kwestie poruszone w {{ $pl["kobieta"] : "Pani" : "Pana" }} komentarzu.
+        chciałbym doprecyzować kwestie poruszone w {{ $pl["kobieta"] ? "Pani" : "Pana" }} komentarzu.
     </p>
 
     <x-mail-quest-mini :quest="$re_quest" />
 
     @if ($comment = $re_quest->changes->last()->comment)
-    <p>{{ $comment }}</p>
+    {{ Illuminate\Mail\Markdown::parse($comment) }}
     @endif
 
     <p>
@@ -30,10 +30,10 @@
         aby zobaczyć szczegóły {{ $is_request ? "zapytania" : "zlecenia" }}
     </h3>
 
-    @if ($request->client)
+    @if ($re_quest->client)
     <p>
         <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->client->user->password }}</b>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $re_quest->client->user->password }}</b>
         </i>
     </p>
     @endif

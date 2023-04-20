@@ -23,7 +23,7 @@ class Clarification extends Mailable
     {
         $this->re_quest = $re_quest;
         $this->is_request = strlen($re_quest->id) == 36;
-        $this->pl = client_polonize($this->is_request ? $re_quest->client_name : $re_quest->client->name);
+        $this->pl = client_polonize($this->is_request ? $re_quest->client_name : $re_quest->client->client_name);
     }
 
     /**

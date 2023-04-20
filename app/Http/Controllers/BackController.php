@@ -320,6 +320,14 @@ class BackController extends Controller
             $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
             $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
 
+            // price required when sending quote
+            if(
+                $rq->new_status == 5 &&
+                (!$rq->price_code)
+            ){
+                return back()->with("error", "Uzupełnij wycenę");
+            }
+
             $request->update([
                 "client_id" => $rq->client_id,
                 "client_name" => ($client) ? $client->client_name : $rq->client_name,

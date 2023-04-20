@@ -25,6 +25,12 @@
     @case(9)
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
         @break
+    @case(34)
+        Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania za pomocą przycisku poniżej.
+        @break
+    @case(35)
+        Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.
+        @break
 @endswitch
 </p>
 
@@ -57,7 +63,7 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
-            @if (!$request->price && $request->status_id == 1)
+            @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
             @endif
             <div id="price-summary" class="hint-table">
@@ -157,11 +163,11 @@
         <div class="flexright">
             <input type="hidden" name="id" value="{{ $request->id }}" />
             <input type="hidden" name="intent" value="review" />
+            @if (in_array($request->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
             @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
             @if (in_array($request->status_id, [5, 34])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#phases" statuschanger="1" icon="1" label="Odnów" /> @endif
-            @if (in_array($request->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
         </div>
         <div id="statuschanger">
             @if (in_array($request->status_id, [4, 5, 7, 8, 34]))
@@ -182,7 +188,7 @@
                 let status = $(this).attr("statuschanger"); if(status == 9) return;
                 $(`#phases button[type="submit"]`).val(status);
                 $("#statuschanger").show();
-                for(i of [9, 6, 8]){
+                for(i of [9, 6, 8, 35]){
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }

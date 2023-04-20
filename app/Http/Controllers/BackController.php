@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
+use App\Mail\Clarification;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
@@ -360,21 +361,22 @@ class BackController extends Controller
         // sending mail
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
-        if($request->status_id == 5){
-            //mail do klienta, bo wycena oddana
+        if(in_array($request->status_id, [5, 34])){ // mail do klienta
             if(
                 $request->email
                 // && $request->contact_preference == "email"
             ){
-                Mail::to($request->email)->send(new RequestQuoted($request));
+                switch($request->status_id){
+                    case 5: Mail::to($request->email)->send(new RequestQuoted($request)); break;
+                    case 34: Mail::to($request->email)->send(new Clarification($request)); break;
+                }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
             }else{
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else if($request->status_id != 4){
-            // mail do mnie, bo zmiany w zapytaniu
+        }else if($request->status_id != 4){ // mail do mnie
             Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
             $mailing = true;
             $flash_content .= ", mail wysłany";
@@ -620,18 +622,19 @@ class BackController extends Controller
         // sending mail
         $flash_content = "Faza zmieniona";
         $mailing = null;
-        if($quest->status_id == 15){
-            //mail do klienta, bo oddaję zlecenie
+        if(in_array($quest->status_id, [15, 34])){ // mail do klienta
             if($quest->client->isMailable()){
-                Mail::to($quest->client->email)->send(new QuestUpdated($quest));
+                switch($quest->status_id){
+                    case 15: Mail::to($quest->client->email)->send(new QuestUpdated($quest)); break;
+                    case 34: Mail::to($quest->client->email)->send(new Clarification($quest)); break;
+                }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
             }else{
                 $mailing = false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else if(Auth::id() != 1){
-            //mail do mnie, bo zmiany w zleceniu
+        }else if(Auth::id() != 1){ // mail do mnie
             Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
             $mailing = true;
             $flash_content .= ", mail wysłany";

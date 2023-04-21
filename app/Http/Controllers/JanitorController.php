@@ -32,7 +32,7 @@ class JanitorController extends Controller
         /**
          * expiring requests
          */
-        $requests = Request::whereIn("status_id", [5, 34])
+        $requests = Request::whereIn("status_id", [5, 95])
             ->where(function ($query) use ($request_expired_after){
                 $query->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateString())
                 ->orWhere("deadline", "<=", Carbon::today()->toDateString());
@@ -63,7 +63,7 @@ class JanitorController extends Controller
         /**
          * expiring unreviewed quests
          */
-        $quests = Quest::whereIn("status_id", [15, 34])
+        $quests = Quest::whereIn("status_id", [15, 95])
             ->whereHas('client', function($q){ $q->where('trust', '<', 1); })
             ->where(function($q) use ($quest_expired_after){
                 $q->where(function($qq) use ($quest_expired_after){
@@ -124,7 +124,7 @@ class JanitorController extends Controller
         /**
          * reminding clients about unreviewed quests
          */
-        $quests = Quest::whereIn("status_id", [15, 34])->get();
+        $quests = Quest::whereIn("status_id", [15, 95])->get();
         foreach($quests as $quest){
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
@@ -133,7 +133,7 @@ class JanitorController extends Controller
             ){
                 if($quest->client->isMailable()){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
-                    StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 34])->orderByDesc("date")->first()->increment("mail_sent");
+                    StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 95])->orderByDesc("date")->first()->increment("mail_sent");
                     $summary[] = [
                         "re_quest" => $quest, "is_request" => false,
                         "operation" => "Przypomnienie o działaniu - mail wysłany",

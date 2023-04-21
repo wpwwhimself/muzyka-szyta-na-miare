@@ -25,10 +25,10 @@
     @case(9)
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
         @break
-    @case(34)
+    @case(95)
         Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania za pomocą przycisku poniżej.
         @break
-    @case(35)
+    @case(96)
         Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.
         @break
 @endswitch
@@ -163,14 +163,14 @@
         <div class="flexright">
             <input type="hidden" name="id" value="{{ $request->id }}" />
             <input type="hidden" name="intent" value="review" />
-            @if (in_array($request->status_id, [34])) <x-button action="#phases" statuschanger="35" icon="35" label="Odpowiedz" /> @endif
+            @if (in_array($request->status_id, [95])) <x-button action="#phases" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
             @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#phases" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
-            @if (in_array($request->status_id, [5, 34])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (in_array($request->status_id, [5, 95])) <x-button action="#phases" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#phases" statuschanger="1" icon="1" label="Odnów" /> @endif
         </div>
         <div id="statuschanger">
-            @if (in_array($request->status_id, [4, 5, 7, 8, 34]))
+            @if (in_array($request->status_id, [4, 5, 7, 8, 95]))
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
                 placeholder="Tutaj wpisz swój komentarz..."
                 />
@@ -188,7 +188,7 @@
                 let status = $(this).attr("statuschanger"); if(status == 9) return;
                 $(`#phases button[type="submit"]`).val(status);
                 $("#statuschanger").show();
-                for(i of [9, 6, 8, 35]){
+                for(i of [9, 6, 8, 96]){
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }

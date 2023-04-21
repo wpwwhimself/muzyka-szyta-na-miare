@@ -35,16 +35,16 @@ class BackController extends Controller
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderByDesc("updated_at");
         $quests = Quest::whereNotIn("status_id", [17, 18, 19])
-            ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 35) then 0 else 1 end") //najpierw priorytety
+            ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderByRaw("case status_id
                 when 12 then 1
                 when 16 then 2
-                when 35 then 3
+                when 96 then 3
                 when 26 then 4
                 when 11 then 5
-                when 34 then 6
+                when 95 then 6
                 when 15 then 7
                 else 99
             end")
@@ -378,14 +378,14 @@ class BackController extends Controller
         // sending mail
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
-        if(in_array($request->status_id, [5, 34])){ // mail do klienta
+        if(in_array($request->status_id, [5, 95])){ // mail do klienta
             if(
                 $request->email
                 // && $request->contact_preference == "email"
             ){
                 switch($request->status_id){
                     case 5: Mail::to($request->email)->send(new RequestQuoted($request)); break;
-                    case 34: Mail::to($request->email)->send(new Clarification($request)); break;
+                    case 95: Mail::to($request->email)->send(new Clarification($request)); break;
                 }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
@@ -639,11 +639,11 @@ class BackController extends Controller
         // sending mail
         $flash_content = "Faza zmieniona";
         $mailing = null;
-        if(in_array($quest->status_id, [15, 34])){ // mail do klienta
+        if(in_array($quest->status_id, [15, 95])){ // mail do klienta
             if($quest->client->isMailable()){
                 switch($quest->status_id){
                     case 15: Mail::to($quest->client->email)->send(new QuestUpdated($quest)); break;
-                    case 34: Mail::to($quest->client->email)->send(new Clarification($quest)); break;
+                    case 95: Mail::to($quest->client->email)->send(new Clarification($quest)); break;
                 }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";

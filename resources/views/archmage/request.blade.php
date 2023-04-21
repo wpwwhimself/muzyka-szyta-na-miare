@@ -241,13 +241,13 @@
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8]) ? 'review' : 'change' }}" />
         @if ($request->status_id != 9) <x-button label="Podgląd maila do oddania" icon="comment-dots" id="mail-prev" action="{{ route('mp-rq', ['id' => $request->id]) }}" target="_blank" :small="true" /> @endif
-        @if (in_array($request->status_id, [1, 6, 35])) <x-button label="Poproś o doprecyzowanie" icon="34" name="new_status" value="34" action="submit" /> @endif
-        @if (in_array($request->status_id, [34])) <x-button label="Klient odpowiada" icon="35" name="new_status" value="35" action="submit" /> @endif
-        @if (in_array($request->status_id, [1, 6, 35])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
-        @if (in_array($request->status_id, [1, 6, 35])) <x-button label="Nie podejmę się" icon="4" name="new_status" value="4" :danger="true" action="submit" /> @endif
+        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Poproś o doprecyzowanie" icon="95" name="new_status" value="95" action="submit" /> @endif
+        @if (in_array($request->status_id, [95])) <x-button label="Klient odpowiada" icon="96" name="new_status" value="96" action="submit" /> @endif
+        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
+        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Nie podejmę się" icon="4" name="new_status" value="4" :danger="true" action="submit" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Klient zatwierdza" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
         @if (in_array($request->status_id, [5])) <x-button label="Klient chce poprawki" name="new_status" value="6" icon="6" action="submit" /> @endif
-        @if (in_array($request->status_id, [5, 34])) <x-button label="Klient odrzuca" name="new_status" value="8" icon="8" :danger="true" action="submit" /> @endif
+        @if (in_array($request->status_id, [5, 95])) <x-button label="Klient odrzuca" name="new_status" value="8" icon="8" :danger="true" action="submit" /> @endif
         @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Klient odnawia" icon="26" name="new_status" value="1" action="submit" /> @endif
     </div>
 </form>

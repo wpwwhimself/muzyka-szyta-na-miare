@@ -17,10 +17,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
     public function dashboard(){
+        //helpers
+        $quest_pricings = array_combine(
+            DB::table("prices")->orderBy("indicator")->pluck("service")->toArray(),
+            array_map(
+                fn($el) => Song::where("price_code", "regexp", $el)->count(),
+                DB::table("prices")->orderBy("indicator")->pluck("indicator")->toArray()
+            )
+        );
+        arsort($quest_pricings);
+
+
         $stats = [
             "summary" => [
                 "general" => [
@@ -37,6 +49,10 @@ class StatsController extends Controller
                         ->orderByDesc("count")
                         ->pluck("count", "type"),
                     "total" => Quest::count(),
+                ],
+                "quest_pricings" => [
+                    "split" => array_slice($quest_pricings, 0, 6),
+                    "total" => Song::where("price_code", "not regexp", "^\d*\.\d*$")->count(),
                 ],
             ],
         ];

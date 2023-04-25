@@ -12,9 +12,9 @@
   </div>
   <x-stats-highlight-h :data="$stats->summary->general" />
   <x-stats-highlight-h title="Podział zleceń wg typu" :data="$stats->summary->quest_types" :bracketed-numbers="'percentages'" />
-  {{-- <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" /> --}}
+  <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" />
 </section>
-{{-- 
+{{--
 <section class="sc-line">
   <x-sc-scissors />
   <div class="section-header">

@@ -8,6 +8,7 @@ use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Invoice;
 use App\Models\Quest;
+use App\Models\QuestType;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -27,6 +28,10 @@ class StatsController extends Controller
                     "skończone questy" => Quest::where("status_id", 19)->count(),
                     "poznani klienci" => Client::count(),
                     "zarobki w sumie" => number_format(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " ")." zł",
+                ],
+                "quest_types" => [
+                    "split" => QuestType::all()->pluck(10, "type"), //todo poprawić
+                    "total" => Quest::count(),
                 ],
             ],
         ];

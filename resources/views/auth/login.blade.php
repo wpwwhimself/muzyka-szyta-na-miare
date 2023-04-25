@@ -10,7 +10,7 @@
                 :autofocus="true" :required="true" /> --}}
             <x-input class="login-grid-container"
                 type="password" name="password" label="Hasło"
-                :required="true" />
+                :required="true" autofocus />
             <x-input class="login-grid-container"
                 type="checkbox" name="remember" label="Zapamiętaj mnie"
                 />

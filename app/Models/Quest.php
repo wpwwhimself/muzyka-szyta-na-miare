@@ -15,6 +15,10 @@ class Quest extends Model
 
     protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline", "wishes"];
 
+    public function getQuestTypeLetterAttribute(){
+        return substr($this->id, 0, 1);
+    }
+
     public function client(){
         return $this->belongsTo(Client::class);
     }
@@ -25,7 +29,7 @@ class Quest extends Model
         return $this->belongsTo(Song::class);
     }
     public function quest_type(){
-        return $this->belongsTo(QuestType::class);
+        return $this->belongsTo(QuestType::class, "quest_type_letter", "code");
     }
     public function changes(){
         return $this->hasMany(StatusChange::class, "re_quest_id");

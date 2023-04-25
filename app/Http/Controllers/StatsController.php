@@ -30,7 +30,12 @@ class StatsController extends Controller
                     "zarobki w sumie" => number_format(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " ")." zł",
                 ],
                 "quest_types" => [
-                    "split" => QuestType::all()->pluck(10, "type"), //todo poprawić
+                    "split" => DB::table("quests")
+                        ->selectRaw("type, count(*) as count")
+                        ->join("quest_types", DB::raw("left(quests.song_id, 1)"), "quest_types.code")
+                        ->groupBy("type")
+                        ->orderByDesc("count")
+                        ->pluck("count", "type"),
                     "total" => Quest::count(),
                 ],
             ],

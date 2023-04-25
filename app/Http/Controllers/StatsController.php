@@ -20,8 +20,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class StatsController extends Controller
 {
     public function dashboard(){
-        $stats = json_decode(Storage::get("/stats.json"));
-        $stats->today = Carbon::parse($stats->today)->diffForHumans();
+        $stats = [
+            "summary" => [
+                "general" => [
+                    "biznes kręci się od" => Carbon::createFromDate(2020, 1, 1)->diff(Carbon::now())->format("%yl %mm %dd"),
+                    "skończone questy" => Quest::where("status_id", 19)->count(),
+                    "poznani klienci" => Client::count(),
+                    "zarobki w sumie" => number_format(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " ")." zł",
+                ],
+            ],
+        ];
+        $stats = json_decode(json_encode($stats));
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

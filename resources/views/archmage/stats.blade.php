@@ -4,17 +4,6 @@
 <div class="flex-right center">
     <x-button action="{{ route('file-size-report') }}" icon="weight-hanging" label="Raport wielkości sejfów" />
 </div>
-<form
-  action="{{ route('stats-import') }}"
-  method="post"
-  class="flex-right section-like"
-  enctype="multipart/form-data"
-  >
-  @csrf
-  <p>Ostatnia aktualizacja: {{ $stats->today }}</p>
-  <x-input type="file" name="json" label="JSON z danymi" :small="true" />
-  <x-button action="submit" label="Wgraj" icon="upload" :small="true" />
-</form>
 <section>
   <div class="section-header">
     <h1>
@@ -22,9 +11,10 @@
     </h1>
   </div>
   <x-stats-highlight-h :data="$stats->summary->general" />
-  <x-stats-highlight-h title="Podział zleceń wg typu" :data="$stats->summary->quest_types" :bracketed-numbers="'percentages'" />
-  <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" />
+  {{-- <x-stats-highlight-h title="Podział zleceń wg typu" :data="$stats->summary->quest_types" :bracketed-numbers="'percentages'" /> --}}
+  {{-- <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" /> --}}
 </section>
+{{-- 
 <section class="sc-line">
   <x-sc-scissors />
   <div class="section-header">
@@ -64,5 +54,5 @@
   <x-stats-highlight-h title="Czas poświęcony na utwór" :data="$stats->songs->time_summary" />
   <x-stats-highlight-h title="Średni czas z podziałem na gatunki <small>(w porównaniu z wynikami miesiąc wstecz)</small>" :data="$stats->songs->time_genres" :bracketedNumbers="'comparison'" />
 </section>
-
+ --}}
 @endsection

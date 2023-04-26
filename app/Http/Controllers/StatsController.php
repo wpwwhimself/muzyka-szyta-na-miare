@@ -77,12 +77,26 @@ class StatsController extends Controller
                         ->selectRaw("status_id, status_name, count(*) as count")
                         ->pluck("count", "status_name"),
                     "total" => Quest::count(),
-                ]
+                ],
+                "corrections" => [
+                    "rows" => StatusChange::whereIn("new_status_id", [16, 26])
+                        ->groupBy("re_quest_id")
+                        ->selectRaw("re_quest_id, count(*) as count")
+                        ->orderByDesc("count")
+                        ->limit(5)
+                        ->join("quests", "re_quest_id", "quests.id", "left")
+                        ->join("clients", "quests.client_id", "clients.id", "left")
+                        ->join("songs", "quests.song_id", "songs.id", "left")
+                        ->join("genres", "songs.genre_id", "genres.id", "left")
+                        ->get(),
+                        //todo do poprawy
+                    "footer" => []
+                ],
             ],
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->quests->statuses);
+        // dd($stats->quests->corrections);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

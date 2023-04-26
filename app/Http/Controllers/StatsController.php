@@ -70,11 +70,19 @@ class StatsController extends Controller
                         "max poprawek" => 1,
                     ],
                 ],
+                "statuses" => [
+                    "split" => Quest::join("statuses", "statuses.id", "status_id")
+                        ->groupBy("status_name", "status_id")
+                        ->orderBy("status_id")
+                        ->selectRaw("status_id, status_name, count(*) as count")
+                        ->pluck("count", "status_name"),
+                    "total" => Quest::count(),
+                ]
             ],
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->quests->recent);
+        // dd($stats->quests->statuses);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

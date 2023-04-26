@@ -55,8 +55,26 @@ class StatsController extends Controller
                     "total" => Song::where("price_code", "not regexp", "^\d*\.\d*$")->count(),
                 ],
             ],
+            "quests" => [
+                "recent" => [
+                    "main" => [
+                        "nowe" => Quest::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
+                        "ukończone" => 1,
+                        "debiutanckie" => 1,
+                        "max poprawek" => 1,
+                    ],
+                    "compared_to" => [
+                        "nowe" => Quest::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
+                        "ukończone" => 1,
+                        "debiutanckie" => 1,
+                        "max poprawek" => 1,
+                    ],
+                ],
+            ],
         ];
+        
         $stats = json_decode(json_encode($stats));
+        // dd($stats->quests->recent);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

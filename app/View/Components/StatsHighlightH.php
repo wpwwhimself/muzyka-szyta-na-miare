@@ -27,7 +27,15 @@ class StatsHighlightH extends Component
                 break;
             case "comparison":
                 $this->data1 = $data->main;
-                $this->data2 = $data->difference;
+                //calculate differences
+                $this->data2 = json_decode(json_encode(array_combine(
+                    array_keys(get_object_vars($data->main)),
+                    array_map(
+                        fn($main, $comp) => $main - $comp,
+                        get_object_vars($data->main),
+                        get_object_vars($data->compared_to),
+                    )
+                )));
                 break;
             default:
                 $this->data1 = $data;

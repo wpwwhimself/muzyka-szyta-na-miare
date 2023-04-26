@@ -73,7 +73,7 @@
                             {{ $quest->song->title ?? "utwór bez tytułu" }}
                             </a>
                         </td>
-                        <td>{{ $quest->price }} zł</td>
+                        <td>{{ as_pln($quest->price) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -110,10 +110,10 @@
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
                     <span>Zaakceptowane</span>
-                    <span>{{ quests_unpaid(Auth::id()) }} zł</span>
+                    <span>{{ as_pln(quests_unpaid(Auth::id())) }}</span>
 
                     <span>Wszystkie</span>
-                    <span>{{ quests_unpaid(Auth::id(), true) }} zł</span>
+                    <span>{{ as_pln(quests_unpaid(Auth::id(), true)) }}</span>
                 </div>
             </div>
 
@@ -122,7 +122,7 @@
                 <i class="fa-solid fa-circle-question"></i>
                 Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
             </p>
-            <h3>{{ number_format(Auth::user()->client->budget, 2, ",", " ") }} zł</h3>
+            <h3>{{ as_pln(Auth::user()->client->budget) }}</h3>
 
             <div class="section-header">
                 <h1>

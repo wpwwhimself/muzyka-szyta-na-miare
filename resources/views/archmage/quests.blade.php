@@ -48,7 +48,7 @@
             </span>
             <span @unless($quest->paid) class='error' @endif>
                 <span {{ Popper::pop($quest->price_code_override) }}>
-                    {{ $quest->price }} zł
+                    {{ as_pln($quest->price) }}
                 </span>
             </span>
             <span class="quest-status">

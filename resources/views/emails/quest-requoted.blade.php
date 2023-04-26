@@ -14,7 +14,7 @@
     <table>
         <tr>
             @foreach ([
-                "Cena" => $quest->price . " zł",
+                "Cena" => as_pln($quest->price),
                 "Termin oddania pierwszej wersji" => $quest->deadline?->format("d.m.Y") ?? "brak",
             ] as $key => $val)
             <td class="framed-cell">

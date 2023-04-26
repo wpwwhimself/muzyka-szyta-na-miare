@@ -33,7 +33,7 @@
                     <td>{{ $price->service }}</td>
                     @for ($letter = "A"; $letter != chr(ord(CURRENT_PRICING()) + 1); $letter = chr(ord($letter) + 1))
                         @if ($price->operation == "+")
-                        <td>{{ $price->{"price_".strtolower($letter)} }} zł</td>
+                        <td>{{ as_pln($price->{"price_".strtolower($letter)}) }}</td>
                         @else
                         <td>{{ $price->{"price_".strtolower($letter)} * 100 }}%</td>
                         @endif

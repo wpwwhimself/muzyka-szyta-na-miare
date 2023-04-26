@@ -34,7 +34,7 @@
                 <tr>
                     <td>{{ $price->service }}</td>
                     @if ($price->operation == "+")
-                    <td>{{ $price->{"price_".strtolower(pricing(Auth::id()))} * (1+$discount) }} zł</td>
+                    <td>{{ as_pln($price->{"price_".strtolower(pricing(Auth::id()))} * (1+$discount)) }}</td>
                     @else
                     <td>{{ $price->{"price_".strtolower(pricing(Auth::id()))} * 100 }}%</td>
                     @endif

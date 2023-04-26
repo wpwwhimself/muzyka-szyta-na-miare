@@ -14,14 +14,14 @@
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
                     <span>Zaakceptowane do zapłacenia</span>
-                    <span>{{ quests_unpaid(1) }} zł</span>
+                    <span>{{ as_pln(quests_unpaid(1)) }}</span>
 
                     <span>Wszystkie do zapłacenia</span>
-                    <span>{{ quests_unpaid(1, true) }} zł</span>
+                    <span>{{ as_pln(quests_unpaid(1, true)) }}</span>
 
                     <span>Zarobki z ostatnich 30 dni</span>
                     <span>
-                        {{ number_format($gains["this_month"], 2, ",", " ") }} zł
+                        {{ as_pln($gains["this_month"]) }}
                         <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
                             ({{ sprintf("%+d", $gains["monthly_diff"]) }})
                         </small>
@@ -195,7 +195,7 @@
                     </span>
                     <div class="quest-meta">
                         @if ($request->price)
-                        <p>{{ $request->price }} zł</p>
+                        <p>{{ as_pln($request->price) }}</p>
                         <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                         @endif
 
@@ -291,7 +291,7 @@
                         <div class="quest-meta">
                             @if ($quest->price)
                             <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
-                                {{ $quest->price }} zł
+                                {{ as_pln($quest->price) }}
                             </p>
                             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                             @endif

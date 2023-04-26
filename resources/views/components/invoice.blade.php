@@ -82,19 +82,19 @@
                 <em>{{ $invoice->quest->song->title ?? "bez tytułu" }}</em>
             </span>
             <span>
-                {{ number_format($invoice->amount, 2, ",", " ") }} zł
+                {{ as_pln($invoice->amount) }}
             </span>
         </div>
     </div>
 
     <div class="grid-2 name-value summary">
         <span>Razem do zapłaty:</span>
-        <span>{{ number_format($invoice->amount, 2, ",", " ") }} zł</span>
+        <span>{{ as_pln($invoice->amount) }}</span>
         @if ($invoice->paid)
         <span class="small">Płatność otrzymana:</span>
-        <span class="small">{{ number_format($invoice->paid, 2, ",", " ") }} zł</span>
+        <span class="small">{{ as_pln($invoice->paid) }}</span>
         <span>Pozostało do zapłaty:</span>
-        <span @if ($invoice->isPaid()) class="success" @endif>{{ number_format($invoice->amount - $invoice->paid, 2, ",", " ") }} zł</span>
+        <span @if ($invoice->isPaid()) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
         @endif
     </div>
 </div>

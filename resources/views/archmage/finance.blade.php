@@ -33,7 +33,7 @@
                             <a href="{{ route("quest", ["id" => $quest->id]) }}">
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <x-phase-indicator-mini :status="$quest->status" />
-                                {{ $quest->price - $quest->payments->sum("comment") }} zł
+                                {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
                             </a>
                             <input type="checkbox" name="{{ $quest->id }}" />
                         </div>
@@ -44,7 +44,7 @@
                         @endforeach
                     </td>
                     <td>
-                        {{ $amount_to_pay }} zł
+                        {{ as_pln($amount_to_pay) }}
                     </td>
                 </tr>
                 @endforeach
@@ -53,7 +53,7 @@
                 <tr>
                     <th></th>
                     <th>Razem</th>
-                    <th>{{ $amount_total }} zł</th>
+                    <th>{{ as_pln($amount_total) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -98,7 +98,7 @@
                     <x-phase-indicator-mini :status="$item->quest->status" />
                 </td>
                 <td>
-                    {{ $item->comment }} zł
+                    {{ as_pln($item->comment) }}
                 </td>
                 <td {{ Popper::pop($item->date) }}>
                     {{ $item->date->diffForHumans() }}

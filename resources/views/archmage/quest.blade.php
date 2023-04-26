@@ -97,10 +97,10 @@
                 </script>
                 <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
                 <label for="payments">
-                    Opłacono: {{ $quest->payments->sum("comment") }} zł
+                    Opłacono: {{ as_pln($quest->payments->sum("comment")) }}
                     @unless ($quest->paid)
                     •
-                    Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
+                    Pozostało: {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
                     @endunless
                 </label>
                 <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" />
@@ -151,7 +151,7 @@
                             </a>
                         </td>
                         <td>
-                            {{ number_format($invoice->amount, 2, ",", " ") }} zł
+                            {{ as_pln($invoice->amount) }}
                         </td>
                     </tr>
                     @empty

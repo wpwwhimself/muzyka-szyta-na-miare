@@ -168,7 +168,7 @@ if(!function_exists("price_calc")){
                 switch($cat->operation){
                     case "+":
                         $price += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × ".$price_to_add." zł"]);
+                        array_push($positions, [$cat->service, count($matches[0])." × ".as_pln($price_to_add)]);
                         break;
                     case "*":
                         $multiplier += $price_to_add * count($matches[0]);
@@ -321,5 +321,19 @@ if(!function_exists("client_polonize")){
             'imiewolacz' => $imiewolacz,
             'kobieta' => $kobieta,
         ];
+    }
+}
+
+/*************************
+ * DECORATIVE FUNCTIONS
+ */
+
+
+/**
+ * Show number as PLN
+ */
+if(!function_exists("as_pln")){
+    function as_pln($value){
+        return number_format($value, 2, ",", " ")." zł";
     }
 }

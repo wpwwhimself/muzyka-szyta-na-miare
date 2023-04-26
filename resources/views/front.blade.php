@@ -229,7 +229,7 @@
                     <h2 class="header hidden">{{ $header }}</h2>
                     @foreach ($prices->where("quest_type_id", $i) as $price)
                     <span class="hidden">{{ $price->service }}</span>
-                    <span class="hidden">{{ $price->price }} zł</span>
+                    <span class="hidden">{{ as_pln($price->price) }}</span>
                     @endforeach
                 @endforeach
             </div>

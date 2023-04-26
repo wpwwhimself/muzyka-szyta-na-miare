@@ -101,10 +101,10 @@
             </script>
             <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
             <label for="payments">
-                Opłacono: {{ $quest->payments->sum("comment") }} zł
+                Opłacono: {{ as_pln($quest->payments->sum("comment")) }}
                 @unless ($quest->paid)
                 •
-                Pozostało: {{ $quest->price - $quest->payments->sum("comment") }} zł
+                Pozostało: {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
                 @endunless
             </label>
             @unless ($quest->paid)

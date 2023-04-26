@@ -53,7 +53,7 @@
             <span {{ Popper::pop($cost->created_at) }}>{{ $cost->created_at->diffForHumans() }}</span>
             <span class="cost-type" data-typ="{{ $cost->cost_type_id }}">{{ $cost->type->name }}</span>
             <span class="cost-desc">{{ $cost->desc }}</span>
-            <span class="cost-amount" data-amount="{{ $cost->amount }}">{{ number_format($cost->amount, 2, ",", " ") }} zł</span>
+            <span class="cost-amount" data-amount="{{ $cost->amount }}">{{ as_pln($cost->amount) }}</span>
         </div>
         @empty
         <p class="grayed-out">Brak danych</p>

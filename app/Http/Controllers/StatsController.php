@@ -81,16 +81,24 @@ class StatsController extends Controller
                 "corrections" => [
                     "rows" => StatusChange::whereIn("new_status_id", [16, 26])
                         ->groupBy("re_quest_id")
-                        ->selectRaw("re_quest_id, count(*) as count")
-                        ->orderByDesc("count")
+                        ->orderByDesc("Liczba poprawek")
                         ->limit(5)
                         ->join("quests", "re_quest_id", "quests.id", "left")
                         ->join("clients", "quests.client_id", "clients.id", "left")
                         ->join("songs", "quests.song_id", "songs.id", "left")
                         ->join("genres", "songs.genre_id", "genres.id", "left")
+                        ->selectRaw("re_quest_id as 'ID zlecenia',
+                            clients.client_name as 'Klient',
+                            songs.title as 'Tytuł utworu',
+                            genres.name as 'Gatunek utworu',
+                            count(*) as 'Liczba poprawek'")
                         ->get(),
-                        //todo do poprawy
-                    "footer" => []
+                    "footer" => DB::table(DB::raw("(SELECT re_quest_id, count(*) as count
+                            FROM status_changes
+                            WHERE new_status_id in (16, 26) AND date > '2023-01-01'
+                            GROUP BY re_quest_id) as x"))
+                        ->selectRaw("'średnio poprawek' as label, avg(count) as aver")
+                        ->pluck("aver", "label"),
                 ],
             ],
         ];

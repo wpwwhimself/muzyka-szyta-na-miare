@@ -100,11 +100,31 @@ class StatsController extends Controller
                         ->selectRaw("'średnio poprawek' as label, avg(count) as aver")
                         ->pluck("aver", "label"),
                 ],
+                "deadlines" => [
+                    "soft" => [
+                        "split" => DB::table(DB::raw("(SELECT distinct `date`, deadline, datediff(deadline, `date`) as difference
+                                FROM status_changes
+                                LEFT JOIN quests ON re_quest_id = quests.id
+                                WHERE new_status_id = 15 AND deadline is not NULL
+                                GROUP BY re_quest_id
+                                ORDER BY re_quest_id, `date`) as x "))
+                            ->selectRaw("difference, count(*) as count")
+                            ->groupBy("difference")
+                            ->pluck("count", "difference"),
+                        "total" => StatusChange::where("new_status_id", 15)
+                            ->distinct("re_quest_id")
+                            ->join("quests", "re_quest_id", "=", "quests.id", "left")
+                            ->select("deadline")
+                            ->whereNotNull("deadline")
+                            ->count(),
+                    ],
+                    "hard" => [],
+                ],
             ],
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->quests->corrections);
+        // dd($stats->quests->deadlines->soft->split);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

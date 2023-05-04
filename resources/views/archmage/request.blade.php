@@ -89,6 +89,7 @@
         <section class="input-group">
             <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
+            <x-input type="text" name="song_id" label="ID utworu" value="{{ $request->song_id }}" :disabled="true" :small="true" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
             <div id="song-summary" class="hint-table">
                 <h3><i class="fa-solid fa-compact-disc"></i> Sugestie</h3>
@@ -99,7 +100,7 @@
                             <th>Tytuł</th>
                             <th>Gatunek</th>
                             <th>Wycena</th>
-                            <th>Uwagi</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="positions">
@@ -144,10 +145,14 @@
                                     content += `<tr>`;
                                     if(song.link?.indexOf(",") > -1) song.link = song.link.substring(0, song.link.indexOf(","));
                                     content += `<td><input type='radio' name='song_id' value='${song.id}' onchange='ghostBind("${song.id}")' /></td>`;
-                                    content += `<td><a href="${song.link}" target="_blank">${song.title}</a></td>`;
+                                    content += `<td>${song.title}</td>`;
                                     content += `<td>${song.genre}</td>`;
                                     content += `<td id="#song_price_code">${song.price_code}</td>`;
-                                    content += (song.notes) ? `<td class='clickable' title='${song.notes}'>są</td>` : `<td></td>`;
+                                    content += `<td>`;
+                                        if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
+                                        if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
+                                        content += `<a href="{{ route('songs') }}#song${song.id}" target="_blank" title='Utwór'>📝</a>`;
+                                    content += `</td>`;
                                     content += `</tr>`;
                                 });
                                 content += `<tr><td><input type='radio' name='song_id' value='0' onchange='ghostBind()' checked /></td><td colspan=4>Nowa piosenka</td></tr>`
@@ -255,7 +260,6 @@
 <script>
 $(document).ready(function(){
 $("#client_id").select2();
-$("#song_id").select2();
 });
 </script>
 @endsection

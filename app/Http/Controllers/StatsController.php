@@ -31,6 +31,13 @@ class StatsController extends Controller
             )
         );
         arsort($quest_pricings);
+        $recent_income = StatusChange::where("new_status_id", 32)
+            ->whereDate("date", ">=", Carbon::today()->subYear())
+            ->selectRaw("DATE_FORMAT(date, '%m-%Y') as month,
+                sum(comment) as sum, 
+                round(avg(comment), 2) as mean")
+            ->groupBy("month")
+            ->get();
 
 
         $stats = [
@@ -121,10 +128,14 @@ class StatsController extends Controller
                     "hard" => [],
                 ],
             ],
+            "finances" => [
+                "income" => $recent_income->pluck("sum", "month"),
+                "prop" => $recent_income->pluck("mean", "month"),
+            ],
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->quests->deadlines->soft->split);
+        // dd($stats->finances->income);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

@@ -8,14 +8,13 @@ use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Invoice;
 use App\Models\Quest;
-use App\Models\Song;
+use App\Models\Request as ModelsRequest;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatsController extends Controller
 {
@@ -183,6 +182,27 @@ class StatsController extends Controller
             ["title" => "Raport zajętości serwera"],
             compact(
                 "sizes", "times",
+            ),
+        ));
+    }
+
+    public function questsCalendar(){
+        $calendar_length = max(
+            7,
+            Quest::orderByDesc("deadline")
+                ->first()
+                ->deadline
+                ->diffInDays() + 2,
+            ModelsRequest::orderByDesc("deadline")
+                ->first()
+                ->deadline
+                ->diffInDays() + 2,
+        );
+
+        return view(user_role().".quests-calendar", array_merge(
+            ["title" => "Grafik zleceń"],
+            compact(
+                "calendar_length"
             ),
         ));
     }

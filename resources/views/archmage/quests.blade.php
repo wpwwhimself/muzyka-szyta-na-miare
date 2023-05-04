@@ -5,6 +5,7 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-boxes-stacked"></i> Lista zleceń</h1>
         <div>
+            <x-a href="{{ route('quests-calendar') }}" icon="calendar">Grafik</x-a>
             <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe zapytanie</x-a>
         </div>
     </div>

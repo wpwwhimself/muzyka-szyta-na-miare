@@ -114,6 +114,9 @@
                     <i class="fa-solid fa-calendar"></i>
                     Grafik najbliższych zleceń
                 </h1>
+                <div>
+                    <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
+                </div>
             </div>
             <x-calendar :click-days="false" :with-today="true" :length="7" />
         </section>

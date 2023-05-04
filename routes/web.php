@@ -103,6 +103,8 @@ Route::controller(StatsController::class)->group(function(){
         Route::post("/finance/costs/types/mod", "modCostType")->name("mod-cost-type");
 
         Route::get("/stats/file-size", "fileSizeReport")->name("file-size-report");
+
+        Route::get("/stats/quests-calendar", "questsCalendar")->name("quests-calendar");
     });
 });
 

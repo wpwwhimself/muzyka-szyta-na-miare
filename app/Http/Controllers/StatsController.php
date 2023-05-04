@@ -38,7 +38,12 @@ class StatsController extends Controller
                 round(avg(comment), 2) as mean")
             ->groupBy("month")
             ->get();
-
+        $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
+            ->selectRaw("DATE_FORMAT(created_at, '%m-%Y') as month,
+                sum(amount) as sum,
+                round(avg(amount), 2) as mean")
+            ->groupBy("month")
+            ->get();
 
         $stats = [
             "summary" => [
@@ -131,6 +136,7 @@ class StatsController extends Controller
             "finances" => [
                 "income" => $recent_income->pluck("sum", "month"),
                 "prop" => $recent_income->pluck("mean", "month"),
+                "costs" => $recent_costs->pluck("sum", "month"),
             ],
         ];
         

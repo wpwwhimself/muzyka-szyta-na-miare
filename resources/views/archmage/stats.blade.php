@@ -40,7 +40,7 @@
   <div class="section-header">
     <h1><i class="fa-solid fa-sack-dollar"></i> Finanse (w ostatnich miesiącach)</h1>
   </div>
-  {{-- <x-stats-highlight-h :data="$stats->finances->total" :bracketed-numbers="'comparison'" /> --}}
+  <x-stats-highlight-h :data="$stats->finances->total" :bracketed-numbers="'comparison'" />
   <x-barplot title="Przychody" :data="$stats->finances->income" />
   <x-barplot title="Koszty" :data="$stats->finances->costs" />
   <x-barplot title="Dochody" :data="$stats->finances->gross" />

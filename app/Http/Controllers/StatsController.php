@@ -9,18 +9,187 @@ use App\Models\CostType;
 use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\Request as ModelsRequest;
+use App\Models\QuestType;
+use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
     public function dashboard(){
-        $stats = json_decode(Storage::get("/stats.json"));
-        $stats->today = Carbon::parse($stats->today)->diffForHumans();
+        //helpers
+        $quest_pricings = array_combine(
+            DB::table("prices")->orderBy("indicator")->pluck("service")->toArray(),
+            array_map(
+                fn($el) => Song::where("price_code", "regexp", $el)->count(),
+                DB::table("prices")->orderBy("indicator")->pluck("indicator")->toArray()
+            )
+        );
+        arsort($quest_pricings);
+        $recent_income = StatusChange::where("new_status_id", 32)
+            ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
+            ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month,
+                sum(comment) as sum, 
+                round(avg(comment), 2) as mean")
+            ->groupBy("month")
+            ->orderBy("month")
+            ->get();
+        $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
+                sum(amount) as sum,
+                round(avg(amount), 2) as mean")
+            ->groupBy("month")
+            ->orderBy("month")
+            ->get();
+        $recent_gross = collect($recent_income->pluck("sum", "month"))
+            ->mergeRecursive($recent_costs->pluck("sum", "month"))
+            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
+        $finances_total = [
+            "przychody" => StatusChange::where("new_status_id", 32)
+                ->whereDate("date", ">=", Carbon::today()->subYear())
+                ->sum("comment"),
+            "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
+                ->sum("amount"),
+        ];
+        $finances_total_last_year = [
+            "przychody" => StatusChange::where("new_status_id", 32)
+                ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
+                ->sum("comment"),
+            "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYears(2))->whereDate("created_at", "<", Carbon::today()->subYear())
+                ->sum("amount"),
+        ];
+        $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
+        $finances_total_last_year["dochody"] = $finances_total_last_year["przychody"] - $finances_total_last_year["koszty"];
+
+        $stats = [
+            "summary" => [
+                "general" => [
+                    "biznes kręci się od" => Carbon::createFromDate(2020, 1, 1)->diff(Carbon::now())->format("%yl %mm %dd"),
+                    "skończone questy" => Quest::where("status_id", 19)->count(),
+                    "poznani klienci" => Client::count(),
+                    "zarobki w sumie" => as_pln(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " "),
+                ],
+                "quest_types" => [
+                    "split" => DB::table("quests")
+                        ->selectRaw("type, count(*) as count")
+                        ->join("quest_types", DB::raw("left(quests.song_id, 1)"), "quest_types.code")
+                        ->groupBy("type")
+                        ->orderByDesc("count")
+                        ->pluck("count", "type"),
+                    "total" => Quest::count(),
+                ],
+                "quest_pricings" => [
+                    "split" => array_slice($quest_pricings, 0, 6),
+                    "total" => Song::where("price_code", "not regexp", "^\d*\.\d*$")->count(),
+                ],
+            ],
+            "quests" => [
+                "recent" => [
+                    "main" => [
+                        "nowe" => Quest::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
+                        "ukończone" => 1,
+                        "debiutanckie" => 1,
+                        "max poprawek" => 1,
+                    ],
+                    "compared_to" => [
+                        "nowe" => Quest::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
+                        "ukończone" => 1,
+                        "debiutanckie" => 1,
+                        "max poprawek" => 1,
+                    ],
+                ],
+                "statuses" => [
+                    "split" => Quest::join("statuses", "statuses.id", "status_id")
+                        ->groupBy("status_name", "status_id")
+                        ->orderBy("status_id")
+                        ->selectRaw("status_id, status_name, count(*) as count")
+                        ->pluck("count", "status_name"),
+                    "total" => Quest::count(),
+                ],
+                "corrections" => [
+                    "rows" => StatusChange::whereIn("new_status_id", [16, 26])
+                        ->groupBy("re_quest_id")
+                        ->orderByDesc("Liczba poprawek")
+                        ->limit(5)
+                        ->join("quests", "re_quest_id", "quests.id", "left")
+                        ->join("clients", "quests.client_id", "clients.id", "left")
+                        ->join("songs", "quests.song_id", "songs.id", "left")
+                        ->join("genres", "songs.genre_id", "genres.id", "left")
+                        ->selectRaw("re_quest_id as 'ID zlecenia',
+                            clients.client_name as 'Klient',
+                            songs.title as 'Tytuł utworu',
+                            genres.name as 'Gatunek utworu',
+                            count(*) as 'Liczba poprawek'")
+                        ->get(),
+                    "footer" => DB::table(DB::raw("(SELECT re_quest_id, count(*) as count
+                            FROM status_changes
+                            WHERE new_status_id in (16, 26) AND date > '2023-01-01'
+                            GROUP BY re_quest_id) as x"))
+                        ->selectRaw("'średnio poprawek' as label, avg(count) as aver")
+                        ->pluck("aver", "label"),
+                ],
+                "deadlines" => [
+                    "soft" => [
+                        "split" => DB::table(DB::raw("(SELECT distinct `date`, deadline, datediff(deadline, `date`) as difference
+                                FROM status_changes
+                                LEFT JOIN quests ON re_quest_id = quests.id
+                                WHERE new_status_id = 15 AND deadline is not NULL
+                                GROUP BY re_quest_id
+                                ORDER BY re_quest_id, `date`) as x "))
+                            ->selectRaw("difference, count(*) as count")
+                            ->groupBy("difference")
+                            ->pluck("count", "difference"),
+                        "total" => StatusChange::where("new_status_id", 15)
+                            ->distinct("re_quest_id")
+                            ->join("quests", "re_quest_id", "=", "quests.id", "left")
+                            ->select("deadline")
+                            ->whereNotNull("deadline")
+                            ->count(),
+                    ],
+                    "hard" => [],
+                ],
+            ],
+            "clients" => [
+                "summary" => [
+                    "split" => [
+                        "zaufani" => Client::where("trust", 1)->count(),
+                        "krętacze" => Client::where("trust", -1)->count(),
+                        "patroni" => Client::where("helped_showcasing", 2)->count(),
+                        "bez zleceń" => Client::withCount("questsDone")
+                            ->having("quests_done_count", 0)
+                            ->count(),
+                        "kobiety" => Client::all()
+                            ->filter(fn($client) => $client->isWoman())
+                            ->count(),
+                    ],
+                    "total" => Client::all()->count(),
+                ],
+                "new" => Client::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+                    ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
+                        count(*) as count")
+                    ->groupBy("month")
+                    ->orderBy("month")
+                    ->pluck("count", "month"),
+            ],
+            "finances" => [
+                "income" => $recent_income->pluck("sum", "month"),
+                "prop" => $recent_income->pluck("mean", "month"),
+                "costs" => $recent_costs->pluck("sum", "month"),
+                "gross" => $recent_gross,
+                "total" => [
+                    "main" => $finances_total,
+                    "compared_to" => $finances_total_last_year,
+                ]
+            ],
+        ];
+        
+        $stats = json_decode(json_encode($stats));
+        // dd($stats->clients->summary->split);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

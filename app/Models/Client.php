@@ -18,6 +18,14 @@ class Client extends Model
     public function quests(){
         return $this->hasMany(Quest::class);
     }
+    public function questsDone(){
+        return $this->hasMany(Quest::class)->where("status_id", 19);
+    }
+    public function isWoman(){
+        return (
+            substr(explode(" ", $this->client_name)[0], -1) == "a"
+        );
+    }
     public function isMailable(){
         return (
             $this->email

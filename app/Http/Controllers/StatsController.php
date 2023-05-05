@@ -9,7 +9,6 @@ use App\Models\CostType;
 use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\Request as ModelsRequest;
-use App\Models\QuestType;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -65,6 +64,19 @@ class StatsController extends Controller
         ];
         $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
         $finances_total_last_year["dochody"] = $finances_total_last_year["przychody"] - $finances_total_last_year["koszty"];
+        $client_exp_raw = Client::withCount("questsDone")
+            ->pluck("quests_done_count")
+            ->countBy()
+            ->toArray();
+        function client_exp_tally($raw, $low = 0, $high = INF){
+            $ret = 0;
+            foreach($raw as $key => $val){
+                if($key >= $low && $key <= $high){
+                    $ret += $val;
+                }
+            }
+            return $ret;
+        }
 
         $stats = [
             "summary" => [
@@ -166,6 +178,15 @@ class StatsController extends Controller
                         "kobiety" => Client::all()
                             ->filter(fn($client) => $client->isWoman())
                             ->count(),
+                    ],
+                    "total" => Client::all()->count(),
+                ],
+                "exp" => [
+                    "split" => [
+                        "weterani (".VETERAN_FROM()."+)" => client_exp_tally($client_exp_raw, VETERAN_FROM()),
+                        "biegli (4-".(VETERAN_FROM()-1).")" => client_exp_tally($client_exp_raw, 4, VETERAN_FROM()-1),
+                        "zainteresowani (2-3)" => client_exp_tally($client_exp_raw, 2, 3),
+                        "nowicjusze (1)" => client_exp_tally($client_exp_raw, 1, 1),
                     ],
                     "total" => Client::all()->count(),
                 ],

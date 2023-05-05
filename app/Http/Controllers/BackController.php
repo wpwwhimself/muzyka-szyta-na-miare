@@ -312,8 +312,12 @@ class BackController extends Controller
                     "status_id" => $rq->new_status,
                 ]);
 
-                //mailing do mnie na razie zbędny
-                $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i]);
+                //mailing do mnie
+                $mailing = null;
+                Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+                $mailing = true;
+                
+                $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
             }
         }
 

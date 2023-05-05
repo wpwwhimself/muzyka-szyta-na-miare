@@ -77,6 +77,21 @@ class StatsController extends Controller
             }
             return $ret;
         }
+        foreach(DB::table(DB::raw("(SELECT distinct `date`, hard_deadline, datediff(hard_deadline, `date`) as difference
+                FROM status_changes
+                LEFT JOIN quests on re_quest_id = quests.id
+                WHERE new_status_id = 19
+                    AND hard_deadline IS NOT NULL
+                ORDER BY re_quest_id, status_changes.id DESC) as x"))
+            ->selectRaw("difference, count(*) as count")
+            ->groupBy("difference")
+            ->pluck("count", "difference") as $deadline => $count){
+                $label = ($deadline <= -7) ? "<= -7" : (
+                    ($deadline >= 7) ? ">= 7" : $deadline
+                );
+                $hard_deadline_count[$label] ??= 0;
+                $hard_deadline_count[$label] += $count;
+            }
 
         $stats = [
             "summary" => [
@@ -163,7 +178,7 @@ class StatsController extends Controller
                             ->whereNotNull("deadline")
                             ->count(),
                     ],
-                    "hard" => [],
+                    "hard" => $hard_deadline_count,
                 ],
             ],
             "clients" => [
@@ -210,7 +225,7 @@ class StatsController extends Controller
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->clients->summary->split);
+        // dd($stats->quests->deadlines->hard);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

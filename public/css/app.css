@@ -954,7 +954,7 @@ footer .contact-info{
 
 /************************MOBILITY**************/
 @media screen and (max-width: 960px){
-    .grid-3{
+    .grid-2, .grid-3{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -1074,9 +1074,6 @@ footer .contact-info{
 
     .flex-right{
         gap: 0.2em;
-    }
-    .grid-2{
-        display: block;
     }
     .grid-3, .section-header{
         flex-direction: column;

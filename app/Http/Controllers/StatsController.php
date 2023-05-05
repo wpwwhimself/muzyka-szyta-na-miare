@@ -154,6 +154,22 @@ class StatsController extends Controller
                     "hard" => [],
                 ],
             ],
+            "clients" => [
+                "summary" => [
+                    "split" => [
+                        "zaufani" => Client::where("trust", 1)->count(),
+                        "krętacze" => Client::where("trust", -1)->count(),
+                        "patroni" => Client::where("helped_showcasing", 2)->count(),
+                        "bez zleceń" => Client::withCount("questsDone")
+                            ->having("quests_done_count", 0)
+                            ->count(),
+                        "kobiety" => Client::all()
+                            ->filter(fn($client) => $client->isWoman())
+                            ->count(),
+                    ],
+                    "total" => Client::all()->count(),
+                ],
+            ],
             "finances" => [
                 "income" => $recent_income->pluck("sum", "month"),
                 "prop" => $recent_income->pluck("mean", "month"),
@@ -167,7 +183,7 @@ class StatsController extends Controller
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->finances->total);
+        // dd($stats->clients->summary->split);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

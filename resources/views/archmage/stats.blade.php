@@ -30,7 +30,7 @@
   <div class="section-header">
     <h1><i class="fa-solid fa-users"></i> Klienci</h1>
   </div>
-  {{-- <x-stats-highlight-h :data="$stats->clients->summary" :bracketed-numbers="'percentages'" /> --}}
+  <x-stats-highlight-h :data="$stats->clients->summary" :bracketed-numbers="'percentages'" />
   {{-- <x-barplot title="Podział klientów wg doświadczenia" :data="$stats->clients->exp" :percentages="true" /> --}}
   {{-- <x-barplot title="Nowi klienci w ostatnim czasie" :data="$stats->clients->new" /> --}}
   {{-- todo top 5 najbardziej i najmniej wybrednych klientów --}}

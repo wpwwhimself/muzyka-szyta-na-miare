@@ -32,7 +32,7 @@
   </div>
   <x-stats-highlight-h :data="$stats->clients->summary" :bracketed-numbers="'percentages'" />
   {{-- <x-barplot title="Podział klientów wg doświadczenia" :data="$stats->clients->exp" :percentages="true" /> --}}
-  {{-- <x-barplot title="Nowi klienci w ostatnim czasie" :data="$stats->clients->new" /> --}}
+  <x-barplot title="Nowi klienci w ostatnim czasie" :data="$stats->clients->new" />
   {{-- todo top 5 najbardziej i najmniej wybrednych klientów --}}
 </section>
 

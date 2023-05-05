@@ -169,6 +169,12 @@ class StatsController extends Controller
                     ],
                     "total" => Client::all()->count(),
                 ],
+                "new" => Client::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+                    ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
+                        count(*) as count")
+                    ->groupBy("month")
+                    ->orderBy("month")
+                    ->pluck("count", "month"),
             ],
             "finances" => [
                 "income" => $recent_income->pluck("sum", "month"),

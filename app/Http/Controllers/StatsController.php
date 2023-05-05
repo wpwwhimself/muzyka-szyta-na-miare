@@ -32,20 +32,23 @@ class StatsController extends Controller
         );
         arsort($quest_pricings);
         $recent_income = StatusChange::where("new_status_id", 32)
-            ->whereDate("date", ">=", Carbon::today()->subYear())
+            ->where("date", ">=", Carbon::today()->subYear()->firstOfMonth())
             ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month,
                 sum(comment) as sum, 
                 round(avg(comment), 2) as mean")
             ->groupBy("month")
             ->orderBy("month")
             ->get();
-        $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
+        $recent_costs = Cost::where("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
             ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
             ->groupBy("month")
             ->orderBy("month")
             ->get();
+        $recent_gross = collect($recent_income->pluck("sum", "month"))
+            ->mergeRecursive($recent_costs->pluck("sum", "month"))
+            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
 
         $stats = [
             "summary" => [
@@ -139,11 +142,12 @@ class StatsController extends Controller
                 "income" => $recent_income->pluck("sum", "month"),
                 "prop" => $recent_income->pluck("mean", "month"),
                 "costs" => $recent_costs->pluck("sum", "month"),
+                "gross" => $recent_gross,
             ],
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->finances->income);
+        // dd($stats->finances->gross);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

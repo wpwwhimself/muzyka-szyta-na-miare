@@ -76,8 +76,8 @@
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
                     <br />
                     <span class="ghost">
-                        <span @popper(wybredność) class="{{ $client->pickiness() > 1 ? 'error' : 'success' }}">
-                            {{ round($client->pickiness() * 100) }}%
+                        <span @popper(wybredność) class="{{ $client->pickiness > 1 ? 'error' : 'success' }}">
+                            {{ round($client->pickiness * 100) }}%
                         </span>
                         •
                         {{ $client->user->password }}

@@ -48,7 +48,7 @@
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />
-            <x-input type="text" name="" label="Wybredność" value="{{ round($quest->client->pickiness() * 100) }}%" :small="true" :disabled="true" class="{{ $quest->client->pickiness() > 1 ? 'error' : 'success' }}" />
+            <x-input type="text" name="" label="Wybredność" value="{{ round($quest->client->pickiness * 100) }}%" :small="true" :disabled="true" class="{{ $quest->client->pickiness > 1 ? 'error' : 'success' }}" />
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>

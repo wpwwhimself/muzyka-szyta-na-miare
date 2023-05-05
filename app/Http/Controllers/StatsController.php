@@ -211,6 +211,27 @@ class StatsController extends Controller
                     ->groupBy("month")
                     ->orderBy("month")
                     ->pluck("count", "month"),
+                "pickiness" => [
+                    "high" => [
+                        "rows" => Client::all()
+                            ->sortByDesc("pickiness")
+                            ->take(5)
+                            ->map(fn($item, $key) => [
+                                "Nazwisko" => $item->client_name,
+                                "Wybredność" => $item->pickiness * 100 . "%",
+                            ]),
+                            //TODO zrobić z tych dwóch faktyczne arraye, jak z corrections
+                    ],
+                    "low" => [
+                        "rows" => Client::all()
+                            ->sortBy("pickiness")
+                            ->take(5)
+                            ->map(fn($item, $key) => [
+                                "Nazwisko" => $item->client_name,
+                                "Wybredność" => $item->pickiness * 100 . "%",
+                            ]),
+                    ],
+                ]
             ],
             "finances" => [
                 "income" => $recent_income->pluck("sum", "month"),
@@ -225,7 +246,7 @@ class StatsController extends Controller
         ];
         
         $stats = json_decode(json_encode($stats));
-        // dd($stats->quests->deadlines->hard);
+        dd($stats->clients->pickiness->high->rows, $stats->quests->corrections->rows);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

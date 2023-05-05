@@ -11,25 +11,15 @@
     <x-stats-highlight-h :data="$stats->summary->general" />
     <x-stats-highlight-h title="Podział zleceń wg typu" :data="$stats->summary->quest_types" :bracketed-numbers="'percentages'" />
     <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" />
+  </section>
+
+  <section>
     <div class="section-header">
       <h1><i class="fa-solid fa-users"></i> Klienci</h1>
     </div>
     <x-stats-highlight-h :data="$stats->clients->summary" :bracketed-numbers="'percentages'" />
     <x-barplot title="Podział klientów wg doświadczenia" :data="$stats->clients->exp" :percentages="true" />
     <x-barplot title="Nowi klienci w ostatnim czasie" :data="$stats->clients->new" />
-    {{-- todo top 5 najbardziej i najmniej wybrednych klientów --}}
-  </section>
-
-  <section class="sc-line">
-    <x-sc-scissors />
-    <div class="section-header">
-      <h1><i class="fa-solid fa-boxes"></i> Zlecenia</h1>
-    </div>
-    <x-stats-highlight-h title="Zlecenia w ostatnich 30 dniach" :data="$stats->quests->recent" :bracketed-numbers="'comparison'" />
-    <x-stats-highlight-h title="Obecne fazy zleceń" :data="$stats->quests->statuses" :bracketed-numbers="'percentages'" />
-    <x-stats-table title="Top 5 najczęściej poprawianych zleceń" :data="$stats->quests->corrections" :footer="true" />
-    <x-barplot title="Na ile dni przed deadlinem się wyrabiam?" :data="$stats->quests->deadlines->soft" :percentages="true" />
-    <x-barplot title="Ile dni przed hard-deadlinem klient akceptuje" :data="$stats->quests->deadlines->hard" />
   </section>
 </div>
 
@@ -43,6 +33,28 @@
   <x-barplot title="Dochody" :data="$stats->finances->gross" :all-pln="true" />
   <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->finances->prop" :all-pln="true" />
 </section>
+
+<div class="grid-2">
+  <section class="sc-line">
+    <x-sc-scissors />
+    <div class="section-header">
+      <h1><i class="fa-solid fa-boxes"></i> Zlecenia</h1>
+    </div>
+    <x-stats-highlight-h title="Zlecenia w ostatnich 30 dniach" :data="$stats->quests->recent" :bracketed-numbers="'comparison'" />
+    <x-stats-highlight-h title="Obecne fazy zleceń" :data="$stats->quests->statuses" :bracketed-numbers="'percentages'" />
+    <x-barplot title="Na ile dni przed deadlinem się wyrabiam?" :data="$stats->quests->deadlines->soft" :percentages="true" />
+    <x-barplot title="Ile dni przed hard-deadlinem klient akceptuje" :data="$stats->quests->deadlines->hard" />
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h1><i class="fa-solid fa-ranking-star"></i> Top 5</h1>
+    </div>
+    <x-stats-table title="Najczęściej poprawiane zlecenia" :data="$stats->quests->corrections" :footer="true" />
+    <x-stats-table title="Najbardziej wybredni klienci" :data="$stats->clients->pickiness->high" :footer="true" />
+    <x-stats-table title="Najmniej wybredni klienci" :data="$stats->clients->pickiness->low" :footer="true" />
+  </section>
+</div>
 
 <section>
   <div class="section-header">

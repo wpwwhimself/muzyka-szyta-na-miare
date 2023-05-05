@@ -6,7 +6,7 @@
         @foreach ($data1 as $name => $val)
         <p>{{ $name }}</p>
         <h3>
-            {{ $val  }}
+            {{ $allPln ? as_pln($val) : $val  }}
             @if($bracketedNumbers)
             <small class="ghost">
                 @switch($bracketedNumbers)

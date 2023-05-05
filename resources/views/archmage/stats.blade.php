@@ -40,11 +40,11 @@
   <div class="section-header">
     <h1><i class="fa-solid fa-sack-dollar"></i> Finanse (w ostatnich miesiącach)</h1>
   </div>
-  <x-stats-highlight-h :data="$stats->finances->total" :bracketed-numbers="'comparison'" />
-  <x-barplot title="Przychody" :data="$stats->finances->income" />
-  <x-barplot title="Koszty" :data="$stats->finances->costs" />
-  <x-barplot title="Dochody" :data="$stats->finances->gross" />
-  <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->finances->prop" />
+  <x-stats-highlight-h :data="$stats->finances->total" :bracketed-numbers="'comparison'" :all-pln="true" />
+  <x-barplot title="Przychody" :data="$stats->finances->income" :all-pln="true" />
+  <x-barplot title="Koszty" :data="$stats->finances->costs" :all-pln="true" />
+  <x-barplot title="Dochody" :data="$stats->finances->gross" :all-pln="true" />
+  <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->finances->prop" :all-pln="true" />
 </section>
 
 <section>

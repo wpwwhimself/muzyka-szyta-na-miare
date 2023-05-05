@@ -14,11 +14,13 @@ class StatsHighlightH extends Component
     public $data1; public $data2;
     public $title;
     public $bracketedNumbers;
-    public function __construct($data, $title = null, $bracketedNumbers = null)
+    public $allPln;
+    public function __construct($data, $title = null, $bracketedNumbers = null, $allPln = false)
     {
         $this->data1 = $data;
         $this->title = $title;
         $this->bracketedNumbers = $bracketedNumbers;
+        $this->allPln = $allPln;
 
         switch($bracketedNumbers){
             case "percentages":

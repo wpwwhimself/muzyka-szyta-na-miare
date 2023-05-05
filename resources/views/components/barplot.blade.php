@@ -2,6 +2,7 @@
     'title', 'data',
     'maxHeight' => 100, 'labelsVert' => false,
     'percentages' => false,
+    'allPln' => false,
 ])
 
 @if ($title)
@@ -18,7 +19,7 @@
             </small>
             <br />
             @endif
-            {{ $val }}
+            {{ $allPln ? as_pln($val) : $val }}
         </span>
     </div>
     <div class="label @if($labelsVert) vertical @endif">{{ $label }}</div>

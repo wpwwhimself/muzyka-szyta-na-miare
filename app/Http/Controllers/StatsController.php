@@ -72,7 +72,7 @@ class StatsController extends Controller
                     "biznes kręci się od" => Carbon::createFromDate(2020, 1, 1)->diff(Carbon::now())->format("%yl %mm %dd"),
                     "skończone questy" => Quest::where("status_id", 19)->count(),
                     "poznani klienci" => Client::count(),
-                    "zarobki w sumie" => number_format(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " ")." zł",
+                    "zarobki w sumie" => as_pln(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " "),
                 ],
                 "quest_types" => [
                     "split" => DB::table("quests")

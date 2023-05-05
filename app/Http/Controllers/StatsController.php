@@ -33,16 +33,18 @@ class StatsController extends Controller
         arsort($quest_pricings);
         $recent_income = StatusChange::where("new_status_id", 32)
             ->whereDate("date", ">=", Carbon::today()->subYear())
-            ->selectRaw("DATE_FORMAT(date, '%m-%Y') as month,
+            ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month,
                 sum(comment) as sum, 
                 round(avg(comment), 2) as mean")
             ->groupBy("month")
+            ->orderBy("month")
             ->get();
         $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
-            ->selectRaw("DATE_FORMAT(created_at, '%m-%Y') as month,
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
             ->groupBy("month")
+            ->orderBy("month")
             ->get();
 
         $stats = [

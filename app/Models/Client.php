@@ -37,6 +37,6 @@ class Client extends Model
     public function getPickinessAttribute(){
         $correction_requests = StatusChange::where("changed_by", $this->id)->whereIn("new_status_id", [16, 26])->count();
         $quests_total = $this->quests->count();
-        return $correction_requests / $quests_total;
+        return round($correction_requests / $quests_total, 2);
     }
 }

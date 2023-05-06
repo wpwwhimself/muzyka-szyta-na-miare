@@ -33,7 +33,7 @@ class StatsController extends Controller
         $recent_income = StatusChange::where("new_status_id", 32)
             ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
             ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month,
-                sum(comment) as sum, 
+                sum(comment) as sum,
                 round(avg(comment), 2) as mean")
             ->groupBy("month")
             ->orderBy("month")
@@ -219,8 +219,8 @@ class StatsController extends Controller
                             ->map(fn($item, $key) => [
                                 "Nazwisko" => $item->client_name,
                                 "Wybredność" => $item->pickiness * 100 . "%",
-                            ]),
-                            //TODO zrobić z tych dwóch faktyczne arraye, jak z corrections
+                            ])
+                            ->values(),
                     ],
                     "low" => [
                         "rows" => Client::all()
@@ -229,7 +229,8 @@ class StatsController extends Controller
                             ->map(fn($item, $key) => [
                                 "Nazwisko" => $item->client_name,
                                 "Wybredność" => $item->pickiness * 100 . "%",
-                            ]),
+                            ])
+                            ->values(0),
                     ],
                 ]
             ],
@@ -244,9 +245,9 @@ class StatsController extends Controller
                 ]
             ],
         ];
-        
+
         $stats = json_decode(json_encode($stats));
-        dd($stats->clients->pickiness->high->rows, $stats->quests->corrections->rows);
+        // dd($stats->clients->pickiness->high->rows, $stats->quests->corrections->rows);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

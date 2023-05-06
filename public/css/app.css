@@ -953,8 +953,11 @@ footer .contact-info{
 .p-9, .p-19, .p-32{ --q-clr: 57, 196, 57; }
 
 /************************MOBILITY**************/
-@media screen and (max-width: 960px){
-    .grid-2, .grid-3{
+@media screen and (max-width: 1030px){
+    .grid-2{
+        display: block;
+    }
+    .grid-3{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;

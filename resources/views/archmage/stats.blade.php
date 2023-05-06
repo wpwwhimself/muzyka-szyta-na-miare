@@ -51,8 +51,8 @@
       <h1><i class="fa-solid fa-ranking-star"></i> Top 5</h1>
     </div>
     <x-stats-table title="Najczęściej poprawiane zlecenia" :data="$stats->quests->corrections" :footer="true" />
-    <x-stats-table title="Najbardziej wybredni klienci" :data="$stats->clients->pickiness->high" :footer="true" />
-    <x-stats-table title="Najmniej wybredni klienci" :data="$stats->clients->pickiness->low" :footer="true" />
+    <x-stats-table title="Najbardziej wybredni klienci" :data="$stats->clients->pickiness->high" />
+    <x-stats-table title="Najmniej wybredni klienci" :data="$stats->clients->pickiness->low" />
   </section>
 </div>
 

@@ -223,7 +223,10 @@ class StatsController extends Controller
                             ->values(),
                     ],
                     "low" => [
-                        "rows" => Client::where("trust", ">", -1)->get()
+                        "rows" => Client::withCount("questsDone")
+                            ->where("trust", ">", -1)
+                            ->having("quests_done_count", ">", 0)
+                            ->get()
                             ->sortBy("pickiness")
                             ->take(5)
                             ->map(fn($item, $key) => [

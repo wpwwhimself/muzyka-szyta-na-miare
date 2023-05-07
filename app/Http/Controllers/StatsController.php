@@ -223,7 +223,7 @@ class StatsController extends Controller
                             ->values(),
                     ],
                     "low" => [
-                        "rows" => Client::all()
+                        "rows" => Client::where("trust", ">", -1)->get()
                             ->sortBy("pickiness")
                             ->take(5)
                             ->map(fn($item, $key) => [

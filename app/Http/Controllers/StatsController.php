@@ -10,6 +10,7 @@ use App\Models\Invoice;
 use App\Models\Quest;
 use App\Models\Request as ModelsRequest;
 use App\Models\Song;
+use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
@@ -250,10 +251,28 @@ class StatsController extends Controller
                     "compared_to" => $finances_total_last_year,
                 ]
             ],
+            "songs" => [
+                "time_summary" => [
+                    "średnio na całość" => DB::table(DB::raw("(".SongWorkTime::groupBy("song_id")
+                            ->selectRaw("sec_to_time(sum(time_to_sec(time_spent))) as sum, song_id")
+                            ->toSql().") as x"))
+                        ->selectRaw("date_format(sec_to_time(avg(time_to_sec(sum))), '%k:%i') as mean")
+                        ->value("mean"),
+                    "średnio elementów" => DB::table(DB::raw("(".SongWorkTime::groupBy("song_id")
+                            ->selectRaw("count(song_id) as count")
+                            ->toSql().") as x"))
+                        ->where("count", ">", 1)
+                        ->average("count"),
+                ],
+                "time_genres" => [
+                    "main" => [],
+                    "compared_to" => [],
+                ],
+            ],
         ];
 
         $stats = json_decode(json_encode($stats));
-        // dd($stats->clients->pickiness->high->rows, $stats->quests->corrections->rows);
+        // dd($stats->songs->time_summary);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

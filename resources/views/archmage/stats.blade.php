@@ -60,7 +60,7 @@
   <div class="section-header">
     <h1><i class="fa-solid fa-compact-disc"></i> Utwory</h1>
   </div>
-  {{-- <x-stats-highlight-h title="Czas poświęcony na utwór" :data="$stats->songs->time_summary" /> --}}
+  <x-stats-highlight-h title="Czas poświęcony na utwór" :data="$stats->songs->time_summary" />
   {{-- <x-stats-highlight-h title="Średni czas z podziałem na gatunki <small>(w porównaniu z wynikami miesiąc wstecz)</small>" :data="$stats->songs->time_genres" :bracketedNumbers="'comparison'" /> --}}
 </section>
 

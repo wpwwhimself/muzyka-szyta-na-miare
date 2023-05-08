@@ -19,7 +19,11 @@
             </small>
             <br />
             @endif
-            {{ $allPln ? as_pln($val) : $val }}
+            @if ($allPln)
+            <small>{{ as_pln($val) }}</small>
+            @else
+            {{ $val }}    
+            @endif
         </span>
     </div>
     <div class="label @if($labelsVert) vertical @endif">{{ $label }}</div>

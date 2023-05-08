@@ -24,7 +24,7 @@ class Invoice extends Model
         return $this->amount == $this->paid;
     }
 
-    public function quest(){
-        return $this->belongsTo(Quest::class);
+    public function quests(){
+        return $this->belongsToMany(Quest::class, InvoiceQuest::class);
     }
 }

@@ -38,9 +38,9 @@ class Quest extends Model
         return $this->hasMany(StatusChange::class, "re_quest_id")->where("new_status_id", 32);
     }
     public function visibleInvoices(){
-        return $this->hasMany(Invoice::class)->where("visible", true);
+        return $this->belongsToMany(Invoice::class, InvoiceQuest::class, "quest_id", "invoice_id")->where("visible", true);
     }
     public function allInvoices(){
-        return $this->hasMany(Invoice::class);
+        return $this->belongsToMany(Invoice::class, InvoiceQuest::class, "quest_id", "invoice_id");
     }
 }

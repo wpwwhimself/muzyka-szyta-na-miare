@@ -32,14 +32,14 @@ class StatsController extends Controller
         arsort($quest_pricings);
         $recent_income = StatusChange::where("new_status_id", 32)
             ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
-            ->selectRaw("DATE_FORMAT(date, '%Y-%m') as month,
+            ->selectRaw("DATE_FORMAT(date, '%y-%m') as month,
                 sum(comment) as sum,
                 round(avg(comment), 2) as mean")
             ->groupBy("month")
             ->orderBy("month")
             ->get();
         $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
+            ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
             ->groupBy("month")
@@ -206,7 +206,7 @@ class StatsController extends Controller
                     "total" => Client::all()->count(),
                 ],
                 "new" => Client::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
-                    ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month,
+                    ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
                         count(*) as count")
                     ->groupBy("month")
                     ->orderBy("month")
@@ -226,6 +226,9 @@ class StatsController extends Controller
                         "rows" => Client::withCount("questsDone")
                             ->where("trust", ">", -1)
                             ->having("quests_done_count", ">", 0)
+                            ->join("quests", "client_id", "clients.id")
+                            ->orderByDesc("quests.updated_at")
+                            ->distinct("client_name")
                             ->get()
                             ->sortBy("pickiness")
                             ->take(5)

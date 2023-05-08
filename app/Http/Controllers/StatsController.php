@@ -14,6 +14,7 @@ use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -265,14 +266,32 @@ class StatsController extends Controller
                         ->average("count"),
                 ],
                 "time_genres" => [
-                    "main" => [],
-                    "compared_to" => [],
+                    "main" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                            ->groupBy(["song_id", "genre_id"])
+                            ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
+                            ->toSql().") as x"))
+                        ->groupBy("genre_id")
+                        ->join("genres", "genre_id", "genres.id")
+                        ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
+                        ->orderByDesc("mean")
+                        ->pluck("mean", "name"),
+                    // TODO naprawić
+                    // "difference" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                    //         ->whereDate("since", "<", Carbon::today()->subMonth())
+                    //         ->groupBy(["song_id", "genre_id"])
+                    //         ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
+                    //         ->toSql().") as x"))
+                    //     ->groupBy("genre_id")
+                    //     ->join("genres", "genre_id", "genres.id")
+                    //     ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
+                    //     ->orderByDesc("mean")
+                    //     ->pluck("mean", "name"),
                 ],
             ],
         ];
 
         $stats = json_decode(json_encode($stats));
-        // dd($stats->songs->time_summary);
+        // dd($stats->songs->time_genres->main);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

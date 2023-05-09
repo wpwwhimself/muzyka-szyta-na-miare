@@ -152,13 +152,15 @@ class BackController extends Controller
         ));
     }
 
-    public function requests(){
+    public function requests(HttpRequest $rq){
         $client = Auth::user()->client;
+        $client_id = $rq->client;
+        $status_id = $rq->status;
 
         $requests = Request::orderBy("updated_at", "desc");
-        if(Auth::id() != 1){
-            $requests = $requests->where("client_id", $client->id);
-        }
+        if(Auth::id() != 1){ $requests = $requests->where("client_id", $client->id); }
+        if($client_id) $requests = $requests->where("client_id", $client_id);
+        if($status_id) $requests = $requests->where("status_id", $status_id);
         $requests = $requests->paginate(25);
 
         return view(user_role().".requests", [
@@ -316,7 +318,7 @@ class BackController extends Controller
                 $mailing = null;
                 Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
                 $mailing = true;
-                
+
                 $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
             }
         }
@@ -542,14 +544,18 @@ class BackController extends Controller
         return redirect()->route($where_to)->with("success", "Komentarz dodany");
     }
 
-    public function quests($client_id = null){
+    public function quests(HttpRequest $rq){
+        $client_id = $rq->client;
+        $status_id = $rq->status;
+        $paid = $rq->paid;
+
         $client = Client::find($client_id) ?? Auth::user()->client;
         if($client_id && $client_id != Auth::id() && Auth::id() != 1) abort(403);
 
         $quests = Quest::orderBy("quests.created_at", "desc");
-        if($client){
-            $quests = $quests->where("client_id", $client->id);
-        }
+        if($client){ $quests = $quests->where("client_id", $client->id); }
+        if($status_id) $quests = $quests->where("status_id", $status_id);
+        if($paid) $quests = $quests->where("paid", $paid);
         $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [

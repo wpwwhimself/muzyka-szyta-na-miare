@@ -52,12 +52,14 @@ Route::controller(BackController::class)->group(function(){
         Route::get('/requests', "requests")->name("requests");
         Route::get('/requests/add', "addRequest")->name("add-request");
 
-        Route::get('/quests/{client_id?}', "quests")->name("quests");
-        Route::get('/quests/view/{id}', "quest")->name("quest");
-        Route::get('/quests/add', "addQuest")->name("add-quest");
-        Route::post('/quests/mod-back', "modQuestBack")->name("mod-quest-back");
-        Route::post('/quests/work-clock', "workClock")->name("work-clock");
-        Route::get('/quests/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
+        Route::prefix("quests")->group(function(){
+            Route::get('/', "quests")->name("quests");
+            Route::get('/view/{id}', "quest")->name("quest");
+            Route::get('/add', "addQuest")->name("add-quest");
+            Route::post('/mod-back', "modQuestBack")->name("mod-quest-back");
+            Route::post('/work-clock', "workClock")->name("work-clock");
+            Route::get('/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
+        });
         Route::post("/quest-song-update", "questSongUpdate")->name("quest-song-update");
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
         Route::post("/quest-wishes-update", "questWishesUpdate")->name("quest-wishes-update");

@@ -64,7 +64,7 @@
             @foreach ($client_class as $client)
             <div class="table-row" id="client{{ $client->id }}">
                 <span class="client-exp">
-                    <a href="{{ route('quests', ["client_id" => $client->id]) }}">
+                    <a href="{{ route('quests').'&client='.$client->id }}">
                         {{ $client->exp }}
                         @if (upcoming_quests($client->id))
                         <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>

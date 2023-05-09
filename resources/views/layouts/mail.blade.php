@@ -7,6 +7,7 @@
 
     <link rel="icon" href="{{ asset("mintgreen_tiny.png") }}">
     <link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <style>
     body{
@@ -15,7 +16,7 @@
         text-align: center;
     }
     h1, h2, h3{
-        font-family: "Krona One", "Arial Black";
+        font-family: "Krona One", Montserrat, "Arial Black";
     }
     h2{
         color: #60cc89

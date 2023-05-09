@@ -39,6 +39,18 @@ class StatsHighlightH extends Component
                     )
                 )));
                 break;
+            case "comparison-raw":
+                $this->data1 = $data->main;
+                //calculate differences
+                $this->data2 = json_decode(json_encode(array_combine(
+                    array_keys(get_object_vars($data->main_raw)),
+                    array_map(
+                        fn($main, $comp) => $main - $comp,
+                        get_object_vars($data->main_raw),
+                        get_object_vars($data->compared_to_raw),
+                    )
+                )));
+                break;
             default:
                 $this->data1 = $data;
         }

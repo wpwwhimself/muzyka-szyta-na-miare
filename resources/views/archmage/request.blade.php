@@ -28,9 +28,8 @@
                 <i class="fa-solid fa-user"></i>
                 Dane klienta
                 @if ($request->client_id)
-                <a href="{{ route('quests', ['client_id' => $request->client_id]) }}" @popper(zlecenia klienta) target="_blank">
-                    <i class="fa-solid fa-up-right-from-square"></i>
-                </a>
+                <a href="{{ route('clients') }}#client{{ $request->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a href="{{ route('quests', ['client_id' => $request->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
                 @endif
             </h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
@@ -229,7 +228,7 @@
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" />
         </section>
 
-        @if (in_array($request->status_id, [1, 6]))
+        @if (in_array($request->status_id, [1, 6, 96]))
         <section class="input-group" id="quest-calendar">
             <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
             <x-calendar />

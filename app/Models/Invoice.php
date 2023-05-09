@@ -25,6 +25,6 @@ class Invoice extends Model
     }
 
     public function quests(){
-        return $this->belongsToMany(Quest::class, InvoiceQuest::class);
+        return $this->belongsToMany(Quest::class, InvoiceQuest::class)->withPivot("primary");
     }
 }

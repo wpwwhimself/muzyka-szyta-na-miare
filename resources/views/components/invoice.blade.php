@@ -61,7 +61,7 @@
         @foreach ($invoice->quests as $quest)
         <div class="table-row">
             <span>
-                @if ($invoice->primary)
+                @if ($quest->pivot->primary)
                     @switch(song_quest_type($quest->song_id)->id)
                         @case(1) Przygotowanie podkładu muzycznego @break
                         @case(2) Przygotowanie nut @break

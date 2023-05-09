@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\StatsController;
 use App\Models\Client;
-use App\Models\Genre;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request as ModelsRequest;

@@ -10,7 +10,7 @@ class Invoice extends Model
     use HasFactory;
 
     protected $fillable = [
-        "quest_id",
+        "quest_id", "full_code_override",
         "primary", "visible",
         "amount", "paid",
         "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",
@@ -18,7 +18,7 @@ class Invoice extends Model
     ];
 
     public function getFullCodeAttribute(){
-        return $this->id . "/" . ($this->primary ? "F" : "FD") . "/" . $this->quest_id;
+        return $this->full_code_override ?? $this->id . "/" . ($this->primary ? "F" : "FD") . "/" . $this->quest_id;
     }
     public function getIsPaidAttribute(){
         return $this->amount == $this->paid;

@@ -265,20 +265,41 @@ class StatsController extends Controller
                         ->where("count", ">", 1)
                         ->average("count"),
                 ],
-                "time_genres" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                        ->groupBy(["song_id", "genre_id"])
-                        ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
-                        ->toSql().") as x"))
-                    ->groupBy("genre_id")
-                    ->join("genres", "genre_id", "genres.id")
-                    ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
-                    ->orderByDesc("mean")
-                    ->pluck("mean", "name"),
+                "time_genres" => [
+                    "main" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                            ->groupBy(["song_id", "genre_id"])
+                            ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
+                            ->toSql().") as x"))
+                        ->groupBy("genre_id")
+                        ->join("genres", "genre_id", "genres.id")
+                        ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
+                        ->orderByDesc("mean")
+                        ->pluck("mean", "name"),
+                    "main_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                            ->groupBy(["song_id", "genre_id"])
+                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
+                            ->toSql().") as x"))
+                        ->groupBy("genre_id")
+                        ->join("genres", "genre_id", "genres.id")
+                        ->selectRaw("name, avg(time_spent) as mean")
+                        ->orderByDesc("mean")
+                        ->pluck("mean", "name"),
+                    "compared_to_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                            ->groupBy(["song_id", "genre_id"])
+                            // ->whereDate("since", "<", Carbon::today()->subMonth()) //TODO naprawić
+                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
+                            ->toSql().") as x"))
+                        ->groupBy("genre_id")
+                        ->join("genres", "genre_id", "genres.id")
+                        ->selectRaw("name, avg(time_spent) as mean")
+                        ->orderByDesc("mean")
+                        ->pluck("mean", "name"),
+                ],
             ],
         ];
 
         $stats = json_decode(json_encode($stats));
-        // dd($stats->songs->time_genres->main);
+        // dd($stats->songs->time_genres->split);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],

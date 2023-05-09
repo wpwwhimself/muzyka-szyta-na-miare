@@ -20,6 +20,10 @@ class CreateInvoiceQuestsTable extends Migration
                 $table->foreign("quest_id")->references("id")->on("quests");
             $table->timestamps();
         });
+
+        Schema::table("invoices", function (Blueprint $table) {
+            $table->dropConstrainedForeignId("quest_id");
+        });
     }
 
     /**
@@ -30,5 +34,9 @@ class CreateInvoiceQuestsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('invoice_quests');
+        Schema::table("invoices", function (Blueprint $table){
+            $table->string("quest_id")->nullable()->after("id");
+                $table->foreign("quest_id")->references("id")->on("quests");
+        });
     }
 }

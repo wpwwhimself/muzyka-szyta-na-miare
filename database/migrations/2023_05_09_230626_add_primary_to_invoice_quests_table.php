@@ -16,6 +16,9 @@ class AddPrimaryToInvoiceQuestsTable extends Migration
         Schema::table('invoice_quests', function (Blueprint $table) {
             $table->boolean("primary")->default(true);
         });
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn("primary");
+        });
     }
 
     /**
@@ -27,6 +30,9 @@ class AddPrimaryToInvoiceQuestsTable extends Migration
     {
         Schema::table('invoice_quests', function (Blueprint $table) {
             $table->dropColumn("primary");
+        });
+        Schema::table('invoice_quests', function (Blueprint $table) {
+            $table->boolean("primary")->after("id");
         });
     }
 }

@@ -386,14 +386,12 @@ class StatsController extends Controller
         return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
     }
     public function invoiceAdd(Request $rq){
-        $quest = Quest::find($rq->quest_id);
+        $quests = Quest::whereIn("id", explode(",", $rq->quests));
 
         Invoice::create([
-            "quest_id" => $quest->id,
-            "primary" => ($quest->allInvoices()->count() == 0),
             "visible" => false,
-            "amount" => $quest->price - $quest->allInvoices()->sum("paid"),
-            "paid" => ($quest->paid ? $quest->price - $quest->allInvoices()->sum("paid") : 0),
+            // "amount" => $quest->price - $quest->allInvoices()->sum("paid"),
+            // "paid" => ($quest->paid ? $quest->price - $quest->allInvoices()->sum("paid") : 0),
             "payer_name" => $rq->payer_name,
             "payer_title" => $rq->payer_title,
             "payer_address" => $rq->payer_address,

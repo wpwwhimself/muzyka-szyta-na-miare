@@ -10,7 +10,7 @@ class Invoice extends Model
     use HasFactory;
 
     protected $fillable = [
-        "quest_id", "full_code_override",
+        "full_code_override",
         "primary", "visible",
         "amount", "paid",
         "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",

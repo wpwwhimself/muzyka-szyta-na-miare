@@ -17,10 +17,10 @@ class Invoice extends Model
         "payer_email", "payer_phone",
     ];
 
-    public function fullCode(){
+    public function getFullCodeAttribute(){
         return $this->id . "/" . ($this->primary ? "F" : "FD") . "/" . $this->quest_id;
     }
-    public function isPaid(){
+    public function getIsPaidAttribute(){
         return $this->amount == $this->paid;
     }
 

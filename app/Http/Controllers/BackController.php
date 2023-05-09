@@ -316,7 +316,7 @@ class BackController extends Controller
                 $mailing = null;
                 Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
                 $mailing = true;
-                
+
                 $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
             }
         }
@@ -608,7 +608,7 @@ class BackController extends Controller
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
 
             $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
-                return !($val->isPaid());
+                return !($val->isPaid);
             })->first();
             $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
 

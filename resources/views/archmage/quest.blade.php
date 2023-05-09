@@ -147,7 +147,7 @@
                         <td>
                             <a href="{{ route('invoice', ['id' => $invoice->id]) }}">
                                 <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
-                                {{ $invoice->fullCode() }}
+                                {{ $invoice->fullCode }}
                             </a>
                         </td>
                         <td>

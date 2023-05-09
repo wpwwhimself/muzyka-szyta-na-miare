@@ -90,17 +90,21 @@ Route::controller(StatsController::class)->group(function(){
     Route::middleware("auth")->group(function(){
         Route::get("/stats", "dashboard")->name("stats");
         Route::post("/stats-import", "statsImport")->name("stats-import");
-        Route::get("/finance", "financeDashboard")->name("finance");
-        Route::post("/finance/pay", "financePay")->name("finance-pay");
 
-        Route::get("/finance/invoice/{id}", "invoice")->name("invoice");
-        Route::post("/finance/invoice/visibility", "invoiceVisibility")->name("invoice-visibility");
-        Route::post("/finance/invoice/add", "invoiceAdd")->name("invoice-add");
+        Route::prefix("finance")->group(function(){
+            Route::get("/", "financeDashboard")->name("finance");
+            Route::post("/pay", "financePay")->name("finance-pay");
 
-        Route::get("/finance/costs", "costs")->name("costs");
-        Route::post("/finance/costs/mod", "modCost")->name("mod-cost");
-        Route::get("/finance/costs/types", "costTypes")->name("cost-types");
-        Route::post("/finance/costs/types/mod", "modCostType")->name("mod-cost-type");
+            Route::get("/invoices", "invoices")->name("invoices");
+            Route::get("/invoices/{id}", "invoice")->name("invoice");
+            Route::post("/invoices/visibility", "invoiceVisibility")->name("invoice-visibility");
+            Route::post("/invoices/add", "invoiceAdd")->name("invoice-add");
+
+            Route::get("/costs", "costs")->name("costs");
+            Route::post("/costs/mod", "modCost")->name("mod-cost");
+            Route::get("/costs/types", "costTypes")->name("cost-types");
+            Route::post("/costs/types/mod", "modCostType")->name("mod-cost-type");
+        });
 
         Route::get("/stats/file-size", "fileSizeReport")->name("file-size-report");
 

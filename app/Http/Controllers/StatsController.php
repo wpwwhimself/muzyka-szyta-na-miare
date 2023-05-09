@@ -363,11 +363,20 @@ class StatsController extends Controller
         return back()->with("success", "Zlecenia opłacone");
     }
 
+    public function invoices(){
+        $invoices = Invoice::orderByDesc("updated_at")->get();
+
+        return view(user_role().".invoices", array_merge(
+            ["title" => "Lista faktur"],
+            compact("invoices")
+        ));
+    }
+
     public function invoice($id){
         $invoice = Invoice::findOrFail($id);
 
         return view(user_role().".invoice", array_merge(
-            ["title" => "Faktura nr ".$invoice->fullCode()],
+            ["title" => "Faktura nr ".$invoice->fullCode],
             compact("invoice"),
         ));
     }

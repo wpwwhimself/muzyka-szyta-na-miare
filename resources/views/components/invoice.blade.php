@@ -1,7 +1,7 @@
 @props(["invoice"])
 
 <div id="invoice">
-    <h1>Faktura nr {{ $invoice->fullCode() }}</h1>
+    <h1>Faktura nr {{ $invoice->fullCode }}</h1>
     <div class="dates grid-2 name-value">
         <span>Data wystawienia:</span>
         <span>{{ $invoice->created_at->format("Y-m-d") }}</span>
@@ -96,7 +96,7 @@
         <span class="small">Płatność otrzymana:</span>
         <span class="small">{{ as_pln($invoice->paid) }}</span>
         <span>Pozostało do zapłaty:</span>
-        <span @if ($invoice->isPaid()) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
+        <span @if ($invoice->isPaid) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
         @endif
     </div>
 </div>

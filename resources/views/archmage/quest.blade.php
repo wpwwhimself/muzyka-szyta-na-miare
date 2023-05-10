@@ -44,7 +44,7 @@
                 <i class="fa-solid fa-user"></i>
                 Klient
                 <a href="{{ route('clients') }}#client{{ $quest->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
-                <a href="{{ route('quests').'&client='.$client->id }}"><i class="fa-solid fa-boxes"></i></a>
+                <a href="{{ route('quests').'&client='.$quest->client_id }}"><i class="fa-solid fa-boxes"></i></a>
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />

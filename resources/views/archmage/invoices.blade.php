@@ -9,14 +9,14 @@
     <form action="{{ route('invoice-add') }}" method="post">
         @csrf
         <div class="grid-3">
-            <x-input type="text" name="payer_name" label="Nazwa płatnika" />
+            <x-input type="text" name="payer_name" label="Nazwa płatnika" value="{{ $client?->client_name }}" />
             <x-input type="text" name="payer_title" label="Tytuł płatnika" :small="true" />
             <x-input type="TEXT" name="payer_address" label="Adres" />
             <x-input type="text" name="payer_nip" value="" label="NIP" :small="true" />
             <x-input type="text" name="payer_regon" value="" label="REGON" :small="true" />
-            <x-input type="text" name="payer_email" label="E-mail" :small="true" />
-            <x-input type="text" name="payer_phone" label="Telefon" :small="true" />
-            <x-input type="text" name="quests" label="Zlecenia (oddz. przecinkami)" :small="true" />
+            <x-input type="text" name="payer_email" label="E-mail" :small="true" value="{{ $client?->email }}" />
+            <x-input type="text" name="payer_phone" label="Telefon" :small="true" value="{{ $client?->phone }}" />
+            <x-input type="text" name="quests" label="Zlecenia (oddz. spacjami)" :small="true" value="{{ $quest_id }}" />
         </div>
         <x-button action="submit" label="Dodaj" icon="check" />
     </form>

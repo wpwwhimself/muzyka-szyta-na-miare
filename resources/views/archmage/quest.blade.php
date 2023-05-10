@@ -138,7 +138,7 @@
                 <thead>
                     <tr>
                         <th>Numer</th>
-                        <th>Kwota</th>
+                        <th>Kwota (zlec./całk.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -151,7 +151,7 @@
                             </a>
                         </td>
                         <td>
-                            {{ as_pln($invoice->amount) }}
+                            {{ as_pln($invoice->quests->filter(fn($q) => $q->id == $quest->id)->first()->pivot->amount) }} / {{ as_pln($invoice->amount) }}
                         </td>
                     </tr>
                     @empty
@@ -163,6 +163,7 @@
                     @endforelse
                 </tbody>
             </table>
+            <x-button action="{{ route('invoices') }}?fillfor={{ $quest->client_id }}&quest={{ $quest->id }}" name="" icon="plus" label="Dodaj" :small="true" />
         </section>
 
         <section id="stats-log">

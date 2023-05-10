@@ -83,7 +83,7 @@
                 <em>{{ $quest->song->title ?? "bez tytułu" }}</em>
             </span>
             <span>
-                {{ as_pln($quest->price) }}
+                {{ as_pln($quest->pivot->amount) }}
             </span>
         </div>
         @endforeach

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class InvoiceQuest extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "invoice_id", "quest_id",
+        "primary",
+        "amount", "paid",
+    ];
 }

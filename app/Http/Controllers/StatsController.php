@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Invoice;
+use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\Request as ModelsRequest;
 use App\Models\Song;
@@ -371,11 +372,22 @@ class StatsController extends Controller
         return back()->with("success", "Zlecenia opłacone");
     }
 
+    public function invoices(Request $rq){
+        $invoices = Invoice::orderByDesc("updated_at")->get();
+        $client = ($rq->fillfor) ? Client::findOrFail($rq->fillfor) : null;
+        $quest_id = $rq->quest;
+
+        return view(user_role().".invoices", array_merge(
+            ["title" => "Lista faktur"],
+            compact("invoices", "client", "quest_id")
+        ));
+    }
+
     public function invoice($id){
         $invoice = Invoice::findOrFail($id);
 
         return view(user_role().".invoice", array_merge(
-            ["title" => "Faktura nr ".$invoice->fullCode()],
+            ["title" => "Faktura nr ".$invoice->fullCode],
             compact("invoice"),
         ));
     }
@@ -385,14 +397,23 @@ class StatsController extends Controller
         return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
     }
     public function invoiceAdd(Request $rq){
-        $quest = Quest::find($rq->quest_id);
+        $invoice_quests = [];
+        $totals = ["amount" => 0, "paid" => 0];
+        foreach(Quest::whereIn("id", explode(" ", $rq->quests))->get() as $quest){
+            $invoice_quests[$quest->id] = [
+                "amount" => $quest->price - $quest->allInvoices?->sum("paid"),
+                "paid" => ($quest->paid ? $quest->price - $quest->allInvoices?->sum("paid") : 0),
+                "primary" => count($quest->allInvoices) == 0,
+            ];
+            foreach(["amount", "paid"] as $i){
+                $totals[$i] += $invoice_quests[$quest->id][$i];
+            }
+        }
 
-        Invoice::create([
-            "quest_id" => $quest->id,
-            "primary" => ($quest->allInvoices()->count() == 0),
+        $invoice = Invoice::create([
             "visible" => false,
-            "amount" => $quest->price - $quest->allInvoices()->sum("paid"),
-            "paid" => ($quest->paid ? $quest->price - $quest->allInvoices()->sum("paid") : 0),
+            "amount" => $totals["amount"],
+            "paid" => $totals["paid"],
             "payer_name" => $rq->payer_name,
             "payer_title" => $rq->payer_title,
             "payer_address" => $rq->payer_address,
@@ -402,7 +423,17 @@ class StatsController extends Controller
             "payer_phone" => $rq->payer_phone,
         ]);
 
-        return back()->with("success", "Dokument utworzony");
+        foreach($invoice_quests as $quest_id => $values){
+            InvoiceQuest::create([
+                "invoice_id" => $invoice->id,
+                "quest_id" => $quest_id,
+                "primary" => $values["primary"],
+                "amount" => $values["amount"],
+                "paid" => $values["paid"],
+            ]);
+        }
+
+        return redirect()->route("invoice", ["id" => $invoice->id])->with("success", "Dokument utworzony");
     }
 
     public function costs(){

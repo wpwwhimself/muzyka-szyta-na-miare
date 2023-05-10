@@ -138,7 +138,7 @@
                 <thead>
                     <tr>
                         <th>Numer</th>
-                        <th>Kwota</th>
+                        <th>Kwota (zlec./całk.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -147,11 +147,11 @@
                         <td>
                             <a href="{{ route('invoice', ['id' => $invoice->id]) }}">
                                 <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
-                                {{ $invoice->fullCode() }}
+                                {{ $invoice->fullCode }}
                             </a>
                         </td>
                         <td>
-                            {{ as_pln($invoice->amount) }}
+                            {{ as_pln($invoice->quests->filter(fn($q) => $q->id == $quest->id)->first()->pivot->amount) }} / {{ as_pln($invoice->amount) }}
                         </td>
                     </tr>
                     @empty
@@ -163,29 +163,7 @@
                     @endforelse
                 </tbody>
             </table>
-            <form action="{{ route('invoice-add') }}" method="post">
-                @csrf
-                <x-button action="#/" id="new_invoice_button" label="Nowy" icon="plus" :small="true" />
-                <div id="payer_details" class="sc-line" style="display: none;">
-                    <x-input type="text" name="payer_name" value="{{ $quest->client->client_name }}" label="Nazwa płatnika" />
-                    <x-input type="text" name="payer_title" value="" label="Tytuł płatnika" :small="true" />
-                    <x-input type="TEXT" name="payer_address" value="" label="Adres" />
-                    <x-input type="text" name="payer_nip" value="" label="NIP" :small="true" />
-                    <x-input type="text" name="payer_regon" value="" label="REGON" :small="true" />
-                    <x-input type="text" name="payer_email" value="{{ $quest->client->email }}" label="E-mail" :small="true" />
-                    <x-input type="text" name="payer_phone" value="{{ $quest->client->phone }}" label="Telefon" :small="true" />
-                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-button action="submit" label="Dodaj" icon="check" :small="true" />
-                </div>
-                <script>
-                $(document).ready(() => {
-                    $("#new_invoice_button").click(() => {
-                        $("#payer_details").show();
-                        $("#new_invoice_button").hide();
-                    });
-                });
-                </script>
-            </form>
+            <x-button action="{{ route('invoices') }}?fillfor={{ $quest->client_id }}&quest={{ $quest->id }}" name="" icon="plus" label="Dodaj" :small="true" />
         </section>
 
         <section id="stats-log">

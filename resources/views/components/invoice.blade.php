@@ -1,7 +1,7 @@
 @props(["invoice"])
 
 <div id="invoice">
-    <h1>Faktura nr {{ $invoice->fullCode() }}</h1>
+    <h1>Faktura nr {{ $invoice->fullCode }}</h1>
     <div class="dates grid-2 name-value">
         <span>Data wystawienia:</span>
         <span>{{ $invoice->created_at->format("Y-m-d") }}</span>
@@ -58,17 +58,18 @@
             <span>Nazwa usługi</span>
             <span>Cena</span>
         </div>
+        @foreach ($invoice->quests as $quest)
         <div class="table-row">
             <span>
-                @if ($invoice->primary)
-                    @switch(song_quest_type($invoice->quest->song_id)->id)
+                @if ($quest->pivot->primary)
+                    @switch(song_quest_type($quest->song_id)->id)
                         @case(1) Przygotowanie podkładu muzycznego @break
                         @case(2) Przygotowanie nut @break
                         @case(3) Obróbka nagrania @break
                         @default Przygotowanie materiałów muzycznych
                     @endswitch
                 @else
-                    @switch(song_quest_type($invoice->quest->song_id)->id)
+                    @switch(song_quest_type($quest->song_id)->id)
                         @case(1) Przygotowanie poprawek do podkładu muzycznego @break
                         @case(2) Przygotowanie poprawek do nut @break
                         @case(3) Dodatkowa obróbka nagrania @break
@@ -76,15 +77,16 @@
                     @endswitch
                 @endif
                 do utworu:
-                @if ($invoice->quest->song->artist)
-                {{ $invoice->quest->song->artist }} –
+                @if ($quest->song->artist)
+                {{ $quest->song->artist }} –
                 @endif
-                <em>{{ $invoice->quest->song->title ?? "bez tytułu" }}</em>
+                <em>{{ $quest->song->title ?? "bez tytułu" }}</em>
             </span>
             <span>
-                {{ as_pln($invoice->amount) }}
+                {{ as_pln($quest->pivot->amount) }}
             </span>
         </div>
+        @endforeach
     </div>
 
     <div class="grid-2 name-value summary">
@@ -94,7 +96,7 @@
         <span class="small">Płatność otrzymana:</span>
         <span class="small">{{ as_pln($invoice->paid) }}</span>
         <span>Pozostało do zapłaty:</span>
-        <span @if ($invoice->isPaid()) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
+        <span @if ($invoice->isPaid) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
         @endif
     </div>
 </div>

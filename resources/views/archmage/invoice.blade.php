@@ -13,8 +13,8 @@
         label="{{ $invoice->visible ? 'Ukryj' : 'Pokaż' }}"
         />
 
-    <x-button action="{{ route('quest', ['id' => $invoice->quest_id]) }}"
-        icon="angles-left" label="Wróć do zlecenia"
+    <x-button action="{{ route('invoices') }}"
+        icon="angles-left" label="Wróć do faktur"
         />
 
     <x-button action="#/" id="print_invoice"

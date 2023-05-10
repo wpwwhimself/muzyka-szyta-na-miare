@@ -614,7 +614,7 @@ class BackController extends Controller
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
 
             $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
-                return !($val->isPaid());
+                return !($val->isPaid);
             })->first();
             $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
 

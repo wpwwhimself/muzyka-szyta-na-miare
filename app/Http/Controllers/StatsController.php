@@ -346,15 +346,27 @@ class StatsController extends Controller
         $clients_quests = [];
         foreach($quest_ids as $id){
             $quest = Quest::find($id);
+            $amount_to_pay = $quest->price - $quest->payments->sum("comment");
 
             // opłać zlecenia
             app("App\Http\Controllers\BackController")->statusHistory(
                 $id,
                 32,
-                $quest->price - $quest->payments->sum("comment"),
+                $amount_to_pay,
                 $quest->client_id,
                 $quest->client->isMailable()
             );
+
+            // opłacanie faktury
+            $invoice = InvoiceQuest::where("quest_id", $id)
+            ->get()
+            ->filter(fn($val) => !($val->isPaid))
+            ->first();
+            $invoice?->update(["paid" => $invoice->paid + $amount_to_pay]);
+            // opłacanie faktury macierzystej
+            $invoice = $invoice?->mainInvoice;
+            $invoice?->update(["paid" => $invoice->paid + $amount_to_pay]);
+
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
 
             // zbierz zlecenia dla konkretnych adresatów

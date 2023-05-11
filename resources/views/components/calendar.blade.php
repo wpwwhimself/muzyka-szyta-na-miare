@@ -7,8 +7,8 @@
     </thead>
     <tbody>
     @foreach ($calendar as $date => $meta)
-        <tr class="cal-row {{ $clickDays ? "clickable" : "" }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}" date="{{ $meta['date_val'] }}">
-            <td class="{{ $meta['day_type'] }}">{{ $date }}</td>
+        <tr class="cal-row {{ $clickDays ? "clickable" : "" }}" date="{{ $meta['date_val'] }}">
+            <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}">{{ $date }}</td>
             <td>
                 @foreach ($meta["quests"] as $quest)
                 <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >

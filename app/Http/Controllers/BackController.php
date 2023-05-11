@@ -10,6 +10,7 @@ use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
 use App\Models\Invoice;
+use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -613,9 +614,14 @@ class BackController extends Controller
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
             $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
 
-            $invoice = Invoice::where("quest_id", $rq->quest_id)->get()->filter(function($val){
-                return !($val->isPaid);
-            })->first();
+            // opłacanie faktury
+            $invoice = InvoiceQuest::where("quest_id", $rq->quest_id)
+                ->get()
+                ->filter(fn($val) => !($val->isPaid))
+                ->first();
+            $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
+            // opłacanie faktury macierzystej
+            $invoice = $invoice?->mainInvoice;
             $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
 
             $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);

@@ -14,4 +14,12 @@ class InvoiceQuest extends Model
         "primary",
         "amount", "paid",
     ];
+
+    public function getIsPaidAttribute(){
+        return $this->amount == $this->paid;
+    }
+
+    public function mainInvoice(){
+        return $this->belongsTo(Invoice::class, "invoice_id");
+    }
 }

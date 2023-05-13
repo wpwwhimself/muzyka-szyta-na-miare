@@ -129,41 +129,44 @@
                     }
                 }
             }
+            function songSuggestions(title) {
+                if(title.length >= 2){
+                    $.ajax({
+                        type: "get",
+                        url: "/song_data",
+                        data: { title: title },
+                        success: function (res) {
+                            const positions_list = $("#song-summary .positions");
+                            res = JSON.parse(res);
+                            let content = ``;
+                            res.forEach(song => {
+                                content += `<tr>`;
+                                if(song.link?.indexOf(",") > -1) song.link = song.link.substring(0, song.link.indexOf(","));
+                                content += `<td><input type='radio' name='song_id' value='${song.id}' onchange='ghostBind("${song.id}")' /></td>`;
+                                content += `<td>${song.title}</td>`;
+                                content += `<td>${song.genre}</td>`;
+                                content += `<td id="#song_price_code">${song.price_code}</td>`;
+                                content += `<td>`;
+                                    if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
+                                    if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
+                                    content += `<a href="{{ route('songs') }}#song${song.id}" target="_blank" title='Utwór'>📝</a>`;
+                                content += `</td>`;
+                                content += `</tr>`;
+                            });
+                            content += `<tr><td><input type='radio' name='song_id' value='0' onchange='ghostBind()' checked /></td><td colspan=4>Nowa piosenka</td></tr>`
+                            positions_list.html(content);
+                            $("#song-summary").show();
+                        }
+                    });
+                }else{
+                    $("#song-summary .positions").html("");
+                    $("#song-summary").hide();
+                }
+            }
             $(document).ready(function(){
-                $("#title").change(function (e) {
-                    if(e.target.value.length >= 2){
-                        $.ajax({
-                            type: "get",
-                            url: "/song_data",
-                            data: { title: e.target.value },
-                            success: function (res) {
-                                const positions_list = $("#song-summary .positions");
-                                res = JSON.parse(res);
-                                let content = ``;
-                                res.forEach(song => {
-                                    content += `<tr>`;
-                                    if(song.link?.indexOf(",") > -1) song.link = song.link.substring(0, song.link.indexOf(","));
-                                    content += `<td><input type='radio' name='song_id' value='${song.id}' onchange='ghostBind("${song.id}")' /></td>`;
-                                    content += `<td>${song.title}</td>`;
-                                    content += `<td>${song.genre}</td>`;
-                                    content += `<td id="#song_price_code">${song.price_code}</td>`;
-                                    content += `<td>`;
-                                        if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
-                                        if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
-                                        content += `<a href="{{ route('songs') }}#song${song.id}" target="_blank" title='Utwór'>📝</a>`;
-                                    content += `</td>`;
-                                    content += `</tr>`;
-                                });
-                                content += `<tr><td><input type='radio' name='song_id' value='0' onchange='ghostBind()' checked /></td><td colspan=4>Nowa piosenka</td></tr>`
-                                positions_list.html(content);
-                                $("#song-summary").show();
-                            }
-                        });
-                    }else{
-                        $("#song-summary .positions").html("");
-                        $("#song-summary").hide();
-                    }
-                });
+                if([1, 6, 96].includes({{ $request->status_id }}))
+                songSuggestions($("#title").val());
+                $("#title").change((e) => songSuggestions(e.target.value));
             });
             </script>
         </section>

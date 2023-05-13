@@ -154,7 +154,7 @@
                 <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
                 <div>
                     <x-a href="{{ route('requests') }}">Wszystkie</x-a>
-                    <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
+                    <x-a href="{{ route('add-request') }}" icon="plus">Nowe</x-a>
                 </div>
             </div>
             <style>

@@ -192,6 +192,7 @@
                 <x-calendar />
             </section>
         </div>
+        <x-input type="TEXT" name="comment" label="Komentarz do zmiany" />
         <input type="hidden" name="intent" value="new" />
         <div class="flexright">
             <x-button

@@ -62,7 +62,10 @@ class BackController extends Controller
                 ->get();
         }else{
             $recent = StatusChange::whereNotIn("new_status_id", [9, 32])
-                ->where("changed_by", "!=", 1)
+                ->where(fn($q) => $q
+                    ->where("changed_by", "!=", 1)
+                    ->orWhereNull("changed_by")
+                )
                 ->orderByDesc("date")
                 ->limit(7)
                 ->get();

@@ -11,6 +11,7 @@
     <x-stats-highlight-h :data="$stats->summary->general" />
     <x-stats-highlight-h title="Podział zleceń wg typu" :data="$stats->summary->quest_types" :bracketed-numbers="'percentages'" />
     <x-stats-highlight-h title="Najpopularniejsze wyceny <small>(z wycenionych schematycznie)</small>" :data="$stats->summary->quest_pricings" :bracketedNumbers="'percentages'" />
+    <x-barplot title="Dochody roczne ogółem" :data="$stats->summary->income_total" :all-pln="true" />
   </section>
 
   <section>
@@ -25,13 +26,13 @@
 
 <section>
   <div class="section-header">
-    <h1><i class="fa-solid fa-sack-dollar"></i> Finanse (w ostatnich miesiącach)</h1>
+    <h1><i class="fa-solid fa-sack-dollar"></i> Finanse</h1>
   </div>
   <x-stats-highlight-h :data="$stats->finances->total" :bracketed-numbers="'comparison'" :all-pln="true" />
-  <x-barplot title="Przychody" :data="$stats->finances->income" :all-pln="true" />
-  <x-barplot title="Koszty" :data="$stats->finances->costs" :all-pln="true" />
-  <x-barplot title="Dochody" :data="$stats->finances->gross" :all-pln="true" />
-  <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->finances->prop" :all-pln="true" />
+  <x-barplot title="Przychody w ostatnich 12 mc" :data="$stats->finances->income" :all-pln="true" />
+  <x-barplot title="Koszty w ostatnich 12 mc" :data="$stats->finances->costs" :all-pln="true" />
+  <x-barplot title="Dochody w ostatnich 12 mc" :data="$stats->finances->gross" :all-pln="true" />
+  <x-barplot title="Średnia cena 1 zlecenia w ostatnich 12 mc" :data="$stats->finances->prop" :all-pln="true" />
 </section>
 
 <div class="grid-2">

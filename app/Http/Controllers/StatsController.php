@@ -67,6 +67,24 @@ class StatsController extends Controller
         ];
         $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
         $finances_total_last_year["dochody"] = $finances_total_last_year["przychody"] - $finances_total_last_year["koszty"];
+        $recent_income_alltime = StatusChange::where("new_status_id", 32)
+            ->whereDate("date", ">=", "2020-01-01")
+            ->selectRaw("DATE_FORMAT(date, '%y-') as year,
+                sum(comment) as sum,
+                round(avg(comment), 2) as mean")
+            ->groupBy("year")
+            ->orderBy("year")
+            ->get();
+        $recent_costs_alltime = Cost::selectRaw("DATE_FORMAT(created_at, '%y-') as year,
+                sum(amount) as sum,
+                round(avg(amount), 2) as mean")
+            ->whereDate("created_at", ">=", "2020-01-01")
+            ->groupBy("year")
+            ->orderBy("year")
+            ->get();
+        $recent_gross_alltime = collect($recent_income_alltime->pluck("sum", "year"))
+            ->mergeRecursive($recent_costs_alltime->pluck("sum", "year")->put('20-', 0)->put('21-', 0))
+            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
         $client_exp_raw = Client::withCount("questsDone")
             ->pluck("quests_done_count")
             ->countBy()
@@ -117,6 +135,7 @@ class StatsController extends Controller
                     "split" => array_slice($quest_pricings, 0, 6),
                     "total" => Song::where("price_code", "not regexp", "^\d*\.\d*$")->count(),
                 ],
+                "income_total" => $recent_gross_alltime,
             ],
             "quests" => [
                 "recent" => [

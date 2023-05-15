@@ -26,6 +26,20 @@
                             ({{ sprintf("%+d", $gains["monthly_diff"]) }})
                         </small>
                     </span>
+
+                    <span>Zarobki w tym miesiącu</span>
+                    <span>
+                        {{ as_pln($gains_this_month["amount"]) }}
+                        <small class="{{
+                            ($gains_this_month['amount'] >= $gains_this_month['limit'])
+                            ? 'error'
+                            : ($gains_this_month['amount'] >= 0.8*$gains_this_month['limit']
+                                ? 'warning'
+                                : '')
+                            }}">
+                            ({{ round($gains_this_month['amount'] / $gains_this_month['limit'], 2)*100 }}%)
+                        </small>
+                    </span>
                 </div>
             </div>
         </section>

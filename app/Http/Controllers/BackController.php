@@ -93,6 +93,10 @@ class BackController extends Controller
             foreach($janitor_log as $i){
                 $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest->id);
             }
+            $gains_this_month = [
+                "amount" => StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment"),
+                "limit" => 1745,
+            ];
         }
         $requests = $requests->get();
         $quests = $quests->get();
@@ -104,6 +108,7 @@ class BackController extends Controller
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
             (isset($unpaids) ? compact("unpaids") : []),
             (isset($gains) ? compact("gains") : []),
+            (isset($gains_this_month) ? compact("gains_this_month") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
             (isset($recent) ? compact("recent") : []),
         ));

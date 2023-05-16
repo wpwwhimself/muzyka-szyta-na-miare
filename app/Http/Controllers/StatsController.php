@@ -49,7 +49,7 @@ class StatsController extends Controller
             ->orderBy("month")
             ->get();
         $recent_gross = collect($recent_income->pluck("sum", "month"))
-            ->mergeRecursive($recent_costs->pluck("sum", "month"))
+            ->mergeRecursive($recent_costs->pluck("sum", "month")->put("23-03", 0))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
         $finances_total = [
             "przychody" => StatusChange::where("new_status_id", 32)
@@ -83,10 +83,12 @@ class StatsController extends Controller
             ->orderBy("year")
             ->get();
         $recent_gross_alltime = collect($recent_income_alltime->pluck("sum", "year"))
-            ->mergeRecursive($recent_costs_alltime->pluck("sum", "year")->put('20-', 0)->put('21-', 0))
+            ->mergeRecursive($recent_costs_alltime->pluck("sum", "year"))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
         $client_exp_raw = Client::withCount("questsDone")
-            ->pluck("quests_done_count")
+            ->pluck("quests_done_count", "client_name")
+            ->mergeRecursive(Client::all()->pluck("extra_exp", "client_name"))
+            ->mapWithKeys(fn($val, $key) => [$key => $val[0] + $val[1]])
             ->countBy()
             ->toArray();
         function client_exp_tally($raw, $low = 0, $high = INF){
@@ -117,7 +119,7 @@ class StatsController extends Controller
         $stats = [
             "summary" => [
                 "general" => [
-                    "biznes kręci się od" => Carbon::createFromDate(2020, 1, 1)->diff(Carbon::now())->format("%yl %mm %dd"),
+                    "biznes kręci się od" => BEGINNING()->diff(Carbon::now())->format("%yl %mm %dd"),
                     "skończone questy" => Quest::where("status_id", 19)->count(),
                     "poznani klienci" => Client::count(),
                     "zarobki w sumie" => as_pln(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " "),
@@ -332,6 +334,15 @@ class StatsController extends Controller
     }
 
     public function financeDashboard(){
+        $this_month = [
+            "zarobiono" => StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())
+                ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
+                ->sum("comment"),
+            "wydano" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
+                ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
+                ->sum("amount"),
+        ];
+
         $unpaids_raw = Quest::where("paid", 0)
             ->whereNotIn("status_id", [17, 18])
             ->whereHas("client", function($query){
@@ -355,7 +366,7 @@ class StatsController extends Controller
         return view(user_role().".finance", array_merge(
             ["title" => "Centrum Finansowe"],
             compact(
-                "unpaids", "recent"
+                "unpaids", "recent", "this_month"
             ),
         ));
     }

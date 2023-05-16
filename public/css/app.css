@@ -955,7 +955,7 @@ footer .contact-info{
 /************************MOBILITY**************/
 @media screen and (max-width: 1030px){
     .grid-2{
-        /* display: block; */
+        display: block;
     }
     .grid-3{
         display: flex;

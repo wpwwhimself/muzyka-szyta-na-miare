@@ -21,6 +21,16 @@
             @endunless
         </div>
     </div>
+
+    @if (Auth::user()->client->isOld())
+    <p class="yellowed-out">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Bardzo prawdopodobnym jest, że poniższa lista jest niepełna.
+        Część przeszłych zleceń została zarchiwizowana.
+        Jeśli chcesz przywrócić któreś z nich, proszę o kontakt mailowy.
+    </p>
+    @endif
+
     <style>
     .table-row{ grid-template-columns: 3fr 2em 11em; }
     .table-row span:nth-child(5){ text-align: center; }

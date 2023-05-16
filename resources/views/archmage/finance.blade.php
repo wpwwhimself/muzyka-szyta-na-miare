@@ -2,6 +2,13 @@
 
 @section('content')
 
+<section>
+    <div class="section-header">
+        <h1><i class="fa-solid fa-chart-pie"></i> Podsumowanie</h1>
+    </div>
+    <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
+</section>
+
 @if(count($unpaids))
 <section>
     <div class="section-header">

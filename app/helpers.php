@@ -32,6 +32,11 @@ if(!function_exists("CURRENT_PRICING")){
         return setting("current_pricing");
     }
 }
+if(!function_exists("BEGINNING")){
+    function BEGINNING(){
+        return Carbon::parse('2023-03-13');
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)
@@ -251,7 +256,8 @@ if(!function_exists("is_patron")){
 if(!function_exists("client_exp")){
     function client_exp($client_id){
         if($client_id == "") return 0;
-        return Client::find($client_id)->quests->where("status_id", 19)->count();
+        $client = Client::find($client_id);
+        return $client->quests->where("status_id", 19)->count() + $client->extra_exp;
     }
 }
 if(!function_exists("upcoming_quests")){

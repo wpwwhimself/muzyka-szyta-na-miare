@@ -14,10 +14,10 @@ class Request extends Model
         "made_by_me",
         "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",
         "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes", "wishes_quest",
-        "price_code", "price", "deadline", "hard_deadline",
+        "price_code", "price", "deadline", "hard_deadline", "delayed_payment",
         "status_id", "quest_id"
     ];
-    protected $dates = ["deadline", "hard_deadline"];
+    protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
 
     public function client(){
         return $this->belongsTo(Client::class);

@@ -111,7 +111,7 @@
             <div class="tutorial">
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
-                    {{-- <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br> --}}
+                    <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
                         (w tytule ID zlecenia, tj. <i>{{ $quest->id }}</i>),</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
@@ -120,6 +120,13 @@
                     chyba, że jesteś np. stałym klientem
                 </p>
             </div>
+            @if ($quest->delayed_payment)
+            <p><b>
+                Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+                proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}.
+                Po zaakceptowaniu zlecenia dostęp do plików zostanie przyznany automatycznie.
+            </b></p>
+            @endif
             @endunless
             @if ($quest->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" />
@@ -177,7 +184,7 @@
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
                                 @endif
                             @endforeach
-                            @if ($quest->paid || can_download_files($quest->client_id))
+                            @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
                                 @foreach ($ver_bots as $file)
                                     @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
                                     <x-file-tile :id="$quest->song->id" :file="$file" />

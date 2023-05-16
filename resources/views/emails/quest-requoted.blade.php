@@ -25,6 +25,13 @@
         </tr>
     </table>
 
+    @if ($quest->delayed_payment)
+        <p><b>
+            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+            proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}.
+        </b></p>
+    @endif
+
     <p>
         Niestety z przyczyn wyżej określonych nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
         Jeśli nie zgadza się {{ $pl["kobieta"] ? "Pani" : "Pan" }} na nowe warunki i chce zrezygnować ze zlecenia, proszę o kliknięcie odpowiedniego przycisku w widoku zlecenia.

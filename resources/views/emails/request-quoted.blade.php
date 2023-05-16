@@ -25,6 +25,13 @@
         </tr>
     </table>
 
+    @if ($request->delayed_payment)
+        <p><b>
+            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+            proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}.
+        </b></p>
+    @endif
+
     @if ($request->hard_deadline)
     <p>
         Termin wykonania został dopasowany do moich możliwości przerobowych.

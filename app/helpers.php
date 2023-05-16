@@ -219,10 +219,21 @@ if(!function_exists("can_see_files")){
     }
 }
 if(!function_exists("can_download_files")){
-    function can_download_files($client_id){
+    function can_download_files($client_id, $quest_id){
         if($client_id == "") return false;
         $trust = Client::findOrFail($client_id)->trust;
-        return $trust >= 0 && (is_veteran($client_id) || $trust == 1);
+        $quest = Quest::findOrFail($quest_id);
+        return
+            $trust >= 0
+            && (
+                is_veteran($client_id)
+                || $trust == 1
+                || (
+                    $quest->delayed_payment !== null
+                    && $quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0
+                    && $quest->status_id === 19
+                )
+            );
     }
 }
 if(!function_exists("is_veteran")){

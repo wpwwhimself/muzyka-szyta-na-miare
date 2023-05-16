@@ -131,7 +131,7 @@
                 </h1>
             </div>
             <p>Numer konta:</p>
-            {{-- <h2>58 1090 1607 0000 0001 5333 1539</h2> --}}
+            <h2>58 1090 1607 0000 0001 5333 1539</h2>
             <p>W tytule proszę o wpisanie ID zlecenia, dla łatwiejszej identyfikacji wpłaty.</p>
         </section>
     </div>

@@ -11,6 +11,8 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request as ModelsRequest;
 use App\Models\Song;
+use App\Models\StatusChange;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -148,6 +150,30 @@ Route::get('/song_data', function(Request $request){
 });
 Route::post('/price_calc', function(Request $request){
     return price_calc($request->labels, $request->price_schema, $request->quoting);
+});
+Route::post('/monthly_payment_limit', function(Request $request){
+    $already_paid_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->sum("comment");
+    $waiting = Quest::where("paid", 0)
+            ->whereNotIn("status_id", [17, 18])
+            ->whereHas("client", function($query){
+                $query->where("trust", ">", -1);
+            })
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price")
+        +
+        ModelsRequest::whereIn("status_id", [5])
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price");
+    $limit = 1745;
+    return response()->json([
+        "safe" => $already_paid_this_month + $waiting + $request->amount < $limit,
+        "waiting" => $waiting,
+        "already_paid_this_month" => $already_paid_this_month,
+    ]);
 });
 Route::get('/quest_type_from_id', function(Request $request){
     return QuestType::where("code", $request->initial)->first()->toJson();

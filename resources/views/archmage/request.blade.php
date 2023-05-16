@@ -180,6 +180,11 @@
                 <hr />
                 <div class="summary"><span>Razem:</span><span>0 zł</span></div>
             </div>
+            <div id="delayed-payments-summary" class="hint-table">
+                <div class="positions"></div>
+                <hr />
+                <div class="summary"></div>
+            </div>
             <script>
             function calcPriceNow(){
                 const labels = $("#price_code").val();
@@ -195,7 +200,7 @@
                             _token: '{{ csrf_token() }}',
                             labels: labels,
                             client_id: client_id,
-                            quoting: {{ $request->status_id == 1 ? "true" : "false" }}
+                            quoting: true
                         },
                         success: function(res){
                             let content = ``;
@@ -206,9 +211,31 @@
                             sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
                             if(res[2]) positions_list.addClass("overridden");
                                 else positions_list.removeClass("overridden");
+                            
+                            checkMonthlyPaymentLimit(res[0]);
                         }
                     });
                 }
+            }
+            function checkMonthlyPaymentLimit(price){
+                const positions_list = $("#delayed-payments-summary .positions");
+                const sum_row = $("#delayed-payments-summary .summary");
+
+                $.ajax({
+                    url: "{{ url('monthly_payment_limit') }}",
+                    type: "post",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        amount: price,
+                    },
+                    success: function(res){
+                        let content = ``;
+                        content += `<span>Przyjęto w tym miesiącu</span><span>${res.already_paid_this_month} zł</span>`;
+                        content += `<span>Oczekuje</span><span>${res.waiting} zł</span>`;
+                        positions_list.html(content);
+                        sum_row.html(`<span>Można brać od razu:</span><span>${res.safe ? "tak" : "nie"}</span>`);
+                    }
+                });
             }
             $(document).ready(function(){
                 calcPriceNow();
@@ -229,6 +256,7 @@
             </span>
             @endif
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" />
+            <x-input type="date" name="delayed_payment" label="Opóźnienie wpłaty" value="{{ $request->delayed_payment?->format('Y-m-d') }}" />
         </section>
 
         @if (in_array($request->status_id, [1, 6, 96]))

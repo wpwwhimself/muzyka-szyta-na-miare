@@ -281,6 +281,7 @@ class BackController extends Controller
                     "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
                     "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
+                    "delayed_payment" => $rq->delayed_payment,
                     "status_id" => $rq->new_status,
                 ]);
 
@@ -373,6 +374,7 @@ class BackController extends Controller
                 "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
                 "deadline" => $rq->deadline,
                 "hard_deadline" => $rq->hard_deadline,
+                "delayed_payment" => $rq->delayed_payment,
                 "status_id" => $rq->new_status,
             ]);
         }else if($intent == "review"){
@@ -383,6 +385,7 @@ class BackController extends Controller
                 $request->price_code = null;
                 $request->deadline = null;
                 $request->hard_deadline = null;
+                $request->delayed_payment = null;
             }
             $request->save();
         }
@@ -483,6 +486,7 @@ class BackController extends Controller
             $quest->price = $request->price;
             $quest->deadline = $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
+            $quest->delayed_payment = $request->delayed_payment;
             $quest->wishes = $request->wishes_quest;
             $quest->save();
 
@@ -706,11 +710,13 @@ class BackController extends Controller
         $quest = Quest::findOrFail($rq->id);
         $price_before = $quest->price;
         $deadline_before = $quest->deadline;
+        $delayed_payment_before = $quest->delayed_payment;
         $quest->update([
             "price_code_override" => $rq->price_code_override,
             "price" => price_calc($rq->price_code_override, $quest->client_id)[0],
             "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)[0]),
             "deadline" => $rq->deadline,
+            "delayed_payment" => $rq->delayed_payment,
         ]);
 
         // if($price_before != $quest->price){
@@ -735,6 +741,7 @@ class BackController extends Controller
         foreach([
             "cena" => [$price_before, $quest->price],
             "termin oddania pierwszej wersji" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
+            "opóźnienie wpłaty" => [$delayed_payment_before->format("Y-m-d"), $quest->delayed_payment->format("Y-m-d")],
         ] as $attr => $value){
             if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
         }

@@ -11,9 +11,9 @@ class Quest extends Model
 
     public $incrementing = false;
     protected $keyType = "string";
-    protected $dates = ["deadline", "hard_deadline"];
+    protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
 
-    protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline", "wishes"];
+    protected $fillable = ["price_code_override", "price", "paid", "status_id", "deadline", "delayed_payment", "wishes"];
 
     public function getQuestTypeLetterAttribute(){
         return substr($this->id, 0, 1);

@@ -17,11 +17,14 @@ class Calendar extends Component
     public $withToday;
     public $clickDays;
     public $length;
+    private $available_day_until;
     public function __construct($withToday = false, $clickDays = true, $length = 14)
     {
         $this->clickDays = $clickDays;
+        $this->available_day_until = explode(",", setting("available_day_until"));
 
         $available_days_needed = setting("available_days_needed");
+        
         $available_days_count = 0;
         $suggestion_ready = 0;
         for($i = ($withToday ? 0 : 1); $i < $length; $i++){
@@ -33,7 +36,7 @@ class Calendar extends Component
 
             $items_count = count($quests) + count($requests);
             if(
-                $items_count < setting("available_day_until") &&
+                $items_count < $this->available_day_until[date("w", $date)] &&
                 ($workday_type == "" || ($workday_type == "weekend" && setting("work_on_weekends")))
             ) $available_days_count++;
             if($available_days_count == $available_days_needed && $suggestion_ready === 0) $suggestion_ready = 1;
@@ -56,11 +59,11 @@ class Calendar extends Component
      * Klasy dni pracujących
      */
     private function workday_type($day_no){
-        $workdays_free = explode(",", setting("workdays_free"));
+        $workdays_free = array_keys(array_filter($this->available_day_until, fn($el) => $el == 0));
         $weekend = [0, 6];
 
-        if(in_array($day_no, $workdays_free)) return "free";
-        else if(in_array($day_no, $weekend)) return "weekend";
+        if(in_array($day_no, $weekend)) return "weekend";
+        else if(in_array($day_no, $workdays_free)) return "free";
         else return "";
     }
 

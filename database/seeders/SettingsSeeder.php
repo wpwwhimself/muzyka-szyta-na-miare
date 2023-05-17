@@ -46,19 +46,14 @@ class SettingsSeeder extends Seeder
                 "value_str" => 5
             ],
             [
-                "setting_name" => "workdays_free",
-                "desc" => "Które dni tygodnia są traktowane jako wolne i nie są brane pod uwagę przy liczeniu deadline'u",
-                "value_str" => "2,5"
-            ],
-            [
                 "setting_name" => "available_days_needed",
                 "desc" => "Ile (dostępnych) dni od dziś można proponować deadline",
                 "value_str" => 2
             ],
             [
                 "setting_name" => "available_day_until",
-                "desc" => "Ile maksymalnie zleceń dziennie przyjmuję (dni z tyloma+ zleceniami nie są brane pod uwagę przy liczeniu deadline'u)",
-                "value_str" => 3
+                "desc" => "Ile maksymalnie zleceń dziennie przyjmuję (dni z tyloma+ zleceniami nie są brane pod uwagę przy liczeniu deadline'u). Od niedzieli, po przecinkach",
+                "value_str" => "2,3,3,0,3,0,2"
             ],
             [
                 "setting_name" => "work_on_weekends",

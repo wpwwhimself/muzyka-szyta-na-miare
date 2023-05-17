@@ -29,15 +29,15 @@
 
                     <span>Zarobki w tym miesiącu</span>
                     <span>
-                        {{ as_pln($gains_this_month["amount"]) }}
+                        {{ as_pln($gains_this_month) }}
                         <small class="{{
-                            ($gains_this_month['amount'] >= $gains_this_month['limit'])
+                            ($gains_this_month >= 0.9 * INCOME_LIMIT())
                             ? 'error'
-                            : ($gains_this_month['amount'] >= 0.8*$gains_this_month['limit']
+                            : ($gains_this_month >= 0.7 * INCOME_LIMIT()
                                 ? 'warning'
                                 : '')
                             }}">
-                            ({{ round($gains_this_month['amount'] / $gains_this_month['limit'], 2)*100 }}%)
+                            ({{ round($gains_this_month / INCOME_LIMIT(), 2)*100 }}%)
                         </small>
                     </span>
                 </div>

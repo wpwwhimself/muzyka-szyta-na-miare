@@ -37,6 +37,11 @@ if(!function_exists("BEGINNING")){
         return Carbon::parse('2023-03-13');
     }
 }
+if(!function_exists("INCOME_LIMIT")){
+    function INCOME_LIMIT(){
+        return 1745;
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)

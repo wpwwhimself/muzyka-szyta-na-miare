@@ -229,11 +229,16 @@
                         amount: price,
                     },
                     success: function(res){
+                        let when_to_ask = "";
+                        switch(res.when_to_ask){
+                            case 0: when_to_ask = "<span class='success'>od razu</span>"; break;
+                            case 1: when_to_ask = "<span class='warning'>w przyszłym miesiącu</span>"; break;
+                            default: when_to_ask = "<span class='error'>za dwa miesiące</span>";
+                        }
                         let content = ``;
-                        content += `<span>Przyjęto w tym miesiącu</span><span>${res.already_paid_this_month} zł</span>`;
-                        content += `<span>Oczekuje</span><span>${res.waiting} zł</span>`;
+                        content += `<span>Saturacja</span><span>${res.saturation[0]} zł • ${res.saturation[1]} zł • ${res.saturation[2]} zł</span>`;
                         positions_list.html(content);
-                        sum_row.html(`<span>Można brać od razu:</span><span>${res.safe ? "tak" : "nie"}</span>`);
+                        sum_row.html(`<span>Kiedy można brać?</span><span>${when_to_ask}</span>`);
                     }
                 });
             }

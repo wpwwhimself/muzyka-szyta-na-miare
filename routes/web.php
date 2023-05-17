@@ -152,27 +152,65 @@ Route::post('/price_calc', function(Request $request){
     return price_calc($request->labels, $request->price_schema, $request->quoting);
 });
 Route::post('/monthly_payment_limit', function(Request $request){
-    $already_paid_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->sum("comment");
-    $waiting = Quest::where("paid", 0)
+    //scheduled and received payments
+    $saturation = [
+        //this month
+        StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->sum("comment")
+        + Quest::where("paid", 0)
             ->whereNotIn("status_id", [17, 18])
-            ->whereHas("client", function($query){
-                $query->where("trust", ">", -1);
-            })
+            ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
             ->where(fn($q) => $q
                 ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                 ->orWhereNull("delayed_payment"))
             ->sum("price")
-        +
-        ModelsRequest::whereIn("status_id", [5])
+        + ModelsRequest::whereIn("status_id", [5])
             ->where(fn($q) => $q
                 ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                 ->orWhereNull("delayed_payment"))
-            ->sum("price");
-    $limit = 1745;
+            ->sum("price"),
+        
+        //next month (scheduled)
+        Quest::where("paid", 0)
+            ->whereNotIn("status_id", [17, 18])
+            ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
+                ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price")
+        + ModelsRequest::whereIn("status_id", [5])
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
+                ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price"),
+        
+        //neeeeeeext month (scheduled)
+        Quest::where("paid", 0)
+            ->whereNotIn("status_id", [17, 18])
+            ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
+                ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price")
+        + ModelsRequest::whereIn("status_id", [5])
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
+                ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth())
+                ->orWhereNull("delayed_payment"))
+            ->sum("price"),
+    ];
+
+    $when_to_ask = 0;
+    while($when_to_ask < 2){
+        if($saturation[$when_to_ask] + $request->amount < INCOME_LIMIT()) break;
+        else $when_to_ask++;
+    }
+
     return response()->json([
-        "safe" => $already_paid_this_month + $waiting + $request->amount < $limit,
-        "waiting" => $waiting,
-        "already_paid_this_month" => $already_paid_this_month,
+        "saturation" => $saturation,
+        "when_to_ask" => $when_to_ask,
     ]);
 });
 Route::get('/quest_type_from_id', function(Request $request){

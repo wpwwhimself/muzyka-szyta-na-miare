@@ -93,10 +93,7 @@ class BackController extends Controller
             foreach($janitor_log as $i){
                 $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest->id);
             }
-            $gains_this_month = [
-                "amount" => StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment"),
-                "limit" => 1745,
-            ];
+            $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
         }
         $requests = $requests->get();
         $quests = $quests->get();

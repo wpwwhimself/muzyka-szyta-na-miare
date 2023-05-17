@@ -75,6 +75,7 @@
             <i class="fa-solid fa-clock-rotate-left"></i>
             Ostatnie wpłaty
         </h1>
+        <x-a href="{{ route('finance-summary') }}">Raport</x-a>
     </div>
 
     <table>

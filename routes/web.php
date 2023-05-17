@@ -96,6 +96,7 @@ Route::controller(StatsController::class)->group(function(){
 
         Route::prefix("finance")->group(function(){
             Route::get("/", "financeDashboard")->name("finance");
+            Route::get("/summary", "financeSummary")->name("finance-summary");
             Route::post("/pay", "financePay")->name("finance-pay");
 
             Route::get("/invoices", "invoices")->name("invoices");

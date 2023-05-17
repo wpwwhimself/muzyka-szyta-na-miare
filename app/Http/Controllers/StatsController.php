@@ -319,9 +319,7 @@ class StatsController extends Controller
                 ],
             ],
         ];
-
         $stats = json_decode(json_encode($stats));
-        // dd($stats->songs->time_genres->split);
 
         return view(user_role().".stats", array_merge(
             ["title" => "GUS"],
@@ -412,6 +410,18 @@ class StatsController extends Controller
         }
 
         return back()->with("success", "Zlecenia opłacone");
+    }
+    public function financeSummary(){
+        $gains = StatusChange::where("new_status_id", 32)
+            ->join("clients", "clients.id", "changed_by", "left")
+            ->orderByDesc("date")
+            ->paginate(25);
+        $losses = Cost::orderByDesc("created_at")->get();
+
+        return view(user_role().".finance-summary", array_merge(
+            ["title" => "Raport przepływów"],
+            compact("gains", "losses")
+        ));
     }
 
     public function invoices(Request $rq){

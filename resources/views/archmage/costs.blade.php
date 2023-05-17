@@ -65,6 +65,7 @@
 <div>
     <x-button action="{{ route('cost-types') }}" label="Typy" icon="cog" />
     <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
+    <x-button action="{{ route('finance-summary') }}" label="Wpływy" icon="angles-down" />
 </div>
 
 @endsection

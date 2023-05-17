@@ -37,6 +37,8 @@
         </h1>
     </div>
 
+    <x-stats-highlight-h :data="$summary" :all-pln="true" />
+
     <div class="quests-table">
         <style>
         .table-row{ grid-template-columns: 1fr 1fr 2fr 1fr; }

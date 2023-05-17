@@ -417,10 +417,13 @@ class StatsController extends Controller
             ->orderByDesc("date")
             ->paginate(25);
         $losses = Cost::orderByDesc("created_at")->get();
+        $summary = [
+            "Suma" => StatusChange::where("new_status_id", 32)->sum("comment"),
+        ];
 
         return view(user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],
-            compact("gains", "losses")
+            compact("gains", "losses", "summary")
         ));
     }
 
@@ -491,10 +494,14 @@ class StatsController extends Controller
     public function costs(){
         $costs = Cost::orderByDesc("created_at")->paginate(25);
         $types = CostType::all()->pluck("name", "id");
+        $summary = [
+            "Suma" => Cost::sum("amount"),
+            "Bez wypłat" => Cost::where("cost_type_id", "<>", 3)->sum("amount"),
+        ];
 
         return view(user_role().".costs", array_merge(
             ["title" => "Lista kosztów"],
-            compact("costs", "types"),
+            compact("costs", "types", "summary"),
         ));
     }
     public function modCost(Request $rq){

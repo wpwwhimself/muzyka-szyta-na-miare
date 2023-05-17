@@ -20,7 +20,7 @@
                     <x-input type="TEXT" name="wishes[]" label="Życzenia" value="{{ Auth::user()->client->default_wishes }}" :hint="$hint['wishes']" />
                     <x-input type="date" name="hard_deadline[]" label="Opcjonalny termin wykonania" :hint="$hint['deadline']" />
                 </div>
-                <x-button action="#quest-box" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
+                <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
             </section>
         </div>
         <script>

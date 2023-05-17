@@ -322,7 +322,7 @@
                             </small>
                         </h5>
                         <x-button
-                            action="#ver_desc_form" label="" icon="note-sticky"
+                            action="#/" label="" icon="note-sticky"
                             value='{{ pathinfo($ver_bots[0], PATHINFO_FILENAME) }}'
                             />
                         <div class="ver_desc">

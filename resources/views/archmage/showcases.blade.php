@@ -18,7 +18,7 @@
 
     <div id="quick-add-showcase" class="flex-right">
     @foreach ($potential_showcases as $song)
-        <x-button action="#add-showcase" :small="true"
+        <x-button action="#/" :small="true"
             label="{!! $song->title !!} ({{ $song->artist }})"
             icon="{{ substr(song_quest_type($song->id)->fa_symbol, 3) }}"
             value="{{ $song->id }}"

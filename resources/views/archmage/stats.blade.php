@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<div class="grid-2">
+<div class="grid-2 force-block">
   <section>
     <div class="section-header">
       <h1>
@@ -35,7 +35,7 @@
   <x-barplot title="Średnia cena 1 zlecenia w ostatnich 12 mc" :data="$stats->finances->prop" :all-pln="true" />
 </section>
 
-<div class="grid-2">
+<div class="grid-2 force-block">
   <section class="sc-line">
     <x-sc-scissors />
     <div class="section-header">

@@ -705,6 +705,7 @@ footer .contact-info{
 .stats-highlight-h p, .stats-highlight-h h3{
     margin: 0;
     display: flex; justify-content: center; align-items: center;
+    flex-wrap: wrap;
     gap: 0.2em;
 }
 .stats-highlight-h h3{
@@ -954,7 +955,7 @@ footer .contact-info{
 
 /************************MOBILITY**************/
 @media screen and (max-width: 1030px){
-    .grid-2{
+    .force-block{
         display: block;
     }
     .grid-3{

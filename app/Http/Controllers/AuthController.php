@@ -21,7 +21,7 @@ class AuthController extends Controller
             'password' => ['required']
         ]);
 
-        $credentials = $request->password;
+        $credentials = trim($request->password);
         $remember = $request->has("remember");
 
         $users = User::all();

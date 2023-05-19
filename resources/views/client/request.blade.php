@@ -138,11 +138,12 @@
                 <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>
             @if ($request->delayed_payment)
-                <p><b>
-                        Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-                        proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}.
-                </b></p>
-                @endif
+                <p class="yellowed-out">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+                    <b>proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}</b>.
+                    Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
+                </p>
             @endif
         </section>
 

@@ -42,7 +42,7 @@ body{
     background-color: var(--bg); color: var(--fg);
 }
 h1, h2, h3, h4, h5{
-    font-family: "Krona One", Montserrat, "Arial";
+    font-family: Montserrat;
     font-weight: normal;
 }
 h2{
@@ -757,7 +757,7 @@ footer .contact-info{
     align-items: center;
 }
 #clients-stats-graph .value, .bar-container .value{
-    font-family: "Krona One", Montserrat, "Arial Black";
+    font-family: Montserrat;
     font-size: 1.2em;
 }
 .bar-container .value{
@@ -940,7 +940,7 @@ footer .contact-info{
     font-weight: bold;
 }
 .name-value.summary span:nth-child(even){
-    font-family: "Krona One", Montserrat, "Arial Black";
+    font-family: Montserrat;
 }
 
 /* quest and request phases */

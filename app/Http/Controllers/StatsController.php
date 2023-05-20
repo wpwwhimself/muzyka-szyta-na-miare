@@ -230,6 +230,7 @@ class StatsController extends Controller
                     "total" => Client::all()->count(),
                 ],
                 "new" => Client::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+                    ->whereDate("created_at", ">=", BEGINNING())
                     ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
                         count(*) as count")
                     ->groupBy("month")

@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    "title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"
+    "title" => "[".$quest->song->id."] ".($quest->song->title ?? "bez tytułu")." | $quest->id"
 ])
 
 @section('content')

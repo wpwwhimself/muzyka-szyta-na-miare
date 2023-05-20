@@ -169,7 +169,7 @@ Route::post('/monthly_payment_limit', function(Request $request){
                 ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                 ->orWhereNull("delayed_payment"))
             ->sum("price"),
-        
+
         //next month (scheduled)
         Quest::where("paid", 0)
             ->whereNotIn("status_id", [17, 18])
@@ -185,7 +185,7 @@ Route::post('/monthly_payment_limit', function(Request $request){
                 ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth())
                 ->orWhereNull("delayed_payment"))
             ->sum("price"),
-        
+
         //neeeeeeext month (scheduled)
         Quest::where("paid", 0)
             ->whereNotIn("status_id", [17, 18])
@@ -204,14 +204,16 @@ Route::post('/monthly_payment_limit', function(Request $request){
     ];
 
     $when_to_ask = 0;
+    $limit_corrected = INCOME_LIMIT() * 0.9;
     while($when_to_ask < 2){
-        if($saturation[$when_to_ask] + $request->amount < INCOME_LIMIT()) break;
+        if($saturation[$when_to_ask] + $request->amount < $limit_corrected) break;
         else $when_to_ask++;
     }
 
     return response()->json([
         "saturation" => $saturation,
         "when_to_ask" => $when_to_ask,
+        "limit_corrected" => $limit_corrected,
     ]);
 });
 Route::get('/quest_type_from_id', function(Request $request){

@@ -358,7 +358,7 @@ tr:hover{
 
 /**********************HEADER***************/
 header{
-    padding: 2em 4em;
+    padding: 1em 4em;
     display: flex; flex-direction: row;
     align-items: center;
     background: var(--bg2);
@@ -385,7 +385,6 @@ nav{
     align-items: center;
 }
 nav a{
-    margin: 0.2em 1em 0.2em 0;
     padding: 0.5em;
     border-radius: 1em;
 }

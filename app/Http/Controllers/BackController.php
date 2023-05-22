@@ -94,7 +94,6 @@ class BackController extends Controller
                 $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest->id);
             }
             $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
-            $quests->where("status_id", "!=", 15);
         }
         $requests = $requests->get();
         $quests = $quests->get();

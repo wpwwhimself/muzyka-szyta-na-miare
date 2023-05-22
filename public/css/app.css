@@ -998,7 +998,7 @@ footer .contact-info{
     .section-header h1{
         font-size: 1.25em;
     }
-    audio, video{
+    video{
         width: calc(100% - 4em);
     }
 
@@ -1079,7 +1079,8 @@ footer .contact-info{
     .flex-right{
         gap: 0.2em;
     }
-    .grid-3, .section-header{
+    .grid-2, .grid-3, .section-header{
+        display: flex;
         flex-direction: column;
     }
     .login-grid-container{

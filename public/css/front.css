@@ -272,6 +272,10 @@ h2.hidden,
         width: 100%;
     }
 
+    .grid-2{
+        display: block;
+    }
+
     /* flex mods */
     #offer .main,
     #offer-other span,

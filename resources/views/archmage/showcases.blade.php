@@ -58,7 +58,7 @@
         <hr />
         @forelse ($showcases as $showcase)
         <div class="table-row">
-            <a href="{{ route('songs') }}#song{{ $showcase->song_id }}">
+            <a href="{{ route('songs', ['search' => $showcase->song_id]) }}">
                 <h3 class="song-title">{{ $showcase->song->title ?? "bez tytułu" }}</h3>
                 <p class="song-artist">{{ $showcase->song->artist }}</p>
             </a>

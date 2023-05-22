@@ -13,7 +13,7 @@
             <h2>
                 <i class="fa-solid fa-compact-disc"></i>
                 Utwór
-                <a href="{{ route('songs') }}#song{{ $quest->song_id }}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a target="_blank" href="{{ route('songs', ['search' => $quest->song_id]) }}" target="_blank"><i class="fa-solid fa-up-right-from-square"></i></a>
             </h2>
             <form action="{{ route("quest-song-update") }}" method="post">
                 @csrf
@@ -43,8 +43,8 @@
             <h2>
                 <i class="fa-solid fa-user"></i>
                 Klient
-                <a href="{{ route('clients') }}#client{{ $quest->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
-                <a href="{{ route('quests').'?client='.$quest->client_id }}"><i class="fa-solid fa-boxes"></i></a>
+                <a target="_blank" href="{{ route('clients', ['search' => $quest->client->client_name]) }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a target="_blank" href="{{ route('quests', ['client' => $quest->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />

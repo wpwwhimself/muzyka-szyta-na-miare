@@ -28,8 +28,8 @@
                 <i class="fa-solid fa-user"></i>
                 Dane klienta
                 @if ($request->client_id)
-                <a href="{{ route('clients') }}#client{{ $request->client_id }}"><i class="fa-solid fa-up-right-from-square"></i></a>
-                <a href="{{ route('quests').'?client='.$request->client_id }}"><i class="fa-solid fa-boxes"></i></a>
+                <a target="_blank" href="{{ route('clients', ['search' => $request->client->client_name]) }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a target="_blank" href="{{ route('quests' ['client' => $request->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
                 @endif
             </h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
@@ -149,7 +149,7 @@
                                 content += `<td>`;
                                     if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
                                     if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
-                                    content += `<a href="{{ route('songs') }}#song${song.id}" target="_blank" title='Utwór'>📝</a>`;
+                                    content += `<a href="{{ route('songs') }}?search=${song.id}" target="_blank" title='Utwór'>📝</a>`;
                                 content += `</td>`;
                                 content += `</tr>`;
                             });
@@ -211,7 +211,7 @@
                             sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
                             if(res[2]) positions_list.addClass("overridden");
                                 else positions_list.removeClass("overridden");
-                            
+
                             checkMonthlyPaymentLimit(res[0]);
                         }
                     });

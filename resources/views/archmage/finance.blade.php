@@ -33,7 +33,7 @@
                 @php $amount_total = 0 @endphp
                 @foreach ($unpaids as $client_id => $quests)
                 <tr>
-                    <td><a href="{{ route("clients") }}#client{{ $client_id }}">{{ $quests[0]->client->client_name }}</a></td>
+                    <td><a href="{{ route("clients", ['search' => $client_id]) }}">{{ $quests[0]->client->client_name }}</a></td>
                     <td class="quest-list">
                         @php $amount_to_pay = 0 @endphp
                         @foreach ($quests as $quest)
@@ -96,7 +96,7 @@
             <tr class="ghost">
             @endif
                 <td>
-                    <a href="{{ route('clients') }}#client{{ $item->quest->client_id }}">
+                    <a href="{{ route('clients', ['search' => $item->quest->client->client_name]) }}">
                         {{ $item->quest->client->client_name }}
                     </a>
                 </td>

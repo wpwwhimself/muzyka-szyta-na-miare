@@ -137,6 +137,7 @@ class BackController extends Controller
             ->whereRaw("LOWER(client_name) like '%$search%'")
             ->orWhereRaw("CONVERT(phone, CHAR) like '%$search%'")
             ->orWhereRaw("LOWER(email) like '%$search%'")
+            ->orWhereRaw("CONVERT(id, CHAR) like '%$search%'")
             ;
         $clients_raw = $clients_raw->get();
 
@@ -798,6 +799,7 @@ class BackController extends Controller
         $songs = Song::orderBy("title")
             ->whereRaw("LOWER(title) like '%$search%'")
             ->orWhereRaw("LOWER(artist) like '%$search%'")
+            ->orWhereRaw("LOWER(id) like '%$search%'")
             ->paginate();
 
         $song_work_times = [];

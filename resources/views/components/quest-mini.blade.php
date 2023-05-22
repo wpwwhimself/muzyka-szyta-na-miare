@@ -14,7 +14,7 @@
             <i class="fa-solid fa-user" @popper(Klient)></i>
             @endif
         <p class="client-name">
-            <a href="{{ route('clients') }}#client{{ $quest->client_id }}">
+            <a href="{{ route('clients', ['search' => $quest->client->client_name]) }}">
             {{ $quest->client->client_name }}
             </a>
         </p>

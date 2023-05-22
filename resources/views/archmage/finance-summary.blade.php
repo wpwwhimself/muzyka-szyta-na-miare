@@ -24,7 +24,7 @@
     @forelse ($gains as $pos)
     <div class="table-row">
         <span {{ Popper::pop($pos->date) }}>{{ $pos->date->diffForHumans() }}</span>
-        <span><a href="{{ route('clients') }}#client{{ $pos->changed_by }}">{{ $pos->client_name }}</a></span>
+        <span><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{{ $pos->client_name }}</a></span>
         <span>
           @if ($pos->re_quest_id)
           <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>

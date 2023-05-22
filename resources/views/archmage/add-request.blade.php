@@ -122,7 +122,7 @@
                                         content += `<td>`;
                                             if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
                                             if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
-                                            content += `<a href="{{ route('songs') }}#song${song.id}" target="_blank" title='Utwór'>📝</a>`;
+                                            content += `<a href="{{ route('songs') }}?search=${song.id}" target="_blank" title='Utwór'>📝</a>`;
                                         content += `</td>`;
                                         content += `</tr>`;
                                     });
@@ -180,7 +180,7 @@
                                 sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
                                 if(res[2]) positions_list.addClass("overridden");
                                     else positions_list.removeClass("overridden");
-                                
+
                                 checkMonthlyPaymentLimit(res[0]);
                             }
                         });

@@ -784,9 +784,12 @@ class BackController extends Controller
         return back()->with("success", "Wpis pracy usunięty");
     }
 
-    public function songs(){
+    public function songs(HttpRequest $rq){
+        $search = strtolower($rq->search ?? "");
         $songs = Song::orderBy("title")
-            ->get();
+            ->whereRaw("LOWER(title) like '%$search%'")
+            ->orWhereRaw("LOWER(artist) like '%$search%'")
+            ->paginate();
 
         $song_work_times = [];
         $price_codes = [];
@@ -816,7 +819,7 @@ class BackController extends Controller
 
         return view(user_role().".songs", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs", "song_work_times", "price_codes")
+            compact("songs", "song_work_times", "price_codes", "search")
         ));
     }
 

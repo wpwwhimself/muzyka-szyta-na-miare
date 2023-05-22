@@ -4,6 +4,10 @@
 <section id="songs-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
+        <form method="get" id="search" class="flex-right" action="{{ route('songs') }}">
+            <input type="text" name="search" class="small" value="{{ $search }}" />
+            <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
+        </form>
     </div>
     <style>
     .table-row{ grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr; }
@@ -56,6 +60,7 @@
         <p class="grayed-out">Nie ma żadnych utworów</p>
         @endforelse
     </div>
+    {{ $songs->links() }}
 </section>
 
 @endsection

@@ -47,6 +47,7 @@
 </section>
 
 <div>
+  <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
   <x-button action="{{ route('costs') }}" label="Koszty" icon="money-bill-wave" />
 </div>
 

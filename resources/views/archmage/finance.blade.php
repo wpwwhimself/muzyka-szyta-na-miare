@@ -117,6 +117,7 @@
     </table>
 </section>
 <div>
+    <x-button action="{{ route('finance-summary') }}" label="Wpływy" icon="angles-down" />
     <x-button action='{{ route("costs") }}' label="Koszty" icon="money-bill-wave" />
     <x-button action='{{ route("invoices") }}' label="Faktury" icon="file-invoice" />
 </div>

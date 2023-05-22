@@ -25,6 +25,10 @@
 <section id="clients-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Lista klientów</h1>
+        <form method="get" id="search" class="flex-right" action="">
+            <input type="text" name="search" class="small" value="{{ $search }}" />
+            <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
+        </form>
     </div>
     <style>
     .table-row{ grid-template-columns: 4em 4fr 4fr 8em 1fr 1fr; }

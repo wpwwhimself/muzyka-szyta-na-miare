@@ -126,11 +126,20 @@ class BackController extends Controller
         ));
     }
 
-    public function clients($param = null, $value = 0){
+    public function clients(HttpRequest $rq, $param = null, $value = 0){
+        $search = strtolower($rq->search ?? "");
+
         $clients_raw = ($param) ?
-            Client::where($param, (in_array($param, ["budget", "helped_showcasing"]) ? ">" : "="), $value)->get() :
-            Client::all()
+            Client::where($param, (in_array($param, ["budget", "helped_showcasing"]) ? ">" : "="), $value) :
+            Client::whereNotNull("client_name")
         ;
+        $clients_raw = $clients_raw
+            ->whereRaw("LOWER(client_name) like '%$search%'")
+            ->orWhereRaw("CONVERT(phone, CHAR) like '%$search%'")
+            ->orWhereRaw("LOWER(email) like '%$search%'")
+            ;
+        $clients_raw = $clients_raw->get();
+
         $max_exp = 0;
         $classes = ["1. Weterani", "2. Biegli", "3. Zainteresowani", "4. Nowicjusze", "5. Debiutanci"];
 
@@ -154,7 +163,7 @@ class BackController extends Controller
 
         return view(user_role().".clients", array_merge(
             ["title" => "Klienci"],
-            compact("clients", "max_exp","classes")
+            compact("clients", "max_exp","classes", "search")
         ));
     }
 

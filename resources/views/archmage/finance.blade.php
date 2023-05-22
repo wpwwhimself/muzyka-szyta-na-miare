@@ -7,6 +7,7 @@
         <h1><i class="fa-solid fa-chart-pie"></i> Podsumowanie</h1>
     </div>
     <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
+    <x-barplot title="Saturacja wpływów w kolejnych miesiącach" :data="$saturation" :all-pln="true" :percentages="true" />
 </section>
 
 @if(count($unpaids))

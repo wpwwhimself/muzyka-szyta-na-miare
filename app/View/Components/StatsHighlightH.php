@@ -22,6 +22,7 @@ class StatsHighlightH extends Component
         $this->bracketedNumbers = $bracketedNumbers;
         $this->allPln = $allPln;
 
+        // if(preg_match("/satur/i", $title)) dd($data);
         switch($bracketedNumbers){
             case "percentages":
                 $this->data1 = $data->split;

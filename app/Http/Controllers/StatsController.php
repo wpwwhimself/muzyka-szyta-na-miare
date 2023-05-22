@@ -15,7 +15,6 @@ use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -342,6 +341,12 @@ class StatsController extends Controller
                 ->sum("amount"),
         ];
 
+        $saturation = [
+            "split" => $this->monthlyPaymentLimit(0)->getOriginalContent()["saturation"],
+            "total" => INCOME_LIMIT(),
+        ];
+        $saturation = json_decode(json_encode($saturation));
+
         $unpaids_raw = Quest::where("paid", 0)
             ->whereNotIn("status_id", [17, 18])
             ->whereHas("client", function($query){
@@ -365,7 +370,7 @@ class StatsController extends Controller
         return view(user_role().".finance", array_merge(
             ["title" => "Centrum Finansowe"],
             compact(
-                "unpaids", "recent", "this_month"
+                "unpaids", "recent", "this_month", "saturation",
             ),
         ));
     }
@@ -575,5 +580,70 @@ class StatsController extends Controller
                 "calendar_length"
             ),
         ));
+    }
+
+    public function monthlyPaymentLimit($amount){
+        //scheduled and received payments
+        $saturation = [
+            //this month
+            StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->sum("comment")
+            + Quest::where("paid", 0)
+                ->whereNotIn("status_id", [17, 18])
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price")
+            + ModelsRequest::whereIn("status_id", [5])
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price"),
+
+            //next month (scheduled)
+            Quest::where("paid", 0)
+                ->whereNotIn("status_id", [17, 18])
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price")
+            + ModelsRequest::whereIn("status_id", [5])
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price"),
+
+            //neeeeeeext month (scheduled)
+            Quest::where("paid", 0)
+                ->whereNotIn("status_id", [17, 18])
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price")
+            + ModelsRequest::whereIn("status_id", [5])
+                ->where(fn($q) => $q
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth())
+                    ->orWhereNull("delayed_payment"))
+                ->sum("price"),
+        ];
+
+        $when_to_ask = 0;
+        $limit_corrected = INCOME_LIMIT() * 0.9;
+        while($when_to_ask < 2){
+            if($saturation[$when_to_ask] + $amount < $limit_corrected) break;
+            else $when_to_ask++;
+        }
+
+        return response()->json([
+            "saturation" => $saturation,
+            "when_to_ask" => $when_to_ask,
+            "limit_corrected" => $limit_corrected,
+        ]);
     }
 }

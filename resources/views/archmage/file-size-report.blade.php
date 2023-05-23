@@ -20,10 +20,10 @@
             <span>Ostatnia modyfikacja</span>
             <span>Rozmiar</span>
         </div>
-    @foreach ($sizes as $safe => $size)
+    @forelse ($sizes as $safe => $size)
         <div class="table-row">
             <span>
-                <a href="{{ route('songs') }}#song{{ preg_replace('/.*\/(.{4}).*/', '$1', $safe) }}">
+                <a href="{{ route('songs', ['search' => preg_replace('/.*\/(.{4}).*/', '$1', $safe)]) }}">
                     {{ $safe }}
                 </a>
             </span>
@@ -41,7 +41,11 @@
                 </span>
             </div>
         </div>
-    @endforeach
+    @empty
+        <div class="table-row">
+            <p class="grayed-out">Pusto...</p>
+        </div>
+    @endforelse
     </div>
 </section>
 

@@ -29,7 +29,7 @@
                 Dane klienta
                 @if ($request->client_id)
                 <a target="_blank" href="{{ route('clients', ['search' => $request->client->client_name]) }}"><i class="fa-solid fa-up-right-from-square"></i></a>
-                <a target="_blank" href="{{ route('quests' ['client' => $request->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
+                <a target="_blank" href="{{ route('quests', ['client' => $request->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
                 @endif
             </h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />

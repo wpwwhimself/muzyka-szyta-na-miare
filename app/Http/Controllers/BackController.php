@@ -134,11 +134,12 @@ class BackController extends Controller
             Client::whereNotNull("client_name")
         ;
         $clients_raw = $clients_raw
-            ->whereRaw("LOWER(client_name) like '%$search%'")
-            ->orWhereRaw("CONVERT(phone, CHAR) like '%$search%'")
-            ->orWhereRaw("LOWER(email) like '%$search%'")
-            ->orWhereRaw("CONVERT(id, CHAR) like '%$search%'")
-            ;
+            ->where(fn($q) => $q
+                ->whereRaw("LOWER(client_name) like '%$search%'")
+                ->orWhereRaw("CONVERT(phone, CHAR) like '%$search%'")
+                ->orWhereRaw("LOWER(email) like '%$search%'")
+                ->orWhereRaw("CONVERT(id, CHAR) like '%$search%'")
+            );
         $clients_raw = $clients_raw->get();
 
         $max_exp = 0;

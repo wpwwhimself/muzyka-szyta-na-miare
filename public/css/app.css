@@ -644,7 +644,7 @@ footer .contact-info{
 }
 
 #quest-history{
-    max-height: 30vh;
+    max-height: 90vh;
     overflow: auto;
 }
 #quest-history .history-position{

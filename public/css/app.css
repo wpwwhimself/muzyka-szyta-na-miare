@@ -1041,8 +1041,8 @@ footer .contact-info{
         align-items: stretch;
     }
 
-    #stats-buttons{
-        flex-direction: row;
+    form:has(#stats-buttons){
+        flex-direction: row !important;
     }
 
     .file-adder{

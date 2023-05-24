@@ -647,17 +647,17 @@ footer .contact-info{
     max-height: 90vh;
     overflow: auto;
 }
-#quest-history .history-position{
+.history-position{
     border-radius: 1em;
     background: rgba(var(--q-clr), 0.5);
     margin: 0.3em; padding: 0.3em 0.5em;
     display: grid; grid-template-columns: 3fr auto; column-gap: 0.5em;
 }
-#quest-history .history-position.by-client{ margin-right: 2em; }
-#quest-history .history-position.by-me{ margin-left: 2em; }
-#quest-history .history-position span:nth-child(1){ text-align: left; }
-#quest-history .history-position .client-name{ font-style: italic; }
-#quest-history .history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; max-width: 250px; }
+.history-position.by-client{ margin-right: 2em; }
+.history-position.by-me{ margin-left: 2em; }
+.history-position span:nth-child(1){ text-align: left; }
+.history-position .client-name{ font-style: italic; }
+.history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; max-width: 250px; }
 
 #document-dropzone{
     background: none;

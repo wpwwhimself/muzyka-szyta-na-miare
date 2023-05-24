@@ -251,9 +251,21 @@
         </div>
         <div id="statuschanger">
             @if (in_array($quest->status_id, [15, 18, 19, 95]))
-            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu"
-                placeholder="Tutaj wpisz swój komentarz..."
-                />
+            <p class="tutorial">
+                <i class="fa-solid fa-circle-question"></i>
+                W historii zlecenia pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
+            </p>
+            <div class="history-position p-18">
+                <span>
+                    <span class="client-name ghost">{{ $quest->client->client_name }}</span>
+                    <br>
+                    <i class="fa-solid fa-pencil"></i> Zmiana statusu zlecenia
+                    <x-input type="TEXT" name="comment" label=""
+                        placeholder="Tutaj wpisz swój komentarz..."
+                        />
+                </span>
+                <span>{!! str_replace(" ", "<br>", \Carbon\Carbon::now()->format("Y-m-d XX:XX:XX")) !!}</span>
+            </div>
             @endif
             <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" :danger="true" />
         </div>
@@ -272,6 +284,8 @@
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }
+
+                $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
             });
         });
         </script>

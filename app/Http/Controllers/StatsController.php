@@ -417,15 +417,21 @@ class StatsController extends Controller
 
         return back()->with("success", "Zlecenia opłacone");
     }
-    public function financeSummary(){
+    public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)
+            ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
             ->join("clients", "clients.id", "changed_by", "left")
-            ->orderByDesc("date")
-            ->paginate(25);
-        $losses = Cost::orderByDesc("created_at")->get();
+            ->orderByDesc("date");
+        $losses = Cost::whereDate("created_at", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
+            ->orderByDesc("created_at");
+
         $summary = [
-            "Suma" => StatusChange::where("new_status_id", 32)->sum("comment"),
+            "Zarobiono" => $gains->sum("comment"),
+            "Wydano" => $losses->sum("amount"),
+            "Saldo na dziś" => StatusChange::where("new_status_id", 32)->sum("comment") - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount"),
         ];
+        $gains = $gains->get();
+        $losses = $losses->get();
 
         return view(user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],

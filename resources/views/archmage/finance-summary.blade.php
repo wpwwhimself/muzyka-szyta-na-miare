@@ -2,17 +2,30 @@
 
 @section('content')
 
+<section class="sc-line">
+    <x-sc-scissors />
+    <div class="section-header">
+      <h1><i class="fa-solid fa-chart-column"></i> Podsumowanie – {{ \Carbon\Carbon::today()->subMonths(request()->get("subMonths", 0))->format("m.Y") }}</h1>
+      @if (request()->get("subMonths"))
+        <x-a href="{{ route('finance-summary') }}">Ten miesiąc</x-a>
+      @else
+        <x-a href="{{ route('finance-summary', ['subMonths' => 1]) }}">Poprzedni miesiąc</x-a>
+      @endif
+    </div>
+    <x-stats-highlight-h :data="$summary" :all-pln="true" />
+    <div>
+    </div>
+</section>
+
 <section>
   <div class="section-header">
     <h1><i class="fa-solid fa-angles-down"></i> Wpływy</h1>
   </div>
 
-  <x-stats-highlight-h :data="$summary" :all-pln="true" />
-
-  <div class="quests-table">
+  <div id="gains" class="quests-table">
     <style>
-      .table-row{ grid-template-columns: 1fr 2fr 1fr 1fr 1fr; }
-      .table-row span:last-child{ text-align: right; }
+      #gains .table-row{ grid-template-columns: 1fr 2fr 1fr 1fr 1fr; }
+      #gains .table-row span:last-child{ text-align: right; }
     </style>
     <div class="table-header table-row">
         <span>Data</span>
@@ -23,7 +36,7 @@
     </div>
     @forelse ($gains as $pos)
     <div class="table-row">
-        <span {{ Popper::pop($pos->date) }}>{{ $pos->date->diffForHumans() }}</span>
+        <span>{{ $pos->date->format("d.m.Y") }}</span>
         <span><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{{ $pos->client_name }}</a></span>
         <span>
           @if ($pos->re_quest_id)
@@ -43,7 +56,37 @@
     <p class="grayed-out">Brak danych</p>
     @endforelse
   </div>
-  {{ $gains->links() }}
+</section>
+
+<section>
+  <div class="section-header">
+    <h1>
+        <i class="fa-solid fa-money-bill-wave"></i> Wydatki
+    </h1>
+  </div>
+
+  <div id="losses" class="quests-table">
+    <style>
+      #losses .table-row{ grid-template-columns: 1fr 2fr 1fr 1fr; }
+      #losses .table-row span:last-child{ text-align: right; }
+    </style>
+    <div class="table-header table-row">
+        <span>Data</span>
+        <span>Typ</span>
+        <span>Opis</span>
+        <span>Kwota</span>
+    </div>
+    @forelse ($losses as $pos)
+    <div class="table-row">
+        <span>{{ $pos->created_at->format("d.m.Y") }}</span>
+        <span>{{ $pos->type->name }}</span>
+        <span>{{ $pos->desc }}</span>
+        <span>{{ as_pln($pos->amount) }}</span>
+    </div>
+    @empty
+    <p class="grayed-out">Brak danych</p>
+    @endforelse
+  </div>
 </section>
 
 <div>

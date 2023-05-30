@@ -601,7 +601,20 @@ class BackController extends Controller
 
         if(!empty($files_raw)){
             foreach($files_raw as $file){
-                $name = preg_split('/(\=|\_)/', pathinfo($file, PATHINFO_FILENAME));
+                $name = [];
+                $name_raw = pathinfo($file, PATHINFO_FILENAME);
+                preg_match("/_(.*)$/", $name_raw, $matches);
+                if(!empty($matches)){
+                    $name[2] = $matches[1];
+                    $name_raw = str_replace("_".$name[2], "", $name_raw);
+                }
+                preg_match("/=(.*)$/", $name_raw, $matches);
+                if(!empty($matches)){
+                    $name[1] = $matches[1];
+                    $name_raw = str_replace("=".$name[1], "", $name_raw);
+                }
+                $name[0] = $name_raw;
+
                 if(!isset($name[1])) $name[1] = "podstawowy";
                 if(!isset($name[2])) $name[2] = "wersja główna";
                 $files[$name[0]][$name[1]][$name[2]][] = $file;

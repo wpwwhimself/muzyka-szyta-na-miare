@@ -40,16 +40,12 @@ class JanitorController extends Controller
             ->get();
         foreach($requests as $request){
             $request->update(["status_id" => 7]);
-            if(
-                ($request->client?->email || $request->email)
-                &&
-                ($request->client?->contact_preference == "email" || $request->contact_preference == "email")
-            ){
+            if($request->client?->email || $request->email){
                 Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request));
                 app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, 1);
                 $summary[] = [
                     "re_quest" => $request, "is_request" => true,
-                    "operation" => "Zapytanie wygaszone - brak reakcji - mail wysłany",
+                    "operation" => "Zapytanie wygaszone - brak reakcji - mail wysłany".(($request->client?->contact_preference == "email" || $request->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
                 ];
             }else{
                 app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
@@ -76,12 +72,12 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             [$new_status, $new_comment, $operation] = $quest->paid ? [19, "brak uwag", "Zlecenie zaakceptowane automatycznie"] : [17, "brak opinii", "Zlecenie wygaszone"];
             $quest->update(["status_id" => $new_status]);
-            if($quest->client->isMailable()){
+            if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, 1);
                 $summary[] = [
                     "re_quest" => $quest, "is_request" => false,
-                    "operation" => "$operation - $new_comment - mail wysłany",
+                    "operation" => "$operation - $new_comment - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
                 ];
             }else{
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, null);
@@ -106,12 +102,12 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
-            if($quest->client->isMailable()){
+            if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak wpłaty"));
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, 1);
                 $summary[] = [
                     "re_quest" => $quest, "is_request" => false,
-                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - mail wysłany",
+                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
                 ];
             }else{
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
@@ -132,12 +128,12 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
             ){
-                if($quest->client->isMailable()){
+                if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
                     StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 95])->orderByDesc("date")->first()->increment("mail_sent");
                     $summary[] = [
                         "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o działaniu - mail wysłany",
+                        "operation" => "Przypomnienie o działaniu - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
                     ];
                 }else{
                     $summary[] = [
@@ -161,7 +157,7 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
             ){
-                if($quest->client->isMailable()){
+                if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
                     //status
                     $status = StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 33)->first();
@@ -172,7 +168,7 @@ class JanitorController extends Controller
                     }
                     $summary[] = [
                         "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o opłacie - mail wysłany",
+                        "operation" => "Przypomnienie o opłacie - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
                     ];
                 }else{
                     $summary[] = [

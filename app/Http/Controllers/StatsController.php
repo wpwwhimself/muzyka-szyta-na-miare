@@ -388,7 +388,7 @@ class StatsController extends Controller
                 32,
                 $amount_to_pay,
                 $quest->client_id,
-                $quest->client->isMailable()
+                $quest->client->email,
             );
 
             // opłacanie faktury
@@ -408,14 +408,21 @@ class StatsController extends Controller
         }
 
         // roześlij maile, jeśli można
+        $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
             $client = Client::find($client_id);
-            if($client->isMailable()){
+            if($client->email){
                 Mail::to($quest->client->email)->send(new MassPayment($quests));
+                $clients_informed[$client_id] = 1;
+            }else{
+                $clients_informed[$client_id] = 0;
             }
         }
+        $clients_informed_count = array_count_values($clients_informed);
+        $clients_informed_output = ($clients_informed_count[1] == count($clients_informed)) ? "wszyscy dostali maile"
+            : ($clients_informed_count[0] == count($clients_informed) ? "nikt nie dostał maila" : ($clients_informed_count[1]."/".count($clients_informed)." klientów dostało maila"));
 
-        return back()->with("success", "Zlecenia opłacone");
+        return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
     }
     public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)

@@ -27,13 +27,6 @@ class Client extends Model
             substr(explode(" ", $this->client_name)[0], -1) == "a"
         );
     }
-    public function isMailable(){
-        return (
-            $this->email
-            // &&
-            // $this->contact_preference == "email"*/
-        );
-    }
     public function isOld(){
         return $this->created_at < BEGINNING();
     }

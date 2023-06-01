@@ -299,14 +299,15 @@ class BackController extends Controller
                 //mailing
                 $mailing = null;
                 if(
-                    $request->email && $request->contact_preference == "email" &&
+                    $request->email &&
                     $rq->new_status == 5
                 ){
                     Mail::to($request->email)->send(new RequestQuoted($request));
                     $mailing = true;
                     $flash_content .= ", mail wysłany";
-                }else{
-                    $mailing = false;
+                }
+                if($request->contact_preference != "email"){
+                    $mailing ??= false;
                     $flash_content .= ", ale wyślij wiadomość";
                 }
                 if($mailing !== null) $request->changes->last()->update(["mail_sent" => $mailing]);
@@ -405,18 +406,16 @@ class BackController extends Controller
         $flash_content = "Zapytanie gotowe";
         $mailing = null;
         if(in_array($request->status_id, [5, 95])){ // mail do klienta
-            if(
-                $request->email
-                // && $request->contact_preference == "email"
-            ){
+            if($request->email){
                 switch($request->status_id){
                     case 5: Mail::to($request->email)->send(new RequestQuoted($request)); break;
                     case 95: Mail::to($request->email)->send(new Clarification($request)); break;
                 }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
-            }else{
-                $mailing = false;
+            }
+            if($request->contact_preference != "email"){
+                $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if($request->status_id != 4){ // mail do mnie
@@ -662,12 +661,13 @@ class BackController extends Controller
             // sending mail
             $flash_content = "Cena wpisana";
             if($quest->paid){
-                if($quest->client->isMailable()){
+                if($quest->client->email){
                     Mail::to($quest->client->email)->send(new PaymentReceived($quest));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
-                }else{
-                    StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
+                }
+                if($quest->client->contact_preference != "email"){
+                    // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
                     $flash_content .= ", ale wyślij wiadomość";
                 }
             }
@@ -689,15 +689,16 @@ class BackController extends Controller
         $flash_content = "Faza zmieniona";
         $mailing = null;
         if(in_array($quest->status_id, [15, 95])){ // mail do klienta
-            if($quest->client->isMailable()){
+            if($quest->client->email){
                 switch($quest->status_id){
                     case 15: Mail::to($quest->client->email)->send(new QuestUpdated($quest)); break;
                     case 95: Mail::to($quest->client->email)->send(new Clarification($quest)); break;
                 }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
-            }else{
-                $mailing = false;
+            }
+            if($quest->client->contact_preference != "email"){
+                $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if(Auth::id() != 1){ // mail do mnie
@@ -750,11 +751,12 @@ class BackController extends Controller
 
         // sending mail
         $mailing = null;
-        if($quest->client->isMailable()){
+        if($quest->client->email){
             Mail::to($quest->client->email)->send(new QuestRequoted($quest, $rq->reason));
             $mailing = true;
-        }else{
-            $mailing = false;
+        }
+        if($quest->client->contact_preference != "email"){
+            $mailing ??= false;
         }
 
         // zbierz zmiany

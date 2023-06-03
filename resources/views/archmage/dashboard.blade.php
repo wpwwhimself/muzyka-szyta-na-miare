@@ -106,7 +106,17 @@
                                 {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
                             </a>
                         </td>
-                        <td>{{ ($change->is_request) ? $change->re_quest->client?->client_name ?? $change->re_quest->client_name : $change->re_quest->client->client_name }}</td>
+                        <td>
+                        @if ($change->is_request)
+                            @if ($change->re_quest->client)
+                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->client_name]) }}">{{ $change->re_quest->client?->client_name }}</a>
+                            @else
+                                {{ $change->re_quest->client_name }}
+                            @endif
+                        @else
+                            <a href="{{ route('clients', ['search' => $change->re_quest->client->client_name]) }}">{{ $change->re_quest->client->client_name }}</a>
+                        @endif
+                        </td>
                         <td>
                             <x-phase-indicator-mini :status="$change->new_status" />
                         </td>
@@ -151,7 +161,10 @@
                 <tbody>
                     @foreach ($patrons_adepts as $patron)
                     <tr>
-                        <td><i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i> {{ $patron->client_name }}</td>
+                        <td>
+                            <i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i>
+                            <a href="{{ route('clients', ['search' => $patron->client_name]) }}">{{ $patron->client_name }}</a>
+                        </td>
                         <td>
                             <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
                             <x-button label="" icon="x" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 0]) }}" :small="true" />

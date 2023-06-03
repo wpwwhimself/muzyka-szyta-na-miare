@@ -85,7 +85,15 @@
             <div class="section-header showcase-highlight">
                 <h1><i class="fa-solid fa-award"></i> Oceń naszą współpracę</h1>
             </div>
-            <p>Recenzje pomagają mi pozyskiwać nowych klientów. Jeśli i Tobie przypadły do gustu efekty moich prac, możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!</p>
+            <p>
+                Recenzje pomagają mi pozyskiwać nowych klientów.
+                Jeśli i Tobie przypadły do gustu efekty moich prac,
+                możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!
+            </p>
+            <p class="yellowed-out">
+                Uwaga! Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
+                Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+            </p>
             <form>
                 <x-button
                     label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"

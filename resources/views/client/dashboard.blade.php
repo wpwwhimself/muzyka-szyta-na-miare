@@ -90,16 +90,16 @@
                 Jeśli i Tobie przypadły do gustu efekty moich prac,
                 możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!
             </p>
-            <p class="yellowed-out">
-                Uwaga! Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
-                Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
-            </p>
             <form>
                 <x-button
                     label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
                     action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
                     />
                 <p>Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.</p>
+                <p class="yellowed-out">
+                    Uwaga! Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
+                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                </p>
                 <x-button
                     label="Właśnie wystawił{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                     action="{{ route('patron-mode', ['id' => Auth::id(), 'level' => 1]) }}"

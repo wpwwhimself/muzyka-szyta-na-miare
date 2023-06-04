@@ -920,7 +920,7 @@ footer .contact-info{
     body {
         --margin: 36px;
         padding-top: var(--margin);
-        /* padding-bottom: var(--margin); */
+        padding-bottom: var(--margin);
     }
     footer{
         padding: 0 var(--margin);

@@ -26,15 +26,17 @@
     <script src="https://unpkg.com/@sidsbrmnn/scrollspy@1.x/dist/scrollspy.min.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73695122-4"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PDLBED2GBQ">
+    </script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'UA-73695122-4');
+    gtag('config', 'G-PDLBED2GBQ');
     </script>
-    
+
     <script>
     const USER_ID = {{ Auth::id() ?? 'null' }};
     const IS_VETERAN = {{ Auth::id() == 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};

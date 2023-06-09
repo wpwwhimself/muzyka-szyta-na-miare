@@ -390,8 +390,8 @@ class BackController extends Controller
             //review jako klient
             $request->status_id = $rq->new_status;
             if($rq->new_status == 1){
-                $request->price = null;
-                $request->price_code = null;
+                // $request->price = null;
+                // $request->price_code = null;
                 $request->deadline = null;
                 $request->hard_deadline = null;
                 $request->delayed_payment = null;

@@ -65,6 +65,8 @@
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
+            @elseif ($request->price && $request->status_id == 1)
+            <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
             @endif
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>

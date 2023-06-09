@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
@@ -113,6 +114,14 @@ Route::controller(StatsController::class)->group(function(){
         Route::get("/stats/file-size", "fileSizeReport")->name("file-size-report");
 
         Route::get("/stats/quests-calendar", "questsCalendar")->name("quests-calendar");
+    });
+});
+
+Route::controller(ClientController::class)->group(function(){
+    Route::middleware("auth")->group(function(){
+        Route::prefix("client")->group(function(){
+            Route::get("view/{id}", "view")->name("client-view");
+        });
     });
 });
 

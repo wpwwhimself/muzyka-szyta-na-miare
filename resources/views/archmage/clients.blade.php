@@ -76,7 +76,11 @@
                     </a>
                 </span>
                 <span class="client-main-data">
-                    <h3 class="song-title">{{ $client->client_name }}</h3>
+                    <h3 class="song-title">
+                        <a href="{{ route('client-view', ['id' => $client->id]) }}">
+                            {{ $client->client_name }}
+                        </a>
+                    </h3>
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
                     <br />
                     <span class="ghost">

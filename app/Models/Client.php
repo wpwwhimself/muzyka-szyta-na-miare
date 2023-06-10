@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['helped_showcasing', 'budget', 'trust'];
+    protected $fillable = [
+        "client_name", "email", "phone", "other_medium", "contact_preference",
+        'trust', 'helped_showcasing',
+        'budget', "extra_exp",
+        "default_wishes", "special_prices",
+    ];
     protected $appends = ["pickiness"];
 
     public function user(){

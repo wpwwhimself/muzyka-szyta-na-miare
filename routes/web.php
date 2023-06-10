@@ -121,6 +121,7 @@ Route::controller(ClientController::class)->group(function(){
     Route::middleware("auth")->group(function(){
         Route::prefix("client")->group(function(){
             Route::get("view/{id}", "view")->name("client-view");
+            Route::post("edit/{id}", "edit")->name("client-edit");
         });
     });
 });

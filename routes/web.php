@@ -67,8 +67,6 @@ Route::controller(BackController::class)->group(function(){
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
         Route::post("/quest-wishes-update", "questWishesUpdate")->name("quest-wishes-update");
 
-        Route::get('/clients/{param?}/{value?}', "clients")->name("clients");
-
         Route::get('/showcases', "showcases")->name("showcases");
         Route::post('/showcases/add', "addShowcase")->name("add-showcase");
 
@@ -119,7 +117,8 @@ Route::controller(StatsController::class)->group(function(){
 
 Route::controller(ClientController::class)->group(function(){
     Route::middleware("auth")->group(function(){
-        Route::prefix("client")->group(function(){
+        Route::prefix("clients")->group(function(){
+            Route::get('list/{param?}/{value?}', "list")->name("clients");
             Route::get("view/{id}", "view")->name("client-view");
             Route::post("edit/{id}", "edit")->name("client-edit");
         });
@@ -177,10 +176,6 @@ Route::post('/monthly_payment_limit', function(Request $request){
 });
 Route::get('/quest_type_from_id', function(Request $request){
     return QuestType::where("code", $request->initial)->first()->toJson();
-});
-Route::post('/budget_update', function(Request $rq){
-    $client = Client::findOrFail($rq->client_id);
-    $client->update(["budget" => $rq->new_budget]);
 });
 Route::get("/get_ver_desc", function(Request $rq){
     return Storage::get($rq->path) ?? "";

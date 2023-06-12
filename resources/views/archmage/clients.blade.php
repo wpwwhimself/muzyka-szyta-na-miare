@@ -31,15 +31,14 @@
         </form>
     </div>
     <style>
-    .table-row{ grid-template-columns: 4em 4fr 4fr 8em 1fr 1fr; }
+    .table-row{ grid-template-columns: 4em 4fr 4fr 8em 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
             <span @popper(doświadczenie klienta)><i class="fa-solid fa-bars-progress"></i></span>
             <span>Nazwisko</span>
             <span>Dane kontaktowe</span>
-            <span>Klient od</span>
-            <span>Budżet</span>
+            <span>Znany od</span>
             <span>Wyjątki</span>
         </div>
         <hr />
@@ -96,30 +95,8 @@
                     <span {{ in_array($client->contact_preference, ["telefon", "sms"]) ?: "class=ghost" }}>{{ implode(" ", str_split($client->phone, 3)) }}</span>
                     <span {{ !in_array($client->contact_preference, ["email", "telefon", "sms"]) ?: "class=ghost" }}>{{ $client->other_medium }}</span>
                 </span>
-                <span>
-                    {{ $client->created_at->diffForHumans() }}<br>
-                    {{ $client->created_at->toDateString() }}
-                </span>
-                <span class="client-budget {{ $client->budget ?: 'ghost' }}">
-                    <x-input type="number" name="budget_mod_{{ $client->id }}" label="" value="{{ $client->budget }}" :small="true" />
-                    <script>
-                    $(document).ready(function(){
-                        $("#budget_mod_{{ $client->id }}").change(function(){
-                            $.ajax({
-                                url: "{{ url('budget_update') }}",
-                                type: "post",
-                                data: {
-                                    _token: '{{ csrf_token() }}',
-                                    client_id: '{{ $client->id }}',
-                                    new_budget: $("#budget_mod_{{ $client->id }}").val()
-                                },
-                                success: function(){
-                                    location.reload();
-                                }
-                            })
-                        });
-                    });
-                    </script>
+                <span {{ Popper::pop($client->created_at->toDateString()) }}>
+                    {{ $client->created_at->diffForHumans() }}
                 </span>
                 <span>
                     @switch($client->trust)
@@ -132,13 +109,16 @@
                         @default
                     @endswitch
                     @if ($client->special_prices)
-                    <i class="success fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>".$client->special_prices) }}></i>
+                    <i class="fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>".$client->special_prices) }}></i>
                     @endif
                     @if ($client->default_wishes)
                     <i class="fa-solid fa-cloud" {{ Popper::pop("Domyślne życzenia:<br>".$client->default_wishes) }}></i>
                     @endif
-                    @if (is_patron($client->id))
-                    <i class="showcase-highlight fa-solid fa-award" @popper(patron)></i>
+                    @if ($client->helped_showcasing)
+                    <i class="showcase-highlight fa-solid fa-award {{ $client->helped_showcasing < 2 ? 'fa-fade' : '' }}" {{ Popper::pop($client->helped_showcasing < 2 ? "Chce być patronem" : "Patron") }}></i>
+                    @endif
+                    @if ($client->budget)
+                    <i class="success fa-solid fa-sack-dollar" {{ Popper::pop("Budżet:<br>".as_pln($client->budget)) }}></i>
                     @endif
                 </span>
             </div>

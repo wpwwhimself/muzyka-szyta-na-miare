@@ -570,7 +570,7 @@ class BackController extends Controller
         $paid = $rq->paid;
 
         $client = Client::find($client_id) ?? Auth::user()->client;
-        if($client_id && $client_id != Auth::id() && Auth::id() != 1) abort(403);
+        if($client_id && $client_id != Auth::id() && Auth::id() != 1) abort(403, "Widok niedostępny");
 
         $quests = Quest::orderBy("quests.created_at", "desc");
         if($client){ $quests = $quests->where("client_id", $client->id); }

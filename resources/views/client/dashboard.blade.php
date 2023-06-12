@@ -10,6 +10,7 @@
             <x-sc-scissors />
             <div class="section-header">
                 <h1><i class="fa-solid fa-user-check"></i> {{ Auth::user()->client->client_name }}</h1>
+                <x-a href="{{ route('client-view', ['id' => Auth::id()]) }}">Edytuj profil</x-a>
             </div>
             <div class="hint-table">
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>

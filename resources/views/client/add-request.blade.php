@@ -16,9 +16,9 @@
                     <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
                     <x-input type="text" name="title[]" label="Tytuł utworu" />
                     <x-input type="text" name="artist[]" label="Oryginalny wykonawca" />
-                    <x-input type="text" name="link[]" label="Link do nagrania" :small="true" :hint="$hint['link']" />
-                    <x-input type="TEXT" name="wishes[]" label="Życzenia" value="{{ Auth::user()->client->default_wishes }}" :hint="$hint['wishes']" />
-                    <x-input type="date" name="hard_deadline[]" label="Opcjonalny termin wykonania" :hint="$hint['deadline']" />
+                    <x-input type="text" name="link[]" label="Link do oryginalnych nagrań (oddzielone przecinkami)" :small="true" :hint="$hint['link']" />
+                    <x-input type="TEXT" name="wishes[]" label="Życzenia (np. styl, czy z linią melodyczną)" value="{{ Auth::user()->client->default_wishes }}" :hint="$hint['wishes']" />
+                    <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" :hint="$hint['deadline']" />
                 </div>
                 <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
             </section>

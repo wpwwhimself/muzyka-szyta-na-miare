@@ -168,6 +168,11 @@ Route::get('/song_data', function(Request $request){
         ->get()->toJson();
     return $songs;
 });
+Route::post('/song_link_change', function(Request $request){
+    if(Auth::id() != 1) return;
+    $id = $request->id;
+    Song::find($id)->update(["link" => $request->link]);
+});
 Route::post('/price_calc', function(Request $request){
     return price_calc($request->labels, $request->price_schema, $request->quoting);
 });

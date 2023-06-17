@@ -599,7 +599,7 @@ class StatsController extends Controller
         //scheduled and received payments
         $saturation = [
             //this month
-            StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->sum("comment")
+            StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("new_status_id", 32)->sum("comment")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("client", fn($q) => $q->where("trust", ">", -1))

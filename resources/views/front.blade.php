@@ -299,7 +299,7 @@
                     <x-input type="text" name="artist[]" label="Wykonawca" />
                     <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" />
                     <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
-                    <x-input type="date" name="hard_deadline[]" label="Na kiedy jest potrzebne? (opcjonalnie)" />
+                    <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
                 </div>
                 <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
             </div>

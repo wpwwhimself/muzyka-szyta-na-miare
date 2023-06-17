@@ -103,6 +103,9 @@ div, form{
     display: flex;
     flex-direction: column;
 }
+.center{
+    align-items: center;
+}
 .hover-lift:hover{
     color: inherit;
     box-shadow: 0 0 1rem #00000044;

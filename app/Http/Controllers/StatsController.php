@@ -338,6 +338,11 @@ class StatsController extends Controller
                 ->sum("comment"),
             "wydano" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
+                ->where("cost_type_id", "!=", 3)
+                ->sum("amount"),
+            "wypłacono" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
+                ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
+                ->where("cost_type_id", 3)
                 ->sum("amount"),
         ];
 
@@ -514,8 +519,9 @@ class StatsController extends Controller
         $costs = Cost::orderByDesc("created_at")->paginate(25);
         $types = CostType::all()->pluck("name", "id");
         $summary = [
-            "Suma" => Cost::sum("amount"),
-            "Bez wypłat" => Cost::where("cost_type_id", "<>", 3)->sum("amount"),
+            "Zwykłe" => Cost::where("cost_type_id", "<>", 3)->sum("amount"),
+            "Wypłaty" => Cost::where("cost_type_id", 3)->sum("amount"),
+            "Razem" => Cost::sum("amount"),
         ];
 
         return view(user_role().".costs", array_merge(

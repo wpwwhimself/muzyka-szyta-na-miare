@@ -15,9 +15,9 @@
                 </h2>
                 <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" :small="true" />
                 <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" />
-                <x-input type="email" name="email" label="Adres e-mail" />
-                <x-input type="tel" name="phone" label="Numer telefonu" />
-                <x-input type="text" name="other_medium" label="Inna forma kontaktu" />
+                <x-input type="email" name="email" label="Adres e-mail" :small="true" />
+                <x-input type="tel" name="phone" label="Numer telefonu" :small="true" />
+                <x-input type="text" name="other_medium" label="Inna forma kontaktu" :small="true" />
                 <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" />
                 <script>
                 function client_fields(){
@@ -34,7 +34,7 @@
                             },
                             success: function(res){
                                 res = JSON.parse(res);
-                                $("input", $("#client_id").parent().parent()).prop("disabled", true);
+                                // $("input", $("#client_id").parent().parent()).prop("disabled", true);
                                 $("#client_name").val(res.client_name);
                                 $("#email").val(res.email);
                                 $("#phone").val(res.phone);

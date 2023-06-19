@@ -185,7 +185,7 @@ class BackController extends Controller
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = $client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")";
+                $clients[$client["id"]] = "$client[client_name] «$client[id]»";
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
@@ -227,11 +227,11 @@ class BackController extends Controller
                     "made_by_me" => true,
 
                     "client_id" => $rq->client_id,
-                    "client_name" => ($client) ? $client->client_name : $rq->client_name,
-                    "email" => ($client) ? $client->email : $rq->email,
-                    "phone" => ($client) ? $client->phone : $rq->phone,
-                    "other_medium" => ($client) ? $client->other_medium : $rq->other_medium,
-                    "contact_preference" => ($client) ? $client->contact_preference : $rq->contact_preference ?? "email",
+                    "client_name" => $rq->client_name,
+                    "email" => $rq->email,
+                    "phone" => $rq->phone,
+                    "other_medium" => $rq->other_medium,
+                    "contact_preference" => $rq->contact_preference ?? "email",
 
                     "song_id" => $song?->id,
                     "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
@@ -321,11 +321,11 @@ class BackController extends Controller
 
             $request->update([
                 "client_id" => $rq->client_id,
-                "client_name" => ($client) ? $client->client_name : $rq->client_name,
-                "email" => ($client) ? $client->email : $rq->email,
-                "phone" => ($client) ? $client->phone : $rq->phone,
-                "other_medium" => ($client) ? $client->other_medium : $rq->other_medium,
-                "contact_preference" => ($client) ? $client->contact_preference : $rq->contact_preference ?? "email",
+                "client_name" => $rq->client_name,
+                "email" => $rq->email,
+                "phone" => $rq->phone,
+                "other_medium" => $rq->other_medium,
+                "contact_preference" => $rq->contact_preference ?? "email",
 
                 "song_id" => $song?->id,
                 "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
@@ -439,6 +439,13 @@ class BackController extends Controller
                     ->update(["client_id" => $user->id]);
             }else{
                 $client = Client::find($request->client_id);
+                $client->update([
+                    "client_name" => $request->client_name,
+                    "email" => $request->email,
+                    "phone" => $request->phone,
+                    "other_medium" => $request->other_medium,
+                    "contact_preference" => $request->contact_preference,
+                ]);
             }
 
             $quest = new Quest;

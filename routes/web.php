@@ -161,12 +161,7 @@ Route::get('/client_data', function(Request $request){
     return Client::find($request->id)->toJson();
 });
 Route::get('/song_data', function(Request $request){
-    $title = $request->title;
-    $songs = Song::where("title", "like", "%$title%")
-        ->join("genres", "genres.id", "=", "songs.genre_id")
-        ->select(["songs.id", "title", "link", "name as genre", "price_code", "notes"])
-        ->get()->toJson();
-    return $songs;
+    return Song::find($request->id)->toJson();
 });
 Route::post('/song_link_change', function(Request $request){
     if(Auth::id() != 1) return;

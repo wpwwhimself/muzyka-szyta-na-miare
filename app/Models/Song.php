@@ -16,7 +16,7 @@ class Song extends Model
     protected $fillable = [
         "title", "artist",
         "link",
-        "notes",
+        "price_code", "notes",
     ];
 
     public function genre(){

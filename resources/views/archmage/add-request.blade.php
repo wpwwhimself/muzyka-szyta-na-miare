@@ -9,9 +9,7 @@
                 <h2>
                     <i class="fa-solid fa-user"></i>
                     Dane klienta
-                    <a href="#/" @popper(zlecenia klienta) target="_blank" id="client_quests_list">
-                        <i class="fa-solid fa-up-right-from-square"></i>
-                    </a>
+                    <a href="#/" @popper(szczegóły klienta) target="_blank" id="client_info"><i class="fa-solid fa-up-right-from-square"></i></a>
                 </h2>
                 <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" :small="true" />
                 <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" />
@@ -34,7 +32,6 @@
                             },
                             success: function(res){
                                 res = JSON.parse(res);
-                                // $("input", $("#client_id").parent().parent()).prop("disabled", true);
                                 $("#client_name").val(res.client_name);
                                 $("#email").val(res.email);
                                 $("#phone").val(res.phone);
@@ -42,11 +39,10 @@
                                 $("#contact_preference").val(res.contact_preference);
                                 $("#wishes").html(res.default_wishes);
                                 if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
-                                $("#client_quests_list").attr("href", "{{ route('quests') }}/" + $("#client_id").val()).show();
+                                $("#client_info").attr("href", "{{ route('clients') }}" + `?search=${$("#client_name").val()}`).show();
                             }
                         });
                     }else{
-                        $("input", $("#client_id").parent().parent()).prop("disabled", false);
                         $("#client_name").val("");
                         $("#email").val("");
                         $("#phone").val("");
@@ -54,7 +50,7 @@
                         $("#contact_preference").val("");
                         $("#wishes").html("");
                         $("#special-prices-warning").html("");
-                        $("#client_quests_list").hide().attr("href", "");
+                        $("#client_info").hide().attr("href", "");
                     }
                 }
                 $(document).ready(function(){
@@ -66,24 +62,8 @@
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-cart-flatbed"></i> Dane utworu</h2>
-                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
+                <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" />
                 <x-input type="text" name="title" label="Tytuł utworu" />
-                <div id="song-summary" class="hint-table">
-                    <h3><i class="fa-solid fa-compact-disc"></i> Sugestie</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Tytuł</th>
-                                <th>Gatunek</th>
-                                <th>Wycena</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody class="positions">
-                        </tbody>
-                    </table>
-                </div>
                 <x-input type="text" name="artist" label="Wykonawca" />
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" />
                 <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" :required="true" />
@@ -92,56 +72,47 @@
                 <x-input type="date" name="hard_deadline" label="Termin klienta" />
 
                 <script>
-                function ghostBind(val = null){
-                    for(let id of ["quest_type", "title", "artist", "link", "genre_id", "wishes"]){
-                        if (val){
-                            $(`#${id}`).addClass("ghost");
-                        }else{
-                            $(`#${id}`).removeClass("ghost");
-                        }
+                function song_fields(){
+                    const empty = $("#song_id").val() == "";
+                    let songdata = {};
+
+                    if(!empty){
+                        $.ajax({
+                            url: "{{ url('song_data') }}",
+                            type: "get",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                id: $("#song_id").val()
+                            },
+                            success: function(res){
+                                res = JSON.parse(res);
+                                $("#title").val(res.title);
+                                $("#artist").val(res.artist);
+                                $("#link").val(res.link);
+                                $("#genre_id").val(res.genre_id);
+                                $("#wishes").val(res.notes);
+                                $("#song-price-sugg").html(`Sugerowana cena: ${res.price_code}`);
+                            }
+                        });
+                    }else{
+                        $("#title").val("");
+                        $("#artist").val("");
+                        $("#link").val("");
+                        $("#genre_id").val("");
+                        $("#song-price-sugg").html("");
                     }
                 }
                 $(document).ready(function(){
-                    $("#title").change(function (e) {
-                        if(e.target.value.length >= 2){
-                            $.ajax({
-                                type: "get",
-                                url: "/song_data",
-                                data: { title: e.target.value },
-                                success: function (res) {
-                                    const positions_list = $("#song-summary .positions");
-                                    res = JSON.parse(res);
-                                    let content = ``;
-                                    res.forEach(song => {
-                                        content += `<tr>`;
-                                        if(song.link?.indexOf(",") > -1) song.link = song.link.substring(0, song.link.indexOf(","));
-                                        content += `<td><input type='radio' name='song_id' value='${song.id}' onchange='ghostBind("${song.id}")' /></td>`;
-                                        content += `<td>${song.title}</td>`;
-                                        content += `<td>${song.genre}</td>`;
-                                        content += `<td id="#song_price_code">${song.price_code}</td>`;
-                                        content += `<td>`;
-                                            if(song.notes) content += `<span class='clickable' title='Uwagi:\n${song.notes}'>🚩</span>`;
-                                            if(song.link) content += `<a href="${song.link}" target="_blank" title='Link do materiałów'>💽</a>`;
-                                            content += `<a href="{{ route('songs') }}?search=${song.id}" target="_blank" title='Utwór'>📝</a>`;
-                                        content += `</td>`;
-                                        content += `</tr>`;
-                                    });
-                                    content += `<tr><td><input type='radio' name='song_id' value='0' onchange='ghostBind()' checked /></td><td colspan=4>Nowa piosenka</td></tr>`
-                                    positions_list.html(content);
-                                    $("#song-summary").show();
-                                }
-                            });
-                        }else{
-                            $("#song-summary .positions").html("");
-                            $("#song-summary").hide();
-                        }
-                    });
+                    song_fields();
+                    $("#song_id").change(function(){ song_fields() });
                 });
                 </script>
             </section>
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+                <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :small="true" :required="true" />
+                <div id="song-price-sugg"></div>
                 <div id="special-prices-warning"></div>
                 <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" :required="false" />
                 <div id="price-summary" class="hint-table">

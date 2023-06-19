@@ -153,7 +153,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = Str::limit("$song[title]", $pad_size);
+                $songs[$song["id"]] = Str::limit($song["title"] ?? "bez tytułu ($song[artist])", $pad_size)." «$song[id]»";
             }
         }else{
             if($request->client_id != Auth::id()){
@@ -180,7 +180,7 @@ class BackController extends Controller
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres")));
     }
     public function addRequest(){
-        $pad_size = 30; // used by dropdowns for mobile preview fix
+        $pad_size = 24; // used by dropdowns for mobile preview fix
 
         if(Auth::id() == 1){
             $clients_raw = Client::all()->toArray();
@@ -189,7 +189,7 @@ class BackController extends Controller
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
-                $songs[$song["id"]] = Str::limit("$song[title]", $pad_size);
+                $songs[$song["id"]] = Str::limit($song["title"] ?? "bez tytułu ($song[artist])", $pad_size)." «$song[id]»";
             }
         }else{
             $clients = [];
@@ -233,13 +233,13 @@ class BackController extends Controller
                     "other_medium" => $rq->other_medium,
                     "contact_preference" => $rq->contact_preference ?? "email",
 
-                    "song_id" => $song?->id,
-                    "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
-                    "title" => ($song) ? $song->title : $rq->title,
-                    "artist" => ($song) ? $song->artist : $rq->artist,
-                    "link" => ($song) ? $song->link : $rq->link,
-                    "genre_id" => ($song) ? $song->genre_id : $rq->genre_id,
-                    "wishes" => ($song) ? $song->wishes : $rq->wishes,
+                    "song_id" => $rq->song_id,
+                    "quest_type_id" => $rq->quest_type,
+                    "title" => $rq->title,
+                    "artist" => $rq->artist,
+                    "link" => $rq->link,
+                    "genre_id" => $rq->genre_id,
+                    "wishes" => $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
                     "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
@@ -249,6 +249,27 @@ class BackController extends Controller
                     "delayed_payment" => $rq->delayed_payment,
                     "status_id" => $rq->new_status,
                 ]);
+
+                // nadpisanie zmienionych gotowców
+                if($rq->song_id){
+                    Song::find($rq->song_id)->update([
+                        "title" => $rq->title,
+                        "artist" => $rq->artist,
+                        "link" => $rq->link,
+                        "genre_id" => $rq->genre_id,
+                        "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
+                        "notes" => $rq->wishes,
+                    ]);
+                }
+                if($rq->client_id){
+                    Client::find($rq->client_id)->update([
+                        "client_name" => $rq->client_name,
+                        "email" => $rq->email,
+                        "phone" => $rq->phone,
+                        "other_medium" => $rq->other_medium,
+                        "contact_preference" => $rq->contact_preference,
+                    ]);
+                }
 
                 if($rq->new_status == 5) $this->statusHistory($request->id, 1, null);
                 $this->statusHistory($request->id, $rq->new_status, $rq->comment);
@@ -327,13 +348,13 @@ class BackController extends Controller
                 "other_medium" => $rq->other_medium,
                 "contact_preference" => $rq->contact_preference ?? "email",
 
-                "song_id" => $song?->id,
-                "quest_type_id" => ($song) ? song_quest_type($rq->song_id)->id : $rq->quest_type,
-                "title" => ($song) ? $song->title : $rq->title,
-                "artist" => ($song) ? $song->artist : $rq->artist,
-                "link" => ($song) ? $song->link : $rq->link,
-                "genre_id" => ($song) ? $song->genre_id : $rq->genre_id,
-                "wishes" => ($song) ? $song->wishes : $rq->wishes,
+                "song_id" => $rq->song_id,
+                "quest_type_id" => $rq->quest_type,
+                "title" => $rq->title,
+                "artist" => $rq->artist,
+                "link" => $rq->link,
+                "genre_id" => $rq->genre_id,
+                "wishes" => $rq->wishes,
                 "wishes_quest" => $rq->wishes_quest,
 
                 "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
@@ -343,6 +364,27 @@ class BackController extends Controller
                 "delayed_payment" => $rq->delayed_payment,
                 "status_id" => $rq->new_status,
             ]);
+
+            // nadpisanie zmienionych gotowców
+            if($song){
+                $song->update([
+                    "title" => $rq->title,
+                    "artist" => $rq->artist,
+                    "link" => $rq->link,
+                    "genre_id" => $rq->genre_id,
+                    "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
+                    "notes" => $rq->wishes,
+                ]);
+            }
+            if($client){
+                $client->update([
+                    "client_name" => $rq->client_name,
+                    "email" => $rq->email,
+                    "phone" => $rq->phone,
+                    "other_medium" => $rq->other_medium,
+                    "contact_preference" => $rq->contact_preference,
+                ]);
+            }
         }else if($intent == "review"){
             //review jako klient
             $request->status_id = $rq->new_status;
@@ -439,13 +481,6 @@ class BackController extends Controller
                     ->update(["client_id" => $user->id]);
             }else{
                 $client = Client::find($request->client_id);
-                $client->update([
-                    "client_name" => $request->client_name,
-                    "email" => $request->email,
-                    "phone" => $request->phone,
-                    "other_medium" => $request->other_medium,
-                    "contact_preference" => $request->contact_preference,
-                ]);
             }
 
             $quest = new Quest;

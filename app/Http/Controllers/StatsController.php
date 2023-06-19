@@ -437,9 +437,13 @@ class StatsController extends Controller
         $losses = Cost::whereDate("created_at", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
             ->orderByDesc("created_at");
 
+        $losses_payments = (clone $losses)->where("cost_type_id", 3)->sum("amount");
+        $losses_other = (clone $losses)->where("cost_type_id", "<>", 3)->sum("amount");
+
         $summary = [
             "Zarobiono" => $gains->sum("comment"),
-            "Wydano" => $losses->sum("amount"),
+            "Wydano" => $losses_other,
+            "Wypłacono" => $losses_payments,
             "Saldo na dziś" => StatusChange::where("new_status_id", 32)->sum("comment") - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount"),
         ];
         $gains = $gains->get();

@@ -13,10 +13,12 @@
     body{
         font-family: "Raleway", "Calibri", "Arial";
         font-size: 16px;
+    }
+    h1, h2, h3, p, footer{
         text-align: center;
     }
     h1, h2, h3{
-        font-family: "Krona One", Montserrat, "Arial Black";
+        font-family: Montserrat, "Arial Black";
     }
     h2{
         color: #60cc89

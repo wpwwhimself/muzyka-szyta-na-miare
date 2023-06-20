@@ -15,7 +15,9 @@
         <tr>
             @foreach ([
                 "Cena" => as_pln($request->price),
-                "Termin oddania pierwszej wersji" => $request->deadline?->format("d.m.Y") ?? "brak",
+                "Termin oddania pierwszej wersji" => ($request->deadline)
+                    ? "do ".$request->deadline?->format("d.m.Y")
+                    : "brak",
             ] as $key => $val)
             <td class="framed-cell">
                 <p>{{ $key }}</p>
@@ -32,13 +34,13 @@
         </b></p>
     @endif
 
-    @if ($request->hard_deadline)
     <p>
-        Termin wykonania został dopasowany do moich możliwości przerobowych.
+        Termin wykonania został dopasowany do moich możliwości przerobowych. Jest szansa na szybsze wykonanie przeze mnie zlecenia, mimo wszystko jednak podaję górną granicę oczekiwania.
+    </p>
+    <p>
         Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiedni komentarz w wycenie, a przekalkuluję wszystko jeszcze raz.
         Należy się przy tym jednak liczyć z możliwymi większymi kosztami.
     </p>
-    @endif
 
     @if ($comment = $request->changes->last()->comment)
     <p>{{ $comment }}</p>

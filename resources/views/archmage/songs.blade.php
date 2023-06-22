@@ -60,4 +60,28 @@
     {{ $songs->links() }}
 </section>
 
+<script>
+// editable songs //
+$(document).ready(() => {
+    $(".link-edit-trigger").click((e) => {
+        e.target.closest(".link-edit-trigger").nextElementSibling.classList.toggle("hidden");
+    });
+
+    $("input[name=link]").change((e) => {
+        $.ajax({
+            type: "post",
+            url: "/song_link_change",
+            data: {
+                id: e.target.getAttribute("data-editable"),
+                link: e.target.value,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function (res) {
+                window.location.reload();
+            }
+        });
+    });
+});
+</script>
+
 @endsection

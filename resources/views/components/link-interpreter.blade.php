@@ -7,32 +7,9 @@
     @endif
     @endforeach
     @if($editable)
-    <x-button action="#/" id="link-edit-trigger" icon="pencil" label="" :small="true" />
-    <div id="link-edit-field">
-        <x-input type="text" name="link" label="Linki" :value="$link" :small="true" />
+    <x-button action="#/" class="link-edit-trigger" icon="pencil" label="" :small="true" />
+    <div class="link-edit-field hidden">
+        <x-input type="text" name="link" label="Linki" :value="$link" :small="true" :data-editable="$editable" />
     </div>
-    <script>
-    $(document).ready(() => {
-        $("#link-edit-field").hide();
-        $("#link-edit-trigger").click(() => {
-            $("#link-edit-field").show();
-        });
-
-        $("#link").change((e) => {
-            $.ajax({
-                type: "post",
-                url: "/song_link_change",
-                data: {
-                    id: "{{ $editable }}",
-                    link: e.target.value,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (res) {
-                    window.location.reload();
-                }
-            });
-        });
-    });
-    </script>
     @endif
 </div>

@@ -90,7 +90,7 @@ div, form{
     /* color set to --acc if it was black pic */
     /* filter: invert(70%) sepia(4%) saturate(5329%) hue-rotate(91deg) brightness(101%) contrast(84%); */
 }
-.grid-2, .grid-3{ display: grid; column-gap: 1em; }
+.grid-2, .grid-3{ display: grid; gap: 1em; }
 .grid-2{ grid-template-columns: 1fr 1fr; }
 .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
 .flex-right{
@@ -256,7 +256,7 @@ input[type="checkbox"]{
 .section-like{
     border: 3px solid var(--bg2);
     border-radius: 1em;
-    padding: 1em; margin-bottom: 1em;
+    padding: 1em;
 }
 .section-like:last-child{ margin-bottom: 0; }
 .black-back{

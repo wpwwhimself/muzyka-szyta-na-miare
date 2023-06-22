@@ -398,7 +398,7 @@ class BackController extends Controller
             $request->save();
         }
 
-        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 6, 8, 9])) ? $request->client_id : null;
+        $changed_by = (Auth::id() == 1 && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
         $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
 
         // sending mail
@@ -681,7 +681,7 @@ class BackController extends Controller
             $rq->quest_id,
             $rq->status_id,
             $rq->comment,
-            (Auth::id() == 1 && in_array($rq->status_id, [16, 18, 19, 26])) ? $quest->client_id : null
+            (Auth::id() == 1 && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
         );
 
         // sending mail

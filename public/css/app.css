@@ -879,8 +879,9 @@ footer .contact-info{
 
 #ppp{
     gap: 0.5em;
-    grid-template-columns: 3fr 1fr;
-    white-space: wrap;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    align-items: flex-start;
 }
 
 #phases{
@@ -1098,6 +1099,7 @@ footer .contact-info{
     }
 
     #ppp{
-        grid-template-columns: auto;
+        flex-direction: column;
+        align-items: stretch;
     }
 }

@@ -878,8 +878,8 @@ footer .contact-info{
 }
 
 #ppp{
-    display: grid; gap: 0.5em;
-    grid-template-columns: 1fr 2fr;
+    gap: 0.5em;
+    grid-template-columns: 3fr 1fr;
     white-space: wrap;
 }
 

@@ -884,20 +884,17 @@ class BackController extends Controller
         return back()->with("success", "Dodano pozycję");
     }
 
-    public function ppp(){
-        $questions = [
-            "Podkład MIDI" => "Podkłady MIDI traktuję jako **nuty**",
-            "Auto-maile do klientów" => "Maile do klientów są wysyłane:
-* dla requestów: w momencie odesłania do akceptacji,
-* dla questów: w momencie odesłania do akceptacji, zmiany wyceny i zarejestrowania jakiejkolwiek wpłaty.
-
-Sprzątacz natomiast wysyła maile przypominające o recenzji i płatnościach."
-        ];
-        ksort($questions);
+    public function ppp(HttpRequest $rq){
+        $titles = [];
+        foreach(Storage::files("doc") as $key => $ttl){
+            $titles[$key] = preg_replace("/(.*)\/(.*)\.md/", "$2", $ttl);
+        }
+        $page = (in_array($rq->c, $titles)) ? $rq->c : "0_index";
+        $content = Storage::get("doc/$page.md");
 
         return view(user_role().".ppp", array_merge(
             ["title" => "Poradnik Przyszłych Pokoleń"],
-            compact("questions")
+            compact("content", "titles")
         ));
     }
 

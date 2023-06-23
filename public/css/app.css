@@ -263,8 +263,8 @@ input[type="checkbox"]{
     background-color: var(--bg1);
     padding: 1em;
 }
-.hidden{
-    display: none !important;
+.gone{
+    display: none;
 }
 
 /* NOŻYCZKI */

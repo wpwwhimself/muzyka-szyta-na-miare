@@ -64,7 +64,7 @@
 // editable songs //
 $(document).ready(() => {
     $(".link-edit-trigger").click((e) => {
-        e.target.closest(".link-edit-trigger").nextElementSibling.classList.toggle("hidden");
+        e.target.closest(".link-edit-trigger").nextElementSibling.classList.toggle("gone");
     });
 
     $("input[name=link]").change((e) => {

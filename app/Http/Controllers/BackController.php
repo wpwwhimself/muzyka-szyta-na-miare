@@ -25,6 +25,7 @@ use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -884,17 +885,15 @@ class BackController extends Controller
         return back()->with("success", "Dodano pozycję");
     }
 
-    public function ppp(HttpRequest $rq){
+    public function ppp($page = "0-index"){
         $titles = [];
-        foreach(Storage::files("doc") as $key => $ttl){
-            $titles[$key] = preg_replace("/(.*)\/(.*)\.md/", "$2", $ttl);
+        foreach(File::allFiles(resource_path("views/doc")) as $key => $ttl){
+            $titles[$key] = preg_replace("/(.*)doc\\\(.*)\.blade\.php/", "$2", $ttl);
         }
-        $page = (in_array($rq->c, $titles)) ? $rq->c : "0_index";
-        $content = Storage::get("doc/$page.md");
 
         return view(user_role().".ppp", array_merge(
             ["title" => "Poradnik Przyszłych Pokoleń"],
-            compact("content", "titles")
+            compact("page", "titles")
         ));
     }
 

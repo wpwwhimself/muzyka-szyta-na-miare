@@ -7,12 +7,16 @@
     <h2>Rozdziały</h2>
     <ol>
     @foreach ($titles as $ttl)
-      <li value="{{ explode("_", $ttl)[0] }}"><a href="{{ route('ppp', ['c' => $ttl]) }}">{{ explode("_", $ttl)[1] }}</a></li>
+      <li value="{{ preg_replace('/^(\d+).*/', '$1', $ttl) }}">
+        <a href="{{ route('ppp', ['page' => $ttl]) }}">
+          {{ preg_replace('/\d+-(.*)/', '$1', $ttl) }}
+        </a>
+      </li>
     @endforeach
     </ol>
   </div>
   <div id="ppp_content">
-    {!! Illuminate\Mail\Markdown::parse($content) !!}
+    @includeFirst(["doc.$page", "doc-missing"])
   </div>
 </div>
 

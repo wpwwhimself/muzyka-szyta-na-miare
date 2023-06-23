@@ -72,7 +72,7 @@ Route::controller(BackController::class)->group(function(){
 
         Route::get("/songs", "songs")->name("songs");
 
-        Route::get("/ppp", "ppp")->name("ppp");
+        Route::get("/ppp/{page?}", "ppp")->name("ppp");
 
         Route::get("/settings", "settings")->name("settings");
     });

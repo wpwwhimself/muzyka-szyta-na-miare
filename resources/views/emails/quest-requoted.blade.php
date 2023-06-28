@@ -15,7 +15,7 @@
         <tr>
             @foreach ([
                 "Cena" => as_pln($quest->price),
-                "Termin oddania pierwszej wersji" => ($quest->deadline?)
+                "Termin oddania pierwszej wersji" => ($quest->deadline)
                     ? "do ".$quest->deadline?->format("d.m.Y")
                     : "brak",
             ] as $key => $val)

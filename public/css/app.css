@@ -910,8 +910,10 @@ footer .contact-info{
 }
 #invoice .summary{
     text-align: right;
-    margin-left: auto; width: fit-content;
+    margin: 1em 0 1em auto;
+    width: fit-content;
     font-size: 1.5em;
+    gap: 0;
 }
 #invoice .summary .small{
     margin: 0;

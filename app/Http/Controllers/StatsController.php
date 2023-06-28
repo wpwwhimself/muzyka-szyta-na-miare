@@ -41,6 +41,7 @@ class StatsController extends Controller
             ->orderBy("month")
             ->get();
         $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+            ->where("cost_type_id", "<>", 3)
             ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
@@ -55,6 +56,7 @@ class StatsController extends Controller
                 ->whereDate("date", ">=", Carbon::today()->subYear())
                 ->sum("comment"),
             "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
+                ->where("cost_type_id", "<>", 3)
                 ->sum("amount"),
         ];
         $finances_total_last_year = [
@@ -62,6 +64,7 @@ class StatsController extends Controller
                 ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
                 ->sum("comment"),
             "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYears(2))->whereDate("created_at", "<", Carbon::today()->subYear())
+                ->where("cost_type_id", "<>", 3)
                 ->sum("amount"),
         ];
         $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
@@ -78,6 +81,7 @@ class StatsController extends Controller
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
             ->whereDate("created_at", ">=", "2020-01-01")
+            ->where("cost_type_id", "<>", 3)
             ->groupBy("year")
             ->orderBy("year")
             ->get();

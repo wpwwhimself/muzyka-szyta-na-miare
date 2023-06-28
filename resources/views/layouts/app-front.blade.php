@@ -39,7 +39,7 @@
 
     <script>
     const USER_ID = {{ Auth::id() ?? 'null' }};
-    const IS_VETERAN = {{ Auth::id() == 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
+    const IS_VETERAN = {{ Auth::id() <= 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
     </script>
 
     <title>{{ config("app.name") }} ✂🎵 Podkłady i aranże dopasowane do Twoich potrzeb</title>

@@ -133,7 +133,7 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
 })->name("request-finalized");
 Route::get("/patron-mode/{id}/{level}", function($id, $level){
     Client::findOrFail($id)->update(["helped_showcasing" => $level]);
-    if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
+    if(Auth::id() <= 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
 })->name("patron-mode");
 
@@ -164,7 +164,7 @@ Route::get('/song_data', function(Request $request){
     return Song::find($request->id)->toJson();
 });
 Route::post('/song_link_change', function(Request $request){
-    if(Auth::id() != 1) return;
+    if(Auth::id() > 1) return;
     $id = $request->id;
     Song::find($id)->update(["link" => $request->link]);
 });

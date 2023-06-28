@@ -51,6 +51,7 @@ if(!function_exists("user_role")){
         $role = "";
         switch(Auth::id()){
             case 1: $role = "archmage"; break;
+            case 0: $role = "archmage"; break;
             default: $role = "client"; break;
         }
         return $role;

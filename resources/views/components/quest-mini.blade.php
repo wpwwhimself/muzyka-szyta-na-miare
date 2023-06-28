@@ -5,7 +5,7 @@
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
     </a>
-    @if (Auth::id() == 1)
+    @if (Auth::id() <= 1)
     <div class="quest-client">
         @if ($quest->client_id)
             @if (is_veteran($quest->client_id))

@@ -27,15 +27,15 @@
             <h2>
                 <i class="fa-solid fa-user"></i>
                 Dane klienta
-                <a href="{{ route('clients', ['search' => $request->client?->client_name]) }}" @popper(szczegóły klienta) target="_blank" id="client_info"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a href="{{ route('clients', ['search' => $request->client?->id]) }}" @popper(szczegóły klienta) target="_blank" id="client_info"><i class="fa-solid fa-up-right-from-square"></i></a>
             </h2>
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
-            <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" value="{{ $request->client_name }}" />
-            <x-input type="email" name="email" label="Adres e-mail" value="{{ $request->email }}" :small="true" />
-            <x-input type="tel" name="phone" label="Numer telefonu" value="{{ $request->phone }}" :small="true" />
-            <x-input type="text" name="other_medium" label="Inna forma kontaktu" value="{{ $request->other_medium }}" :small="true" />
-            <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ $request->contact_preference }}" />
-            
+            <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" value="{{ _ct_($request->client_name) }}" />
+            <x-input type="email" name="email" label="Adres e-mail" value="{{ _ct_($request->email) }}" :small="true" />
+            <x-input type="tel" name="phone" label="Numer telefonu" value="{{ _ct_($request->phone) }}" :small="true" />
+            <x-input type="text" name="other_medium" label="Inna forma kontaktu" value="{{ _ct_($request->other_medium) }}" :small="true" />
+            <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ _ct_($request->contact_preference) }}" />
+
             @if(in_array($request->status_id, [1, 6, 96]))
             <script>
             function client_fields(dont_clear_fields = false){

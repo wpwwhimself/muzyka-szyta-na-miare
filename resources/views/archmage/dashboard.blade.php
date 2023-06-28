@@ -14,22 +14,22 @@
                 <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
                 <div class="positions">
                     <span>Zaakceptowane do zapłacenia</span>
-                    <span>{{ as_pln(quests_unpaid(1)) }}</span>
+                    <span>{{ _c_(as_pln(quests_unpaid(1))) }}</span>
 
                     <span>Wszystkie do zapłacenia</span>
-                    <span>{{ as_pln(quests_unpaid(1, true)) }}</span>
+                    <span>{{ _c_(as_pln(quests_unpaid(1, true))) }}</span>
 
                     <span>Zarobki z ostatnich 30 dni</span>
                     <span>
-                        {{ as_pln($gains["this_month"]) }}
+                        {{ _c_(as_pln($gains["this_month"])) }}
                         <small class="{{ $gains['monthly_diff'] >= 0 ? 'success' : 'error' }}">
-                            ({{ sprintf("%+d", $gains["monthly_diff"]) }})
+                            ({{ _c_(sprintf("%+d", $gains["monthly_diff"])) }})
                         </small>
                     </span>
 
                     <span>Zarobki w tym miesiącu</span>
                     <span>
-                        {{ as_pln($gains_this_month) }}
+                        {{ _c_(as_pln($gains_this_month)) }}
                         <small class="{{
                             ($gains_this_month >= 0.9 * INCOME_LIMIT())
                             ? 'error'
@@ -37,7 +37,7 @@
                                 ? 'warning'
                                 : '')
                             }}">
-                            ({{ round($gains_this_month / INCOME_LIMIT(), 2)*100 }}%)
+                            ({{ _c_(round($gains_this_month / INCOME_LIMIT(), 2)*100) }}%)
                         </small>
                     </span>
                 </div>
@@ -109,12 +109,12 @@
                         <td>
                         @if ($change->is_request)
                             @if ($change->re_quest->client)
-                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->client_name]) }}">{{ $change->re_quest->client?->client_name }}</a>
+                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client?->client_name) }}</a>
                             @else
-                                {{ $change->re_quest->client_name }}
+                                {{ _ct_($change->re_quest->client_id) }}
                             @endif
                         @else
-                            <a href="{{ route('clients', ['search' => $change->re_quest->client->client_name]) }}">{{ $change->re_quest->client->client_name }}</a>
+                            <a href="{{ route('clients', ['search' => $change->re_quest->client->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
                         @endif
                         </td>
                         <td>
@@ -163,7 +163,7 @@
                     <tr>
                         <td>
                             <i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i>
-                            <a href="{{ route('clients', ['search' => $patron->client_name]) }}">{{ $patron->client_name }}</a>
+                            <a href="{{ route('clients', ['search' => $patron->client_id]) }}">{{ _ct_($patron->client_name) }}</a>
                         </td>
                         <td>
                             <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
@@ -210,12 +210,12 @@
                     <span class="ghost">
                         @if ($request->client?->client_name)
                             @if (is_veteran($request->client->id))
-                            <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
+                            <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($request->client->client_name) }}
                             @else
-                            <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
+                            <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($request->client->client_name) }}
                             @endif
                         @else
-                            <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
+                            <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($request->client_name) }}
                         @endif
                     </span>
                 </span>
@@ -225,7 +225,7 @@
                     </span>
                     <div class="quest-meta">
                         @if ($request->price)
-                        <p>{{ as_pln($request->price) }}</p>
+                        <p>{{ _c_(as_pln($request->price)) }}</p>
                         <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                         @endif
 
@@ -305,12 +305,12 @@
                         <span class="ghost">
                             @if ($quest->client?->client_name)
                                 @if (is_veteran($quest->client->id))
-                                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
+                                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($quest->client->client_name) }}
                                 @else
-                                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
+                                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($quest->client->client_name) }}
                                 @endif
                             @else
-                                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
+                                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($quest->client_name) }}
                             @endif
                         </span>
                     </span>
@@ -321,7 +321,7 @@
                         <div class="quest-meta">
                             @if ($quest->price)
                             <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
-                                {{ as_pln($quest->price) }}
+                                {{ _c_(as_pln($quest->price)) }}
                             </p>
                             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
                             @endif

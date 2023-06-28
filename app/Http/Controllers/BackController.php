@@ -100,7 +100,11 @@ class BackController extends Controller
         $quests = $quests->get();
 
         return view(user_role().".dashboard", array_merge(
-            ["title" => (Auth::id() <= 1) ? "Szpica arcymaga" : "Pulpit"],
+            [
+                "title" => (Auth::id() <= 1)
+                ? (Auth::id() == 1 ? "Szpica arcymaga" : "WITAJ, OBSERWATORZE")
+                : "Pulpit"
+            ],
             compact("quests", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
@@ -150,7 +154,7 @@ class BackController extends Controller
         if(Auth::id() <= 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = Str::limit($client["client_name"] ." (". ($client["email"] ?? $client["phone"]) .")", $pad_size);
+                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
@@ -186,7 +190,7 @@ class BackController extends Controller
         if(Auth::id() <= 1){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = "$client[client_name] «$client[id]»";
+                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
             }
             $songs_raw = Song::all()->toArray();
             foreach($songs_raw as $song){
@@ -214,6 +218,7 @@ class BackController extends Controller
 
     public function addRequestBack(HttpRequest $rq){
         if(isset($rq->m_test) && $rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
 
         $flash_content = "Zapytania dodane";
         $loop_length = is_array($rq->quest_type) ? count($rq->quest_type) : 1;
@@ -326,6 +331,7 @@ class BackController extends Controller
     }
 
     public function modRequestBack(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $intent = $rq->intent;
         $request = Request::find($rq->id);
 
@@ -636,6 +642,7 @@ class BackController extends Controller
     }
 
     public function modQuestBack(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $quest = Quest::findOrFail($rq->quest_id);
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
             return back()->with("error", "Zatrzymaj zegar");
@@ -712,6 +719,7 @@ class BackController extends Controller
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }
     public function questSongUpdate(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $song = Song::findOrFail($rq->id);
         $song->update([
             "title" => $rq->title,
@@ -722,6 +730,7 @@ class BackController extends Controller
         return back()->with("success", "Utwór zmodyfikowany");
     }
     public function questWishesUpdate(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $quest = Quest::findOrFail($rq->id);
         $quest->update([
             "wishes" => $rq->wishes_quest,
@@ -729,6 +738,7 @@ class BackController extends Controller
         return back()->with("success", "Zlecenie zmodyfikowane");
     }
     public function questQuoteUpdate(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $quest = Quest::findOrFail($rq->id);
         $price_before = $quest->price;
         $deadline_before = $quest->deadline;
@@ -781,6 +791,7 @@ class BackController extends Controller
     }
 
     public function workClock(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         $now_working = SongWorkTime::where("now_working", 1)->first();
 
         if($now_working){
@@ -806,6 +817,7 @@ class BackController extends Controller
         return back()->with("success", "Praca zalogowana");
     }
     public function workClockRemove($song_id, $status_id){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         SongWorkTime::where("song_id", $song_id)->where("status_id", $status_id)->first()->delete();
         return back()->with("success", "Wpis pracy usunięty");
     }
@@ -875,6 +887,7 @@ class BackController extends Controller
     }
 
     public function addShowcase(HttpRequest $rq){
+        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
         Showcase::create([
             "song_id" => $rq->song_id,
             "link_fb" => (filter_var($rq->link_fb, FILTER_VALIDATE_URL)) ?

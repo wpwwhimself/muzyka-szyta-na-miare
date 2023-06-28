@@ -22,28 +22,28 @@
         </section>
         <section class="account">
             <h3>Nabywca</h3>
-            <h2>{{ $invoice->payer_name ?? $invoice->quest->client->client_name }}</h2>
-            <h3>{{ $invoice->payer_title }}</h3>
+            <h2>{{ _ct_($invoice->payer_name ?? $invoice->quest->client->client_name) }}</h2>
+            <h3>{{ _ct_($invoice->payer_title) }}</h3>
             <div class="grid-2 name-value">
                 @if ($invoice->payer_address)
                     <span>adres:</span>
-                    <span>{{ $invoice->payer_address }}</span>
+                    <span>{{ _ct_($invoice->payer_address) }}</span>
                 @endif
                 @if($invoice->payer_email)
                     <span>e-mail:</span>
-                    <span>{{ $invoice->payer_email }}</span>
+                    <span>{{ _ct_($invoice->payer_email) }}</span>
                 @endif
                 @if($invoice->payer_phone)
                     <span>tel:</span>
-                    <span>{{ number_format($invoice->payer_phone, 0, ",", " ") }}</span>
+                    <span>{{ _ct_(implode(" ", str_split($invoice->payer_phone, 3))) }}</span>
                 @endif
                 @if($invoice->payer_nip)
                     <span>NIP:</span>
-                    <span>{{ $invoice->payer_nip }}</span>
+                    <span>{{ _ct_($invoice->payer_nip) }}</span>
                 @endif
                 @if($invoice->payer_regon)
                     <span>REGON:</span>
-                    <span>{{ $invoice->payer_regon }}</span>
+                    <span>{{ _ct_($invoice->payer_regon) }}</span>
                 @endif
             </div>
         </section>
@@ -83,7 +83,7 @@
                 <em>{{ $quest->song->title ?? "bez tytułu" }}</em>
             </span>
             <span>
-                {{ as_pln($quest->pivot->amount) }}
+                {{ _c_(as_pln($quest->pivot->amount)) }}
             </span>
         </div>
         @endforeach
@@ -91,12 +91,12 @@
 
     <div class="grid-2 name-value summary">
         <span>Razem do zapłaty:</span>
-        <span>{{ as_pln($invoice->amount) }}</span>
+        <span>{{ _c_(as_pln($invoice->amount)) }}</span>
         @if ($invoice->paid)
         <span class="small">Płatność otrzymana:</span>
-        <span class="small">{{ as_pln($invoice->paid) }}</span>
+        <span class="small">{{ _c_(as_pln($invoice->paid)) }}</span>
         <span>Pozostało do zapłaty:</span>
-        <span @if ($invoice->isPaid) class="success" @endif>{{ as_pln($invoice->amount - $invoice->paid) }}</span>
+        <span @if ($invoice->isPaid) class="success" @endif>{{ _c_(as_pln($invoice->amount - $invoice->paid)) }}</span>
         @endif
     </div>
 </div>

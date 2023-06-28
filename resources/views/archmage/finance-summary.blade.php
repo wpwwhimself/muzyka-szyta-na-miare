@@ -37,7 +37,7 @@
     @forelse ($gains as $pos)
     <div class="table-row">
         <span>{{ $pos->date->format("d.m.Y") }}</span>
-        <span><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{{ $pos->client_name }}</a></span>
+        <span><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{{ _ct_($pos->client_name) }}</a></span>
         <span>
           @if ($pos->re_quest_id)
           <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>
@@ -79,9 +79,9 @@
     @forelse ($losses as $pos)
     <div class="table-row">
         <span>{{ $pos->created_at->format("d.m.Y") }}</span>
-        <span>{{ $pos->type->name }}</span>
+        <span>{{ _ct_($pos->type->name) }}</span>
         <span>{{ $pos->desc }}</span>
-        <span>{{ as_pln($pos->amount) }}</span>
+        <span>{{ _c_(as_pln($pos->amount)) }}</span>
     </div>
     @empty
     <p class="grayed-out">Brak danych</p>

@@ -33,9 +33,9 @@
                     <td>{{ $price->service }}</td>
                     @for ($letter = "A"; $letter != chr(ord(CURRENT_PRICING()) + 1); $letter = chr(ord($letter) + 1))
                         @if ($price->operation == "+")
-                        <td>{{ as_pln($price->{"price_".strtolower($letter)}) }}</td>
+                        <td>{{ _c_(as_pln($price->{"price_".strtolower($letter)})) }}</td>
                         @else
-                        <td>{{ $price->{"price_".strtolower($letter)} * 100 }}%</td>
+                        <td>{{ _c_($price->{"price_".strtolower($letter)} * 100) }}%</td>
                         @endif
                     @endfor
                 </tr>

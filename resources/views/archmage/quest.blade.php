@@ -43,11 +43,11 @@
             <h2>
                 <i class="fa-solid fa-user"></i>
                 Klient
-                <a target="_blank" href="{{ route('clients', ['search' => $quest->client->client_name]) }}"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a target="_blank" href="{{ route('clients', ['search' => $quest->client_id]) }}"><i class="fa-solid fa-up-right-from-square"></i></a>
                 <a target="_blank" href="{{ route('quests', ['client' => $quest->client_id]) }}"><i class="fa-solid fa-boxes"></i></a>
             </h2>
-            <x-input type="text" name="" label="Nazwisko" value="{{ $quest->client->client_name }}" :disabled="true" />
-            <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ $quest->client->contact_preference }}" :small="true" :disabled="true" />
+            <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
+            <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />
             <x-input type="text" name="" label="Wybredność" value="{{ round($quest->client->pickiness * 100) }}%" :small="true" :disabled="true" class="{{ $quest->client->pickiness > 1 ? 'error' : 'success' }}" />
         </section>
         <section class="input-group">
@@ -97,10 +97,10 @@
                 </script>
                 <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
                 <label for="payments">
-                    Opłacono: {{ as_pln($quest->payments->sum("comment")) }}
+                    Opłacono: {{ _c_(as_pln($quest->payments->sum("comment"))) }}
                     @unless ($quest->paid)
                     •
-                    Pozostało: {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
+                    Pozostało: {{ _c_(as_pln($quest->price - $quest->payments->sum("comment"))) }}
                     @endunless
                 </label>
                 <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" />
@@ -215,7 +215,7 @@
                     </tfoot>
                     </tbody>
                 </table>
-    
+
                 @if ($quest->status_id == 12)
                 <form method="POST" action="{{ route("work-clock") }}" class="flex-right">
                     <div id="stats-buttons">
@@ -237,7 +237,7 @@
                 </form>
                 @endif
             </section>
-    
+
             <section class="input-group sc-line">
                 <x-sc-scissors />
                 <h2>
@@ -251,10 +251,11 @@
                         <i class="error fa-solid fa-xmark" @popper(Klient nic nie widzi)></i>
                     @endif
                 </h2>
-    
+
+                @unless(Auth::id() == 0)
                 {{-- dropzone css --}}
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
-    
+
                 <form class="" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-row">
@@ -265,7 +266,7 @@
                         </div>
                     </div>
                 </form>
-    
+
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
                 <script>
                     let uploadedDocumentMap = {};
@@ -298,7 +299,7 @@
                     });
                 </script>
                 {{-- dropzone end --}}
-    
+
                 {{-- fallback wgrywania plików przez cPanel --}}
                 <a
                     href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
@@ -306,7 +307,8 @@
                     >
                     Dodaj pliki ręcznie przez cPanel<br>
                 </a>
-    
+                @endunless
+
                 @forelse ($files as $ver_super => $ver_mains)
                     @if (count($files) > 1)
                     <h3 class="pre-file-container-a">{{ $ver_super }}</h3>
@@ -353,14 +355,14 @@
                 @empty
                 <p class="grayed-out">Brak plików</p>
                 @endforelse
-    
+
                 <form id="ver_desc_form" action="{{ route('ver-desc-mod') }}" method="POST" style="display:none;">
                     @csrf
                     <input type="hidden" name="ver" value="0" />
                     <x-input type="TEXT" name="desc" label="Opis wersji XXX" />
                     <x-button action="submit" label="Popraw opis" icon="pen-to-square" />
                 </form>
-    
+
                 <script>
                 $(document).ready(function(){
                     $(".file-container-b .submit").click(function(){

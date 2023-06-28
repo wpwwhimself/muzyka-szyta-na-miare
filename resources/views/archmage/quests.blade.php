@@ -39,17 +39,17 @@
             <span>
             @if ($quest->client?->client_name)
                 @if (is_veteran($quest->client->id))
-                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $quest->client->client_name }}
+                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($quest->client->client_name) }}
                 @else
-                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $quest->client->client_name }}
+                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($quest->client->client_name) }}
                 @endif
             @else
-                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $quest->client_name }}
+                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($quest->client_name) }}
             @endif
             </span>
             <span @unless($quest->paid) class='error' @endif>
                 <span {{ Popper::pop($quest->price_code_override) }}>
-                    {{ as_pln($quest->price) }}
+                    {{ _c_(as_pln($quest->price)) }}
                 </span>
             </span>
             <span class="quest-status">

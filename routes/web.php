@@ -132,8 +132,9 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
     ));
 })->name("request-finalized");
 Route::get("/patron-mode/{id}/{level}", function($id, $level){
+    if(Auth::id() == 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
     Client::findOrFail($id)->update(["helped_showcasing" => $level]);
-    if(Auth::id() <= 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
+    if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
 })->name("patron-mode");
 
@@ -158,13 +159,17 @@ Route::get("/songs_info", function(Request $rq){
 });
 
 Route::get('/client_data', function(Request $request){
-    return Client::find($request->id)->toJson();
+    $data = Client::find($request->id)->toArray();
+    foreach($data as $key => $value){
+        if(!preg_match("/id/", $key)) $data[$key] = _ct_($value);
+    }
+    return json_encode($data);
 });
 Route::get('/song_data', function(Request $request){
     return Song::find($request->id)->toJson();
 });
 Route::post('/song_link_change', function(Request $request){
-    if(Auth::id() > 1) return;
+    if(Auth::id() != 1) return;
     $id = $request->id;
     Song::find($id)->update(["link" => $request->link]);
 });
@@ -186,6 +191,7 @@ Route::controller(JanitorController::class)->group(function(){
 });
 
 Route::post("/settings_change", function(Request $rq){
+    if(Auth::id() != 1) return;
     DB::table("settings")
         ->where("setting_name", $rq->setting_name)
         ->update(["value_str" => $rq->value_str])

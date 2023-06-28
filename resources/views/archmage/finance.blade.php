@@ -33,7 +33,7 @@
                 @php $amount_total = 0 @endphp
                 @foreach ($unpaids as $client_id => $quests)
                 <tr>
-                    <td><a href="{{ route("clients", ['search' => $client_id]) }}">{{ $quests[0]->client->client_name }}</a></td>
+                    <td><a href="{{ route("clients", ['search' => $client_id]) }}">{{ _ct_($quests[0]->client->client_name) }}</a></td>
                     <td class="quest-list">
                         @php $amount_to_pay = 0 @endphp
                         @foreach ($quests as $quest)
@@ -45,7 +45,7 @@
                                 >
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <x-phase-indicator-mini :status="$quest->status" />
-                                {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
+                                {{ _c_(as_pln($quest->price - $quest->payments->sum("comment"))) }}
                             </a>
                             <input type="checkbox" name="{{ $quest->id }}" />
                         </div>
@@ -56,7 +56,7 @@
                         @endforeach
                     </td>
                     <td>
-                        {{ as_pln($amount_to_pay) }}
+                        {{ _c_(as_pln($amount_to_pay)) }}
                     </td>
                 </tr>
                 @endforeach
@@ -65,7 +65,7 @@
                 <tr>
                     <th></th>
                     <th>Razem</th>
-                    <th>{{ as_pln($amount_total) }}</th>
+                    <th>{{ _c_(as_pln($amount_total)) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -100,8 +100,8 @@
             <tr class="ghost">
             @endif
                 <td>
-                    <a href="{{ route('clients', ['search' => $item->quest->client->client_name]) }}">
-                        {{ $item->quest->client->client_name }}
+                    <a href="{{ route('clients', ['search' => $item->quest->client->id]) }}">
+                        {{ _ct_($item->quest->client->client_name) }}
                     </a>
                 </td>
                 <td>
@@ -111,7 +111,7 @@
                     <x-phase-indicator-mini :status="$item->quest->status" />
                 </td>
                 <td>
-                    {{ as_pln($item->comment) }}
+                    {{ _c_(as_pln($item->comment)) }}
                 </td>
                 <td {{ Popper::pop($item->date) }}>
                     {{ $item->date->diffForHumans() }}

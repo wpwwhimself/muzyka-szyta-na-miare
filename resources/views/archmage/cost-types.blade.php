@@ -20,8 +20,8 @@
         </div>
         @forelse ($types as $type)
         <div class="table-row clickable" data-id="{{ $type->id }}">
-            <span class="cost-name">{{ $type->name }}</span>
-            <span class="cost-desc">{{ $type->desc }}</span>
+            <span class="cost-name">{{ _ct_($type->name) }}</span>
+            <span class="cost-desc">{{ _ct_($type->desc) }}</span>
         </div>
         @empty
         <p class="grayed-out">Brak typów</p>

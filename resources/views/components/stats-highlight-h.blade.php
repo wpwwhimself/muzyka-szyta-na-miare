@@ -6,16 +6,16 @@
         @foreach ($data1 as $name => $val)
         <p>{{ $name }}</p>
         <h3>
-            {{ $allPln ? as_pln($val) : $val  }}
+            {{ $allPln ? _c_(as_pln($val)) : _ct_($val) }}
             @if($bracketedNumbers)
             <small class="ghost">
                 @switch($bracketedNumbers)
                     @case("percentages")
-                        ({{ round($val / $data2 * 100) }}%)
+                        ({{ _c_(round($val / $data2 * 100)) }}%)
                         @break
                     @case("comparison")
                         <span class="{{ $data2->{$name} > 0 ? 'diff-hot' : 'diff-cold' }}">
-                            {{ sprintf("%+d", $data2->{$name}) }}
+                            {{ _c_(sprintf("%+d", $data2->{$name})) }}
                         </span>
                         @break
                 @endswitch

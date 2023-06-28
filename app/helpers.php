@@ -42,6 +42,11 @@ if(!function_exists("INCOME_LIMIT")){
         return 1745;
     }
 }
+if(!function_exists("OBSERVER_ERROR")){
+    function OBSERVER_ERROR(){
+        return "Jako obserwator nie możesz tego zrobić";
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)
@@ -55,6 +60,20 @@ if(!function_exists("user_role")){
             default: $role = "client"; break;
         }
         return $role;
+    }
+}
+
+/**
+ * Censor data for showcase account
+ */
+if(!function_exists("_c_")){
+    function _c_($data){
+        return (Auth::id() == 0) ? preg_replace("/(\d)/", "⁎", $data) : $data;
+    }
+}
+if(!function_exists("_ct_")){
+    function _ct_($data){
+        return (Auth::id() == 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
     }
 }
 
@@ -179,11 +198,11 @@ if(!function_exists("price_calc")){
                 switch($cat->operation){
                     case "+":
                         $price += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × ".as_pln($price_to_add)]);
+                        array_push($positions, [$cat->service, count($matches[0])." × "._c_(as_pln($price_to_add))]);
                         break;
                     case "*":
                         $multiplier += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × ".($price_to_add*100)."%"]);
+                        array_push($positions, [$cat->service, count($matches[0])." × "._c_(($price_to_add*100))."%"]);
                         break;
                 }
             endif;
@@ -198,7 +217,7 @@ if(!function_exists("price_calc")){
             $override = true;
         }
 
-        return [round($price, 2), $positions, $override, $labels];
+        return [_c_(round($price, 2)), $positions, $override, $labels];
     }
 }
 

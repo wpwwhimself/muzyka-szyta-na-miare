@@ -39,7 +39,7 @@
                                 $("#contact_preference").val(res.contact_preference);
                                 $("#wishes").html(res.default_wishes);
                                 if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
-                                $("#client_info").attr("href", "{{ route('clients') }}" + `?search=${$("#client_name").val()}`).show();
+                                $("#client_info").attr("href", "{{ route('clients') }}" + `?search=${$("#client_id").val()}`).show();
                             }
                         });
                     }else{

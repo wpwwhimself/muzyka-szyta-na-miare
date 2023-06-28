@@ -34,12 +34,12 @@
             <span>
             @if ($request->client?->client_name)
                 @if (is_veteran($request->client->id))
-                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ $request->client->client_name }}
+                <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($request->client->client_name) }}
                 @else
-                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ $request->client->client_name }}
+                <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($request->client->client_name) }}
                 @endif
             @else
-                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ $request->client_name }}
+                <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($request->client_name) }}
             @endif
             </span>
             <span class="quest-status">

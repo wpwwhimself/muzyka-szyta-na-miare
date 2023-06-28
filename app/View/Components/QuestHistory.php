@@ -37,8 +37,8 @@ class QuestHistory extends Component
     }
     public function clientName($id){
         if($id == 1) return "Wojciech Przybyła";
-        if($id == null) return $this->quest->client_name;
-        return Client::find($id)->client_name;
+        if($id == null) return _ct_($this->quest->client_name);
+        return _ct_(Client::find($id)->client_name);
     }
 
     /**

@@ -77,7 +77,7 @@
                 <span class="client-main-data">
                     <h3 class="song-title">
                         <a href="{{ route('client-view', ['id' => $client->id]) }}">
-                            {{ $client->client_name }}
+                            {{ _ct_($client->client_name) }}
                         </a>
                     </h3>
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
@@ -87,13 +87,13 @@
                             {{ round($client->pickiness * 100) }}%
                         </span>
                         •
-                        {{ $client->user->password }}
+                        {{ _ct_($client->user->password) }}
                     </span>
                 </span>
                 <span class="contact-info">
-                    <span {{ in_array($client->contact_preference, ["email"]) ? : "class=ghost" }}><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></span>
-                    <span {{ in_array($client->contact_preference, ["telefon", "sms"]) ?: "class=ghost" }}>{{ implode(" ", str_split($client->phone, 3)) }}</span>
-                    <span {{ !in_array($client->contact_preference, ["email", "telefon", "sms"]) ?: "class=ghost" }}>{{ $client->other_medium }}</span>
+                    <span {{ in_array($client->contact_preference, ["email"]) ? : "class=ghost" }}><a href="mailto:{{ _ct_($client->email) }}">{{ _ct_($client->email) }}</a></span>
+                    <span {{ in_array($client->contact_preference, ["telefon", "sms"]) ?: "class=ghost" }}>{{ _ct_(implode(" ", str_split($client->phone, 3))) }}</span>
+                    <span {{ !in_array($client->contact_preference, ["email", "telefon", "sms"]) ?: "class=ghost" }}>{{ _ct_($client->other_medium) }}</span>
                 </span>
                 <span {{ Popper::pop($client->created_at->toDateString()) }}>
                     {{ $client->created_at->diffForHumans() }}
@@ -109,16 +109,16 @@
                         @default
                     @endswitch
                     @if ($client->special_prices)
-                    <i class="fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>".$client->special_prices) }}></i>
+                    <i class="fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>"._ct_($client->special_prices)) }}></i>
                     @endif
                     @if ($client->default_wishes)
-                    <i class="fa-solid fa-cloud" {{ Popper::pop("Domyślne życzenia:<br>".$client->default_wishes) }}></i>
+                    <i class="fa-solid fa-cloud" {{ Popper::pop("Domyślne życzenia:<br>"._ct_($client->default_wishes)) }}></i>
                     @endif
                     @if ($client->helped_showcasing)
                     <i class="showcase-highlight fa-solid fa-award {{ $client->helped_showcasing < 2 ? 'fa-fade' : '' }}" {{ Popper::pop($client->helped_showcasing < 2 ? "Chce być patronem" : "Patron") }}></i>
                     @endif
                     @if ($client->budget)
-                    <i class="success fa-solid fa-sack-dollar" {{ Popper::pop("Budżet:<br>".as_pln($client->budget)) }}></i>
+                    <i class="success fa-solid fa-sack-dollar" {{ Popper::pop("Budżet:<br>"._c_(as_pln($client->budget))) }}></i>
                     @endif
                 </span>
             </div>

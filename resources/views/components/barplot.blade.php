@@ -16,14 +16,14 @@
         <span class="value">
             @if ($percentages)
             <small class="ghost">
-                ({{ round($val / $data->total * 100) }}%)
+                ({{ _c_(round($val / $data->total * 100)) }}%)
             </small>
             <br />
             @endif
             @if ($allPln)
-            <small>{{ as_pln($val) }}</small>
+            <small>{{ _c_(as_pln($val)) }}</small>
             @else
-            {{ $val }}    
+            {{ _c_($val) }}
             @endif
         </span>
     </div>

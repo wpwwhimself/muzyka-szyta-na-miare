@@ -381,6 +381,7 @@ class StatsController extends Controller
     }
     public function financePay(Request $rq){
         $quest_ids = array_keys($rq->except("_token"));
+        if(empty($quest_ids)) return back()->with("error", "Zaznacz zlecenia");
 
         $clients_quests = [];
         foreach($quest_ids as $id){

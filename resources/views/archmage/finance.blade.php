@@ -38,7 +38,11 @@
                         @php $amount_to_pay = 0 @endphp
                         @foreach ($quests as $quest)
                         <div>
-                            <a href="{{ route("quest", ["id" => $quest->id]) }}">
+                            <a href="{{ route("quest", ["id" => $quest->id]) }}"
+                                @if ($quest->delayed_payment > Carbon\Carbon::today())
+                                class="ghost" {{ Popper::pop("Opłata opóźniona do za ".$quest->delayed_payment->endOfDay()->diffInDays()." dni") }}
+                                @endif
+                                >
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <x-phase-indicator-mini :status="$quest->status" />
                                 {{ as_pln($quest->price - $quest->payments->sum("comment")) }}

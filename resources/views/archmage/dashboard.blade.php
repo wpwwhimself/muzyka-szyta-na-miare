@@ -204,7 +204,7 @@
                     <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
                     @if($request->artist) <span class="song-artist">{{ $request->artist }}</span> @endif
                     @if (is_priority($request->id))
-                    • <b>Priorytet</b>
+                    <b>Priorytet</b>
                     @endif
                     <br>
                     <span class="ghost">
@@ -356,18 +356,6 @@
                             </p>
                             <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
                             @endif
-                            @unless (strlen($quest->id) > 10)
-                            <p class="quest-id">
-                                <x-quest-type
-                                    :id="song_quest_type($quest->song_id)->id ?? 0"
-                                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
-                                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
-                                    :small="true"
-                                    />
-                                {{ $quest->id }}
-                            </p>
-                            <i class="fa-solid fa-hashtag" @popper(Identyfikator zlecenia)></i>
-                            @endunless
                         </div>
                     </span>
                 </a>

@@ -28,7 +28,7 @@
         <div class="grid-2">
             <x-input type="number" name="trust" label="Zaufanie" :value="$client->trust" :small="true" />
             <x-input type="number" name="helped_showcasing" label="Status patrona" :value="$client->helped_showcasing" :small="true" />
-            <x-input type="number" name="budget" label="Budżet" :value="_c_($client->budget)" :small="true" />
+            <x-input type="number" name="budget" label="Budżet" :value="_c_($client->budget)" :small="true" step="0.01" />
             <x-input type="number" name="extra_exp" label="Dodatkowe doświadczenie" :value="$client->extra_exp" :small="true" />
             <x-input type="TEXT" name="default_wishes" label="Domyślne życzenia" :value="_ct_($client->default_wishes)" />
             <x-input type="TEXT" name="special_prices" label="Specjalne warunki cenowe" :value="_ct_($client->special_prices)" />

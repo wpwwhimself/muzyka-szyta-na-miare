@@ -23,7 +23,7 @@
             </li>
         </a>
         @endforeach
-        @if (Auth::id() <= 1)
+        @if (in_array(Auth::id(), [0, 1], true))
             @foreach ($archmage as $item)
             <a href="{{ $item['link'] }}">
                 <li>

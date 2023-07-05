@@ -73,7 +73,7 @@ class ClientController extends Controller
             "contact_preference" => $rq->contact_preference,
         ]);
 
-        if(Auth::id() <= 1){
+        if(in_array(Auth::id(), [0, 1], true)){
             Client::findOrFail($id)->update([
                 "trust" => $rq->trust,
                 "helped_showcasing" => $rq->helped_showcasing,

@@ -19,7 +19,7 @@
 
     <script>
     const USER_ID = {{ Auth::id() ?? 'null' }};
-    const IS_VETERAN = {{ Auth::id() <= 1 ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
+    const IS_VETERAN = {{ in_array(Auth::id(), [0, 1], true) ? 0 : intval(is_veteran(Auth::id() ?? "")) }};
     </script>
 
     @env("local")

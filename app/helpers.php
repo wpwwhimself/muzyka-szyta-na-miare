@@ -68,12 +68,12 @@ if(!function_exists("user_role")){
  */
 if(!function_exists("_c_")){
     function _c_($data){
-        return (Auth::id() == 0) ? preg_replace("/(\d)/", "⁎", $data) : $data;
+        return (Auth::id() !== null && Auth::id() == 0) ? preg_replace("/(\d)/", "⁎", $data) : $data;
     }
 }
 if(!function_exists("_ct_")){
     function _ct_($data){
-        return (Auth::id() == 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
+        return (Auth::id() !== null && Auth::id() == 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
     }
 }
 

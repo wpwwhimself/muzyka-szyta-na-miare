@@ -286,6 +286,10 @@
                 }
 
                 $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
+
+                const comment_field = document.querySelector("#statuschanger #comment");
+                comment_field.scrollIntoView({behavior: "smooth"});
+                comment_field.focus();
             });
         });
         </script>

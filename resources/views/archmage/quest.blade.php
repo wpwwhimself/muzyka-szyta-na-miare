@@ -118,6 +118,7 @@
                     $("#price-mod-trigger").click(() => {
                         $("#price-mod-trigger").hide();
                         $("#price-mod-box").show();
+                        $("#reason").focus();
                     });
                 });
                 </script>

@@ -2,6 +2,7 @@
 
 <div class="quest-links {{ $editable ? 'flex-down center' : '' }}">
     @foreach (explode(",", $raw) as $link)
+    @php $link = Str::of($link)->trim() @endphp
     @if (filter_var($link, FILTER_VALIDATE_URL))
     <x-button action="{{ $link }}" target="_blank" icon="up-right-from-square" label="Link" :small="true" />
     @endif

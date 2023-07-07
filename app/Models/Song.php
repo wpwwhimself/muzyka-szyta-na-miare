@@ -5,6 +5,7 @@ namespace App\Models;
 use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Song extends Model
 {
@@ -27,5 +28,9 @@ class Song extends Model
     }
     public function quests(){
         return $this->hasMany(Quest::class);
+    }
+
+    public function getHasShowcaseFileAttribute(){
+        return Storage::exists("showcases/$this->id.ogg");
     }
 }

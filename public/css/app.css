@@ -227,6 +227,9 @@ input[type="checkbox"]{
     height: 1.2em;
     accent-color: var(--acc);
 }
+input[type="file"]{
+    display: none;
+}
 *[type="submit"], .submit{
     display: inline-block;
     width: fit-content;

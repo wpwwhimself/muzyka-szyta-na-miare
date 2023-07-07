@@ -85,6 +85,9 @@ Route::controller(FileController::class)->group(function(){
         Route::get('/safe-d/{id}/{filename}', 'fileDownload')->name('download');
         Route::get('/safe/{id}/{filename}', 'show')->name('safe-show');
         Route::post('/safe/ver-desc-mod', "verDescMod")->name("ver-desc-mod");
+
+        Route::post("/showcase/upload", "showcaseFileUpload")->name("showcase-file-upload");
+        Route::get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
     });
 });
 

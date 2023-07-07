@@ -341,6 +341,8 @@
                                 <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
                                 @elseif (pathinfo($file)['extension'] == "mp3")
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                                @elseif (pathinfo($file)['extension'] == "ogg")
+                                <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/ogg" /></audio>
                                 @endif
                             @endforeach
                             @foreach ($ver_bots as $file)
@@ -388,6 +390,34 @@
                     });
                 });
                 </script>
+
+                <h2>
+                    <i class="fa-solid fa-bullhorn"></i>
+                    Podgląd dla ludu
+                </h2>
+
+                @if($quest->song->has_showcase_file)
+                <audio controls><source src="{{ route('showcase-file-show', ['id' => $quest->song->id]) }}" type="audio/ogg" /></audio>
+                @else
+                <span class="grayed-out">Brak showcase'u</span>
+                @endif
+
+                <form id="showcase-file-form" method="post" action="{{ route('showcase-file-upload') }}" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="showcase_file" />
+                    <input type="hidden" name="id" value="{{ $quest->song_id }}" />
+                    <x-button action="#/" id="showcase-file-button" :small="true"
+                        :icon="$quest->song->has_showcase_file ? 'pencil' : 'plus'"
+                        label="{{ $quest->song->has_showcase_file ? 'Podmień' : 'Dodaj' }} plik"
+                        />
+                    <script>
+                    const button = $("#showcase-file-button");
+                    const file_input = $("input[name='showcase_file']");
+                    button.click(() => file_input.trigger("click"));
+                    file_input.change(() => $("#showcase-file-form").submit());
+                    </script>
+                </form>
+                               
             </section>
         </div>
 

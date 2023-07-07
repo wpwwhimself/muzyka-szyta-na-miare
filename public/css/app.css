@@ -198,6 +198,7 @@ input, select, textarea, button, .submit{
 textarea{
     height: 3em;
     resize: vertical;
+    transition-duration: 0s;
 }
 .select2-dropdown, .select2-selection--single{ background-color: var(--bg) !important; color: var(--fg) !important; }
 input, select, button, .submit{

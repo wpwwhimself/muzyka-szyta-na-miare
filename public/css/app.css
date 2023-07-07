@@ -650,8 +650,10 @@ footer .contact-info{
 }
 
 #quest-history{
-    max-height: 90vh;
+    height: 500px;
     overflow: auto;
+    resize: vertical;
+    transition-duration: 0s;
 }
 .history-position{
     border-radius: 1em;

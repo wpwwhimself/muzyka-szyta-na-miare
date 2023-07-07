@@ -379,7 +379,10 @@
                                 path: '/safe/{{ $quest->song->id }}/' + ver + '.md'
                             },
                             success: function(res){
-                                $("#ver_desc_form textarea").text(res).focus();
+                                $("#ver_desc_form textarea").text(res);
+                            },
+                            complete: function(){
+                                $("#ver_desc_form textarea").focus();
                             }
                         });
                     });

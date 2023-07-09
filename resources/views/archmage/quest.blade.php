@@ -397,7 +397,7 @@
                 </h2>
 
                 @if($quest->song->has_showcase_file)
-                <audio controls><source src="{{ route('showcase-file-show', ['id' => $quest->song->id]) }}" type="audio/ogg" /></audio>
+                <audio controls><source src="{{ route('showcase-file-show', ['id' => $quest->song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
                 @else
                 <span class="grayed-out">Brak showcase'u</span>
                 @endif
@@ -417,7 +417,7 @@
                     file_input.change(() => $("#showcase-file-form").submit());
                     </script>
                 </form>
-                               
+
             </section>
         </div>
 

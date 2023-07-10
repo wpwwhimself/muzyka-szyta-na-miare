@@ -153,12 +153,14 @@ Route::get("/mp-aqm/{id}", function($id){ return new App\Mail\ArchmageQuestMod(Q
  */
 // front -- listing songs
 Route::get("/songs_info", function(Request $rq){
-    return Song::orderByRaw("ISNULL(title)")
+    $songs = Song::orderByRaw("ISNULL(title)")
+        ->where("id", "not like", "O%")
         ->orderBy("title")
         ->orderBy("artist")
-        ->select(["title", "artist"])
         ->distinct()
         ->get();
+    
+    return $songs;
 });
 
 Route::get('/client_data', function(Request $request){

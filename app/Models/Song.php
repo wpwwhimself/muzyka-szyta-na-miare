@@ -19,6 +19,9 @@ class Song extends Model
         "link",
         "price_code", "notes",
     ];
+    protected $appends = [
+        "has_showcase_file",
+    ];
 
     public function genre(){
         return $this->belongsTo(Genre::class);

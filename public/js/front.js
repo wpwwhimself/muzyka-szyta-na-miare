@@ -11,9 +11,27 @@ $(document).ready(function(){
                 const list = $("#songs ul");
                 $("#songs .grayed-out").remove();
                 for(song of res){
-                    list.append(`<li>${song.title ?? 'utwór bez tytułu'} <span class='ghost'>${song.artist ?? ''}</span></li>`);
+                    list.append(`<li>
+                        <span>${song.title ?? 'utwór bez tytułu'}</span>
+                        <span class='ghost'>${song.artist ?? ''}</span>
+                        ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania" class="clickable" data-song-id="${song.id}">💽</span>` : ``}
+                    </li>`);
                 }
                 list.after($(`<p>Razem: ${res.length}</p>`));
+
+                $("#songs .clickable").click(function(){
+                    const player = document.querySelector("#songs audio");
+                    const song_id = $(this).attr("data-song-id");
+
+                    if(player.currentTime && !player.paused){
+                        player.pause();
+                    }else{
+                        player.src = `/showcase/show/${song_id}`;
+                        player.load();
+                        player.play();
+                    }
+
+                });
             }
         }
     });

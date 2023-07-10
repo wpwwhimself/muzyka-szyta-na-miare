@@ -129,75 +129,6 @@
             <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
 
-        <div id="showcase-mp3s" class="flex-right">
-            <div class="sampleproj section-like hidden">
-                <p>Solo fortepian</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4O.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z94.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/piano_ZCJ.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Piosenka aktorska</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4E.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z97.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/aktorska_ZC1.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Dla dzieci</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z3M.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/kids_Z9K.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Ballada</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4T.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z98.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/ballad_ZCT.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Rock</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z34.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z91.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/rock_ZCK.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Metal</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4F.mp3") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Reggae</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4M.mp3") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Biesiadne</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4P.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9N.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/biesiada_ZCQ.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Disco polo</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z4Q.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9G.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/discopolo_ZCN.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Country</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z45.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z92.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/country_ZCS.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Jazz</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z33.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/jazz_ZCW.ogg") }}"></audio>
-            </div>
-            <div class="sampleproj section-like hidden">
-                <p>Blues</p>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z3N.mp3") }}"></audio>
-                <audio controls><source type="audio/mp3" src="{{ asset("assets/front/showcase/Z9E.mp3") }}"></audio>
-                <audio controls><source type="audio/ogg" src="{{ asset("assets/front/showcase/blues_ZCL.ogg") }}"></audio>
-            </div>
-        </div>
-
         <div id="showcase-fbs" class="flex-right">
         @foreach ($showcases as $showcase)
         {!! $showcase->link_ig ?? $showcase->link_fb !!}
@@ -213,7 +144,12 @@
 
         <div id="songs">
             <h2>Utwory, których się podjąłem</h2>
+            <p class="tutorial">
+                <i class="fa-solid fa-circle-question"></i>
+                Kliknij ikonę płyty, aby odtworzyć próbkę
+            </p>
             <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
+            <audio></audio>
         </div>
     </section>
 

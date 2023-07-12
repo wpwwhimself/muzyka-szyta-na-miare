@@ -147,15 +147,15 @@ class StatsController extends Controller
                 "recent" => [
                     "main" => [
                         "nowe" => Quest::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
-                        "ukończone" => 1,
-                        "debiutanckie" => 1,
-                        "max poprawek" => 1,
+                        "ukończone" => Quest::where("updated_at", ">=", Carbon::today()->subMonths(1))->where("status_id", 19)->count(),
+                        "debiutanckie" => Client::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
+                        "max poprawek" => StatusChange::where("date", ">=", Carbon::today()->subMonths(1))->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
                     ],
                     "compared_to" => [
                         "nowe" => Quest::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
-                        "ukończone" => 1,
-                        "debiutanckie" => 1,
-                        "max poprawek" => 1,
+                        "ukończone" => Quest::whereBetween("updated_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->where("status_id", 19)->count(),
+                        "debiutanckie" => Client::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
+                        "max poprawek" => StatusChange::whereBetween("date", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
                     ],
                 ],
                 "statuses" => [

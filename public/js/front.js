@@ -19,15 +19,20 @@ $(document).ready(function(){
                 }
                 list.after($(`<p>Razem: ${res.length}</p>`));
 
+                $("#song-loader").hide();
+
                 $("#songs .clickable").click(function(){
                     const player = document.querySelector("#songs audio");
                     const song_id = $(this).attr("data-song-id");
+                    const nowPlaying = player.currentSrc.substr(-4);
 
-                    if(player.currentTime && !player.paused){
+                    if(player.currentTime && !player.paused && nowPlaying == song_id){
                         player.pause();
                     }else{
-                        player.src = `/showcase/show/${song_id}`;
+                        $("#song-loader").show();
+                        player.src = `showcase/show/${song_id}`;
                         player.load();
+                        $("#song-loader").hide();
                         player.play();
                     }
 

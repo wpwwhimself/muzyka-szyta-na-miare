@@ -144,6 +144,7 @@
 
         <div id="songs">
             <h2>Utwory, których się podjąłem</h2>
+            <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Kliknij ikonę płyty, aby odtworzyć próbkę

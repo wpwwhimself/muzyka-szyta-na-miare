@@ -157,9 +157,10 @@ Route::get("/songs_info", function(Request $rq){
         ->where("id", "not like", "O%")
         ->orderBy("title")
         ->orderBy("artist")
+        ->select(["title", "artist"])
         ->distinct()
         ->get();
-    
+
     return $songs;
 });
 

@@ -117,7 +117,7 @@
         </div>
     </section>
 
-    <section id="showcase">
+    <section id="showcases">
         <h1>Co już udało mi się wykonać?</h1>
 
         <div id="showcase-yts" class="flex-right">

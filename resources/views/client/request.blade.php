@@ -173,6 +173,9 @@
         <div class="flexright">
             <input type="hidden" name="id" value="{{ $request->id }}" />
             <input type="hidden" name="intent" value="review" />
+            @if (in_array($request->status_id, [1, 6, 96]))
+            <x-button action="#/" statuschanger="{{ $request->status_id }}" is-follow-up="1" icon="{{ $request->status_id }}" label="Popraw ostatni komentarz" />
+            @endif
             @if (in_array($request->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
             @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#/" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
@@ -180,7 +183,7 @@
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#/" statuschanger="1" icon="1" label="Odnów" /> @endif
         </div>
         <div id="statuschanger">
-            @if (in_array($request->status_id, [4, 5, 7, 8, 95]))
+            {{-- @if (in_array($request->status_id, [4, 5, 7, 8, 95])) --}}
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 W historii zapytania pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
@@ -196,7 +199,7 @@
                 </span>
                 <span>{!! str_replace(" ", "<br>", \Carbon\Carbon::now()->format("Y-m-d XX:XX:XX")) !!}</span>
             </div>
-            @endif
+            {{-- @endif --}}
             <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" :danger="true" />
         </div>
         <script>
@@ -214,10 +217,16 @@
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }
-                
+
                 $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
 
                 const comment_field = document.querySelector("#statuschanger #comment");
+                if($(this).attr("is-follow-up")){
+                    const last_comment = $(`#quest-history .history-position.p-${status}:first ul`).text().trim();
+                    comment_field.innerHTML = last_comment;
+                }else{
+                    comment_field.innerHTML = "";
+                }
                 comment_field.scrollIntoView({behavior: "smooth"});
                 comment_field.focus();
             });

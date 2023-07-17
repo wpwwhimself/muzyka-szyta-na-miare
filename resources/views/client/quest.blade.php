@@ -243,10 +243,13 @@
             </p>
             @endif
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+            @if (in_array($quest->status_id, [16, 26, 96]))
+            <x-button action="#/" statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
+            @endif
             @if (in_array($quest->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
             @if (in_array($quest->status_id, [15, 95])) <x-button action="#/" statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  /> @endif
             @if (in_array($quest->status_id, [15])) <x-button action="#/" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
-            @if (in_array($quest->status_id, [11, 12, 13, 15, 95])) <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (!in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
         </div>
         <div id="statuschanger">
@@ -288,6 +291,12 @@
                 $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
 
                 const comment_field = document.querySelector("#statuschanger #comment");
+                if($(this).attr("is-follow-up")){
+                    const last_comment = $(`#quest-history .history-position.p-${status}:first ul`).text().trim();
+                    comment_field.innerHTML = last_comment;
+                }else{
+                    comment_field.innerHTML = "";
+                }
                 comment_field.scrollIntoView({behavior: "smooth"});
                 comment_field.focus();
             });

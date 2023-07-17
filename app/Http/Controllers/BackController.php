@@ -335,6 +335,8 @@ class BackController extends Controller
         $intent = $rq->intent;
         $request = Request::find($rq->id);
 
+        $is_same_status = $request->status_id == $rq->new_status;
+
         if($intent == "change"){
             $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
             $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
@@ -406,7 +408,11 @@ class BackController extends Controller
         }
 
         $changed_by = (in_array(Auth::id(), [0, 1], true) && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
-        $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
+        if($is_same_status){
+            $request->changes->last()->update(["comment" => $rq->comment, "date" => now()]);
+        }else{
+            $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
+        }
 
         // sending mail
         $flash_content = "Zapytanie gotowe";
@@ -682,15 +688,20 @@ class BackController extends Controller
             return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
         }
 
+        $is_same_status = $quest->status_id == $rq->status_id;
         $quest->status_id = $rq->status_id;
         $quest->save();
 
-        $this->statusHistory(
-            $rq->quest_id,
-            $rq->status_id,
-            $rq->comment,
-            (in_array(Auth::id(), [0, 1], true) && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
-        );
+        if($is_same_status){
+            $quest->changes->last()->update(["comment" => $rq->comment, "date" => now()]);
+        }else{
+            $this->statusHistory(
+                $rq->quest_id,
+                $rq->status_id,
+                $rq->comment,
+                (in_array(Auth::id(), [0, 1], true) && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
+            );
+        }
 
         // sending mail
         $flash_content = "Faza zmieniona";

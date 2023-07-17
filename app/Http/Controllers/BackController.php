@@ -774,7 +774,7 @@ class BackController extends Controller
         foreach([
             "cena" => [$price_before, $quest->price],
             "termin oddania pierwszej wersji" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
-            "opóźnienie wpłaty" => [$delayed_payment_before->format("Y-m-d"), $quest->delayed_payment->format("Y-m-d")],
+            "opóźnienie wpłaty" => [$delayed_payment_before?->format("Y-m-d"), $quest->delayed_payment?->format("Y-m-d")],
         ] as $attr => $value){
             if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
         }

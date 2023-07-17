@@ -7,6 +7,10 @@ if($(".alert").length){ //if exists
     setTimeout(() => {
         $(".alert").addClass("in");
     }, 1);
+
+    //allow dismissal
+    $(".alert").click(() => $(".alert").removeClass("in"));
+
     //disappear
     setTimeout(() => {
         $(".alert").removeClass("in");

@@ -390,6 +390,7 @@
                 });
                 </script>
 
+                @if($quest->quest_type_letter == "P")
                 <h2>
                     <i class="fa-solid fa-bullhorn"></i>
                     Podgląd dla ludu
@@ -416,6 +417,7 @@
                     file_input.change(() => $("#showcase-file-form").submit());
                     </script>
                 </form>
+                @endif
 
             </section>
         </div>

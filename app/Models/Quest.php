@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,9 @@ class Quest extends Model
 
     public function getQuestTypeLetterAttribute(){
         return substr($this->id, 0, 1);
+    }
+    public function getDelayedPaymentInEffectAttribute(){
+        return $this->delayed_payment > Carbon::today();
     }
 
     public function client(){

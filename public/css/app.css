@@ -987,6 +987,9 @@ footer .contact-info{
     .flex-right{
         flex-direction: column;
     }
+    .flex-right .mobile-first{ order: 1; }
+    .flex-right :not(.mobile-first){ order: 99; }
+
     .main-wrapper{
         padding: 2em 1em;
         margin: 1em auto;

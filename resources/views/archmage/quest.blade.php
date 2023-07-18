@@ -168,8 +168,7 @@
             <x-button action="{{ route('invoices') }}?fillfor={{ $quest->client_id }}&quest={{ $quest->id }}" name="" icon="plus" label="Dodaj" :small="true" />
         </section>
 
-        <div class="flex-down">
-
+        <div class="flex-down mobile-first">
             <section id="stats-log">
                 <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
                 <table>

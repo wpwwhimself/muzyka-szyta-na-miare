@@ -135,7 +135,7 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
     ));
 })->name("request-finalized");
 Route::get("/patron-mode/{id}/{level}", function($id, $level){
-    if(Auth::id() == 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
+    if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
     Client::findOrFail($id)->update(["helped_showcasing" => $level]);
     if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
     return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");

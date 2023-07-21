@@ -62,7 +62,7 @@ class ClientController extends Controller
     }
 
     public function edit($id, Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         Client::findOrFail($id)->update([

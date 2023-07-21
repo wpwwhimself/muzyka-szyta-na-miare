@@ -54,12 +54,9 @@ if(!function_exists("OBSERVER_ERROR")){
  */
 if(!function_exists("user_role")){
     function user_role(){
-        $role = "";
-        switch(Auth::id()){
-            case 1: $role = "archmage"; break;
-            case 0: $role = "archmage"; break;
-            default: $role = "client"; break;
-        }
+        $role = (in_array(Auth::id(), [0, 1], true))
+            ? "archmage"
+            : "client";
         return $role;
     }
 }
@@ -69,12 +66,12 @@ if(!function_exists("user_role")){
  */
 if(!function_exists("_c_")){
     function _c_($data){
-        return (Auth::id() !== null && Auth::id() == 0) ? preg_replace("/(\d)/", "⁎", $data) : $data;
+        return (Auth::id() === 0) ? preg_replace("/(\d)/", "⁎", $data) : $data;
     }
 }
 if(!function_exists("_ct_")){
     function _ct_($data){
-        return (Auth::id() !== null && Auth::id() == 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
+        return (Auth::id() === 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
     }
 }
 

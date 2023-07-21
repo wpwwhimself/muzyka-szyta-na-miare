@@ -222,6 +222,7 @@ class BackController extends Controller
 
         $flash_content = "Zapytania dodane";
         $loop_length = is_array($rq->quest_type) ? count($rq->quest_type) : 1;
+        $requests_created = [];
 
         for($i = 0; $i < $loop_length; $i++){
             if(in_array(Auth::id(), [0, 1], true)){ // arcymag
@@ -324,10 +325,14 @@ class BackController extends Controller
 
                 $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
             }
+            $requests_created[] = $request;
         }
 
         if(Auth::check()) return redirect()->route("dashboard")->with("success", $flash_content);
-        return back()->with("success", $flash_content);
+        return view("client.request-confirm", array_merge(
+            ["title" => "Zapytanie dodane"],
+            compact("requests_created")
+        ))->with("success", $flash_content);
     }
 
     public function modRequestBack(HttpRequest $rq){

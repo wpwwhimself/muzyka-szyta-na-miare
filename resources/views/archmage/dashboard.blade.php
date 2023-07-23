@@ -109,9 +109,9 @@
                         <td>
                         @if ($change->is_request)
                             @if ($change->re_quest->client)
-                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client?->client_name) }}</a>
+                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
                             @else
-                                {{ _ct_($change->re_quest->client_id) }}
+                                {{ _ct_($change->re_quest->client_name) }}
                             @endif
                         @else
                             <a href="{{ route('clients', ['search' => $change->re_quest->client->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>

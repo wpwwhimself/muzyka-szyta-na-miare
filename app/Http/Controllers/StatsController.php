@@ -385,7 +385,7 @@ class StatsController extends Controller
         ));
     }
     public function financePay(Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         $quest_ids = array_keys($rq->except("_token"));
         if(empty($quest_ids)) return back()->with("error", "Zaznacz zlecenia");
 
@@ -482,13 +482,13 @@ class StatsController extends Controller
         ));
     }
     public function invoiceVisibility(Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         Invoice::find($rq->id)->update(["visible" => $rq->visible]);
 
         return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
     }
     public function invoiceAdd(Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         $invoice_quests = [];
         $totals = ["amount" => 0, "paid" => 0];
         foreach(Quest::whereIn("id", explode(" ", $rq->quests))->get() as $quest){
@@ -544,7 +544,7 @@ class StatsController extends Controller
         ));
     }
     public function modCost(Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         $fields = [
             "cost_type_id" => $rq->cost_type_id,
             "desc" => $rq->desc,
@@ -564,7 +564,7 @@ class StatsController extends Controller
         ));
     }
     public function modCostType(Request $rq){
-        if(Auth::id() == 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         $fields = ["name" => $rq->name, "desc" => $rq->desc];
         if($rq->id) CostType::find($rq->id)->update($fields);
         else CostType::create($fields);

@@ -42,7 +42,7 @@
         Należy się przy tym jednak liczyć z możliwymi większymi kosztami.
     </p>
 
-    @if ($comment = $request->changes->last()->comment)
+    @if ($comment = $request->changes->first()->comment)
     <p>{{ $comment }}</p>
     @endif
 

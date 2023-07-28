@@ -52,6 +52,15 @@
         </section>
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+
+            @if(in_array($quest->status_id, [16, 26]) && $quest->changes->get(1)->date->diffInDays() >= 30)
+            <div class="error">
+                <i class="fa-solid fa-stopwatch"></i>
+                Ostatnia zmiana padła {{ $quest->changes->get(1)->date->diffForHumans() }}.<br>
+                Uwzględnij to w wycenie.
+            </div>
+            @endif
+
             <form action="{{ route("quest-quote-update") }}" method="post">
                 @csrf
                 <input type="hidden" name="id" value="{{ $quest->id }}" />

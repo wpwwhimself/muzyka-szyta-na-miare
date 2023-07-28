@@ -295,7 +295,7 @@ class BackController extends Controller
                     $mailing ??= false;
                     $flash_content .= ", ale wyślij wiadomość";
                 }
-                if($mailing !== null) $request->changes->last()->update(["mail_sent" => $mailing]);
+                if($mailing !== null) $request->changes->first()->update(["mail_sent" => $mailing]);
             }else{ // klient
                 //bulk
                 $request = Request::create([
@@ -414,7 +414,7 @@ class BackController extends Controller
 
         $changed_by = (in_array(Auth::id(), [0, 1], true) && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
         if($is_same_status){
-            $request->changes->last()->update(["comment" => $rq->comment, "date" => now()]);
+            $request->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
             $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
         }
@@ -440,7 +440,7 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-        if($mailing !== null) $request->changes->last()->update(["mail_sent" => $mailing]);
+        if($mailing !== null) $request->changes->first()->update(["mail_sent" => $mailing]);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
@@ -698,7 +698,7 @@ class BackController extends Controller
         $quest->save();
 
         if($is_same_status){
-            $quest->changes->last()->update(["comment" => $rq->comment, "date" => now()]);
+            $quest->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
             $this->statusHistory(
                 $rq->quest_id,
@@ -729,7 +729,7 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-        if($mailing !== null) $quest->changes->last()->update(["mail_sent" => $mailing]);
+        if($mailing !== null) $quest->changes->first()->update(["mail_sent" => $mailing]);
 
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);

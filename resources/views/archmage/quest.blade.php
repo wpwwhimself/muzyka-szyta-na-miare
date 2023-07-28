@@ -104,9 +104,9 @@
                     $("#price_code_override").change(function (e) { calcPriceNow() });
                 });
                 </script>
-                <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
                 <label for="payments">
-                    Opłacono: {{ _c_(as_pln($quest->payments->sum("comment"))) }}
+                    Opłacono: {{ _c_(as_pln($quest->paid ? $quest->price : $quest->payments->sum("comment"))) }}
                     @unless ($quest->paid)
                     •
                     Pozostało: {{ _c_(as_pln($quest->price - $quest->payments->sum("comment"))) }}

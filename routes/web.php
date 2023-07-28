@@ -55,6 +55,13 @@ Route::controller(BackController::class)->group(function(){
         Route::get('/requests', "requests")->name("requests");
         Route::get('/requests/add', "addRequest")->name("add-request");
 
+        Route::get('/requests/view/{id}/obliterate', function($id){
+            if(Auth::id() != 1) return back()->with("error", "Nie masz uprawnień do wykonania tej czynności");
+            StatusChange::where("re_quest_id", $id)->delete();
+            ModelsRequest::find($id)->delete();
+            return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
+        });
+
         Route::prefix("quests")->group(function(){
             Route::get('/', "quests")->name("quests");
             Route::get('/view/{id}', "quest")->name("quest");
@@ -62,6 +69,18 @@ Route::controller(BackController::class)->group(function(){
             Route::post('/mod-back', "modQuestBack")->name("mod-quest-back");
             Route::post('/work-clock', "workClock")->name("work-clock");
             Route::get('/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
+
+            Route::get("/view/{id}/restatus/{status_id}", function($id, $status_id){
+                if(Auth::id() != 1) return back()->with("error", "Nie masz uprawnień do wykonania tej czynności");
+                Quest::find($id)->update(["status_id" => $status_id]);
+                StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->update(["new_status_id" => $status_id]);
+                return back()->with("success", "Faza zmieniona siłą");
+            });
+            Route::get("/view/{id}/phantompay/{paid?}", function($id, $paid = 1){
+                if(Auth::id() != 1) return back()->with("error", "Nie masz uprawnień do wykonania tej czynności");
+                Quest::find($id)->update(["paid" => $paid]);
+                return back()->with("success", "Zlecenie \"opłacone\"");
+            });
         });
         Route::post("/quest-song-update", "questSongUpdate")->name("quest-song-update");
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");

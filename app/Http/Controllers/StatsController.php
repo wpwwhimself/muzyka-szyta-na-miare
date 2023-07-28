@@ -217,6 +217,7 @@ class StatsController extends Controller
                         "patroni" => Client::where("helped_showcasing", 2)->count(),
                         "bez zleceń" => Client::withCount("questsDone")
                             ->having("quests_done_count", 0)
+                            ->where("extra_exp", 0)
                             ->count(),
                         "kobiety" => Client::all()
                             ->filter(fn($client) => $client->isWoman())

@@ -2,8 +2,10 @@
 
 namespace App\View\Components;
 
+use App\Models\CalendarFreeDay;
 use App\Models\Quest;
 use App\Models\Request;
+use Carbon\Carbon;
 use Illuminate\View\Component;
 
 class Calendar extends Component
@@ -24,12 +26,12 @@ class Calendar extends Component
         $this->available_day_until = explode(",", setting("available_day_until"));
 
         $available_days_needed = setting("available_days_needed");
-        
+
         $available_days_count = 0;
         $suggestion_ready = 0;
         for($i = ($withToday ? 0 : 1); $i < $length; $i++){
             $date = strtotime("+$i day");
-            $workday_type = $this->workday_type(date("w", $date));
+            $workday_type = $this->workday_type($date);
             $quests = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [11, 12, 16, 26, 95, 96])->get();
             $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
             $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
@@ -37,7 +39,7 @@ class Calendar extends Component
             $items_count = count($quests) + count($requests);
             if(
                 $items_count < $this->available_day_until[date("w", $date)] &&
-                ($workday_type == "" || ($workday_type == "weekend" && setting("work_on_weekends")))
+                (!preg_match("/free/", $workday_type))
             ) $available_days_count++;
             if($available_days_count == $available_days_needed && $suggestion_ready === 0) $suggestion_ready = 1;
 
@@ -58,13 +60,16 @@ class Calendar extends Component
     /**
      * Klasy dni pracujących
      */
-    private function workday_type($day_no){
+    private function workday_type($day){
+        $day_no = date("w", $day);
         $workdays_free = array_keys(array_filter($this->available_day_until, fn($el) => $el == 0));
         $weekend = [0, 6];
+        $is_free_day = !!(CalendarFreeDay::whereDate("date", Carbon::parse($day))->first());
 
-        if(in_array($day_no, $weekend)) return "weekend";
-        else if(in_array($day_no, $workdays_free)) return "free";
-        else return "";
+        $return = [];
+        if(in_array($day_no, $workdays_free) || $is_free_day || (in_array($day_no, $weekend) && !setting("work_on_weekends"))) $return[] = "free";
+        if(in_array($day_no, $weekend)) $return[] = "weekend";
+        return implode(" ", $return);
     }
 
     /**

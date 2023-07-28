@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MassPayment;
+use App\Models\CalendarFreeDay;
 use App\Models\Client;
 use App\Models\Cost;
 use App\Models\CostType;
@@ -610,12 +611,22 @@ class StatsController extends Controller
                 ->diffInDays() + 2,
         );
 
+        $free_days = CalendarFreeDay::orderBy("date")->whereDate("date", ">=", Carbon::today())->get();
+
         return view(user_role().".quests-calendar", array_merge(
             ["title" => "Grafik zleceń"],
             compact(
-                "calendar_length"
+                "calendar_length", "free_days"
             ),
         ));
+    }
+    public function qcModFreeDay(Request $rq){
+        if($rq->mode == "add"){
+            CalendarFreeDay::create(["date" => $rq->date]);
+        }else{
+            CalendarFreeDay::where("date", $rq->date)->delete();
+        }
+        return back()->with("success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty"));
     }
 
     public function monthlyPaymentLimit($amount){

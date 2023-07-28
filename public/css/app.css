@@ -858,13 +858,13 @@ footer .contact-info{
     cursor: pointer;
 }
 .cal-row .free{
-    color: gray;
+    opacity: 0.5;
 }
 .cal-row .weekend{
     color: goldenrod;
 }
 .cal-row .suggest{
-    color:hsl(108, 100%, 39%);
+    color:hsl(108, 100%, 39%) !important;
 }
 .cal-row a{
     display: inline-block;

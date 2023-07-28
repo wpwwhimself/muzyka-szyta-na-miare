@@ -115,6 +115,7 @@ Route::controller(StatsController::class)->group(function(){
         Route::get("/stats/file-size", "fileSizeReport")->name("file-size-report");
 
         Route::get("/stats/quests-calendar", "questsCalendar")->name("quests-calendar");
+        Route::get("/stats/quests-calendar/add-free-day", "qcModFreeDay")->name("qc-mod-free-day");
     });
 });
 

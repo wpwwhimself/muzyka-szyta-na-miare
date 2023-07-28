@@ -8,7 +8,16 @@
     <tbody>
     @foreach ($calendar as $date => $meta)
         <tr class="cal-row {{ $clickDays ? "clickable" : "" }}" date="{{ $meta['date_val'] }}">
-            <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}">{{ $date }}</td>
+            <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}">
+                @if ($meta['suggest_date'] && $clickDays)
+                <i class="fa-solid fa-square-check"></i>
+                @elseif (preg_match("/free/", $meta['day_type']))
+                <i class="fa-regular fa-square"></i>
+                @else
+                <i class="fa-solid fa-square"></i>
+                @endif
+                {{ $date }}
+            </td>
             <td>
                 @foreach ($meta["quests"] as $quest)
                 <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >

@@ -1073,7 +1073,7 @@ footer .contact-info{
         flex-basis: 100%;
     }
 
-    #quests-list .quests-table .table-row{
+    #requests-list .quests-table .table-row, #quests-list .quests-table .table-row{
         display: flex; flex-wrap: wrap; justify-content: space-between;
     }
     .quests-table .quest-status,

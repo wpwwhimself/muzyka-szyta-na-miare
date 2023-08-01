@@ -934,7 +934,7 @@ class BackController extends Controller
     public function ppp($page = "0-index"){
         $titles = [];
         foreach(File::allFiles(resource_path("views/doc")) as $key => $ttl){
-            $titles[$key] = preg_replace("/(.*)doc\\\(.*)\.blade\.php/", "$2", $ttl);
+            $titles[$key] = preg_replace('/(.*)doc[\/\\\](.*)\.blade\.php/', "$2", $ttl);
         }
 
         return view(user_role().".ppp", array_merge(

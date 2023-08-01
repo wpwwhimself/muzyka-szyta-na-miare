@@ -74,17 +74,29 @@ class ClientController extends Controller
         ]);
 
         if(in_array(Auth::id(), [0, 1], true)){
-            Client::findOrFail($id)->update([
+            $client = Client::findOrFail($id);
+
+            $client->update([
                 "trust" => $rq->trust,
                 "helped_showcasing" => $rq->helped_showcasing,
-                "budget" => $rq->budget,
                 "extra_exp" => $rq->extra_exp,
                 "default_wishes" => $rq->default_wishes,
                 "special_prices" => $rq->special_prices,
             ]);
-            User::findOrFail($id)->update([
+            $client->user->update([
                 "password" => $rq->password,
             ]);
+
+            // budget handling
+            if($client->budget != $rq->budget){
+                app("App\Http\Controllers\BackController")->statusHistory(
+                    null,
+                    32,
+                    $rq->budget - $client->budget,
+                    $client->id
+                );
+                $client->update(["budget" => $rq->budget]);
+            }
         }
 
         return back()->with("success", "Dane poprawione");

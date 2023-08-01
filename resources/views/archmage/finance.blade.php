@@ -106,15 +106,19 @@
             <tr class="ghost">
             @endif
                 <td>
-                    <a href="{{ route('clients', ['search' => $item->quest->client->id]) }}">
-                        {{ _ct_($item->quest->client->client_name) }}
+                    <a href="{{ route('clients', ['search' => $item->changer->id]) }}">
+                        {{ _ct_($item->changer->client_name) }}
                     </a>
                 </td>
                 <td>
+                    @if($item->re_quest_id)
                     <a href="{{ route('quest', ['id' => $item->re_quest_id]) }}">
                         {{ $item->quest->song->title ?? "utwór bez tytułu" }}
                     </a>
                     <x-phase-indicator-mini :status="$item->quest->status" />
+                    @else
+                    <span class="grayed-out">budżet</span>
+                    @endif
                 </td>
                 <td>
                     {{ _c_(as_pln($item->comment)) }}

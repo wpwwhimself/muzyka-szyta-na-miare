@@ -522,12 +522,13 @@ class BackController extends Controller
             if($client->budget){
                 $sub_amount = min([$request->price, $client->budget]);
                 $client->budget -= $sub_amount;
+                $this->statusHistory(null, 32, -$sub_amount, $client->id);
                 if($sub_amount == $request->price){
                     $quest->paid = true;
                     $quest->save();
                 }
                 $client->save();
-                $this->statusHistory($quest->id, 32, $sub_amount);
+                $this->statusHistory($quest->id, 32, $sub_amount, $client->id);
                 // $invoice->update(["paid" => $sub_amount]);
             }
 
@@ -555,9 +556,13 @@ class BackController extends Controller
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null){
-        $client_id = (strlen($re_quest_id) == 36) ?
-            Request::find($re_quest_id)->client_id :
-            Quest::find($re_quest_id)->client_id;
+        if($re_quest_id){
+            $client_id = (strlen($re_quest_id) == 36) ?
+                Request::find($re_quest_id)->client_id :
+                Quest::find($re_quest_id)->client_id;
+        }else{
+            $client_id = $changed_by;
+        }
 
         StatusChange::insert([
             "re_quest_id" => $re_quest_id,
@@ -662,7 +667,19 @@ class BackController extends Controller
         // wpisywanie wpłaty za zlecenie
         if($rq->status_id == 32){
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
-            $this->statusHistory($rq->quest_id, $rq->status_id, $rq->comment, $quest->client_id);
+
+            // opłacenie zlecenia (sprawdzenie nadwyżki)
+            $amount_to_pay = $quest->price - $quest->payments->sum("comment");
+            $amount_for_budget = $rq->comment - $amount_to_pay;
+
+            $this->statusHistory($rq->quest_id, $rq->status_id, min($rq->comment, $amount_to_pay), $quest->client_id);
+            if($amount_for_budget > 0){
+                $this->statusHistory(null, $rq->status_id, $amount_for_budget, $quest->client_id);
+
+                // budżet
+                $quest->client->budget += $amount_for_budget;
+                $quest->client->save();
+            }
 
             // opłacanie faktury
             $invoice = InvoiceQuest::where("quest_id", $rq->quest_id)

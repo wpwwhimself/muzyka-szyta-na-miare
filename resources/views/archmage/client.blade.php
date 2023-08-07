@@ -12,7 +12,7 @@
                 <x-input type="email" name="email" label="Email" :value="_ct_($client->email)" :small="true" />
                 <x-input type="phone" name="phone" label="Telefon" :value="_ct_($client->phone)" :small="true" />
                 <x-input type="text" name="other_medium" label="Inna droga kontaktu" :value="_ct_($client->other_medium)" :small="true" />
-                <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" :value="_ct_($client->contact_preference)" :small="true" />
+                <x-select name="contact_preference" label="Preferencja kontaktowa" :value="_ct_($client->contact_preference)" :small="true" :options="$contact_preferences" />
             </div>
     </section>
     <section>

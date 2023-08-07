@@ -56,9 +56,16 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
         if(!in_array(Auth::id(), [0, 1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
+        $contact_preferences = [
+            "email" => "email",
+            "telefon" => "telefon",
+            "sms" => "SMS",
+            "inne" => "inne",
+        ];
+
         return view(user_role().".client", array_merge([
             "title" => $client->client_name." | Edycja klienta"
-        ], compact("client")));
+        ], compact("client", "contact_preferences")));
     }
 
     public function edit($id, Request $rq){

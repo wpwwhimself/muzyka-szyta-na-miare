@@ -1,4 +1,4 @@
-<h1>Supermoce Arcymaga</h1>
+<h1>Zaklęcia Arcymaga</h1>
 <p>
     Administrator w razie potrzeby może nadpisać parametry zleceń niestandardową drogą,
     na przykład w sytuacji błędnego wpisania danych przez Klienta lub potrzeby ich usunięcia.
@@ -19,4 +19,10 @@
 <p>
     <code>phantompay/{paid?}</code> --
     Zmienia status opłacenia zlecenia. Przydatne, jeśli klient jednak nie opłacił zlecenia lub coś pójdzie nie tak w systemie i trzeba odebrać prawo do pobierania.
+</p>
+
+<h2>Dla zapytań i zleceń</h2>
+<p>
+    <code>silence</code> --
+    Usuwa ostatni wpis w historii re_questa. Przydatne, jeśli klient spamuje bez potrzeby albo w przypadku bugów ze zmianą stanu.
 </p>

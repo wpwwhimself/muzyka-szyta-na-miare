@@ -783,6 +783,18 @@ class BackController extends Controller
             "deadline" => $rq->deadline,
             "delayed_payment" => $rq->delayed_payment,
         ]);
+        $difference = $quest->price - $price_before;
+        if($quest->client->budget){
+            $sub_amount = min([$difference, $quest->client->budget]);
+            $quest->client->budget -= $sub_amount;
+            $this->statusHistory(null, 32, -$sub_amount, $quest->client->id);
+            if($sub_amount == $difference){
+                $quest->paid = true;
+                $quest->save();
+            }
+            $quest->client->save();
+            $this->statusHistory($quest->id, 32, $sub_amount, $quest->client->id);
+        }
 
         // if($price_before != $quest->price){
         //     Invoice::create([
@@ -795,7 +807,7 @@ class BackController extends Controller
         // sending mail
         $mailing = null;
         if($quest->client->email){
-            Mail::to($quest->client->email)->send(new QuestRequoted($quest, $rq->reason));
+            Mail::to($quest->client->email)->send(new QuestRequoted($quest, $rq->reason, $difference));
             $mailing = true;
         }
         if($quest->client->contact_preference != "email"){

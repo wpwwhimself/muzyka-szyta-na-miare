@@ -18,11 +18,13 @@ class QuestRequoted extends Mailable
      */
     public $quest;
     public $reason;
+    public $price_difference;
     public $pl;
-    public function __construct($quest, $reason)
+    public function __construct($quest, $reason, $price_difference)
     {
         $this->quest = $quest;
         $this->reason = $reason;
+        $this->price_difference = $price_difference;
         $this->pl = client_polonize($quest->client->client_name);
     }
 

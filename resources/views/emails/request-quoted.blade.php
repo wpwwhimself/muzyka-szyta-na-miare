@@ -14,7 +14,7 @@
     <table>
         <tr>
             @foreach ([
-                "Cena" => as_pln($request->price),
+                "Cena" => as_pln($request->price).(($request->client?->budget) ? "*" : ""),
                 "Termin oddania pierwszej wersji" => ($request->deadline)
                     ? "do ".$request->deadline?->format("d.m.Y")
                     : "brak",
@@ -32,6 +32,14 @@
             Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
             proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}.
         </b></p>
+    @endif
+
+    @if ($request->client?->budget)
+    <p><i>
+        *{{ ($request->client?->budget >= $request->price) ? "Całość" : "Część" }}
+        kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
+        {{ as_pln($request->client?->budget) }}
+    </i></p>
     @endif
 
     <p>

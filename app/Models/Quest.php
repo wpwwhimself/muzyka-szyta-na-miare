@@ -36,7 +36,7 @@ class Quest extends Model
         return $this->belongsTo(QuestType::class, "quest_type_letter", "code");
     }
     public function changes(){
-        return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date");
+        return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
     public function payments(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->where("new_status_id", 32);

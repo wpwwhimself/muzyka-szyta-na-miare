@@ -32,6 +32,6 @@ class Request extends Model
         return $this->belongsTo(Song::class);
     }
     public function changes(){
-        return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date");
+        return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
 }

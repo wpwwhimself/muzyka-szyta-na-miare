@@ -44,7 +44,8 @@
 
     <p>
         Niestety z przyczyn wyżej określonych nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
-        Jeśli nie zgadza się {{ $pl["kobieta"] ? "Pani" : "Pan" }} na nowe warunki i chce zrezygnować ze zlecenia, proszę o kliknięcie odpowiedniego przycisku w widoku zlecenia.
+        Jeśli <b>nie zgadza się {{ $pl["kobieta"] ? "Pani" : "Pan" }} na nowe warunki</b> i chce zrezygnować ze zlecenia, proszę o kliknięcie odpowiedniego przycisku w widoku zlecenia.
+        W przeciwnym wypadku nie musi {{ $pl["kobieta"] ? "Pani" : "Pan" }} podejmować żadnych czynności.
     </p>
 
     <h3>

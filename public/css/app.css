@@ -857,6 +857,9 @@ footer .contact-info{
     user-select: none;
     cursor: pointer;
 }
+.calendar-table td:first-child{
+    white-space: nowrap;
+}
 .cal-row .free{
     opacity: 0.5;
 }

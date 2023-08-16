@@ -9,34 +9,32 @@
     @foreach ($calendar as $date => $meta)
         <tr class="cal-row {{ $clickDays ? "clickable" : "" }}" date="{{ $meta['date_val'] }}">
             <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}">
+                <i class="
                 @if ($meta['suggest_date'] && $clickDays)
-                <i class="fa-solid fa-square-check"></i>
+                fa-solid fa-square-check
                 @elseif (preg_match("/free/", $meta['day_type']))
-                <i class="fa-regular fa-square"></i>
+                fa-regular fa-square
                 @else
-                <i class="fa-solid fa-square"></i>
+                fa-solid fa-square
                 @endif
-                {{ $date }}
+                "></i>&nbsp;{{ $date }}
             </td>
             <td>
                 @foreach ($meta["quests"] as $quest)
                 <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
-                    <i class="fa-regular fa-square"></i>
-                    {{ $quest->song->title ?? "bez tytułu" }}
+                    <i class="fa-regular fa-square"></i>&nbsp;{{ $quest->song->title ?? "bez tytułu" }}
                 </a>
                 @endforeach
 
                 @foreach ($meta["quests_done"] as $quest)
                 <a class="quest ghost" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
-                    <i class="fa-solid fa-square-check"></i>
-                    {{ $quest->song->title ?? "bez tytułu" }}
+                    <i class="fa-solid fa-square-check"></i>&nbsp;{{ $quest->song->title ?? "bez tytułu" }}
                 </a>
                 @endforeach
 
                 @foreach ($meta["requests"] as $request)
                 <a class="request ghost" href="{{ route('request', ['id' => $request->id]) }}" target="_blank" >
-                    <i class="fa-solid fa-envelope-open"></i>
-                    {{ $request->title ?? "bez tytułu" }}
+                    <i class="fa-solid fa-envelope-open"></i>&nbsp;{{ $request->title ?? "bez tytułu" }}
                 </a>
                 @endforeach
             </td>

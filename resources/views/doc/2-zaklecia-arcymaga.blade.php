@@ -20,6 +20,10 @@
     <code>phantompay/{paid?}</code> --
     Zmienia status opłacenia zlecenia. Przydatne, jeśli klient jednak nie opłacił zlecenia lub coś pójdzie nie tak w systemie i trzeba odebrać prawo do pobierania.
 </p>
+<p>
+    <code>polymorph/{letter}</code> --
+    Zmienia typ zlecenia (i powiązanego z nim utworu). Przydatne, jeśli przypadkiem przyjęło się np. zlecenie na nuty jako podkład.
+</p>
 
 <h2>Dla zapytań i zleceń</h2>
 <p>

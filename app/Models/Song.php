@@ -15,6 +15,7 @@ class Song extends Model
     protected $keyType = "string";
 
     protected $fillable = [
+        "id",
         "title", "artist",
         "link",
         "price_code", "notes",

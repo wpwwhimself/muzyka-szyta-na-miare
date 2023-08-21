@@ -184,6 +184,19 @@ Route::middleware("auth")->group(function(){
             Quest::find($id)->update(["paid" => $paid]);
             return back()->with("success", "Zlecenie \"opłacone\"");
         });
+        Route::get("/view/{id}/polymorph/{letter}", function($id, $letter){
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
+            if(!in_array($letter, QuestType::all()->pluck("code")->toArray())) return back()->with("error", "Niewłaściwa litera");
+            $new_quest_id = next_quest_id($letter);
+            $new_song_id = next_song_id($letter);
+            $quest = Quest::find($id);
+
+            $quest->update(["id" => $new_quest_id]);
+            $quest->song->update(["id" => $new_song_id]);
+            StatusChange::where("re_quest_id", $id)->update(["re_quest_id" => $new_quest_id]);
+
+            return redirect()->route("quest", ["id" => $new_quest_id])->with("success", "Zlecenie przemianowane");
+        });
     });
 });
 

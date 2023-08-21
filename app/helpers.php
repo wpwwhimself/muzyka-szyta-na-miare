@@ -96,7 +96,7 @@ if(!function_exists("song_quest_type")){
  */
 if(!function_exists("next_quest_id")){
     function next_quest_id($quest_type_id){
-        $letter = QuestType::find($quest_type_id)->code;
+        $letter = (is_numeric($quest_type_id)) ? QuestType::find($quest_type_id)->code : $quest_type_id;
         $newest_id = Quest::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
         if(!$newest_id || date("y") != substr($newest_id, 1, 2)){
             return $letter . date("y") . "-00";
@@ -108,7 +108,7 @@ if(!function_exists("next_quest_id")){
 }
 if(!function_exists("next_song_id")){
     function next_song_id($quest_type_id){
-        $letter = QuestType::find($quest_type_id)->code;
+        $letter = (is_numeric($quest_type_id)) ? QuestType::find($quest_type_id)->code : $quest_type_id;
         $newest_id = Song::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id");
         if(!$newest_id){
             return $letter . "000";

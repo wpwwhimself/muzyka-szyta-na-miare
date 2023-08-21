@@ -48,6 +48,11 @@ if(!function_exists("OBSERVER_ERROR")){
         return "Jako obserwator nie możesz tego zrobić";
     }
 }
+if(!function_exists("MISSPELL_ERROR")){
+    function MISSPELL_ERROR(){
+        return "Zaklęcie tylko dla zaawansowanych";
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)

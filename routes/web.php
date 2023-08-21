@@ -169,18 +169,18 @@ Route::middleware("auth")->group(function(){
 
     Route::prefix("quests")->group(function(){
         Route::get("/view/{id}/restatus/{status_id}", function($id, $status_id){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
             Quest::find($id)->update(["status_id" => $status_id]);
             StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->update(["new_status_id" => $status_id]);
             return back()->with("success", "Faza zmieniona siłą");
         });
         Route::get("/view/{id}/silence", function($id){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
             StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
             return back()->with("success", "Ostatni status uciszony");
         });
         Route::get("/view/{id}/phantompay/{paid?}", function($id, $paid = 1){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
             Quest::find($id)->update(["paid" => $paid]);
             return back()->with("success", "Zlecenie \"opłacone\"");
         });

@@ -55,18 +55,6 @@ Route::controller(BackController::class)->group(function(){
         Route::get('/requests', "requests")->name("requests");
         Route::get('/requests/add', "addRequest")->name("add-request");
 
-        Route::get('/requests/view/{id}/obliterate', function($id){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-            StatusChange::where("re_quest_id", $id)->delete();
-            ModelsRequest::find($id)->delete();
-            return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
-        });
-        Route::get("/requests/view/{id}/silence", function($id){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-            return back()->with("success", "Ostatni status uciszony");
-        });
-
         Route::prefix("quests")->group(function(){
             Route::get('/', "quests")->name("quests");
             Route::get('/view/{id}', "quest")->name("quest");
@@ -74,23 +62,6 @@ Route::controller(BackController::class)->group(function(){
             Route::post('/mod-back', "modQuestBack")->name("mod-quest-back");
             Route::post('/work-clock', "workClock")->name("work-clock");
             Route::get('/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
-
-            Route::get("/view/{id}/restatus/{status_id}", function($id, $status_id){
-                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-                Quest::find($id)->update(["status_id" => $status_id]);
-                StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->update(["new_status_id" => $status_id]);
-                return back()->with("success", "Faza zmieniona siłą");
-            });
-            Route::get("/view/{id}/silence", function($id){
-                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-                StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-                return back()->with("success", "Ostatni status uciszony");
-            });
-            Route::get("/view/{id}/phantompay/{paid?}", function($id, $paid = 1){
-                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-                Quest::find($id)->update(["paid" => $paid]);
-                return back()->with("success", "Zlecenie \"opłacone\"");
-            });
         });
         Route::post("/quest-song-update", "questSongUpdate")->name("quest-song-update");
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
@@ -177,6 +148,44 @@ Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::
 Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
 Route::get("/mp-w/{id}", function($id){ return new App\Mail\_Welcome(Client::findOrFail($id)); })->name("mp-w");
 Route::get("/mp-aqm/{id}", function($id){ return new App\Mail\ArchmageQuestMod(Quest::findOrFail($id)); })->name("mp-aqm");
+
+/* MAGIC SPELLS */
+Route::middleware("auth")->group(function(){
+    Route::prefix("requests")->group(function(){
+        Route::controller(BackController::class)->group(function(){
+            Route::get('/view/{id}/obliterate', function($id){
+                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+                StatusChange::where("re_quest_id", $id)->delete();
+                ModelsRequest::find($id)->delete();
+                return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
+            });
+            Route::get("/view/{id}/silence", function($id){
+                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+                StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
+                return back()->with("success", "Ostatni status uciszony");
+            });
+        });
+    });
+
+    Route::prefix("quests")->group(function(){
+        Route::get("/view/{id}/restatus/{status_id}", function($id, $status_id){
+            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            Quest::find($id)->update(["status_id" => $status_id]);
+            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->update(["new_status_id" => $status_id]);
+            return back()->with("success", "Faza zmieniona siłą");
+        });
+        Route::get("/view/{id}/silence", function($id){
+            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
+            return back()->with("success", "Ostatni status uciszony");
+        });
+        Route::get("/view/{id}/phantompay/{paid?}", function($id, $paid = 1){
+            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            Quest::find($id)->update(["paid" => $paid]);
+            return back()->with("success", "Zlecenie \"opłacone\"");
+        });
+    });
+});
 
 /**
  * for AJAX purposes

@@ -190,10 +190,17 @@ Route::middleware("auth")->group(function(){
             $new_quest_id = next_quest_id($letter);
             $new_song_id = next_song_id($letter);
             $quest = Quest::find($id);
+            $old_song_id = $quest->song_id;
 
             $quest->update(["id" => $new_quest_id]);
             $quest->song->update(["id" => $new_song_id]);
             StatusChange::where("re_quest_id", $id)->update(["re_quest_id" => $new_quest_id]);
+            if(Storage::exists("safe/$old_song_id")){
+                Storage::rename("safe/$old_song_id", "safe/$new_song_id");
+            }
+            if(Storage::exists("showcases/$old_song_id.ogg")){
+                Storage::rename("showcases/$old_song_id.ogg", "showcases/$new_song_id.ogg");
+            }
 
             return redirect()->route("quest", ["id" => $new_quest_id])->with("success", "Zlecenie przemianowane");
         });

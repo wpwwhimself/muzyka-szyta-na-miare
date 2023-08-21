@@ -23,6 +23,7 @@
 <p>
     <code>polymorph/{letter}</code> --
     Zmienia typ zlecenia (i powiązanego z nim utworu). Przydatne, jeśli przypadkiem przyjęło się np. zlecenie na nuty jako podkład.
+    Zmiana obejmuje też powiązania z plikami, showcase'ami, historią i fakturami dla danego zlecenia.
 </p>
 
 <h2>Dla zapytań i zleceń</h2>

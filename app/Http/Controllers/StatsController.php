@@ -433,7 +433,7 @@ class StatsController extends Controller
             }
         }
         $clients_informed_count = array_count_values($clients_informed);
-        $clients_informed_output = ($clients_informed_count[1] == count($clients_informed)) ? "wszyscy dostali maile"
+        $clients_informed_output = (isset($clients_informed_count[1]) && $clients_informed_count[1] == count($clients_informed)) ? "wszyscy dostali maile"
             : ($clients_informed_count[0] == count($clients_informed) ? "nikt nie dostał maila" : ($clients_informed_count[1]."/".count($clients_informed)." klientów dostało maila"));
 
         return back()->with("success", "Zlecenia opłacone, $clients_informed_output");

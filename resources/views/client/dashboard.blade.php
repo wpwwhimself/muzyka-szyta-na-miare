@@ -159,13 +159,16 @@
             </div>
         </div>
         <div class="dashboard-mini-wrapper">
-        @forelse ($quests as $key => $quest)
+        @php $quest_count = 0 @endphp
+        @foreach ($quests as $key => $quest)
             @if ($quest->client_id == Auth::id())
+            @php $quest_count++; @endphp
             <x-quest-mini :quest="$quest" :queue="$key + 1" />
             @endif
-        @empty
+        @endforeach
+        @unless($quest_count)
             <p class="grayed-out">brak aktywnych zleceń</p>
-        @endforelse
+        @endunless
         </div>
     </section>
 

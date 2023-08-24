@@ -344,13 +344,17 @@
                                 {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}
                             </div>
                             <div class="file-container-c">
+                            @php usort($ver_bots, "file_order") @endphp
                             @foreach ($ver_bots as $file)
                                 @if (pathinfo($file)['extension'] == "mp4")
-                                <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="video/mpeg" /></video>
+                                <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" /></video>
+                                    @break
                                 @elseif (pathinfo($file)['extension'] == "mp3")
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
+                                    @break
                                 @elseif (pathinfo($file)['extension'] == "ogg")
                                 <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/ogg" /></audio>
+                                    @break
                                 @endif
                             @endforeach
                             @foreach ($ver_bots as $file)

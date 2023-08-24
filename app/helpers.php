@@ -382,3 +382,15 @@ if(!function_exists("as_pln")){
         return number_format($value, 2, ",", " ")." zł";
     }
 }
+
+/**
+ * Order file array, so as the most important to render are first
+ */
+if(!function_exists("file_order")){
+    function file_order($a, $b){
+        $correct_order = ["mp4", "mp3", "ogg"];
+        $ext_a = preg_replace("/.*\.(.*)$/", "$1", $a);
+        $ext_b = preg_replace("/.*\.(.*)$/", "$1", $b);
+        return (array_search($ext_a, $correct_order) < array_search($ext_b, $correct_order)) ? -1 : 1;
+    }
+}

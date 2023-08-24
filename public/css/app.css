@@ -267,6 +267,9 @@ input[type="file"]{
 .gone{
     display: none;
 }
+video{
+    width: 100%;
+}
 
 /* NOŻYCZKI */
 .sc-line{
@@ -1043,9 +1046,6 @@ footer .contact-info{
     }
     .section-header h1{
         font-size: 1.25em;
-    }
-    video{
-        width: calc(100% - 4em);
     }
 
     header nav{

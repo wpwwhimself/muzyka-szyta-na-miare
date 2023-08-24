@@ -563,17 +563,44 @@ footer .contact-info{
 .quest-phase-bars{
     display: grid;
     grid-template-columns: repeat(9, 1fr);
-    margin: 0.3em;
+    margin: 0.3em 0;
+    column-gap: 1.05em;
 }
 .quest-phase-bars div{
-    background-color: #ffffff44;
-    border: 1px solid #00000044;
-    margin: 0 0.1em;
+    color: var(--bg2);
+    background-color: currentColor;
     height: 0.7em;
-    border-radius: 1em;
+    position: relative;
+    border-radius: 0;
+}
+.quest-phase-bars div::before, .quest-phase-bars div::after{
+    content: "";
+    position: absolute;
+    border: 0.35em solid transparent;
+    box-sizing: border-box;
+    width: 0.7em;
+    height: 0.7em;
+}
+.quest-phase-bars div::before{
+    left: -0.7em;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+}
+.quest-phase-bars div::after{
+    right: -0.7em;
+    border-left-color: inherit;
+}
+.quest-phase-bars div:first-child::before{
+    border-color: inherit;
+    width: 0.35em;
+    left: -0.35em;
+}
+.quest-phase-bars div:last-child::after{
+    display: none;
 }
 .quest-phase-bars .highlighted{
-    background-color: rgb(var(--q-clr));
+    color: rgb(var(--q-clr));
 }
 
 .quest-phase-label{

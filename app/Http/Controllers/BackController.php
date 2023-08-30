@@ -567,7 +567,7 @@ class BackController extends Controller
         StatusChange::insert([
             "re_quest_id" => $re_quest_id,
             "new_status_id" => $new_status_id,
-            "changed_by" => ($client_id == null && in_array($new_status_id, [1, 8, 9])) ? null : $changed_by ?? Auth::id(),
+            "changed_by" => ($client_id == null && in_array($new_status_id, [1, 6, 8, 9, 96])) ? null : $changed_by ?? Auth::id(),
             "comment" => $comment,
             "mail_sent" => $mailing,
             "date" => now(),

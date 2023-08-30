@@ -565,6 +565,7 @@ footer .contact-info{
     grid-template-columns: repeat(9, 1fr);
     margin: 0.3em;
     column-gap: 1.05em;
+    padding-left: 0.7em;
 }
 .quest-phase-bars div{
     color: var(--bg2);
@@ -593,8 +594,6 @@ footer .contact-info{
 }
 .quest-phase-bars div:first-child::before{
     border-color: inherit;
-    width: 0.35em;
-    left: -0.35em;
 }
 .quest-phase-bars div:last-child::after{
     display: none;

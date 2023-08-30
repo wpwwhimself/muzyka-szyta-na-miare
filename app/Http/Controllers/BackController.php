@@ -148,7 +148,8 @@ class BackController extends Controller
         ]);
     }
     public function request($id){
-        $request = Request::findOrFail($id);
+        $request = Request::find($id);
+        if(!$request) abort(404, "Nie ma takiego zapytania");
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(in_array(Auth::id(), [0, 1], true)){
@@ -446,7 +447,8 @@ class BackController extends Controller
     }
 
     public function requestFinal($id, $status){
-        $request = Request::findOrFail($id);
+        $request = Request::find($id);
+        if(!$request) abort(404, "Nie ma takiego zapytania");
 
         if(in_array($request->status_id, [4,7,8,9]))
             return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
@@ -607,7 +609,8 @@ class BackController extends Controller
     }
 
     public function quest($id){
-        $quest = Quest::findOrFail($id);
+        $quest = Quest::find($id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
 
         $prices = DB::table("prices")
             ->where("quest_type_id", song_quest_type($quest->song_id)->id)->orWhereNull("quest_type_id")
@@ -659,7 +662,8 @@ class BackController extends Controller
 
     public function modQuestBack(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::findOrFail($rq->quest_id);
+        $quest = Quest::find($rq->quest_id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
             return back()->with("error", "Zatrzymaj zegar");
         }
@@ -753,7 +757,8 @@ class BackController extends Controller
     }
     public function questSongUpdate(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $song = Song::findOrFail($rq->id);
+        $song = Song::find($rq->id);
+        if(!$song) abort(404, "Nie ma takiego utworu");
         $song->update([
             "title" => $rq->title,
             "artist" => $rq->artist,
@@ -764,7 +769,8 @@ class BackController extends Controller
     }
     public function questWishesUpdate(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::findOrFail($rq->id);
+        $quest = Quest::find($rq->id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
         $quest->update([
             "wishes" => $rq->wishes_quest,
         ]);
@@ -772,7 +778,8 @@ class BackController extends Controller
     }
     public function questQuoteUpdate(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::findOrFail($rq->id);
+        $quest = Quest::find($rq->id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
         $price_before = $quest->price;
         $deadline_before = $quest->deadline;
         $delayed_payment_before = $quest->delayed_payment;

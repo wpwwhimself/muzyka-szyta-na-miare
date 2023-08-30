@@ -476,7 +476,8 @@ class StatsController extends Controller
     }
 
     public function invoice($id){
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::find($id);
+        if(!$invoice) abort(404, "Nie ma takiej faktury");
 
         return view(user_role().".invoice", array_merge(
             ["title" => "Faktura nr ".$invoice->fullCode],

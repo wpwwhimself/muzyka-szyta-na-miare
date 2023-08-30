@@ -53,7 +53,8 @@ class ClientController extends Controller
     }
 
     public function view($id){
-        $client = Client::findOrFail($id);
+        $client = Client::find($id);
+        if(!$client) abort(404, "Nie ma takiego klienta");
         if(!in_array(Auth::id(), [0, 1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         $contact_preferences = [
@@ -72,7 +73,9 @@ class ClientController extends Controller
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
-        Client::findOrFail($id)->update([
+        $client = Client::find($id);
+        if(!$client) abort(404, "Nie ma takiego klienta");
+        $client->update([
             "client_name" => $rq->client_name,
             "email" => $rq->email,
             "phone" => $rq->phone,
@@ -81,8 +84,6 @@ class ClientController extends Controller
         ]);
 
         if(in_array(Auth::id(), [0, 1], true)){
-            $client = Client::findOrFail($id);
-
             $client->update([
                 "trust" => $rq->trust,
                 "helped_showcasing" => $rq->helped_showcasing,

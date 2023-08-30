@@ -298,6 +298,14 @@ video{
     height: 35px;
 }
 
+#error-page{
+    text-align: center;
+    font-size: 1.5em;
+}
+#error-page h1{
+    font-size: 6em;
+    margin: 0;
+}
 
 /* ALERTS */
 .alert{

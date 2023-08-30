@@ -57,7 +57,17 @@
                             $("#phone").val(res.phone);
                             $("#other_medium").val(res.other_medium);
                             $("#contact_preference").val(res.contact_preference);
-                            $("#wishes").html(res.default_wishes);
+                            if(res.default_wishes != null){
+                                $("#default-wishes-button")
+                                    .attr("data-fill", res.default_wishes)
+                                    .show()
+                                    .click(() => {$("#wishes").val($("#default-wishes-button").attr("data-fill"))});
+                            }else{
+                                $("#default-wishes-button")
+                                    .attr("data-fill", "")
+                                    .hide()
+                                    .off();
+                            }
                             if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
                             $("#client_info").attr("href", "{{ route('quests') }}" + `?client=${$("#client_id").val()}`).show();
                         }
@@ -69,7 +79,7 @@
                         $("#phone").val("");
                         $("#other_medium").val("");
                         $("#contact_preference").val("");
-                        $("#wishes").html("");
+                        $("#default-wishes-button").attr("data-fill", "").hide().off();
                         $("#special-prices-warning").html("");
                         $("#client_info").hide().attr("href", "");
                     }
@@ -93,6 +103,7 @@
             <x-link-interpreter :raw="$request->link" />
             <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" />
+                <x-button label="Wpisz domyślne życzenia" icon="circle-question" action="#/" id="default-wishes-button" :small="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" />
             <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline?->format('Y-m-d') }}" />
 

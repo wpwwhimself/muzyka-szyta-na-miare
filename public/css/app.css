@@ -572,7 +572,8 @@ footer .contact-info{
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     margin: 0.3em;
-    column-gap: 0.8em;
+    column-gap: 1.05em;
+    padding: 0 0.35em 0 0.7em;
 }
 .quest-phase-bars div{
     color: var(--bg2);
@@ -590,7 +591,7 @@ footer .contact-info{
     height: 0.7em;
 }
 .quest-phase-bars div::before{
-    left: -0.35em;
+    left: -0.7em;
     border-top-color: inherit;
     border-right-color: inherit;
     border-bottom-color: inherit;
@@ -599,9 +600,15 @@ footer .contact-info{
     right: -0.7em;
     border-left-color: inherit;
 }
-.quest-phase-bars div:first-child::before,
+.quest-phase-bars div:first-child::before{
+    border: none;
+    background-color: currentColor;
+}
 .quest-phase-bars div:last-child::after{
-    display: none;
+    border: none;
+    background-color: currentColor;
+    width: 0.35em;
+    right: -0.35em;
 }
 .quest-phase-bars .highlighted{
     color: rgb(var(--q-clr));

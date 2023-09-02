@@ -601,7 +601,10 @@ footer .contact-info{
     border-left-color: inherit;
 }
 .quest-phase-bars div:first-child::before{
-    border-color: inherit;
+    border: none;
+    background-color: currentColor;
+    width: 0.35em;
+    left: -0.35em;
 }
 .quest-phase-bars div:last-child::after{
     display: none;

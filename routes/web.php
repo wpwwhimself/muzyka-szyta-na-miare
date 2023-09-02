@@ -160,9 +160,14 @@ Route::middleware("auth")->group(function(){
                 return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
             });
             Route::get("/view/{id}/silence", function($id){
-                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+                if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
                 StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
                 return back()->with("success", "Ostatni status uciszony");
+            });
+            Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
+                if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
+                ModelsRequest::find($id)->update([$property => $value]);
+                return back()->with("success", "Atrybut zmieniony");
             });
         });
     });
@@ -179,10 +184,10 @@ Route::middleware("auth")->group(function(){
             StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
             return back()->with("success", "Ostatni status uciszony");
         });
-        Route::get("/view/{id}/phantompay/{paid?}", function($id, $paid = 1){
+        Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
             if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            Quest::find($id)->update(["paid" => $paid]);
-            return back()->with("success", "Zlecenie \"opłacone\"");
+            Quest::find($id)->update([$property => $value]);
+            return back()->with("success", "Atrybut zmieniony");
         });
         Route::get("/view/{id}/polymorph/{letter}", function($id, $letter){
             if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());

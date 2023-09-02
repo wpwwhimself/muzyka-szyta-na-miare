@@ -17,10 +17,6 @@
     Zmienia status zlecenia wraz z charakterem ostatniego komentarza. Przydatne, jeśli Klient odrzuci zlecenie zamiast go akceptować.
 </p>
 <p>
-    <code>phantompay/{paid?}</code> --
-    Zmienia status opłacenia zlecenia. Przydatne, jeśli klient jednak nie opłacił zlecenia lub coś pójdzie nie tak w systemie i trzeba odebrać prawo do pobierania.
-</p>
-<p>
     <code>polymorph/{letter}</code> --
     Zmienia typ zlecenia (i powiązanego z nim utworu). Przydatne, jeśli przypadkiem przyjęło się np. zlecenie na nuty jako podkład.
     Zmiana obejmuje też powiązania z plikami, showcase'ami, historią i fakturami dla danego zlecenia.
@@ -30,4 +26,9 @@
 <p>
     <code>silence</code> --
     Usuwa ostatni wpis w historii re_questa. Przydatne, jeśli klient spamuje bez potrzeby albo w przypadku bugów ze zmianą stanu.
+</p>
+<p>
+    <code>transmute/{attribute}/{value?}</code> --
+    Zmienia wartość wskazanego atrybutu. Pozostaw <code>value</code> puste, jeśli wartość ma być wymazana.
+    Przydatne, jeśli trzeba coś zrobić od strony bazy bez wchodzenia do bazy.
 </p>

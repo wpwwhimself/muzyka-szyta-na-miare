@@ -245,8 +245,15 @@
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
-                Miej jednak na uwadze, że jeśli zmiany będą duże lub długo po terminie, mogę zmienić wycenę zlecenia.
             </p>
+                @if ($quest->changes->get(1)->date->diffInDays() >= 30)
+                <p class="error" style="text-align: left;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Ostatnia zmiana padła {{ $quest->changes->get(1)->date->diffForHumans() }}.
+                    Zażądanie poprawek może wiązać się z dopłatą.
+                    Zobacz <a href="{{ route('prices') }}">cennik</a> po więcej informacji.
+                </p>
+                @endif
             @endif
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             @if (in_array($quest->status_id, [16, 26, 96]))

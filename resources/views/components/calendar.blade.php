@@ -8,9 +8,9 @@
     <tbody>
     @foreach ($calendar as $date => $meta)
         <tr class="cal-row {{ $clickDays ? "clickable" : "" }}" date="{{ $meta['date_val'] }}">
-            <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $clickDays ? 'suggest' : '' }}">
+            <td class="{{ $meta['day_type'] }} {{ $meta['suggest_date'] && $suggest ? 'suggest' : '' }}">
                 <i class="
-                    @if ($meta['suggest_date'] && $clickDays)
+                    @if ($meta['suggest_date'] && $suggest)
                     fa-solid fa-square-check
                     @elseif (preg_match("/free/", $meta['day_type']))
                     fa-regular fa-square
@@ -44,7 +44,7 @@
     </tbody>
 </table>
 
-@if ($clickDays)
+@if ($suggest && $clickDays)
 <x-input type="checkbox" name="work_on_weekends" label="Licz weekendy" :small="true" value="{{ setting('work_on_weekends') }}" />
 <script>
     $(document).ready(function(){

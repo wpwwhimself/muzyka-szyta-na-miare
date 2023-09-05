@@ -10,7 +10,14 @@
                 Grafik nadchodzących zleceń
             </h1>
         </div>
-        <x-calendar :click-days="false" :with-today="true" :length="$calendar_length" />
+        <x-calendar :click-days="true" :suggest="false" :with-today="true" :length="$calendar_length" />
+        <script>
+        $(document).ready(() => {
+            $("tr[date]").click((el)=>{
+                $("#date").val($(el.currentTarget).attr("date"));
+            });
+        });
+        </script>
     </section>
 
     <section>

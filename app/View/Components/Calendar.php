@@ -18,11 +18,13 @@ class Calendar extends Component
     public $calendar;
     public $withToday;
     public $clickDays;
+    public $suggest;
     public $length;
     private $available_day_until;
-    public function __construct($withToday = false, $clickDays = true, $length = 14)
+    public function __construct($withToday = false, $clickDays = true, $suggest = true, $length = 14)
     {
         $this->clickDays = $clickDays;
+        $this->suggest = $suggest;
         $this->available_day_until = explode(",", setting("available_day_until"));
 
         $available_days_needed = setting("available_days_needed");

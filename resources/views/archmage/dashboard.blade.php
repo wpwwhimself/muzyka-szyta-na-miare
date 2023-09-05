@@ -142,7 +142,7 @@
                     <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
                 </div>
             </div>
-            <x-calendar :click-days="false" :with-today="true" :length="7" />
+            <x-calendar :click-days="false" :suggest="false" :with-today="true" :length="7" />
         </section>
 
         @if (count($patrons_adepts) > 0)

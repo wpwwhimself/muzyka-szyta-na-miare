@@ -55,6 +55,23 @@
 
 <section>
     <div class="section-header">
+        <h1><i class="fa-solid fa-circle-exclamation"></i> Uwagi</h1>
+    </div>
+
+    <ul>
+        <li>
+            Dla każdego typu zlecenia jest wyznaczona <b>cena minimalna</b>. Obecnie jest to:
+            <ul>
+                @foreach ($minimal_prices as $label => $price)
+                <li>{{ $label }}: {{ as_pln($price) }}</li>
+                @endforeach
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <div class="section-header">
         <h1>
             <i class="fa-solid fa-circle-question"></i>
             Jak naliczam ceny?

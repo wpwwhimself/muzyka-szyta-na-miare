@@ -91,12 +91,12 @@
                         },
                         success: function(res){
                             let content = ``;
-                            for(line of res[1]){
+                            for(line of res.positions){
                                 content += `<span>${line[0]}</span><span>${line[1]}</span>`;
                             }
                             positions_list.html(content);
-                            sum_row.html(`<span>Razem:</span><span>${res[0]} zł</span>`);
-                            if(res[2]) positions_list.addClass("overridden");
+                            sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
+                            if(res.override) positions_list.addClass("overridden");
                                 else positions_list.removeClass("overridden");
                         }
                     });

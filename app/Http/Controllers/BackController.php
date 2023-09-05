@@ -125,9 +125,12 @@ class BackController extends Controller
             is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
+        $quest_types = QuestType::all()->pluck("type", "id")->toArray();
+        $minimal_prices = array_combine($quest_types, QUEST_MINIMAL_PRICES());
+
         return view(user_role().".prices", array_merge(
             ["title" => "Cennik"],
-            compact("prices", "discount")
+            compact("prices", "discount", "minimal_prices")
         ));
     }
 
@@ -250,8 +253,8 @@ class BackController extends Controller
                     "wishes" => $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
-                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
-                    "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
+                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
+                    "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
                     "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
                     "delayed_payment" => $rq->delayed_payment,
@@ -372,8 +375,8 @@ class BackController extends Controller
                 "wishes" => $rq->wishes,
                 "wishes_quest" => $rq->wishes_quest,
 
-                "price_code" => price_calc($rq->price_code, $rq->client_id, true)[3],
-                "price" => price_calc($rq->price_code, $rq->client_id, true)[0],
+                "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
+                "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
                 "deadline" => $rq->deadline,
                 "hard_deadline" => $rq->hard_deadline,
                 "delayed_payment" => $rq->delayed_payment,
@@ -785,8 +788,8 @@ class BackController extends Controller
         $delayed_payment_before = $quest->delayed_payment;
         $quest->update([
             "price_code_override" => $rq->price_code_override,
-            "price" => price_calc($rq->price_code_override, $quest->client_id)[0],
-            "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)[0]),
+            "price" => price_calc($rq->price_code_override, $quest->client_id)["price"],
+            "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)["price"]),
             "deadline" => $rq->deadline,
             "delayed_payment" => $rq->delayed_payment,
         ]);

@@ -18,6 +18,14 @@ if(!function_exists("setting")){
         return DB::table("settings")->where("setting_name", $setting_name)->value("value_str");
     }
 }
+if(!function_exists("QUEST_MINIMAL_PRICES")){
+    function QUEST_MINIMAL_PRICES(){
+        return array_combine(
+            [1, 2, 3],
+            explode(",", setting("quest_minimal_price"))
+        );
+    }
+}
 
 /**
  * "CONSTANTS"
@@ -212,15 +220,30 @@ if(!function_exists("price_calc")){
         }
 
         $price *= $multiplier;
-
-        // price override
         $override = false;
+
+        // minimal price
+        $minimal_price = QUEST_MINIMAL_PRICES()[$quest_type_present];
+        $minimal_price_output = 0;
+        if($price < $minimal_price){
+            $price = $minimal_price;
+            $minimal_price_output = $minimal_price;
+            $override = true;
+        }
+
+        // manual price override
         if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
             $price = floatval(str_replace(",",".",$matches[0][0]));
             $override = true;
         }
 
-        return [_c_(round($price, 2)), $positions, $override, $labels];
+        return [
+            "price" => _c_(round($price, 2)),
+            "positions" => $positions,
+            "override" => $override,
+            "labels" => $labels,
+            "minimal_price" => $minimal_price_output,
+        ];
     }
 }
 

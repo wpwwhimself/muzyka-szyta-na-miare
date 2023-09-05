@@ -65,6 +65,11 @@ class SettingsSeeder extends Seeder
                 "desc" => "Ile dni sejf musi leżeć odłogiem, żeby był oznaczony jako bezpieczny do usunięcia",
                 "value_str" => 120
             ],
+            [
+                "setting_name" => "quest_minimal_price",
+                "desc" => "Minimalna cena zlecenia dla poszczególnych typów zleceń: kolejno P, N, O",
+                "value_str" => "45,100,10"
+            ],
         ]);
     }
 }

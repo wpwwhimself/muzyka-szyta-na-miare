@@ -223,7 +223,7 @@ if(!function_exists("price_calc")){
         $override = false;
 
         // minimal price
-        $minimal_price = QUEST_MINIMAL_PRICES()[$quest_type_present];
+        $minimal_price = $quest_type_present ? QUEST_MINIMAL_PRICES()[$quest_type_present] : 0;
         $minimal_price_output = 0;
         if($price < $minimal_price){
             $price = $minimal_price;

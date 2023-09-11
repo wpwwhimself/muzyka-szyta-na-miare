@@ -114,6 +114,8 @@ div, form{
 .auth-link{
     border: solid 2px var(--acc);
 }
+.flex-right .first{ order: 1; }
+.flex-right :not(.first){ order: 99; }
 
 /* UNI COLORS */
 .showcase-highlight{

@@ -619,8 +619,7 @@ class BackController extends Controller
             ->where("quest_type_id", song_quest_type($quest->song_id)->id)->orWhereNull("quest_type_id")
             ->orderBy("quest_type_id")->orderBy("indicator")
             ->pluck("service", "indicator")->toArray();
-        if(in_array(Auth::id(), [0, 1], true)) $stats_statuses = DB::table("statuses")->where("id", ">=", 100)->orderByDesc("status_name")->get()->toArray();
-        else if($quest->client_id != Auth::id()) abort(403, "To nie jest Twoje zlecenie");
+        if($quest->client_id != Auth::id() && !in_array(Auth::id(), [0, 1], true)) abort(403, "To nie jest Twoje zlecenie");
 
         $files_raw = collect(Storage::files('safe/'.$quest->song_id))
             ->sortByDesc(function($file){return Storage::lastModified($file);});
@@ -650,15 +649,12 @@ class BackController extends Controller
             }
         }
 
-        $workhistory = SongWorkTime::where("song_id", $quest->song_id)->orderBy("status_id")->get();
-
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
                 compact("quest", "prices", "files", "last_mod", "desc"),
                 (isset($stats_statuses) ? compact("stats_statuses") : []),
-                (isset($workhistory) ? compact("workhistory") : []),
             )
         );
     }

@@ -17,18 +17,16 @@
     @auth
         @foreach ($logged as $item)
         <a href="{{ $item['link'] }}">
-            <li>
+            <li {{ Popper::pop($item['label']) }}>
                 <i class="{{ $item['icon'] }}"></i>
-                {{ $item['label'] }}
             </li>
         </a>
         @endforeach
         @if (in_array(Auth::id(), [0, 1], true))
             @foreach ($archmage as $item)
             <a href="{{ $item['link'] }}">
-                <li>
+                <li {{ Popper::pop($item['label']) }}>
                     <i class="{{ $item['icon'] }}"></i>
-                    {{ $item['label'] }}
                 </li>
             </a>
             @endforeach

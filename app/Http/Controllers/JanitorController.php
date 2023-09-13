@@ -60,7 +60,10 @@ class JanitorController extends Controller
          * expiring unreviewed quests
          */
         $quests = Quest::whereIn("status_id", [15, 95])
-            ->whereHas('client', function($q){ $q->where('trust', '<', 1); })
+            ->where(function($q){
+                $q->whereHas('client', function($q){ $q->where('trust', '<', 1); })
+                    ->orWhereHas('client', function($q){ $q->where('trust', 1); })->where("paid", true);
+            })
             ->where(function($q) use ($quest_expired_after){
                 $q->where(function($qq) use ($quest_expired_after){
                     $qq->where("paid", false)->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString());

@@ -52,19 +52,38 @@
                 <thead>
                     <tr>
                         <th>ReQuest</th>
-                        <th>Wykonano</th>
+                        <th>Status</th>
+                        <th>Komentarz</th>
+                        <th>Mail</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($janitor_log as $i)
                     <tr>
                         <td>
-                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}">
+                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}" @if ($i->is_request)
+                                class="ghost"
+                            @endif>
                                 {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
                             </a>
                         </td>
                         <td>
-                            {{ $i->operation }}
+                            <x-phase-indicator-mini :status="$i->re_quest->status" />
+                        </td>
+                        <td>
+                            {{ $i->comment }}
+                        </td>
+                        <td>
+                            @switch($i->mailing)
+                                @case(2)
+                                    <i class="fa-solid fa-square-check success" @popper(mail wysłany)></i>
+                                    @break
+                                @case(1)
+                                    <i class="fa-solid fa-triangle-exclamation warning" @popper(mail wysłany, ale wyślij wiadomość)></i>
+                                    @break
+                                @default
+                                    <i class="fa-solid fa-xmark error" @popper(wyślij wiadomość)></i>
+                            @endswitch
                         </td>
                     </tr>
                     @empty

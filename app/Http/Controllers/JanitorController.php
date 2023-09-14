@@ -40,20 +40,19 @@ class JanitorController extends Controller
             ->get();
         foreach($requests as $request){
             $request->update(["status_id" => 7]);
+            $summaryEntry = [
+                "re_quest" => $request, "is_request" => true,
+                "comment" => "Brak reakcji",
+            ];
             if($request->client?->email || $request->email){
                 Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request));
-                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, 1);
-                $summary[] = [
-                    "re_quest" => $request, "is_request" => true,
-                    "operation" => "Zapytanie wygaszone - brak reakcji - mail wysłany".(($request->client?->contact_preference == "email" || $request->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
-                ];
+                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "Brak reakcji", 1, 1);
+                $summaryEntry["mailing"] = 1 + intval($request->client?->contact_preference == "email" || $request->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "brak reakcji", 1, null);
-                $summary[] = [
-                    "re_quest" => $request, "is_request" => true,
-                    "operation" => "Zapytanie wygaszone - brak reakcji - WYMAGA KONTAKTU",
-                ];
+                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "Brak reakcji", 1, null);
+                $summaryEntry["mailing"] = 0;
             }
+            $summary[] = $summaryEntry;
         }
 
         /**
@@ -73,22 +72,21 @@ class JanitorController extends Controller
             })
             ->get();
         foreach($quests as $quest){
-            [$new_status, $new_comment, $operation] = $quest->paid ? [19, "brak uwag", "Zlecenie zaakceptowane automatycznie"] : [17, "brak opinii", "Zlecenie wygaszone"];
+            [$new_status, $new_comment] = $quest->paid ? [19, "Brak uwag"] : [17, "Brak opinii"];
             $quest->update(["status_id" => $new_status]);
+            $summaryEntry = [
+                "re_quest" => $quest, "is_request" => false,
+                "comment" => $new_comment,
+            ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, 1);
-                $summary[] = [
-                    "re_quest" => $quest, "is_request" => false,
-                    "operation" => "$operation - $new_comment - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
-                ];
+                $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
             }else{
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, null);
-                $summary[] = [
-                    "re_quest" => $quest, "is_request" => false,
-                    "operation" => "$operation - $new_comment - WYMAGA KONTAKTU",
-                ];
+                $summaryEntry["mailing"] = 0;
             }
+            $summary[] = $summaryEntry;
         }
 
         /**
@@ -105,20 +103,19 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
+            $summaryEntry = [
+                "re_quest" => $quest, "is_request" => false,
+                "comment" => "Nieopłacone, ale zaakceptowane",
+            ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak wpłaty"));
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, 1);
-                $summary[] = [
-                    "re_quest" => $quest, "is_request" => false,
-                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
-                ];
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "Brak wpłaty", 1, 1);
+                $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "brak wpłaty", 1, null);
-                $summary[] = [
-                    "re_quest" => $quest, "is_request" => false,
-                    "operation" => "Zlecenie wygaszone - nieopłacone, choć zaakceptowane - WYMAGA KONTAKTU",
-                ];
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "Brak wpłaty", 1, null);
+                $summaryEntry["mailing"] = 0;
             }
+            $summary[] = $summaryEntry;
         }
 
         /**
@@ -126,6 +123,10 @@ class JanitorController extends Controller
          */
         $quests = Quest::whereIn("status_id", [15, 95])->get();
         foreach($quests as $quest){
+            $summaryEntry = [
+                "re_quest" => $quest, "is_request" => false,
+                "comment" => "Przypomnienie o działaniu",
+            ];
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
@@ -134,17 +135,12 @@ class JanitorController extends Controller
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
                     StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 95])->orderByDesc("date")->first()->increment("mail_sent");
-                    $summary[] = [
-                        "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o działaniu - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
-                    ];
+                    $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
                 }else{
-                    $summary[] = [
-                        "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o działaniu - WYMAGA KONTAKTU",
-                    ];
+                    $summaryEntry["mailing"] = 0;
                 }
             }
+            $summary[] = $summaryEntry;
         }
 
         /**
@@ -155,6 +151,10 @@ class JanitorController extends Controller
             ->whereDate("delayed_payment", "<", Carbon::today())
             ->get();
         foreach($quests as $quest){
+            $summaryEntry = [
+                "re_quest" => $quest, "is_request" => false,
+                "comment" => "Przypomnienie o opłacie",
+            ];
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
@@ -169,17 +169,12 @@ class JanitorController extends Controller
                     }else{
                         app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
                     }
-                    $summary[] = [
-                        "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o opłacie - mail wysłany".(($quest->client->contact_preference == "email") ? "" : ", ale WYMAGA KONTAKTU"),
-                    ];
+                    $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
                 }else{
-                    $summary[] = [
-                        "re_quest" => $quest, "is_request" => false,
-                        "operation" => "Przypomnienie o opłacie - WYMAGA KONTAKTU",
-                    ];
+                    $summaryEntry["mailing"] = 0;
                 }
             }
+            $summary[] = $summaryEntry;
         }
 
         /**

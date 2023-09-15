@@ -123,15 +123,15 @@ class JanitorController extends Controller
          */
         $quests = Quest::whereIn("status_id", [15, 95])->get();
         foreach($quests as $quest){
-            $summaryEntry = [
-                "re_quest" => $quest, "is_request" => false,
-                "comment" => "Przypomnienie o działaniu",
-            ];
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
             ){
+                $summaryEntry = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "comment" => "Przypomnienie o działaniu",
+                ];
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
                     StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 95])->orderByDesc("date")->first()->increment("mail_sent");
@@ -139,8 +139,8 @@ class JanitorController extends Controller
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
+                $summary[] = $summaryEntry;
             }
-            $summary[] = $summaryEntry;
         }
 
         /**
@@ -151,15 +151,15 @@ class JanitorController extends Controller
             ->whereDate("delayed_payment", "<", Carbon::today())
             ->get();
         foreach($quests as $quest){
-            $summaryEntry = [
-                "re_quest" => $quest, "is_request" => false,
-                "comment" => "Przypomnienie o opłacie",
-            ];
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
             ){
+                $summaryEntry = [
+                    "re_quest" => $quest, "is_request" => false,
+                    "comment" => "Przypomnienie o opłacie",
+                ];
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));
                     //status
@@ -173,8 +173,8 @@ class JanitorController extends Controller
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
+                $summary[] = $summaryEntry;
             }
-            $summary[] = $summaryEntry;
         }
 
         /**

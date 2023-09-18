@@ -152,23 +152,23 @@ Route::get("/mp-aqm/{id}", function($id){ return new App\Mail\ArchmageQuestMod(Q
 /* MAGIC SPELLS */
 Route::middleware("auth")->group(function(){
     Route::prefix("requests")->group(function(){
-        Route::controller(BackController::class)->group(function(){
-            Route::get('/view/{id}/obliterate', function($id){
-                if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-                StatusChange::where("re_quest_id", $id)->delete();
-                ModelsRequest::find($id)->delete();
-                return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
-            });
-            Route::get("/view/{id}/silence", function($id){
-                if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-                StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-                return back()->with("success", "Ostatni status uciszony");
-            });
-            Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
-                if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-                ModelsRequest::find($id)->update([$property => $value]);
-                return back()->with("success", "Atrybut zmieniony");
-            });
+        Route::get('/view/{id}/obliterate', function($id){
+            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
+            StatusChange::where("re_quest_id", $id)->delete();
+            ModelsRequest::find($id)->delete();
+            return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
+        });
+        Route::get("/view/{id}/silence", function($id){
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
+            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
+            return back()->with("success", "Ostatni status uciszony");
+        });
+        Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
+            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
+            $r = ModelsRequest::find($id);
+            $r->{$property} = $value;
+            $r->save();
+            return back()->with("success", "Atrybut zmieniony");
         });
     });
 
@@ -186,7 +186,9 @@ Route::middleware("auth")->group(function(){
         });
         Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
             if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            Quest::find($id)->update([$property => $value]);
+            $q = Quest::find($id);
+            $q->{$property} = $value;
+            $q->save();
             return back()->with("success", "Atrybut zmieniony");
         });
         Route::get("/view/{id}/polymorph/{letter}", function($id, $letter){

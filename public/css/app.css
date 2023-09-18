@@ -625,6 +625,9 @@ footer .contact-info{
     color: rgb(var(--q-clr));
 }
 
+.ver_desc{
+    max-width: 300px;
+}
 .ver_desc p, .ver_desc ul, .ver_desc ol{
     margin: 0.2em 0;
 }

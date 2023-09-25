@@ -209,11 +209,11 @@ if(!function_exists("price_calc")){
                 switch($cat->operation){
                     case "+":
                         $price += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × "._c_(as_pln($price_to_add))]);
+                        array_push($positions, [$cat->service, _c_(as_pln(count($matches[0]) * $price_to_add))]);
                         break;
                     case "*":
                         $multiplier += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, count($matches[0])." × "._c_(($price_to_add*100))."%"]);
+                        array_push($positions, [$cat->service, _c_(count($matches[0]) * $price_to_add * 100)."%"]);
                         break;
                 }
             endif;

@@ -36,7 +36,6 @@
             <x-input type="text" name="other_medium" label="Inna forma kontaktu" value="{{ _ct_($request->other_medium) }}" :small="true" />
             <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ _ct_($request->contact_preference) }}" />
 
-            @if(in_array($request->status_id, [1, 6, 96]))
             <script>
             function client_fields(dont_clear_fields = false){
                 const empty = $("#client_id").val() == "";
@@ -79,10 +78,10 @@
                         $("#phone").val("");
                         $("#other_medium").val("");
                         $("#contact_preference").val("");
-                        $("#default-wishes-button").attr("data-fill", "").hide().off();
                         $("#special-prices-warning").html("");
                         $("#client_info").hide().attr("href", "");
                     }
+                    $("#default-wishes-button").attr("data-fill", "").hide().off();
                 }
             }
             $(document).ready(function(){
@@ -91,7 +90,6 @@
                 $("#client_id").change(function(){ client_fields() });
             });
             </script>
-            @endif
         </section>
 
         <section class="input-group">

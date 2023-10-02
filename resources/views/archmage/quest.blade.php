@@ -48,6 +48,7 @@
             </h2>
             <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />
+            <x-input type="text" name="" label="Hasło do konta" value="{{ _ct_($quest->client->user->password) }}" :small="true" :disabled="true" />
             <x-input type="text" name="" label="Wybredność" value="{{ round($quest->client->pickiness * 100) }}%" :small="true" :disabled="true" class="{{ $quest->client->pickiness > 1 ? 'error' : 'success' }}" />
         </section>
         <section class="input-group">

@@ -209,7 +209,7 @@ if(!function_exists("price_calc")){
                 switch($cat->operation){
                     case "+":
                         $price += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, _c_(as_pln($price))]);
+                        array_push($positions, [$cat->service, _c_(as_pln($price_to_add * count($matches[0])))]);
                         break;
                     case "*":
                         $multiplier += $price_to_add * count($matches[0]);

@@ -207,8 +207,8 @@ input, select, button, .submit{
 input:disabled, select:disabled, textarea:disabled{
     border-color: #aaaaaa22;
 }
-input:focus, textarea:focus, select:focus{
-    box-shadow: 0 0 15px var(--acc); border-bottom: 2px solid white;
+.highlighted{
+    box-shadow: 0 0 15px var(--acc);
 }
 option{
     background-color: var(--bg);

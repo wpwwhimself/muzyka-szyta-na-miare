@@ -35,3 +35,13 @@ $(document).ready(()=>{
         $(".tutorial").hide();
     }
 });
+
+/**
+ * Podświetlanie inputów
+ */
+const highlightInput = (input) => {
+    input.nextElementSibling.classList.add("accent");
+}
+const clearHighlightInput = (input) => {
+    input.nextElementSibling.classList.remove("accent");
+}

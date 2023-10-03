@@ -156,7 +156,7 @@ a{
     text-decoration: none;
     color: inherit;
 }
-a:hover{
+a:hover, .accent{
     color: var(--acc);
 }
 

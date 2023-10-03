@@ -20,6 +20,7 @@
         {{ $autofocus ? "autofocus" : "" }}
         {{ $disabled ? "disabled" : "" }}
         {{ $required ? "required" : "" }}
+        onfocus="highlightInput(this)" onblur="clearHighlightInput(this)"
         >
         @if ($emptyOption)
             <option value="" {{ $value ? "" : "selected" }}></option>

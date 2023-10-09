@@ -76,6 +76,8 @@ Route::controller(BackController::class)->group(function(){
 
         Route::get("/settings", "settings")->name("settings");
     });
+
+    Route::get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
 });
 
 Route::controller(FileController::class)->group(function(){
@@ -135,12 +137,6 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
         compact("id", "status", "is_new_client")
     ));
 })->name("request-finalized");
-Route::get("/patron-mode/{id}/{level}", function($id, $level){
-    if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
-    Client::findOrFail($id)->update(["helped_showcasing" => $level]);
-    if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", ($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony");
-    return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
-})->name("patron-mode");
 
 /* MAILING */
 Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); })->name("mp-rq");

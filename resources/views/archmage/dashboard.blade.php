@@ -30,8 +30,8 @@
                             <a href="{{ route('clients', ['search' => $patron->id]) }}">{{ _ct_($patron->client_name) }}</a>
                         </td>
                         <td>
-                            <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
-                            <x-button label="" icon="x" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 0]) }}" :small="true" />
+                            <x-button label="" icon="check" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 2]) }}" :small="true" />
+                            <x-button label="" icon="x" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 0]) }}" :small="true" />
                         </td>
                     </tr>
                     @endforeach

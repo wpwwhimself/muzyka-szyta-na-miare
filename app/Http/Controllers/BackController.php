@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
+use App\Mail\PatronRejected;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
@@ -839,6 +840,21 @@ class BackController extends Controller
             $mailing
         );
         return back()->with("success", "Wycena zapytania zmodyfikowana");
+    }
+
+    public function setPatronLevel($client_id, $level){
+        if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
+        $client = Client::findOrFail($client_id);
+
+        $client->update(["helped_showcasing" => $level]);
+        $mailing = false;
+        if($level == 0 && $client->email){
+            Mail::to($client->email)->send(new PatronRejected($client));
+            $mailing = true;
+        }
+
+        if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", (($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony").($mailing ? ", mail wysłany" : ""));
+        return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
     }
 
     public function workClock(HttpRequest $rq){

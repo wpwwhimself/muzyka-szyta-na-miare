@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="grid-2">
+        <div class="flex-right" style="grid-column: 1 / span 2">
+            <x-button
+            action="{{ route('add-request') }}"
+            label="Dodaj nowe zapytanie" icon="plus"
+            />
+        </div>
+
         @if (count($patrons_adepts) > 0)
         <section id="patrons-adepts" style="grid-column: 1 / span 2">
             <div class="section-header">
@@ -20,7 +27,7 @@
                     <tr>
                         <td>
                             <i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i>
-                            <a href="{{ route('clients', ['search' => $patron->client_id]) }}">{{ _ct_($patron->client_name) }}</a>
+                            <a href="{{ route('clients', ['search' => $patron->id]) }}">{{ _ct_($patron->client_name) }}</a>
                         </td>
                         <td>
                             <x-button label="" icon="check" action="{{ route('patron-mode', ['id' => $patron->id, 'level' => 2]) }}" :small="true" />
@@ -35,12 +42,12 @@
 
         @php $statuses_for_split = [11, 12, 13, 16, 26, 96]; @endphp
         @foreach([
-            ["Zlecenia w toku", $quests->filter(fn($q) => in_array($q->status_id, $statuses_for_split))],
-            ["Zlecenia czekające", $quests->filter(fn($q) => !in_array($q->status_id, $statuses_for_split))],
-        ] as [$title, $data])
+            ["Zlecenia w toku", "box", $quests->filter(fn($q) => in_array($q->status_id, $statuses_for_split))],
+            ["Zlecenia czekające", "box-open", $quests->filter(fn($q) => !in_array($q->status_id, $statuses_for_split))],
+        ] as [$sec_title, $icon, $data])
         <section id="dashboard-quests">
             <div class="section-header">
-                <h1><i class="fa-solid fa-signal"></i> {{ $title }}</h1>
+                <h1><i class="fa-solid fa-{{ $icon }}"></i> {{ $sec_title }}</h1>
                 <div>
                     <x-a href="{{ route('quests') }}">Wszystkie</x-a>
                 </div>
@@ -141,7 +148,7 @@
             <div class="section-header">
                 <h1>
                     <i class="fa-solid fa-calendar"></i>
-                    Grafik najbliższych zleceń
+                    Grafik
                 </h1>
                 <div>
                     <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
@@ -155,7 +162,6 @@
                 <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
                 <div>
                     <x-a href="{{ route('requests') }}">Wszystkie</x-a>
-                    <x-a href="{{ route('add-request') }}" icon="plus">Nowe</x-a>
                 </div>
             </div>
             <style>

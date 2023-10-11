@@ -50,9 +50,16 @@ class StatsController extends Controller
             ->groupBy("month")
             ->orderBy("month")
             ->get();
-        $recent_gross = collect($recent_income->pluck("sum", "month"))
-            ->mergeRecursive($recent_costs->pluck("sum", "month")->put("23-03", 0))
-            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
+        $recent_income = $recent_income->pluck("sum", "month")->mergeRecursive($recent_income->pluck("mean", "month"));
+        $recent_costs = $recent_costs->pluck("sum", "month")->mergeRecursive(($recent_costs)->pluck("mean", "month"));
+        foreach($recent_income->mergeRecursive($recent_costs)->filter(fn($el) => count($el) < 4) as $month => $value){
+            $recent_income = $recent_income->union([$month => [0, 0]]);
+            $recent_costs = $recent_costs->union([$month => [0, 0]]);
+        }
+        $recent_income = $recent_income->sortKeys();
+        $recent_costs = $recent_costs->sortKeys();
+        $recent_gross = $recent_income->mergeRecursive($recent_costs)
+            ->mapWithKeys(fn($val, $month) => [$month => $val[0] - $val[2]]);
         $finances_total = [
             "przychody" => StatusChange::where("new_status_id", 32)
                 ->whereDate("date", ">=", Carbon::today()->subYear())
@@ -272,9 +279,9 @@ class StatsController extends Controller
                 ]
             ],
             "finances" => [
-                "income" => $recent_income->pluck("sum", "month"),
-                "prop" => $recent_income->pluck("mean", "month"),
-                "costs" => $recent_costs->pluck("sum", "month"),
+                "income" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
+                "prop" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[1]]),
+                "costs" => $recent_costs->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
                 "gross" => $recent_gross,
                 "total" => [
                     "main" => $finances_total,

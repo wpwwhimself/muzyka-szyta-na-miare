@@ -151,6 +151,11 @@
                 </p>
             @endif
         </section>
+
+        <section class="input-group">
+            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+            <x-quest-history :quest="$request" />
+        </section>
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">
@@ -279,9 +284,4 @@
         @endif
     </div>
 </form>
-
-<section class="input-group">
-    <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
-    <x-quest-history :quest="$request" />
-</section>
 @endsection

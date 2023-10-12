@@ -1,6 +1,6 @@
 @props(['id', 'file'])
 
-<a 
+<a
   href="{{ route('download', ['id' => $id, 'filename' => basename($file)]) }}"
   class="file-tile {{ pathinfo($file, PATHINFO_EXTENSION) }}">
   <div class="container">
@@ -15,7 +15,7 @@
         <i class="fa-solid fa-file-video"></i>
         @break
       @default
-        <i class="fa-solid fa-file-audio"></i>
+        <i class="fa-solid fa-file"></i>
     @endswitch
     <i class="fa-solid fa-download"></i>
   </div>

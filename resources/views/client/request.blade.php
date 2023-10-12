@@ -125,13 +125,15 @@
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
                 @if ($request->deadline)
-                <p><i class="fa-solid fa-circle-question"></i> Termin oddania jest liczony do podanego dnia włącznie.</p>
+                <p><i class="fa-solid fa-circle-question"></i> Termin oddania jest liczony do podanego dnia włącznie.<br>
+                    Są duże szanse, że uda mi się wykonać zlecenie szybciej,<br>
+                    ale to jest najpóźniejszy dzień.
+                </p>
                 @endif
-                <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu będzie można dokonać na 2 sposoby:</p>
                 <ul>
-                    <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
-                        (w tytule ID zlecenia, zostanie ono przyznane po akceptacji),</li>
-                    <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
+                    <li>na numer konta,</li>
+                    <li>BLIKiem na numer telefonu.</li>
                 </ul>
                 <p>
                     Jest ona potrzebna do pobierania plików,<br>
@@ -149,30 +151,18 @@
                 </p>
             @endif
         </section>
-
-        <section class="input-group">
-            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
-            <x-quest-history :quest="$request" />
-        </section>
     </div>
-    @if ($request->status_id == 5)
-    <p class="tutorial">
-        <i class="fa-solid fa-circle-question"></i>
-        Za pomocą poniższych przycisków możesz zaakceptować warunki zlecenia lub,
-        jeśli coś Ci się nie podoba w przygotowanej przeze mnie wycenie, poprosić o wprowadzenie zmian.
-        Instrukcje do tego celu możesz umieścić w oknie, które pojawi się po wybraniu jednej z poniższych opcji.
-        Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
-    </p>
-    @elseif (in_array($request->status_id, [4, 7, 8]))
+    @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">
         <i class="fa-solid fa-circle-question"></i>
         Zapytanie zostało zamknięte, ale nadal możesz je przywrócić w celu ponownego złożenia zamówienia.
     </p>
     @endif
     <div id="phases">
+        <input type="hidden" name="id" value="{{ $request->id }}" />
+        <input type="hidden" name="intent" value="review" />
+        @if($request->status_id != 5)
         <div class="flexright">
-            <input type="hidden" name="id" value="{{ $request->id }}" />
-            <input type="hidden" name="intent" value="review" />
             @if (in_array($request->status_id, [1, 6, 96]))
             <x-button action="#/" statuschanger="{{ $request->status_id }}" is-follow-up="1" icon="{{ $request->status_id }}" label="Popraw ostatni komentarz" />
             @endif
@@ -222,7 +212,7 @@
 
                 const comment_field = document.querySelector("#statuschanger #comment");
                 if($(this).attr("is-follow-up")){
-                    const last_comment = $(`#quest-history .history-position.p-${status}:first ul`).text().trim();
+                    const last_comment = $(`#quest-history .history-position.p-${status}:first .qh-comment`).text().trim();
                     comment_field.innerHTML = last_comment;
                 }else{
                     comment_field.innerHTML = "";
@@ -232,6 +222,66 @@
             });
         });
         </script>
+        @else
+        <div id="opinion-1">
+            <h2>Czy odpowiada Ci powyższa wycena?</h2>
+            <div>
+                <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
+                <x-button label="Nie" icon="times" action="#/" />
+            </div>
+        </div>
+        <div id="opinion-2" class="gone">
+            <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
+            <div>
+                <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" />
+                <x-button optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" />
+                <x-button optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" />
+            </div>
+            <input type="hidden" name="optbc">
+            <div id="opinion-inputs" class="flex-down gone spaced">
+                <x-input type="url" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
+                <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
+                <div class="priority" for="opinion_deadline">
+                    <p>W trybie priorytetowym jestem w stanie wykonać zlecenie poza kolejnością; wiąże się to jednak z podwyższoną ceną.</p>
+                    <div class="flex-right center">
+                        <x-input type="date" name="new-deadline-date" label="Nowy termin oddania pierwszej wersji" :value="get_next_working_day()->format('Y-m-d')" :disabled="true" />
+                        <x-input type="text" name="new-deadline-price" label="Nowa cena zlecenia" :value="as_pln(price_calc($request->price_code.'z', $request->client_id, true)['price'])" :disabled="true" />
+                    </div>
+                </div>
+                <x-input for="opinion_link opinion_wishes" type="TEXT" name="comment" label="Komentarz (opcjonalne)" />
+                <x-button for="opinion_link opinion_wishes" action="submit" icon="6" name="new_status" value="6" label="Oddaj do ponownej wyceny" />
+                <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
+            </div>
+        </div>
+        <script>
+        $(document).ready(function(){
+            $("#opinion-1 a:last").click(function(){
+                $("#opinion-1 a.ghost").removeClass("ghost");
+                $(`#opinion-1 a:first`).addClass("ghost");
+
+                $("#opinion-2").removeClass("gone");
+            });
+
+            $("#opinion-2 a[optbc]").click(function(){
+                let optbc = $(this).attr("optbc");
+                $("input[name='optbc']").val(optbc);
+
+                $("#opinion-2 a[optbc]").addClass("ghost");
+                $(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
+
+                $("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("gone");
+                $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("gone");
+                $("#opinion-2 #opinion-inputs").removeClass("gone");
+                $("#opinion-2 #opinion-submit").removeClass("gone");
+            });
+        });
+        </script>
+        @endif
     </div>
 </form>
+
+<section class="input-group">
+    <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+    <x-quest-history :quest="$request" />
+</section>
 @endsection

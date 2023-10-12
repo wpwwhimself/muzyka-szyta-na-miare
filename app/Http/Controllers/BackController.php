@@ -57,7 +57,7 @@ class BackController extends Controller
 
         if(!in_array(Auth::id(), [0, 1], true)){
             $requests = $requests->where("client_id", $client->id);
-            $quests_total = client_exp(Auth::id());
+            $quests_total = Auth::user()->client->exp;
             $unpaids = Quest::where("client_id", Auth::id())
                 ->whereNotIn("status_id", [18])
                 ->where("paid", 0)
@@ -121,9 +121,9 @@ class BackController extends Controller
         $prices = DB::table("prices")->get();
 
         $discount = (in_array(Auth::id(), [0, 1], true)) ? null : (
-            is_veteran(Auth::id()) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            (Auth::user()->client->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
-            is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+            (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
         $quest_types = QuestType::all()->pluck("type", "id")->toArray();
@@ -404,15 +404,26 @@ class BackController extends Controller
                     "contact_preference" => $rq->contact_preference,
                 ]);
             }
+
+            $changes = [
+                "cena" => $request->price,
+                "termin wykonania" => $request->deadline->format("d.m.Y"),
+            ];
         }else if($intent == "review"){
             //review jako klient
             $request->status_id = $rq->new_status;
+
+            $changes = [];
+
             if($rq->new_status == 1){
                 // $request->price = null;
                 // $request->price_code = null;
                 $request->deadline = null;
                 $request->hard_deadline = null;
                 $request->delayed_payment = null;
+            }elseif($rq->new_status == 6){
+                $changes = ["zmiana ($rq->optbc)" => $request->{$rq->optbc} . " → " . $rq->{"opinion_".$rq->optbc}];
+                $request->{$rq->optbc} = $rq->{"opinion_".$rq->optbc};
             }
             $request->save();
         }
@@ -421,7 +432,7 @@ class BackController extends Controller
         if($is_same_status){
             $request->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
-            $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by);
+            $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by, null, $changes);
         }
 
         // sending mail
@@ -450,7 +461,7 @@ class BackController extends Controller
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
 
-    public function requestFinal($id, $status){
+    public function requestFinal($id, $status, $with_priority = false){
         $request = Request::find($id);
         if(!$request) abort(404, "Nie ma takiego zapytania");
 
@@ -458,6 +469,7 @@ class BackController extends Controller
             return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
 
         $request->status_id = $status;
+        $price = price_calc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
 
         $is_new_client = 0;
 
@@ -512,9 +524,9 @@ class BackController extends Controller
             $quest->song_id = $request->song_id ?? $song->id;
             $quest->client_id = $request->client_id ?? $user->id;
             $quest->status_id = 11;
-            $quest->price_code_override = $request->price_code;
-            $quest->price = $request->price;
-            $quest->deadline = $request->deadline;
+            $quest->price_code_override = $price["labels"];
+            $quest->price = $price["price"];
+            $quest->deadline = ($with_priority) ? get_next_working_day() : $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
             $quest->delayed_payment = $request->delayed_payment;
             $quest->wishes = $request->wishes_quest;
@@ -539,6 +551,8 @@ class BackController extends Controller
             }
 
             $request->quest_id = $quest->id;
+            $request->price_code = $price["labels"];
+            $request->price = $price["price"];
         }
 
         $request->save();
@@ -561,7 +575,7 @@ class BackController extends Controller
         else return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
-    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null){
+    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
         if($re_quest_id){
             $client_id = (strlen($re_quest_id) == 36) ?
                 Request::find($re_quest_id)->client_id :
@@ -575,6 +589,7 @@ class BackController extends Controller
             "new_status_id" => $new_status_id,
             "changed_by" => ($client_id == null && in_array($new_status_id, [1, 6, 8, 9, 96])) ? null : $changed_by ?? Auth::id(),
             "comment" => $comment,
+            "values" => $changes ? json_encode($changes) : null,
             "mail_sent" => $mailing,
             "date" => now(),
         ]);
@@ -585,7 +600,7 @@ class BackController extends Controller
             ->where("new_status_id", $rq->status)
             ->first();
 
-        $history->comment = json_encode(["powód" => $rq->comment]);
+        $history->values = json_encode(["powód" => $rq->comment]);
         $history->save();
 
         $where_to = (!Auth::check()) ? "home" : "dashboard";
@@ -617,7 +632,7 @@ class BackController extends Controller
         if(!$quest) abort(404, "Nie ma takiego zlecenia");
 
         $prices = DB::table("prices")
-            ->where("quest_type_id", song_quest_type($quest->song_id)->id)->orWhereNull("quest_type_id")
+            ->where("quest_type_id", $quest->song->type->id)->orWhereNull("quest_type_id")
             ->orderBy("quest_type_id")->orderBy("indicator")
             ->pluck("service", "indicator")->toArray();
         if($quest->client_id != Auth::id() && !in_array(Auth::id(), [0, 1], true)) abort(403, "To nie jest Twoje zlecenie");
@@ -822,22 +837,23 @@ class BackController extends Controller
         }
 
         // zbierz zmiany
-        $comment = [];
+        $changes = [];
         foreach([
             "cena" => [$price_before, $quest->price],
             "termin oddania pierwszej wersji" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
             "opóźnienie wpłaty" => [$delayed_payment_before?->format("Y-m-d"), $quest->delayed_payment?->format("Y-m-d")],
         ] as $attr => $value){
-            if ($value[0] != $value[1]) $comment[$attr] = $value[0] . " → " . $value[1];
+            if ($value[0] != $value[1]) $changes[$attr] = $value[0] . " → " . $value[1];
         }
-        $comment["zmiana z uwagi na"] = $rq->reason;
+        $changes["zmiana z uwagi na"] = $rq->reason;
 
         app("App\Http\Controllers\BackController")->statusHistory(
             $rq->id,
             31,
-            json_encode($comment),
             null,
-            $mailing
+            null,
+            $mailing,
+            $changes
         );
         return back()->with("success", "Wycena zapytania zmodyfikowana");
     }

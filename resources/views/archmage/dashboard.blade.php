@@ -26,7 +26,7 @@
                     @foreach ($patrons_adepts as $patron)
                     <tr>
                         <td>
-                            <i class="fa-solid fa-{{ is_veteran($patron->id) ? 'user-shield' : 'user' }}"></i>
+                            <i class="fa-solid fa-{{ $patron->is_veteran ? 'user-shield' : 'user' }}"></i>
                             <a href="{{ route('clients', ['search' => $patron->id]) }}">{{ _ct_($patron->client_name) }}</a>
                         </td>
                         <td>
@@ -71,17 +71,17 @@
                     <span>Meta</span>
                 </div>
             @forelse ($data as $key => $quest)
-                <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
+                <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ ($quest->is_priority) ? "priority" : "" }}">
                     <span>{{ $key + 1 }}</span>
                     <span class="quest-main-data flex-down">
                         <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
                         @if($quest->song->artist) <span class="song-artist">{{ $quest->song->artist }}</span> @endif
-                        @if (is_priority($quest->id))
+                        @if ($quest->is_priority)
                         <b>Priorytet</b>
                         @endif
                         <span class="ghost">
                             @if ($quest->client?->client_name)
-                                @if (is_veteran($quest->client->id))
+                                @if ($quest->client->is_veteran)
                                 <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($quest->client->client_name) }}
                                 @else
                                 <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($quest->client->client_name) }}
@@ -179,17 +179,17 @@
                     <span>Meta</span>
                 </div>
             @forelse ($requests as $request)
-            <a href="{{ route('request', $request->id) }}" class="table-row p-{{ $request->status_id }} {{ is_priority($request->id) ? "priority" : "" }}">
+            <a href="{{ route('request', $request->id) }}" class="table-row p-{{ $request->status_id }} {{ ($request->is_priority) ? "priority" : "" }}">
                 <span class="quest-main-data flex-down">
                     <h3 class="song-title">{{ $request->title ?? "bez tytułu" }}</h3>
                     @if($request->artist) <span class="song-artist">{{ $request->artist }}</span> @endif
-                    @if (is_priority($request->id))
+                    @if ($request->is_priority)
                     <b>Priorytet</b>
                     @endif
                     <br>
                     <span class="ghost">
                         @if ($request->client?->client_name)
-                            @if (is_veteran($request->client->id))
+                            @if ($request->client->is_veteran)
                             <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($request->client->client_name) }}
                             @else
                             <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($request->client->client_name) }}

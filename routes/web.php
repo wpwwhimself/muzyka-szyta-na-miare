@@ -45,7 +45,7 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/requests/add-back', "addRequestBack")->name("add-request-back");
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
-    Route::get('/requests/finalize/{id}/{status}', "requestFinal")->name("request-final");
+    Route::get('/requests/finalize/{id}/{status}/{with_priority?}', "requestFinal")->name("request-final");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 
     Route::middleware("auth")->group(function(){

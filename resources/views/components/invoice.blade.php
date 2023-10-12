@@ -62,14 +62,14 @@
         <div class="table-row">
             <span>
                 @if ($quest->pivot->primary)
-                    @switch(song_quest_type($quest->song_id)->id)
+                    @switch($quest->song->type->id)
                         @case(1) Przygotowanie podkładu muzycznego @break
                         @case(2) Przygotowanie nut @break
                         @case(3) Obróbka nagrania @break
                         @default Przygotowanie materiałów muzycznych
                     @endswitch
                 @else
-                    @switch(song_quest_type($quest->song_id)->id)
+                    @switch($quest->song->type->id)
                         @case(1) Przygotowanie poprawek do podkładu muzycznego @break
                         @case(2) Przygotowanie poprawek do nut @break
                         @case(3) Dodatkowa obróbka nagrania @break

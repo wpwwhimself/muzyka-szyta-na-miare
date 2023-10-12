@@ -68,7 +68,7 @@
                                     .off();
                             }
                             if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
-                            $("#client_info").attr("href", "{{ route('quests') }}" + `?client=${$("#client_id").val()}`).show();
+                            $("#client_info").attr("href", "{{ route('clients') }}" + `?search=${$("#client_id").val()}`).show();
                         }
                     });
                 }else{

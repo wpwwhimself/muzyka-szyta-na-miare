@@ -69,8 +69,8 @@
                 <span class="client-exp">
                     <a href="{{ route('quests', ['client' => $client->id]) }}">
                         {{ $client->exp }}
-                        @if (upcoming_quests($client->id))
-                        <span class="upcoming-quests">+{{ upcoming_quests($client->id) }}</span>
+                        @if ($client->upcoming_quests_count)
+                        <span class="upcoming-quests">+{{ $client->upcoming_quests_count }}</span>
                         @endif
                     </a>
                 </span>
@@ -80,7 +80,7 @@
                             {{ _ct_($client->client_name) }}
                         </a>
                     </h3>
-                    <progress id="client_exp" value="{{ $client->exp }}" max="{{ is_veteran($client->id) ? $max_exp : VETERAN_FROM() }}"></progress>
+                    <progress id="client_exp" value="{{ $client->exp }}" max="{{ $client->is_veteran ? $max_exp : VETERAN_FROM() }}"></progress>
                     <br />
                     <span class="ghost">
                         <span @popper(wybredność) class="{{ $client->pickiness > 1 ? 'error' : 'success' }}">

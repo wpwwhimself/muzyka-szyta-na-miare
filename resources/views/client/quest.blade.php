@@ -47,7 +47,7 @@
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>
-            <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ song_quest_type($quest->song_id)->type }}" :disabled="true" :small="true" />
+            <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ $quest->song->type->type }}" :disabled="true" :small="true" />
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
             <x-link-interpreter :raw="$quest->song->link" />
@@ -177,7 +177,7 @@
                             {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}
                         </div>
                         <div class="file-container-c">
-                        @if ($quest->paid || can_see_files($quest->client_id))
+                        @if ($quest->paid || $quest->client->can_see_files)
                             @php usort($ver_bots, "file_order") @endphp
                             @foreach ($ver_bots as $file)
                                 @if (pathinfo($file)['extension'] == "mp4")
@@ -305,7 +305,7 @@
 
                 const comment_field = document.querySelector("#statuschanger #comment");
                 if($(this).attr("is-follow-up")){
-                    const last_comment = $(`#quest-history .history-position.p-${status}:first ul`).text().trim();
+                    const last_comment = $(`#quest-history .history-position.p-${status}:first .qh-comment`).text().trim();
                     comment_field.innerHTML = last_comment;
                 }else{
                     comment_field.innerHTML = "";

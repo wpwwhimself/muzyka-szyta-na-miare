@@ -14,6 +14,7 @@ class StatusChange extends Model
         "new_status_id",
         "changed_by",
         "comment",
+        "values",
         "mail_sent",
         "date",
     ];
@@ -21,6 +22,10 @@ class StatusChange extends Model
     // const CREATED_AT = "date";
     // const UPDATED_AT = "date";
     public $timestamps = false;
+
+    public function getChangesListAttribute(){
+        return json_decode($this->values);
+    }
 
     public function invoice(){
         return $this->hasManyThrough(Invoice::class, InvoiceQuest::class, "quest_id", "id", "re_quest_id", "invoice_id");

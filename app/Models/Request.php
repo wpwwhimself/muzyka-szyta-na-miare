@@ -19,6 +19,10 @@ class Request extends Model
     ];
     protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
 
+    public function getIsPriorityAttribute(){
+        return preg_match("/z/", $this->price_code);
+    }
+
     public function client(){
         return $this->belongsTo(Client::class);
     }

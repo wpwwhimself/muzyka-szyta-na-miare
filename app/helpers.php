@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\CalendarFreeDay;
 use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
-use App\Models\Request;
 use App\Models\Song;
 use App\Models\User;
 use Carbon\Carbon;
@@ -85,17 +85,6 @@ if(!function_exists("_c_")){
 if(!function_exists("_ct_")){
     function _ct_($data){
         return (Auth::id() === 0) ? ($data ? preg_replace("/[\wąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/", "⁎", $data) : null) : $data;
-    }
-}
-
-/**
- * Given song ID, returns type of quest it is based on
- */
-if(!function_exists("song_quest_type")){
-    function song_quest_type($song_id){
-        $type_letter = substr($song_id, 0, 1);
-        if($type_letter == "A") return collect(["id" => 0, "type" => "nie ustalono (archiwalne)", "code" => "A", "fa_symbol" => "fa-circle-question"]);
-        return QuestType::where("code", $type_letter)->first();
     }
 }
 
@@ -185,6 +174,7 @@ if(!function_exists("generate_password")){
 if(!function_exists("price_calc")){
     function price_calc($labels, $client_id, $quoting = false){
         if($client_id == null) $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
+        $client = Client::find($client_id);
         $price_schema = pricing($client_id);
 
         $price = 0; $multiplier = 1; $positions = [];
@@ -194,8 +184,8 @@ if(!function_exists("price_calc")){
             ->get();
 
         if($quoting){
-            if(is_veteran($client_id) && !preg_match_all("/=/", $labels)) $labels .= "=";
-            if(is_patron($client_id) && !preg_match_all("/-/", $labels)) $labels .= "-";
+            if($client->is_veteran && !preg_match_all("/=/", $labels)) $labels .= "=";
+            if($client->is_patron && !preg_match_all("/-/", $labels)) $labels .= "-";
         }
 
         foreach($price_list as $cat){
@@ -248,33 +238,31 @@ if(!function_exists("price_calc")){
     }
 }
 
+/**
+ * Next working day
+ */
+if(!function_exists("get_next_working_day")){
+    function get_next_working_day(){
+        $workdays_capacity = explode(",", setting("available_day_until"));
+        $free_days_soon = CalendarFreeDay::whereBetween("date", [Carbon::today(), Carbon::today()->addWeek()])
+            ->get()->pluck("date")->toArray();
+
+        for($day = Carbon::today()->addDay(); $day->lte(Carbon::today()->addWeek()); $day = $day->addDay()){
+            if($workdays_capacity[$day->format("w")] > 0 && !in_array($day, $free_days_soon))
+                return $day;
+        }
+
+        return null;
+    }
+}
+
 /*************************
  * DETECTIVE FUNCTIONS
  */
 
-/**
- * for quests
- */
-if(!function_exists("is_priority")){
-    function is_priority($quest_id){
-        //requesty mają UUID
-        $is_request = strlen($quest_id) == 36;
-        return preg_match(
-            "/z/",
-            ($is_request ? Request::findOrFail($quest_id)->price_code : Quest::findOrFail($quest_id)->price_code_override)
-        );
-    }
-}
-
-/**
+ /**
  * for clients
  */
-if(!function_exists("can_see_files")){
-    function can_see_files($client_id){
-        if($client_id == "") return false;
-        return Client::findOrFail($client_id)->trust > -1;
-    }
-}
 if(!function_exists("can_download_files")){
     function can_download_files($client_id, $quest_id){
         if($client_id == "") return false;
@@ -283,7 +271,7 @@ if(!function_exists("can_download_files")){
         return
             $trust >= 0
             && (
-                is_veteran($client_id)
+                Client::find($client_id)->is_veteran
                 || $trust == 1
                 || (
                     $quest->delayed_payment !== null
@@ -291,31 +279,6 @@ if(!function_exists("can_download_files")){
                     && $quest->status_id === 19
                 )
             );
-    }
-}
-if(!function_exists("is_veteran")){
-    function is_veteran($client_id){
-        if($client_id == "") return false;
-        return client_exp($client_id) >= VETERAN_FROM();
-    }
-}
-if(!function_exists("is_patron")){
-    function is_patron($client_id){
-        if($client_id == "") return false;
-        return Client::find($client_id)->helped_showcasing == 2;
-    }
-}
-if(!function_exists("client_exp")){
-    function client_exp($client_id){
-        if($client_id == "") return 0;
-        $client = Client::find($client_id);
-        return $client->quests->where("status_id", 19)->count() + $client->extra_exp;
-    }
-}
-if(!function_exists("upcoming_quests")){
-    function upcoming_quests($client_id){
-        if($client_id == "") return 0;
-        return Client::find($client_id)->quests->whereIn("status_id", [11, 12, 15, 16, 26])->count();
     }
 }
 if(!function_exists("pricing")){

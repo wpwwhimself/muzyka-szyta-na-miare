@@ -1,5 +1,5 @@
 @props(['quest', "queue" => null])
-<div class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
+<div class="quest-mini hover-light q-container p-{{ $quest->status_id }} {{ ($quest->is_priority) ? "priority" : "" }}">
     <a href="{{ route((strlen($quest->id) > 10) ? "request" : "quest", $quest->id) }}" class="song-title-artist">
         <p class="song-artist"><i class="fa-solid {{ $quest->status->status_symbol }}"></i> {{ $quest->status->status_name }}</p>
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
@@ -8,7 +8,7 @@
     @if (in_array(Auth::id(), [0, 1], true))
     <div class="quest-client">
         @if ($quest->client_id)
-            @if (is_veteran($quest->client_id))
+            @if ($quest->client->is_veteran)
             <i class="fa-solid fa-user-shield" @popper(Klient)></i>
             @else
             <i class="fa-solid fa-user" @popper(Klient)></i>
@@ -72,9 +72,9 @@
             @unless (strlen($quest->id) > 10)
             <p class="quest-id">
                 <x-quest-type
-                    :id="song_quest_type($quest->song_id)->id ?? 0"
-                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
-                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                    :id="$quest->song->type->id ?? 0"
+                    :label="$quest->song->type->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                     :small="true"
                     />
                 {{ $quest->id }}

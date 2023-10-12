@@ -26,18 +26,34 @@ class Client extends Model
     public function questsDone(){
         return $this->hasMany(Quest::class)->where("status_id", 19);
     }
-    public function isWoman(){
+
+    public function getExpAttribute(){
+        return $this->quests->where("status_id", 19)->count() + $this->extra_exp;
+    }
+    public function getIsWomanAttribute(){
         return (
             substr(explode(" ", $this->client_name)[0], -1) == "a"
         );
     }
-    public function isOld(){
+    public function getIsOldAttribute(){
         return $this->created_at < BEGINNING();
+    }
+    public function getIsVeteranAttribute(){
+        return $this->exp >= VETERAN_FROM();
+    }
+    public function getIsPatronAttribute(){
+        return $this->helped_showcasing == 2;
     }
     public function getPickinessAttribute(){
         $correction_requests = StatusChange::where("changed_by", $this->id)->whereIn("new_status_id", [16, 26])->count();
         $quests_total = $this->quests->count();
         if($quests_total == 0) return 0;
         return round($correction_requests / $quests_total, 2);
+    }
+    public function getCanSeeFilesAttribute(){
+        return $this->trust > -1;
+    }
+    public function getUpcomingQuestsCountAttribute(){
+        return $this->quests->whereIn("status_id", [11, 12, 15, 16, 26])->count();
     }
 }

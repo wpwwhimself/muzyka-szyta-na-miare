@@ -26,9 +26,9 @@
         <div id="song{{ $song->id }}" class="table-row">
             <span class="quest-main-data">
                 <x-quest-type
-                    :id="song_quest_type($song->id)->id ?? 0"
-                    :label="song_quest_type($song->id)->type ?? 'nie zdefiniowano'"
-                    :fa-symbol="song_quest_type($song->id)->fa_symbol ?? 'fa-circle-question'"
+                    :id="$song->type->id ?? 0"
+                    :label="$song->type->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="$song->type->fa_symbol ?? 'fa-circle-question'"
                     />
                 <span>
                     <h3 class="song-title">{{ $song->title ?? "bez tytułu" }}</h3>

@@ -19,9 +19,9 @@
                 @csrf
                 <div id="quest-song-id">
                     <x-quest-type
-                        :id="song_quest_type($quest->song_id)->id ?? 0"
-                        :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
-                        :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                        :id="$quest->song->type->id ?? 0"
+                        :label="$quest->song->type->type ?? 'nie zdefiniowano'"
+                        :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                         />
                     <x-input type="text" name="" label="ID utworu" value="{{ $quest->song->id }}" :disabled="true" :small="true" />
                     <input type="hidden" name="id" value="{{ $quest->song->id }}" />
@@ -190,7 +190,7 @@
                     Pliki
                     @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
                         <i class="success fa-solid fa-check" @popper(Uprawniony do pobierania)></i>
-                    @elseif (can_see_files($quest->client_id))
+                    @elseif ($quest->client->can_see_files)
                         <i class="warning fa-solid fa-eye" @popper(Widzi podglądy)></i>
                     @else
                         <i class="error fa-solid fa-xmark" @popper(Klient nic nie widzi)></i>

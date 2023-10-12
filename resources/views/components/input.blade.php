@@ -11,7 +11,10 @@
 <div {{
     $attributes
         ->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "placeholder", "small"])))
-        ->merge(["class" => ($small) ? "input-container input-small" : "input-container"])
+        ->merge([
+            "class" => ($small) ? "input-container input-small" : "input-container",
+            "for" => $name
+        ])
     }}>
 
     @if ($hint && $type != "hidden")
@@ -38,7 +41,7 @@
             {{ $autofocus ? "autofocus" : "" }}
             {{ $required ? "required" : "" }}
             {{ $disabled ? "disabled" : "" }}
-            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required"]))) }}
+            {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "class"]))) }}
             onfocus="highlightInput(this)" onblur="clearHighlightInput(this)"
             >{{ html_entity_decode($value) }}</textarea>
     @else

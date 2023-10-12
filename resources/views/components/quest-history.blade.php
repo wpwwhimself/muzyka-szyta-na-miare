@@ -12,15 +12,15 @@
             @elseif ($item->mail_sent === 0)
             <i class="fa-solid fa-comment" @popper(Wiadomość wysłana pozamailowo)></i>
             @endif
-            <ul>
-            @if (substr($item->comment, 0, 1) != "{")
-            {!! str_replace("\n", "<br>", ($item->changed_by != 1 ? _ct_($item->comment) : $item->comment)) !!}{{ $item->new_status_id != 32 ? "" : " zł" }}
-            @else
-            @foreach (json_decode($item->comment) ?? [] as $key=>$val)
-            <li>{{ $key }}: {{ $val }}</li>
+            <ul class="qh-values ghost">
+            @foreach (json_decode($item->values) ?? [] as $key => $val)
+                <li>{{ $key }}: {{ $val }}</li>
             @endforeach
-            @endif
             </ul>
+            <div class="qh-comment ghost">
+                {!! Illuminate\Mail\Markdown::parse(($item->changed_by != 1 ? _ct_($item->comment) : $item->comment) ?? "") !!}
+                {{ $item->new_status_id != 32 ? "" : "zł" }}
+            </div>
         </span>
         <span>{!! str_replace(" ", "<br>", $item->date) !!}</span>
     </div>

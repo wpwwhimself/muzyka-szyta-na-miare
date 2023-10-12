@@ -33,7 +33,7 @@
             </span>
             <span>
             @if ($request->client?->client_name)
-                @if (is_veteran($request->client->id))
+                @if ($request->client->is_veteran)
                 <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($request->client->client_name) }}
                 @else
                 <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($request->client->client_name) }}

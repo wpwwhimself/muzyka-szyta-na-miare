@@ -10,7 +10,7 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
-    @if (!(is_veteran($quest->client_id) || $quest->client->trust == 1))
+    @if (!($quest->client->is_veteran || $quest->client->trust == 1))
     <p>
         Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniem za pomocą odpowiednich przycisków w widoku zlecenia.
     </p>

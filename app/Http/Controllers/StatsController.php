@@ -228,7 +228,7 @@ class StatsController extends Controller
                             ->where("extra_exp", 0)
                             ->count(),
                         "kobiety" => Client::all()
-                            ->filter(fn($client) => $client->isWoman())
+                            ->filter(fn($client) => $client->is_woman)
                             ->count(),
                     ],
                     "total" => Client::all()->count(),

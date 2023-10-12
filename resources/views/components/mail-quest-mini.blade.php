@@ -5,7 +5,7 @@
         <td class="framed-cell">
             <p>
             @if ($quest->song)
-            {{ song_quest_type($quest->song->id)->type }}
+            {{ $quest->song->type->type }}
             @else
             {{ DB::table("quest_types")->find($quest->quest_type_id)->type }}
             @endif

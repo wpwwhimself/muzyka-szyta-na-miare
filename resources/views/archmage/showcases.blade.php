@@ -20,7 +20,7 @@
     @foreach ($potential_showcases as $song)
         <x-button action="#/" :small="true"
             label="{!! $song->title !!} ({{ $song->artist }})"
-            icon="{{ substr(song_quest_type($song->id)->fa_symbol, 3) }}"
+            icon="{{ substr($song->type->fa_symbol, 3) }}"
             value="{{ $song->id }}"
             />
     @endforeach

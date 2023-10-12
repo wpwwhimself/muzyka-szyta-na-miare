@@ -22,7 +22,7 @@
                     <span>
                         @if (Auth::user()->client->trust == -1)
                         <i class="fa-solid fa-user-ninja error"></i> niezaufany
-                        @elseif (is_veteran(Auth::id()))
+                        @elseif (Auth::user()->client->is_veteran)
                         <i class="fa-solid fa-user-shield"></i> stały klient
                         @else
                         <i class="fa-solid fa-user"></i> klient początkujący<br>
@@ -30,7 +30,7 @@
                         @endif
                     </span>
 
-                    @if (is_patron(Auth::id()))
+                    @if (Auth::user()->client->is_patron)
                     <span>Pomoc w reklamie</span>
                     <span>odnotowana</span>
                     @endif
@@ -40,9 +40,9 @@
                         {{
                             Auth::user()->client->special_prices ? "spersonalizowany cennik"
                             : (
-                                is_veteran(Auth::id()) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+                                (Auth::user()->client->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
                                 +
-                                is_patron(Auth::id()) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+                                (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
                             )*100 . "%"
                         }}
                     </span>
@@ -81,7 +81,7 @@
             </table>
             @endif
 
-            @if ($quests_total && !is_patron(Auth::id()) && Auth::user()->client->helped_showcasing != 1)
+            @if ($quests_total && !Auth::user()->client->is_patron && Auth::user()->client->helped_showcasing != 1)
             <br>
             <div class="section-header showcase-highlight">
                 <h1><i class="fa-solid fa-award"></i> Oceń naszą współpracę</h1>
@@ -103,7 +103,7 @@
                 </p>
                 <x-button
                     label="Właśnie wystawił{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
-                    action="{{ route('patron-mode', ['id' => Auth::id(), 'level' => 1]) }}"
+                    action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
                     />
             </form>
             @endif

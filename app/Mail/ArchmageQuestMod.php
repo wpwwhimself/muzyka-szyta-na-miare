@@ -35,7 +35,7 @@ class ArchmageQuestMod extends Mailable
         return ($this->isRequest) ?
             $this
             ->from('kontakt@muzykaszytanamiare.pl', 'Goniec MSZNM')
-            ->subject("[".$this->quest->status->status_name."] ".$this->quest->title)
+            ->subject("[".$this->quest->status->status_name.($this->quest->is_priority ? " PRIORYTETOWO" : "")."] ".$this->quest->title)
             ->replyTo($this->quest->email ?? $this->quest->client?->email, $this->quest->name ?? $this->quest->client?->name)
             ->view('emails.archmage-quest-mod')
             :

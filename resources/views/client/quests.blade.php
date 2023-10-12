@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    @if (Auth::user()->client->isOld())
+    @if (Auth::user()->client->is_old)
     <p class="yellowed-out">
         <i class="fa-solid fa-triangle-exclamation"></i>
         Bardzo prawdopodobnym jest, że poniższa lista jest niepełna.
@@ -46,9 +46,9 @@
         <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }}">
             <span class="quest-main-data">
                 <x-quest-type
-                    :id="song_quest_type($quest->song_id)->id ?? 0"
-                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
-                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                    :id="$quest->song->type->id ?? 0"
+                    :label="$quest->song->type->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                     />
                 <span>
                     <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>

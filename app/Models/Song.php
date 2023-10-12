@@ -37,4 +37,9 @@ class Song extends Model
     public function getHasShowcaseFileAttribute(){
         return Storage::exists("showcases/$this->id.ogg");
     }
+    public function getTypeAttribute(){
+        $type_letter = substr($this->id, 0, 1);
+        if($type_letter == "A") return collect(["id" => 0, "type" => "nie ustalono (archiwalne)", "code" => "A", "fa_symbol" => "fa-circle-question"]);
+        return QuestType::where("code", $type_letter)->first();
+    }
 }

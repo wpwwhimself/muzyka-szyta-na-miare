@@ -100,8 +100,11 @@ div, form{
     display: flex;
     flex-direction: column;
 }
-.center{
+.flex-down.center{
     align-items: center;
+}
+.flex-right.center{
+    justify-content: center;
 }
 .hover-lift:hover{
     color: inherit;
@@ -150,6 +153,9 @@ b.priority, .priority b{
 }
 .tutorial ul{ margin: 0; }
 .tutorial p{ margin: 0.2em auto; }
+.spaced{
+    margin: 1em;
+}
 
 /* CLICKABLE */
 a{
@@ -712,7 +718,15 @@ footer .contact-info{
 .history-position.by-me{ margin-left: 2em; }
 .history-position span:nth-child(1){ text-align: left; }
 .history-position .client-name{ font-style: italic; }
-.history-position ul{ margin: 0; padding-left: 1em; opacity: 0.5; font-size: 0.8em; max-width: 250px; }
+.history-position .qh-values, .history-position .qh-comment{
+    margin: 0; font-size: 0.8em; max-width: 250px;
+}
+.history-position .qh-values{
+    padding-left: 1em;
+}
+.history-position .qh-comment p{
+    margin: 0;
+}
 
 #document-dropzone{
     background: none;
@@ -939,10 +953,6 @@ footer .contact-info{
 
 #phases{
     margin-top: 2em;
-}
-#phases textarea{
-    border-top-style: solid;
-    border-top-color: rgb(227, 227, 227);
 }
 
 #invoice{

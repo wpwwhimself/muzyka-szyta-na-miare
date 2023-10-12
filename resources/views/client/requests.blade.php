@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    @if (Auth::user()->client->isOld())
+    @if (Auth::user()->client->is_old)
     <p class="yellowed-out">
         <i class="fa-solid fa-triangle-exclamation"></i>
         Bardzo prawdopodobnym jest, że poniższa lista jest niepełna.

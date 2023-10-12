@@ -21,24 +21,24 @@
         </div>
         <hr />
         @forelse ($quests as $quest)
-        <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ is_priority($quest->id) ? "priority" : "" }}">
+        <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ ($quest->is_priority) ? "priority" : "" }}">
             <span class="quest-main-data">
                 <x-quest-type
-                    :id="song_quest_type($quest->song_id)->id ?? 0"
-                    :label="song_quest_type($quest->song_id)->type ?? 'nie zdefiniowano'"
-                    :fa-symbol="song_quest_type($quest->song_id)->fa_symbol ?? 'fa-circle-question'"
+                    :id="$quest->song->type->id ?? 0"
+                    :label="$quest->song->type->type ?? 'nie zdefiniowano'"
+                    :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                     />
                 <span>
                     <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
                     <span class="song-artist">{{ $quest->song->artist }}</span>
-                    @if (is_priority($quest->id))
+                    @if ($quest->is_priority)
                     • <b>Priorytet</b>
                     @endif
                 </span>
             </span>
             <span>
             @if ($quest->client?->client_name)
-                @if (is_veteran($quest->client->id))
+                @if ($quest->client->is_veteran)
                 <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($quest->client->client_name) }}
                 @else
                 <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($quest->client->client_name) }}

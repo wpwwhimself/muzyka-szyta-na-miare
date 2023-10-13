@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
+use App\Mail\Onboarding;
 use App\Mail\PatronRejected;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestRequoted;
@@ -573,6 +574,17 @@ class BackController extends Controller
 
         if(in_array(Auth::id(), [0, 1], true)) return redirect()->route("request", ["id" => $request->id]);
         else return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
+    }
+
+    public function requestFinalized($id, $status, $is_new_client){
+        $request = Request::findOrFail($id);
+        if($request->client->email){
+            Mail::to($request->client->email)->send(new Onboarding($request->client));
+        }
+        return view("request-finalized", array_merge(
+            ["title" => "Zapytanie zamknięte"],
+            compact("id", "status", "is_new_client", "request")
+        ));
     }
 
     public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){

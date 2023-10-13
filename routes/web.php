@@ -46,6 +46,7 @@ Route::controller(BackController::class)->group(function(){
     Route::post('/requests/mod-back', "modRequestBack")->name("mod-request-back");
 
     Route::get('/requests/finalize/{id}/{status}/{with_priority?}', "requestFinal")->name("request-final");
+    Route::get('/request-finalized/{id}/{status}/{is_new_client}', "requestFinalized")->name("request-finalized");
     Route::post("/request-finalized-sub", "questReject")->name("quest-reject");
 
     Route::middleware("auth")->group(function(){
@@ -130,13 +131,6 @@ Route::controller(ClientController::class)->group(function(){
         });
     });
 });
-
-Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $status, $is_new_client){
-    return view("request-finalized", array_merge(
-        ["title" => "Zapytanie zamknięte"],
-        compact("id", "status", "is_new_client")
-    ));
-})->name("request-finalized");
 
 /* MAILING */
 Route::get("/mp/{method}/{params}", function($method, $params = null){

@@ -306,6 +306,7 @@
                 <thead>
                     <tr>
                         <th>ReQuest</th>
+                        <th>Klient</th>
                         <th>Status</th>
                         <th>Komentarz</th>
                         <th>Mail</th>
@@ -319,6 +320,11 @@
                                 class="ghost"
                             @endif>
                                 {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ route('clients', ['search' => $i->re_quest->client_id]) }}">
+                                {{ $i->is_request ? $i->re_quest->client_name : $i->re_quest->client->client_name }}
                             </a>
                         </td>
                         <td>
@@ -342,7 +348,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan=2>
+                        <td colspan=5>
                             <span class="grayed-out">
                                 <i class="fa-solid fa-bed"></i>
                                 Sprzątacz dzisiaj śpi

@@ -10,14 +10,9 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
-    <p>
-        Teraz w statusie: <b>{{ $quest->status->status_name }}</b>
-        @if ($comment = $quest->changes->first()?->comment)
-        <br>
-        <b>Komentarz:</b>
-        {{ $comment }}
-        @endif
-    </p>
+    @if ($comment = $quest->changes->first()?->comment)
+    {{ Illuminate\Mail\Markdown::parse($comment) }}
+    @endif
 
     <h3>
         <a

@@ -27,7 +27,7 @@ class ArchmageQuestMod extends Mailable
             $this->quest = ($this->isRequest) ? Request::findOrFail($data) : Quest::findOrFail($data);
         }else{
             $this->quest = $data;
-            $this->isRequest = strlen($this->quest->id);
+            $this->isRequest = strlen($this->quest->id) == 36;
         }
     }
 

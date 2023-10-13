@@ -238,9 +238,10 @@
         <div id="opinion-2" class="gone">
             <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
             <div>
-                <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" />
-                <x-button optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" />
-                <x-button optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" />
+                <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
+                <x-button optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" :small="true" />
+                <x-button optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" :small="true" />
+                <x-button optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
             </div>
             <input type="hidden" name="optbc">
             <div id="opinion-inputs" class="flex-down gone spaced">
@@ -253,8 +254,9 @@
                         <x-input type="text" name="new-deadline-price" label="Nowa cena zlecenia" :value="as_pln(price_calc($request->price_code.'z', $request->client_id, true)['price'])" :disabled="true" />
                     </div>
                 </div>
-                <x-input for="opinion_link opinion_wishes" type="TEXT" name="comment" label="Komentarz (opcjonalne)" />
+                <x-input for="opinion_link opinion_wishes opinion_nothing" type="TEXT" name="comment" label="Komentarz (opcjonalne)" />
                 <x-button for="opinion_link opinion_wishes" action="submit" icon="6" name="new_status" value="6" label="Oddaj do ponownej wyceny" />
+                <x-button for="opinion_nothing" action="submit" icon="8" name="new_status" value="8" label="Zrezygnuj z zapytania" />
                 <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
             </div>
         </div>

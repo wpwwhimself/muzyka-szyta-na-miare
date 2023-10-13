@@ -127,10 +127,10 @@ div, form{
 .ghost{
     opacity: 0.4;
 }
-div.priority{
+div.priority, .submit.priority{
     border: 3px solid rgb(var(--danger));
 }
-b.priority, .priority b{
+b.priority, .priority b, .submit.priority{
     color: rgb(var(--danger));
 }
 .grayed-out{
@@ -721,11 +721,15 @@ footer .contact-info{
 .history-position .qh-values, .history-position .qh-comment{
     margin: 0; font-size: 0.8em; max-width: 250px;
 }
-.history-position .qh-values{
+.history-position ul{
     padding-left: 1em;
 }
-.history-position .qh-comment p{
+.history-position .qh-comment p,
+.history-position ul{
     margin: 0;
+}
+.history-position .qh-values{
+    list-style-type: circle;
 }
 
 #document-dropzone{
@@ -953,6 +957,13 @@ footer .contact-info{
 
 #phases{
     margin-top: 2em;
+}
+.archmage-quest-phases{
+    margin: 0 !important;
+}
+.archmage-quest-phases .input-container{
+    display: inline-flex;
+    vertical-align: middle;
 }
 
 #invoice{

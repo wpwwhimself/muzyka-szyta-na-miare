@@ -3,17 +3,37 @@
 @section('content')
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
-    <script>
-    $(document).ready(function(){
-        const status = parseInt($(".quest-phase").attr("status"));
-        //disabling inputs if no change is allowed
-        if([4, 5, 7, 8, 9].includes(status)){
-            $("input:not(input[type=hidden]), select, textarea:not(#comment)").prop("disabled", true);
-        };
-    });
-    </script>
     <h1>Szczegóły zapytania</h1>
+
     <x-phase-indicator :status-id="$request->status_id" />
+
+    <div id="phases" class="archmage-quest-phases">
+        @if ($request->status_id != 9) <x-input type="TEXT" name="comment" label="Komentarz do zmiany" /> @endif
+        <input type="hidden" name="id" value="{{ $request->id }}" />
+        <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8, 95]) ? 'review' : 'change' }}" />
+        
+        @foreach ([
+            ["Oddaj", 5, [1, 6, 96]],
+            ["Doprecyzuj", 95, [1, 6, 96]],
+            ["Klient odpowiada", 96, [95]],
+            ["Odmów", 4, [1, 6, 96]],
+            ["Klient przyjmuje", 9, [5]],
+            ["Klient przyjmuje pilnie", -9, [5]],
+            ["Klient chce poprawki", 6, [5]],
+            ["Klient odrzuca", 8, [5, 95]],
+            ["Klient odnawia", 1, [4, 7, 8]],
+        ] as [$label, $status_id, $show_on_statuses])
+            @if (in_array($request->status_id, $show_on_statuses))
+            <x-button :action="abs($status_id) == 9 ? route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => $status_id < 0]) : 'submit'"
+                name="new_status"
+                :icon="abs($status_id)"
+                :value="$status_id"
+                :label="$label"
+                :class="$status_id < 0 ? 'priority' : ''"
+                />
+            @endif
+        @endforeach
+    </div>
 
     @if ($request->quest_id)
     <h2>
@@ -254,19 +274,6 @@
             <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
             <x-quest-history :quest="$request" />
         </section>
-    </div>
-    <div id="step-1" class="flexright">
-        <x-input type="TEXT" name="comment" label="Komentarz do zmiany" />
-        <input type="hidden" name="id" value="{{ $request->id }}" />
-        <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8]) ? 'review' : 'change' }}" />
-        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Poproś o doprecyzowanie" icon="95" name="new_status" value="95" action="submit" /> @endif
-        @if (in_array($request->status_id, [95])) <x-button label="Klient odpowiada" icon="96" name="new_status" value="96" action="submit" /> @endif
-        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Popraw i oddaj do wyceny" icon="5" name="new_status" value="5" action="submit" /> @endif
-        @if (in_array($request->status_id, [1, 6, 96])) <x-button label="Nie podejmę się" icon="4" name="new_status" value="4" :danger="true" action="submit" /> @endif
-        @if (in_array($request->status_id, [5])) <x-button label="Klient zatwierdza" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
-        @if (in_array($request->status_id, [5])) <x-button label="Klient chce poprawki" name="new_status" value="6" icon="6" action="submit" /> @endif
-        @if (in_array($request->status_id, [5, 95])) <x-button label="Klient odrzuca" name="new_status" value="8" icon="8" :danger="true" action="submit" /> @endif
-        @if (in_array($request->status_id, [4, 7, 8])) <x-button label="Klient odnawia" icon="26" name="new_status" value="1" action="submit" /> @endif
     </div>
 </form>
 

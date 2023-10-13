@@ -173,7 +173,7 @@ if(!function_exists("generate_password")){
  */
 if(!function_exists("price_calc")){
     function price_calc($labels, $client_id, $quoting = false){
-        if($client_id == null) $client_id = $_POST['client_id']; //odczyt tak, bo nie chce złapać argumentu
+        if($client_id == null) $client_id = $_POST['client_id'] ?? null; //odczyt tak, bo nie chce złapać argumentu
         $client = Client::find($client_id);
         $price_schema = pricing($client_id);
 
@@ -184,10 +184,11 @@ if(!function_exists("price_calc")){
             ->get();
 
         if($quoting){
-            if($client->is_veteran && !preg_match_all("/=/", $labels)) $labels .= "=";
-            if($client->is_patron && !preg_match_all("/-/", $labels)) $labels .= "-";
+            if($client?->is_veteran && !preg_match_all("/=/", $labels)) $labels .= "=";
+            if($client?->is_patron && !preg_match_all("/-/", $labels)) $labels .= "-";
         }
 
+        $quest_type_present = null;
         foreach($price_list as $cat){
             preg_match_all("/$cat->indicator/", $labels, $matches);
             if(count($matches[0]) > 0):

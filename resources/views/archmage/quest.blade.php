@@ -8,6 +8,28 @@
 
     <x-phase-indicator :status-id="$quest->status_id" />
 
+    <form action="{{ route('mod-quest-back') }}" method="POST" id="phases" class="archmage-quest-phases">
+        <div class="flexright">
+            @csrf
+            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
+            <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+            @foreach ([
+                ["Rozpocznij", 12, [11, 13, 16, 26, 96]],
+                ["Oddaj", 15, [11, 12, 13, 16, 26, 96]],
+                ["Doprecyzuj", 95, [11, 12, 13, 16, 26, 96]],
+                ["Klient odpowiada", 96, [95]],
+                ["Zawieś", 13, [12, 16, 96]],
+                ["Klient akceptuje", 19, [15, 96]],
+                ["Klient cofa", 16, [15]],
+                ["Klient odrzuca", 18, [11, 12, 13, 15, 16, 95, 96]],
+                ["Kient przywraca", 26, [17, 18, 19]],
+                ["Wygaś", 17, [13, 15]],
+            ] as [$label, $status_id, $show_on_statuses])
+                @if (in_array($quest->status_id, $show_on_statuses)) <x-button action="submit" name="status_id" :icon="$status_id" :value="$status_id" :label="$label" /> @endif
+            @endforeach
+        </div>
+    </form>
+
     <div id="quest-box" class="flex-right">
         <section class="input-group">
             <h2>
@@ -371,29 +393,11 @@
             </section>
         </div>
 
-        <section class="input-group">
+        <section class="input-group @if($quest->status_id == 12) first @endif">
             <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
             <x-quest-history :quest="$quest" />
         </section>
     </div>
-
-    <form action="{{ route('mod-quest-back') }}" method="POST" id="phases">
-        <div class="flexright">
-            @csrf
-            <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
-            <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [12, 13, 16, 26, 96])) <x-button action="submit" name="status_id" icon="95" value="95" label="Doprecyzuj" /> @endif
-            @if (in_array($quest->status_id, [95])) <x-button action="submit" name="status_id" icon="96" value="96" label="Klient odpowiada" /> @endif
-            @if (in_array($quest->status_id, [11, 13, 16, 26, 96])) <x-button action="submit" name="status_id" icon="12" value="12" label="Rozpocznij prace" /> @endif
-            @if (in_array($quest->status_id, [12, 16, 96])) <x-button action="submit" name="status_id" icon="13" value="13" label="Zawieś prace" /> @endif
-            @if (in_array($quest->status_id, [12, 13, 16, 26, 96])) <x-button action="submit" name="status_id" icon="15" value="15" label="Oddaj do recenzji" /> @endif
-            @if (in_array($quest->status_id, [15])) <x-button action="submit" name="status_id" icon="16" value="16" label="Klient cofa" /> @endif
-            @if (in_array($quest->status_id, [11, 12, 13, 15, 16, 95, 96])) <x-button action="submit" name="status_id" icon="18" value="18" label="Klient odrzuca" :danger="true" /> @endif
-            @if (in_array($quest->status_id, [15, 96])) <x-button action="submit" name="status_id" icon="19" value="19" label="Klient akceptuje"  /> @endif
-            @if (in_array($quest->status_id, [17, 18, 19])) <x-button action="submit" name="status_id" icon="26" value="26" label="Klient przywraca" /> @endif
-            @if (in_array($quest->status_id, [13, 15])) <x-button action="submit" name="status_id" icon="17" value="17" label="Wygaś" /> @endif
-        </div>
-    </form>
 </div>
 
 @endsection

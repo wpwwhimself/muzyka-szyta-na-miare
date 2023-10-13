@@ -405,10 +405,10 @@ class BackController extends Controller
                 ]);
             }
 
-            $changes = [
+            $changes = ($request->price || $request->deadline) ? [
                 "cena" => $request->price,
-                "termin wykonania" => $request->deadline->format("d.m.Y"),
-            ];
+                "termin wykonania" => $request->deadline?->format("d.m.Y"),
+            ] : null;
         }else if($intent == "review"){
             //review jako klient
             $request->status_id = $rq->new_status;
@@ -421,7 +421,7 @@ class BackController extends Controller
                 $request->deadline = null;
                 $request->hard_deadline = null;
                 $request->delayed_payment = null;
-            }elseif($rq->new_status == 6){
+            }elseif($rq->new_status == 6 && $rq->optbc){
                 $changes = ["zmiana ($rq->optbc)" => $request->{$rq->optbc} . " → " . $rq->{"opinion_".$rq->optbc}];
                 $request->{$rq->optbc} = $rq->{"opinion_".$rq->optbc};
             }

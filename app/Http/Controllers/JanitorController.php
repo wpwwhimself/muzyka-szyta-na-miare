@@ -148,8 +148,10 @@ class JanitorController extends Controller
          */
         $quests = Quest::where("paid", 0)
             ->where("status_id", 19)
-            ->whereDate("delayed_payment", "<", Carbon::today())
-            ->get();
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", "<", Carbon::today())
+                ->orWhereNull("delayed_payment")
+            )->get();
         foreach($quests as $quest){
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1

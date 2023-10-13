@@ -139,11 +139,11 @@ Route::get('/request-finalized/{id}/{status}/{is_new_client}', function($id, $st
 })->name("request-finalized");
 
 /* MAILING */
-Route::get("/mp-rq/{id}", function($id){ return new App\Mail\RequestQuoted(ModelsRequest::findOrFail($id)); })->name("mp-rq");
-Route::get("/mp-q/{id}", function($id){ return new App\Mail\QuestUpdated(Quest::findOrFail($id)); })->name("mp-q");
-Route::get("/mp-q-p/{id}", function($id){ return new App\Mail\PaymentReceived(Quest::findOrFail($id)); })->name("mp-q-p");
-Route::get("/mp-w/{id}", function($id){ return new App\Mail\_Welcome(Client::findOrFail($id)); })->name("mp-w");
-Route::get("/mp-aqm/{id}", function($id){ return new App\Mail\ArchmageQuestMod(Quest::findOrFail($id)); })->name("mp-aqm");
+Route::get("/mp/{method}/{params}", function($method, $params = null){
+    $method = "App\\Mail\\".$method;
+    $params = explode(",", $params);
+    return new $method(...$params);
+});
 
 /* MAGIC SPELLS */
 Route::middleware("auth")->group(function(){

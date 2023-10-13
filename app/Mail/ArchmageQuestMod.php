@@ -2,7 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\StatusChange;
+use App\Models\Quest;
+use App\Models\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -19,10 +20,15 @@ class ArchmageQuestMod extends Mailable
      */
     public $quest;
     public $isRequest;
-    public function __construct($quest)
+    public function __construct($data)
     {
-        $this->quest = $quest;
-        $this->isRequest = strlen($quest->id) == 36;
+        if(is_string($data)){
+            $this->isRequest = strlen($data) == 36;
+            $this->quest = ($this->isRequest) ? Request::findOrFail($data) : Quest::findOrFail($data);
+        }else{
+            $this->quest = $data;
+            $this->isRequest = strlen($this->quest->id);
+        }
     }
 
     /**

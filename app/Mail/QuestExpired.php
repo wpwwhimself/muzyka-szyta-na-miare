@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Quest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -21,9 +22,9 @@ class QuestExpired extends Mailable
     public $pl;
     public function __construct($quest, $reason)
     {
-        $this->quest = $quest;
+        $this->quest = is_string($quest) ? Quest::findOrFail($quest) : $quest;
         $this->reason = $reason;
-        $this->pl = client_polonize($quest->client->client_name);
+        $this->pl = client_polonize($this->quest->client->client_name);
     }
 
     /**

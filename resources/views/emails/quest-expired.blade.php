@@ -5,7 +5,8 @@
 @section('content')
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
-        ze względu na {{ $reason }} zamówione przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} zlecenie zostało wygaszone.
+        ze względu na {{ $reason }}, zamówione przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} zlecenie zostało wygaszone.
+        Oznacza to, że jest ono traktowane jako odrzucone.
     </p>
 
     <x-mail-quest-mini :quest="$quest" />

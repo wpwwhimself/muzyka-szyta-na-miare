@@ -5,8 +5,8 @@
 @section('content')
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
-        z uwagi na {{ $reason }},
-        jestem zmuszony dokonać zmiany w wycenie {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia.
+        niestety z uwagi na {{ $reason }}, nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
+        Wobec tego muszę dokonać zmiany w wycenie {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia.
     </p>
 
     <x-mail-quest-mini :quest="$quest" />
@@ -36,14 +36,14 @@
 
     @if ($quest->client->budget)
     <p><i>
-        *{{ ($quest->client->budget >= $difference) ? "Całość" : "Część" }}
+        *{{ ($quest->client->budget >= $price_difference) ? "Całość" : "Część" }}
         różnicy kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
         {{ as_pln($quest->client->budget) }}
     </i></p>
     @endif
 
     <p>
-        Niestety z przyczyn wyżej określonych nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
+        
         Jeśli <b>nie zgadza się {{ $pl["kobieta"] ? "Pani" : "Pan" }} na nowe warunki</b> i chce zrezygnować ze zlecenia, proszę o kliknięcie odpowiedniego przycisku w widoku zlecenia.
         W przeciwnym wypadku nie musi {{ $pl["kobieta"] ? "Pani" : "Pan" }} podejmować żadnych czynności.
     </p>

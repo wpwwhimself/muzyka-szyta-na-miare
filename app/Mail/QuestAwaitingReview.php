@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Quest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -20,8 +21,8 @@ class QuestAwaitingReview extends Mailable
     public $pl;
     public function __construct($quest)
     {
-        $this->quest = $quest;
-        $this->pl = client_polonize($quest->client->client_name);
+        $this->quest = is_string($quest) ? Quest::findOrFail($quest) : $quest;
+        $this->pl = client_polonize($this->quest->client->client_name);
     }
 
     /**

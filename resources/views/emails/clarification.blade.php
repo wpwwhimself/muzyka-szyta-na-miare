@@ -6,7 +6,7 @@
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
         w nawiązaniu do złożonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} {{ $is_request ? "zapytania" : "zlecenia" }},
-        chciałbym doprecyzować kwestie poruszone w {{ $pl["kobieta"] ? "Pani" : "Pana" }} komentarzu.
+        chciałbym doprecyzować pewne kwestie jego dotyczące.
     </p>
 
     <x-mail-quest-mini :quest="$re_quest" />
@@ -16,7 +16,7 @@
     @endif
 
     <p>
-        Uprzejmie proszę o odpowiedź. Przyspieszy to moje prace nad zleceniem.
+        Uprzejmie proszę o odpowiedź. Przyspieszy to moje prace nad {{ $is_request ? "zapytaniem" : "zleceniem" }}.
     </p>
 
     <h3>

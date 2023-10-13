@@ -11,10 +11,7 @@
     <x-mail-quest-mini :quest="$quest" />
 
     @if ($comment = $quest->changes->first()->comment)
-    <p>
-        <b>Najnowszy komentarz:</b>
-        {{ $comment }}
-    </p>
+    {{ Illuminate\Mail\Markdown::parse($comment) }}
     @endif
 
     <h3>

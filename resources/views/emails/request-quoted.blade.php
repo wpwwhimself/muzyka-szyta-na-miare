@@ -6,68 +6,17 @@
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
         uprzejmie dziękuję za @if ($request->client_id) ponowne @endif zainteresowanie moimi usługami.
-        Poniżej prezentuję skrót wyceny zlecenia.
+        Wycena {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia została już przeze mnie przygotowana.
     </p>
 
     <x-mail-quest-mini :quest="$request" />
 
-    <table>
-        <tr>
-            @foreach ([
-                "Cena" => as_pln($request->price).(($request->client?->budget) ? "*" : ""),
-                "Termin oddania pierwszej wersji" => ($request->deadline)
-                    ? "do ".$request->deadline?->format("d.m.Y")
-                    : "brak",
-            ] as $key => $val)
-            <td class="framed-cell">
-                <p>{{ $key }}</p>
-                <h2>{{ $val }}</h2>
-            </td>
-            @endforeach
-        </tr>
-    </table>
-
-    @if ($request->delayed_payment)
-        <p><b>
-            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-            proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}.
-        </b></p>
-    @endif
-
-    @if ($request->client?->budget)
-    <p><i>
-        *{{ ($request->client?->budget >= $request->price) ? "Całość" : "Część" }}
-        kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
-        {{ as_pln($request->client?->budget) }}
-    </i></p>
-    @endif
-
-    <p>
-        Termin wykonania został dopasowany do moich możliwości przerobowych. Jest szansa na szybsze wykonanie przeze mnie zlecenia, mimo wszystko jednak podaję górną granicę oczekiwania.
-    </p>
-    <p>
-        Jeśli zlecenie powinno zostać wykonane w trybie pilnym, proszę o odpowiedni komentarz w wycenie, a przekalkuluję wszystko jeszcze raz.
-        Należy się przy tym jednak liczyć z możliwymi większymi kosztami.
-    </p>
-
     @if ($comment = $request->changes->first()->comment)
-    <p>{{ $comment }}</p>
+    {{ Illuminate\Mail\Markdown::parse($comment) }}
     @endif
 
-    <p>
-        Proszę o potwierdzenie warunków przyciskiem poniżej.
-    </p>
+    <p>Uprzejmie proszę o zapoznanie się i wyrażenie swojej opinii za pomocą przycisków dostępnych pod wyceną.</p>
 
-    <h3>
-        Kliknij
-        <a
-            class="button"
-            href="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}"
-            >
-            tutaj,
-        </a>
-        aby potwierdzić warunki
-    </h3>
     <h3>
         Kliknij
         <a

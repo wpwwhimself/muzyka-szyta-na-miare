@@ -18,6 +18,9 @@
     </p>
     @endif
 
+    <p>
+        Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
+    </p>
     <h3>
         Kliknij
         <a
@@ -29,9 +32,6 @@
         aby zalogować się na swoje konto.
     </h3>
 
-    <p>
-        Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
-    </p>
     <p>
         <i>
             Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quests[0]->client->user->password }}</b>

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,10 +19,10 @@ class RequestQuoted extends Mailable
      */
     public $request;
     public $pl;
-    public function __construct($request)
+    public function __construct($data)
     {
-        $this->request = $request;
-        $this->pl = client_polonize($request->client_name);
+        $this->request = is_string($data) ? Request::findOrFail($data) : $data;
+        $this->pl = client_polonize($this->request->client_name);
     }
 
     /**

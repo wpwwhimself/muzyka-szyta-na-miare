@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Quest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -20,8 +21,8 @@ class MassPayment extends Mailable
     public $pl;
     public function __construct($quests)
     {
-        $this->quests = $quests;
-        $this->pl = client_polonize($quests[0]->client->client_name);
+        $this->quests = collect(is_string($quests) ? explode(";", $quests) : $quests)->map(fn($el) => is_string($el) ? Quest::findOrFail($el) : $el);
+        $this->pl = client_polonize($this->quests[0]->client->client_name);
     }
 
     /**

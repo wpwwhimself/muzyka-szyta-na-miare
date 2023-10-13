@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,9 +19,10 @@ class PatronRejected extends Mailable
      */
     public $client;
     public $pl;
-    public function __construct($client)
+    public function __construct($data)
     {
-        $this->pl = client_polonize($client->client_name);
+        $this->client = is_string($data) ? Client::findOrFail($data) : $data;
+        $this->pl = client_polonize($this->client->client_name);
     }
 
     /**

@@ -14,6 +14,12 @@
       @case("mp4")
         <i class="fa-solid fa-file-video"></i>
         @break
+      @case("mp3")
+      @case("flac")
+      @case("wav")
+      @case("ogg")
+        <i class="fa-solid fa-file-audio"></i>
+        @break
       @default
         <i class="fa-solid fa-file"></i>
     @endswitch

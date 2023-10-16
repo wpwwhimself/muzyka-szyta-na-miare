@@ -9,6 +9,118 @@
             />
         </div>
 
+        <section id="recent">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie zmiany</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ReQuest</th>
+                        <th>Klient</th>
+                        <th>Status</th>
+                        <th>Kiedy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($recent as $change)
+                    @if ($change->date->gt(now()->subDay()))
+                    <tr>
+                    @else
+                    <tr class="ghost">
+                    @endif
+                        <td>
+                            <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>
+                        @if ($change->is_request)
+                            @if ($change->re_quest->client)
+                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
+                            @else
+                                {{ _ct_($change->re_quest->client_name) }}
+                            @endif
+                        @else
+                            <a href="{{ route('clients', ['search' => $change->re_quest->client->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
+                        @endif
+                        </td>
+                        <td>
+                            <x-phase-indicator-mini :status="$change->new_status" />
+                        </td>
+                        <td {{ Popper::pop($change->date) }}>
+                            {{ $change->date->diffForHumans() }}
+                        </td>
+                    </tr>
+                    @empty
+                        <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </section>
+
+        <section id="dashboard-janitor-log">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-broom"></i> Raport Sprzątacza</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ReQuest</th>
+                        <th>Klient</th>
+                        <th>Status</th>
+                        <th>Komentarz</th>
+                        <th>Mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($janitor_log as $i)
+                    <tr>
+                        <td>
+                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}" @if ($i->is_request)
+                                class="ghost"
+                            @endif>
+                                {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ route('clients', ['search' => $i->re_quest->client_id]) }}">
+                                {{ $i->is_request ? $i->re_quest->client_name : $i->re_quest->client->client_name }}
+                            </a>
+                        </td>
+                        <td>
+                            <x-phase-indicator-mini :status="$i->re_quest->status" />
+                        </td>
+                        <td>
+                            {{ $i->comment }}
+                        </td>
+                        <td>
+                            @switch($i->mailing)
+                                @case(2)
+                                    <i class="fa-solid fa-square-check success" @popper(mail wysłany)></i>
+                                    @break
+                                @case(1)
+                                    <i class="fa-solid fa-triangle-exclamation warning" @popper(mail wysłany, ale wyślij wiadomość)></i>
+                                    @break
+                                @default
+                                    <i class="fa-solid fa-xmark error" @popper(wyślij wiadomość)></i>
+                            @endswitch
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan=5>
+                            <span class="grayed-out">
+                                <i class="fa-solid fa-bed"></i>
+                                Sprzątacz dzisiaj śpi
+                            </span>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </section>
+
         @if (count($patrons_adepts) > 0)
         <section id="patrons-adepts" style="grid-column: 1 / span 2">
             <div class="section-header">
@@ -246,118 +358,6 @@
                 <p class="grayed-out">brak aktywnych zapytań</p>
             @endforelse
             </div>
-        </section>
-
-        <section id="recent">
-            <div class="section-header">
-                <h1><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie zmiany</h1>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ReQuest</th>
-                        <th>Klient</th>
-                        <th>Status</th>
-                        <th>Kiedy</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($recent as $change)
-                    @if ($change->date->gt(now()->subDay()))
-                    <tr>
-                    @else
-                    <tr class="ghost">
-                    @endif
-                        <td>
-                            <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
-                            </a>
-                        </td>
-                        <td>
-                        @if ($change->is_request)
-                            @if ($change->re_quest->client)
-                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
-                            @else
-                                {{ _ct_($change->re_quest->client_name) }}
-                            @endif
-                        @else
-                            <a href="{{ route('clients', ['search' => $change->re_quest->client->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
-                        @endif
-                        </td>
-                        <td>
-                            <x-phase-indicator-mini :status="$change->new_status" />
-                        </td>
-                        <td {{ Popper::pop($change->date) }}>
-                            {{ $change->date->diffForHumans() }}
-                        </td>
-                    </tr>
-                    @empty
-                        <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </section>
-
-        <section id="dashboard-janitor-log">
-            <div class="section-header">
-                <h1><i class="fa-solid fa-broom"></i> Raport Sprzątacza</h1>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ReQuest</th>
-                        <th>Klient</th>
-                        <th>Status</th>
-                        <th>Komentarz</th>
-                        <th>Mail</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($janitor_log as $i)
-                    <tr>
-                        <td>
-                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}" @if ($i->is_request)
-                                class="ghost"
-                            @endif>
-                                {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ route('clients', ['search' => $i->re_quest->client_id]) }}">
-                                {{ $i->is_request ? $i->re_quest->client_name : $i->re_quest->client->client_name }}
-                            </a>
-                        </td>
-                        <td>
-                            <x-phase-indicator-mini :status="$i->re_quest->status" />
-                        </td>
-                        <td>
-                            {{ $i->comment }}
-                        </td>
-                        <td>
-                            @switch($i->mailing)
-                                @case(2)
-                                    <i class="fa-solid fa-square-check success" @popper(mail wysłany)></i>
-                                    @break
-                                @case(1)
-                                    <i class="fa-solid fa-triangle-exclamation warning" @popper(mail wysłany, ale wyślij wiadomość)></i>
-                                    @break
-                                @default
-                                    <i class="fa-solid fa-xmark error" @popper(wyślij wiadomość)></i>
-                            @endswitch
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan=5>
-                            <span class="grayed-out">
-                                <i class="fa-solid fa-bed"></i>
-                                Sprzątacz dzisiaj śpi
-                            </span>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
         </section>
     </div>
 @endsection

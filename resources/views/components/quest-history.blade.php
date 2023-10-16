@@ -18,8 +18,13 @@
             @endforeach
             </ul>
             <div class="qh-comment ghost">
-                {!! Illuminate\Mail\Markdown::parse(($item->changed_by != 1 ? _ct_($item->comment) : $item->comment) ?? "") !!}
-                {{ $item->new_status_id != 32 ? "" : "zł" }}
+                @php
+                    $output = $item->comment;
+                    if($item->new_status_id == 32) $output = as_pln($output);
+                    if($item->changed_by != 1) $output = _ct_($output);
+                    if(!$output) $output = "";
+                @endphp
+                {!! Illuminate\Mail\Markdown::parse($output) !!}
             </div>
         </span>
         <span>{!! str_replace(" ", "<br>", $item->date) !!}</span>

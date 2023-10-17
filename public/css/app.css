@@ -66,6 +66,9 @@ section:hover{
     margin-bottom: 1em;
 }
 .section-header h1, .section-header h2, .section-header h3{
+    margin-bottom: 0;
+}
+.section-header:first-of-type h1, .section-header:first-of-type h2, .section-header:first-of-type h3{
     margin: 0;
 }
 .section-header>div{

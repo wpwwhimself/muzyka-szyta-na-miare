@@ -150,7 +150,7 @@
             </table>
         </section>
 
-        <section class="sc-line">
+        <section id="dashboard-requests" class="sc-line">
             <x-sc-scissors />
             <div class="section-header">
                 <h1>

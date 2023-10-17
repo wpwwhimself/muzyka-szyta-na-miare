@@ -241,7 +241,7 @@ input[type="file"]{
 *[type="submit"], .submit{
     display: inline-block;
     width: fit-content;
-    padding: 0.5em 1.5em; margin: 0.5em auto 0;
+    padding: 0.5em 1em; margin: 0.5em auto 0;
     border: 2px solid var(--acc);
     border-radius: 2em;
     transition-duration: 0.3s;
@@ -257,7 +257,8 @@ input[type="file"]{
     border: inset 2px black;
 }
 .small{
-    font-size: 1em; margin: 0.2em;
+    font-size: 0.75em;
+    margin: 0;
 }
 .quest-mini .small{
     font-size: 1em; margin: 0;

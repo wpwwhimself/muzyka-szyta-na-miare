@@ -25,7 +25,15 @@
                 ["Kient przywraca", 26, [17, 18, 19]],
                 ["Wygaś", 17, [13, 15]],
             ] as [$label, $status_id, $show_on_statuses])
-                @if (in_array($quest->status_id, $show_on_statuses)) <x-button action="submit" name="status_id" :icon="$status_id" :value="$status_id" :label="$label" /> @endif
+                @if (in_array($quest->status_id, $show_on_statuses))
+                @php $nomail = (!$quest->client->email && in_array($status_id, [15, 95])) @endphp
+                <x-button action="submit"
+                    name="status_id"
+                    :icon="$status_id"
+                    :value="$status_id"
+                    :label="$label"
+                    :class="$nomail ? 'warning' : ''"
+                    /> @endif
             @endforeach
         </div>
     </form>

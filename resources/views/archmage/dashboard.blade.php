@@ -2,13 +2,6 @@
 
 @section('content')
     <div class="grid-2">
-        <div class="flex-right" style="grid-column: 1 / span 2">
-            <x-button
-            action="{{ route('add-request') }}"
-            label="Dodaj nowe zapytanie" icon="plus"
-            />
-        </div>
-
         @if (count($patrons_adepts) > 0)
         <section id="patrons-adepts" style="grid-column: 1 / span 2">
             <div class="section-header">
@@ -166,6 +159,7 @@
             <div class="section-header">
                 <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
                 <div>
+                    <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
                     <x-a href="{{ route('requests') }}">Wszystkie</x-a>
                 </div>
             </div>

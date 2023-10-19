@@ -156,10 +156,13 @@
             <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
 
             @forelse ($files as $ver_super => $ver_mains)
-                @if (count($files) > 1)
                 <h3 class="pre-file-container-a">{{ $ver_super }}</h3>
-                @endif
                 @foreach ($ver_mains as $ver_main => $ver_subs)
+                @php
+                    $ids = [];
+                    preg_match("/^\d{1,3}/", $ver_main, $ids);
+                @endphp
+                @if(($ids[0] ?? Auth::id()) == Auth::id())
                 <div class="file-container-a">
                     <h4>
                         <small>wariant:</small>
@@ -205,6 +208,7 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
                 @endforeach
             @empty
             <p class="grayed-out">Brak plików</p>

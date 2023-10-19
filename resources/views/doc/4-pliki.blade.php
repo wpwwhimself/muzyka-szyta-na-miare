@@ -34,6 +34,9 @@
   Warunkiem koniecznym podglądu zawartości Sejfu jest brak statusu krętacza <i class="fas fa-user-ninja error"></i> dla Klienta.
   Podglądy plików są generowane dla formatów <code>.mp3</code> i <code>.mp4</code>.
 </p>
+<p>
+  Dodatkowo, ponieważ w Sejfie danego utworu mogą znajdować się pliki przeznaczone dla konkretnego Klienta, ukryte są pliki, których wariant (określony w nazwie pliku po znaku <code>=</code>) zawiera ID Klienta różne od ID przeglądającego.
+</p>
 <p class="grayed-out">
   Wsparcie dla podglądu plików <code>.pdf</code> zostało wyłączone ze względu na możliwość obejścia blokady pobierania.
 </p>

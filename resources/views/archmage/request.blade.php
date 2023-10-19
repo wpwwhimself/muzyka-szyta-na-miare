@@ -11,7 +11,7 @@
         @if ($request->status_id != 9) <x-input type="TEXT" name="comment" label="Komentarz do zmiany" /> @endif
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8, 95]) ? 'review' : 'change' }}" />
-        
+
         @foreach ([
             ["Oddaj", 5, [1, 6, 96]],
             ["Doprecyzuj", 95, [1, 6, 96]],
@@ -170,6 +170,8 @@
 
         <section class="input-group">
             <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+
+            <h3>Kwota</h3>
             <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
             <div id="song-price-sugg"></div>
             <div id="special-prices-warning"></div>
@@ -259,16 +261,12 @@
                 @endif
             </span>
             @endif
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" />
             <x-input type="date" name="delayed_payment" label="Opóźnienie wpłaty" value="{{ $request->delayed_payment?->format('Y-m-d') }}" />
-        </section>
 
-        @if (in_array($request->status_id, [1, 6, 96]))
-        <section class="input-group" id="quest-calendar">
-            <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
-            <x-calendar />
+            <h3>Termin</h3>
+            @if (in_array($request->status_id, [1, 6, 96])) <x-calendar /> @endif
+            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" />
         </section>
-        @endif
 
         <section class="input-group">
             <h2><i class="fa-solid fa-timeline"></i> Historia</h2>

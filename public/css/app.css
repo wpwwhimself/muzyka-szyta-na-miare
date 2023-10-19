@@ -195,6 +195,9 @@ form, .login-grid-container, .input-container{
 .input-group a{
     align-self: center;
 }
+section h2, section h3{
+    margin-bottom: 0;
+}
 .login-grid-container{
     padding: 0 2em;
 }

@@ -122,6 +122,8 @@
 
             <section class="input-group">
                 <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+
+                <h3>Kwota</h3>
                 <x-select name="quest_type" label="Rodzaj zlecenia" :options="$questTypes" :small="true" :required="true" />
                 <div id="song-price-sugg"></div>
                 <div id="special-prices-warning"></div>
@@ -198,13 +200,11 @@
                     $("#price_code").change(function (e) { calcPriceNow() });
                 });
                 </script>
-                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
                 <x-input type="date" name="delayed_payment" label="Opóźnienie wpłaty" />
-            </section>
 
-            <section>
-                <h2><i class="fa-solid fa-calendar-days"></i> Grafik</h2>
+                <h3>Termin</h3>
                 <x-calendar />
+                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
             </section>
         </div>
         <x-input type="TEXT" name="comment" label="Komentarz do zmiany" />

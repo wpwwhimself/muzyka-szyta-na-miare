@@ -186,12 +186,22 @@
                             switch(res.when_to_ask){
                                 case 0: when_to_ask = "<span class='success'>od razu</span>"; break;
                                 case 1: when_to_ask = "<span class='warning'>w przyszłym miesiącu</span>"; break;
-                                default: when_to_ask = "<span class='error'>za dwa miesiące</span>";
+                                default: when_to_ask = `<span class='error'>za ${res.when_to_ask} mc</span>`;
                             }
                             let content = ``;
                             content += `<span>Saturacja</span><span>${res.saturation[0]} zł • ${res.saturation[1]} zł • ${res.saturation[2]} zł</span>`;
                             positions_list.html(content);
                             sum_row.html(`<span>Kiedy można brać?</span><span>${when_to_ask}</span>`);
+
+                            let delayed_payment;
+                            if(res.when_to_ask == 0){
+                                delayed_payment = undefined;
+                            }else{
+                                let today = new Date();
+                                delayed_payment = (new Date(today.getFullYear(), today.getMonth() + res.when_to_ask, 1));
+                                delayed_payment = `${delayed_payment.getFullYear()}-${(delayed_payment.getMonth() + 1).toString().padStart(2, 0)}-${delayed_payment.getDate().toString().padStart(2, 0)}`;
+                            }
+                            document.getElementById("delayed_payment").value = delayed_payment;
                         }
                     });
                 }

@@ -95,6 +95,9 @@ h1{
 #recomms-other img:hover{
     filter: grayscale(0.2);
 }
+#recomms .flex-right{
+    align-items: center;
+}
 
 #showcase-mp3s{
     flex-wrap: wrap;

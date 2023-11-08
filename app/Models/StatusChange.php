@@ -26,6 +26,11 @@ class StatusChange extends Model
     public function getChangesListAttribute(){
         return json_decode($this->values);
     }
+    public function getReQuestAttribute(){
+        return (strlen($this->re_quest_id) == 36)
+            ? Request::find($this->re_quest_id)
+            : Quest::find($this->re_quest_id);
+    }
 
     public function invoice(){
         return $this->hasManyThrough(Invoice::class, InvoiceQuest::class, "quest_id", "id", "re_quest_id", "invoice_id");

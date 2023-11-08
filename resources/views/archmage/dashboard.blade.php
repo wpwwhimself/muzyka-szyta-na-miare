@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     @forelse ($recent as $change)
-                    @if ($change->date->gt(now()->subDay()))
+                    @if ($change->re_quest->status_id == $change->new_status_id)
                     <tr>
                     @else
                     <tr class="ghost">

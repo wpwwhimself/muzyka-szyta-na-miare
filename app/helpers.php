@@ -382,3 +382,20 @@ if(!function_exists("file_order")){
         return (array_search($ext_a, $correct_order) < array_search($ext_b, $correct_order)) ? -1 : 1;
     }
 }
+
+/**
+ * Extract file tags from its version name
+ */
+if(!function_exists("file_name_and_tags")){
+    function file_name_and_tags($ver_sub){
+        $tags_raw = preg_replace("/^.*\[(.*)\]$/", "$1", $ver_sub);
+        $ver_sub = preg_replace("/^(.*)\[.*\]$/", "$1", $ver_sub);
+
+        if($tags_raw == $ver_sub) return [$ver_sub, []];
+
+        $tags = null;
+        preg_match_all("/([cdm]|t[+-]\d+)/", $tags_raw, $tags);
+
+        return [$ver_sub, $tags[1]];
+    }
+}

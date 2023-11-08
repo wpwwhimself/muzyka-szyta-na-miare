@@ -1,0 +1,1 @@
+<span {{ $attributes->merge(["class" => "file-tag $props[0]"]) }} {{ Popper::pop($props[1]) }}>{{ $tag[0] == "t" ? substr($tag, 1) : $props[2] }}</span>

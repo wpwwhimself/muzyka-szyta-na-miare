@@ -930,6 +930,16 @@ footer .contact-info{
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }
 .pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
 
+.file-tag{
+    border-radius: 1em;
+    padding: 0 0.2em;
+    user-select: none;
+}
+.file-tag.click{ background-color: rgb(0, 200, 0); }
+.file-tag.demo{ background-color: rgb(235, 200, 0); }
+.file-tag.melody{ background-color: rgb(120, 0, 200); }
+.file-tag.transpose{ background-color: aquamarine; color: black; }
+
 .clickable{
     user-select: none;
     cursor: pointer;

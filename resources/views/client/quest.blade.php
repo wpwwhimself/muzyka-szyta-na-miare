@@ -169,9 +169,11 @@
                         {{ $ver_main }}
                     </h4>
                     @foreach ($ver_subs as $ver_sub => $ver_bots)
+                    @php list($ver_sub_name, $tags) = file_name_and_tags($ver_sub); @endphp
                     <div class="file-container-b">
                         <h5>
-                            {{ $ver_sub }}
+                            @foreach ($tags as $tag) <x-file-tag :tag="$tag" /> @endforeach
+                            {{ $ver_sub_name }}
                             <small class="ghost" {{ Popper::pop($last_mod[$ver_main][$ver_sub]) }}>
                                 {{ $last_mod[$ver_main][$ver_sub]->diffForHumans() }}
                             </small>

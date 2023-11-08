@@ -40,3 +40,44 @@
 <p class="grayed-out">
   Wsparcie dla podglądu plików <code>.pdf</code> zostało wyłączone ze względu na możliwość obejścia blokady pobierania.
 </p>
+
+<h1>Nazwy plików</h1>
+
+<p>
+  Aby odpowiednio wyświetlić pliki w zleceniu,
+  system korzysta ze schematu nazewnictwa plików,
+  który jest wykorzystywany do ich dzielenia i grupowania.
+  Pliki na serwerze powinny być wgrywane z nazwami zgodnymi z poniższym schematem:
+</p>
+<code>
+  {nazwa główna}={nazwa wariantu}_{nazwa wersji}[{tagi}].{rozserzenie}
+</code>
+<ul>
+  <li>
+    nazwa główna
+    -- wymagana, zazwyczaj ID utworu. W przypadku wielu nazw głównych w Sejfie pojawiają się nagłówki
+  </li>
+  <li>
+    nazwa wariantu
+    -- stawiana po znaku <code>=</code>, wydziela większe grupy plików,
+    zazwyczaj różniących się w znacznym stopniu (np. aranżacja, tempo).
+    Brak nazwy wariantu jest wyświetlany jako <strong>wariant podstawowy</strong>
+  </li>
+  <li>
+    nazwa wersji
+    -- stawiana po znaku <code>_</code>, wydziela osobne wersje plików,
+    różniące się w mniejszym stopniu (np. inne pojedyncze dźwięki, wyciszone partie).
+    Brak nazwy wersji jest wyświetlany jako <strong>wersja główna</strong>
+  </li>
+  <li>
+    tagi
+    -- umieszczane w nazwie wersji w nawiasach kwadratowych,
+    wskazują na ważne modyfikacje plików. Obecnie wyróżniane są następujące tagi:
+    <ul>
+      <li><x-file-tag tag="c" /> c -- wersja z metronomem (click track)</li>
+      <li><x-file-tag tag="d" /> d -- wersja demonstracyjna, np. z atrapą wokalu</li>
+      <li><x-file-tag tag="m" /> m -- wersja z linią melodyczną</li>
+      <li><x-file-tag tag="t+1" /> t -- transpozycja względem oryginału -- należy podać kierunek i liczbę półtonów, np. t-3 albo t+2</li>
+    </ul>
+  </li>
+</ul>

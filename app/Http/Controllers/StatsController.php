@@ -216,6 +216,14 @@ class StatsController extends Controller
                     ],
                     "hard" => $hard_deadline_count,
                 ],
+                "requests" => [
+                    "split" => ModelsRequest::join("statuses", "statuses.id", "status_id")
+                        ->groupBy("status_name", "status_id")
+                        ->orderByDesc("status_id")
+                        ->selectRaw("status_id, status_name, count(*) as count")
+                        ->pluck("count", "status_name"),
+                    "total" => ModelsRequest::count(),
+                ],
             ],
             "clients" => [
                 "summary" => [

@@ -394,8 +394,9 @@ if(!function_exists("file_name_and_tags")){
         if($tags_raw == $ver_sub) return [$ver_sub, []];
 
         $tags = null;
-        preg_match_all("/([cdm]|t[+-]\d+)/", $tags_raw, $tags);
+        preg_match_all("/([cdm]|t[+-]?\d+)/", $tags_raw, $tags);
 
         return [$ver_sub, $tags[1]];
     }
 }
+

@@ -98,7 +98,9 @@ class JanitorController extends Controller
                 $q->where('trust', '<', 1);
             })
             ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
-            ->whereDate("delayed_payment", "<", Carbon::today()->subMonth())
+            ->where(fn($q) => $q
+                ->whereDate("delayed_payment", "<", Carbon::today()->subMonth())
+                ->orWhereNull("delayed_payment"))
             ->get();
         foreach($quests as $quest){
             $quest->update(["status_id" => 17]);
@@ -149,7 +151,7 @@ class JanitorController extends Controller
         $quests = Quest::where("paid", 0)
             ->where("status_id", 19)
             ->where(fn($q) => $q
-                ->whereDate("delayed_payment", "<", Carbon::today())
+                ->whereDate("delayed_payment", "<", Carbon::today()->subMonth())
                 ->orWhereNull("delayed_payment")
             )->get();
         foreach($quests as $quest){

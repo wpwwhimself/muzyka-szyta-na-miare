@@ -2,13 +2,73 @@
 
 @section('content')
 
-<section>
-    <div class="section-header">
-        <h1><i class="fa-solid fa-chart-pie"></i> Podsumowanie</h1>
-    </div>
-    <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
-    <x-barplot title="Saturacja wpływów w kolejnych miesiącach" :data="$saturation" :all-pln="true" :percentages="true" />
-</section>
+<div>
+    <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
+    <x-button action='{{ route("costs") }}' label="Koszty" icon="money-bill-wave" />
+    <x-button action='{{ route("invoices") }}' label="Faktury" icon="file-invoice" />
+</div>
+
+<div class="grid-2">
+    <section>
+        <div class="section-header">
+            <h1><i class="fa-solid fa-chart-pie"></i> Podsumowanie</h1>
+        </div>
+        <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
+        <x-barplot title="Saturacja wpływów w kolejnych miesiącach" :data="$saturation" :all-pln="true" :percentages="true" />
+    </section>
+
+    <section>
+        <div class="section-header">
+            <h1>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Ostatnie wpłaty
+            </h1>
+            <x-a href="{{ route('finance-summary') }}">Raport</x-a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Klient</th>
+                    <th>Zlecenie</th>
+                    <th>Kwota</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($recent as $item)
+                @if ($item->date->gt(now()->subDay()))
+                <tr>
+                @else
+                <tr class="ghost">
+                @endif
+                    <td>
+                        <a href="{{ route('clients', ['search' => $item->changer->id]) }}">
+                            {{ _ct_($item->changer->client_name) }}
+                        </a>
+                    </td>
+                    <td>
+                        @if($item->re_quest_id)
+                        <a href="{{ route('quest', ['id' => $item->re_quest_id]) }}">
+                            {{ $item->quest->song->title ?? "utwór bez tytułu" }}
+                        </a>
+                        <x-phase-indicator-mini :status="$item->quest->status" />
+                        @else
+                        <span class="grayed-out">budżet</span>
+                        @endif
+                    </td>
+                    <td>
+                        {{ _c_(as_pln($item->comment)) }}
+                    </td>
+                    <td {{ Popper::pop($item->date) }}>
+                        {{ $item->date->diffForHumans() }}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </section>
+</div>
 
 @if(count($unpaids))
 <section>
@@ -80,60 +140,4 @@
 </section>
 @endif
 
-<section>
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            Ostatnie wpłaty
-        </h1>
-        <x-a href="{{ route('finance-summary') }}">Raport</x-a>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Klient</th>
-                <th>Zlecenie</th>
-                <th>Kwota</th>
-                <th>Data</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach ($recent as $item)
-            @if ($item->date->gt(now()->subDay()))
-            <tr>
-            @else
-            <tr class="ghost">
-            @endif
-                <td>
-                    <a href="{{ route('clients', ['search' => $item->changer->id]) }}">
-                        {{ _ct_($item->changer->client_name) }}
-                    </a>
-                </td>
-                <td>
-                    @if($item->re_quest_id)
-                    <a href="{{ route('quest', ['id' => $item->re_quest_id]) }}">
-                        {{ $item->quest->song->title ?? "utwór bez tytułu" }}
-                    </a>
-                    <x-phase-indicator-mini :status="$item->quest->status" />
-                    @else
-                    <span class="grayed-out">budżet</span>
-                    @endif
-                </td>
-                <td>
-                    {{ _c_(as_pln($item->comment)) }}
-                </td>
-                <td {{ Popper::pop($item->date) }}>
-                    {{ $item->date->diffForHumans() }}
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-</section>
-<div>
-    <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
-    <x-button action='{{ route("costs") }}' label="Koszty" icon="money-bill-wave" />
-    <x-button action='{{ route("invoices") }}' label="Faktury" icon="file-invoice" />
-</div>
 @endsection

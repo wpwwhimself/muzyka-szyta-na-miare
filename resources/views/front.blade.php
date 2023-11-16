@@ -61,7 +61,7 @@
             </div>
             <ul>
                 <li>Każdy aspekt projektu <b>dostosowany do Twoich wymagań</b> – od wykorzystanych instrumentów do budowy utworu</li>
-                <li><b>Szybki</b> czas realizacji – od 1-{{ $average_quest_done }} dni</li>
+                <li><b>Szybki</b> czas realizacji – od 1-{{ $average_quest_done }} dni <i class="fas fa-circle-question" @popper(...o ile nie mam<br>za dużo zamówień)></i></li>
                 <li>Darmowe <b>poprawki na bieżąco</b>, żeby było idealnie</li>
             </ul>
         </div>

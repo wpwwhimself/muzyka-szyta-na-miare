@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     @forelse ($recent as $change)
-                    @if ($change->date->gt(now()->subDay()))
+                    @if ($change->re_quest->status_id == $change->new_status_id)
                     <tr>
                     @else
                     <tr class="ghost">
@@ -281,7 +281,14 @@
                 <a href="{{ route('quest', $quest->id) }}" class="table-row p-{{ $quest->status_id }} {{ ($quest->is_priority) ? "priority" : "" }}">
                     <span>{{ $key + 1 }}</span>
                     <span class="quest-main-data flex-down">
-                        <h3 class="song-title">{{ $quest->song->title ?? "bez tytułu" }}</h3>
+                        <h3 class="song-title">
+                            <x-quest-type
+                                :id="$quest->song->type->id ?? 0"
+                                :label="$quest->song->type->type ?? 'nie zdefiniowano'"
+                                :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
+                                />
+                            {{ $quest->song->title ?? "bez tytułu" }}
+                        </h3>
                         @if($quest->song->artist) <span class="song-artist">{{ $quest->song->artist }}</span> @endif
                         @if ($quest->is_priority)
                         <b>Priorytet</b>

@@ -268,22 +268,22 @@ class StatsController extends Controller
                             ])
                             ->values(),
                     ],
-                    "low" => [
-                        "rows" => Client::withCount("questsDone")
-                            ->where("trust", ">", -1)
-                            ->having("quests_done_count", ">", 0)
-                            ->join("quests", "client_id", "clients.id")
-                            ->orderByDesc("quests.updated_at")
-                            ->distinct("client_name")
-                            ->get()
-                            ->sortBy("pickiness")
-                            ->take(5)
-                            ->map(fn($item, $key) => [
-                                "Nazwisko" => $item->client_name,
-                                "Wybredność" => $item->pickiness * 100 . "%",
-                            ])
-                            ->values(0),
-                    ],
+                    // "low" => [
+                    //     "rows" => Client::withCount("questsDone")
+                    //         ->where("trust", ">", -1)
+                    //         ->having("quests_done_count", ">", 0)
+                    //         ->join("quests", "client_id", "clients.id")
+                    //         ->orderByDesc("quests.updated_at")
+                    //         ->distinct("client_name")
+                    //         ->get()
+                    //         ->sortBy("pickiness")
+                    //         ->take(5)
+                    //         ->map(fn($item, $key) => [
+                    //             "Nazwisko" => $item->client_name,
+                    //             "Wybredność" => $item->pickiness * 100 . "%",
+                    //         ])
+                    //         ->values(0),
+                    // ],
                 ]
             ],
             "finances" => [

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class JanitorController extends Controller
 {
-    public function index(){
+    public function re_quests_cleanup(){
         $summary = [];
 
         /**
@@ -185,6 +185,6 @@ class JanitorController extends Controller
          * summary and report
          */
         Storage::put("janitor_log.json", json_encode($summary, JSON_PRETTY_PRINT));
-        return "Report ready";
+        return redirect()->route("dashboard");
     }
 }

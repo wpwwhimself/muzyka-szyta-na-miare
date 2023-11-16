@@ -248,8 +248,8 @@ Route::get("/get_ver_desc", function(Request $rq){
     return Storage::get($rq->path) ?? "";
 });
 
-Route::controller(JanitorController::class)->prefix("janitor")->group(function(){
-    Route::get("/re_quests_cleanup", "re_quests_cleanup");
+Route::controller(JanitorController::class)->group(function(){
+    Route::get("/janitor", "index");
 });
 
 Route::post("/settings_change", function(Request $rq){

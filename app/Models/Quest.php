@@ -25,6 +25,9 @@ class Quest extends Model
     public function getIsPriorityAttribute(){
         return preg_match("/z/", $this->price_code_override);
     }
+    public function getLinkToAttribute(){
+        return route("quest", ["id" => $this->id]);
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);

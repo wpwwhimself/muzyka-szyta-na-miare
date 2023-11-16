@@ -94,7 +94,12 @@ class BackController extends Controller
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
-                $i->re_quest = ($i->is_request) ? Request::find($i->re_quest->id) : Quest::find($i->re_quest->id);
+                $i->subject = (strlen($i->subject) === 36)
+                    ? Request::find($i->subject) :
+                    (strlen($i->subject) === 6
+                        ? Quest::find($i->subject)
+                        : Song::find($i->subject)
+                    );
             }
             $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
         }

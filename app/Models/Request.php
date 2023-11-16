@@ -22,6 +22,9 @@ class Request extends Model
     public function getIsPriorityAttribute(){
         return preg_match("/z/", $this->price_code);
     }
+    public function getLinkToAttribute(){
+        return route("request", ["id" => $this->id]);
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);

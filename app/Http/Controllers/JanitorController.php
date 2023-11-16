@@ -15,9 +15,37 @@ use Illuminate\Support\Facades\Storage;
 
 class JanitorController extends Controller
 {
-    public function re_quests_cleanup(){
-        $summary = [];
+    public $summary;
 
+    public function getSummary(){
+        return $this->summary;
+    }
+    private function clearSummary(){
+        $this->summary = [];
+    }
+    private function addToSummary($procedure, $subject_type, $subject, $comment, $mailing){
+        $this->summary[] = compact("procedure", "subject_type", "subject", "comment", "mailing");
+        return $this->summary;
+    }
+    private function exportSummary(){
+        Storage::put("janitor_log.json", json_encode($this->summary, JSON_PRETTY_PRINT));
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    public function index(){
+        $this->clearSummary();
+        
+        $this->re_quests_cleanup();
+        $this->safe_cleanup();
+
+        $this->exportSummary();
+        return redirect()->route("dashboard")->with("success", "Sprzątacz wykonał swoją robotę");
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    private function re_quests_cleanup(){
         /**
          * constants
          */
@@ -41,7 +69,9 @@ class JanitorController extends Controller
         foreach($requests as $request){
             $request->update(["status_id" => 7]);
             $summaryEntry = [
-                "re_quest" => $request, "is_request" => true,
+                "procedure" => "re_quests",
+                "subject_type" => "request",
+                "subject" => $request->id,
                 "comment" => "Brak reakcji",
             ];
             if($request->client?->email || $request->email){
@@ -52,7 +82,7 @@ class JanitorController extends Controller
                 app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "Brak reakcji", 1, null);
                 $summaryEntry["mailing"] = 0;
             }
-            $summary[] = $summaryEntry;
+            $this->addToSummary(...$summaryEntry);
         }
 
         /**
@@ -75,7 +105,9 @@ class JanitorController extends Controller
             [$new_status, $new_comment] = $quest->paid ? [19, "Brak uwag"] : [17, "Brak opinii"];
             $quest->update(["status_id" => $new_status]);
             $summaryEntry = [
-                "re_quest" => $quest, "is_request" => false,
+                "procedure" => "re_quests",
+                "subject_type" => "quest",
+                "subject" => $quest->id,
                 "comment" => $new_comment,
             ];
             if($quest->client->email){
@@ -86,7 +118,7 @@ class JanitorController extends Controller
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $new_comment, 1, null);
                 $summaryEntry["mailing"] = 0;
             }
-            $summary[] = $summaryEntry;
+            $this->addToSummary(...$summaryEntry);
         }
 
         /**
@@ -106,7 +138,9 @@ class JanitorController extends Controller
             $quest->update(["status_id" => 17]);
             $quest->client->update(["trust" => -1]);
             $summaryEntry = [
-                "re_quest" => $quest, "is_request" => false,
+                "procedure" => "re_quests",
+                "subject_type" => "quest",
+                "subject" => $quest->id,
                 "comment" => "Nieopłacone, ale zaakceptowane",
             ];
             if($quest->client->email){
@@ -117,7 +151,7 @@ class JanitorController extends Controller
                 app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "Brak wpłaty", 1, null);
                 $summaryEntry["mailing"] = 0;
             }
-            $summary[] = $summaryEntry;
+            $this->addToSummary(...$summaryEntry);
         }
 
         /**
@@ -131,7 +165,9 @@ class JanitorController extends Controller
                 !$quest->updated_at->isToday()
             ){
                 $summaryEntry = [
-                    "re_quest" => $quest, "is_request" => false,
+                    "procedure" => "re_quests",
+                    "subject_type" => "quest",
+                    "subject" => $quest->id,
                     "comment" => "Przypomnienie o działaniu",
                 ];
                 if($quest->client->email){
@@ -141,7 +177,7 @@ class JanitorController extends Controller
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
-                $summary[] = $summaryEntry;
+                $this->addToSummary(...$summaryEntry);
             }
         }
 
@@ -161,7 +197,9 @@ class JanitorController extends Controller
                 !$quest->updated_at->isToday()
             ){
                 $summaryEntry = [
-                    "re_quest" => $quest, "is_request" => false,
+                    "procedure" => "re_quests",
+                    "subject_type" => "quest",
+                    "subject" => $quest->id,
                     "comment" => "Przypomnienie o opłacie",
                 ];
                 if($quest->client->email){
@@ -177,14 +215,36 @@ class JanitorController extends Controller
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
-                $summary[] = $summaryEntry;
+                $this->addToSummary(...$summaryEntry);
+            }
+        }
+    }
+
+    private function safe_cleanup(){
+        $safes = Storage::disk()->directories("safe");
+        $sizes = []; $times = [];
+
+        foreach($safes as $safe){
+            $files = Storage::files($safe);
+            $size = 0;
+            $modtime = 0;
+            foreach($files as $file){
+                $size += Storage::size($file);
+                if(Storage::lastModified($file) > $modtime) $modtime = Storage::lastModified($file);
+            }
+            $modtime = new Carbon($modtime);
+
+            if($modtime->diffInDays() >= setting("safe_old_enough")){
+                Storage::deleteDirectory($safe);
+                $this->addToSummary(
+                    "safe",
+                    "song",
+                    preg_replace('/.*\/(.{4}).*/', '$1', $safe),
+                    "Sejf wyczyszczony",
+                    0
+                );
             }
         }
 
-        /**
-         * summary and report
-         */
-        Storage::put("janitor_log.json", json_encode($summary, JSON_PRETTY_PRINT));
-        return redirect()->route("dashboard");
     }
 }

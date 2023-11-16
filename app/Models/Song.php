@@ -42,4 +42,7 @@ class Song extends Model
         if($type_letter == "A") return collect(["id" => 0, "type" => "nie ustalono (archiwalne)", "code" => "A", "fa_symbol" => "fa-circle-question"]);
         return QuestType::where("code", $type_letter)->first();
     }
+    public function getLinkToAttribute(){
+        return route("songs", ["search" => $this->id]);
+    }
 }

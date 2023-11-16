@@ -88,9 +88,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ReQuest</th>
-                        <th>Klient</th>
-                        <th>Status</th>
+                        <th>Obiekt</th>
                         <th>Komentarz</th>
                         <th>Mail</th>
                     </tr>
@@ -99,19 +97,14 @@
                     @forelse ($janitor_log as $i)
                     <tr>
                         <td>
-                            <a href="{{ route($i->is_request ? 'request' : 'quest', ["id" => $i->re_quest->id]) }}" @if ($i->is_request)
-                                class="ghost"
-                            @endif>
-                                {{ ($i->is_request ? $i->re_quest->title : $i->re_quest->song->title) ?? "bez tytułu" }}
+                            <a href="{{ $i->subject->link_to }}">
+                                @if($i->procedure === "re_quests")
+                                    <x-phase-indicator-mini :status="$i->subject->status" />
+                                    {{ $i->subject->song?->title ?? $i->subject->title }}
+                                @elseif($i->procedure === "safe")
+                                    {{ $i->subject->title }}
+                                @endif
                             </a>
-                        </td>
-                        <td>
-                            <a href="{{ route('clients', ['search' => $i->re_quest->client_id]) }}">
-                                {{ $i->is_request ? $i->re_quest->client_name : $i->re_quest->client->client_name }}
-                            </a>
-                        </td>
-                        <td>
-                            <x-phase-indicator-mini :status="$i->re_quest->status" />
                         </td>
                         <td>
                             {{ $i->comment }}

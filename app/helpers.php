@@ -299,7 +299,7 @@ if(!function_exists("pricing")){
 }
 if(!function_exists("quests_unpaid")){
     function quests_unpaid($client_id, $all = false){
-        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18, 17]) : [19];
+        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18]) : [17, 19];
 
         $quests = Quest::where("paid", 0)
             ->whereIn("status_id", $allowed_statuses)

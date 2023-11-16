@@ -11,7 +11,7 @@
 <p>
     Procedura Sprzątacza jest wywoływana za pomocą zadania cron dostępnych w cPanelu
     (obecnie ustawionego na codziennie na godzinę 1:00)
-    lub może zostać wywołana ręcznie przez przejście pod adres <code>/re_quests_janitor</code>.
+    lub może zostać wywołana ręcznie przez przejście pod adres <code>/janitor/re_quests_cleanup</code>.
 </p>
 
 <h2>Kryteria</h2>

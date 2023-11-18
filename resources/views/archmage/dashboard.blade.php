@@ -97,15 +97,19 @@
                     @forelse ($janitor_log as $i)
                     <tr>
                         <td>
+                            @if(is_object($i->subject))
                             <a href="{{ $i->subject->link_to }}">
                                 @if($i->procedure === "re_quests")
                                     <x-phase-indicator-mini :status="$i->subject->status" />
-                                    {{ $i->subject->song?->title ?? $i->subject->title }}
+                                    {{ $i->subject->song?->title ?? $i->subject->title ?? "utwór bez tytułu" }}
                                 @elseif($i->procedure === "safe")
                                     <i class="fas fa-folder" @popper(Sejf)></i>
-                                    {{ $i->subject->title }}
+                                    {{ $i->subject->title ?? "utwór bez tytułu" }}
                                 @endif
                             </a>
+                            @else
+                            <span>{{ $i->subject }}</span>
+                            @endif
                         </td>
                         <td>
                             {{ $i->comment }}

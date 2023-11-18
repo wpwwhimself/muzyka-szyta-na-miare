@@ -102,6 +102,7 @@
                                     <x-phase-indicator-mini :status="$i->subject->status" />
                                     {{ $i->subject->song?->title ?? $i->subject->title }}
                                 @elseif($i->procedure === "safe")
+                                    <i class="fas fa-folder" @popper(Sejf)></i>
                                     {{ $i->subject->title }}
                                 @endif
                             </a>
@@ -117,8 +118,9 @@
                                 @case(1)
                                     <i class="fa-solid fa-triangle-exclamation warning" @popper(mail wysłany, ale wyślij wiadomość)></i>
                                     @break
-                                @default
+                                @case(0)
                                     <i class="fa-solid fa-xmark error" @popper(wyślij wiadomość)></i>
+                                    @break
                             @endswitch
                         </td>
                     </tr>

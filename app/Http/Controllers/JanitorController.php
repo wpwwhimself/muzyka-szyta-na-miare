@@ -23,7 +23,7 @@ class JanitorController extends Controller
     private function clearSummary(){
         $this->summary = [];
     }
-    private function addToSummary($procedure, $subject_type, $subject, $comment, $mailing){
+    private function addToSummary($procedure, $subject_type, $subject, $comment, $mailing = null){
         $this->summary[] = compact("procedure", "subject_type", "subject", "comment", "mailing");
         return $this->summary;
     }
@@ -35,7 +35,7 @@ class JanitorController extends Controller
 
     public function index(){
         $this->clearSummary();
-        
+
         $this->re_quests_cleanup();
         $this->safe_cleanup();
 
@@ -240,8 +240,7 @@ class JanitorController extends Controller
                     "safe",
                     "song",
                     preg_replace('/.*\/(.{4}).*/', '$1', $safe),
-                    "Sejf wyczyszczony",
-                    0
+                    "Sejf wyczyszczony"
                 );
             }
         }

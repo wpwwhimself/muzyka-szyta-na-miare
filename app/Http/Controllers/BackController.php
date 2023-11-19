@@ -575,6 +575,10 @@ class BackController extends Controller
             $this->statusHistory($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
+            //send onboarding if new client
+            if($request->client->email && $is_new_client){
+                Mail::to($request->client->email)->send(new Onboarding($request->client));
+            }
         }
 
         if(in_array(Auth::id(), [0, 1], true)) return redirect()->route("request", ["id" => $request->id]);
@@ -583,9 +587,7 @@ class BackController extends Controller
 
     public function requestFinalized($id, $status, $is_new_client){
         $request = Request::findOrFail($id);
-        if($request->client->email){
-            Mail::to($request->client->email)->send(new Onboarding($request->client));
-        }
+
         return view("request-finalized", array_merge(
             ["title" => "Zapytanie zamknięte"],
             compact("id", "status", "is_new_client", "request")

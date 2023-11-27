@@ -123,9 +123,10 @@
             @if ($quest->delayed_payment)
             <p class="yellowed-out">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.
-                Po zaakceptowaniu zlecenia dostęp do plików zostanie przyznany automatycznie.
+                Z uwagi na limity przyjmowanych przeze mnie wpłat,<br>
+                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.<br>
+                Po zaakceptowaniu zlecenia dostęp do plików<br>
+                zostanie przyznany automatycznie.
             </p>
             @endif
             @endunless

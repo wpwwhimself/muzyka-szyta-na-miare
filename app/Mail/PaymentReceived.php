@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Quest;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,11 +19,13 @@ class PaymentReceived extends Mailable
      * @return void
      */
     public $quest;
+    public $paymentShouldBeDelayed;
     public $pl;
     public function __construct($data)
     {
         $this->quest = is_string($data) ? Quest::findOrFail($data) : $data;
         $this->pl = client_polonize($this->quest->client->client_name);
+        $this->paymentShouldBeDelayed = $this->quest->delayed_payment?->gte(Carbon::today());
     }
 
     /**
@@ -33,7 +36,7 @@ class PaymentReceived extends Mailable
     public function build()
     {
         return $this
-            ->subject("Wpłata zarejestrowana za zlecenie ".$this->quest->id)
+            ->subject(($this->paymentShouldBeDelayed ? "Przedwczesna wpłata" : "Wpłata")." zarejestrowana za zlecenie ".$this->quest->id)
             ->view('emails.payment-received');
     }
 }

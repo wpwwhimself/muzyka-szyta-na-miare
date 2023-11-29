@@ -1,5 +1,5 @@
 @extends('layouts.mail', [
-    "title" => "Zlecenie zaktualizowane"
+    "title" => "Otrzymano wpłatę"
 ])
 
 @section('content')
@@ -9,6 +9,13 @@
     </p>
 
     <x-mail-quest-mini :quest="$quest" />
+
+    @if ($paymentShouldBeDelayed)
+    <p>
+        Chciałbym jednak zauważyć, że z uwagi na limity wpłat, jakie muszę spełniać, <strong>poprosiłem o wpłatę po {{ $quest->delayed_payment->format("d.m.Y") }}</strong>.
+        Bardzo proszę o zwracanie uwagi na informacje podane na zleceniach w przyszłości.
+    </p>
+    @endif
 
     @if (!($quest->client->is_veteran || $quest->client->trust == 1))
     <p>
@@ -28,7 +35,7 @@
     </h3>
 
     <p>
-        Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
+        {{ $paymentShouldBeDelayed ? "Niemniej" : "Uprzejmie" }} dziękuję za zaufanie i skorzystanie z moich usług.
     </p>
     <p>
         <i>

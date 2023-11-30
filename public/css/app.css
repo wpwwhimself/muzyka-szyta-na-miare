@@ -192,7 +192,7 @@ form, .login-grid-container, .input-container{
     display: flex;
     flex-direction: column;
 }
-.input-group a{
+.input-group a, .input-group button{
     align-self: center;
 }
 section h2, section h3{
@@ -1060,7 +1060,7 @@ footer .contact-info{
 .p-5, .p-15, .p-31, .p-95{ --q-clr: 145, 87, 168; }
 .p-6, .p-16, .p-26, .p-96{ --q-clr: 207, 60, 60; }
 .p-4, .p-7, .p-8, .p-17, .p-18, .p-33{ --q-clr: 175, 175, 175; }
-.p-9, .p-19, .p-32{ --q-clr: 57, 196, 57; }
+.p-9, .p-19, .p-32, .p-14{ --q-clr: 57, 196, 57; }
 
 /************************MOBILITY**************/
 @media screen and (max-width: 1030px){

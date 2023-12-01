@@ -1020,6 +1020,9 @@ footer .contact-info{
     /* font-size: 0.75em; */
     opacity: 0.5;
 }
+#invoice .grid-2{
+    gap: 0 1em;
+}
 
 @media print{
     @page {
@@ -1046,7 +1049,7 @@ footer .contact-info{
 .name-value{
     grid-template-columns: auto auto;
 }
-.name-value span:nth-child(even){
+.name-value span:nth-child(odd){
     font-weight: bold;
 }
 .name-value.summary span:nth-child(even){

@@ -246,7 +246,7 @@
             </div>
         </section>
 
-        @php $statuses_for_split = [11, 12, 13, 16, 26, 96]; @endphp
+        @php $statuses_for_split = [11, 12, 13, 14, 16, 26, 96]; @endphp
         @foreach([
             ["Zlecenia w toku", "box", $quests->filter(fn($q) => in_array($q->status_id, $statuses_for_split))],
             ["Zlecenia czekające", "box-open", $quests->filter(fn($q) => !in_array($q->status_id, $statuses_for_split))],

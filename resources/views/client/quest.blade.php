@@ -12,6 +12,9 @@
     @case(13)
         Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.
         @break
+    @case(14)
+        Obecny etap prac został przez Ciebie przyjęty. Wkrótce dostarczę dalszą część materiałów.
+        @break
     @case(15)
         Do Twojego zlecenia zostały dodane nowe pliki. Poniżej możesz je przeglądać i wyrazić swoją opinię na ich temat.
         @break
@@ -221,6 +224,12 @@
                 i poproś o ponowne wgranie
             </p>
             @endif
+            @if ($quest->status_id == 15 && !$quest->files_ready)
+            <p class="yellowed-out">
+                To nie są jeszcze wszystkie pliki.<br>
+                Dalsze prace po akceptacji tego etapu.
+            </p>
+            @endif
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Tutaj pojawią się pliki związane<br>
@@ -267,7 +276,13 @@
             <x-button action="#/" statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
             @endif
             @if (in_array($quest->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
-            @if (in_array($quest->status_id, [15, 95])) <x-button action="#/" statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  /> @endif
+            @if (in_array($quest->status_id, [15, 95]))
+                @if ($quest->files_ready)
+                <x-button action="#/" statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  />
+                @else
+                <x-button action="#/" statuschanger="14" icon="14" label="Zaakceptuj etap"  />
+                @endif
+            @endif
             @if (in_array($quest->status_id, [15])) <x-button action="#/" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
             @if (!in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
@@ -303,7 +318,7 @@
                 let status = $(this).attr("statuschanger");
                 $(`#phases button[type="submit"]`).val(status);
                 $("#statuschanger").show();
-                for(i of [19, 16, 18, 26, 96]){
+                for(i of [14, 19, 16, 18, 26, 96]){
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }

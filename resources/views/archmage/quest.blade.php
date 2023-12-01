@@ -14,14 +14,14 @@
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             @foreach ([
-                ["Rozpocznij", 12, [11, 13, 16, 26, 96]],
-                ["Oddaj", 15, [11, 12, 13, 16, 26, 96]],
-                ["Doprecyzuj", 95, [11, 12, 13, 16, 26, 96]],
+                ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
+                ["Oddaj", 15, [11, 12, 13, 14, 16, 26, 96]],
+                ["Doprecyzuj", 95, [11, 12, 13, 14, 16, 26, 96]],
                 ["Klient odpowiada", 96, [95]],
-                ["Zawieś", 13, [12, 16, 96]],
-                ["Klient akceptuje", 19, [15, 96]],
+                ["Zawieś", 13, [12, 14, 16, 96]],
+                ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 96]],
                 ["Klient cofa", 16, [15]],
-                ["Klient odrzuca", 18, [11, 12, 13, 15, 16, 95, 96]],
+                ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 95, 96]],
                 ["Kient przywraca", 26, [17, 18, 19]],
                 ["Wygaś", 17, [13, 15]],
             ] as [$label, $status_id, $show_on_statuses])
@@ -226,6 +226,14 @@
                         <i class="error fa-solid fa-xmark" @popper(Klient nic nie widzi)></i>
                     @endif
                 </h2>
+
+                @unless ($quest->files_ready)
+                <form action="{{ route('quest-files-ready-update') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                    <x-button action="submit" label="Wszystko wgrane" icon="file-circle-check" name="ready" value="1" :small="true" />
+                </form>
+                @endunless
 
                 @unless(Auth::id() === 0)
                 {{-- dropzone css --}}

@@ -47,6 +47,7 @@ class BackController extends Controller
                 when 16 then 2
                 when 96 then 3
                 when 26 then 4
+                when 14 then 4.5
                 when 11 then 5
                 when 95 then 6
                 when 15 then 7
@@ -750,6 +751,12 @@ class BackController extends Controller
 
         $is_same_status = $quest->status_id == $rq->status_id;
         $quest->status_id = $rq->status_id;
+
+        // files ready checkpoint
+        if(in_array($rq->status_id, [16, 26])){
+            $quest->files_ready = false;
+        }
+
         $quest->save();
 
         if($is_same_status){
@@ -875,6 +882,16 @@ class BackController extends Controller
             $changes
         );
         return back()->with("success", "Wycena zapytania zmodyfikowana");
+    }
+
+    public function questFilesReadyUpdate(HttpRequest $rq){
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        $quest = Quest::find($rq->quest_id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest->update([
+            "files_ready" => $rq->ready,
+        ]);
+        return back()->with("success", "Zawartość sejfu zatwierdzona");
     }
 
     public function setPatronLevel($client_id, $level){

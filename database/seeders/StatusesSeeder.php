@@ -27,11 +27,12 @@ class StatusesSeeder extends Seeder
             ["id" => 11, "status_name" => "nowe", "status_symbol" => "fa-cart-flatbed"],
             ["id" => 12, "status_name" => "prace w toku", "status_symbol" => "fa-person-digging"],
             ["id" => 13, "status_name" => "prace przerwane", "status_symbol" => "fa-pause"],
+            ["id" => 14, "status_name" => "póki co zaakceptowane", "status_symbol" => "fa-check"],
             ["id" => 15, "status_name" => "czeka na recenzję", "status_symbol" => "fa-truck-ramp-box"],
             ["id" => 16, "status_name" => "oddane do poprawki", "status_symbol" => "fa-people-pulling"],
             ["id" => 17, "status_name" => "wygasłe", "status_symbol" => "fa-wind"],
             ["id" => 18, "status_name" => "odrzucone", "status_symbol" => "fa-dumpster-fire"],
-            ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check"],
+            ["id" => 19, "status_name" => "zaakceptowane", "status_symbol" => "fa-check-double"],
             ["id" => 26, "status_name" => "oddane po zamknięciu", "status_symbol" => "fa-recycle"],
             /* statusy techniczne */
             ["id" => 31, "status_name" => "zmieniono wycenę", "status_symbol" => "fa-magnifying-glass-dollar"],

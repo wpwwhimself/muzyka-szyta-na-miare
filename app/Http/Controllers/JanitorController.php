@@ -187,7 +187,7 @@ class JanitorController extends Controller
         $quests = Quest::where("paid", 0)
             ->where("status_id", 19)
             ->where(fn($q) => $q
-                ->whereDate("delayed_payment", "<", Carbon::today()->subMonth())
+                ->whereDate("delayed_payment", "<", Carbon::today())
                 ->orWhereNull("delayed_payment")
             )->get();
         foreach($quests as $quest){

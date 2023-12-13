@@ -5,7 +5,7 @@
         <h2 class="song-title">{{ $quest->song->title ?? $quest->title ?? "bez tytułu" }}</h2>
         <p class="song-artist">{{ $quest->song->artist ?? $quest->artist }}</p>
     </a>
-    @if (in_array(Auth::id(), [0, 1], true))
+    @if (is_archmage())
     <div class="quest-client">
         @if ($quest->client_id)
             @if ($quest->client->is_veteran)

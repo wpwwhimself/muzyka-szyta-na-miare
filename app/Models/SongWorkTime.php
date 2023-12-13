@@ -10,5 +10,6 @@ class SongWorkTime extends Model
     use HasFactory;
 
     protected $fillable = ["song_id", "status_id", "time_spent", "now_working", "since"];
+    protected $dates = ["time_spent", "since"];
     public $timestamps = false;
 }

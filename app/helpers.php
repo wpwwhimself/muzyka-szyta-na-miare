@@ -67,10 +67,13 @@ if(!function_exists("MISSPELL_ERROR")){
  */
 if(!function_exists("user_role")){
     function user_role(){
-        $role = (in_array(Auth::id(), [0, 1], true))
-            ? "archmage"
-            : "client";
+        $role = (is_archmage()) ? "archmage" : "client";
         return $role;
+    }
+}
+if(!function_exists("is_archmage")){
+    function is_archmage(){
+        return in_array(Auth::id(), [0, 1], true);
     }
 }
 

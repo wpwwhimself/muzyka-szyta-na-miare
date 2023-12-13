@@ -57,7 +57,7 @@ class BackController extends Controller
             ->orderByRaw("paid desc")
             ->orderBy("created_at");
 
-        if(!in_array(Auth::id(), [0, 1], true)){
+        if(!is_archmage()){
             $requests = $requests->where("client_id", $client->id);
             $quests_total = Auth::user()->client->exp;
             $unpaids = Quest::where("client_id", Auth::id())
@@ -109,7 +109,7 @@ class BackController extends Controller
 
         return view(user_role().".dashboard", array_merge(
             [
-                "title" => (in_array(Auth::id(), [0, 1], true))
+                "title" => (is_archmage())
                 ? (Auth::id() == 1 ? "Szpica arcymaga" : "WITAJ, OBSERWATORZE")
                 : "Pulpit"
             ],
@@ -127,7 +127,7 @@ class BackController extends Controller
     public function prices(){
         $prices = DB::table("prices")->get();
 
-        $discount = (in_array(Auth::id(), [0, 1], true)) ? null : (
+        $discount = (is_archmage()) ? null : (
             (Auth::user()->client->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
             (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
@@ -148,7 +148,7 @@ class BackController extends Controller
         $status_id = $rq->status;
 
         $requests = Request::orderBy("updated_at", "desc");
-        if(!in_array(Auth::id(), [0, 1], true)){ $requests = $requests->where("client_id", $client->id); }
+        if(!is_archmage()){ $requests = $requests->where("client_id", $client->id); }
         if($client_id) $requests = $requests->where("client_id", $client_id);
         if($status_id) $requests = $requests->where("status_id", $status_id);
         $requests = $requests->paginate(25);
@@ -163,7 +163,7 @@ class BackController extends Controller
         if(!$request) abort(404, "Nie ma takiego zapytania");
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
-        if(in_array(Auth::id(), [0, 1], true)){
+        if(is_archmage()){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
                 $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
@@ -199,7 +199,7 @@ class BackController extends Controller
     public function addRequest(){
         $pad_size = 24; // used by dropdowns for mobile preview fix
 
-        if(in_array(Auth::id(), [0, 1], true)){
+        if(is_archmage()){
             $clients_raw = Client::all()->toArray();
             foreach($clients_raw as $client){
                 $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
@@ -237,7 +237,7 @@ class BackController extends Controller
         $requests_created = [];
 
         for($i = 0; $i < $loop_length; $i++){
-            if(in_array(Auth::id(), [0, 1], true)){ // arcymag
+            if(is_archmage()){ // arcymag
                 //non-bulk
                 $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
                 $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
@@ -435,7 +435,7 @@ class BackController extends Controller
             $request->save();
         }
 
-        $changed_by = (in_array(Auth::id(), [0, 1], true) && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
+        $changed_by = (is_archmage() && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
         if($is_same_status){
             $request->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
@@ -569,7 +569,7 @@ class BackController extends Controller
         Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
         $mailing = true;
 
-        $this->statusHistory($id, $status, null, (in_array(Auth::id(), [0, 1], true)) ? $request->client_id : null, $mailing);
+        $this->statusHistory($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
 
         if($status == 9){
             //added quest
@@ -582,7 +582,7 @@ class BackController extends Controller
             }
         }
 
-        if(in_array(Auth::id(), [0, 1], true)) return redirect()->route("request", ["id" => $request->id]);
+        if(is_archmage()) return redirect()->route("request", ["id" => $request->id]);
         else return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
     }
 
@@ -633,7 +633,7 @@ class BackController extends Controller
         $paid = $rq->paid;
 
         $client = Client::find($client_id) ?? Auth::user()->client;
-        if($client_id && $client_id != Auth::id() && !in_array(Auth::id(), [0, 1], true)) abort(403, "Widok niedostępny");
+        if($client_id && $client_id != Auth::id() && !is_archmage()) abort(403, "Widok niedostępny");
 
         $quests = Quest::orderBy("quests.created_at", "desc");
         if($client){ $quests = $quests->where("client_id", $client->id); }
@@ -655,7 +655,7 @@ class BackController extends Controller
             ->where("quest_type_id", $quest->song->type->id)->orWhereNull("quest_type_id")
             ->orderBy("quest_type_id")->orderBy("indicator")
             ->pluck("service", "indicator")->toArray();
-        if($quest->client_id != Auth::id() && !in_array(Auth::id(), [0, 1], true)) abort(403, "To nie jest Twoje zlecenie");
+        if($quest->client_id != Auth::id() && !is_archmage()) abort(403, "To nie jest Twoje zlecenie");
 
         $files_raw = collect(Storage::files('safe/'.$quest->song_id))
             ->sortByDesc(function($file){return Storage::lastModified($file);});
@@ -766,7 +766,7 @@ class BackController extends Controller
                 $rq->quest_id,
                 $rq->status_id,
                 $rq->comment,
-                (in_array(Auth::id(), [0, 1], true) && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
+                (is_archmage() && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
             );
         }
 
@@ -786,7 +786,7 @@ class BackController extends Controller
                 $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else if(!in_array(Auth::id(), [0, 1], true)){ // mail do mnie
+        }else if(!is_archmage()){ // mail do mnie
             Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
             $mailing = true;
             $flash_content .= ", mail wysłany";

@@ -83,7 +83,7 @@ class ClientController extends Controller
             "contact_preference" => $rq->contact_preference,
         ]);
 
-        if(in_array(Auth::id(), [0, 1], true)){
+        if(is_archmage()){
             $client->update([
                 "trust" => $rq->trust,
                 "helped_showcasing" => $rq->helped_showcasing,

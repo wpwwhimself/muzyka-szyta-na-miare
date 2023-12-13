@@ -472,6 +472,49 @@ footer .contact-info{
     margin-right: auto;
 }
 
+/***** EXTENDO-BLOCKS **********/
+.extendo-block{
+    --eb-space: 0.5em;
+    --eb-border: 1px solid var(--bg2);
+
+    & h1, h2, h3, p, ul{
+        margin: 0;
+        padding: 0;
+    }
+    & div{
+        border-radius: 0;
+    }
+    & .hidden{
+        display: none;
+    }
+    & .header{
+        justify-content: space-between;
+        align-items: center;
+
+        & .right-side{
+            flex-direction: row-reverse;
+        }
+    }
+    & .body{
+        align-items: center;
+        gap: 3em;
+        &:not(:first-child){
+            padding-top: var(--eb-space);
+            margin-top: var(--eb-space);
+            border-top: var(--eb-border);
+        }
+
+        & > *{
+            max-width: 250px;
+        }
+        & .list-data{
+            list-style-type: none;
+        }
+    }
+
+
+}
+
 /*****************/
 
 #dashboard-quests{
@@ -540,22 +583,37 @@ footer .contact-info{
     width: 1em;
     text-align: center;
 }
-.quests-table .table-row{
-    display: grid;
-    align-items: center;
-    padding: 0.5em;
-    border-radius: 1em;
-}
-.quests-table .table-row:hover{
-    background: rgba(var(--q-clr), 0.3);
-    color: inherit;
-}
-.quests-table .table-header{
-    font-weight: bold;
-}
+.quests-table{
+    gap: 1em;
 
-.quests-table .subsection{
-    margin-bottom: 3.5em;
+    & .table-row{
+        display: grid;
+        align-items: center;
+        padding: 0.5em;
+        border-radius: 1em;
+    }
+    & .table-row:hover{
+        background: rgba(var(--q-clr), 0.3);
+        color: inherit;
+    }
+    & .table-header{
+        font-weight: bold;
+    }
+    & .subsection{
+        margin-bottom: 3.5em;
+    }
+    & .quest-main-data{
+        display: flex;
+        column-gap: 1em;
+    }
+    & .quest-main-data>span{
+        flex-basis: 100%;
+    }
+    & .song-title{
+        margin: 0;
+        background: none;
+        font-size: 1.1em;
+    }
 }
 
 .quest-mini .song-title, .quest-mini .song-artist{
@@ -563,21 +621,9 @@ footer .contact-info{
     margin: 0;
 }
 
-.quests-table .quest-main-data{
-    display: flex;
-    column-gap: 1em;
-}
-.quests-table .quest-main-data>span{
-    flex-basis: 100%;
-}
 .song-title{
     font-size: 1.25rem;
     background-color: rgb(var(--q-clr));
-}
-.quests-table .song-title{
-    margin: 0;
-    background: none;
-    font-size: 1.1em;
 }
 .song-title-artist{
     margin-bottom: 0.5em;

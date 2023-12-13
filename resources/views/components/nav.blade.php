@@ -22,7 +22,7 @@
             </li>
         </a>
         @endforeach
-        @if (in_array(Auth::id(), [0, 1], true))
+        @if (is_archmage())
             @foreach ($archmage as $item)
             <a href="{{ $item['link'] }}">
                 <li {{ Popper::pop($item['label']) }}>

@@ -72,8 +72,8 @@ if(!function_exists("user_role")){
     }
 }
 if(!function_exists("is_archmage")){
-    function is_archmage(){
-        return in_array(Auth::id(), [0, 1], true);
+    function is_archmage($user_id = null){
+        return in_array($user_id ?? Auth::id(), [0, 1], true);
     }
 }
 

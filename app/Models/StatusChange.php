@@ -38,4 +38,7 @@ class StatusChange extends Model
     public function changer(){
         if($this->changed_by > 1) return $this->hasOne(Client::class, "id", "changed_by");
     }
+    public function status(){
+        return $this->hasOne(Status::class, "id", "new_status_id");
+    }
 }

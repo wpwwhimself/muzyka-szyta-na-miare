@@ -766,33 +766,30 @@ footer .contact-info{
 }
 
 #quest-history{
-    height: 500px;
-    overflow: auto;
-    resize: vertical;
-    transition-duration: 0s;
-}
-.history-position{
-    border-radius: 1em;
-    background: rgba(var(--q-clr), 0.5);
-    margin: 0.3em; padding: 0.3em 0.5em;
-    display: grid; grid-template-columns: 3fr auto; column-gap: 0.5em;
-}
-.history-position.by-client{ margin-right: 2em; }
-.history-position.by-me{ margin-left: 2em; }
-.history-position span:nth-child(1){ text-align: left; }
-.history-position .client-name{ font-style: italic; }
-.history-position .qh-values, .history-position .qh-comment{
-    margin: 0; font-size: 0.8em; max-width: 250px;
-}
-.history-position ul{
-    padding-left: 1em;
-}
-.history-position .qh-comment p,
-.history-position ul{
-    margin: 0;
-}
-.history-position .qh-values{
-    list-style-type: circle;
+    max-width: none;
+
+    & .history-position{
+        display: inline-flex;
+        --circle-size: 3rem;
+
+        & .circle{
+            margin: 0;
+            justify-content: center;
+            border-radius: 100%;
+            width: var(--circle-size); height: var(--circle-size);
+            background: var(--bg1);
+            &:hover{
+                background: rgba(var(--q-clr), 0.5);
+            }
+            &.by-client{
+                border-bottom: 2px solid var(--acc);
+            }
+        }
+        & .notification-counter{
+            max-width: var(--circle-size);
+            white-space: wrap;
+        }
+    }
 }
 
 #document-dropzone{

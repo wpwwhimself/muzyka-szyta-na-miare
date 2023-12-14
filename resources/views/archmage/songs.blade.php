@@ -21,7 +21,7 @@
             <x-extendo-section title="Gatunek">{{ $song->genre->name }}</x-extendo-section>
             <x-extendo-section title="Kod wyceny">{!! $price_codes[$song->id] !!}</x-extendo-section>
             <x-extendo-section title="Linki"><x-link-interpreter :raw="$song->link" :editable="$song->id" /></x-extendo-section>
-            <x-extendo-section title="Notatki">{{ !$song->notes ?: Illuminate\Mail\Markdown::parse($song->notes) }}</x-extendo-section>
+            <x-extendo-section title="Notatki">{{ $song->notes ? Illuminate\Mail\Markdown::parse($song->notes) : "" }}</x-extendo-section>
             <x-extendo-section title="Czas wykonania">
                 <span {{ Popper::pop($song_work_times[$song->id]['parts']) }}>
                     {{ $song->work_time }}

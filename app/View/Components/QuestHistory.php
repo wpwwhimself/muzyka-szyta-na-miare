@@ -22,7 +22,7 @@ class QuestHistory extends Component
     public function __construct($quest)
     {
         $this->quest = $quest;
-        $this->history = StatusChange::where("re_quest_id", $quest->id)
+        $this->history = StatusChange::whereIn("re_quest_id", [$quest->id, Request::where("quest_id", $quest->id)->value("id")])
             ->orderBy("date")
             ->orderBy("new_status_id")
             ->get()

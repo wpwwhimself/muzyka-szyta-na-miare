@@ -2,8 +2,6 @@
 
 namespace App\View\Components;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
 class ExtendoBlock extends Component
@@ -15,6 +13,7 @@ class ExtendoBlock extends Component
     public $subtitle;
     public $warning;
     public $extended;
+    public $scissors;
 
     /**
      * Create a new component instance.
@@ -32,7 +31,8 @@ class ExtendoBlock extends Component
         $subtitle = null,
         $headerIcon = null,
         $warning = null,
-        $extended = false
+        $extended = false,
+        $scissors = false,
     ) {
         $this->key = $key;
         $this->headerIcon = $headerIcon;
@@ -40,6 +40,7 @@ class ExtendoBlock extends Component
         $this->subtitle = $subtitle;
         $this->warning = $warning;
         $this->extended = $extended;
+        $this->scissors = $scissors;
     }
 
     /**

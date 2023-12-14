@@ -403,3 +403,14 @@ if(!function_exists("file_name_and_tags")){
     }
 }
 
+/**
+ * Turn array to html list
+ */
+if(!function_exists("arr_to_list")){
+    function arr_to_list($array, $ordered = false){
+        $list_tag = $ordered ? "ol" : "ul";
+        echo "<$list_tag>";
+        foreach($array as $label => $value) echo "<li><strong>$label</strong>: $value</li>";
+        echo "</$list_tag>";
+    }
+}

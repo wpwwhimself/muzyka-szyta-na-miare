@@ -73,7 +73,7 @@
         <x-extendo-block key="quote"
             header-icon="sack-dollar"
             title="Wycena"
-            :subtitle="!$request->price ?: as_pln($request->price).' // '.$request->deadline?->format('d.m.Y')"
+            :subtitle="!$request->price ?: as_pln($request->price).' // do '.$request->deadline?->format('d.m.Y')"
             :warning="$warn_quote"
         >
             @if (!$request->price)
@@ -135,11 +135,11 @@
                 </span>
                 @endif
             </div>
-            
+
             @if ($request->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
-            
+
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
                 @if ($request->deadline)

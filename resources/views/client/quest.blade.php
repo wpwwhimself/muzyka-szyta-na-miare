@@ -47,9 +47,16 @@
 
     <x-phase-indicator :status-id="$quest->status_id" />
 
-    <div id="quest-box" class="flex-right">
-        <section class="input-group">
-            <h2><i class="fa-solid fa-compact-disc"></i> Szczegóły utworu</h2>
+    <div class="flex-down spaced">
+        <x-extendo-block key="meta"
+            header-icon="compact-disc"
+            title="Szczegóły utworu"
+            {{-- :subtitle="implode(" – ", array_filter([
+                $quest->song->artist,
+                $quest->song->title ?? 'utwór bez tytułu',
+            ], fn($v) => !empty($v)))" --}}
+            :extended="true"
+        >
             <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ $quest->song->type->type }}" :disabled="true" :small="true" />
             <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
             <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
@@ -60,9 +67,17 @@
             @if ($quest->wishes)
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $quest->wishes }}" :disabled="true" />
             @endif
-        </section>
-        <section class="input-group">
-            <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+        </x-extendo-block>
+
+        @php
+        $warn_quote = !!$quest->delayed_payment;
+        @endphp
+        <x-extendo-block key="quote"
+            header-icon="sack-dollar"
+            title="Wycena"
+            :subtitle="as_pln($quest->price).' // do '.$quest->deadline?->format('d.m.Y')"
+            :warning="$warn_quote"
+        >
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
                 <hr />
@@ -102,14 +117,17 @@
                 $("#price_code").change(function (e) { calcPriceNow() });
             });
             </script>
-            <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
-            <label for="payments">
-                Opłacono: {{ as_pln($quest->payments->sum("comment")) }}
-                @unless ($quest->paid)
-                •
-                Pozostało: {{ as_pln($quest->price - $quest->payments->sum("comment")) }}
-                @endunless
-            </label>
+
+            @if ($quest->deadline) <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
+
+            <x-extendo-section title="Wpłaty">
+                <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                @php arr_to_list(array_merge(
+                    ["Opłacono" => as_pln($quest->payments->sum("comment"))],
+                    !$quest->paid ? ["Pozostało" => as_pln($quest->price - $quest->payments->sum("comment"))] : [],
+                )) @endphp
+            </x-extendo-section>
+
             @unless ($quest->paid)
             <div class="tutorial">
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
@@ -133,13 +151,10 @@
             </p>
             @endif
             @endunless
-            @if ($quest->deadline)
-            <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" />
-            @endif
-            @if ($quest->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
-            @endif
 
+            @if ($quest->hard_deadline) <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
+
+            <x-extendo-section title="Faktury">
             @if (count($quest->visibleInvoices))
                 <h2>
                     <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -153,13 +168,17 @@
                 <p class="grayed-out">Brak</p>
                 @endforelse
             @endif
-        </section>
+            </x-extendo-section>
+        </x-extendo-block>
 
-        <section class="input-group sc-line">
-            <x-sc-scissors />
-            <h2><i class="fa-solid fa-file-waveform"></i> Pliki</h2>
-
+        <x-extendo-block key="files"
+            header-icon="file-waveform"
+            title="Pliki"
+            :extended="true"
+            scissors
+        >
             @forelse ($files as $ver_super => $ver_mains)
+            <div class="no-shrinking">
                 <h3 class="pre-file-container-a">{{ $ver_super }}</h3>
                 @foreach ($ver_mains as $ver_main => $ver_subs)
                 @php
@@ -216,6 +235,7 @@
                 </div>
                 @endif
                 @endforeach
+            </div>
             @empty
             <p class="grayed-out">Brak plików</p>
             @if (in_array($quest->status_id, [19]))
@@ -238,12 +258,14 @@
                 ich pobrania lub odsłuchania.
             </p>
             @endforelse
-        </section>
+        </x-extendo-block>
 
-        <section class="input-group">
-            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+        <x-extendo-block key="history"
+            header-icon="timeline"
+            title="Historia"
+        >
             <x-quest-history :quest="$quest" />
-        </section>
+        </x-extendo-block>
     </div>
 
     <form action="{{ route('mod-quest-back') }}" method="POST" id="phases">
@@ -294,15 +316,9 @@
                 W historii zlecenia pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
             </p>
             <div class="history-position p-18">
-                <span>
-                    <span class="client-name ghost">{{ $quest->client->client_name }}</span>
-                    <br>
-                    <i class="fa-solid fa-pencil"></i> Zmiana statusu zlecenia
-                    <x-input type="TEXT" name="comment" label=""
-                        placeholder="Tutaj wpisz swój komentarz..."
-                        />
-                </span>
-                <span>{!! str_replace(" ", "<br>", \Carbon\Carbon::now()->format("Y-m-d XX:XX:XX")) !!}</span>
+                <x-input type="TEXT" name="comment" label=""
+                    placeholder="Tutaj wpisz swój komentarz..."
+                    />
             </div>
             {{-- @endif --}}
             <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" :danger="true" />

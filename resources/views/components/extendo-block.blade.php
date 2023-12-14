@@ -1,13 +1,20 @@
-<div class="extendo-block section-like" data-ebid="{{ $key }}">
+<div @class([
+    "extendo-block",
+    "section-like",
+    "warning-like" => $warning,
+    "sc-line" => $scissors,
+]) data-ebid="{{ $key }}">
+    @if($scissors) <x-sc-scissors /> @endif
+
     @unless($extended === "perma")
-    <div class="header flex-right">
-        <div class="titles flex-right">
+    <div class="header flex-right keep-for-mobile">
+        <div class="titles flex-right keep-for-mobile">
             <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
             <h2>{{ $title }}</h2>
             <span class="ghost">{{ $subtitle }}</span>
         </div>
-        <div class="right-side flex-right">
-            <i class="fas fa-angles-down clickable" data-ebf="open"></i>
+        <div class="right-side flex-right keep-for-mobile">
+            <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
             @if ($warning) <i class="fas fa-triangle-exclamation fa-fade warning"></i> @endif
         </div>
     </div>

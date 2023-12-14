@@ -12,10 +12,27 @@
     <div class="quests-table">
         @forelse ($songs as $song)
         <x-extendo-block :key="$song->id"
-            type="song"
-            :object="$song"
-            extended="perma"
-        />
+            :header-icon="preg_replace('/fa-/', '', $song->type->fa_symbol)"
+            :title="$song->title ?? 'bez tytułu'"
+            :subtitle="$song->artist"
+        >
+            <x-extendo-section title="ID">{{ $song->id }}</x-extendo-section>
+            <x-extendo-section title="Typ">{{ $song->type->type }}</x-extendo-section>
+            <x-extendo-section title="Gatunek">{{ $song->genre->name }}</x-extendo-section>
+            <x-extendo-section title="Kod wyceny">{!! $price_codes[$song->id] !!}</x-extendo-section>
+            <x-extendo-section title="Linki"><x-link-interpreter :raw="$song->link" :editable="$song->id" /></x-extendo-section>
+            <x-extendo-section title="Notatki">{{ !$song->notes ?: Illuminate\Mail\Markdown::parse($song->notes) }}</x-extendo-section>
+            <x-extendo-section title="Czas wykonania">
+                <span {{ Popper::pop($song_work_times[$song->id]['parts']) }}>
+                    {{ $song->work_time }}
+                </span>
+            </x-extendo-section>
+            <x-extendo-section title="Zlecenia">
+                @foreach ($song->quests as $quest)
+                    <a href="{{ $quest->linkTo }}">{{ $quest->id }}</a>
+                @endforeach
+            </x-extendo-section>
+        </x-extendo-block>
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>
         @endforelse

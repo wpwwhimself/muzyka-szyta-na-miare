@@ -491,13 +491,17 @@ footer .contact-info{
         justify-content: space-between;
         align-items: center;
 
+        & .titles{
+            align-items: baseline;
+        }
         & .right-side{
             flex-direction: row-reverse;
         }
     }
     & .body{
+        justify-content: space-evenly;
         align-items: center;
-        gap: 3em;
+        gap: 1em;
         &:not(:first-child){
             padding-top: var(--eb-space);
             margin-top: var(--eb-space);
@@ -507,8 +511,8 @@ footer .contact-info{
         & > *{
             max-width: 250px;
         }
-        & .list-data{
-            list-style-type: none;
+        & > .extendo-section{
+            
         }
     }
 

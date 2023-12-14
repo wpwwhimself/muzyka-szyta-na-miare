@@ -21,7 +21,7 @@
                 </td>
                 <td>
                     @if ($entry->now_working) <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i> @endif
-                    {{ $entry->time_spent->format("H:mm:ss") }}
+                    {{ $entry->time_spent->format("H:m:s") }}
                 </td>
             </tr>
         @empty

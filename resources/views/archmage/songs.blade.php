@@ -1,7 +1,7 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="songs-list">
+<section id="songs-list" class="flex-down spaced">
     <div class="section-header">
         <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
         <form method="get" id="search" class="flex-right" action="{{ route('songs') }}">
@@ -9,7 +9,7 @@
             <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
         </form>
     </div>
-    <div class="quests-table">
+    {{-- <div class="quests-table"> --}}
         @forelse ($songs as $song)
         <x-extendo-block :key="$song->id"
             :header-icon="preg_replace('/fa-/', '', $song->type->fa_symbol)"
@@ -36,7 +36,7 @@
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>
         @endforelse
-    </div>
+    {{-- </div> --}}
     {{ $songs->links() }}
 </section>
 

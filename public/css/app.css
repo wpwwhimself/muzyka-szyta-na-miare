@@ -104,6 +104,9 @@ div, form{
     display: flex;
     flex-direction: column;
 }
+.flex-down.spaced{
+    gap: 1em;
+}
 .flex-down.center{
     align-items: center;
 }
@@ -157,9 +160,6 @@ b.priority, .priority b, .submit.priority{
 }
 .tutorial ul{ margin: 0; }
 .tutorial p{ margin: 0.2em auto; }
-.spaced{
-    margin: 1em;
-}
 
 /* CLICKABLE */
 a{

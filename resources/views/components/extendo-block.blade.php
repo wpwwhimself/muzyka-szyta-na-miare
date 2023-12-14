@@ -2,11 +2,11 @@
     @unless($extended === "perma")
     <div class="header flex-right">
         <div class="titles flex-right">
-            <h1><i class="fas fa-{{ $headerIcon }}"></i></h1>
-            <h1>{{ $title }}</h1>
+            <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
+            <h2>{{ $title }}</h2>
             <span class="ghost">{{ $subtitle }}</span>
         </div>
-        <div class="right-side">
+        <div class="right-side flex-right">
             <i class="fas fa-angles-down clickable" data-ebf="open"></i>
             @if ($warning) <i class="fas fa-triangle-exclamation fa-fade warning"></i> @endif
         </div>

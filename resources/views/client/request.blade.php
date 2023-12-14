@@ -46,82 +46,100 @@
     </h2>
     @endif
 
-    <div id="quest-box" class="flex-right">
-        <section class="input-group">
-            <h2><i class="fa-solid fa-cart-flatbed"></i> Dane zlecenia</h2>
-            <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" :disabled="true" />
+    <div class="flex-down spaced">
+        <x-extendo-block key="meta"
+            header-icon="cart-flatbed"
+            title="Dane zlecenia"
+            :subtitle="ucfirst($request->quest_type->type)"
+            :extended="true"
+        >
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" :disabled="true" />
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" :disabled="true" />
-            <x-input type="url" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" :disabled="true" />
-            <x-link-interpreter :raw="$request->link" />
+            <x-extendo-section title="Link do nagrania">
+                <x-link-interpreter :raw="$request->link" />
+            </x-extendo-section>
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
             @if ($request->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
-        </section>
-
-        <section class="input-group">
-            <h2><i class="fa-solid fa-sack-dollar"></i> Wycena</h2>
+        </x-extendo-block>
+        @php
+        $warn_quote = !!$request->delayed_payment
+            || !$request->price
+            || ($request->price && $request->status_id == 1)
+        ;
+        @endphp
+        <x-extendo-block key="quote"
+            header-icon="sack-dollar"
+            title="Wycena"
+            :subtitle="!$request->price ?: as_pln($request->price).' // '.$request->deadline?->format('d.m.Y')"
+            :warning="$warn_quote"
+        >
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
             @elseif ($request->price && $request->status_id == 1)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
             @endif
-            <div id="price-summary" class="hint-table">
-                <div class="positions"></div>
-                <hr />
-                <div class="summary"><span>Razem:</span><span>0 zł</span></div>
-            </div>
-            <script>
-            function calcPriceNow(){
-                const labels = "{{ $request->price_code }}";
-                const client_id = {!! $request->client_id ?? "\"\"" !!};
-                const positions_list = $("#price-summary .positions");
-                const sum_row = $("#price-summary .summary");
-                if(labels == "") $("#price-summary").hide();
-                else{
-                    $.ajax({
-                        url: "{{ url('price_calc') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            labels: labels,
-                            client_id: client_id
-                        },
-                        success: function(res){
-                            let content = ``;
-                            for(line of res.positions){
-                                content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+
+            <div>
+                <div id="price-summary" class="hint-table">
+                    <div class="positions"></div>
+                    <hr />
+                    <div class="summary"><span>Razem:</span><span>0 zł</span></div>
+                </div>
+                <script>
+                function calcPriceNow(){
+                    const labels = "{{ $request->price_code }}";
+                    const client_id = {!! $request->client_id ?? "\"\"" !!};
+                    const positions_list = $("#price-summary .positions");
+                    const sum_row = $("#price-summary .summary");
+                    if(labels == "") $("#price-summary").hide();
+                    else{
+                        $.ajax({
+                            url: "{{ url('price_calc') }}",
+                            type: "post",
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                labels: labels,
+                                client_id: client_id
+                            },
+                            success: function(res){
+                                let content = ``;
+                                for(line of res.positions){
+                                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+                                }
+                                positions_list.html(content);
+                                sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
+                                if(res.override) positions_list.addClass("overridden");
+                                    else positions_list.removeClass("overridden");
                             }
-                            positions_list.html(content);
-                            sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
-                            if(res.override) positions_list.addClass("overridden");
-                                else positions_list.removeClass("overridden");
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-            $(document).ready(function(){
-                calcPriceNow();
-            });
-            </script>
-            @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
-            <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
-                <i class="fa-solid fa-sack-dollar"></i>
-                Budżet w wysokości <b>{{ as_pln($request->client->budget) }}</b> automatycznie
-                <br>
-                pokryje
-                @if ($request->client->budget >= $request->price)
-                całą kwotę zlecenia
-                @else
-                część kwoty zlecenia
+                $(document).ready(function(){
+                    calcPriceNow();
+                });
+                </script>
+                @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
+                <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    Budżet w wysokości <b>{{ as_pln($request->client->budget) }}</b> automatycznie
+                    <br>
+                    pokryje
+                    @if ($request->client->budget >= $request->price)
+                    całą kwotę zlecenia
+                    @else
+                    część kwoty zlecenia
+                    @endif
+                </span>
                 @endif
-            </span>
-            @endif
+            </div>
+            
             @if ($request->deadline)
             <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
+            
             @if ($request->price && $request->status_id == 5)
             <div class="tutorial">
                 @if ($request->deadline)
@@ -135,10 +153,6 @@
                     <li>na numer konta,</li>
                     <li>BLIKiem na numer telefonu.</li>
                 </ul>
-                <p>
-                    Jest ona potrzebna do pobierania plików,<br>
-                    chyba, że jesteś np. stałym klientem
-                </p>
                 <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
             </div>
             @endif
@@ -150,12 +164,14 @@
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                 </p>
             @endif
-        </section>
+        </x-extendo-block>
 
-        <section class="input-group">
-            <h2><i class="fa-solid fa-timeline"></i> Historia</h2>
+        <x-extendo-block key="history"
+            header-icon="timeline"
+            title="Historia"
+        >
             <x-quest-history :quest="$request" />
-        </section>
+        </x-extendo-block>
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">

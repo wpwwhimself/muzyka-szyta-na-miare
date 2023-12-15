@@ -260,12 +260,7 @@
             @endforelse
         </x-extendo-block>
 
-        <x-extendo-block key="history"
-            header-icon="timeline"
-            title="Historia"
-        >
-            <x-quest-history :quest="$quest" />
-        </x-extendo-block>
+        <x-quest-history :quest="$quest" />
     </div>
 
     <form action="{{ route('mod-quest-back') }}" method="POST" id="phases">

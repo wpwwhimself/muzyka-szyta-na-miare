@@ -778,13 +778,14 @@ footer .contact-info{
             margin: 0;
             justify-content: center;
             border-radius: 100%;
+            font-size: 1.5em;
             width: var(--circle-size); height: var(--circle-size);
             background: var(--bg1);
             &:hover{
                 background: rgba(var(--q-clr), 0.5);
             }
             &.by-client{
-                border-bottom: 2px solid var(--acc);
+                border: 2px solid var(--acc);
             }
         }
         & .notification-counter{

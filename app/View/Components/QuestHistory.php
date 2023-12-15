@@ -23,8 +23,8 @@ class QuestHistory extends Component
     {
         $this->quest = $quest;
         $this->history = StatusChange::whereIn("re_quest_id", [$quest->id, Request::where("quest_id", $quest->id)->value("id")])
-            ->orderBy("date")
-            ->orderBy("new_status_id")
+            ->orderBy("date", "desc")
+            ->orderBy("new_status_id", "desc")
             ->get()
         ;
     }
@@ -46,7 +46,7 @@ class QuestHistory extends Component
         $content = [
             "<span class='quest-status p-".$entry->status->id."'><i class='fas ".$entry->status->status_symbol."'></i> ".$entry->status->status_name."</span>",
             count($details) ? implode("\n", $details) : null,
-            $entry->comment,
+            $entry->new_status_id == 32 ? as_pln($entry->comment) : $entry->comment,
             "<span class='grayed-out'>".$this->clientName($entry->changed_by).", ".$entry->date."</span>",
         ];
         foreach($content as $value){

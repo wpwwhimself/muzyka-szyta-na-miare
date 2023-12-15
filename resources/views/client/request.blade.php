@@ -166,12 +166,7 @@
             @endif
         </x-extendo-block>
 
-        <x-extendo-block key="history"
-            header-icon="timeline"
-            title="Historia"
-        >
-            <x-quest-history :quest="$request" />
-        </x-extendo-block>
+        <x-quest-history :quest="$request" />
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">

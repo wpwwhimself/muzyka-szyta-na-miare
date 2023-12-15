@@ -115,9 +115,9 @@
             @if ($quest->deadline) <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
 
             <x-extendo-section title="Wpłaty">
-                <progress id="payments" value="{{ $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
                 @php arr_to_list(array_merge(
-                    ["Opłacono" => as_pln($quest->payments->sum("comment"))],
+                    ["Opłacono" => as_pln($quest->paid ? $quest->price : $quest->payments->sum("comment"))],
                     !$quest->paid ? ["Pozostało" => as_pln($quest->price - $quest->payments->sum("comment"))] : [],
                 )) @endphp
             </x-extendo-section>
@@ -172,8 +172,7 @@
             scissors
         >
             @forelse ($files as $ver_super => $ver_mains)
-            <div class="no-shrinking">
-                <h3 class="pre-file-container-a">{{ $ver_super }}</h3>
+            <x-extendo-section :title="$ver_super" no-shrinking>
                 @foreach ($ver_mains as $ver_main => $ver_subs)
                 @php
                     $ids = [];
@@ -229,7 +228,7 @@
                 </div>
                 @endif
                 @endforeach
-            </div>
+            </x-extendo-section>
             @empty
             <p class="grayed-out">Brak plików</p>
             @if (in_array($quest->status_id, [19]))

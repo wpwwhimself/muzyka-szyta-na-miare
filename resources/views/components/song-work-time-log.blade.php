@@ -1,5 +1,9 @@
-<div>
-    <h2><i class="fa-solid fa-snowplow"></i> Log tworzenia</h2>
+<x-extendo-block key="time-log"
+    header-icon="snowplow"
+    title="Log tworzenia"
+    :subtitle="$quest->song->work_time"
+    :extended="$extended"
+>
     <table>
         <thead>
             <tr>
@@ -65,4 +69,4 @@
         </div>
     </form>
     @endif
-</div>
+</x-extendo-block>

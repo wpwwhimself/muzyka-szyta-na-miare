@@ -4,7 +4,6 @@ namespace App\View\Components;
 
 use App\Models\Client;
 use App\Models\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -19,7 +18,9 @@ class QuestHistory extends Component
      */
     public $quest;
     public $history;
-    public function __construct($quest)
+    public $extended;
+
+    public function __construct($quest, $extended = false)
     {
         $this->quest = $quest;
         $this->history = StatusChange::whereIn("re_quest_id", [$quest->id, Request::where("quest_id", $quest->id)->value("id")])
@@ -27,6 +28,7 @@ class QuestHistory extends Component
             ->orderBy("new_status_id")
             ->get()
         ;
+        $this->extended = $extended;
     }
 
     public function statusName($id){

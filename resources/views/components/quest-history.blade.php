@@ -1,10 +1,11 @@
 <x-extendo-block key="history"
     header-icon="timeline"
     title="Historia"
+    :extended="$extended"
 >
-    <x-extendo-section title="Najnowszy komentarz">
+    <x-extendo-section title="Ostatni komentarz klienta">
         @if(is_archmage() && $history->whereNotIn("changed_by", [0, 1])->last()?->comment)
-        {{ Illuminate\Mail\Markdown::parse($history->whereNotIn("changed_by", [0, 1])->last()->comment) }}
+        {!! $entryLabel($history->whereNotIn("changed_by", [0, 1])->last()) !!}
         @endif
     </x-extendo-section>
 

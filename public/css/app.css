@@ -106,6 +106,7 @@ div, form{
 }
 .flex-down.spaced{
     gap: 1em;
+    margin-block: 1em;
 }
 .flex-down.center{
     align-items: center;

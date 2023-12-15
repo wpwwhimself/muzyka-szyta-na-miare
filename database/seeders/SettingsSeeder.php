@@ -70,6 +70,11 @@ class SettingsSeeder extends Seeder
                 "desc" => "Minimalna cena zlecenia dla poszczególnych typów zleceń: kolejno P, N, O",
                 "value_str" => "45,100,10"
             ],
+            [
+                "setting_name" => "min_account_balance",
+                "desc" => "Minimalne saldo konta (na potrzeby obliczania wypłaty)",
+                "value_str" => 750
+            ],
         ]);
     }
 }

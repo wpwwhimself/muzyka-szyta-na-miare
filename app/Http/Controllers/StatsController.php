@@ -464,11 +464,14 @@ class StatsController extends Controller
         $losses_payments = (clone $losses)->where("cost_type_id", 3)->sum("amount");
         $losses_other = (clone $losses)->where("cost_type_id", "<>", 3)->sum("amount");
 
+        $balance_now = StatusChange::where("new_status_id", 32)->sum("comment") - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount");
+
         $summary = [
             "Zarobiono" => $gains->sum("comment"),
             "Wydano" => $losses_other,
             "Wypłacono" => $losses_payments,
-            "Saldo na dziś" => StatusChange::where("new_status_id", 32)->sum("comment") - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount"),
+            "Saldo na dziś" => $balance_now,
+            "Można wypłacić" => max($balance_now - setting("min_account_balance"), 0),
         ];
         $gains = $gains->get();
         $losses = $losses->get();

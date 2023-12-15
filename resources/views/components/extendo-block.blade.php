@@ -15,11 +15,11 @@
         </div>
         <div class="right-side flex-right keep-for-mobile">
             <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
-            @if (array_filter($warning ?? [], fn($t) => $t))
+            @if ($warning)
             @php
                 $warning_content = [];
                 foreach ($warning as $message => $test) {
-                    if($test) $warning_content[] = $message;
+                    $warning_content[] = $message;
                 }
             @endphp
             <i class="fas fa-triangle-exclamation fa-fade warning"

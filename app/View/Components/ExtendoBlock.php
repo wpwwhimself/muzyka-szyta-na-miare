@@ -39,7 +39,7 @@ class ExtendoBlock extends Component
         $this->headerIcon = $headerIcon;
         $this->title = $title;
         $this->subtitle = $subtitle;
-        $this->warning = $warning;
+        $this->warning = array_filter($warning ?? [], fn($t) => $t);
         $this->extended = $extended;
         $this->scissors = $scissors;
     }

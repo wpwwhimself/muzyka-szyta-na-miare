@@ -56,7 +56,7 @@ section{
     margin: 1em 0 0;
     padding: 1em;
 }
-section:hover{
+section:hover, .section-like:hover{
     border-color: var(--fg);
 }
 .section-header{

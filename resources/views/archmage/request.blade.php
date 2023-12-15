@@ -36,7 +36,7 @@
     </div>
 
     @if ($request->quest_id)
-    <h2>Zlecenie przepisane z numerem <a href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h2>
+    <h3>Zlecenie przepisane z numerem <a href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h3>
     @endif
 
     <div class="flex-down spaced">
@@ -117,7 +117,7 @@
             :subtitle="$request->song?->full_title ?? $request->title"
             :extended="in_array($request->status_id, [1])"
             :warning="[
-                'Klient ma domyślne życzenia' => $request->client->default_wishes,
+                'Klient ma domyślne życzenia' => $request->client?->default_wishes,
                 'Klient ma deadline' => $request->hard_deadline,
             ]"
         >

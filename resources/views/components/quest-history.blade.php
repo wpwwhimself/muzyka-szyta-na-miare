@@ -3,7 +3,7 @@
     title="Historia"
 >
     <x-extendo-section title="Najnowszy komentarz">
-        @if(is_archmage() && $history->whereNotIn("changed_by", [0, 1])->last()->comment)
+        @if(is_archmage() && $history->whereNotIn("changed_by", [0, 1])->last()?->comment)
         {{ Illuminate\Mail\Markdown::parse($history->whereNotIn("changed_by", [0, 1])->last()->comment) }}
         @endif
     </x-extendo-section>

@@ -64,17 +64,15 @@
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
         </x-extendo-block>
-        @php
-        $warn_quote = !!$request->delayed_payment
-            || !$request->price
-            || ($request->price && $request->status_id == 1)
-        ;
-        @endphp
         <x-extendo-block key="quote"
             header-icon="sack-dollar"
             title="Wycena"
             :subtitle="!$request->price ?: as_pln($request->price).' // do '.$request->deadline?->format('d.m.Y')"
-            :warning="$warn_quote"
+            :warning="[
+                'Zwróć uwagę, kiedy masz zapłacić' => $request->delayed_payment,
+                'Wycena nadal w przygotowaniu' => !$request->price,
+                'Wycena może być nieaktualna' => $request->price && $request->status_id == 1,
+            ]"
         >
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>

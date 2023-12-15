@@ -51,10 +51,7 @@
         <x-extendo-block key="meta"
             header-icon="compact-disc"
             title="Szczegóły utworu"
-            {{-- :subtitle="implode(" – ", array_filter([
-                $quest->song->artist,
-                $quest->song->title ?? 'utwór bez tytułu',
-            ], fn($v) => !empty($v)))" --}}
+            :subtitle="$quest->song->full_title"
             :extended="true"
         >
             <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ $quest->song->type->type }}" :disabled="true" :small="true" />
@@ -69,14 +66,11 @@
             @endif
         </x-extendo-block>
 
-        @php
-        $warn_quote = !!$quest->delayed_payment;
-        @endphp
         <x-extendo-block key="quote"
             header-icon="sack-dollar"
             title="Wycena"
             :subtitle="as_pln($quest->price).' // do '.$quest->deadline?->format('d.m.Y')"
-            :warning="$warn_quote"
+            :warning="['Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment]"
         >
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>

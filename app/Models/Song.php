@@ -53,4 +53,10 @@ class Song extends Model
     public function getLinkToAttribute(){
         return route("songs", ["search" => $this->id]);
     }
+    public function getFullTitleAttribute(){
+        return implode(' – ', array_filter([
+            $this->artist,
+            $this->title ?? 'utwór bez tytułu',
+        ], fn($v) => !empty($v)));
+    }
 }

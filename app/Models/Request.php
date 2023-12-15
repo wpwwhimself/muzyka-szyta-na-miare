@@ -41,4 +41,7 @@ class Request extends Model
     public function changes(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
+    public function quest(){
+        return $this->belongsTo(Quest::class);
+    }
 }

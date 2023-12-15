@@ -22,6 +22,7 @@ class ExtendoBlock extends Component
      * @param type type of component -- song, client, request or quest
      * @param object object to draw data from -- if missing, then...?
      * @param extended should the drawer be already extended? false / true / 'perma'
+     * @param warning should the block display a warning? array of warning messages => conditions
      *
      * @return void
      */

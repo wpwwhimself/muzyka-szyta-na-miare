@@ -437,7 +437,7 @@
         </div>
 
         @unless ($quest->status_id == 12)
-        <x-quest-history :quest="$quest" />
+        <x-quest-history :quest="$quest" :extended="in_array($quest->status_id, [16, 26, 96])" />
         @endunless
     </div>
 </div>

@@ -314,7 +314,8 @@
                 title="Wycena"
                 :subtitle="as_pln($quest->price).' // do '.$quest->deadline->format('d.m.Y')"
                 :warning="[
-                    'Ostatnia zmiana padła '.$quest->changes->get(1)->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->changes->get(1)->date->diffInDays() >= 30
+                    'Ostatnia zmiana padła '.$quest->changes->get(1)->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->changes->get(1)->date->diffInDays() >= 30,
+                    'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,
                 ]"
             >
                 <div>

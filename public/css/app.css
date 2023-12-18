@@ -1155,7 +1155,7 @@ footer .contact-info{
     header>.flex-right{
         flex-direction: row;
     }
-    section{
+    section, .section-like{
         margin: 1em 0;
     }
     .section-header h1{
@@ -1242,6 +1242,7 @@ footer .contact-info{
     .grid-2, .grid-3, .section-header>div{
         display: flex;
         flex-direction: column;
+        align-items: inherit;
     }
     .login-grid-container{
         padding: 0.5em 0;

@@ -14,6 +14,7 @@ class ExtendoBlock extends Component
     public $warning;
     public $extended;
     public $scissors;
+    public $buttons;
 
     /**
      * Create a new component instance.

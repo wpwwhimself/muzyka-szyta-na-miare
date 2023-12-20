@@ -20,7 +20,7 @@ class Quest extends Model
         return substr($this->id, 0, 1);
     }
     public function getDelayedPaymentInEffectAttribute(){
-        return $this->delayed_payment > Carbon::today();
+        return $this->delayed_payment > Carbon::today() && !$this->paid;
     }
     public function getIsPriorityAttribute(){
         return preg_match("/z/", $this->price_code_override);

@@ -4,7 +4,7 @@
     :subtitle="$quest->song->work_time"
     :extended="$extended"
 >
-    <table>
+    <table id="stats-log">
         <thead>
             <tr>
                 <th>Etap</th>
@@ -19,12 +19,15 @@
                     {{ DB::table("statuses")->find($entry->status_id)->status_name }}
                 </td>
                 <td>
+                    @if ($entry->now_working)
+                    <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
+                    @else
                     <a class="log-delete" href="{{ route('work-clock-remove', ['status_id' => $entry->status_id, 'song_id' => $entry->song_id]) }}">
                         <i class="fa-solid fa-trash" @popper(usuń wpis)></i>
                     </a>
+                    @endif
                 </td>
                 <td>
-                    @if ($entry->now_working) <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i> @endif
                     {{ $entry->time_spent->format("H:i:s") }}
                 </td>
             </tr>

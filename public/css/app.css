@@ -800,33 +800,29 @@ footer .contact-info{
     background: none;
 }
 
-#stats{
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-}
 #stats-buttons{
     margin-top: 1em;
     gap: 0.2em;
     align-items: center;
     max-width: 20em;
+
+    & button{
+        margin: 0;
+        padding: 0.3em;
+    }
 }
-#stats-buttons button{
-    margin: 0;
-    padding: 0.3em;
-}
-#stats-log .table{
-    grid-template-columns: 2fr 1fr;
-}
-#stats-log .table span:nth-child(2n - 1){ text-align: left; }
-#stats-log .active{
-    color: var(--acc);
-    font-weight: bold;
-}
-#stats-log .log-delete{
-    display: none;
-}
-#stats-log tr:hover .log-delete{
-    display: inline;
+#stats-log{
+    & span:nth-child(2n - 1){ text-align: left; }
+    & .active{
+        color: var(--acc);
+        font-weight: bold;
+    }
+    & .log-delete{
+        display: none;
+    }
+    & tr:hover .log-delete{
+        display: inline;
+    }
 }
 
 .stats-highlight-h{

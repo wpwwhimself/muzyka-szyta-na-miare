@@ -105,13 +105,13 @@
                                 >
                                 {{ $quest->song->title ?? "utwór bez tytułu" }}
                                 <x-phase-indicator-mini :status="$quest->status" />
-                                {{ _c_(as_pln($quest->price - $quest->payments->sum("comment"))) }}
+                                {{ _c_(as_pln($quest->price - $quest->payments_sum)) }}
                             </a>
                             <input type="checkbox" name="{{ $quest->id }}" />
                         </div>
                         @php
-                        $amount_to_pay[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments->sum("comment");
-                        $amount_total[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments->sum("comment")
+                        $amount_to_pay[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum;
+                        $amount_total[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum
                         @endphp
                         @endforeach
                     </td>

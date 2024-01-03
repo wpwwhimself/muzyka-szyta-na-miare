@@ -361,16 +361,16 @@
                 </div>
 
                 <x-extendo-section title="Wpłaty">
-                    <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                    <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments_sum }}" max="{{ $quest->price }}"></progress>
                     @php arr_to_list(array_merge(
-                        ["Opłacono" => _c_(as_pln($quest->paid ? $quest->price : $quest->payments->sum("comment")))],
-                        !$quest->paid ? ["Pozostało" => _c_(as_pln($quest->price - $quest->payments->sum("comment")))] : [],
+                        ["Opłacono" => _c_(as_pln($quest->paid ? $quest->price : $quest->payments_sum))],
+                        !$quest->paid ? ["Pozostało" => _c_(as_pln($quest->price - $quest->payments_sum))] : [],
                     )) @endphp
                     @unless ($quest->paid)
                     <form action="{{ route("mod-quest-back") }}" method="post" id="quest-pay">
                         @csrf
                         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                        <x-input type="number" name="comment" label="Kwota" step="0.01" :small="true" value="{{ $quest->price - $quest->payments->sum('comment') }}" />
+                        <x-input type="number" name="comment" label="Kwota" step="0.01" :small="true" value="{{ $quest->price - $quest->payments_sum }}" />
                         <x-button action="submit" name="status_id" icon="32" value="32" label="Opłać" :small="true" />
                     </form>
                     @endunless

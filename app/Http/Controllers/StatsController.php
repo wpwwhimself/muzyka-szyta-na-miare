@@ -409,7 +409,7 @@ class StatsController extends Controller
         $clients_quests = [];
         foreach($quest_ids as $id){
             $quest = Quest::find($id);
-            $amount_to_pay = $quest->price - $quest->payments->sum("comment");
+            $amount_to_pay = $quest->price - $quest->payments_sum;
 
             // opłać zlecenia
             app("App\Http\Controllers\BackController")->statusHistory(

@@ -708,7 +708,7 @@ class BackController extends Controller
             if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
 
             // opłacenie zlecenia (sprawdzenie nadwyżki)
-            $amount_to_pay = $quest->price - $quest->payments->sum("comment");
+            $amount_to_pay = $quest->price - $quest->payments_sum;
             $amount_for_budget = $rq->comment - $amount_to_pay;
 
             $this->statusHistory($rq->quest_id, $rq->status_id, min($rq->comment, $amount_to_pay), $quest->client_id);
@@ -827,7 +827,7 @@ class BackController extends Controller
         $quest->update([
             "price_code_override" => $rq->price_code_override,
             "price" => price_calc($rq->price_code_override, $quest->client_id)["price"],
-            "paid" => ($quest->payments->sum("comment") >= price_calc($rq->price_code_override, $quest->client_id)["price"]),
+            "paid" => ($quest->payments_sum >= price_calc($rq->price_code_override, $quest->client_id)["price"]),
             "deadline" => $rq->deadline,
             "delayed_payment" => $rq->delayed_payment,
         ]);

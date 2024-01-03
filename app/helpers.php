@@ -317,7 +317,7 @@ if(!function_exists("quests_unpaid")){
         $quests_val = $quests->sum("price");
 
         foreach($quests->get() as $quest){
-            $quests_val -= $quest->payments->sum("comment");
+            $quests_val -= $quest->payments_sum;
         }
 
         return $quests_val;

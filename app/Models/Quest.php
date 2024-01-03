@@ -28,6 +28,9 @@ class Quest extends Model
     public function getLinkToAttribute(){
         return route("quest", ["id" => $this->id]);
     }
+    public function getPaymentsSumAttribute(){
+        return $this->payments->sum("comment");
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);

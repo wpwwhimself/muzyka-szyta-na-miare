@@ -70,7 +70,12 @@
             header-icon="sack-dollar"
             title="Wycena"
             :subtitle="as_pln($quest->price).' // do '.$quest->deadline?->format('d.m.Y')"
-            :warning="['Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment]"
+            :warning="[
+                'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment,
+                'Zlecenie nieopłacone' => $quest->client->trust == -1
+                    || $quest->status_id == 19 && !$quest->paid
+                    || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
+            ]"
         >
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>
@@ -115,10 +120,10 @@
             @if ($quest->deadline) <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
 
             <x-extendo-section title="Wpłaty">
-                <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments->sum("comment") }}" max="{{ $quest->price }}"></progress>
+                <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments_sum }}" max="{{ $quest->price }}"></progress>
                 @php arr_to_list(array_merge(
-                    ["Opłacono" => as_pln($quest->paid ? $quest->price : $quest->payments->sum("comment"))],
-                    !$quest->paid ? ["Pozostało" => as_pln($quest->price - $quest->payments->sum("comment"))] : [],
+                    ["Opłacono" => as_pln($quest->paid ? $quest->price : $quest->payments_sum)],
+                    !$quest->paid ? ["Pozostało" => as_pln($quest->price - $quest->payments_sum)] : [],
                 )) @endphp
             </x-extendo-section>
 

@@ -28,7 +28,7 @@
                 }
             @endphp
             <i class="fas fa-triangle-exclamation fa-fade warning"
-                {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("\n", $warning_content))) }}
+                {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
             ></i>
             @endif
         </div>

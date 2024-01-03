@@ -93,14 +93,25 @@ class BackController extends Controller
                     ->sum("comment"),
             ];
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
+            
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
+                // translating subjects
                 $length = strlen($i->subject);
                 $replacement =
                     ($length == 36) ? Request::find($i->subject)
                     : (($length == 6) ? Quest::find($i->subject)
                     : Song::find($i->subject));
                 $i->subject = $replacement ?? $i->subject;
+
+                // translating operations
+                if(in_array($i->comment, array_keys(JanitorController::$OPERATIONS))){
+                    [$status_id, $comment_code] = explode("_", $i->comment);
+                    $i->comment = [
+                        "status_id" => $status_id,
+                        "comment" => JanitorController::$OPERATIONS[$i->comment],
+                    ];
+                }
             }
             $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
         }

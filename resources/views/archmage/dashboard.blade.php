@@ -112,7 +112,12 @@
                             @endif
                         </td>
                         <td>
+                            @if(is_array($i->comment))
+                            {{ $i->comment["comment"] }}
+                            <x-phase-indicator-mini :status="\App\Models\Status::find($i->comment['status_id'])" />
+                            @else
                             {{ $i->comment }}
+                            @endif
                         </td>
                         <td>
                             @switch($i->mailing)

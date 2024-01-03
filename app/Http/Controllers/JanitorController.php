@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Storage;
 class JanitorController extends Controller
 {
     public $summary;
+    public static $OPERATIONS = [
+        "7_FORGOT" => "Brak reakcji",
+        "15_REMINDED" => "Przypomnienie o działaniu",
+        "17_FORGOT" => "Brak opinii",
+        "17_UNPAID" => "Nieopłacone, ale zaakceptowane",
+        "19_ALLGOOD" => "Brak uwag",
+        "33_REMINDED" => "Przypomnienie o opłacie",
+    ];
 
     public function getSummary(){
         return $this->summary;
@@ -72,7 +80,7 @@ class JanitorController extends Controller
                 "procedure" => "re_quests",
                 "subject_type" => "request",
                 "subject" => $request->id,
-                "comment" => "Brak reakcji",
+                "comment" => "7_FORGOT",
             ];
             if($request->client?->email || $request->email){
                 Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request));
@@ -102,7 +110,7 @@ class JanitorController extends Controller
             })
             ->get();
         foreach($quests as $quest){
-            [$new_status, $new_comment] = $quest->paid ? [19, "Brak uwag"] : [17, "Brak opinii"];
+            [$new_status, $new_comment] = $quest->paid ? [19, "19_ALLGOOD"] : [17, "17_FORGOT"];
             $quest->update(["status_id" => $new_status]);
             $summaryEntry = [
                 "procedure" => "re_quests",
@@ -141,7 +149,7 @@ class JanitorController extends Controller
                 "procedure" => "re_quests",
                 "subject_type" => "quest",
                 "subject" => $quest->id,
-                "comment" => "Nieopłacone, ale zaakceptowane",
+                "comment" => "17_UNPAID",
             ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak wpłaty"));
@@ -168,7 +176,7 @@ class JanitorController extends Controller
                     "procedure" => "re_quests",
                     "subject_type" => "quest",
                     "subject" => $quest->id,
-                    "comment" => "Przypomnienie o działaniu",
+                    "comment" => "15_REMINDED",
                 ];
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
@@ -200,7 +208,7 @@ class JanitorController extends Controller
                     "procedure" => "re_quests",
                     "subject_type" => "quest",
                     "subject" => $quest->id,
-                    "comment" => "Przypomnienie o opłacie",
+                    "comment" => "33_REMINDED",
                 ];
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest));

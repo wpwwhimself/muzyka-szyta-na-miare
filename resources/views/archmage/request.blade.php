@@ -297,7 +297,7 @@
             </div>
         </x-extendo-block>
 
-        <x-quest-history :quest="$request" />
+        <x-quest-history :quest="$request" :extended="true" />
     </div>
 </form>
 

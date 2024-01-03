@@ -43,7 +43,7 @@
             header-icon="compact-disc"
             title="Utwór"
             :subtitle="$quest->song_id . ' // ' . $quest->song->full_title"
-            :extended="$quest->status_id == 12"
+            :extended="in_array($quest->status_id, [11, 12])"
         >
             <x-extendo-section title="Rodzaj">
                 <x-quest-type
@@ -94,9 +94,9 @@
         <x-extendo-block key="files"
             header-icon="file-waveform"
             title="Pliki"
-            :extended="true"
+            :extended="!in_array($quest->status_id, [11])"
             :warning="[
-                'Pliki nieoznaczone jako komplet' => !$quest->files_ready,
+                'Pliki nieoznaczone jako komplet' => $quest->status_id != 11 && !$quest->files_ready,
             ]"
             scissors
         >
@@ -438,7 +438,7 @@
         </div>
 
         @unless ($quest->status_id == 12)
-        <x-quest-history :quest="$quest" :extended="in_array($quest->status_id, [16, 26, 96])" />
+        <x-quest-history :quest="$quest" :extended="true" />
         @endunless
     </div>
 </div>

@@ -884,6 +884,12 @@ class BackController extends Controller
         }
         $changes["zmiana z uwagi na"] = $rq->reason;
 
+        // change quest status
+        $quest->update([
+            "status_id" => 31,
+            "files_ready" => false,
+        ]);
+
         app("App\Http\Controllers\BackController")->statusHistory(
             $rq->id,
             31,

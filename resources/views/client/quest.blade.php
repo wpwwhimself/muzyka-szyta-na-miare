@@ -33,6 +33,9 @@
     @case(26)
         Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.
         @break
+    @case(31)
+        Wycena dla tego zlecenia musiała zostać zmieniona. Aby prace mogły postępować dalej, musisz je zaakceptować.
+        @break
     @case(95)
         Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.
         @break
@@ -291,7 +294,7 @@
             <x-button action="#/" statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
             @endif
             @if (in_array($quest->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
-            @if (in_array($quest->status_id, [15, 95]))
+            @if (in_array($quest->status_id, [15, 31, 95]))
                 @if ($quest->files_ready)
                 <x-button action="#/" statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  />
                 @else

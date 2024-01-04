@@ -19,9 +19,9 @@
                 ["Doprecyzuj", 95, [11, 12, 13, 14, 16, 26, 96]],
                 ["Klient odpowiada", 96, [95]],
                 ["Zawieś", 13, [12, 14, 16, 96]],
-                ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 96]],
+                ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 31, 96]],
                 ["Klient cofa", 16, [15]],
-                ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 95, 96]],
+                ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 31, 95, 96]],
                 ["Kient przywraca", 26, [17, 18, 19]],
                 ["Wygaś", 17, [13, 15]],
             ] as [$label, $status_id, $show_on_statuses])

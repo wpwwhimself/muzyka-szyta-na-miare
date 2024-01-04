@@ -11,29 +11,6 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
-    <table>
-        <tr>
-            @foreach ([
-                "Cena" => as_pln($quest->price).(($quest->client->budget) ? "*" : ""),
-                "Termin oddania pierwszej wersji" => ($quest->deadline)
-                    ? "do ".$quest->deadline?->format("d.m.Y")
-                    : "brak",
-            ] as $key => $val)
-            <td class="framed-cell">
-                <p>{{ $key }}</p>
-                <h2>{{ $val }}</h2>
-            </td>
-            @endforeach
-        </tr>
-    </table>
-
-    @if ($quest->delayed_payment)
-        <p><b>
-            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-            proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}.
-        </b></p>
-    @endif
-
     @if ($quest->client->budget)
     <p><i>
         *{{ ($quest->client->budget >= $price_difference) ? "Całość" : "Część" }}
@@ -43,9 +20,7 @@
     @endif
 
     <p>
-        
-        Jeśli <b>nie zgadza się {{ $pl["kobieta"] ? "Pani" : "Pan" }} na nowe warunki</b> i chce zrezygnować ze zlecenia, proszę o kliknięcie odpowiedniego przycisku w widoku zlecenia.
-        W przeciwnym wypadku nie musi {{ $pl["kobieta"] ? "Pani" : "Pan" }} podejmować żadnych czynności.
+        Proszę o przejście do zlecenia, aby zaakceptować lub odrzucić nowe warunki zlecenia.
     </p>
 
     <h3>

@@ -22,7 +22,9 @@ class JanitorController extends Controller
         "17_FORGOT" => "Brak opinii",
         "17_UNPAID" => "Nieopłacone, ale zaakceptowane",
         "19_ALLGOOD" => "Brak uwag",
+        "31_REMINDED" => "Przypomnienie o działaniu",
         "33_REMINDED" => "Przypomnienie o opłacie",
+        "95_REMINDED" => "Przypomnienie o działaniu",
     ];
 
     public function getSummary(){
@@ -96,7 +98,7 @@ class JanitorController extends Controller
         /**
          * expiring unreviewed quests
          */
-        $quests = Quest::whereIn("status_id", [15, 95])
+        $quests = Quest::whereIn("status_id", [15, 31, 95])
             ->where(function($q){
                 $q->whereHas('client', function($q){ $q->where('trust', '<', 1); })
                     ->orWhereHas('client', function($q){ $q->where('trust', 1); })->where("paid", true);
@@ -165,7 +167,7 @@ class JanitorController extends Controller
         /**
          * reminding clients about unreviewed quests
          */
-        $quests = Quest::whereIn("status_id", [15, 95])->get();
+        $quests = Quest::whereIn("status_id", [15, 31, 95])->get();
         foreach($quests as $quest){
             if(
                 $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
@@ -176,11 +178,11 @@ class JanitorController extends Controller
                     "procedure" => "re_quests",
                     "subject_type" => "quest",
                     "subject" => $quest->id,
-                    "comment" => "15_REMINDED",
+                    "comment" => $quest->status_id."_REMINDED",
                 ];
                 if($quest->client->email){
                     Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest));
-                    StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 95])->orderByDesc("date")->first()->increment("mail_sent");
+                    StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 31, 95])->orderByDesc("date")->first()->increment("mail_sent");
                     $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
                 }else{
                     $summaryEntry["mailing"] = 0;

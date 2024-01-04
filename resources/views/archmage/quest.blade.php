@@ -312,7 +312,11 @@
             <x-extendo-block key="quote"
                 header-icon="sack-dollar"
                 title="Wycena"
-                :subtitle="as_pln($quest->price).' // do '.$quest->deadline->format('d.m.Y')"
+                :subtitle="implode(' // ', array_filter([
+                    as_pln($quest->price),
+                    'do '.$quest->deadline->format('d.m.Y'),
+                    $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
+                ], fn($val) => !is_null($val)))"
                 :warning="[
                     'Ostatnia zmiana padła '.$quest->changes->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->changes->get(1)?->date->diffInDays() >= 30,
                     'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,

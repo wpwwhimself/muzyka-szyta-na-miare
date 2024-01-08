@@ -122,10 +122,10 @@ class JanitorController extends Controller
             ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest, "brak opinii"));
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $OPERATIONS[$new_comment], 1, 1);
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, 1);
                 $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, $OPERATIONS[$new_comment], 1, null);
+                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, null);
                 $summaryEntry["mailing"] = 0;
             }
             $this->addToSummary(...$summaryEntry);

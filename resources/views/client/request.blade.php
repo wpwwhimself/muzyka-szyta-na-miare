@@ -26,7 +26,7 @@
         Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
         @break
     @case(95)
-        Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania za pomocą przycisku poniżej.
+        Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania (zawarte w historii) za pomocą przycisku poniżej.
         @break
     @case(96)
         Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.
@@ -167,7 +167,7 @@
             @endif
         </x-extendo-block>
 
-        <x-quest-history :quest="$request" />
+        <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">
@@ -195,17 +195,7 @@
                 <i class="fa-solid fa-circle-question"></i>
                 W historii zapytania pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
             </p>
-            <div class="history-position p-18">
-                <span>
-                    <span class="client-name ghost">{{ $request->client_name }}</span>
-                    <br>
-                    <i class="fa-solid fa-pencil"></i> Zmiana statusu zlecenia
-                    <x-input type="TEXT" name="comment" label=""
-                        placeholder="Tutaj wpisz swój komentarz..."
-                        />
-                </span>
-                <span>{!! str_replace(" ", "<br>", \Carbon\Carbon::now()->format("Y-m-d XX:XX:XX")) !!}</span>
-            </div>
+            <x-input type="TEXT" name="comment" label="" placeholder="Tutaj wpisz swój komentarz..." />
             {{-- @endif --}}
             <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" :danger="true" />
         </div>

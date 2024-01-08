@@ -9,6 +9,12 @@
         @endif
     </x-extendo-section>
 
+    <x-extendo-section title="Ostatni mój komentarz">
+        @if(!is_archmage() && $history->whereIn("changed_by", [0, 1])->last()?->comment)
+        {!! $entryLabel($history->whereIn("changed_by", [0, 1])->last()) !!}
+        @endif
+    </x-extendo-section>
+
     <div id="quest-history">
         @forelse ($history as $item)
         <div @class([

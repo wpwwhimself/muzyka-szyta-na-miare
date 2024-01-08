@@ -365,6 +365,7 @@ if(!function_exists("client_polonize")){
  */
 if(!function_exists("as_pln")){
     function as_pln($value){
+        if (empty($value)) return null;
         return number_format($value, 2, ",", " ")." zł";
     }
 }

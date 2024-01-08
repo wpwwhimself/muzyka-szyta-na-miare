@@ -67,7 +67,10 @@
         <x-extendo-block key="quote"
             header-icon="sack-dollar"
             title="Wycena"
-            :subtitle="!$request->price ?: as_pln($request->price).' // do '.$request->deadline?->format('d.m.Y')"
+            :subtitle="implode(' // ', array_filter([
+                as_pln($request->price),
+                $request->deadline ? 'do '.$request->deadline->format('d.m.Y') : null,
+            ], fn($val) => !is_null($val)))"
             :warning="[
                 'Zwróć uwagę, kiedy masz zapłacić' => $request->delayed_payment,
                 'Wycena nadal w przygotowaniu' => !$request->price,

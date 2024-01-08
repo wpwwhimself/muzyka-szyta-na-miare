@@ -6,14 +6,11 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
+use App\Http\Controllers\SpellbookController;
 use App\Http\Controllers\StatsController;
 use App\Models\Client;
-use App\Models\Quest;
 use App\Models\QuestType;
-use App\Models\Request as ModelsRequest;
 use App\Models\Song;
-use App\Models\StatusChange;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -140,68 +137,18 @@ Route::get("/mp/{method}/{params}", function($method, $params = null){
     return new $method(...$params);
 });
 
-/* MAGIC SPELLS */
-Route::middleware("auth")->group(function(){
+Route::controller(SpellbookController::class)->middleware(["auth", "cancastspells"])->group(function(){
     Route::prefix("requests")->group(function(){
-        Route::get('/view/{id}/obliterate', function($id){
-            if(Auth::id() != 1) return back()->with("error", "Zaklęcie tylko dla zaawansowanych");
-            StatusChange::where("re_quest_id", $id)->delete();
-            ModelsRequest::find($id)->delete();
-            return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
-        });
-        Route::get("/view/{id}/silence", function($id){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-            return back()->with("success", "Ostatni status uciszony");
-        });
-        Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            $r = ModelsRequest::find($id);
-            $r->{$property} = $value;
-            $r->save();
-            return back()->with("success", "Atrybut zmieniony");
-        });
+        Route::get('/view/{id}/obliterate', "obliterate");
+        Route::get("/view/{id}/silence", "silence");
+        Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
     });
 
     Route::prefix("quests")->group(function(){
-        Route::get("/view/{id}/restatus/{status_id}", function($id, $status_id){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            Quest::find($id)->update(["status_id" => $status_id]);
-            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->update(["new_status_id" => $status_id]);
-            return back()->with("success", "Faza zmieniona siłą");
-        });
-        Route::get("/view/{id}/silence", function($id){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-            return back()->with("success", "Ostatni status uciszony");
-        });
-        Route::get("/view/{id}/transmute/{property}/{value?}", function($id, $property, $value = null){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            $q = Quest::find($id);
-            $q->{$property} = $value;
-            $q->save();
-            return back()->with("success", "Atrybut zmieniony");
-        });
-        Route::get("/view/{id}/polymorph/{letter}", function($id, $letter){
-            if(Auth::id() != 1) return back()->with("error", MISSPELL_ERROR());
-            if(!in_array($letter, QuestType::all()->pluck("code")->toArray())) return back()->with("error", "Niewłaściwa litera");
-            $new_quest_id = next_quest_id($letter);
-            $new_song_id = next_song_id($letter);
-            $quest = Quest::find($id);
-            $old_song_id = $quest->song_id;
-
-            $quest->update(["id" => $new_quest_id]);
-            $quest->song->update(["id" => $new_song_id]);
-            StatusChange::where("re_quest_id", $id)->update(["re_quest_id" => $new_quest_id]);
-            if(Storage::exists("safe/$old_song_id")){
-                Storage::rename("safe/$old_song_id", "safe/$new_song_id");
-            }
-            if(Storage::exists("showcases/$old_song_id.ogg")){
-                Storage::rename("showcases/$old_song_id.ogg", "showcases/$new_song_id.ogg");
-            }
-
-            return redirect()->route("quest", ["id" => $new_quest_id])->with("success", "Zlecenie przemianowane");
-        });
+        Route::get("/view/{id}/restatus/{status_id}", "restatus");
+        Route::get("/view/{id}/silence", "silence");
+        Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
+        Route::get("/view/{id}/polymorph/{letter}", "polymorph");
     });
 });
 

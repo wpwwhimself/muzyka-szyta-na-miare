@@ -22,6 +22,13 @@
                 </div>
                 <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
             </section>
+
+            <section>
+                <h2><i class="fas fa-circle-question"></i> Uwagi</h2>
+                <ul>
+                    <li>Jeśli zamieszczasz wiele źródeł, będę zakładać, że budowa utworu będzie oparta głównie na pierwszym z nich.</li>
+                </ul>
+            </section>
         </div>
         <script>
         $(document).ready(function(){

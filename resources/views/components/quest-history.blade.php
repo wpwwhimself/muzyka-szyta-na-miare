@@ -3,15 +3,14 @@
     title="Historia"
     :extended="$extended"
 >
-    <x-extendo-section title="Ostatni komentarz klienta">
-        @if(is_archmage() && $history->whereNotIn("changed_by", [0, 1])->last()?->comment)
-        {!! $entryLabel($history->whereNotIn("changed_by", [0, 1])->last()) !!}
-        @endif
-    </x-extendo-section>
-
-    <x-extendo-section title="Ostatni mój komentarz">
-        @if(!is_archmage() && $history->whereIn("changed_by", [0, 1])->last()?->comment)
-        {!! $entryLabel($history->whereIn("changed_by", [0, 1])->last()) !!}
+    @php
+        $lastComment = is_archmage()
+        ? $history->whereNotIn("changed_by", [0, 1])->last() ?? $history->whereNull("changed_by")->last()
+        : $history->whereIn("changed_by", [0, 1])->last();
+    @endphp
+    <x-extendo-section :title="is_archmage() ? 'Ostatni komentarz klienta' : 'Ostatni mój komentarz'">
+        @if($lastComment?->comment)
+        {!! $entryLabel($lastComment) !!}
         @endif
     </x-extendo-section>
 

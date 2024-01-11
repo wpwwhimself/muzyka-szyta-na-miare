@@ -28,7 +28,8 @@
                 name="new_status"
                 :icon="abs($status_id)"
                 :value="$status_id"
-                :label="$label"
+                :label="''"
+                :pop="$label"
                 :class="$status_id < 0 ? 'priority' : ''"
                 />
             @endif

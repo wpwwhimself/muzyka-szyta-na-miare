@@ -17,9 +17,10 @@
         <div class="right-side flex-right">{{ $buttons }}</div>
         @endif
 
-        @unless($extended === "perma")
         <div class="right-side flex-right keep-for-mobile">
+            @unless($extended === "perma")
             <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
+            @endunless
             @if ($warning)
             @php
                 $warning_content = [];
@@ -32,7 +33,6 @@
             ></i>
             @endif
         </div>
-        @endunless
     </div>
 
     <div @class(['body', 'flex-right', 'hidden' => !$extended])>

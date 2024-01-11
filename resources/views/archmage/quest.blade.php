@@ -313,7 +313,7 @@
                 header-icon="sack-dollar"
                 title="Wycena"
                 :subtitle="implode(' // ', array_filter([
-                    as_pln($quest->price),
+                    _c_(as_pln($quest->price)),
                     'do '.$quest->deadline->format('d.m.Y'),
                     $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
                 ], fn($val) => !is_null($val)))"
@@ -424,7 +424,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {{ as_pln($invoice->quests->filter(fn($q) => $q->id == $quest->id)->first()->pivot->amount) }} / {{ as_pln($invoice->amount) }}
+                                    {{ _c_(as_pln($invoice->quests->filter(fn($q) => $q->id == $quest->id)->first()->pivot->amount)) }} / {{ _c_(as_pln($invoice->amount)) }}
                                 </td>
                             </tr>
                             @empty

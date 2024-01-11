@@ -96,15 +96,15 @@ class StatsController extends Controller
             ->get();
         $recent_income_alltime = $recent_income_alltime->pluck("sum", "year")->mergeRecursive($recent_income_alltime->pluck("mean", "year"));
         $recent_costs_alltime = $recent_costs_alltime->pluck("sum", "year")->mergeRecursive(($recent_costs_alltime)->pluck("mean", "year"));
-        foreach($recent_income_alltime->mergeRecursive($recent_costs_alltime)->filter(fn($el) => count($el) < 2) as $year => $value){
-            $recent_income_alltime = $recent_income_alltime->union([$year => 0]);
-            $recent_costs_alltime = $recent_costs_alltime->union([$year => 0]);
+        foreach($recent_income_alltime->mergeRecursive($recent_costs_alltime)->filter(fn($el) => count($el) < 4) as $year => $value){
+            $recent_income_alltime = $recent_income_alltime->union([$year => [0, 0]]);
+            $recent_costs_alltime = $recent_costs_alltime->union([$year => [0, 0]]);
         }
         $recent_income_alltime = $recent_income_alltime->sortKeys();
         $recent_costs_alltime = $recent_costs_alltime->sortKeys();
-        $recent_gross_alltime = collect($recent_income_alltime->pluck("sum", "year"))
-            ->mergeRecursive($recent_costs_alltime->pluck("sum", "year"))
-            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[1]]);
+        $recent_gross_alltime = collect($recent_income_alltime)
+            ->mergeRecursive($recent_costs_alltime)
+            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[2]]);
         $client_exp_raw = Client::withCount("questsDone")
             ->pluck("quests_done_count", "client_name")
             ->mergeRecursive(Client::all()->pluck("extra_exp", "client_name"))

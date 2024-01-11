@@ -63,7 +63,7 @@
             Dla każdego typu zlecenia jest wyznaczona <b>cena minimalna</b>. Obecnie jest to:
             <ul>
                 @foreach ($minimal_prices as $label => $price)
-                <li>{{ $label }}: {{ as_pln($price) }}</li>
+                <li>{{ $label }}: {{ _c_(as_pln($price)) }}</li>
                 @endforeach
             </ul>
         </li>

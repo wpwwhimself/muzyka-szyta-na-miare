@@ -50,7 +50,7 @@
           <a href="{{ route('invoice', ['id' => $pos->invoice->first()->id]) }}">{{ $pos->invoice->first()->full_code }}</a>
           @endif
         </span>
-        <span>{{ as_pln($pos->comment) }}</span>
+        <span>{{ _c_(as_pln($pos->comment)) }}</span>
     </div>
     @empty
     <p class="grayed-out">Brak danych</p>

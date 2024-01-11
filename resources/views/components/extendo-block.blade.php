@@ -6,7 +6,7 @@
 ]) data-ebid="{{ $key }}">
     @if($scissors) <x-sc-scissors /> @endif
 
-    <div class="header flex-right keep-for-mobile">
+    <div class="header flex-right keep-for-mobile no-wrap">
         <div class="titles flex-right keep-for-mobile">
             <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
             <h2>{{ $title }}</h2>

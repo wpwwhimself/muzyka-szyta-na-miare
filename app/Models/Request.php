@@ -38,7 +38,7 @@ class Request extends Model
     public function song(){
         return $this->belongsTo(Song::class);
     }
-    public function changes(){
+    public function history(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
     public function quest(){

@@ -318,7 +318,7 @@
                     $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
                 ], fn($val) => !is_null($val)))"
                 :warning="[
-                    'Ostatnia zmiana padła '.$quest->changes->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->changes->get(1)?->date->diffInDays() >= 30,
+                    'Ostatnia zmiana padła '.$quest->history->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->history->get(1)?->date->diffInDays() >= 30,
                     'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,
                 ]"
             >

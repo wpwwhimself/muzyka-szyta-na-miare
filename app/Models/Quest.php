@@ -31,6 +31,9 @@ class Quest extends Model
     public function getPaymentsSumAttribute(){
         return $this->payments->sum("comment");
     }
+    public function getCompletedOnceAttribute() {
+        return $this->history->whereIn("new_status_id", [14, 19])->count() > 0;
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);
@@ -44,7 +47,7 @@ class Quest extends Model
     public function quest_type(){
         return $this->belongsTo(QuestType::class, "quest_type_letter", "code");
     }
-    public function changes(){
+    public function history(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
     public function payments(){

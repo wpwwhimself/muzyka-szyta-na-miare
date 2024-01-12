@@ -10,7 +10,7 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
-    @if ($comment = $quest->changes->first()->comment)
+    @if ($comment = $quest->history->first()->comment)
     {{ Illuminate\Mail\Markdown::parse($comment) }}
     @endif
 

@@ -93,7 +93,7 @@ class BackController extends Controller
                     ->sum("comment"),
             ];
             $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
-            
+
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
                 // translating subjects
@@ -318,7 +318,7 @@ class BackController extends Controller
                     $mailing ??= false;
                     $flash_content .= ", ale wyślij wiadomość";
                 }
-                if($mailing !== null) $request->changes->first()->update(["mail_sent" => $mailing]);
+                if($mailing !== null) $request->history->first()->update(["mail_sent" => $mailing]);
             }else{ // klient
                 //bulk
                 $request = Request::create([
@@ -448,7 +448,7 @@ class BackController extends Controller
 
         $changed_by = (is_archmage() && in_array($rq->new_status, [1, 6, 8, 9, 96])) ? $request->client_id : null;
         if($is_same_status){
-            $request->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
+            $request->history->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
             $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by, null, $changes);
         }
@@ -474,7 +474,7 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-        if($mailing !== null) $request->changes->first()->update(["mail_sent" => $mailing]);
+        if($mailing !== null) $request->history->first()->update(["mail_sent" => $mailing]);
 
         return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
     }
@@ -771,7 +771,7 @@ class BackController extends Controller
         $quest->save();
 
         if($is_same_status){
-            $quest->changes->first()->update(["comment" => $rq->comment, "date" => now()]);
+            $quest->history->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
             $this->statusHistory(
                 $rq->quest_id,
@@ -802,7 +802,7 @@ class BackController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-        if($mailing !== null) $quest->changes->first()->update(["mail_sent" => $mailing]);
+        if($mailing !== null) $quest->history->first()->update(["mail_sent" => $mailing]);
 
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);

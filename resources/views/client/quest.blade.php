@@ -280,10 +280,10 @@
                 <i class="fa-solid fa-circle-question"></i>
                 Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
             </p>
-                @if ($quest->changes->get(1)->date->diffInDays() >= 30)
+                @if ($quest->history->get(1)->date->diffInDays() >= 30)
                 <p class="error" style="text-align: left;">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    Ostatnia zmiana padła {{ $quest->changes->get(1)->date->diffForHumans() }}.
+                    Ostatnia zmiana padła {{ $quest->history->get(1)->date->diffForHumans() }}.
                     Zażądanie poprawek może wiązać się z dopłatą.
                     Zobacz <a href="{{ route('prices') }}">cennik</a> po więcej informacji.
                 </p>
@@ -302,7 +302,13 @@
                 @endif
             @endif
             @if (in_array($quest->status_id, [15])) <x-button action="#/" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
-            @if (!in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" /> @endif
+            @if (!in_array($quest->status_id, [18, 19]))
+                @if ($quest->completed_once)
+                    <x-button action="#/" statuschanger="19" icon="18" label="Zrezygnuj z dalszych zmian" />
+                @else
+                    <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" />
+                @endif
+            @endif
             @if (in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
         </div>
         <div id="statuschanger">

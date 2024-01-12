@@ -22,7 +22,7 @@ class Nav extends Component
             ["link" => "#showcases", "label" => "Realizacje"],
             ["link" => "#prices", "label" => "Cennik"],
             ["link" => "#about", "label" => "O mnie"],
-            ["link" => "#contact", "label" => "Kontakt"],
+            ["link" => "#contact", "label" => "Złóż zamówienie"],
         ];
         $this->logged = [
             ["link" => route("dashboard"), "label" => "Pulpit", "icon" => "fa-solid fa-house-chimney-user"],

@@ -164,11 +164,20 @@ b.priority, .priority b, .submit.priority{
 
 /* CLICKABLE */
 a{
-    text-decoration: none;
+    text-decoration-color: rgba(128, 128, 128, 0.5);
     color: inherit;
 }
 a:hover, .accent{
     color: var(--acc);
+    text-decoration-color: var(--acc);
+}
+nav a,
+a.submit,
+.contact-info a,
+.quests-table .table-row,
+.day-tiles a
+{
+    text-decoration: none;
 }
 
 /* FORM */

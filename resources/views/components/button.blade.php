@@ -3,7 +3,7 @@
 @if ($action == "submit")
 <button type="submit" {{ $attributes->class(['clickable', 'hover-lift', 'danger' => $danger, 'small' => $small])->merge(['id' => $id, 'class' => $attributes->get('class')]) }} {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ !$pop ?: Popper::pop($pop) }}>
 @else
-<a href="{{ $action }}" {{ $attributes->class(['submit', 'hover-lift', 'danger' => $danger, 'small' => $small])->merge(['id' => $id]) }} {!! $danger ? "onclick='dangerConfirm()'" : "" !!}>
+<a href="{{ $action }}" {{ $attributes->class(['submit', 'hover-lift', 'danger' => $danger, 'small' => $small])->merge(['id' => $id]) }} {!! $danger ? "onclick='dangerConfirm()'" : "" !!} {{ !$pop ?: Popper::pop($pop) }}>
 @endif
     @if (is_numeric($icon))
         @if ($icon >= 100)

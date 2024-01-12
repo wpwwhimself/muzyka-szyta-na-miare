@@ -29,7 +29,7 @@
             @if ($quest->price)
             <i class="fa-solid fa-sack-dollar" @popper(Cena)></i>
             <p class="{{ $quest->paid ? 'success' : ($quest->payments?->sum('comment') > 0 ? 'warning' : '') }}">
-                {{ as_pln($quest->price) }}
+                {{ _c_(as_pln($quest->price)) }}
             </p>
             @endif
 

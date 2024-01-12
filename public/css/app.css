@@ -182,6 +182,9 @@ form, .login-grid-container, .input-container{
     justify-content: center;
     text-align: center;
 }
+form.center{
+    align-items: center;
+}
 .input-container{
     margin: 0.2em 0;
     position: relative;
@@ -492,12 +495,15 @@ footer .contact-info{
     & .header{
         justify-content: space-between;
         align-items: center;
+        flex-wrap: nowrap;
 
         & .titles{
             align-items: baseline;
+            text-align: left;
         }
         & .right-side{
             flex-direction: row-reverse;
+            align-self: flex-start;
         }
     }
     & .body{

@@ -6,7 +6,7 @@
 ]) data-ebid="{{ $key }}">
     @if($scissors) <x-sc-scissors /> @endif
 
-    <div class="header flex-right keep-for-mobile">
+    <div class="header flex-right keep-for-mobile no-wrap">
         <div class="titles flex-right keep-for-mobile">
             <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
             <h2>{{ $title }}</h2>
@@ -17,9 +17,10 @@
         <div class="right-side flex-right">{{ $buttons }}</div>
         @endif
 
-        @unless($extended === "perma")
         <div class="right-side flex-right keep-for-mobile">
+            @unless($extended === "perma")
             <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
+            @endunless
             @if ($warning)
             @php
                 $warning_content = [];
@@ -32,7 +33,6 @@
             ></i>
             @endif
         </div>
-        @endunless
     </div>
 
     <div @class(['body', 'flex-right', 'hidden' => !$extended])>

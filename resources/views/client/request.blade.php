@@ -199,7 +199,7 @@
             </p>
             <x-input type="TEXT" name="comment" label="" placeholder="Tutaj wpisz swój komentarz..." />
             {{-- @endif --}}
-            <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" :danger="true" />
+            <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" />
         </div>
         <script>
         $(document).ready(function(){

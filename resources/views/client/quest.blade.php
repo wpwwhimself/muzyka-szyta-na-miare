@@ -322,7 +322,7 @@
                     />
             </div>
             {{-- @endif --}}
-            <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" :danger="true" />
+            <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" />
         </div>
         <script>
         $(document).ready(function(){

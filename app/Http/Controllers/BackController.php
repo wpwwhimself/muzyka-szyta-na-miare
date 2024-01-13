@@ -321,6 +321,12 @@ class BackController extends Controller
                 if($mailing !== null) $request->history->first()->update(["mail_sent" => $mailing]);
             }else{ // klient
                 //bulk
+
+                // ignore empty requests
+                if (empty($rq->title[$i]) && empty($rq->artist[$i]) && empty($rq->link[$i])) {
+                    continue;
+                }
+
                 $request = Request::create([
                     "made_by_me" => false,
 

@@ -195,7 +195,7 @@
             {{-- @if (in_array($request->status_id, [4, 5, 7, 8, 95])) --}}
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
-                W historii zapytania pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
+                W historii zlecenia pojawi się Twój komentarz.
             </p>
             <x-input type="TEXT" name="comment" label="" placeholder="Tutaj wpisz swój komentarz..." />
             {{-- @endif --}}

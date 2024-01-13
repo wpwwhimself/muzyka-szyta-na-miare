@@ -137,7 +137,7 @@
                 <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
-                        (w tytule ID zlecenia, tj. <i>{{ $quest->id }}</i>),</li>
+                        (w tytule wpisz <i>{{ $quest->id }}</i>)</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>
@@ -314,7 +314,7 @@
             {{-- @if (in_array($quest->status_id, [15, 18, 19, 95])) --}}
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
-                W historii zlecenia pojawi się wpis podobny do tego poniżej. Możesz teraz dopisać dodatkowy komentarz.
+                W historii zlecenia pojawi się Twój komentarz.
             </p>
             <div class="history-position p-18">
                 <x-input type="TEXT" name="comment" label=""

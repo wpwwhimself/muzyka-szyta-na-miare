@@ -183,7 +183,7 @@
 
     <section id="dashboard-requests">
         <div class="section-header">
-            <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
+            <h1><i class="fa-solid fa-envelope"></i> Aktualne zapytania</h1>
             <div>
                 <x-a href="{{ route('quests') }}">Wszystkie</x-a>
             </div>

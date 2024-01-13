@@ -34,6 +34,8 @@
 @endswitch
 </p>
 
+<x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
+
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <h1>Szczegóły zapytania</h1>

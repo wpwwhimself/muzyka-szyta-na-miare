@@ -45,6 +45,8 @@
 @endswitch
 </p>
 
+<x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
+
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
 
@@ -158,13 +160,10 @@
 
             <x-extendo-section title="Faktury">
             @if (count($quest->visibleInvoices))
-                <h2>
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-                    Dokumenty
-                </h2>
                 @forelse($quest->visibleInvoices as $invoice)
                 <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
                     icon="file-invoice" label="{{ $invoice->fullCode }}" :small="true"
+                    target="_blank"
                     />
                 @empty
                 <p class="grayed-out">Brak</p>

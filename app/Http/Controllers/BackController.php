@@ -215,15 +215,10 @@ class BackController extends Controller
                 'Wycena może być nieaktualna' => $request->price && $request->status_id == 1,
             ],
         ];
-        $warningsOn = array_reduce($warnings, function ($carry, $innerArray) {
-            return $carry || array_reduce($innerArray, function ($innerCarry, $element) {
-                return $innerCarry || (bool) $element;
-            }, false);
-        }, false);
 
         return view(user_role().".request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings", "warningsOn")));
+        ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings")));
     }
     public function addRequest(){
         $pad_size = 24; // used by dropdowns for mobile preview fix
@@ -736,17 +731,12 @@ class BackController extends Controller
                     || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
             ],
         ];
-        $warningsOn = array_reduce($warnings, function ($carry, $innerArray) {
-            return $carry || array_reduce($innerArray, function ($innerCarry, $element) {
-                return $innerCarry || (bool) $element;
-            }, false);
-        }, false);
 
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "last_mod", "desc", "warnings", "warningsOn"),
+                compact("quest", "prices", "files", "last_mod", "desc", "warnings"),
                 (isset($stats_statuses) ? compact("stats_statuses") : []),
             )
         );

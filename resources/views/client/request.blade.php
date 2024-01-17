@@ -36,7 +36,7 @@
 
 <x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
 
-@if ($warningsOn)
+@if (sumWarnings($warnings))
 <h1 class="warning">
     <i class="fas fa-triangle-exclamation fa-fade"></i>
     Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!

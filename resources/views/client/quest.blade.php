@@ -47,6 +47,13 @@
 
 <x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
 
+@if ($warningsOn)
+<h1 class="warning">
+    <i class="fas fa-triangle-exclamation fa-fade"></i>
+    Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
+</h1>
+@endif
+
 <div class="input-container">
     <h1>Szczegóły zlecenia</h1>
 

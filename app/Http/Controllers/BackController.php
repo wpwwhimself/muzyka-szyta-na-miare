@@ -725,7 +725,7 @@ class BackController extends Controller
             ],
         ] : [
             "quote" => [
-                'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment,
+                'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment_in_effect,
                 'Zlecenie nieopłacone' => $quest->client->trust == -1
                     || $quest->status_id == 19 && !$quest->paid
                     || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,

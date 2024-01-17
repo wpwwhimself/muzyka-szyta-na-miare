@@ -75,12 +75,7 @@
             header-icon="sack-dollar"
             title="Wycena"
             :subtitle="as_pln($quest->price).' // do '.$quest->deadline?->format('d.m.Y')"
-            :warning="[
-                'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment,
-                'Zlecenie nieopłacone' => $quest->client->trust == -1
-                    || $quest->status_id == 19 && !$quest->paid
-                    || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
-            ]"
+            :warning="$warnings['quote']"
         >
             <div id="price-summary" class="hint-table">
                 <div class="positions"></div>

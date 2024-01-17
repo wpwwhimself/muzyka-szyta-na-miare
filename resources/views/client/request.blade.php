@@ -73,11 +73,7 @@
                 as_pln($request->price),
                 $request->deadline ? 'do '.$request->deadline->format('d.m.Y') : null,
             ], fn($val) => !is_null($val)))"
-            :warning="[
-                'Zwróć uwagę, kiedy masz zapłacić' => $request->delayed_payment,
-                'Wycena nadal w przygotowaniu' => !$request->price,
-                'Wycena może być nieaktualna' => $request->price && $request->status_id == 1,
-            ]"
+            :warning="$warnings['quote']"
         >
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>

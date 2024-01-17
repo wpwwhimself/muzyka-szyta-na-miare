@@ -96,9 +96,7 @@
             header-icon="file-waveform"
             title="Pliki"
             :extended="!in_array($quest->status_id, [11])"
-            :warning="[
-                'Pliki nieoznaczone jako komplet' => $quest->status_id != 11 && !$quest->files_ready,
-            ]"
+            :warning="$warnings['files']"
             scissors
         >
             <x-extendo-section title="Widoczność">
@@ -318,10 +316,7 @@
                     'do '.$quest->deadline->format('d.m.Y'),
                     $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
                 ], fn($val) => !is_null($val)))"
-                :warning="[
-                    'Ostatnia zmiana padła '.$quest->history->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->history->get(1)?->date->diffInDays() >= 30,
-                    'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,
-                ]"
+                :warning="$warnings['quote']"
             >
                 <div>
                     <div id="price-summary" class="hint-table">

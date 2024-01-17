@@ -117,10 +117,7 @@
             title="Dane utworu"
             :subtitle="$request->song?->full_title ?? $request->title"
             :extended="in_array($request->status_id, [1])"
-            :warning="[
-                'Klient ma domyślne życzenia' => $request->client?->default_wishes,
-                'Klient ma deadline' => $request->hard_deadline,
-            ]"
+            :warning="$warnings['song']"
         >
             <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" :value="$request->song_id" />
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />

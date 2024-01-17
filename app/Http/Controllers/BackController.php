@@ -203,9 +203,22 @@ class BackController extends Controller
             ->pluck("service", "indicator")->toArray();
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
+        $warnings = is_archmage() ? [
+            'song' => [
+                'Klient ma domyślne życzenia' => $request->client?->default_wishes,
+                'Klient ma deadline' => $request->hard_deadline,
+            ],
+        ] : [
+            "quote" => [
+                'Zwróć uwagę, kiedy masz zapłacić' => $request->delayed_payment,
+                'Wycena nadal w przygotowaniu' => !$request->price,
+                'Wycena może być nieaktualna' => $request->price && $request->status_id == 1,
+            ],
+        ];
+
         return view(user_role().".request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices", "questTypes", "clients", "songs", "genres")));
+        ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings")));
     }
     public function addRequest(){
         $pad_size = 24; // used by dropdowns for mobile preview fix
@@ -702,11 +715,28 @@ class BackController extends Controller
             }
         }
 
+        $warnings = is_archmage() ? [
+            "files" => [
+                'Pliki nieoznaczone jako komplet' => $quest->status_id != 11 && !$quest->files_ready,
+            ],
+            "quote" => [
+                'Ostatnia zmiana padła '.$quest->history->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->history->get(1)?->date->diffInDays() >= 30,
+                'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,
+            ],
+        ] : [
+            "quote" => [
+                'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment,
+                'Zlecenie nieopłacone' => $quest->client->trust == -1
+                    || $quest->status_id == 19 && !$quest->paid
+                    || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
+            ],
+        ];
+
         return view(
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "last_mod", "desc"),
+                compact("quest", "prices", "files", "last_mod", "desc", "warnings"),
                 (isset($stats_statuses) ? compact("stats_statuses") : []),
             )
         );

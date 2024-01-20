@@ -81,6 +81,7 @@
                 $request->deadline ? 'do '.$request->deadline->format('d.m.Y') : null,
             ], fn($val) => !is_null($val)))"
             :warning="$warnings['quote']"
+            :extended="sumWarnings($warnings['quote'], true)"
         >
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>

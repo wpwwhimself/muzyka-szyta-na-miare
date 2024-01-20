@@ -359,8 +359,12 @@ if(!function_exists("client_polonize")){
  * takes a full, nested list of warnings and returns whether at least one of them is active
  */
 if(!function_exists("sumWarnings")){
-    function sumWarnings($warnings) {
-        return array_reduce($warnings, function ($carry, $innerArray) {
+    function sumWarnings($warnings, $shallow = false) {
+        return array_reduce($warnings, function ($carry, $innerArray) use ($shallow) {
+            if ($shallow) {
+                return $carry || (bool) $innerArray;
+            }
+
             return $carry || array_reduce($innerArray, function ($innerCarry, $element) {
                 return $innerCarry || (bool) $element;
             }, false);

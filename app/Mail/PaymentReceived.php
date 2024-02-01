@@ -25,7 +25,7 @@ class PaymentReceived extends Mailable
     {
         $this->quest = is_string($data) ? Quest::findOrFail($data) : $data;
         $this->pl = client_polonize($this->quest->client->client_name);
-        $this->paymentShouldBeDelayed = $this->quest->delayed_payment?->gte(Carbon::today());
+        $this->paymentShouldBeDelayed = $this->quest->delayed_payment?->gt(Carbon::today());
     }
 
     /**

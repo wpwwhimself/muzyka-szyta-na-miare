@@ -793,6 +793,12 @@ class BackController extends Controller
                 }
             }
 
+            // wycofanie statusu krętacza
+            if ($quest->client->trust == -1 && $quest->client->quests_unpaid->count() == 0) {
+                $quest->client->update(["trust" => 0]);
+                $flash_content .= "; już nie jest krętaczem";
+            }
+
             return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
         }
 

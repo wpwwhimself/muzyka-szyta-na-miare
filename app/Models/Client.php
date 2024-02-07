@@ -26,6 +26,9 @@ class Client extends Model
     public function questsDone(){
         return $this->hasMany(Quest::class)->where("status_id", 19);
     }
+    public function questsUnpaid(){
+        return $this->hasMany(Quest::class)->where("paid", 0);
+    }
 
     public function getExpAttribute(){
         return $this->quests->where("status_id", 19)->count() + $this->extra_exp;

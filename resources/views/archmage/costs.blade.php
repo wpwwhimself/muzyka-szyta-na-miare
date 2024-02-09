@@ -2,6 +2,13 @@
 
 @section('content')
 
+<div>
+    <x-button action="{{ route('cost-types') }}" label="Typy" icon="cog" />
+    <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
+    <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
+</div>
+
+
 <section>
     <div class="section-header">
         <h1>
@@ -63,11 +70,5 @@
     </div>
     {{ $costs->links() }}
 </section>
-
-<div>
-    <x-button action="{{ route('cost-types') }}" label="Typy" icon="cog" />
-    <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
-    <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
-</div>
 
 @endsection

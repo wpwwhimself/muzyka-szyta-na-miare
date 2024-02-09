@@ -1,6 +1,11 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
+
+<div>
+    <x-button action="{{ route('file-size-report') }}" icon="weight-hanging" label="Raport wielkości sejfów" />
+</div>
+
 <div class="grid-2 force-block">
   <section>
     <div class="section-header">
@@ -65,7 +70,4 @@
   <x-stats-highlight-h title="Średni czas z podziałem na gatunki</small>" :data="$stats->songs->time_genres" :bracketed-numbers="'comparison-raw'" />
 </section>
 
-<div>
-  <x-button action="{{ route('file-size-report') }}" icon="weight-hanging" label="Raport wielkości sejfów" />
-</div>
 @endsection

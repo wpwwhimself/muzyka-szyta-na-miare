@@ -6,6 +6,7 @@
     <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
     <x-button action='{{ route("costs") }}' label="Koszty" icon="money-bill-wave" />
     <x-button action='{{ route("invoices") }}' label="Faktury" icon="file-invoice" />
+    <x-button action='{{ route("taxes") }}' label="Podatki" icon="cash-register" />
 </div>
 
 <div class="grid-2">

@@ -372,6 +372,23 @@ if(!function_exists("sumWarnings")){
     }
 }
 
+/**
+ * calculating tax
+ */
+if(!function_exists("tax_calc")){
+    function tax_calc($income) {
+        $threshold = 120e3;
+        $tax_deduction = 3.6e3;
+
+        $calculated = $income > $threshold
+            ? (10.8e3 + ($income - $threshold) * 0.32)
+            : 0.12 * $income - $tax_deduction
+        ;
+
+        return max(0, $calculated);
+    }
+}
+
 /*************************
  * DECORATIVE FUNCTIONS
  */

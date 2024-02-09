@@ -716,4 +716,27 @@ class StatsController extends Controller
             "limit_corrected" => $limit_corrected,
         ]);
     }
+
+    public function taxes(Request $rq) {
+        $fiscal_year = $rq->fiscalYear ?? date("Y") - 1;
+
+        $money = [
+            "Przychody" => StatusChange::where("new_status_id", 32)
+                ->whereBetween("date", ["$fiscal_year-01-01", "$fiscal_year-12-31"])
+                ->sum("comment"),
+            "Koszty" => Cost::whereBetween("created_at", ["$fiscal_year-01-01", "$fiscal_year-12-31"])
+                ->whereNotIn("cost_type_id", [3])
+                ->sum("amount"),
+        ];
+        $money["Dochody"] = $money["Przychody"] - $money["Koszty"];
+        $money["Podatek"] = tax_calc($money["Dochody"]);
+
+        return view(user_role().".taxes", array_merge(
+            ["title" => "Kwestie podatkowe"],
+            compact(
+                "fiscal_year",
+                "money",
+            ),
+        ));
+    }
 }

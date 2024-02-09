@@ -2,6 +2,12 @@
 
 @section('content')
 
+<div>
+    <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
+    <x-button action="{{ route('costs') }}" label="Koszty" icon="money-bill-wave" />
+    <x-button action='{{ route("taxes") }}' label="Podatki" icon="cash-register" />
+</div>
+
 <section class="sc-line">
     <x-sc-scissors />
     <div class="section-header">
@@ -88,10 +94,5 @@
     @endforelse
   </div>
 </section>
-
-<div>
-  <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
-  <x-button action="{{ route('costs') }}" label="Koszty" icon="money-bill-wave" />
-</div>
 
 @endsection

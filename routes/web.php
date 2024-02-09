@@ -111,6 +111,8 @@ Route::controller(StatsController::class)->group(function(){
             Route::post("/costs/mod", "modCost")->name("mod-cost");
             Route::get("/costs/types", "costTypes")->name("cost-types");
             Route::post("/costs/types/mod", "modCostType")->name("mod-cost-type");
+
+            Route::get("/taxes", "taxes")->name("taxes");
         });
 
         Route::get("/stats/file-size", "fileSizeReport")->name("file-size-report");

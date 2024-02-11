@@ -33,7 +33,7 @@ class RequestExpired extends Mailable
     public function build()
     {
         return $this
-            ->subject("Wygaszono zapytanie | ".($this->request->title ?? "utwór bez tytułu"))
+            ->subject("Wygaszono zapytanie | ".$this->request->full_title)
             ->view('emails.request-expired');
     }
 }

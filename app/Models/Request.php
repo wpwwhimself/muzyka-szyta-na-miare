@@ -25,6 +25,12 @@ class Request extends Model
     public function getLinkToAttribute(){
         return route("request", ["id" => $this->id]);
     }
+    public function getFullTitleAttribute(){
+        return implode(' – ', array_filter([
+            $this->artist,
+            $this->title ?? 'utwór bez tytułu',
+        ], fn($v) => !empty($v)));
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);

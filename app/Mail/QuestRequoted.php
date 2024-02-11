@@ -37,7 +37,7 @@ class QuestRequoted extends Mailable
     public function build()
     {
         return $this
-            ->subject("Zmiana warunków zlecenia | ".($this->quest->song->title ?? "utwór bez tytułu"))
+            ->subject("Zmiana warunków zlecenia | ".$this->quest->song->full_title)
             ->view('emails.quest-requoted');
     }
 }

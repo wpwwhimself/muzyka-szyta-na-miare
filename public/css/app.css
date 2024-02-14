@@ -1139,6 +1139,7 @@ footer .contact-info{
 @media screen and (max-width: 600px){
     body{
         padding-bottom: 0;
+        min-height: 100vh;
     }
     .flex-right:not(.keep-for-mobile){
         flex-direction: column;
@@ -1149,6 +1150,7 @@ footer .contact-info{
     .main-wrapper{
         padding: 2em 1em;
         margin: 1em auto;
+        flex-grow: 1;
     }
 
     header{

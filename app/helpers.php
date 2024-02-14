@@ -56,6 +56,11 @@ if(!function_exists("OBSERVER_ERROR")){
         return "Jako obserwator nie możesz tego zrobić";
     }
 }
+if(!function_exists("STATUSES_WITH_ELEVATED_HISTORY")){
+    function STATUSES_WITH_ELEVATED_HISTORY(){
+        return [6, 12, 16, 26, 96];
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)

@@ -112,6 +112,10 @@
             </script>
         </x-extendo-block>
 
+        @if (in_array($request->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
+        <x-quest-history :quest="$request" :extended="true" />
+        @endif
+
         <x-extendo-block key="song"
             header-icon="cart-flatbed"
             title="Dane utworu"
@@ -295,7 +299,9 @@
             </div>
         </x-extendo-block>
 
+        @unless (in_array($request->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
         <x-quest-history :quest="$request" :extended="true" />
+        @endunless
     </div>
 </form>
 

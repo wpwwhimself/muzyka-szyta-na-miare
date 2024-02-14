@@ -90,6 +90,8 @@
             <x-song-work-time-log :quest="$quest" :extended="true" />
             <x-quest-history :quest="$quest" :extended="true" />
         </div>
+        @elseif (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
+        <x-quest-history :quest="$quest" :extended="true" />
         @endif
 
         <x-extendo-block key="files"
@@ -437,7 +439,7 @@
             </x-extendo-block>
         </div>
 
-        @unless ($quest->status_id == 12)
+        @unless (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
         <x-quest-history :quest="$quest" :extended="true" />
         @endunless
     </div>

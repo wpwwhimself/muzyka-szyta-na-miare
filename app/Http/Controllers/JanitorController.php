@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\QuestAwaitingPayment;
 use App\Mail\QuestAwaitingReview;
 use App\Mail\QuestExpired;
+use App\Mail\RequestAwaitingReview;
 use App\Mail\RequestExpired;
 use App\Models\Quest;
 use App\Models\Request;
@@ -17,6 +18,7 @@ class JanitorController extends Controller
 {
     public $summary;
     public static $OPERATIONS = [
+        "5_REMINDED" => "Przypomnienie o działaniu",
         "7_FORGOT" => "Brak reakcji",
         "15_REMINDED" => "Przypomnienie o działaniu",
         "17_FORGOT" => "Brak opinii",
@@ -66,6 +68,7 @@ class JanitorController extends Controller
             ] as $name){
             $$name = setting($name);
         }
+        $request_reminder_time = floor($quest_reminder_time / 2);
 
         /**
          * expiring requests
@@ -162,6 +165,33 @@ class JanitorController extends Controller
                 $summaryEntry["mailing"] = 0;
             }
             $this->addToSummary(...$summaryEntry);
+        }
+
+        /**
+         * reminding clients about pending requests
+         */
+        $requests = Request::whereIn("status_id", [5, 95])->get();
+        foreach($requests as $request){
+            if(
+                $request->updated_at->diffInDays(Carbon::now()) % $request_reminder_time == $request_reminder_time - 1
+                &&
+                !$request->updated_at->isToday()
+            ){
+                $summaryEntry = [
+                    "procedure" => "re_quests",
+                    "subject_type" => "request",
+                    "subject" => $request->id,
+                    "comment" => $request->status_id."_REMINDED",
+                ];
+                if($request->client?->email ?? $request->email){
+                    Mail::to($request->client?->email ?? $request->email)->send(new RequestAwaitingReview($request));
+                    StatusChange::where("re_quest_id", $request->id)->whereIn("new_status_id", [5, 95])->orderByDesc("date")->first()->increment("mail_sent");
+                    $summaryEntry["mailing"] = 1 + intval(($request->client?->contact_preference ?? $request->contact_preference) == "email");
+                }else{
+                    $summaryEntry["mailing"] = 0;
+                }
+                $this->addToSummary(...$summaryEntry);
+            }
         }
 
         /**

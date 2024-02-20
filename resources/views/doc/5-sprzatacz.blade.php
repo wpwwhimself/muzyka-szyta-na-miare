@@ -28,7 +28,7 @@
 </p>
 <ul>
     <li>wygaszanie zleceń i zapytań, pod którymi Klient nie podjął żadnych działań w określonym oknie czasu,</li>
-    <li>przypomnienia o podjęciu działań dotyczących zlecenia (opinia, opłata).</li>
+    <li>przypomnienia o podjęciu działań dotyczących zlecenia (opinia, opłata) lub zapytania (akceptacja wyceny).</li>
 </ul>
 <ol class="ghost">
     <li>Wszystkie akcje wysyłające powiadomienia sprawdzają, czy Klient posiada maila.</li>

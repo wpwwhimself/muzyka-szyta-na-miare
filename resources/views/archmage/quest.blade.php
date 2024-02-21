@@ -14,6 +14,7 @@
             <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
             @foreach ([
+                ["Wprowadzenie/odrzucenie zmian", 11, [21]],
                 ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
                 ["Oddaj", 15, [11, 12, 13, 14, 16, 26, 96]],
                 ["Doprecyzuj", 95, [11, 12, 13, 14, 16, 26, 96]],
@@ -21,8 +22,9 @@
                 ["Zawieś", 13, [12, 14, 16, 96]],
                 ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 31, 96]],
                 ["Klient cofa", 16, [15]],
-                ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 31, 95, 96]],
+                ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 31, 21, 95, 96]],
                 ["Kient przywraca", 26, [17, 18, 19]],
+                ["Kient prosi o zmiany", 21, [11]],
                 ["Wygaś", 17, [13, 15]],
             ] as [$label, $status_id, $show_on_statuses])
                 @if (in_array($quest->status_id, $show_on_statuses))

@@ -30,6 +30,9 @@
     @case(19)
         Zlecenie zostało przez Ciebie przyjęte bez zarzutów. Cieszę się, że mogłem coś dla Ciebie przygotować i polecam się do dalszych zleceń.
         @break
+    @case(21)
+        W tym zleceniu została zgłoszona chęć wprowadzenia zmian. Wkrótce je zweryfikuję i wprowadzę odpowiednie poprawki.
+        @break
     @case(26)
         Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.
         @break
@@ -292,8 +295,10 @@
                 @endif
             @endif
             <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            @if (in_array($quest->status_id, [16, 26, 96]))
+            @if (in_array($quest->status_id, [11])) <x-button action="#/" statuschanger="21" icon="21" label="Poproś o zmiany" /> @endif
+            @if (in_array($quest->status_id, [16, 21, 26, 96]))
             <x-button action="#/" statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
+                @if ($quest->status_id == 21) <x-button action="#/" statuschanger="11" icon="11" label="Zrezygnuj ze zmian" /> @endif
             @endif
             @if (in_array($quest->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
             @if (in_array($quest->status_id, [15, 31, 95]))

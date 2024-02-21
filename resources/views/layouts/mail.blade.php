@@ -20,7 +20,7 @@
     h1, h2, h3{
         font-family: Montserrat, "Arial Black";
     }
-    h2, strong, b{
+    h2, strong, b, a{
         color: #60cc89
     }
     table{

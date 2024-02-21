@@ -58,7 +58,12 @@ if(!function_exists("OBSERVER_ERROR")){
 }
 if(!function_exists("STATUSES_WITH_ELEVATED_HISTORY")){
     function STATUSES_WITH_ELEVATED_HISTORY(){
-        return [6, 12, 16, 26, 96];
+        return [6, 12, 16, 21, 26, 96];
+    }
+}
+if(!function_exists("STATUSES_WAITING_FOR_ME")){
+    function STATUSES_WAITING_FOR_ME(){
+        return [1, 6, 11, 12, 13, 14, 16, 21, 26, 96];
     }
 }
 

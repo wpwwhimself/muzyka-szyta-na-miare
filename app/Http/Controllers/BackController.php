@@ -11,7 +11,6 @@ use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
-use App\Models\Invoice;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\QuestType;
@@ -44,13 +43,7 @@ class BackController extends Controller
             ->orderByRaw("case when deadline is null then 1 else 0 end")
             ->orderByRaw("case status_id
                 when 12 then 1
-                when 16 then 2
-                when 96 then 3
-                when 26 then 4
-                when 14 then 4.5
-                when 11 then 5
-                when 95 then 6
-                when 15 then 7
+                when 11 or 14 or 16 or 21 or 26 or 96 then 5
                 else 99
             end")
             ->orderBy("deadline")
@@ -826,12 +819,16 @@ class BackController extends Controller
         // sending mail
         $flash_content = "Faza zmieniona";
         $mailing = null;
-        if(in_array($quest->status_id, [15, 95])){ // mail do klienta
+        if(
+            in_array($quest->status_id, [15, 95])
+            || $quest->status_id == 11 && is_archmage()
+        ){ // mail do klienta
             if($quest->client->email){
-                switch($quest->status_id){
-                    case 15: Mail::to($quest->client->email)->send(new QuestUpdated($quest)); break;
-                    case 95: Mail::to($quest->client->email)->send(new Clarification($quest)); break;
-                }
+                Mail::to($quest->client->email)->send(
+                    $quest->status_id == 95
+                    ? new Clarification($quest)
+                    : new QuestUpdated($quest)
+                );
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
             }

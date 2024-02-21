@@ -251,10 +251,9 @@
             </div>
         </section>
 
-        @php $statuses_for_split = [11, 12, 13, 14, 16, 26, 96]; @endphp
         @foreach([
-            ["Zlecenia w toku", "box", $quests->filter(fn($q) => in_array($q->status_id, $statuses_for_split))],
-            ["Zlecenia czekające", "box-open", $quests->filter(fn($q) => !in_array($q->status_id, $statuses_for_split))],
+            ["Zlecenia w toku", "box", $quests->filter(fn($q) => in_array($q->status_id, STATUSES_WAITING_FOR_ME()))],
+            ["Zlecenia czekające", "box-open", $quests->filter(fn($q) => !in_array($q->status_id, STATUSES_WAITING_FOR_ME()))],
         ] as [$sec_title, $icon, $data])
         <section id="dashboard-quests">
             <div class="section-header">

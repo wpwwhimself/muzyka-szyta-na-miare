@@ -6,7 +6,7 @@
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
     <p>
         ze względu na {{ $reason }}, zamówione przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} zlecenie zostało wygaszone.
-        Oznacza to, że jest ono traktowane jako odrzucone.
+        Oznacza to, że jest ono traktowane jako {{ $treat_as }}.
     </p>
 
     <x-mail-quest-mini :quest="$quest" />

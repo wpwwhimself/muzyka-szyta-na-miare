@@ -19,11 +19,13 @@ class QuestExpired extends Mailable
      */
     public $quest;
     public $reason;
+    public $treat_as;
     public $pl;
     public function __construct($quest, $reason)
     {
         $this->quest = is_string($quest) ? Quest::findOrFail($quest) : $quest;
         $this->reason = $reason;
+        $this->treat_as = ($this->quest->status_id === 19 && $this->quest->paid) ? "zaakceptowane" : "odrzucone";
         $this->pl = client_polonize($this->quest->client->client_name);
     }
 

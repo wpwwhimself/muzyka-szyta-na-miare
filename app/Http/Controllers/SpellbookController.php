@@ -21,14 +21,16 @@ class SpellbookController extends Controller
 
     public function silence($id){
         StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
-        return back()->with("success", "Ostatni status uciszony");
+        $route_back = is_request($id) ? "request" : "quest";
+        return redirect()->route($route_back, ["id" => $id])->with("success", "Ostatni status uciszony");
     }
 
     public function transmute($id, $property, $value = null){
-        $r = (strlen($id) == 36) ? ModelsRequest::find($id) : Quest::find($id);
+        $r = is_request($id) ? ModelsRequest::find($id) : Quest::find($id);
         $r->{$property} = $value;
         $r->save();
-        return back()->with("success", "Atrybut zmieniony");
+        $route_back = is_request($id) ? "request" : "quest";
+        return redirect()->route($route_back, ["id" => $id])->with("success", "Atrybut zmieniony");
     }
 
     public function restatus($id, $status_id){
@@ -38,7 +40,7 @@ class SpellbookController extends Controller
             ->orderByDesc("date")
             ->first()
             ->update(["new_status_id" => $status_id]);
-        return back()->with("success", "Faza zmieniona siłą");
+        return redirect()->route("quest", ["id" => $id])->with("success", "Faza zmieniona siłą");
     }
 
     public function polymorph($id, $letter){

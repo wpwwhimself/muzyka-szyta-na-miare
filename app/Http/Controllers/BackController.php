@@ -67,7 +67,7 @@ class BackController extends Controller
                 ->limit(7)
                 ->get();
             foreach($recent as $change){
-                $change->is_request = (strlen($change->re_quest_id) == 36);
+                $change->is_request = is_request($change->re_quest_id);
                 $change->re_quest = ($change->is_request) ?
                     Request::find($change->re_quest_id) :
                     Quest::find($change->re_quest_id);
@@ -620,7 +620,7 @@ class BackController extends Controller
 
     public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
         if($re_quest_id){
-            $client_id = (strlen($re_quest_id) == 36) ?
+            $client_id = is_request($re_quest_id) ?
                 Request::find($re_quest_id)->client_id :
                 Quest::find($re_quest_id)->client_id;
         }else{

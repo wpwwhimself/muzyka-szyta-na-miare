@@ -399,6 +399,15 @@ if(!function_exists("tax_calc")){
     }
 }
 
+/**
+ * take ID and say whether it's a request
+ */
+if(!function_exists("is_request")){
+    function is_request($id) {
+        return strlen($id) == 36;
+    }
+}
+
 /*************************
  * DECORATIVE FUNCTIONS
  */

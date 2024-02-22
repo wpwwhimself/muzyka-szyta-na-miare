@@ -225,7 +225,7 @@
 
                 const comment_field = document.querySelector("#statuschanger #comment");
                 if($(this).attr("is-follow-up")){
-                    const last_comment = $(`#quest-history .history-position.p-${status}:first .qh-comment`).text().trim();
+                    const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
                     comment_field.innerHTML = last_comment;
                 }else{
                     comment_field.innerHTML = "";

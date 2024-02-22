@@ -28,7 +28,7 @@
                 "p-".$item->status->id,
                 "by-client" => !is_archmage($item->changed_by),
             ]) {{ Popper::arrow()->interactive()->pop($entryLabel($item)) }}>
-                <i class="fas {{ $item->status->status_symbol }} quest-status p-{{ $item->new_status_id }}"></i>
+                <i class="fas {{ $item->status->status_symbol }} quest-status p-{{ $item->new_status_id }}" data-comment="{{ $item->comment }}"></i>
             </div>
             <small class="notification-counter">
                 @if ($item->mail_sent >= 1)

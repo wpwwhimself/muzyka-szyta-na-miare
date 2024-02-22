@@ -343,7 +343,7 @@
                 let status = $(this).attr("statuschanger");
                 $(`#phases button[type="submit"]`).val(status);
                 $("#statuschanger").show();
-                for(i of [14, 19, 16, 18, 26, 96]){
+                for(i of [11, 14, 19, 16, 18, 21, 26, 96]){
                     if(i == status) continue;
                     $(`a[statuschanger="${i}"]`).addClass("ghost");
                 }
@@ -352,7 +352,7 @@
 
                 const comment_field = document.querySelector("#statuschanger #comment");
                 if($(this).attr("is-follow-up")){
-                    const last_comment = $(`#quest-history .history-position.p-${status}:first .qh-comment`).text().trim();
+                    const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
                     comment_field.innerHTML = last_comment;
                 }else{
                     comment_field.innerHTML = "";

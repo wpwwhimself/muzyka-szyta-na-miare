@@ -812,7 +812,7 @@ class BackController extends Controller
                 $rq->quest_id,
                 $rq->status_id,
                 $rq->comment,
-                (is_archmage() && in_array($rq->status_id, [16, 18, 19, 26, 96])) ? $quest->client_id : null
+                (is_archmage() && in_array($rq->status_id, [16, 18, 19, 21, 26, 96])) ? $quest->client_id : null
             );
         }
 

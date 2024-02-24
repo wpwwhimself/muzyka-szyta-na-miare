@@ -23,7 +23,7 @@ class Song extends Model
         "price_code", "notes",
     ];
     protected $appends = [
-        "has_showcase_file",
+        "full_title", "has_showcase_file",
     ];
 
     public function genre(){

@@ -14,7 +14,12 @@ $(document).ready(function(){
                     list.append(`<li>
                         <span>${song.title ?? 'utwór bez tytułu'}</span>
                         <span class='ghost'>${song.artist ?? ''}</span>
-                        ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania" class="clickable" data-song-id="${song.id}">💽</span>` : ``}
+                        ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania"
+                            class="clickable"
+                            data-song-id="${song.id}"
+                            data-song-title="${song.full_title}"
+                            data-song-desc="${song.notes || ''}"
+                        >💽</span>` : ``}
                     </li>`);
                 }
                 list.after($(`<p>Razem: ${res.length}</p>`));
@@ -22,21 +27,24 @@ $(document).ready(function(){
                 $("#song-loader").hide();
 
                 $("#songs .clickable").click(function(){
+                    $("#songs .popup").addClass("open");
+
                     const player = document.querySelector("#songs audio");
                     const song_id = $(this).attr("data-song-id");
-                    const nowPlaying = player.currentSrc.substr(-4);
+                    const song_title = $(this).attr("data-song-title");
+                    const song_desc = $(this).attr("data-song-desc");
 
-                    if(player.currentTime && !player.paused && nowPlaying == song_id){
-                        player.pause();
-                    }else{
-                        $("#song-loader").show();
-                        player.src = `showcase/show/${song_id}`;
-                        player.load();
-                        $("#song-loader").hide();
-                        player.play();
-                    }
+                    $("#songs .popup .song-full-title").text(song_title)
+                    $("#songs .popup .song-desc").text(song_desc)
 
+                    $("#song-loader").show();
+                    player.src = `showcase/show/${song_id}`;
+                    player.load();
+                    $("#song-loader").hide();
                 });
+                $("#songs #popup-close").click(function() {
+                    $("#songs .popup").removeClass("open");
+                })
             }
         }
     });

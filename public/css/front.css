@@ -136,6 +136,24 @@ h1{
     gap: 0.1em 0.5em;
     overflow-x: scroll;
 }
+#songs .popup {
+    display: none;
+    position: fixed; z-index: 99;
+    top: 0; left: 0; right: 0; bottom: 0;
+    backdrop-filter: blur(1em);
+    justify-content: center; align-items: center;
+
+    &.open {
+        display: flex;
+    }
+    & .popup-contents {
+        gap: 1em;
+
+        & h3, p {
+            margin: 0;
+        }
+    }
+}
 
 
 .front-table{

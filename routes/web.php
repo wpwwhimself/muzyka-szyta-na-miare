@@ -80,6 +80,8 @@ Route::controller(BackController::class)->group(function(){
 });
 
 Route::controller(FileController::class)->group(function(){
+    Route::get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
+
     Route::middleware("auth")->group(function(){
         Route::post('/safe-u/{id}', 'fileUpload')->name('upload');
         Route::post('/safe-s', 'fileStore')->name('store');
@@ -88,7 +90,6 @@ Route::controller(FileController::class)->group(function(){
         Route::post('/safe/ver-desc-mod', "verDescMod")->name("ver-desc-mod");
 
         Route::post("/showcase/upload", "showcaseFileUpload")->name("showcase-file-upload");
-        Route::get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
     });
 });
 

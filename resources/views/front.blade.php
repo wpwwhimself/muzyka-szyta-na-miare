@@ -145,13 +145,20 @@
 
         <div id="songs">
             <h2>Utwory, których się podjąłem</h2>
-            <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
             <p class="tutorial">
                 <i class="fa-solid fa-circle-question"></i>
                 Kliknij ikonę płyty, aby odtworzyć próbkę
             </p>
             <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
-            <audio></audio>
+            <div class="popup">
+                <div class="popup-contents flex-down center">
+                    <h3 class="song-full-title"></h3>
+                    <p class="song-desc"></p>
+                    <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
+                    <audio controls></audio>
+                    <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
+                </div>
+            </div>
         </div>
     </section>
 

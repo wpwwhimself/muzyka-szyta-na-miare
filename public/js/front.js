@@ -26,10 +26,10 @@ $(document).ready(function(){
 
                 $("#song-loader").hide();
 
+                const player = document.querySelector("#songs audio");
                 $("#songs .clickable").click(function(){
                     $("#songs .popup").addClass("open");
 
-                    const player = document.querySelector("#songs audio");
                     const song_id = $(this).attr("data-song-id");
                     const song_title = $(this).attr("data-song-title");
                     const song_desc = $(this).attr("data-song-desc");
@@ -41,9 +41,11 @@ $(document).ready(function(){
                     player.src = `showcase/show/${song_id}`;
                     player.load();
                     $("#song-loader").hide();
+                    player.play()
                 });
                 $("#songs #popup-close").click(function() {
                     $("#songs .popup").removeClass("open");
+                    player.pause()
                 })
             }
         }

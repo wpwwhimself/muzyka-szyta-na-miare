@@ -1,5 +1,5 @@
 @props([
-  "title",
+  "title" => null,
   "noShrinking" => false,
 ])
 
@@ -10,7 +10,7 @@
     "center",
     "no-shrinking" => $noShrinking,
 ])>
-    <span class="title grayed-out">{{ $title }}</span>
+    @if ($title) <span class="title grayed-out">{{ $title }}</span> @endif
     <span>{{ $slot }}</span>
 </div>
 @endunless

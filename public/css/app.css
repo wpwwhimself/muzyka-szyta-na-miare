@@ -938,17 +938,22 @@ footer .contact-info{
     background-color: var(--bg2);
     border-radius: 2em;
     padding: 1em; margin: 0.5em 0;
-}
-.file-container-a h4{
-    margin: 0;
-    border-bottom: 2px solid var(--acc);
-}
-.pre-file-container-a{
-    margin-bottom: 0;
-}
-.pre-file-container-a::after, .pre-file-container-a::before{
-    content: "–";
-    margin: 0 1em;
+    position: relative;
+
+    & h4 {
+        margin: 0;
+        border-bottom: 2px solid var(--acc);
+    }
+    & .file-super {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        text-align: center;
+        font-size: 0.75em;
+
+        &::after, &::before {
+            content: "–";
+            margin: 0 1em;
+        }
+    }
 }
 .file-container-b{
     position: relative;

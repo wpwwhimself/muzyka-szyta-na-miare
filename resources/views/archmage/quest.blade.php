@@ -182,13 +182,14 @@
             </x-extendo-section>
 
             @forelse ($files as $ver_super => $ver_mains)
-            <x-extendo-section :title="$ver_super" no-shrinking>
                 @foreach ($ver_mains as $ver_main => $ver_subs)
+                <x-extendo-section no-shrinking>
                 <div class="file-container-a">
                     <h4>
                         <small>wariant:</small>
                         {{ $ver_main }}
                     </h4>
+                    <span class="ghost file-super">{{ $ver_super }}</span>
                     @foreach ($ver_subs as $ver_sub => $ver_bots)
                     @php list($ver_sub_name, $tags) = file_name_and_tags($ver_sub); @endphp
                     <div class="file-container-b">
@@ -218,6 +219,8 @@
                             @elseif (pathinfo($file)['extension'] == "ogg")
                             <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/ogg" /></audio>
                                 @break
+                            @elseif (pathinfo($file)['extension'] == "pdf")
+                            <span class="ghost">Nie jestem w stanie pokazać podglądu</span>
                             @endif
                         @endforeach
                         @foreach ($ver_bots as $file)
@@ -229,8 +232,8 @@
                     </div>
                     @endforeach
                 </div>
+                </x-extendo-section>
                 @endforeach
-            </x-extendo-section>
             @empty
             <p class="grayed-out">Brak plików</p>
             @endforelse

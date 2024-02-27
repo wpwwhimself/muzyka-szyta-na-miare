@@ -239,7 +239,7 @@
         <div id="opinion-1">
             <h2>Czy odpowiada Ci powyższa wycena?</h2>
             <div>
-                <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
+                <x-button label="Tak" icon="check" action="#/" />
                 <x-button label="Nie" icon="times" action="#/" />
             </div>
         </div>
@@ -268,13 +268,21 @@
                 <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
             </div>
         </div>
+        <div id="opinion-3" class="gone">
+            <h2>Na pewno? Termin realizacji też?</h2>
+            <div>
+                <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
+                <x-button label="Nie" icon="times" action="#/" />
+            </div>
+        </div>
         <script>
         $(document).ready(function(){
-            $("#opinion-1 a:last").click(function(){
+            $("#opinion-1 a:last, #opinion-3 a:last").click(function(){
                 $("#opinion-1 a.ghost").removeClass("ghost");
                 $(`#opinion-1 a:first`).addClass("ghost");
 
                 $("#opinion-2").removeClass("gone");
+                $("#opinion-3").addClass("gone");
             });
 
             $("#opinion-2 a[optbc]").click(function(){
@@ -288,6 +296,14 @@
                 $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("gone");
                 $("#opinion-2 #opinion-inputs").removeClass("gone");
                 $("#opinion-2 #opinion-submit").removeClass("gone");
+            });
+
+            $("#opinion-1 a:first").click(function(){
+                $("#opinion-1 a.ghost").removeClass("ghost");
+                $(`#opinion-1 a:last`).addClass("ghost");
+
+                $("#opinion-2").addClass("gone");
+                $("#opinion-3").removeClass("gone");
             });
         });
         </script>

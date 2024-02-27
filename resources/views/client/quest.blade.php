@@ -128,7 +128,7 @@
             });
             </script>
 
-            @if ($quest->deadline) <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
+            @if ($quest->deadline) <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
 
             <x-extendo-section title="Wpłaty">
                 <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments_sum }}" max="{{ $quest->price }}"></progress>

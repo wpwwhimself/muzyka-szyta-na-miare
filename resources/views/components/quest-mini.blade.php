@@ -48,7 +48,7 @@
             </p>
             @endif
             @if ($quest->deadline)
-            <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
+            <i class="fa-solid fa-calendar" @popper(Do kiedy (włącznie) oddam pliki)></i>
             <p
                 @if(in_array($quest->status_id, [11, 12]))
                     @if ($quest->deadline?->addDay()->subDays(1)->lte(now()))

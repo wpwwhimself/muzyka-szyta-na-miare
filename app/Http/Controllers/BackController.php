@@ -916,7 +916,7 @@ class BackController extends Controller
         $changes = [];
         foreach([
             "cena" => [$price_before, $quest->price],
-            "termin oddania pierwszej wersji" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
+            "do kiedy (włącznie) oddam pliki" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
             "opóźnienie wpłaty" => [$delayed_payment_before?->format("Y-m-d"), $quest->delayed_payment?->format("Y-m-d")],
         ] as $attr => $value){
             if ($value[0] != $value[1]) $changes[$attr] = $value[0] . " → " . $value[1];

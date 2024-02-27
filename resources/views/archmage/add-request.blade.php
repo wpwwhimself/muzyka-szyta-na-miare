@@ -214,7 +214,7 @@
 
                 <h3>Termin</h3>
                 <x-calendar />
-                <x-input type="date" name="deadline" label="Termin oddania pierwszej wersji" />
+                <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" />
             </section>
         </div>
         <x-input type="TEXT" name="comment" label="Komentarz do zmiany" />

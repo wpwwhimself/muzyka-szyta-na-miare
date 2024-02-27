@@ -240,7 +240,7 @@
                             {{ Popper::pop($request->deadline->format("Y-m-d")) }} >
                             {{ $request->deadline?->addDay()->diffForHumans() }}
                         </p>
-                        <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
+                        <i class="fa-solid fa-calendar" @popper(Do kiedy (włącznie) oddam pliki)></i>
                         @endif
                     </div>
                 </span>
@@ -348,7 +348,7 @@
                                 {{ Popper::pop($quest->deadline->format("Y-m-d")) }} >
                                 {{ $quest->deadline?->addDay()->diffForHumans() }}
                             </p>
-                            <i class="fa-solid fa-calendar" @popper(Termin oddania pierwszej wersji)></i>
+                            <i class="fa-solid fa-calendar" @popper(Do kiedy (włącznie) oddam pliki)></i>
                             @endif
                         </div>
                     </span>

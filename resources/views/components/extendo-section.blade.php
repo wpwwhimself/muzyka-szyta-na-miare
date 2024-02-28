@@ -11,6 +11,6 @@
     "no-shrinking" => $noShrinking,
 ])>
     @if ($title) <span class="title grayed-out">{{ $title }}</span> @endif
-    <span>{{ $slot }}</span>
+    {{ $slot }}
 </div>
 @endunless

@@ -216,19 +216,14 @@ class BackController extends Controller
     public function addRequest(){
         $pad_size = 24; // used by dropdowns for mobile preview fix
 
-        if(is_archmage()){
-            $clients_raw = Client::all()->toArray();
-            foreach($clients_raw as $client){
-                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
-            }
-            $songs_raw = Song::all()->toArray();
-            foreach($songs_raw as $song){
-                $songs[$song["id"]] = Str::limit($song["title"] ?? "bez tytułu ($song[artist])", $pad_size)." «$song[id]»";
-            }
-        }else{
-            $clients = [];
-            $songs = [];
+        if (is_archmage()) {
+            // arcymag od razu tworzy pusty request i edytuje go później
+            $request = Request::create(["status_id" => 1]);
+            return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
         }
+        
+        $clients = [];
+        $songs = [];
 
         $questTypes_raw = QuestType::all()->toArray();
         foreach($questTypes_raw as $val){

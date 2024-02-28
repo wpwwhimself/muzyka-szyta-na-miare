@@ -37,7 +37,7 @@ class BackController extends Controller
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderByDesc("updated_at");
-        $quests = Quest::whereNotIn("status_id", [17, 18, 19])
+        $quests_ongoing = Quest::whereIn("status_id", STATUSES_WAITING_FOR_ME())
             ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")
             ->orderByRaw("case when deadline is null then 1 else 0 end")
@@ -48,7 +48,13 @@ class BackController extends Controller
             end")
             ->orderBy("deadline")
             ->orderByRaw("paid desc")
-            ->orderBy("created_at");
+            ->orderBy("created_at")
+            ->get();
+        $quests_review = Quest::whereNotIn("status_id", [17, 18, 19])
+            ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
+            ->orderByDesc("deadline")
+            ->orderBy("created_at")
+            ->get();
 
         if(!is_archmage()){
             $requests = $requests->where("client_id", $client->id);
@@ -109,7 +115,6 @@ class BackController extends Controller
             $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
         }
         $requests = $requests->get();
-        $quests = $quests->get();
 
         return view(user_role().".dashboard", array_merge(
             [
@@ -117,7 +122,7 @@ class BackController extends Controller
                 ? (Auth::id() == 1 ? "Szpica arcymaga" : "WITAJ, OBSERWATORZE")
                 : "Pulpit"
             ],
-            compact("quests", "requests"),
+            compact("quests_ongoing", "quests_review", "requests"),
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
             (isset($unpaids) ? compact("unpaids") : []),

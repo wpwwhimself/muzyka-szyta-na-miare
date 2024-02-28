@@ -252,8 +252,8 @@
         </section>
 
         @foreach([
-            ["Zlecenia w toku", "box", $quests->filter(fn($q) => in_array($q->status_id, STATUSES_WAITING_FOR_ME()))],
-            ["Zlecenia czekające", "box-open", $quests->filter(fn($q) => !in_array($q->status_id, STATUSES_WAITING_FOR_ME()))],
+            ["Zlecenia w toku", "box", $quests_ongoing],
+            ["Zlecenia czekające", "box-open", $quests_review],
         ] as [$sec_title, $icon, $data])
         <section id="dashboard-quests">
             <div class="section-header">

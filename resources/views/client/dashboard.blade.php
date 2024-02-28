@@ -163,26 +163,31 @@
         Możesz najechać na większość symboli, aby pokazać ich znaczenie.
     </p>
 
-    <section id="dashboard-quests">
-        <div class="section-header">
-            <h1><i class="fa-solid fa-gears"></i> Aktualne zlecenia</h1>
-            <div>
-                <x-a href="{{ route('quests') }}">Wszystkie</x-a>
+    @foreach ([
+        ["review", "Zlecenia wymagające odpowiedzi", "bell", $quests_review],
+        ["ongoing", "Aktualne zlecenia", "gears", $quests_ongoing],
+    ] as [$sec_code, $sec_title, $sec_icon, $sec_list])
+        <section id="dashboard-quests-{{ $sec_code }}">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-{{ $sec_icon }}"></i> {{ $sec_title }}</h1>
+                <div>
+                    <x-a href="{{ route('quests') }}">Wszystkie</x-a>
+                </div>
             </div>
-        </div>
-        <div class="dashboard-mini-wrapper">
-        @php $quest_count = 0 @endphp
-        @foreach ($quests as $key => $quest)
-            @if ($quest->client_id == Auth::id())
-            @php $quest_count++; @endphp
-            <x-quest-mini :quest="$quest" :queue="$key + 1" />
-            @endif
-        @endforeach
-        @unless($quest_count)
-            <p class="grayed-out">brak aktywnych zleceń</p>
-        @endunless
-        </div>
-    </section>
+            <div class="dashboard-mini-wrapper">
+            @php $quest_count = 0 @endphp
+            @foreach ($sec_list as $key => $quest)
+                @if ($quest->client_id == Auth::id())
+                @php $quest_count++; @endphp
+                <x-quest-mini :quest="$quest" :queue="($sec_code == 'ongoing') ? $key + 1 : null" />
+                @endif
+            @endforeach
+            @unless($quest_count)
+                <p class="grayed-out">brak aktywnych zleceń</p>
+            @endunless
+            </div>
+        </section>
+    @endforeach
 
     <section id="dashboard-requests">
         <div class="section-header">

@@ -224,9 +224,10 @@ class BackController extends Controller
         if (is_archmage()) {
             // arcymag od razu tworzy pusty request i edytuje go później
             $request = Request::create(["status_id" => 1]);
+            $this->statusHistory($request->id, 1, "~ spoza strony");
             return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
         }
-        
+
         $clients = [];
         $songs = [];
 

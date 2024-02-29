@@ -492,6 +492,9 @@ footer .contact-info{
 
     &.warning-like{
         border-color: rgb(var(--warning));
+        animation-name: blinking;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
     }
 
     & h1, h2, h3, p, ul{
@@ -530,8 +533,6 @@ footer .contact-info{
             max-width: 250px;
         }
     }
-
-
 }
 
 /*****************/
@@ -1270,5 +1271,11 @@ footer .contact-info{
     #ppp{
         flex-direction: column;
         align-items: stretch;
+    }
+}
+
+@keyframes blinking {
+    50% {
+        border-color: var(--bg2);
     }
 }

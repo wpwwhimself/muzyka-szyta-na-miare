@@ -3,6 +3,7 @@
     title="Log tworzenia"
     :subtitle="$quest->song->work_time"
     :extended="$extended"
+    :warning="['Zegar tyka' => $workhistory->search(fn($entry) => $entry->now_working) !== false]"
 >
     <table id="stats-log">
         <thead>

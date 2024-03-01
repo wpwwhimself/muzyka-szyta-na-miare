@@ -13,6 +13,7 @@
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8, 95]) ? 'review' : 'change' }}" />
 
         @foreach ([
+            ["Uzupełnij", 1, [1]],
             ["Oddaj", 5, [1, 6, 96]],
             ["Doprecyzuj", 95, [1, 6, 96]],
             ["Klient odpowiada", 96, [95]],

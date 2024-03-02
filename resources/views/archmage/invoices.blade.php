@@ -11,14 +11,16 @@
         <div class="grid-3">
             <x-input type="text" name="payer_name" label="Nazwa płatnika" value="{{ _ct_($client?->client_name) }}" />
             <x-input type="text" name="payer_title" label="Tytuł płatnika" :small="true" />
-            <x-input type="TEXT" name="payer_address" label="Adres" />
+            <x-input type="text" name="payer_address" label="Adres" />
             <x-input type="text" name="payer_nip" value="" label="NIP" :small="true" />
             <x-input type="text" name="payer_regon" value="" label="REGON" :small="true" />
             <x-input type="text" name="payer_email" label="E-mail" :small="true" value="{{ _ct_($client?->email) }}" />
             <x-input type="text" name="payer_phone" label="Telefon" :small="true" value="{{ _ct_($client?->phone) }}" />
             <x-input type="text" name="quests" label="Zlecenia (oddz. spacjami)" :small="true" value="{{ $quest_id }}" />
         </div>
-        <x-button action="submit" label="Dodaj" icon="check" />
+        <input type="hidden" id="id" name="id" value="" />
+        <x-button action="submit" id="invoice-add-btn" label="Dodaj" icon="check" />
+        <x-button action="submit" id="invoice-edit-btn" label="Popraw" icon="pencil" />
     </form>
 </section>
 
@@ -40,11 +42,12 @@
         <tbody>
         @forelse ($invoices as $invoice)
             <tr>
-                <td>
+                <td class="invoice-number">
                     <a href="{{ route('invoice', ['id' => $invoice->id]) }}">
                         <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
                         {{ $invoice->fullCode }}
                     </a>
+                    <i class="fas fa-pencil invoice-edit clickable" data-invoice-id="{{ $invoice->id }}"></i>
                 </td>
                 <td>
                 @foreach ($invoice->quests as $quest)
@@ -61,5 +64,35 @@
         </tbody>
     </table>
 </section>
+
+<script>
+$(document).ready(function() {
+    $("#invoice-edit-btn").hide()
+
+    $(".invoice-edit").click(function() {
+        fetch("/api/invoice/" + $(this).attr("data-invoice-id"))
+            .then(res => res.json())
+            .then(res => {
+                const invoice = res.invoice
+
+                $("#invoice-edit-btn").show()
+                $("#invoice-add-btn").hide()
+                for (let field of [
+                    "id",
+                    "payer_name",
+                    "payer_title",
+                    "payer_address",
+                    "payer_nip",
+                    "payer_regon",
+                    "payer_email",
+                    "payer_phone",
+                ]) {
+                    $("#" + field).val(invoice[field])
+                }
+                $("#quests").val(invoice.quests.map(q => q.id).join(" "))
+            })
+    })
+})
+</script>
 
 @endsection

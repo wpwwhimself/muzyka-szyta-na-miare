@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PatchController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,11 @@ Route::controller(PatchController::class)->group(function(){
 
     Route::prefix("songs")->group(function(){
         Route::patch("/{id}/{mode?}", "patchSong");
+    });
+});
+
+Route::controller(StatsController::class)->group(function() {
+    Route::prefix("invoice")->group(function() {
+        Route::get("/{id}", "invoice");
     });
 });

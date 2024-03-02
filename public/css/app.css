@@ -1057,6 +1057,15 @@ footer .contact-info{
     vertical-align: middle;
 }
 
+.invoice-number {
+    & .invoice-edit {
+        display: none;
+    }
+    &:hover .invoice-edit {
+        display: inline;
+    }
+}
+
 #invoice{
     position: relative;
 }

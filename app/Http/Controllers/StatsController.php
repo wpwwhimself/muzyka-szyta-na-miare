@@ -501,14 +501,16 @@ class StatsController extends Controller
         ));
     }
 
-    public function invoice($id){
-        $invoice = Invoice::find($id);
+    public function invoice($id, Request $rq){
+        $invoice = Invoice::with("quests")->find($id);
         if(!$invoice) abort(404, "Nie ma takiej faktury");
 
-        return view(user_role().".invoice", array_merge(
-            ["title" => "Faktura nr ".$invoice->fullCode],
-            compact("invoice"),
-        ));
+        return (substr($rq->path(), 0, 3) == "api")
+            ? response()->json(["invoice" => $invoice])
+            : view(user_role().".invoice", array_merge(
+                ["title" => "Faktura nr ".$invoice->fullCode],
+                compact("invoice"),
+            ));
     }
     public function invoiceVisibility(Request $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
@@ -531,18 +533,35 @@ class StatsController extends Controller
             }
         }
 
-        $invoice = Invoice::create([
-            "visible" => false,
-            "amount" => $totals["amount"],
-            "paid" => $totals["paid"],
-            "payer_name" => $rq->payer_name,
-            "payer_title" => $rq->payer_title,
-            "payer_address" => $rq->payer_address,
-            "payer_nip" => $rq->payer_nip,
-            "payer_regon" => $rq->payer_regon,
-            "payer_email" => $rq->payer_email,
-            "payer_phone" => $rq->payer_phone,
-        ]);
+        if ($rq->id) {
+            // edycja
+            $invoice = Invoice::find($rq->id);
+            $invoice->update([
+                "amount" => $totals["amount"],
+                "paid" => $totals["paid"],
+                "payer_name" => $rq->payer_name,
+                "payer_title" => $rq->payer_title,
+                "payer_address" => $rq->payer_address,
+                "payer_nip" => $rq->payer_nip,
+                "payer_regon" => $rq->payer_regon,
+                "payer_email" => $rq->payer_email,
+                "payer_phone" => $rq->payer_phone,
+            ]);
+            InvoiceQuest::where("invoice_id", $rq->id)->delete();
+        } else {
+            $invoice = Invoice::create([
+                "visible" => false,
+                "amount" => $totals["amount"],
+                "paid" => $totals["paid"],
+                "payer_name" => $rq->payer_name,
+                "payer_title" => $rq->payer_title,
+                "payer_address" => $rq->payer_address,
+                "payer_nip" => $rq->payer_nip,
+                "payer_regon" => $rq->payer_regon,
+                "payer_email" => $rq->payer_email,
+                "payer_phone" => $rq->payer_phone,
+            ]);
+        }
 
         foreach($invoice_quests as $quest_id => $values){
             InvoiceQuest::create([
@@ -554,7 +573,7 @@ class StatsController extends Controller
             ]);
         }
 
-        return redirect()->route("invoice", ["id" => $invoice->id])->with("success", "Dokument utworzony");
+        return redirect()->route("invoice", ["id" => $invoice->id])->with("success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony");
     }
 
     public function costs(){

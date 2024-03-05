@@ -382,19 +382,7 @@ class StatsController extends Controller
         ];
         $saturation = json_decode(json_encode($saturation));
 
-        $unpaids_raw = Quest::where("paid", 0)
-            ->whereNotIn("status_id", [17, 18])
-            ->whereHas("client", function($query){
-                $query->where("trust", ">", -1);
-            })
-            ->orderBy("quests.updated_at")
-            ->get();
-        $unpaids = [];
-        if(count($unpaids_raw) > 0){
-            foreach($unpaids_raw as $quest){
-                $unpaids[$quest->client->id][] = $quest;
-            };
-        }
+        $unpaids = Client::has("questsUnpaid")->orderBy("client_name")->get();
 
         $recent = StatusChange::where("new_status_id", 32)->orderByDesc("date")->limit(10)->get();
         foreach($recent as $i){

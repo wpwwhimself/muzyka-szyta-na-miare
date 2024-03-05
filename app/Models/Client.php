@@ -27,7 +27,7 @@ class Client extends Model
         return $this->hasMany(Quest::class)->where("status_id", 19);
     }
     public function questsUnpaid(){
-        return $this->hasMany(Quest::class)->where("paid", 0);
+        return $this->hasMany(Quest::class)->where("paid", 0)->whereNotIn("status_id", [17, 18]);
     }
 
     public function getExpAttribute(){

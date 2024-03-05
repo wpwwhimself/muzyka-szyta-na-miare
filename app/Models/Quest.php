@@ -31,6 +31,9 @@ class Quest extends Model
     public function getPaymentsSumAttribute(){
         return $this->payments->sum("comment");
     }
+    public function getPaymentRemainingAttribute() {
+        return $this->price - $this->payments_sum;
+    }
     public function getCompletedOnceAttribute() {
         return $this->history->whereIn("new_status_id", [14, 19])->count() > 0;
     }

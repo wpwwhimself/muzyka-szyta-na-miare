@@ -82,16 +82,19 @@
 
     <form action="{{ route('finance-pay') }}" method="post" class="flex-down spaced">
         @csrf
-        
+
         @php $amount_total = ['immediate' => 0, 'delayed' => 0] @endphp
-        @foreach ($unpaids as $client_id => $quests)
-        <x-extendo-block :key="$client_id"
-            :header-icon="($quests[0]->client->is_veteran ? 'user-shield' : 'user')"
-            :title="_ct_($quests[0]->client->client_name)"
-            :subtitle="count($quests)"
+        @foreach ($unpaids as $client)
+        <x-extendo-block :key="$client->id"
+            :header-icon="($client->is_veteran ? 'user-shield' : 'user')"
+            :title="_ct_($client->client_name)"
+            :subtitle="implode(' // ', [
+                $client->questsUnpaid->count(),
+                _c_(as_pln($client->questsUnpaid->sum('payment_remaining'))),
+            ])"
         >
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp
-            @foreach ($quests as $quest)
+            @foreach ($client->questsUnpaid as $quest)
             <x-extendo-section :title="$quest->id">
                 <a href="{{ route('quest', ['id' => $quest->id]) }}"
                     @if ($quest->delayed_payment_in_effect)
@@ -114,11 +117,11 @@
                 @if($amount_to_pay["delayed"]) <span class="ghost">{{ _c_(as_pln($amount_to_pay["delayed"])) }}</span> @endif
             </x-extendo-section>
             <div>
-                <x-button label="Klient" icon="user" :small="true" :action="route('clients', ['search' => $client_id])" />
+                <x-button label="Klient" icon="user" :small="true" :action="route('clients', ['search' => $client->id])" />
             </div>
         </x-extendo-block>
         @endforeach
-            
+
         <h3>
             Razem:
             @if($amount_total["immediate"]) <span>{{ _c_(as_pln($amount_total["immediate"])) }}</span> @endif

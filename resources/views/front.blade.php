@@ -240,9 +240,9 @@
                 <h2>Szczegóły zlecenia</h2>
                 <div class="bulk-box sc-line">
                     <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$quest_types" />
-                    <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="C'est la vie" />
-                    <x-input type="text" name="artist[]" label="Wykonawca" placeholder="Andrzej Zaucha" />
-                    <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="https://youtube.com/watch?v=xxxxxxxx" />
+                    <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="{{ $random_song->title }}" />
+                    <x-input type="text" name="artist[]" label="Wykonawca" placeholder="{{ $random_song->artist }}" />
+                    <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="{{ $random_song->link }}" />
                     <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
                     <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
                 </div>

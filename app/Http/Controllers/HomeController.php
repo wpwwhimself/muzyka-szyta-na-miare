@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Showcase;
+use App\Models\Song;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,8 @@ class HomeController extends Controller
         $quests_completed = Quest::where("status_id", 19)->count();
         $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();
 
+        $random_song = Song::all()->random();
+
         $contact_preferences = [
             "email" => "email",
             "telefon" => "telefon",
@@ -50,6 +53,7 @@ class HomeController extends Controller
             "prices",
             "quest_types",
             "contact_preferences",
+            "random_song",
             "average_quest_done",
             "quests_completed",
             "quests_originals_completed"

@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    "title" => "[".$quest->song->id."] ".($quest->song->title ?? "bez tytułu")." | $quest->id"
+    "title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"
 ])
 
 @section('content')
@@ -302,7 +302,10 @@
             <x-extendo-block key="client"
                 header-icon="user"
                 title="Klient"
-                :subtitle="$quest->client->client_name"
+                :subtitle="implode(' // ', [
+                    $quest->client->id,
+                    $quest->client->client_name,
+                ])"
             >
                 <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
                 <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />

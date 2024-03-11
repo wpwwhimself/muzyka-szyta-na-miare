@@ -39,6 +39,7 @@ class StatusesSeeder extends Seeder
             ["id" => 31, "status_name" => "zmieniono wycenę", "status_symbol" => "fa-magnifying-glass-dollar"],
             ["id" => 32, "status_name" => "dokonano wpłaty", "status_symbol" => "fa-cash-register"],
             ["id" => 33, "status_name" => "przypomnienie o wpłacie", "status_symbol" => "fa-comment-dollar"],
+            ["id" => 34, "status_name" => "dokonano zwrotu wpłaty", "status_symbol" => "fa-hand-holding-dollar"],
             ["id" => 95, "status_name" => "czeka na doprecyzowanie", "status_symbol" => "fa-reply"],
             ["id" => 96, "status_name" => "doprecyzowane", "status_symbol" => "fa-reply-all"],
             /* statusy pracy nad questem */

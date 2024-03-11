@@ -71,6 +71,38 @@
     </section>
 </div>
 
+@if (count($returns))
+<section>
+    <div class="section-header">
+        <h1>
+            <i class="fa-solid fa-backward-step"></i>
+            Zwroty pieniędzy do wykonania
+        </h1>
+    </div>
+
+    <div class="flex-down spaced">
+        @foreach ($returns as $quest)
+        <x-extendo-block :key="$quest->id"
+            :header-icon="substr($quest->song->type->fa_symbol, 3)"
+            :title="$quest->song->full_title"
+            :subtitle="$quest->client->client_name"
+        >
+            <x-extendo-section title="Suma wpłat">
+                {{ _ct_(as_pln($quest->payments_sum)) }}
+            </x-extendo-section>
+
+            <x-button
+                :action="route('finance-return', ['quest_id' => $quest->id])"
+                label="Potwierdź zwrot"
+                icon="check"
+                :small="true"
+            />
+        </x-extendo-block>
+        @endforeach
+    </div>
+</section>
+@endif
+
 @if(count($unpaids))
 <section>
     <div class="section-header">

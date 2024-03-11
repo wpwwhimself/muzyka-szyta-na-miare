@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MassPayment;
+use App\Mail\PaymentReturned;
 use App\Models\CalendarFreeDay;
 use App\Models\Client;
 use App\Models\Cost;
@@ -16,6 +17,7 @@ use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
+use Dotenv\Util\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -365,11 +367,17 @@ class StatsController extends Controller
         $this_month = [
             "zarobiono" => StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
+                ->where("new_status_id", 32)
                 ->sum("comment"),
             "wydano" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
                 ->where("cost_type_id", "!=", 3)
-                ->sum("amount"),
+                ->sum("amount")
+                -
+                StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())
+                ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
+                ->where("new_status_id", 34)
+                ->sum("comment"),
             "wypłacono" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
                 ->where("cost_type_id", 3)
@@ -390,10 +398,15 @@ class StatsController extends Controller
             $i->new_status = Status::find($i->new_status_id);
         }
 
+        $returns = Quest::where("status_id", 18)
+            ->where("paid", true)
+            ->get()
+        ;
+
         return view(user_role().".finance", array_merge(
             ["title" => "Centrum Finansowe"],
             compact(
-                "unpaids", "recent", "this_month", "saturation",
+                "unpaids", "recent", "this_month", "saturation", "returns"
             ),
         ));
     }
@@ -449,6 +462,34 @@ class StatsController extends Controller
 
         return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
     }
+    public function financeReturn(string $quest_id) {
+        $quest = Quest::find($quest_id);
+
+        // wypłata
+        app("App\Http\Controllers\BackController")->statusHistory(
+            $quest_id,
+            34,
+            -$quest->payments_sum,
+            $quest->client_id
+        );
+
+        // oznacz jako nieopłacony
+        $quest->update(["paid" => false]);
+
+        $flash_content = "Zwrot wpisany";
+
+        if($quest->client->email){
+            Mail::to($quest->client->email)->send(new PaymentReturned($quest));
+            StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
+            $flash_content .= ", mail wysłany";
+        }
+        if($quest->client->contact_preference != "email"){
+            // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
+            $flash_content .= ", ale wyślij wiadomość";
+        }
+
+        return back()->with("success", $flash_content);
+    }
     public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
@@ -471,6 +512,13 @@ class StatsController extends Controller
         ];
         $gains = $gains->get();
         $losses = $losses->get();
+
+        $losses = $losses->merge(
+            StatusChange::where("new_status_id", 34)
+                ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
+                ->join("clients", "clients.id", "changed_by", "left")
+                ->get(["status_changes.*", "date as created_at"])
+        )->sortByDesc("created_at");
 
         return view(user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],

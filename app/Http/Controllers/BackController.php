@@ -36,7 +36,7 @@ class BackController extends Controller
         $client = Auth::user()->client;
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
-            ->orderByDesc("updated_at");
+            ->orderBy("updated_at");
         $quests_ongoing = Quest::whereIn("status_id", STATUSES_WAITING_FOR_ME())
             ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end") //najpierw priorytety
             ->orderByRaw("case status_id when 13 then 1 else 0 end")

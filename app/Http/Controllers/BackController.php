@@ -64,7 +64,7 @@ class BackController extends Controller
                 ->where("paid", 0)
                 ->get();
         }else{
-            $recent = StatusChange::whereNotIn("new_status_id", [9, 32])
+            $recent = StatusChange::whereNotIn("new_status_id", [9, 32, 34])
                 ->where(fn($q) => $q
                     ->where("changed_by", "!=", 1)
                     ->orWhereNull("changed_by")
@@ -80,18 +80,6 @@ class BackController extends Controller
                 $change->new_status = Status::find($change->new_status_id);
             }
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
-            $gains = [
-                "this_month" => StatusChange::where("new_status_id", 32)
-                    ->whereDate("date", ">=", Carbon::today()->subMonth())
-                    ->sum("comment"),
-                "last_month" => StatusChange::where("new_status_id", 32)
-                    ->whereDate("date", "<", Carbon::today()->subMonth())
-                    ->whereDate("date", ">=", Carbon::today()->subMonths(2))
-                    ->sum("comment"),
-                "total" => StatusChange::where("new_status_id", 32)
-                    ->sum("comment"),
-            ];
-            $gains["monthly_diff"] = $gains["this_month"] - $gains["last_month"];
 
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
@@ -112,7 +100,6 @@ class BackController extends Controller
                     ];
                 }
             }
-            $gains_this_month = StatusChange::whereDate("date", ">=", Carbon::today()->floorMonth())->sum("comment");
         }
         $requests = $requests->get();
 
@@ -126,8 +113,6 @@ class BackController extends Controller
             (isset($quests_total) ? compact("quests_total") : []),
             (isset($patrons_adepts) ? compact("patrons_adepts") : []),
             (isset($unpaids) ? compact("unpaids") : []),
-            (isset($gains) ? compact("gains") : []),
-            (isset($gains_this_month) ? compact("gains_this_month") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
             (isset($recent) ? compact("recent") : []),
         ));

@@ -92,7 +92,7 @@
             </x-extendo-section>
 
             <x-extendo-section title="ID zlecenia">
-                {{ $quest->id }}
+                <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a>
             </x-extendo-section>
 
             <x-button

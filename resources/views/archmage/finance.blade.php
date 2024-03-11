@@ -91,6 +91,10 @@
                 {{ _ct_(as_pln($quest->payments_sum)) }}
             </x-extendo-section>
 
+            <x-extendo-section title="ID zlecenia">
+                {{ $quest->id }}
+            </x-extendo-section>
+
             <x-button
                 :action="route('finance-return', ['quest_id' => $quest->id])"
                 label="Potwierdź zwrot"

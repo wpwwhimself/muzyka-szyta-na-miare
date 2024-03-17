@@ -1096,6 +1096,7 @@ footer .contact-info{
 }
 #invoice .grid-2{
     gap: 0 1em;
+    align-items: inherit;
 }
 
 @media print{

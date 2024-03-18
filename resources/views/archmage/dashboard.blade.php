@@ -291,6 +291,9 @@
                                 :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                                 />
                             {{ $quest->song->title ?? "bez tytułu" }}
+                            @if ($quest->song->has_safe_files)
+                            <i class="fas fa-folder" @popper(Sejf istnieje)></i>
+                            @endif
                         </h3>
                         @if($quest->song->artist) <span class="song-artist">{{ $quest->song->artist }}</span> @endif
                         @if ($quest->is_priority)

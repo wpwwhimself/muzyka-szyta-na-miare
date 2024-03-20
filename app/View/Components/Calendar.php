@@ -19,15 +19,25 @@ class Calendar extends Component
     public $withToday;
     public $clickDays;
     public $suggest;
-    public $length;
     private $available_day_until;
-    public function __construct($withToday = false, $clickDays = true, $suggest = true, $length = 14)
+    public function __construct($withToday = false, $clickDays = true, $suggest = true)
     {
         $this->clickDays = $clickDays;
         $this->suggest = $suggest;
         $this->available_day_until = explode(",", setting("available_day_until"));
 
         $available_days_needed = setting("available_days_needed");
+        $length = max(
+            7,
+            7 - Quest::orderByDesc("deadline")
+                ->first()
+                ->deadline
+                ->diffInDays(Carbon::now(), false),
+            7 - Request::orderByDesc("deadline")
+                ->first()
+                ->deadline
+                ->diffInDays(Carbon::now(), false),
+        );
 
         $available_days_count = 0;
         $suggestion_ready = 0;

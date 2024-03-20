@@ -158,9 +158,9 @@
                     <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
                 </div>
             </div>
-            <x-calendar :click-days="false" :suggest="false" :with-today="true" :length="7" />
+            <x-calendar :click-days="false" :suggest="false" :with-today="true" />
 
-            <div class="section-header">
+            <div>
                 <h1><i class="fa-solid fa-envelope"></i> Zapytania</h1>
                 <div>
                     <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>

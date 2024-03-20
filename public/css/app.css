@@ -1009,6 +1009,11 @@ footer .contact-info{
     user-select: none;
     cursor: pointer;
 }
+.folding {
+    max-height: 30vh;
+    overflow: auto;
+    border-radius: 0;
+}
 .calendar-table td:first-child{
     white-space: nowrap;
 }

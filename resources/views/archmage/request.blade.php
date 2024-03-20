@@ -297,7 +297,7 @@
             </div>
 
             <div>
-                @if (in_array($request->status_id, [1, 6, 96])) <x-calendar /> @endif
+                @if (in_array($request->status_id, [1, 6, 96])) <div class="folding"><x-calendar /></div> @endif
                 <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" />
             </div>
         </x-extendo-block>

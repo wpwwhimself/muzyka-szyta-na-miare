@@ -694,24 +694,12 @@ class StatsController extends Controller
     }
 
     public function questsCalendar(){
-        $calendar_length = max(
-            7,
-            Quest::orderByDesc("deadline")
-                ->first()
-                ->deadline
-                ->diffInDays() + 2,
-            ModelsRequest::orderByDesc("deadline")
-                ->first()
-                ->deadline
-                ->diffInDays() + 2,
-        );
-
         $free_days = CalendarFreeDay::orderBy("date")->whereDate("date", ">=", Carbon::today())->get();
 
         return view(user_role().".quests-calendar", array_merge(
             ["title" => "Grafik zleceń"],
             compact(
-                "calendar_length", "free_days"
+                "free_days"
             ),
         ));
     }

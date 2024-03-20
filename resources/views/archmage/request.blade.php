@@ -1,6 +1,8 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
+<x-a href="{{ route('add-request') }}" icon="plus">Dodaj kolejne</x-a>
+
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <h1>Szczegóły zapytania</h1>

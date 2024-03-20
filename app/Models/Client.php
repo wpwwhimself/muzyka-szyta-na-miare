@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,6 +29,9 @@ class Client extends Model
     }
     public function questsUnpaid(){
         return $this->hasMany(Quest::class)->where("paid", 0)->whereNotIn("status_id", [17, 18]);
+    }
+    public function questsRecent() {
+        return $this->hasMany(Quest::class)->whereDate("updated_at", ">=", Carbon::today()->subMonths(3));
     }
 
     public function getExpAttribute(){

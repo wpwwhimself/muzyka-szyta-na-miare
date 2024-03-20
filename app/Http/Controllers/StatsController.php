@@ -292,7 +292,20 @@ class StatsController extends Controller
                     //         ])
                     //         ->values(0),
                     // ],
-                ]
+                ],
+                "most_active" => [
+                    "rows" => Client::has("questsRecent")
+                        ->with("questsRecent")
+                        ->withCount("questsRecent")
+                        ->orderByDesc("quests_recent_count")
+                        ->limit(5)
+                        ->get()
+                        ->map(fn($item, $key) => [
+                            "Nazwisko" => $item->client_name,
+                            "Liczba zleceń" => $item->quests_recent_count,
+                        ])
+                        ->values(),
+                ],
             ],
             "finances" => [
                 "income" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),

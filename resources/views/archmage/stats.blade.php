@@ -59,6 +59,7 @@
     </div>
     <x-stats-table title="Najczęściej poprawiane zlecenia" :data="$stats->quests->corrections" :footer="true" />
     <x-stats-table title="Najbardziej wybredni klienci" :data="$stats->clients->pickiness->high" />
+    <x-stats-table title="Najbardziej aktywni w ostatnich 3 mc" :data="$stats->clients->most_active" />
   </section>
 </div>
 

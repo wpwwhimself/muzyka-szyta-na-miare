@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    "title" => "[".$quest->song->id."] ".($quest->song->title ?? "bez tytułu")." | $quest->id"
+    "title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"
 ])
 
 @section('content')
@@ -26,6 +26,7 @@
                 ["Kient przywraca", 26, [17, 18, 19]],
                 ["Kient prosi o zmiany", 21, [11]],
                 ["Wygaś", 17, [13, 15]],
+                ["Popraw ostatni komentarz", $quest->status_id, [$quest->status_id]],
             ] as [$label, $status_id, $show_on_statuses])
                 @if (in_array($quest->status_id, $show_on_statuses))
                 @php $nomail = (!$quest->client->email && in_array($status_id, [15, 95])) @endphp
@@ -36,6 +37,7 @@
                     :label="''"
                     :pop="$label"
                     :class="$nomail ? 'warning' : ''"
+                    :small="$status_id == $quest->status_id"
                     /> @endif
             @endforeach
         </div>
@@ -302,7 +304,10 @@
             <x-extendo-block key="client"
                 header-icon="user"
                 title="Klient"
-                :subtitle="$quest->client->client_name"
+                :subtitle="implode(' // ', [
+                    $quest->client->id,
+                    $quest->client->client_name,
+                ])"
             >
                 <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
                 <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />

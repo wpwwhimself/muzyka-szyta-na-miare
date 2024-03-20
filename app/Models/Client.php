@@ -61,6 +61,6 @@ class Client extends Model
         return $this->trust > -1;
     }
     public function getUpcomingQuestsCountAttribute(){
-        return $this->quests->whereIn("status_id", [11, 12, 15, 16, 26])->count();
+        return $this->quests->whereNotIn("status_id", [17, 18, 19])->count();
     }
 }

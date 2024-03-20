@@ -84,10 +84,17 @@
     </div>
     @forelse ($losses as $pos)
     <div class="table-row">
+        @if (get_class($pos) == "App\Models\Cost")
         <span>{{ $pos->created_at->format("d.m.Y") }}</span>
         <span>{{ _ct_($pos->type->name) }}</span>
         <span>{{ $pos->desc }}</span>
         <span>{{ _c_(as_pln($pos->amount)) }}</span>
+        @else
+        <span>{{ $pos->date->format("d.m.Y") }}</span>
+        <span>zwrot wpłaty</span>
+        <span><a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a></span>
+        <span>{{ _c_(as_pln(-$pos->comment)) }}</span>
+        @endif
     </div>
     @empty
     <p class="grayed-out">Brak danych</p>

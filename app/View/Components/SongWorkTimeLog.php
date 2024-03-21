@@ -21,7 +21,11 @@ class SongWorkTimeLog extends Component
     public function __construct($quest, $extended = false)
     {
         $this->quest = $quest;
-        $this->workhistory = SongWorkTime::where("song_id", $quest->song_id)->orderBy("status_id")->get();
+        $this->workhistory = SongWorkTime::where("song_id", $quest->song_id)
+            ->join("statuses", "statuses.id", "=", "status_id")
+            ->orderByDesc("time_spent")
+            ->orderBy("status_name")
+            ->get();
         $this->stats_statuses = DB::table("statuses")->where("id", ">=", 100)->orderByDesc("status_name")->get()->toArray();
         $this->extended = $extended;
     }

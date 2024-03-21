@@ -29,11 +29,11 @@ class Calendar extends Component
         $available_days_needed = setting("available_days_needed");
         $length = max(
             7,
-            7 - Quest::orderByDesc("deadline")
+            7 - (!$suggest * 4) - Quest::orderByDesc("deadline")
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),
-            7 - Request::orderByDesc("deadline")
+            7 - (!$suggest * 4) - Request::orderByDesc("deadline")
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),

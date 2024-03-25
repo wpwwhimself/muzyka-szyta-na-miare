@@ -57,7 +57,10 @@
             <x-input type="text" name="other_medium" label="Inna forma kontaktu" value="{{ _ct_($request->other_medium) }}" :small="true" />
             <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ _ct_($request->contact_preference) }}" />
 
-            <x-button action="{{ route('quests', ['client' => $request->client?->id]) }}" id="client_info" icon="boxes-stacked" label="Zlecenia" small />
+            <div>
+                <x-button action="{{ route('clients', ['search' => $request->client_id]) }}" icon="user" label="Szczegóły" small />
+                <x-button action="{{ route('quests', ['client' => $request->client_id]) }}" icon="boxes" label="Zlecenia" small />
+            </div>
 
             <script>
             function client_fields(dont_clear_fields = false){
@@ -123,7 +126,7 @@
             header-icon="cart-flatbed"
             title="Dane utworu"
             :subtitle="$request->song?->full_title ?? $request->title"
-            :extended="in_array($request->status_id, [1])"
+            :extended="in_array($request->status_id, [1, 6, 96])"
             :warning="$warnings['song']"
         >
             <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" :value="$request->song_id" />

@@ -256,9 +256,11 @@ if(!function_exists("get_next_working_day")){
         $free_days_soon = CalendarFreeDay::whereBetween("date", [Carbon::today(), Carbon::today()->addWeek()])
             ->get()->pluck("date")->toArray();
 
-        for($day = Carbon::today()->addDay(); $day->lte(Carbon::today()->addWeek()); $day = $day->addDay()){
+        $day = Carbon::today()->addDay();
+        while(true){
             if($workdays_capacity[$day->format("w")] > 0 && !in_array($day, $free_days_soon))
                 return $day;
+            $day = $day->addDay();
         }
 
         return null;

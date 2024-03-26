@@ -253,7 +253,7 @@ if(!function_exists("price_calc")){
 if(!function_exists("get_next_working_day")){
     function get_next_working_day(){
         $workdays_capacity = explode(",", setting("available_day_until"));
-        $free_days_soon = CalendarFreeDay::whereBetween("date", [Carbon::today(), Carbon::today()->addWeek()])
+        $free_days_soon = CalendarFreeDay::where("date", ">=", Carbon::today())
             ->get()->pluck("date")->toArray();
 
         $day = Carbon::today()->addDay();

@@ -57,6 +57,8 @@
             <span class="grayed-out">Brak wpisów</span>
         @endforelse
         </div>
+
+        <p>Najbliższy dzień pracujący: <b>{{ get_next_working_day()->format("d.m.Y") }}</b></p>
     </section>
 </div>
 @endsection

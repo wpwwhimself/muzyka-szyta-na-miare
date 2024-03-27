@@ -17,7 +17,6 @@ use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
 use Carbon\Carbon;
-use Dotenv\Util\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -188,7 +187,7 @@ class StatsController extends Controller
                     "rows" => StatusChange::whereIn("new_status_id", [16, 26])
                         ->groupBy("re_quest_id")
                         ->orderByDesc("Liczba poprawek")
-                        ->limit(5)
+                        ->limit(10)
                         ->join("quests", "re_quest_id", "quests.id", "left")
                         ->join("clients", "quests.client_id", "clients.id", "left")
                         ->join("songs", "quests.song_id", "songs.id", "left")
@@ -271,7 +270,7 @@ class StatsController extends Controller
                     "high" => [
                         "rows" => Client::all()
                             ->sortByDesc("pickiness")
-                            ->take(5)
+                            ->take(10)
                             ->map(fn($item, $key) => [
                                 "Nazwisko" => $item->client_name,
                                 "Wybredność" => $item->pickiness * 100 . "%",
@@ -300,7 +299,7 @@ class StatsController extends Controller
                         ->with("questsRecent")
                         ->withCount("questsRecent")
                         ->orderByDesc("quests_recent_count")
-                        ->limit(5)
+                        ->limit(10)
                         ->get()
                         ->map(fn($item, $key) => [
                             "Nazwisko" => $item->client_name,

@@ -126,7 +126,10 @@
             :title="_ct_($client->client_name)"
             :subtitle="implode(' // ', [
                 $client->questsUnpaid->count(),
-                _c_(as_pln($client->questsUnpaid->sum('payment_remaining'))),
+                $client->questsUnpaid
+                    ->partition(fn($q) => !$q->delayed_payment_in_effect)
+                    ->map(fn($q) => _c_(as_pln($q->sum('payment_remaining'))))
+                    ->implode(' + '),
             ])"
         >
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp

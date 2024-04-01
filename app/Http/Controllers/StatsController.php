@@ -512,9 +512,14 @@ class StatsController extends Controller
             ->orderByDesc("created_at");
 
         $losses_payments = (clone $losses)->where("cost_type_id", 3)->sum("amount");
-        $losses_other = (clone $losses)->where("cost_type_id", "<>", 3)->sum("amount");
+        $losses_other = (clone $losses)->where("cost_type_id", "<>", 3)->sum("amount")
+            -
+            StatusChange::where("new_status_id", 34)
+            ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
+            ->sum("comment");
 
-        $balance_now = StatusChange::where("new_status_id", 32)->sum("comment") - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount");
+        $balance_now = StatusChange::whereIn("new_status_id", [32, 34])->sum("comment")
+            - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount");
 
         $summary = [
             "Zarobiono" => $gains->sum("comment"),

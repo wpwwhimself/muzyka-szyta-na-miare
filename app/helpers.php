@@ -47,6 +47,8 @@ if(!function_exists("BEGINNING")){
 }
 if(!function_exists("INCOME_LIMIT")){
     function INCOME_LIMIT(){
+        if(Carbon::parse("2024-07-01")->diffInDays(Carbon::today(), false) >= 0) return 3225;
+        if(Carbon::parse("2024-01-01")->diffInDays(Carbon::today(), false) >= 0) return 3181.5;
         if(Carbon::parse("2023-07-01")->diffInDays(Carbon::today(), false) >= 0) return 2700;
         return 1745;
     }

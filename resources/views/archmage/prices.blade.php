@@ -67,6 +67,10 @@
                 @endforeach
             </ul>
         </li>
+        <li>
+            <i>Przygotowanie filmu</i> w przypadku nagrania siebie z instrumentem
+            wyceniane jest do 2 filmów (czyli 6 instrumentów = qqq).
+        </li>
     </ul>
 </section>
 

@@ -577,9 +577,9 @@ class StatsController extends Controller
         $totals = ["amount" => 0, "paid" => 0];
         foreach(Quest::whereIn("id", explode(" ", $rq->quests))->get() as $quest){
             $invoice_quests[$quest->id] = [
-                "amount" => $quest->price - $quest->allInvoices?->sum("paid"),
-                "paid" => ($quest->paid ? $quest->price - $quest->allInvoices?->sum("paid") : 0),
-                "primary" => count($quest->allInvoices) == 0,
+                "amount" => $quest->price - $quest->allInvoices?->filter(fn($invoice) => $invoice->id != $rq->id)->sum("paid"),
+                "paid" => ($quest->paid ? $quest->price - $quest->allInvoices?->filter(fn($invoice) => $invoice->id != $rq->id)->sum("paid") : 0),
+                "primary" => count($quest->allInvoices?->filter(fn($invoice) => $invoice->id != $rq->id)) == 0,
             ];
             foreach(["amount", "paid"] as $i){
                 $totals[$i] += $invoice_quests[$quest->id][$i];

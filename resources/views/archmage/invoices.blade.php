@@ -35,6 +35,7 @@
         <thead>
             <tr>
                 <th>Faktura</th>
+                <th>Płatnik</th>
                 <th>Dotyczy</th>
                 <th>Kwota</th>
             </tr>
@@ -48,6 +49,10 @@
                         {{ $invoice->fullCode }}
                     </a>
                     <i class="fas fa-pencil invoice-edit clickable" data-invoice-id="{{ $invoice->id }}"></i>
+                </td>
+                <td>
+                    {{ $invoice->payer_name }}
+                    <span class="ghost">{{ $invoice->payer_title }}</span>
                 </td>
                 <td>
                 @foreach ($invoice->quests as $quest)

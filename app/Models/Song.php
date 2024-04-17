@@ -35,13 +35,18 @@ class Song extends Model
     public function quests(){
         return $this->hasMany(Quest::class);
     }
+    
+    public function getCostsAttribute() {
+        return Cost::where("desc", "like", "%".$this->id."%")
+            ->orderByDesc("created_at")
+            ->get();
+    }
     public function getWorkTimeAttribute(){
         return CarbonInterval::seconds($this->hasMany(SongWorkTime::class)->sum(DB::raw("TIME_TO_SEC(time_spent)")))
             ->cascade()
             ->format("%h:%I:%S")
         ;
     }
-
     public function getHasShowcaseFileAttribute(){
         return Storage::exists("showcases/$this->id.ogg");
     }

@@ -32,6 +32,33 @@
                     <a href="{{ $quest->linkTo }}">{{ $quest->id }}</a>
                 @endforeach
             </x-extendo-section>
+            <x-extendo-section title="Koszty">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategoria</th>
+                            <th>Kwota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($song->costs as $cost)
+                        <tr>
+                            <td>{{ $cost->type->name }}</td>
+                            <td>{{ _c_(as_pln($cost->amount)) }}</td>
+                        </tr>
+                        @empty
+                        <tr><td colspan=2><span class="grayed-out">Brak kosztów</span></td></tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Suma:</th>
+                            <th>{{ _c_(as_pln($song->costs?->sum("amount"))) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <x-button action="{{ route('costs') }}" name="" icon="money-bill-wave" label="Koszty" :small="true" />
+            </x-extendo-section>
         </x-extendo-block>
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>

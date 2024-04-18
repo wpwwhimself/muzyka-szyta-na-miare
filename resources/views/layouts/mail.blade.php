@@ -14,17 +14,11 @@
         font-family: "Raleway", "Calibri", "Arial";
         font-size: 16px;
     }
-    h1, h2, h3, p, footer{
-        text-align: center;
-    }
     h1, h2, h3{
         font-family: Montserrat, "Arial Black";
     }
     h2, strong, b, a{
         color: #60cc89
-    }
-    table{
-        margin: 0 auto;
     }
     td.framed-cell{
         border: 3px solid gray;
@@ -40,8 +34,8 @@
     footer h2, footer h3{
         margin: 0;
     }
-    footer .contact-info{
-        margin: 1em 0;
+    footer .contact-info a{
+        display: block;
     }
     </style>
     <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>

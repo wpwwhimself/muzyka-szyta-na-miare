@@ -270,6 +270,9 @@
         </div>
         <div id="opinion-3" class="gone">
             <h2>Na pewno? Termin realizacji też?</h2>
+            @if ($request->delayed_payment)
+            <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
+            @endif
             <div>
                 <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
                 <x-button label="Nie" icon="times" action="#/" />

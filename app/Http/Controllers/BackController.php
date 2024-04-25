@@ -951,6 +951,18 @@ class BackController extends Controller
         return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
     }
 
+    public function workClockBig($entity, $id) {
+        switch($entity) {
+            case "quest": $data = Quest::find($id); break;
+            case "song": $data = Song::find($id); break;
+            default: abort(501, "Nie obsługuję takiego bytu");
+        }
+
+        return view(user_role().".work-time-clock", array_merge([
+            "title" => "Studio",
+        ], compact("data", "entity")));
+    }
+
     public function workClock(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         $now_working = SongWorkTime::where("now_working", 1)->first();

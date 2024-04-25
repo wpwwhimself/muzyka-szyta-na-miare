@@ -72,5 +72,6 @@
                 />
         </div>
     </form>
+    <x-a :href="route('work-clock-big', ['entity' => 'quest', 'id' => $quest->id])">Studio</x-a>
     @endif
 </x-extendo-block>

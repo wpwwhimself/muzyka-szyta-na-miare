@@ -65,6 +65,7 @@ Route::controller(BackController::class)->group(function(){
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
         Route::post("/quest-wishes-update", "questWishesUpdate")->name("quest-wishes-update");
         Route::post("/quest-files-ready-update", "questFilesReadyUpdate")->name("quest-files-ready-update");
+        Route::get("/work-time-clock/{entity}/{id}", "workClockBig")->name("work-clock-big");
 
         Route::get('/showcases', "showcases")->name("showcases");
         Route::post('/showcases/add', "addShowcase")->name("add-showcase");

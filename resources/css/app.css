@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&family=Krona+One&family=Montserrat:wght@700&display=swap);
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&family=Krona+One&family=Montserrat:wght@700&display=swap');
 :root{
     --acc: #60cc89;
 
@@ -257,7 +257,6 @@ input[type="file"]{
 }
 *[type="submit"], .submit{
     display: inline-block;
-    width: -moz-fit-content;
     width: fit-content;
     padding: 0.5em 1em; margin: 0.5em auto 0;
     border: 2px solid var(--acc);
@@ -567,8 +566,7 @@ footer .contact-info{
 .quest-client{
     display: flex;
     justify-content: center;
-    -moz-column-gap: 0.5em;
-         column-gap: 0.5em;
+    column-gap: 0.5em;
 }
 .quest-client .client-name{
     margin-bottom: 0.25em;
@@ -626,8 +624,7 @@ footer .contact-info{
     }
     & .quest-main-data{
         display: flex;
-        -moz-column-gap: 1em;
-             column-gap: 1em;
+        column-gap: 1em;
     }
     & .quest-main-data>span{
         flex-basis: 100%;
@@ -665,8 +662,7 @@ footer .contact-info{
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     margin: 0.3em;
-    -moz-column-gap: 1.05em;
-         column-gap: 1.05em;
+    column-gap: 1.05em;
     padding: 0 0.35em 0 0.7em;
 }
 .quest-phase-bars div{
@@ -729,7 +725,6 @@ footer .contact-info{
 
 #dashboard-unpaids .quest-list a, #finance-unpaids .quest-list>div{
     display: flex;
-    width: -moz-fit-content;
     width: fit-content;
     margin-left: auto;
     align-items: center;
@@ -1003,9 +998,7 @@ footer .contact-info{
 .file-tag{
     border-radius: 1em;
     padding: 0 0.2em;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
+    user-select: none;
 }
 .file-tag.click{ background-color: rgb(0, 200, 0); }
 .file-tag.demo{ background-color: rgb(235, 200, 0); }
@@ -1013,9 +1006,7 @@ footer .contact-info{
 .file-tag.transpose{ background-color: aquamarine; color: black; }
 
 .clickable{
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
+    user-select: none;
     cursor: pointer;
 }
 .folding {
@@ -1099,7 +1090,6 @@ footer .contact-info{
 #invoice .summary{
     text-align: right;
     margin: 1em 0 1em auto;
-    width: -moz-fit-content;
     width: fit-content;
     font-size: 1.5em;
     gap: 0;
@@ -1304,4 +1294,3 @@ footer .contact-info{
         border-color: var(--bg2);
     }
 }
-

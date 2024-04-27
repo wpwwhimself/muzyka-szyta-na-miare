@@ -951,50 +951,6 @@ class BackController extends Controller
         return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
     }
 
-    public function workClockBig($entity, $id) {
-        switch($entity) {
-            case "quest": $data = Quest::find($id); break;
-            case "song": $data = Song::find($id); break;
-            default: abort(501, "Nie obsługuję takiego bytu");
-        }
-
-        return view(user_role().".work-time-clock", array_merge([
-            "title" => "Studio",
-        ], compact("data", "entity")));
-    }
-
-    public function workClock(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $now_working = SongWorkTime::where("now_working", 1)->first();
-
-        if($now_working){
-            $now_working->update([
-                "now_working" => 0,
-                "time_spent" => Carbon::createFromTimeString($now_working->time_spent)
-                        ->addSeconds(Carbon::createFromTimeString($now_working->since)->diffInSeconds(now()))
-                        ->format("H:i:s")
-            ]);
-        }
-
-        if($rq->status_id != 13){
-            SongWorkTime::updateOrCreate([
-                "status_id" => $rq->status_id,
-                "song_id" => $rq->song_id,
-            ],
-            [
-                "now_working" => 1,
-                "since" => now(),
-            ]);
-        }
-
-        return back()->with("success", "Praca zalogowana");
-    }
-    public function workClockRemove($song_id, $status_id){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        SongWorkTime::where("song_id", $song_id)->where("status_id", $status_id)->first()->delete();
-        return back()->with("success", "Wpis pracy usunięty");
-    }
-
     public function songs(HttpRequest $rq){
         $search = strtolower($rq->search ?? "");
         $songs = Song::orderBy("title")

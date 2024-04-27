@@ -23,7 +23,10 @@ class Song extends Model
         "price_code", "notes",
     ];
     protected $appends = [
-        "full_title", "has_showcase_file",
+        "full_title",
+        "has_showcase_file",
+        "work_time_total",
+        "now_working",
     ];
 
     public function genre(){
@@ -35,16 +38,26 @@ class Song extends Model
     public function quests(){
         return $this->hasMany(Quest::class);
     }
-    
+    public function workTime() {
+        return $this->hasMany(SongWorkTime::class)->orderByDesc("time_spent");
+    }
+
     public function getCostsAttribute() {
         return Cost::where("desc", "like", "%".$this->id."%")
             ->orderByDesc("created_at")
             ->get();
     }
-    public function getWorkTimeAttribute(){
+    public function getWorkTimeTotalAttribute(){
         return CarbonInterval::seconds($this->hasMany(SongWorkTime::class)->sum(DB::raw("TIME_TO_SEC(time_spent)")))
             ->cascade()
             ->format("%h:%I:%S")
+        ;
+    }
+    public function getNowWorkingAttribute() {
+        return $this->workTime
+            ->filter(fn($log) => $log->now_working)
+            ->count()
+            > 0
         ;
     }
     public function getHasShowcaseFileAttribute(){

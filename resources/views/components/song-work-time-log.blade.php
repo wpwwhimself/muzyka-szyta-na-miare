@@ -1,7 +1,7 @@
 <x-extendo-block key="time-log"
     header-icon="snowplow"
     title="Log tworzenia"
-    :subtitle="$quest->song->work_time"
+    :subtitle="$quest->song->work_time_total"
     :extended="$extended"
     :warning="['Zegar tyka' => $workhistory->search(fn($entry) => $entry->now_working) !== false]"
 >
@@ -22,14 +22,10 @@
                 <td>
                     @if ($entry->now_working)
                     <i class="fa-solid fa-gear fa-spin" @popper(zegar tyka)></i>
-                    @else
-                    <a class="log-delete" href="{{ route('work-clock-remove', ['status_id' => $entry->status_id, 'song_id' => $entry->song_id]) }}">
-                        <i class="fa-solid fa-trash" @popper(usuń wpis)></i>
-                    </a>
                     @endif
                 </td>
                 <td>
-                    {{ $entry->time_spent->format("H:i:s") }}
+                    {{ $entry->time_spent }}
                 </td>
             </tr>
         @empty
@@ -54,24 +50,6 @@
     </table>
 
     @if ($quest->status_id == 12)
-    <form method="POST" action="{{ route("work-clock") }}" class="flex-right">
-        <div id="stats-buttons">
-            @csrf
-            <input type="hidden" name="song_id" value="{{ $quest->song_id }}" />
-            @foreach ($stats_statuses as $option)
-            <x-button
-                label="{{-- $option->status_name --}}" icon="{{ $option->id }}"
-                action="submit" value="{{ $option->id }}" name="status_id"
-                :small="true" :pop="$option->status_name"
-                />
-            @endforeach
-            <x-button
-                label="stop" icon="circle-pause"
-                action="submit" value="13" name="status_id"
-                :small="true"
-                />
-        </div>
-    </form>
-    <x-a :href="route('work-clock-big', ['entity' => 'quest', 'id' => $quest->id])">Studio</x-a>
+    <x-a :href="route('studio-view', ['quest_id' => $quest->id])">Studio</x-a>
     @endif
 </x-extendo-block>

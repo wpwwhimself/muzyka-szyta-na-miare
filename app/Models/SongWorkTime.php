@@ -10,6 +10,10 @@ class SongWorkTime extends Model
     use HasFactory;
 
     protected $fillable = ["song_id", "status_id", "time_spent", "now_working", "since"];
-    protected $dates = ["time_spent", "since"];
+    protected $dates = ["since"];
     public $timestamps = false;
+
+    public function status() {
+        return $this->belongsTo(Status::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\SpellbookController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\WorkClockController;
 use App\Models\Client;
 use App\Models\QuestType;
 use App\Models\Song;
@@ -58,14 +59,11 @@ Route::controller(BackController::class)->group(function(){
             Route::get('/view/{id}', "quest")->name("quest");
             Route::get('/add', "addQuest")->name("add-quest");
             Route::post('/mod-back', "modQuestBack")->name("mod-quest-back");
-            Route::post('/work-clock', "workClock")->name("work-clock");
-            Route::get('/work-clock-remove/{song_id}/{status_id}', "workClockRemove")->name("work-clock-remove");
         });
         Route::post("/quest-song-update", "questSongUpdate")->name("quest-song-update");
         Route::post("/quest-quote-update", "questQuoteUpdate")->name("quest-quote-update");
         Route::post("/quest-wishes-update", "questWishesUpdate")->name("quest-wishes-update");
         Route::post("/quest-files-ready-update", "questFilesReadyUpdate")->name("quest-files-ready-update");
-        Route::get("/work-time-clock/{entity}/{id}", "workClockBig")->name("work-clock-big");
 
         Route::get('/showcases', "showcases")->name("showcases");
         Route::post('/showcases/add', "addShowcase")->name("add-showcase");
@@ -133,6 +131,10 @@ Route::controller(ClientController::class)->group(function(){
             Route::post("edit/{id}", "edit")->name("client-edit");
         });
     });
+});
+
+Route::controller(WorkClockController::class)->middleware("auth")->group(function() {
+    Route::get("/studio-view/{quest_id}", "index")->name("studio-view");
 });
 
 /* MAILING */

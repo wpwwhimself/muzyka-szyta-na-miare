@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PatchController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\WorkClockController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,12 @@ Route::controller(StatsController::class)->group(function() {
     Route::prefix("invoice")->group(function() {
         Route::get("/{id}", "invoice");
     });
+});
+
+Route::controller(WorkClockController::class)->prefix("clock")->group(function() {
+    Route::get("modes", "modes");
+    Route::get("song-data-by-quest/{quest_id}", "songDataByQuest");
+    Route::get("logs", "logDetails");
+    Route::post('start-stop', "startStop");
+    Route::get('remove/{song_id}/{status_id}', "remove");
 });

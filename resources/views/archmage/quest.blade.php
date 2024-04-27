@@ -446,7 +446,7 @@
                     </table>
                     <x-button action="{{ route('invoices') }}?fillfor={{ $quest->client_id }}&quest={{ $quest->id }}" name="" icon="plus" label="Dodaj" :small="true" />
                 </x-extendo-section>
-                
+
                 <x-extendo-section title="Koszty">
                     <table>
                         <thead>

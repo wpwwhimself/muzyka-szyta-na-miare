@@ -15,6 +15,9 @@
         Chciałbym jednak zauważyć, że z uwagi na limity wpłat, jakie muszę spełniać, <strong>poprosiłem o wpłatę po {{ $quest->delayed_payment->format("d.m.Y") }}</strong>.
         Bardzo proszę o zwracanie uwagi na informacje podane na zleceniach w przyszłości.
     </p>
+    <p>
+        Dodatkowo będę wdzięczny za każdą informację, która poprawi czytelność tego komunikatu.
+    </p>
     @endif
 
     @if (!($quest->client->is_veteran || $quest->client->trust == 1))

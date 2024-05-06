@@ -139,11 +139,13 @@ class BackController extends Controller
     public function requests(HttpRequest $rq){
         $client = Auth::user()->client;
         $client_id = $rq->client;
+        $client_name = $rq->client_name;
         $status_id = $rq->status;
 
         $requests = Request::orderBy("updated_at", "desc");
         if(!is_archmage()){ $requests = $requests->where("client_id", $client->id); }
         if($client_id) $requests = $requests->where("client_id", $client_id);
+        if($client_name) $requests = $requests->where("client_name", "regexp", $client_name);
         if($status_id) $requests = $requests->where("status_id", $status_id);
         $requests = $requests->paginate(25);
 

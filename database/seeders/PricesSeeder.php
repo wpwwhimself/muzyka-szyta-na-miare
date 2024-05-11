@@ -68,7 +68,7 @@ class PricesSeeder extends Seeder
                 "operation" => "+", "price_a" => 340, "price_b" => 340
             ],
             [
-                "indicator" => "u", "service" => "dopłata za każdą partię ponad 4.", "quest_type_id" => 2,
+                "indicator" => "u", "service" => "do 4 kolejnych partii więcej", "quest_type_id" => 2,
                 "operation" => "*", "price_a" => 0.07, "price_b" => 0.07
             ],
             [

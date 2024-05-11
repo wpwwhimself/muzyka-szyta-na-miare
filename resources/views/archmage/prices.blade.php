@@ -11,6 +11,7 @@
         <thead>
             <tr>
                 <th>Usługa</th>
+                <th>Kod</th>
                 @for ($letter = "A"; $letter != chr(ord(CURRENT_PRICING()) + 1); $letter = chr(ord($letter) + 1))
                 <th>Cena {{ $letter }}</th>
                 @endfor
@@ -24,13 +25,14 @@
                 null => "Pozostałe"
             ] as $i => $header)
                 <tr>
-                    <td colspan={{ ord(CURRENT_PRICING()) - ord("A") + 2 }}>
+                    <td colspan={{ ord(CURRENT_PRICING()) - ord("A") + 3 }}>
                         <h2>{{ $header }}</h2>
                     </td>
                 </tr>
                 @foreach ($prices->where("quest_type_id", $i) as $price)
                 <tr>
                     <td>{{ $price->service }}</td>
+                    <td>{{ $price->indicator }}</td>
                     @for ($letter = "A"; $letter != chr(ord(CURRENT_PRICING()) + 1); $letter = chr(ord($letter) + 1))
                         @if ($price->operation == "+")
                         <td>{{ _c_(as_pln($price->{"price_".strtolower($letter)})) }}</td>
@@ -42,7 +44,7 @@
                 @endforeach
                 @if ($header == "Nuty")
                 <tr class="ghost">
-                    <td colspan={{ ord(CURRENT_PRICING()) - ord("A") + 2 }}>
+                    <td colspan={{ ord(CURRENT_PRICING()) - ord("A") + 3 }}>
                         <i class="fa-solid fa-info-circle"></i>
                         Nuty przygotowywane razem z podkładem muzycznym lub nagraniem są wyceniane o połowę taniej.
                     </td>

@@ -1,7 +1,16 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
-<x-a href="{{ route('add-request') }}" icon="plus">Dodaj kolejne</x-a>
+<x-a href="{{ route('add-request', [
+    'client' => $request->client_id,
+    'client_new' => implode('*', [
+        $request->client_name,
+        $request->email,
+        $request->phone,
+        $request->other_medium,
+        $request->contact_preference,
+    ])
+]) }}" icon="plus">Dodaj kolejne</x-a>
 
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf

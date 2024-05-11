@@ -205,12 +205,33 @@ class BackController extends Controller
             "title" => "Zapytanie",
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings")));
     }
-    public function addRequest(){
+    public function addRequest(HttpRequest $rq){
         $pad_size = 24; // used by dropdowns for mobile preview fix
 
         if (is_archmage()) {
             // arcymag od razu tworzy pusty request i edytuje go później
-            $request = Request::create(["status_id" => 1]);
+            $client_data = [];
+            if ($rq->has("client")) $client_data["client_id"] = $rq->client;
+            if ($rq->has("client_new")) {
+                $client_data = array_filter(
+                    array_combine(
+                        [
+                            "client_name",
+                            "email",
+                            "phone",
+                            "other_medium",
+                            "contact_preference",
+                        ],
+                        explode("*", $rq->client_new)
+                    ),
+                    fn($el) => $el != ""
+                );
+            }
+
+            $request = Request::create(array_merge(
+                ["status_id" => 1],
+                $client_data
+            ));
             $this->statusHistory($request->id, 1, "~ spoza strony");
             return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
         }

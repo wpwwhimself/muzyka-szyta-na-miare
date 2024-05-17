@@ -240,7 +240,11 @@
             <div>
                 <h2>Szczegóły zlecenia</h2>
                 <div class="bulk-box sc-line">
-                    <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$quest_types" />
+                    <div class="flex-right keep-for-mobile">
+                        @foreach ($quest_types as $id => $type)
+                        <x-input type="radio" name="quest_type[]" :value="$id" :label="$type" :checked="$id == 1" />
+                        @endforeach
+                    </div>
                     <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="{{ $random_song->title }}" />
                     <x-input type="text" name="artist[]" label="Wykonawca" placeholder="{{ $random_song->artist }}" />
                     <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="{{ $random_song->link }}" />

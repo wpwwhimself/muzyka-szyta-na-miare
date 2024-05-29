@@ -9,10 +9,14 @@
     <div id="meta" class="flex-down spaced">
         <x-extendo-block key="song"
             header-icon="compact-disc"
-            title="Szczegóły utworu"
+            title="Utworu"
             :subtitle="$quest->song->full_title"
             :extended="true"
         >
+            <x-extendo-section title="ID">
+                {{ $quest->song->id }}
+            </x-extendo-section>
+
             <x-extendo-section title="Rodzaj">
                 <x-quest-type
                     :id="$quest->song->type->id"

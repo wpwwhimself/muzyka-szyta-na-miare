@@ -16,7 +16,10 @@ class WorkClockController extends Controller
         $quest = Quest::find($quest_id);
 
         return view(user_role().".studio-view", array_merge([
-            "title" => "Studio",
+            "title" => implode(" | ", [
+                $quest->song->id . "_" . $quest->song->title,
+                "Studio"
+            ]),
         ], compact("quest")));
     }
 

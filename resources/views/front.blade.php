@@ -251,7 +251,7 @@
                     <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
                     <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
                 </div>
-                <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejne zlecenie" :small="true" />
+                <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejny utwór" :small="true" />
             </div>
             <script>
             $(document).ready(function(){

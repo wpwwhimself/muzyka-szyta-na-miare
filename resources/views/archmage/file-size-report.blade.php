@@ -16,15 +16,16 @@
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
-            <span>Sejf</span>
+            <span>Utwór (Sejf)</span>
             <span>Ostatnia modyfikacja</span>
             <span>Rozmiar</span>
         </div>
     @forelse ($sizes as $safe => $size)
         <div class="table-row">
             <span>
-                <a href="{{ route('songs', ['search' => preg_replace('/.*\/(.{4}).*/', '$1', $safe)]) }}">
-                    {{ $safe }}
+                <a href="{{ route('songs', ['search' => $songs[$safe]->id]) }}" class="flex-down">
+                    {{ $songs[$safe]->full_title }}
+                    <small>{{ $safe }}</small>
                 </a>
             </span>
             <span {{ Popper::pop($times[$safe]) }}

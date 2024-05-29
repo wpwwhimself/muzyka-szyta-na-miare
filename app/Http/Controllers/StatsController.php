@@ -675,7 +675,7 @@ class StatsController extends Controller
 
     public function fileSizeReport(){
         $safes = Storage::disk()->directories("safe");
-        $sizes = []; $times = [];
+        $sizes = []; $times = []; $songs = [];
         foreach($safes as $safe){
             $files = Storage::files($safe);
             $size = 0;
@@ -686,13 +686,14 @@ class StatsController extends Controller
             }
             $sizes[$safe] = $size;
             $times[$safe] = new Carbon($modtime);
+            $songs[$safe] = Song::find(preg_replace('/.*\/(.{4}).*/', '$1', $safe));
         }
         arsort($sizes);
 
         return view(user_role().".file-size-report", array_merge(
             ["title" => "Raport zajętości serwera"],
             compact(
-                "sizes", "times",
+                "sizes", "times", "songs"
             ),
         ));
     }

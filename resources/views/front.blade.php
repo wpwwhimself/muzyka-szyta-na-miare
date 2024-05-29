@@ -166,6 +166,11 @@
     <section id="prices" class="grid-2">
         <div class="black-back">
             <h1>Cennik</h1>
+            <span class="yellowed-out">
+                <i class="fas fa-triangle-exclamation"></i>
+                Poniższe ceny mają charakter poglądowy.
+                Wycena każdego zlecenia jest wykonywana indywidualnie.
+            </span>
             <div class="front-table">
                 @foreach ([
                     "1" => "Podkłady muzyczne",

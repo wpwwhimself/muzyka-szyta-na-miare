@@ -83,7 +83,7 @@ class BackController extends Controller
             $showcases_missing = Quest::where("status_id", 19)
                 ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
                 ->get()
-                ->filter(fn($q) => !$q->song->has_showcase_file && $q->quest_type->code == "P");
+                ->filter(fn($q) => !$q->song->has_showcase_file && $q->quest_type?->code == "P");
 
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
@@ -828,7 +828,7 @@ class BackController extends Controller
             ];
 
             $changes = json_decode($last_status->values);
-            
+
             foreach ($changes as $label => $change) {
                 if ($label == "zmiana z uwagi na") continue;
 

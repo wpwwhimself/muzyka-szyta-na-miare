@@ -2,6 +2,7 @@
 
 @section("content")
 
+<div class="input-container">
 <div class="grid-2">
     <script src="{{ mix('js/workTimeClock.js') }}" defer></script>
     <section id="clock"></section>
@@ -39,5 +40,6 @@
     </div>
 </div>
 <x-a :href="$quest->linkTo">Wróć</x-a>
+</div>
 
 @endsection

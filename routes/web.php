@@ -133,8 +133,9 @@ Route::controller(ClientController::class)->group(function(){
     });
 });
 
-Route::controller(WorkClockController::class)->middleware("auth")->group(function() {
-    Route::get("/studio-view/{quest_id}", "index")->name("studio-view");
+Route::controller(WorkClockController::class)->middleware("auth")->prefix("studio-view")->group(function() {
+    Route::get("/", "main")->name("studio");
+    Route::get("/{quest_id}", "index")->name("studio-view");
 });
 
 /* MAILING */

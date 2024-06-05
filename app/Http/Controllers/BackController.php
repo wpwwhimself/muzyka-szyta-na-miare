@@ -812,6 +812,27 @@ class BackController extends Controller
             $quest->files_ready = false;
         }
 
+        // handle rejecting new quote
+        $last_status = $quest->history->first();
+        if ($last_status->new_status_id == 31 && $rq->status_id == 19) {
+            $fields = [
+                "cena" => "price",
+                "kod wyceny" => "price_code_override",
+                "do kiedy (włącznie) oddam pliki" => "deadline",
+                "opóźnienie wpłaty" => "delayed_payment",
+            ];
+
+            $changes = json_decode($last_status->values);
+            
+            foreach ($changes as $label => $change) {
+                if ($label == "zmiana z uwagi na") continue;
+
+                [$prev, $next] = explode(" → ", $change);
+                $quest->{$fields[$label]} = empty($prev) ? null : $prev;
+            }
+            $quest->paid = true;
+        }
+
         $quest->save();
 
         if($is_same_status){
@@ -881,6 +902,7 @@ class BackController extends Controller
         $quest = Quest::find($rq->id);
         if(!$quest) abort(404, "Nie ma takiego zlecenia");
         $price_before = $quest->price;
+        $price_code_before = $quest->price_code_override;
         $deadline_before = $quest->deadline;
         $delayed_payment_before = $quest->delayed_payment;
         $quest->update([
@@ -927,6 +949,7 @@ class BackController extends Controller
             "cena" => [$price_before, $quest->price],
             "do kiedy (włącznie) oddam pliki" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
             "opóźnienie wpłaty" => [$delayed_payment_before?->format("Y-m-d"), $quest->delayed_payment?->format("Y-m-d")],
+            "kod wyceny" => [$price_code_before, $quest->price_code_override],
         ] as $attr => $value){
             if ($value[0] != $value[1]) $changes[$attr] = $value[0] . " → " . $value[1];
         }

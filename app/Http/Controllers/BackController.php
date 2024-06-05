@@ -80,6 +80,10 @@ class BackController extends Controller
                 $change->new_status = Status::find($change->new_status_id);
             }
             $patrons_adepts = Client::where("helped_showcasing", 1)->get();
+            $showcases_missing = Quest::where("status_id", 19)
+                ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
+                ->get()
+                ->filter(fn($q) => !$q->song->has_showcase_file && $q->quest_type->code == "P");
 
             $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
             foreach($janitor_log as $i){
@@ -115,6 +119,7 @@ class BackController extends Controller
             (isset($unpaids) ? compact("unpaids") : []),
             (isset($janitor_log) ? compact("janitor_log") : []),
             (isset($recent) ? compact("recent") : []),
+            (isset($showcases_missing) ? compact("showcases_missing") : []),
         ));
     }
 

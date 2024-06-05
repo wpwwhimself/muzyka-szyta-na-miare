@@ -145,6 +145,30 @@
                     @endforelse
                 </tbody>
             </table>
+
+            @if (count($showcases_missing))
+            <div class="section-header">
+                <h1><i class="fa-solid fa-bullhorn"></i> Showcase'y do stworzenia</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Zlecenie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($showcases_missing as $quest)
+                    <tr>
+                        <td>
+                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                                {{ $quest->song->title ?? "utwór bez tytułu" }}
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @endif
         </section>
 
         <section id="dashboard-requests" class="sc-line">

@@ -12,12 +12,27 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkClockController extends Controller
 {
+    public function main() {
+        return view(user_role().".studio", array_merge([
+            "title" => "Studio",
+        ]));
+    }
+
+    public function activeQuests(Request $rq) {
+        $data = Quest::with("song", "client", "status")
+            ->whereIn("status_id", [12, 14, 16, 96])
+            ->orderBy("deadline")
+            ->get();
+
+        return response()->json($data);
+    }
+
     public function index($quest_id) {
         $quest = Quest::find($quest_id);
 
         return view(user_role().".studio-view", array_merge([
             "title" => implode(" | ", [
-                $quest->song->id . "_" . $quest->song->title,
+                $quest->song->title ?? "Utwór bez tytułu",
                 "Studio"
             ]),
         ], compact("quest")));

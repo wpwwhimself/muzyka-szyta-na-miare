@@ -17,4 +17,5 @@ mix.js('resources/js/app.js', 'public/js')
     ]);
 
 mix.js("resources/js/workTimeClock.js", "public/js")
+    .js("resources/js/studio.js", "public/js")
     .vue();

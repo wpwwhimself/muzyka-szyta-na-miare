@@ -38,6 +38,7 @@ Route::controller(StatsController::class)->group(function() {
 });
 
 Route::controller(WorkClockController::class)->prefix("clock")->group(function() {
+    Route::get("active-quests", "activeQuests");
     Route::get("modes", "modes");
     Route::get("song-data-by-quest/{quest_id}", "songDataByQuest");
     Route::get("logs", "logDetails");

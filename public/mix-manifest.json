@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/workTimeClock.js": "/js/workTimeClock.js",
+    "/js/studio.js": "/js/studio.js",
     "/css/app.css": "/css/app.css"
 }

@@ -10,8 +10,8 @@
     <div id="meta" class="flex-down spaced">
         <x-extendo-block key="song"
             header-icon="compact-disc"
-            title="Utworu"
-            :subtitle="$quest->song->full_title"
+            title="Utwór"
+            :subtitle="$quest->song->id . '_' . $quest->song->title"
             :extended="true"
         >
             <x-extendo-section title="ID">
@@ -39,7 +39,7 @@
         <x-quest-history :quest="$quest" :extended="true" />
     </div>
 </div>
-<x-a :href="$quest->linkTo">Wróć</x-a>
+<x-a :href="route('studio')">Wróć</x-a>
 </div>
 
 @endsection

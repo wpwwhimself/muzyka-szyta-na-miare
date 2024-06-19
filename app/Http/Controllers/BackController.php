@@ -287,7 +287,7 @@ class BackController extends Controller
                     "quest_type_id" => $rq->quest_type,
                     "title" => $rq->title,
                     "artist" => $rq->artist,
-                    "link" => $rq->link,
+                    "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
                     "wishes" => $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
@@ -305,7 +305,7 @@ class BackController extends Controller
                     Song::find($rq->song_id)->update([
                         "title" => $rq->title,
                         "artist" => $rq->artist,
-                        "link" => $rq->link,
+                        "link" => yt_cleanup($rq->link),
                         "genre_id" => $rq->genre_id,
                         "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
                         "notes" => $rq->wishes,
@@ -360,7 +360,7 @@ class BackController extends Controller
                     "quest_type_id" => $rq->quest_type[$i],
                     "title" => $rq->title[$i],
                     "artist" => $rq->artist[$i],
-                    "link" => $rq->link[$i],
+                    "link" => yt_cleanup($rq->link[$i]),
                     "wishes" => $rq->wishes[$i],
 
                     "hard_deadline" => $rq->hard_deadline[$i],
@@ -415,7 +415,7 @@ class BackController extends Controller
                 "quest_type_id" => $rq->quest_type,
                 "title" => $rq->title,
                 "artist" => $rq->artist,
-                "link" => $rq->link,
+                "link" => yt_cleanup($rq->link),
                 "genre_id" => $rq->genre_id,
                 "wishes" => $rq->wishes,
                 "wishes_quest" => $rq->wishes_quest,
@@ -433,7 +433,7 @@ class BackController extends Controller
                 $song->update([
                     "title" => $rq->title,
                     "artist" => $rq->artist,
-                    "link" => $rq->link,
+                    "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
                     "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
                     "notes" => $rq->wishes,
@@ -525,7 +525,7 @@ class BackController extends Controller
                 $song->id = next_song_id($request->quest_type_id);
                 $song->title = $request->title;
                 $song->artist = $request->artist;
-                $song->link = $request->link;
+                $song->link = yt_cleanup($request->link);
                 $song->genre_id = $request->genre_id;
                 $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
                 $song->notes = $request->wishes;
@@ -888,7 +888,7 @@ class BackController extends Controller
         $song->update([
             "title" => $rq->title,
             "artist" => $rq->artist,
-            "link" => $rq->link,
+            "link" => yt_cleanup($rq->link),
             "notes" => $rq->wishes,
         ]);
         return back()->with("success", "Utwór zmodyfikowany");

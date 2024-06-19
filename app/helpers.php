@@ -466,3 +466,12 @@ if(!function_exists("arr_to_list")){
         echo "</$list_tag>";
     }
 }
+
+/**
+ * cleanup of tracking data from youtube links
+ */
+if(!function_exists("yt_cleanup")){
+    function yt_cleanup($urls){
+        return preg_replace("/[?&]si=[\d\w]{16}/", "", $urls ?? "");
+    }
+}

@@ -95,12 +95,20 @@
                 <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a>
             </x-extendo-section>
 
-            <x-button
-                :action="route('finance-return', ['quest_id' => $quest->id])"
-                label="Potwierdź zwrot"
-                icon="check"
-                :small="true"
-            />
+            <div class="flex-down center">
+                <x-button
+                    :action="route('finance-return', ['quest_id' => $quest->id])"
+                    label="Potwierdź zwrot"
+                    icon="check"
+                    :small="true"
+                />
+                <x-button
+                    :action="route('finance-return', ['quest_id' => $quest->id, 'budget' => true])"
+                    label="Przesuń na budżet"
+                    icon="sack-dollar"
+                    :small="true"
+                />
+            </div>
         </x-extendo-block>
         @endforeach
     </div>

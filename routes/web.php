@@ -101,7 +101,7 @@ Route::controller(StatsController::class)->group(function(){
             Route::get("/", "financeDashboard")->name("finance");
             Route::get("/summary", "financeSummary")->name("finance-summary");
             Route::post("/pay", "financePay")->name("finance-pay");
-            Route::get("/return/{quest_id}", "financeReturn")->name("finance-return");
+            Route::get("/return/{quest_id}/{budget?}", "financeReturn")->name("finance-return");
 
             Route::get("/invoices", "invoices")->name("invoices");
             Route::get("/invoices/{id}", "invoice")->name("invoice");

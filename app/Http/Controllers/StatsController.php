@@ -474,14 +474,15 @@ class StatsController extends Controller
 
         return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
     }
-    public function financeReturn(string $quest_id) {
+    public function financeReturn(string $quest_id, bool $budget = false) {
         $quest = Quest::find($quest_id);
+        $payments_sum = $quest->payments_sum;
 
         // wypłata
         app("App\Http\Controllers\BackController")->statusHistory(
             $quest_id,
             34,
-            -$quest->payments_sum,
+            -$payments_sum,
             $quest->client_id
         );
 
@@ -490,7 +491,21 @@ class StatsController extends Controller
 
         $flash_content = "Zwrot wpisany";
 
-        if($quest->client->email){
+        if ($budget) {
+            // przesunięcie na budżet
+            app("App\Http\Controllers\BackController")->statusHistory(
+                null,
+                32,
+                $payments_sum,
+                $quest->client_id
+            );
+            $quest->client->budget += $payments_sum;
+            $quest->client->save();
+
+            $flash_content .= ", budżet zmieniony";
+        }
+
+        if($quest->client->email && !$budget){
             Mail::to($quest->client->email)->send(new PaymentReturned($quest));
             StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
             $flash_content .= ", mail wysłany";

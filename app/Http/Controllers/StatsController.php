@@ -506,7 +506,7 @@ class StatsController extends Controller
         }
 
         if($quest->client->email && !$budget){
-            Mail::to($quest->client->email)->send(new PaymentReturned($quest));
+            Mail::to($quest->client->email)->send(new PaymentReturned($quest->fresh()));
             StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
             $flash_content .= ", mail wysłany";
         }

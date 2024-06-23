@@ -330,7 +330,7 @@ class BackController extends Controller
                     $request->email &&
                     $rq->new_status == 5
                 ){
-                    Mail::to($request->email)->send(new RequestQuoted($request));
+                    Mail::to($request->email)->send(new RequestQuoted($request->fresh()));
                     $mailing = true;
                     $flash_content .= ", mail wysłany";
                 }
@@ -369,7 +369,7 @@ class BackController extends Controller
 
                 //mailing do mnie
                 $mailing = null;
-                Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+                Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
                 $mailing = true;
 
                 $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
@@ -485,8 +485,8 @@ class BackController extends Controller
         if(in_array($request->status_id, [5, 95])){ // mail do klienta
             if($request->email){
                 switch($request->status_id){
-                    case 5: Mail::to($request->email)->send(new RequestQuoted($request)); break;
-                    case 95: Mail::to($request->email)->send(new Clarification($request)); break;
+                    case 5: Mail::to($request->email)->send(new RequestQuoted($request->fresh())); break;
+                    case 95: Mail::to($request->email)->send(new Clarification($request->fresh())); break;
                 }
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
@@ -496,7 +496,7 @@ class BackController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if($request->status_id != 4){ // mail do mnie
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
@@ -603,7 +603,7 @@ class BackController extends Controller
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
-        Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request));
+        Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
         $mailing = true;
 
         $this->statusHistory($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
@@ -790,7 +790,7 @@ class BackController extends Controller
             $flash_content = "Cena wpisana";
             if($quest->paid){
                 if($quest->client->email){
-                    Mail::to($quest->client->email)->send(new PaymentReceived($quest));
+                    Mail::to($quest->client->email)->send(new PaymentReceived($quest->fresh()));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
                 }
@@ -861,8 +861,8 @@ class BackController extends Controller
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(
                     $quest->status_id == 95
-                    ? new Clarification($quest)
-                    : new QuestUpdated($quest)
+                    ? new Clarification($quest->fresh())
+                    : new QuestUpdated($quest->fresh())
                 );
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
@@ -872,7 +872,7 @@ class BackController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if(!is_archmage()){ // mail do mnie
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest));
+            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest->fresh()));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
@@ -941,7 +941,7 @@ class BackController extends Controller
         // sending mail
         $mailing = null;
         if($quest->client->email){
-            Mail::to($quest->client->email)->send(new QuestRequoted($quest, $rq->reason, $difference));
+            Mail::to($quest->client->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
             $mailing = true;
         }
         if($quest->client->contact_preference != "email"){
@@ -994,7 +994,7 @@ class BackController extends Controller
         $client->update(["helped_showcasing" => $level]);
         $mailing = false;
         if($level == 0 && $client->email){
-            Mail::to($client->email)->send(new PatronRejected($client));
+            Mail::to($client->email)->send(new PatronRejected($client->fresh()));
             $mailing = true;
         }
 

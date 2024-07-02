@@ -153,17 +153,17 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Zlecenie</th>
+                        <th><i class="fas fa-box"></i> ID</th>
+                        <th><i class="fas fa-compact-disc"></i> ID</th>
+                        <th>Utwór</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($showcases_missing as $quest)
                     <tr>
-                        <td>
-                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
-                                {{ $quest->song->title ?? "utwór bez tytułu" }}
-                            </a>
-                        </td>
+                        <td><a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a></td>
+                        <td>{{ $quest->song->id }}</td>
+                        <td>{{ $quest->song->full_title }}</td>
                     </tr>
                     @endforeach
                 </tbody>

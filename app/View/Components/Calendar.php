@@ -27,13 +27,14 @@ class Calendar extends Component
         $this->available_day_until = explode(",", setting("available_day_until"));
 
         $available_days_needed = setting("available_days_needed");
+        $min_length = 10;
         $length = max(
-            7,
-            7 - (!$suggest * 4) - Quest::orderByDesc("deadline")
+            $min_length,
+            $min_length - (!$suggest * 2) - Quest::orderByDesc("deadline")
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),
-            7 - (!$suggest * 4) - Request::orderByDesc("deadline")
+            $min_length - (!$suggest * 2) - Request::orderByDesc("deadline")
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),

@@ -478,32 +478,29 @@ class StatsController extends Controller
         $quest = Quest::find($quest_id);
         $payments_sum = $quest->payments_sum;
 
-        // wypłata
-        app("App\Http\Controllers\BackController")->statusHistory(
-            $quest_id,
-            34,
-            -$payments_sum,
-            $quest->client_id
-        );
+        if (!$budget) {
+            // wypłata
+            app("App\Http\Controllers\BackController")->statusHistory(
+                $quest_id,
+                34,
+                -$payments_sum,
+                $quest->client_id
+            );
+        } else {
+            // przesunięcie na budżet
+            StatusChange::where("re_quest_id", $quest_id)
+                ->where("new_status_id", 32)
+                ->where("changed_by", $quest->client_id)
+                ->update(["re_quest_id" => null]);
+
+            $quest->client->budget += $payments_sum;
+            $quest->client->save();
+        }
 
         // oznacz jako nieopłacony
         $quest->update(["paid" => false]);
 
-        $flash_content = "Zwrot wpisany";
-
-        if ($budget) {
-            // przesunięcie na budżet
-            app("App\Http\Controllers\BackController")->statusHistory(
-                null,
-                32,
-                $payments_sum,
-                $quest->client_id
-            );
-            $quest->client->budget += $payments_sum;
-            $quest->client->save();
-
-            $flash_content .= ", budżet zmieniony";
-        }
+        $flash_content = "Zwrot wpisany" . (($budget) ? ", budżet zmieniony" : "");
 
         if($quest->client->email && !$budget){
             Mail::to($quest->client->email)->send(new PaymentReturned($quest->fresh()));

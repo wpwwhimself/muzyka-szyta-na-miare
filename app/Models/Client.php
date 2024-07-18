@@ -15,6 +15,7 @@ class Client extends Model
         'trust', 'helped_showcasing',
         'budget', "extra_exp",
         "default_wishes", "special_prices",
+        "external_drive",
     ];
     protected $appends = ["pickiness"];
 

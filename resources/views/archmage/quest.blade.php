@@ -105,23 +105,43 @@
             :warning="$warnings['files']"
             scissors
         >
-            <x-extendo-section title="Widoczność">
-                <span>
-                    @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
-                        <i class="success fa-solid fa-check"></i> Uprawniony do pobierania
-                    @elseif ($quest->client->can_see_files)
-                        <i class="warning fa-solid fa-eye"></i> Widzi podglądy
-                    @else
-                        <i class="error fa-solid fa-xmark"></i> Nic nie widzi
+            <x-extendo-section title="Skompletowanie">
+                <x-extendo-section title="Chmura">
+                    @if ($quest->client->external_drive)
+                    <x-a href="{{ $quest->client->external_drive }}" _target="blank">Link</x-a>
+                    <form action="{{ route('quest-files-external-update') }}" method="post" class="flex-right center">
+                        @csrf
+                        <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+
+                        @if ($quest->has_files_on_external_drive)
+                        <span><i class="fas fa-cloud success"></i> Posiada pliki</span>
+                        <x-button action="submit" label="Zmień" icon="cloud-arrow-down" name="external" value="0" :small="true" />
+                        @else
+                        <span><i class="fas fa-cloud-bolt error"></i> Brak plików</span>
+                        <x-button action="submit" label="Zmień" icon="cloud-arrow-up" name="external" value="1" :small="true" />
+                        @endif
+                    </form>
                     @endif
-                </span>
-                @unless ($quest->files_ready)
-                <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex-right center">
-                    @csrf
-                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-button action="submit" label="Wszystko wgrane" icon="file-circle-check" name="ready" value="1" :small="true" />
-                </form>
-                @endunless
+                </x-extendo-section>
+
+                <x-extendo-section title="Widoczność">
+                    <span>
+                        @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
+                            <i class="success fa-solid fa-check"></i> Uprawniony do pobierania
+                        @elseif ($quest->client->can_see_files)
+                            <i class="warning fa-solid fa-eye"></i> Widzi podglądy
+                        @else
+                            <i class="error fa-solid fa-xmark"></i> Nic nie widzi
+                        @endif
+                    </span>
+                    @unless ($quest->files_ready)
+                    <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex-right center">
+                        @csrf
+                        <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                        <x-button action="submit" label="Wszystko wgrane" icon="file-circle-check" name="ready" value="1" :small="true" />
+                    </form>
+                    @endunless
+                </x-extendo-section>
             </x-extendo-section>
 
             <x-extendo-section title="Wgrywanie">

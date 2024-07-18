@@ -267,6 +267,13 @@
                 ich pobrania lub odsłuchania.
             </p>
             @endforelse
+
+            <x-extendo-section title="Chmura">
+            @if ($quest->has_files_on_external_drive)
+                <span><i class="fas fa-cloud ghost"></i> W chmurze znajdują się pliki związane z tym zleceniem</span>
+                <x-a :href="$quest->client->external_drive">Otwórz</x-a>
+            @endif
+            </x-extendo-section>
         </x-extendo-block>
 
         <x-quest-history :quest="$quest" />

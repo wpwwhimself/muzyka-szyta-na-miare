@@ -32,6 +32,7 @@
             <x-input type="number" name="extra_exp" label="Dodatkowe doświadczenie" :value="$client->extra_exp" :small="true" />
             <x-input type="TEXT" name="default_wishes" label="Domyślne życzenia" :value="_ct_($client->default_wishes)" />
             <x-input type="TEXT" name="special_prices" label="Specjalne warunki cenowe" :value="_ct_($client->special_prices)" />
+            <x-input type="url" name="external_drive" label="Link do chmury" :value="_ct_($client->external_drive)" />
         </div>
     </section>
     <x-button action="submit" label="Popraw dane" icon="pencil" />

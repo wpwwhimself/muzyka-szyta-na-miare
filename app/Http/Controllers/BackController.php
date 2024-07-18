@@ -987,6 +987,17 @@ class BackController extends Controller
         return back()->with("success", "Zawartość sejfu zatwierdzona");
     }
 
+    public function questFilesExternalUpdate(HttpRequest $rq) {
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        $quest = Quest::find($rq->quest_id);
+        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+
+        $quest->update([
+            "has_files_on_external_drive" => $rq->external,
+        ]);
+        return back()->with("success", "Zmieniono status chmury");
+    }
+
     public function setPatronLevel($client_id, $level){
         if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
         $client = Client::findOrFail($client_id);

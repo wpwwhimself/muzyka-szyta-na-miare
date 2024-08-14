@@ -67,8 +67,8 @@
             <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ _ct_($request->contact_preference) }}" />
 
             <div>
-                <x-button action="{{ route('clients', ['search' => $request->client_id]) }}" icon="user" label="Szczegóły" small />
-                <x-button action="{{ route('quests', ['client' => $request->client_id]) }}" icon="boxes" label="Zlecenia" small />
+                <x-button action="{{ route('clients', ['search' => $request->client_id]) }}" icon="user" label="Szczegóły" small data-function="client_details" />
+                <x-button action="{{ route('quests', ['client' => $request->client_id]) }}" icon="boxes" label="Zlecenia" small data-function="client_quests" />
             </div>
 
             <script>
@@ -103,7 +103,8 @@
                                     .off();
                             }
                             if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
-                            $("#client_info").attr("href", "{{ route('quests') }}" + `?client=${$("#client_id").val()}`).show();
+                            $("[data-function=client_details]").attr("href", "{{ route('clients') }}" + `?search=${$("#client_id").val()}`).show();
+                            $("[data-function=client_quests]").attr("href", "{{ route('quests') }}" + `?client=${$("#client_id").val()}`).show();
                         }
                     });
                 }else{
@@ -114,14 +115,14 @@
                         $("#other_medium").val("");
                         $("#contact_preference").val("");
                         $("#special-prices-warning").html("");
-                        $("#client_info").hide().attr("href", "");
+                        $("[data-function]").parent().hide();
                     }
                     $("#default-wishes-button").attr("data-fill", "").hide().off();
                 }
             }
             $(document).ready(function(){
                 client_fields(true);
-                if($("#client_id").val() == "") $("#client_info").hide();
+                if($("#client_id").val() == "") $("[data-function]").parent().hide();
                 $("#client_id").change(function(){ client_fields() });
             });
             </script>

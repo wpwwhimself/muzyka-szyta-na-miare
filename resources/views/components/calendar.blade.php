@@ -23,7 +23,7 @@
             <td>
                 @foreach ($meta["quests"] as $quest)
                 <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
-                    <i class="fa-regular fa-square"></i> {{ $quest->song->title ?? "bez tytułu" }}
+                    <x-quest-type :type="$quest->song->type" small /> {{ $quest->song->title ?? "bez tytułu" }}
                 </a>
                 @endforeach
 

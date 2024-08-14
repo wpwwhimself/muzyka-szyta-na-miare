@@ -1030,6 +1030,10 @@ footer .contact-info{
     display: inline-block;
     margin: 2px;
 }
+.cal-row .quest-type {
+    font-size: 1em;
+    margin: 0;
+}
 
 .quests-table .song-artist{
     text-align: left;

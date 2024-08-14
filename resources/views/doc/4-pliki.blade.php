@@ -77,6 +77,7 @@
       <li><x-file-tag tag="c" /> c -- wersja z metronomem (click track)</li>
       <li><x-file-tag tag="d" /> d -- wersja demonstracyjna, np. z atrapą wokalu</li>
       <li><x-file-tag tag="m" /> m -- wersja z linią melodyczną</li>
+      <li><x-file-tag tag="v" /> v -- wersja z linią wokalną</li>
       <li><x-file-tag tag="t+1" /> t -- transpozycja względem oryginału -- należy podać kierunek i liczbę półtonów, np. t-3 albo t+2</li>
     </ul>
   </li>

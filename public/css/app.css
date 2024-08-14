@@ -1003,6 +1003,7 @@ footer .contact-info{
 .file-tag.click{ background-color: rgb(0, 200, 0); }
 .file-tag.demo{ background-color: rgb(235, 200, 0); }
 .file-tag.melody{ background-color: rgb(120, 0, 200); }
+.file-tag.vocal{ background-color: rgb(191, 69, 132); }
 .file-tag.transpose{ background-color: aquamarine; color: black; }
 
 .clickable{

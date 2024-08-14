@@ -10,18 +10,25 @@ class FileTag extends Component
     public $props;
 
     /**
+     * list of available tags
+     */
+    public const OPTIONS = [
+        "c" => ["click", "wersja z metronomem", "⏰"],
+        "d" => ["demo", "wersja demonstracyjna", "🚧"],
+        "m" => ["melody", "wersja z linią melodyczną", "🎵"],
+        "v" => ["vocal", "wersja z linią wokalną", "🎙️"],
+        "t" => ["transpose", "transpozycja względem oryginału", null],
+    ];
+    public const REGEX = "/([cdmv]|t[+-]?\d+)/";
+
+    /**
      * Create a new component instance.
      *
      * @return void
      */
     public function __construct($tag)
     {
-        $options = [
-            "c" => ["click", "wersja z metronomem", "⏰"],
-            "d" => ["demo", "wersja demonstracyjna", "🚧"],
-            "m" => ["melody", "wersja z linią melodyczną", "🎵"],
-            "t" => ["transpose", "transpozycja względem oryginału", null],
-        ];
+        $options = self::OPTIONS;
 
         $this->tag = $tag;
         $this->props = $options[$tag[0]];

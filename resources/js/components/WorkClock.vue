@@ -106,6 +106,8 @@ const startStop = (song_id, status_id) => {
  * @param {string} status_id
  */
 const remove = (song_id, status_id) => {
+    if (!confirm("Ostrożnie! Czy na pewno chcesz usunąć ten wpis?")) return
+
     fetch(url + `remove/${song_id}/${status_id}/`)
         .then(res => res.json())
         .then(res => {

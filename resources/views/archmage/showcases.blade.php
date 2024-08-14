@@ -47,7 +47,7 @@
         <h1><i class="fa-solid fa-list"></i> Lista reklam</h1>
     </div>
     <style>
-    .table-row{ grid-template-columns: 1fr 1fr 1fr; }
+    #showcases-list .table-row{ grid-template-columns: 1fr 1fr 1fr; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
@@ -70,6 +70,42 @@
         @endforelse
     </div>
     {{ $showcases->links() }}
+</section>
+
+<section id="client-showcases-list">
+    <div class="section-header">
+        <h1><i class="fa-solid fa-list"></i> Reklamy klienta</h1>
+    </div>
+
+    <form action="{{ route('add-client-showcase') }}" method="POST" class="flex-right">
+        @csrf
+        <x-select name="song_id" label="Utwór" :options="$all_songs" :small="true" />
+        <x-input type="text" name="embed" label="Embed" :small="true" />
+        <x-button action="submit" label="Dodaj" icon="plus" :small="true" />
+    </form>
+
+    <style>
+    #client-showcases-list .table-row{ grid-template-columns: repeat(2, 1fr); }
+    </style>
+    <div class="quests-table">
+        <div class="table-header table-row">
+            <span>Tytuł<br>Wykonawca</span>
+            <span>Embed</span>
+        </div>
+        <hr />
+        @forelse ($client_showcases as $showcase)
+        <div class="table-row">
+            <a href="{{ route('songs', ['search' => $showcase->song_id]) }}">
+                <h3 class="song-title">{{ $showcase->song->title ?? "bez tytułu" }}</h3>
+                <p class="song-artist">{{ $showcase->song->artist }}</p>
+            </a>
+            {!! $showcase->embed ?? "<span></span>" !!}
+        </div>
+        @empty
+        <p class="grayed-out">Nie ma żadnych reklam</p>
+        @endforelse
+    </div>
+    {{ $client_showcases->links() }}
 </section>
 
 @endsection

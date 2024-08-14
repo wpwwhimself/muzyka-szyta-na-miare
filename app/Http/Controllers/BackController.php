@@ -11,6 +11,7 @@ use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
+use App\Models\ClientShowcase;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\QuestType;
@@ -1054,7 +1055,8 @@ class BackController extends Controller
     }
 
     public function showcases(){
-        $showcases = Showcase::orderBy("updated_at", "desc")->paginate(10);
+        $showcases = Showcase::orderBy("updated_at", "desc")->paginate(5);
+        $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->paginate(5);
 
         $songs_raw = Song::whereDoesntHave('showcase')
             ->whereHas('quests', function($q){
@@ -1071,9 +1073,15 @@ class BackController extends Controller
             $songs[$song["id"]] = "$song[title] ($song[artist]) [$song[id]]";
         }
 
+        $all_songs = Song::orderBy("title")
+            ->orderBy("artist")
+            ->orderBy("id")
+            ->get()
+            ->map(fn($s) => "$s[title] ($s[artist]) [$s[id]]");
+
         return view(user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],
-            compact("showcases", "songs", "potential_showcases")
+            compact("showcases", "client_showcases", "songs", "all_songs", "potential_showcases")
         ));
     }
 
@@ -1084,6 +1092,16 @@ class BackController extends Controller
             "link_fb" => (filter_var($rq->link_fb, FILTER_VALIDATE_URL)) ?
                 "<a target='_blank' href='$rq->link_fb'>$rq->link_fb</a>" : $rq->link_fb,
             "link_ig" => $rq->link_ig,
+        ]);
+
+        return back()->with("success", "Dodano pozycję");
+    }
+
+    public function addShowcaseFromClient(HttpRequest $rq){
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        ClientShowcase::create([
+            "song_id" => $rq->song_id,
+            "embed" => $rq->embed,
         ]);
 
         return back()->with("success", "Dodano pozycję");

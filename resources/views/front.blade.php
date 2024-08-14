@@ -121,11 +121,9 @@
         <h1>Co już udało mi się wykonać?</h1>
 
         <div id="showcase-yts" class="flex-right">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/Wa5MImmxBwI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/ztDH4-cHepg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/RRGUBczaxQc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/4l0n_VqYBUk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/Z01Bga583P4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            @foreach ($client_showcases as $showcase)
+            {!! $showcase->embed !!}
+            @endforeach
         </div>
         <div id="showcase-spotify">
             <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientShowcase;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Showcase;
@@ -14,6 +15,7 @@ class HomeController extends Controller
 {
     public function index(){
         $showcases = Showcase::orderBy("updated_at", "desc")->limit(3)->get();
+        $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
 
         $prices = DB::table("prices")->where("operation", "+")->get(["service", "quest_type_id", "price_".strtolower(CURRENT_PRICING())." AS price"]);
 
@@ -50,6 +52,7 @@ class HomeController extends Controller
 
         return view("front", compact(
             "showcases",
+            "client_showcases",
             "prices",
             "quest_types",
             "contact_preferences",

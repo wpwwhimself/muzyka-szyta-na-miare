@@ -68,6 +68,7 @@ Route::controller(BackController::class)->group(function(){
 
         Route::get('/showcases', "showcases")->name("showcases");
         Route::post('/showcases/add', "addShowcase")->name("add-showcase");
+        Route::post('/showcases/add-from-client', "addShowcaseFromClient")->name("add-client-showcase");
 
         Route::get("/songs", "songs")->name("songs");
 

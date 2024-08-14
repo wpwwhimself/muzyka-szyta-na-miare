@@ -1077,7 +1077,7 @@ class BackController extends Controller
             ->orderBy("artist")
             ->orderBy("id")
             ->get()
-            ->map(fn($s) => "$s[title] ($s[artist]) [$s[id]]");
+            ->mapWithKeys(fn($s) => [$s["id"] => "$s[title] ($s[artist]) [$s[id]]"]);
 
         return view(user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],

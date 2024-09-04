@@ -12,6 +12,7 @@ use App\Mail\QuestUpdated;
 use App\Mail\RequestQuoted;
 use App\Models\Client;
 use App\Models\ClientShowcase;
+use App\Models\Invoice;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\QuestType;
@@ -931,13 +932,11 @@ class BackController extends Controller
             $this->statusHistory($quest->id, 32, $sub_amount, $quest->client->id);
         }
 
-        // if($price_before != $quest->price){
-        //     Invoice::create([
-        //         "quest_id" => $quest->id,
-        //         "amount" => $quest->price - $price_before,
-        //         "primary" => false,
-        //     ]);
-        // }
+        if($price_before != $quest->price){
+            InvoiceQuest::where("quest_id", $quest->id)->update(["amount" => $quest->price]);
+            $invoice_amount = Invoice::whereHas("quests", fn($q) => $q->where("quest_id", $quest->id))->first()->quests->sum("price");
+            Invoice::whereHas("quests", fn($q) => $q->where("quest_id", $quest->id))->update(["amount" => $invoice_amount]);
+        }
 
         // sending mail
         $mailing = null;

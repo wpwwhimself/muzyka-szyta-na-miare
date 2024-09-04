@@ -38,8 +38,11 @@ $(document).ready(()=>{
  * Podświetlanie inputów
  */
 const highlightInput = (input) => {
-    input.nextElementSibling.classList.add("accent");
+    document.querySelectorAll(`.input-container`).forEach(el => el.classList.add("ghost"))
+    input.closest(".input-container").classList.remove("ghost");
+    input.nextElementSibling.classList.add("accent", "bigger");
 }
 const clearHighlightInput = (input) => {
-    input.nextElementSibling.classList.remove("accent");
+    document.querySelectorAll(`.input-container`).forEach(el => el.classList.remove("ghost"))
+    input.nextElementSibling.classList.remove("accent", "bigger");
 }

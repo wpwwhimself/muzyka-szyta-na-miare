@@ -179,6 +179,9 @@ a.submit,
 {
     text-decoration: none;
 }
+.bigger {
+    scale: 1.2;
+}
 
 /* FORM */
 .login-box{

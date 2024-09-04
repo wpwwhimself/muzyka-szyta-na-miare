@@ -315,7 +315,7 @@
             <x-button action="#/" statuschanger="14" icon="14" label="Zaakceptuj etap"  />
             @endif
         @endif
-        @if (in_array($quest->status_id, [15])) <x-button action="#/" statuschanger="16" icon="16" label="Poproś o poprawki" /> @endif
+        @if (in_array($quest->status_id, [14, 15])) <x-button action="#/" statuschanger="16" icon="16" :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'" /> @endif
         @if (!in_array($quest->status_id, [18, 19]))
             @if ($quest->completed_once)
                 <x-button action="#/" statuschanger="19" icon="18" label="Zrezygnuj z dalszych zmian" />

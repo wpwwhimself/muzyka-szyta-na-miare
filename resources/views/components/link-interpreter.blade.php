@@ -1,7 +1,7 @@
 @props(['raw', 'editable' => null])
 
 @unless(empty($raw))
-<div class="quest-links {{ $editable ? 'flex-down center' : '' }}">
+<div class="quest-links center {{ $editable ? 'flex-down' : 'flex-right' }}">
     @foreach (explode(",", $raw) as $link)
     @php $link = Str::of($link)->trim() @endphp
     @if (filter_var($link, FILTER_VALIDATE_URL))

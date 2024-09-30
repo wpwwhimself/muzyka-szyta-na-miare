@@ -110,6 +110,7 @@ div, form{
 }
 .flex-down.center{
     align-items: center;
+    text-align: center;
 }
 .flex-right.center{
     justify-content: center;

@@ -318,7 +318,7 @@
                                 :fa-symbol="$quest->song->type->fa_symbol ?? 'fa-circle-question'"
                                 />
                             {{ $quest->song->title ?? "bez tytułu" }}
-                            @if ($quest->song->has_safe_files)
+                            @if ($quest->song->has_safe_files || $quest->song->created_at->lte(now()->subMonth()))
                             <i class="fas fa-folder" @popper(Sejf istnieje)></i>
                             @endif
                         </h3>

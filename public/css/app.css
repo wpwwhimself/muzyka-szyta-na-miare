@@ -981,6 +981,10 @@ footer .contact-info{
     margin: 0.2em;
     border-radius: 1em;
     background-color: var(--bg1);
+
+    & .hidden {
+        display: none;
+    }
 }
 .file-tile .container{
     position: relative;
@@ -991,9 +995,9 @@ footer .contact-info{
     position: absolute; top: 0; left: 0;
     display: block; width: 100%;
 }
-.file-tile:hover i:first-child{ opacity: 0; }
-.file-tile i:last-child{ opacity: 0; }
-.file-tile:hover i:last-child{ opacity: 1; }
+.file-tile.hoverable:hover i:first-child{ opacity: 0; }
+.file-tile.hoverable i:last-child{ opacity: 0; }
+.file-tile.hoverable:hover i:last-child{ opacity: 1; }
 .mp3{ color: rgba(39, 197, 0, 0.8); }
 .mp4, .mid{ color: rgba(255, 0, 0, 0.8); }
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }

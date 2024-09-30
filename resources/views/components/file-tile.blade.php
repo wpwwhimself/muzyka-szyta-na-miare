@@ -2,7 +2,7 @@
 
 <a
   href="{{ route('download', ['id' => $id, 'filename' => basename($file)]) }}"
-  class="file-tile {{ pathinfo($file, PATHINFO_EXTENSION) }}">
+  class="file-tile hoverable {{ pathinfo($file, PATHINFO_EXTENSION) }}">
   <div class="container">
     @switch(pathinfo($file, PATHINFO_EXTENSION))
       @case("pdf")

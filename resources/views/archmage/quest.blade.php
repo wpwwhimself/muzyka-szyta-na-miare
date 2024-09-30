@@ -234,14 +234,15 @@
                         @if (pathinfo($file)['extension'] == "mp4")
                         <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" /></video>
                             @break
-                        @elseif (pathinfo($file)['extension'] == "mp3")
-                        <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/mpeg" /></audio>
-                            @break
-                        @elseif (pathinfo($file)['extension'] == "ogg")
-                        <audio controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" type="audio/ogg" /></audio>
+                        @elseif (in_array(pathinfo($file)['extension'], ["mp3", "ogg"]))
+                        <x-file-player
+                            :song-id="$quest->song->id"
+                            :file="$file"
+                            :type="pathinfo($file)['extension']"
+                        />
                             @break
                         @elseif (pathinfo($file)['extension'] == "pdf")
-                        <span class="ghost">Nie jestem w stanie pokazać podglądu</span>
+                        <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
                         @endif
                     @endforeach
                     @foreach ($ver_bots as $file)

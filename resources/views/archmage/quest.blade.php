@@ -55,6 +55,7 @@
                 :fa-symbol="$quest->song->type->fa_symbol"
             />
         </x-extendo-section>
+        <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>
         <x-input type="text" name="title" label="Tytuł" value="{{ $quest->song->title }}" />
         <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
         <div>

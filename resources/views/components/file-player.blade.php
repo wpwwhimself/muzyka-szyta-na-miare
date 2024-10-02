@@ -15,7 +15,11 @@
         </i>
     </div>
 
-    <audio oncanplaythrough="enableFilePlayer('{{ basename($file) }}')">
+    <span class="loader ghost hidden"></span>
+
+    <audio onprogress="showLoader('{{ basename($file) }}')"
+        onloadeddata="enableFilePlayer('{{ basename($file) }}')"
+    >
         <source src="{{ route('safe-show', ["id" => $songId, "filename" => basename($file)]) }}"
             type="audio/{{ $type == "mp3" ? "mpeg" : $type }}"
         />

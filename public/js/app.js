@@ -58,6 +58,7 @@ const changeFilePlayerButton = (filename, icon) => {
 }
 const enableFilePlayer = (filename) => {
     changeFilePlayerButton(filename, "play")
+    showLoader(filename, false)
 }
 const startFilePlayer = (filename) => {
     document.querySelector(`.file-player[data-file-name="${filename}"] audio`).play()
@@ -66,4 +67,15 @@ const startFilePlayer = (filename) => {
 const pauseFilePlayer = (filename) => {
     document.querySelector(`.file-player[data-file-name="${filename}"] audio`).pause()
     changeFilePlayerButton(filename, "play")
+}
+
+const showLoader = (filename, reveal = true) => {
+    const loader = document.querySelector(`.file-player[data-file-name="${filename}"] .loader`)
+    const audio = document.querySelector(`.file-player[data-file-name="${filename}"] audio`)
+
+    loader.innerHTML = (audio.buffered.length)
+        ? Math.round(audio.buffered.end(0) / audio.duration * 100) + "%"
+        : "..."
+
+    (reveal) ? loader.classList.remove("hidden") : loader.classList.add("hidden")
 }

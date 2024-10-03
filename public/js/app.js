@@ -2,7 +2,9 @@
  * Ukrywanie alertów
  */
 const TOAST_TIMEOUT = 4000;
-if($(".alert").length){ //if exists
+$(document).ready(() => {
+    if (!$(".alert").length) return
+
     //appear
     setTimeout(() => {
         $(".alert").addClass("in");
@@ -15,7 +17,7 @@ if($(".alert").length){ //if exists
     setTimeout(() => {
         $(".alert").removeClass("in");
     }, TOAST_TIMEOUT);
-}
+})
 /**
  * Niebezpieczne guziki
  */

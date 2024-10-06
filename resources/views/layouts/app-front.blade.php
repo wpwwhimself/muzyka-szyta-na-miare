@@ -24,6 +24,7 @@
     <script src="{{ asset("js/front.js") }}" defer></script>
     <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@sidsbrmnn/scrollspy@1.x/dist/scrollspy.min.js"></script>
+    @bukStyles
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- Google tag (gtag.js) -->
@@ -104,7 +105,7 @@
                     <a href="https://www.facebook.com/orkiestrawolsztyn">Powiatowej Wolsztyńskiej Orkiestry Dętej</a>
                 </li>
                 <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako software developer</li>
-                <li>Mam za sobą <b>studia matematyczne</b> i jestem w trakcie studiów <b>magisterskich</b> na Uniwersytecie Ekonomicznym w Poznaniu</li>
+                <li>Mam za sobą <b>studia magisterskie</b> z matematyki i informatyki</li>
             </ul>
         </div>
     </section>
@@ -124,5 +125,6 @@
 
     @include("popper::assets")
     @include('cookie-consent::index')
+    @bukScripts
 </body>
 </html>

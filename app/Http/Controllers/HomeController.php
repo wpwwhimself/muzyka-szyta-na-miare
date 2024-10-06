@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        return view("front.index");
+    }
+
+    public function podklady()
+    {
         $showcases = Showcase::orderBy("updated_at", "desc")->limit(3)->get();
         $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
 
@@ -38,9 +44,6 @@ class HomeController extends Controller
         $diffs = array_filter($diffs, function($val){ return is_numeric($val); });
         $average_quest_done = (count($diffs) == 0) ? 0 : round(array_sum($diffs)/count($diffs));
 
-        $quests_completed = Quest::where("status_id", 19)->count();
-        $quests_originals_completed = Quest::where("price_code_override", "like", "%d%")->where("status_id", 19)->count();
-
         $random_song = Song::all()->random();
 
         $contact_preferences = [
@@ -50,7 +53,7 @@ class HomeController extends Controller
             "inne" => "inne"
         ];
 
-        return view("front", compact(
+        return view("front.podklady", compact(
             "showcases",
             "client_showcases",
             "prices",
@@ -58,8 +61,16 @@ class HomeController extends Controller
             "contact_preferences",
             "random_song",
             "average_quest_done",
-            "quests_completed",
-            "quests_originals_completed"
         ));
+    }
+
+    public function organista()
+    {
+        return view("front.organista");
+    }
+
+    public function dj()
+    {
+        return view("front.dj");
     }
 }

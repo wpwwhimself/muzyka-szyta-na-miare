@@ -16,6 +16,9 @@
         /* --acc: hsl(47, 100%, 62%); */
         --bas: hsl(39, 24%, 73%);
     }
+    .white-on-black {
+        filter: invert(0.9);
+    }
 }
 @media (prefers-color-scheme: light){
     :root{
@@ -85,7 +88,7 @@ small{
 div, form{
     border-radius: 1em;
 }
-.logo{
+.logo, .icon{
     height: 5em;
     margin: 0.5em;
     /* color set to --acc if it was black pic */
@@ -174,6 +177,7 @@ a:hover, .accent{
 }
 nav a,
 a.submit,
+a.section-like,
 .contact-info a,
 .quests-table .table-row,
 .day-tiles a

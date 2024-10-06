@@ -38,7 +38,7 @@ h1{
 #home{
     font-size: 1.25em;
     box-sizing: border-box;
-    margin: 3em auto; padding: 3em 10em;
+    margin: 3em auto 0; padding: 3em 10em;
     display: flex; justify-content: center; align-items: center; flex-direction: column;
 }
 #home li{
@@ -225,6 +225,24 @@ form button{
 .cookie-consent div,
 #showcase-scores img:hover{
     box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.3);
+}
+
+/* background divisions */
+#background-division {
+    & > img {
+        height: 100vh;
+        position: fixed; top: 0; bottom: 0;
+        z-index: 0;
+        opacity: 0.025;
+
+        &:first-child {
+            left: 0;
+        }
+        &:last-child {
+            right: 0;
+            scale: -1 1;
+        }
+    }
 }
 
 /* animate on scroll */

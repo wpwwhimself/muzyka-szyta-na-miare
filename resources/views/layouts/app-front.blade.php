@@ -42,14 +42,87 @@
     const IS_VETERAN = {{ is_archmage() ? 0 : intval(Auth::user()->client->is_veteran ?? "") }};
     </script>
 
-    <title>{{ config("app.name") }} ✂🎵 Podkłady i aranże dopasowane do Twoich potrzeb</title>
+    <title>{{ config("app.name") }} ✂🎵 @yield("subtitle")</title>
 </head>
 <body>
+    <header>
+        <x-logo />
+        @unless (Route::currentRouteName() == "home")
+        <x-nav />
+        @endunless
+    </header>
+
+    @if (Str::startsWith(Route::currentRouteName(), "home-"))
+    <div id="background-division">
+        @for ($i = 0; $i < 2; $i++)
+        <img
+            src="{{ asset("assets/divisions/".Str::afterLast(Route::currentRouteName(), "-").".svg") }}"
+            alt="division logo"
+            class="white-on-black"
+        >
+        @endfor
+    </div>
+    @endif
+
+    <section id="home" class="sc-line">
+        <x-sc-scissors />
+        <div class="company-name flex-right">
+            <img src="{{ asset(
+                Str::startsWith(Route::currentRouteName(), "home-")
+                    ? "assets/msznm-".Str::afterLast(Route::currentRouteName(), "-").".svg"
+                    : "msznm.svg"
+            ) }}" alt="logo" class="logo">
+            <div>
+                <h1>{{ config("app.name") }}</h1>
+                <p>Wojciech Przybyła</p>
+                <h2>@yield("subtitle")</h2>
+            </div>
+        </div>
+
+        @hasSection("bullets")
+        <ul class="section-like">
+            @yield("bullets")
+        </ul>
+        @endif
+    </section>
+
+    @yield("content")
+
+    @unless (Route::currentRouteName() == "home")
+    <section id="about">
+        <h1>O mnie</h1>
+        <div class="flex-right">
+            <img class="hidden" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
+            <ul class="hidden">
+                <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
+                <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
+                <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
+                <li>Jestem stałym członkiem <b>3 zespołów muzycznych</b>:
+                    <a href="https://www.facebook.com/profile.php?id=100060053047728">Dixie Kings</a>,
+                    <a href="https://www.facebook.com/orkiestrawihajster">Orkiestry Tanecznej Wihajster</a>
+                    oraz
+                    <a href="https://www.facebook.com/orkiestrawolsztyn">Powiatowej Wolsztyńskiej Orkiestry Dętej</a>
+                </li>
+                <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako software developer</li>
+                <li>Mam za sobą <b>studia matematyczne</b> i jestem w trakcie studiów <b>magisterskich</b> na Uniwersytecie Ekonomicznym w Poznaniu</li>
+            </ul>
+        </div>
+    </section>
+
+    <x-sc-hr />
+    @endunless
+
+    @yield("contact-form")
+
+    <x-footer />
+
     @foreach (["success", "error"] as $status)
     @if (session($status))
         <x-alert :status="$status" />
     @endif
     @endforeach
-    @yield('everything')
+
+    @include("popper::assets")
+    @include('cookie-consent::index')
 </body>
 </html>

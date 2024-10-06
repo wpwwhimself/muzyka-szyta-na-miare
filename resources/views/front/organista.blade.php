@@ -16,7 +16,7 @@
     <h1>Jak mogę wzbogacić Twoją uroczystość?</h1>
 
     <div class="main black-back hidden">
-        <x-mdi-book-cross />
+        <x-mdi-book-cross height="6em" />
         <div>
             <h2>Organy</h2>
             <p>Od wielu lat gram na organach podczas mszy niedzielnych i okolicznościowych</p>
@@ -28,7 +28,7 @@
         </ul>
     </div>
     <div class="main black-back hidden">
-        <x-mdi-piano />
+        <x-mdi-piano height="6em" />
         <div>
             <h2>Pianino</h2>
             <p>Dodatkowy akcent muzyczny dla Twojej ceremonii</p>
@@ -40,7 +40,7 @@
         </ul>
     </div>
     <div class="main black-back hidden">
-        <x-mdi-trumpet />
+        <x-mdi-trumpet height="6em" />
         <div>
             <h2>Trąbka</h2>
             <p>Pozwól wybrzmieć pięknym melodiom</p>

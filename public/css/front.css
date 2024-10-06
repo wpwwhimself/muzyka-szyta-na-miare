@@ -236,7 +236,8 @@ form button{
 /* background divisions */
 #background-division {
     & > img {
-        height: 100vh;
+        height: 80vh;
+        margin-block: 10vh;
         position: fixed; top: 0; bottom: 0;
         z-index: 0;
         opacity: 0.025;
@@ -344,5 +345,10 @@ span.hidden
     }
     .cookie-consent button{
         margin: 0 auto;
+    }
+
+    #background-division > img {
+        height: 60vh;
+        margin-block: 20vh;
     }
 }

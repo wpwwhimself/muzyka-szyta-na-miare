@@ -16,8 +16,8 @@
 	<meta property='og:description' content='Poszukujesz kogoś, kto pomoże Ci w sprawach muzycznych? Potrzebujesz podkładu lub nut? Napisz do mnie.' />
 
     <link rel="icon" href="{{ URL::asset("msznm.svg") }}">
-    <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}">
-    <link rel="stylesheet" href="{{ URL::asset("css/front.css") }}">
+    <link rel="stylesheet" href="{{ URL::asset("css/app.css") }}?{{ time() }}">
+    <link rel="stylesheet" href="{{ URL::asset("css/front.css") }}?{{ time() }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>

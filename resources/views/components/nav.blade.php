@@ -15,22 +15,27 @@
         @endauth
     @else
         @auth
-            @foreach ($logged as $item)
-            <a href="{{ $item['link'] }}">
-                <li {{ Popper::pop($item['label']) }}>
-                    <i class="{{ $item['icon'] }}"></i>
+            @foreach ([
+                [route("dashboard"), "Pulpit", "house-chimney-user", true],
+                [route("quests"), "Zlecenia", "boxes-stacked", true],
+                [route("requests"), "Zapytania", "envelope-open-text", true],
+                [route("prices"), "Cennik", "barcode", true],
+                [route("songs"), "Utwory", "compact-disc", is_archmage()],
+                [route("clients"), "Klienci", "users", is_archmage()],
+                [route("finance"), "Finanse", "sack-dollar", is_archmage()],
+                [route("showcases"), "Reklama", "bullhorn", is_archmage()],
+                [route("stats"), "Statystyki", "chart-line", is_archmage()],
+                [route("ppp"), "PPP", "circle-question", is_archmage()],
+                [route("settings"), "Ustawienia", "cog", is_archmage()],
+            ] as [$link, $label, $icon, $condition])
+            @if ($condition)
+            <a href="{{ $link }}">
+                <li {{ Popper::pop($label) }}>
+                    <i class="fas fa-{{ $icon }}"></i>
                 </li>
             </a>
-            @endforeach
-            @if (is_archmage())
-                @foreach ($archmage as $item)
-                <a href="{{ $item['link'] }}">
-                    <li {{ Popper::pop($item['label']) }}>
-                        <i class="{{ $item['icon'] }}"></i>
-                    </li>
-                </a>
-                @endforeach
             @endif
+            @endforeach
             <a href="{{ route("logout") }}" class="auth-link"><li><i class="fa-solid fa-power-off"></i> Wyloguj się</li></a>
         @endauth
     @endif

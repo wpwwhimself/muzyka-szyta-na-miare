@@ -934,7 +934,7 @@ class BackController extends Controller
 
         if($price_before != $quest->price){
             InvoiceQuest::where("quest_id", $quest->id)->update(["amount" => $quest->price]);
-            $invoice_amount = Invoice::whereHas("quests", fn($q) => $q->where("quest_id", $quest->id))->first()->quests->sum("price");
+            $invoice_amount = Invoice::whereHas("quests", fn($q) => $q->where("quest_id", $quest->id))->first()?->quests->sum("price");
             Invoice::whereHas("quests", fn($q) => $q->where("quest_id", $quest->id))->update(["amount" => $invoice_amount]);
         }
 

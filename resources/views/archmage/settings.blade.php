@@ -19,7 +19,7 @@
         $("input").change(function(){
             $.ajax({
                 type: "POST",
-                url: "{{ url('settings_change') }}",
+                url: "/api/settings_change",
                 data: {
                     setting_name: $(this).attr("name"),
                     value_str: $(this).val(),

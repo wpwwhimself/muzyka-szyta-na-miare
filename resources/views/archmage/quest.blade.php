@@ -275,7 +275,7 @@
                 $("#ver_desc_form label").text("Opis wersji " + ver);
                 $("#ver_desc_form input[name=ver]").val("{{ $quest->song->id }}/" + ver);
                 $.ajax({
-                    url: "{{ url('get_ver_desc') }}",
+                    url: "/api/get_ver_desc",
                     type: "get",
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -365,7 +365,7 @@
                     if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
                     else{
                         $.ajax({
-                            url: "{{ url('price_calc') }}",
+                            url: "/api/price_calc",
                             type: "post",
                             data: {
                                 _token: '{{ csrf_token() }}',

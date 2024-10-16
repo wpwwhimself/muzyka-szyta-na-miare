@@ -104,7 +104,7 @@
                     if(labels == "") $("#price-summary").hide();
                     else{
                         $.ajax({
-                            url: "{{ url('price_calc') }}",
+                            url: "/api/price_calc",
                             type: "post",
                             data: {
                                 _token: '{{ csrf_token() }}',

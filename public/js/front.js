@@ -5,7 +5,7 @@ $(document).ready(function(){
      */
     $.ajax({
         type: "GET",
-        url: "/songs_info",
+        url: "/api/songs_info",
         success: function (res) {
             if(res.length > 0){
                 const list = $("#songs ul");

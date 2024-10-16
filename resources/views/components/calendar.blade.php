@@ -54,7 +54,7 @@
 
         $("#work_on_weekends").change(function(){
             $.ajax({
-                url: "{{ url('settings_change') }}",
+                url: "/api/settings_change",
                 type: "post",
                 data: {
                     _token: "{{ csrf_token() }}",

@@ -78,7 +78,7 @@
 
                 if(!empty){
                     $.ajax({
-                        url: "{{ url('client_data') }}",
+                        url: "/api/client_data",
                         type: "get",
                         data: {
                             _token: "{{ csrf_token() }}",
@@ -162,7 +162,7 @@
 
                     if(!empty){
                         $.ajax({
-                            url: "{{ url('song_data') }}",
+                            url: "/api/song_data",
                             type: "get",
                             data: {
                                 _token: "{{ csrf_token() }}",
@@ -230,7 +230,7 @@
                     if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
                     else{
                         $.ajax({
-                            url: "{{ url('price_calc') }}",
+                            url: "/api/price_calc",
                             type: "post",
                             data: {
                                 _token: '{{ csrf_token() }}',
@@ -258,7 +258,7 @@
                     const sum_row = $("#delayed-payments-summary .summary");
 
                     $.ajax({
-                        url: "{{ url('monthly_payment_limit') }}",
+                        url: "/api/monthly_payment_limit",
                         type: "post",
                         data: {
                             _token: '{{ csrf_token() }}',

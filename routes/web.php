@@ -5,19 +5,10 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\SpellbookController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\WorkClockController;
-use App\Models\Client;
-use App\Models\QuestType;
-use App\Models\Song;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -178,63 +169,6 @@ Route::domain("dj.".$domain)->group(function(){
 Route::domain($domain)->group(function(){
     Route::get('/', [HomeController::class, "index"])->name("home");
 });
-
-/**
- * for AJAX purposes
- */
-// front -- listing songs
-Route::get("/songs_info", function(Request $rq){
-    $songs = Song::orderByRaw("ISNULL(title)")
-        ->where("id", "not like", "O%")
-        ->orderBy("title")
-        ->orderBy("artist")
-        ->select(["id", "title", "artist"])
-        ->distinct()
-        ->get();
-
-    return $songs;
-});
-
-Route::get('/client_data', function(Request $request){
-    $data = Client::find($request->id)->toArray();
-    foreach($data as $key => $value){
-        if(!preg_match("/id/", $key)) $data[$key] = _ct_($value);
-    }
-    return json_encode($data);
-});
-Route::get('/song_data', function(Request $request){
-    return Song::find($request->id)->toJson();
-});
-Route::post('/song_link_change', function(Request $request){
-    if(Auth::id() != 1) return;
-    $id = $request->id;
-    Song::find($id)->update(["link" => $request->link]);
-});
-Route::post('/price_calc', function(Request $request){
-    return price_calc($request->labels, $request->price_schema, $request->quoting);
-});
-Route::post('/monthly_payment_limit', function(Request $request){
-    return app("App\Http\Controllers\StatsController")->monthlyPaymentLimit($request->amount);
-});
-Route::get('/quest_type_from_id', function(Request $request){
-    return QuestType::where("code", $request->initial)->first()->toJson();
-});
-Route::get("/get_ver_desc", function(Request $rq){
-    return Storage::get($rq->path) ?? "";
-});
-
-Route::controller(JanitorController::class)->group(function(){
-    Route::get("/janitor", "index");
-});
-
-Route::post("/settings_change", function(Request $rq){
-    if(Auth::id() != 1) return;
-    DB::table("settings")
-        ->where("setting_name", $rq->setting_name)
-        ->update(["value_str" => $rq->value_str])
-    ;
-});
-
 
 /*
 Route::get("/greenlight", function(Request $rq){

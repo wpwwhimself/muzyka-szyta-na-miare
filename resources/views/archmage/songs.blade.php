@@ -79,7 +79,7 @@ $(document).ready(() => {
     $("input[name=link]").change((e) => {
         $.ajax({
             type: "post",
-            url: "/song_link_change",
+            url: "/api/song_link_change",
             data: {
                 id: e.target.getAttribute("data-editable"),
                 link: e.target.value,

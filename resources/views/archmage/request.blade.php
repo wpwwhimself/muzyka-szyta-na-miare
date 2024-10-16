@@ -146,7 +146,7 @@
                 <x-input type="text" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
                 <x-link-interpreter :raw="$request->link" />
             </div>
-            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" :required="true" />
+            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" />
             <div>
                 <x-input type="TEXT" name="wishes" label="Życzenia dotyczące utworu" value="{{ $request->wishes }}" />
                 <x-button label="Wpisz domyślne życzenia" icon="circle-question" action="#/" id="default-wishes-button" :small="true" />

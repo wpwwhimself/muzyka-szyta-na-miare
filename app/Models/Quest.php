@@ -16,6 +16,14 @@ class Quest extends Model
 
     protected $fillable = ["id", "price_code_override", "price", "paid", "status_id", "deadline", "delayed_payment", "wishes", "files_ready", "has_files_on_external_drive"];
 
+    // rounded prices
+    public function getPriceAttribute($val) {
+        return round($val, 2);
+    }
+    public function setPriceAttribute($val) {
+        $this->attributes["price"] = round($val, 2);
+    }
+
     public function getQuestTypeLetterAttribute(){
         return substr($this->id, 0, 1);
     }

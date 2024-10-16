@@ -102,7 +102,7 @@
         </span>
         <div class="front-table">
             <span class="hidden">Msza okolicznościowa (ślub, jubileusz, ...)</span>
-            <span class="hidden">{{ as_pln(250) }}</span>
+            <span class="hidden">{{ as_pln(150) }}</span>
         </div>
     </div>
 

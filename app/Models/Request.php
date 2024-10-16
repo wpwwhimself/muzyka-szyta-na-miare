@@ -19,6 +19,14 @@ class Request extends Model
     ];
     protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
 
+    // rounded prices
+    public function getPriceAttribute($val) {
+        return round($val, 2);
+    }
+    public function setPriceAttribute($val) {
+        $this->attributes["price"] = round($val, 2);
+    }
+
     public function getIsPriorityAttribute(){
         return preg_match("/z/", $this->price_code);
     }

@@ -74,7 +74,6 @@ class BackController extends Controller
                 ->orderByDesc("date")
                 ->limit(7)
                 ->get();
-            $recent = collect();
             foreach($recent as $change){
                 $change->is_request = is_request($change->re_quest_id);
                 $change->re_quest = ($change->is_request) ?

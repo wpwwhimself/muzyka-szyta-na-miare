@@ -233,25 +233,6 @@ form button{
     box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.3);
 }
 
-/* background divisions */
-#background-division {
-    & > img {
-        height: 80vh;
-        margin-block: 10vh;
-        position: fixed; top: 0; bottom: 0;
-        z-index: 0;
-        opacity: 0.025;
-
-        &:first-child {
-            left: 0;
-        }
-        &:last-child {
-            right: 0;
-            scale: -1 1;
-        }
-    }
-}
-
 /* animate on scroll */
 .hidden{
     opacity: 0;
@@ -345,10 +326,5 @@ span.hidden
     }
     .cookie-consent button{
         margin: 0 auto;
-    }
-
-    #background-division > img {
-        height: 60vh;
-        margin-block: 20vh;
     }
 }

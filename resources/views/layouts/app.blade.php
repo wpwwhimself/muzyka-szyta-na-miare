@@ -34,15 +34,31 @@
 </head>
 <body>
     <x-header :title="$title" />
+
+    <div id="background-division">
+        @for ($i = 0; $i < 2; $i++)
+        <img
+            src="{{ asset("assets/divisions/"
+                .(Str::between(Request::root(), "://", ".".env("APP_DOMAIN")) ?? "msznm")
+                .".svg") }}"
+            alt="division logo"
+            class="white-on-black"
+        >
+        @endfor
+    </div>
+
     @foreach (["success", "error"] as $status)
         @if (session($status))
             <x-alert :status="$status" />
         @endif
     @endforeach
+
     <div class="main-wrapper">
         @yield("content")
     </div>
+
     <x-footer />
+    
     @include("popper::assets")
 </body>
 </html>

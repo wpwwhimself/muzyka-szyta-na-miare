@@ -53,17 +53,17 @@
         @endunless
     </header>
 
-    @if (Str::startsWith(Route::currentRouteName(), "home-"))
     <div id="background-division">
         @for ($i = 0; $i < 2; $i++)
         <img
-            src="{{ asset("assets/divisions/".Str::afterLast(Route::currentRouteName(), "-").".svg") }}"
+            src="{{ asset("assets/divisions/"
+                .(Str::between(Request::root(), "://", ".".env("APP_DOMAIN")) ?? "msznm")
+                .".svg") }}"
             alt="division logo"
             class="white-on-black"
         >
         @endfor
     </div>
-    @endif
 
     <section id="home" class="sc-line">
         <x-sc-scissors />

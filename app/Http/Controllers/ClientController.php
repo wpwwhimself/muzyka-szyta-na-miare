@@ -110,4 +110,14 @@ class ClientController extends Controller
 
         return back()->with("success", "Dane poprawione");
     }
+
+    //////////////////////////////////////////
+
+    public function getById(int $id){
+        $data = Client::find($id)->toArray();
+        foreach($data as $key => $value){
+            if(!preg_match("/id/", $key)) $data[$key] = _ct_($value);
+        }
+        return json_encode($data);
+    }
 }

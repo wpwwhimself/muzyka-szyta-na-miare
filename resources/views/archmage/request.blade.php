@@ -78,11 +78,10 @@
 
                 if(!empty){
                     $.ajax({
-                        url: "/api/client_data",
+                        url: `/api/clients/${$("#client_id").val()}`,
                         type: "get",
                         data: {
                             _token: "{{ csrf_token() }}",
-                            id: $("#client_id").val()
                         },
                         success: function(res){
                             res = JSON.parse(res);
@@ -162,11 +161,10 @@
 
                     if(!empty){
                         $.ajax({
-                            url: "/api/song_data",
+                            url: `/api/songs/${$("#song_id").val()}`,
                             type: "get",
                             data: {
                                 _token: "{{ csrf_token() }}",
-                                id: $("#song_id").val()
                             },
                             success: function(res){
                                 res = JSON.parse(res);

@@ -48,25 +48,25 @@
                 </thead>
                 <tbody>
                     @forelse ($recent as $change)
-                    @if ($change->re_quest->status_id == $change->new_status_id)
+                    @if ($change->re_quest?->status_id == $change->new_status_id)
                     <tr>
                     @else
                     <tr class="ghost">
                     @endif
                         <td>
                             <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                                {{ (($change->is_request) ? $change->re_quest->title : $change->re_quest->song->title) ?? "utwór bez tytułu" }}
+                                {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
                             </a>
                         </td>
                         <td>
                         @if ($change->is_request)
-                            @if ($change->re_quest->client)
-                                <a href="{{ route('clients', ['search' => $change->re_quest->client?->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
+                            @if ($change->re_quest?->client)
+                                <a href="{{ route('clients', ['search' => $change->re_quest?->client?->id]) }}">{{ _ct_($change->re_quest?->client->client_name) }}</a>
                             @else
-                                {{ _ct_($change->re_quest->client_name) }}
+                                {{ _ct_($change->re_quest?->client_name) }}
                             @endif
                         @else
-                            <a href="{{ route('clients', ['search' => $change->re_quest->client->id]) }}">{{ _ct_($change->re_quest->client->client_name) }}</a>
+                            <a href="{{ route('clients', ['search' => $change->re_quest?->client->id]) }}">{{ _ct_($change->re_quest?->client->client_name) }}</a>
                         @endif
                         </td>
                         <td>

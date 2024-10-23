@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Quest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +51,11 @@ class FileController extends Controller
 
     public function fileDownload($id, $filename){
         return Storage::download("safe/$id/$filename");
+    }
+
+    public function verDescGet(Request $rq)
+    {
+        return Storage::get($rq->path) ?? "";
     }
 
     public function verDescMod(Request $rq){

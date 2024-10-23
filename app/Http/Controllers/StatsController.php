@@ -397,7 +397,7 @@ class StatsController extends Controller
         ];
 
         $saturation = [
-            "split" => $this->monthlyPaymentLimit(0)->getOriginalContent()["saturation"],
+            "split" => $this->monthlyPaymentLimit()->getOriginalContent()["saturation"],
             "total" => INCOME_LIMIT(),
         ];
         $saturation = json_decode(json_encode($saturation));
@@ -729,7 +729,7 @@ class StatsController extends Controller
         return back()->with("success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty"));
     }
 
-    public function monthlyPaymentLimit($amount){
+    public function monthlyPaymentLimit(Request $rq = null){
         //scheduled and received payments
         $saturation = [
             //this month
@@ -779,7 +779,7 @@ class StatsController extends Controller
         $when_to_ask = 0;
         $limit_corrected = INCOME_LIMIT() * 0.9;
         while($when_to_ask < 2){
-            if($saturation[$when_to_ask] + $amount < $limit_corrected) break;
+            if($saturation[$when_to_ask] + ($rq->amount ?? 0) < $limit_corrected) break;
             else $when_to_ask++;
         }
 
@@ -811,5 +811,9 @@ class StatsController extends Controller
                 "money",
             ),
         ));
+    }
+
+    public function priceCalc(Request $request){
+        return price_calc($request->labels, $request->price_schema, $request->quoting);
     }
 }

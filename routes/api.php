@@ -66,7 +66,3 @@ Route::controller(WorkClockController::class)->prefix("clock")->group(function()
     Route::post('start-stop', "startStop");
     Route::get('remove/{song_id}/{status_id}', "remove");
 });
-
-Route::controller(JanitorController::class)->prefix("janitor")->group(function(){
-    Route::get("/", "index"); //TODO write as job
-});

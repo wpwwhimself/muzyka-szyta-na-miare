@@ -52,7 +52,7 @@ class JanitorController extends Controller
         $this->safe_cleanup();
 
         $this->exportSummary();
-        return redirect()->route("dashboard")->with("success", "Sprzątacz wykonał swoją robotę");
+        return response()->json(["message" => "Sprzątacz wykonał swoją robotę"]);
     }
 
     //////////////////////////////////////////////////////////////////////////

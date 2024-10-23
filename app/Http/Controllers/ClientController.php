@@ -98,7 +98,7 @@ class ClientController extends Controller
 
             // budget handling
             if($client->budget != $rq->budget){
-                app("App\Http\Controllers\BackController")->statusHistory(
+                BackController::newStatusLog(
                     null,
                     32,
                     $rq->budget - $client->budget,

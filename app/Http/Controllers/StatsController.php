@@ -433,7 +433,7 @@ class StatsController extends Controller
             $amount_to_pay = $quest->price - $quest->payments_sum;
 
             // opłać zlecenia
-            app("App\Http\Controllers\BackController")->statusHistory(
+            BackController::newStatusLog(
                 $id,
                 32,
                 $amount_to_pay,
@@ -480,7 +480,7 @@ class StatsController extends Controller
 
         if (!$budget) {
             // wypłata
-            app("App\Http\Controllers\BackController")->statusHistory(
+            BackController::newStatusLog(
                 $quest_id,
                 34,
                 -$payments_sum,

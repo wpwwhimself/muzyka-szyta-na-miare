@@ -127,9 +127,9 @@ class QuestController extends Controller
             $amount_to_pay = $quest->price - $quest->payments_sum;
             $amount_for_budget = $rq->comment - $amount_to_pay;
 
-            $this->statusHistory($rq->quest_id, $rq->status_id, min($rq->comment, $amount_to_pay), $quest->client_id);
+            BackController::newStatusLog($rq->quest_id, $rq->status_id, min($rq->comment, $amount_to_pay), $quest->client_id);
             if($amount_for_budget > 0){
-                $this->statusHistory(null, $rq->status_id, $amount_for_budget, $quest->client_id);
+                BackController::newStatusLog(null, $rq->status_id, $amount_for_budget, $quest->client_id);
 
                 // budżet
                 $quest->client->budget += $amount_for_budget;
@@ -205,7 +205,7 @@ class QuestController extends Controller
         if($is_same_status){
             $quest->history->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
-            $this->statusHistory(
+            BackController::newStatusLog(
                 $rq->quest_id,
                 $rq->status_id,
                 $rq->comment,
@@ -301,13 +301,13 @@ class QuestController extends Controller
         if($quest->client->budget){
             $sub_amount = min([$difference, $quest->client->budget]);
             $quest->client->budget -= $sub_amount;
-            $this->statusHistory(null, 32, -$sub_amount, $quest->client->id);
+            BackController::newStatusLog(null, 32, -$sub_amount, $quest->client->id);
             if($sub_amount == $difference){
                 $quest->paid = true;
                 $quest->save();
             }
             $quest->client->save();
-            $this->statusHistory($quest->id, 32, $sub_amount, $quest->client->id);
+            BackController::newStatusLog($quest->id, 32, $sub_amount, $quest->client->id);
         }
 
         if($price_before != $quest->price){
@@ -344,7 +344,7 @@ class QuestController extends Controller
             "files_ready" => false,
         ]);
 
-        app("App\Http\Controllers\BackController")->statusHistory(
+        BackController::newStatusLog(
             $rq->id,
             31,
             null,

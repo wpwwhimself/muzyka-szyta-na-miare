@@ -129,7 +129,7 @@ class BackController extends Controller
         ));
     }
 
-    public function statusHistory($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
+    public static function newStatusLog($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
         if($re_quest_id){
             $client_id = is_request($re_quest_id) ?
                 Request::find($re_quest_id)->client_id :

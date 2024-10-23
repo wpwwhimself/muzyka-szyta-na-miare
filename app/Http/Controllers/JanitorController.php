@@ -89,10 +89,10 @@ class JanitorController extends Controller
             ];
             if($request->client?->email || $request->email){
                 Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request->fresh()));
-                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "Brak reakcji", 1, 1);
+                BackController::newStatusLog($request->id, 7, "Brak reakcji", 1, 1);
                 $summaryEntry["mailing"] = 1 + intval($request->client?->contact_preference == "email" || $request->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($request->id, 7, "Brak reakcji", 1, null);
+                BackController::newStatusLog($request->id, 7, "Brak reakcji", 1, null);
                 $summaryEntry["mailing"] = 0;
             }
             $this->addToSummary(...$summaryEntry);
@@ -125,10 +125,10 @@ class JanitorController extends Controller
             ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest->fresh(), "brak opinii"));
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, 1);
+                BackController::newStatusLog($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, 1);
                 $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, null);
+                BackController::newStatusLog($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, null);
                 $summaryEntry["mailing"] = 0;
             }
             $this->addToSummary(...$summaryEntry);
@@ -158,10 +158,10 @@ class JanitorController extends Controller
             ];
             if($quest->client->email){
                 Mail::to($quest->client->email)->send(new QuestExpired($quest->fresh(), "brak wpłaty"));
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "Brak wpłaty", 1, 1);
+                BackController::newStatusLog($quest->id, 17, "Brak wpłaty", 1, 1);
                 $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
             }else{
-                app("App\Http\Controllers\BackController")->statusHistory($quest->id, 17, "Brak wpłaty", 1, null);
+                BackController::newStatusLog($quest->id, 17, "Brak wpłaty", 1, null);
                 $summaryEntry["mailing"] = 0;
             }
             $this->addToSummary(...$summaryEntry);
@@ -249,7 +249,7 @@ class JanitorController extends Controller
                     if($status){
                         $status->increment("mail_sent");
                     }else{
-                        app("App\Http\Controllers\BackController")->statusHistory($quest->id, 33, null, 1, true);
+                        BackController::newStatusLog($quest->id, 33, null, 1, true);
                     }
                     $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
                 }else{

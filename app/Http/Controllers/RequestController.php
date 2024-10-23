@@ -119,7 +119,7 @@ class RequestController extends Controller
                 ["status_id" => 1],
                 $client_data
             ));
-            $this->statusHistory($request->id, 1, "~ spoza strony");
+            BackController::newStatusLog($request->id, 1, "~ spoza strony");
             return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
         }
 
@@ -214,8 +214,8 @@ class RequestController extends Controller
                     ]);
                 }
 
-                if($rq->new_status == 5) $this->statusHistory($request->id, 1, null);
-                $this->statusHistory($request->id, $rq->new_status, $rq->comment);
+                if($rq->new_status == 5) BackController::newStatusLog($request->id, 1, null);
+                BackController::newStatusLog($request->id, $rq->new_status, $rq->comment);
 
                 //mailing
                 $mailing = null;
@@ -265,7 +265,7 @@ class RequestController extends Controller
                 Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
                 $mailing = true;
 
-                $this->statusHistory($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
+                BackController::newStatusLog($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
             }
             $requests_created[] = $request;
         }
@@ -369,7 +369,7 @@ class RequestController extends Controller
         if($is_same_status){
             $request->history->first()->update(["comment" => $rq->comment, "date" => now()]);
         }else{
-            $this->statusHistory($request->id, $request->status_id, $rq->comment, $changed_by, null, $changes);
+            BackController::newStatusLog($request->id, $request->status_id, $rq->comment, $changed_by, null, $changes);
         }
 
         // sending mail
@@ -477,13 +477,13 @@ class RequestController extends Controller
             if($client->budget){
                 $sub_amount = min([$request->price, $client->budget]);
                 $client->budget -= $sub_amount;
-                $this->statusHistory(null, 32, -$sub_amount, $client->id);
+                BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
                 if($sub_amount == $request->price){
                     $quest->paid = true;
                     $quest->save();
                 }
                 $client->save();
-                $this->statusHistory($quest->id, 32, $sub_amount, $client->id);
+                BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
                 // $invoice->update(["paid" => $sub_amount]);
             }
 
@@ -499,11 +499,11 @@ class RequestController extends Controller
         Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
         $mailing = true;
 
-        $this->statusHistory($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
+        BackController::newStatusLog($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
 
         if($status == 9){
             //added quest
-            $this->statusHistory($request->quest_id, 11, null, $request->client_id);
+            BackController::newStatusLog($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
             //send onboarding if new client

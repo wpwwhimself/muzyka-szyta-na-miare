@@ -38,24 +38,6 @@ class AuthController extends Controller
         return back()->with("error", "Nieprawidłowe dane logowania");
     }
 
-    public function register(Request $request){
-        $request->validate([
-            // 'login' => 'required|unique:users',
-            'password' => 'required|min:6'
-        ]);
-
-        $data = $request->all();
-        $check = $this->createUser($data);
-
-        return redirect("dashboard")->with("success", "Utworzono nowy login");
-    }
-    public function createUser(array $data){
-        return User::create([
-            // 'login' => $data['login'],
-            'password' => Hash::make($data['password'])
-        ]);
-    }
-
     public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();

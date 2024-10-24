@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\Song;
 use App\Models\Status;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class SongController extends Controller
 {
@@ -45,10 +48,27 @@ class SongController extends Controller
             }, $song_work_times[$song->id]["parts"]));
         }
 
-        return view(user_role().".songs", array_merge(
+        return view(user_role().".songs.list", array_merge(
             ["title" => "Lista utworów"],
             compact("songs", "song_work_times", "price_codes", "search")
         ));
+    }
+
+    public function edit(string $id): View
+    {
+        $song = Song::findOrFail($id);
+        $genres = Genre::orderBy("name")->get()->pluck("name");
+        return view(user_role().".songs.edit", array_merge(
+            ["title" => $song->title . " | Edycja utworu"],
+            compact("song", "genres"),
+        ));
+    }
+
+    public function process(Request $rq): RedirectResponse
+    {
+        Song::findOrFail($rq->id)
+            ->update($rq->except("_token"));
+        return redirect()->route("songs")->with("success", "Utwór poprawiony");
     }
 
     /////////////////////////////////////////

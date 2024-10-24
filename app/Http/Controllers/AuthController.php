@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function input(){
-        return view("auth.login", [
-            "title" => "Logowanie",
-        ]);
+        return (Auth::check())
+            ? redirect()->route("dashboard")
+            : view("auth.login", [
+                "title" => "Logowanie",
+            ]);
     }
 
     public function authenticate(Request $request){

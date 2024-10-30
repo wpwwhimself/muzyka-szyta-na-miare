@@ -62,7 +62,7 @@
             <x-input type="text" name="link" label="Linki" value="{{ $quest->song->link }}" :small="true" />
             <x-link-interpreter :raw="$quest->song->link" />
         </div>
-        <x-input type="text" name="genre" label="Gatunek" value="{{ $quest->song->genre->name }}" :small="true" :disabled="true" />
+        <x-input type="text" name="genre" label="Gatunek" value="{{ $quest->song->genre?->name }}" :small="true" :disabled="true" />
         <x-input type="TEXT" name="notes" label="Życzenia dotyczące utworu" value="{{ $quest->song->notes }}" />
         <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
 

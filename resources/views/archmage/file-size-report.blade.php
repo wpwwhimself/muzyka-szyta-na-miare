@@ -23,7 +23,7 @@
     @forelse ($sizes as $safe => $size)
         <div class="table-row">
             <span>
-                <a href="{{ route('songs', ['search' => $songs[$safe]->id]) }}" class="flex-down">
+                <a href="{{ route('songs', ['search' => $songs[$safe]->id ?? '']) }}" class="flex-down">
                     {{ $songs[$safe]->full_title }}
                     <small>{{ $safe }}</small>
                 </a>

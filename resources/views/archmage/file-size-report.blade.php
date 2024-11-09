@@ -23,10 +23,14 @@
     @forelse ($sizes as $safe => $size)
         <div class="table-row">
             <span>
-                <a href="{{ route('songs', ['search' => $songs[$safe]->id ?? '']) }}" class="flex-down">
+                @if ($songs[$safe])
+                <a href="{{ route('songs', ['search' => $songs[$safe]->id]) }}" class="flex-down">
                     {{ $songs[$safe]->full_title }}
                     <small>{{ $safe }}</small>
                 </a>
+                @else
+                <small>{{ $safe }}</small>
+                @endif
             </span>
             <span {{ Popper::pop($times[$safe]) }}
                 @if ($times[$safe]->diffInDays() >= setting("safe_old_enough"))

@@ -15,7 +15,7 @@
                 <div class="bulk-box sc-line">
                     <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
                     <x-input type="text" name="title[]" label="Tytuł utworu" />
-                    <x-input type="text" name="artist[]" label="Oryginalny wykonawca" />
+                    <x-input type="text" name="artist[]" label="Wykonawca" />
                     <x-input type="text" name="link[]" label="Link do oryginalnych nagrań (oddzielone przecinkami)" :small="true" :hint="$hint['link']" />
                     <x-input type="TEXT" name="wishes[]" label="Życzenia (np. styl, czy z linią melodyczną)" value="{{ Auth::user()->client->default_wishes }}" :hint="$hint['wishes']" />
                     <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" :hint="$hint['deadline']" />

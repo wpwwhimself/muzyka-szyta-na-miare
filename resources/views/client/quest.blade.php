@@ -81,7 +81,13 @@
     <x-extendo-block key="quote"
         header-icon="sack-dollar"
         title="Wycena"
-        :subtitle="as_pln($quest->price).' // do '.$quest->deadline?->format('d.m.Y')"
+        :subtitle="implode(' ', array_filter([
+            'do zapłaty:',
+            as_pln($quest->payment_remaining),
+            $quest->delayed_payment_in_effect ? 'po '.$quest->delayed_payment->format('d.m.Y') : null,
+            '//',
+            'pliki do '.$quest->deadline?->format('d.m.Y'),
+        ]))"
         :warning="$warnings['quote']"
         :extended="sumWarnings($warnings['quote'], true)"
     >

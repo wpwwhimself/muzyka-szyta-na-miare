@@ -253,7 +253,7 @@
             </div>
             <input type="hidden" name="optbc">
             <div id="opinion-inputs" class="flex-down gone spaced">
-                <x-input type="url" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
+                <x-input type="text" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
                 <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
                 <div class="priority" for="opinion_deadline">
                     <p>W trybie priorytetowym jestem w stanie wykonać zlecenie poza kolejnością; wiąże się to jednak z podwyższoną ceną.</p>

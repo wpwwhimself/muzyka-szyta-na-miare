@@ -1167,7 +1167,6 @@ footer .contact-info{
         }
         &:last-child {
             right: 0;
-            scale: -1 1;
         }
     }
 }
@@ -1323,7 +1322,7 @@ footer .contact-info{
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     #background-division > img {
         height: 60vh;
         margin-block: 20vh;

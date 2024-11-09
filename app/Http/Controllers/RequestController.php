@@ -284,6 +284,11 @@ class RequestController extends Controller
 
         $is_same_status = $request->status_id == $rq->new_status;
 
+        if (Auth::id() === 1 && $rq->new_status == 5 && !$rq->genre_id) {
+            // archmage forgot to define genre
+            return back()->with("error", "Uzupełnij gatunek");
+        }
+
         if($intent == "change"){
             $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
             $client = ($rq->client_id) ? Client::find($rq->client_id) : null;

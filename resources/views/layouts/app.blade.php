@@ -39,7 +39,7 @@
         @for ($i = 0; $i < 2; $i++)
         <img
             src="{{ asset("assets/divisions/"
-                .(Str::between(Request::root(), "://", ".".env("APP_DOMAIN")) ?? "msznm")
+                .($i == 0 ? (Str::between(Request::root(), "://", ".".env("APP_DOMAIN")) ?? "msznm") : "msznm")
                 .".svg") }}"
             alt="division logo"
             class="white-on-black"
@@ -58,7 +58,7 @@
     </div>
 
     <x-footer />
-    
+
     @include("popper::assets")
 </body>
 </html>

@@ -45,6 +45,7 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::get("/ppp/{page?}", "ppp")->name("ppp");
 
             Route::get("/settings", "settings")->name("settings");
+            Route::post("/settings", "updateSetting")->name("settings-update");
 
             Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
         });
@@ -57,7 +58,7 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::get('/view/{id}', "show")->name("request");
                 Route::post('/add-back', "processAdd")->name("add-request-back");
                 Route::post('/mod-back', "processMod")->name("mod-request-back");
-            
+
                 Route::get('/finalize/{id}/{status}/{with_priority?}', "finalize")->name("request-final");
                 Route::get('/finalized/{id}/{status}/{is_new_client}', "finalized")->name("request-finalized");
                 Route::post("/finalized-sub", "questReject")->name("quest-reject");
@@ -89,7 +90,7 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::get('/safe-d/{id}/{filename}', 'fileDownload')->name('download');
             Route::get('/safe/{id}/{filename}', 'show')->name('safe-show');
             Route::post('/safe/ver-desc-mod', "verDescMod")->name("ver-desc-mod");
-    
+
             Route::withoutMiddleware("auth")->get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
             Route::post("/showcase/upload", "showcaseFileUpload")->name("showcase-file-upload");
         });
@@ -104,57 +105,57 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::prefix("stats")->group(function(){
                 Route::get("/", "dashboard")->name("stats");
                 Route::post("/import", "statsImport")->name("stats-import");
-                
+
                 Route::get("/file-size", "fileSizeReport")->name("file-size-report");
-    
+
                 Route::prefix("quests-calendar")->group(function(){
                     Route::get("/", "questsCalendar")->name("quests-calendar");
                     Route::get("/add-free-day", "qcModFreeDay")->name("qc-mod-free-day");
                 });
             });
-    
+
             Route::prefix("finance")->group(function(){
                 Route::get("/", "financeDashboard")->name("finance");
                 Route::get("/summary", "financeSummary")->name("finance-summary");
                 Route::post("/pay", "financePay")->name("finance-pay");
                 Route::get("/return/{quest_id}/{budget?}", "financeReturn")->name("finance-return");
-    
+
                 Route::prefix("invoices")->group(function(){
                     Route::get("/", "invoices")->name("invoices");
                     Route::get("/{id}", "invoice")->name("invoice");
                     Route::post("/visibility", "invoiceVisibility")->name("invoice-visibility");
                     Route::post("/add", "invoiceAdd")->name("invoice-add");
                 });
-    
+
                 Route::prefix("costs")->group(function(){
                     Route::get("/", "costs")->name("costs");
                     Route::post("/mod", "modCost")->name("mod-cost");
                     Route::get("/types", "costTypes")->name("cost-types");
                     Route::post("/types/mod", "modCostType")->name("mod-cost-type");
                 });
-    
+
                 Route::get("/taxes", "taxes")->name("taxes");
             });
         });
-    
+
         Route::controller(ClientController::class)->prefix("clients")->group(function(){
             Route::get('list/{param?}/{value?}', "list")->name("clients");
             Route::get("view/{id}", "view")->name("client-view");
             Route::post("edit/{id}", "edit")->name("client-edit");
         });
-        
+
         Route::controller(WorkClockController::class)->prefix("studio-view")->group(function() {
             Route::get("/", "main")->name("studio");
             Route::get("/{quest_id}", "index")->name("studio-view");
         });
-    
+
         Route::controller(SpellbookController::class)->middleware("cancastspells")->group(function(){
             Route::prefix("requests")->group(function(){
                 Route::get('/view/{id}/obliterate', "obliterate");
                 Route::get("/view/{id}/silence", "silence");
                 Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
             });
-    
+
             Route::prefix("quests")->group(function(){
                 Route::get("/view/{id}/restatus/{status_id}", "restatus");
                 Route::get("/view/{id}/silence", "silence");

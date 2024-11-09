@@ -5,32 +5,17 @@
     <div class="section-header">
         <h1><i class="fa-solid fa-cog"></i> Ustawienia systemu</h1>
     </div>
-    <div class="grid-2">
-    @foreach ($settings as $setting)
-        <span>{{ $setting->desc }}</span>
-        <x-input type="text"
-            name="{{ $setting->setting_name }}" value="{{ $setting->value_str }}"
-            label="{{ $setting->setting_name }}" :small="true"
-            />
-    @endforeach
-    </div>
-    <script>
-    $(document).ready(function(){
-        $("input").change(function(){
-            $.ajax({
-                type: "POST",
-                url: "/api/settings_change",
-                data: {
-                    setting_name: $(this).attr("name"),
-                    value_str: $(this).val(),
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    window.location.reload();
-                }
-            });
-        });
-    });
-    </script>
+    <form action="{{ route("settings-update") }}" method="POST">
+        @csrf
+        <div class="grid-3">
+            @foreach ($settings as $setting)
+            <x-input type="text"
+                name="{{ $setting->setting_name }}" value="{{ $setting->value_str }}"
+                label="{{ $setting->desc }}"
+                />
+            @endforeach
+        </div>
+        <x-button action="submit" label="Zapisz" icon="check" />
+    </form>
 </section>
 @endsection

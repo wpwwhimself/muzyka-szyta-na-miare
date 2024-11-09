@@ -26,10 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(BackController::class)->group(function() {
-    Route::post("/settings_change", "updateSetting");
-});
-
 Route::controller(QuestController::class)->prefix("quests")->group(function() {
     Route::patch("/{id}/{mode?}", "patch");
 });

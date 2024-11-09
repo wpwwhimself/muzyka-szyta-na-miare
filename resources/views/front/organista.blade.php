@@ -101,8 +101,11 @@
             Poniższe ceny mogą się różnić w zależności od kosztów dojazdu
         </span>
         <div class="front-table">
-            <span class="hidden">Msza okolicznościowa (ślub, jubileusz, ...)</span>
-            <span class="hidden">{{ as_pln(150) }}</span>
+            <span class="hidden">Organy (ślub, jubileusz, ...)</span>
+            <span class="hidden">{{ as_pln(300) }}</span>
+
+            <span class="hidden">Trąbka (pogrzeb, ślub, ...)</span>
+            <span class="hidden">{{ as_pln(100) }}</span>
         </div>
     </div>
 
@@ -110,12 +113,20 @@
         <x-sc-scissors />
         <h1>FAQ</h1>
 
-        <p class="ghost">🚧 Zostanie dodane wkrótce</p>
         <ul id="faq">
+            <li class="hidden">Jaki repertuar gram?</li>
+            <li class="hidden">Gram pieśni eucharystyczne, ale nie tylko. Na msze okolicznościowe gram pieśni dopasowane do okazji. Mogę również zagrać utwory <strong>na życzenie</strong>.</li>
 
+            <li class="hidden">Czy mam własny instrument?</li>
+            <li class="hidden">Preferuję grę na lokalnym instrumencie, ale jeśli go nie ma lub nie ma pozwolenia na grę na nim, jestem w stanie grać na własnych organach z własnym nagłośnieniem.</li>
+
+            <li class="hidden">Czy współpracuję z innymi muzykami?</li>
+            <li class="hidden">Jeśli podczas uroczystości ma zaśpiewać/zagrać również ktoś inny, to jestem w stanie tej osobie akompaniować. Proszę tylko o stosowną informację wcześniej.</li>
+
+            <li class="hidden">Co z zapłatą?</li>
+            <li class="hidden">W zupełności wystarcza mi przekazanie pieniędzy przed lub po uroczystości.</li>
         </ul>
     </div>
 </section>
-
 
 @endsection

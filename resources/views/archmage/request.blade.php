@@ -138,7 +138,18 @@
             :extended="in_array($request->status_id, [1, 6, 96])"
             :warning="$warnings['song']"
         >
-            <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" :value="$request->song_id" />
+            <div>
+                <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" :value="$request->song_id" />
+                @unless ($similar_songs->isEmpty())
+                <span class="warning">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    Podobne:
+                    @foreach ($similar_songs as $song)
+                        <span class="clickable" onclick="$(`#song_id`).val('{{ $song->id }}').trigger('change')">{{ $song->id }}</span>
+                    @endforeach
+                </span>
+                @endunless
+            </div>
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
             <div>

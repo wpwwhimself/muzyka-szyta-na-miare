@@ -74,6 +74,18 @@ class RequestController extends Controller
             ->pluck("service", "indicator")->toArray();
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
+        // detecting youtube link and finding similar songs
+        $similar_songs = ($request->link && $request->status_id == 1)
+            ? Song::where(
+                "link",
+                "regexp",
+                Str::of($request->link)
+                    ->matchAll("/v?[=\/]([A-Za-z0-9\-\_]{11})/")
+                    ->join("|")
+            )
+                ->get()
+            : collect();
+
         $warnings = is_archmage() ? [
             'song' => [
                 'Klient ma domyślne życzenia' => $request->client?->default_wishes,
@@ -89,7 +101,7 @@ class RequestController extends Controller
 
         return view(user_role().".request", array_merge([
             "title" => "Zapytanie",
-        ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings")));
+        ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings", "similar_songs")));
     }
 
     public function add(HttpRequest $rq){

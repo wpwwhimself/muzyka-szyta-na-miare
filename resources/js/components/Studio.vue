@@ -53,12 +53,10 @@ setInterval(getQuests, 10e3)
             `p-${quest.status_id}`,
         ].filter(Boolean).join(' ')">
             <span style="color: rgb(var(--q-clr))"><FontAwesomeIcon :icon="dIcons[quest.status_id]" /></span>
-            <a :href="`/quests/view/${quest.id}`">{{ quest.id }}</a>
-            <a :href="`/songs?search=${quest.song_id}`">{{ quest.song.full_title }}</a>
-            <a :href="`/clients/list?search=${quest.client.client_name}`">{{ quest.client.client_name }}</a>
-            <a :href="`/studio-view/${quest.id}`" class="submit small">
-                <FontAwesomeIcon :icon="faAnglesRight" />
-            </a>
+            <span><a :href="`/quests/view/${quest.id}`">{{ quest.id }}</a></span>
+            <span><a :href="`/songs?search=${quest.song_id}`">{{ quest.song.full_title }}</a></span>
+            <span><a :href="`/clients/list?search=${quest.client.client_name}`">{{ quest.client.client_name }}</a></span>
+            <span><a :href="`/studio-view/${quest.id}`" class="submit tight"><FontAwesomeIcon :icon="faAnglesRight" /></a></span>
         </div>
     </div>
 </template>
@@ -66,6 +64,6 @@ setInterval(getQuests, 10e3)
 
 <style scoped>
 .table-row {
-    grid-template-columns: 2em 1fr 4fr 2fr 2em;
+    grid-template-columns: 2em 1fr 4fr 2fr 4em;
 }
 </style>

@@ -134,7 +134,7 @@ onMounted(() => {
 />
 <div class="flex-down center" v-else>
     <div id="clocks-outer" class="flex-right center">
-        <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="10x" />
+        <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="8x" />
         <div id="clocks" class="flex-down center">
             <strong>{{ renderTime(time_major) }}</strong>
             <strong class="ghost" v-if="nowWorking != 0">
@@ -147,13 +147,13 @@ onMounted(() => {
     <div class="grid-2">
         <div class="buttons">
             <div v-for="mode in modes"
-                class="submit clickable"
+                class="submit tight clickable"
                 @click="() => startStop(song.id, mode.id)"
             >
                 {{ mode.status_symbol }}
             </div>
             <div
-                class="submit clickable"
+                class="submit tight clickable"
                 style="grid-column: span 2"
                 @click="() => startStop(song.id, 13)"
             >
@@ -163,10 +163,6 @@ onMounted(() => {
         </div>
 
         <div>
-            <h2>
-                <FontAwesomeIcon :icon="faSnowplow" />
-                Log tworzenia
-            </h2>
             <table id="log-table">
                 <tr v-for="log in song?.work_time"
                     :class="[
@@ -191,16 +187,18 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400..700&display=swap');
 #clocks-outer {
     align-items: center;
+    margin-bottom: 1em;
 }
 #clocks > * {
-    font-size: 4em;
-    font-family: monospace;
+    font-size: 3em;
+    font-family: "Sometype Mono";
     line-height: 90%;
 
     &:first-child {
-        font-size: 9em;
+        font-size: 6em;
     }
 }
 .buttons {

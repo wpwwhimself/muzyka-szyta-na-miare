@@ -35,7 +35,7 @@
             <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
         </x-extendo-block>
 
-        <x-quest-history :quest="$quest" :extended="true" />
+        <x-quest-history :quest="$quest" />
     </div>
 </div>
 <x-a :href="route('studio')">Wróć</x-a>

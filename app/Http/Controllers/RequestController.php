@@ -75,15 +75,11 @@ class RequestController extends Controller
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
         // detecting youtube link and finding similar songs
-        $similar_songs = ($request->link && $request->status_id == 1)
-            ? Song::where(
-                "link",
-                "regexp",
-                Str::of($request->link)
-                    ->matchAll("/v?[=\/]([A-Za-z0-9\-\_]{11})/")
-                    ->join("|")
-            )
-                ->get()
+        $matcher =  Str::of($request->link)
+            ->matchAll("/v?[=\/]([A-Za-z0-9\-\_]{11})/")
+            ->join("|");
+        $similar_songs = ($request->link && $request->status_id == 1 && $matcher)
+            ? Song::where("link", "regexp", $matcher)->get()
             : collect();
 
         $warnings = is_archmage() ? [

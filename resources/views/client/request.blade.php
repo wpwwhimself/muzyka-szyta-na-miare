@@ -66,9 +66,13 @@
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" :disabled="true" />
             <x-extendo-section title="Link do nagrania">
                 <x-link-interpreter :raw="$request->link" />
+                <x-input type="checkbox" name="accept_link" label="Zgadzam się" />
             </x-extendo-section>
-            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
-            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
+            <x-extendo-section title="Życzenia">
+                <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
+                <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
+                <x-input type="checkbox" name="accept_wishes" label="Zgadzam się" />
+            </x-extendo-section>
             @if ($request->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
@@ -171,6 +175,8 @@
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                 </p>
             @endif
+
+            <x-input type="checkbox" name="accept_quote" label="Zgadzam się" />
         </x-extendo-block>
 
         <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />

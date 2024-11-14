@@ -736,7 +736,7 @@ class StatsController extends Controller
             StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("new_status_id", 32)->sum("comment")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
@@ -750,7 +750,7 @@ class StatsController extends Controller
             //next month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth()))
@@ -764,7 +764,7 @@ class StatsController extends Controller
             //neeeeeeext month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1))
+                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth()))
@@ -783,11 +783,11 @@ class StatsController extends Controller
             else $when_to_ask++;
         }
 
-        return response()->json([
-            "saturation" => $saturation,
-            "when_to_ask" => $when_to_ask,
-            "limit_corrected" => $limit_corrected,
-        ]);
+        return response()->json(compact(
+            "saturation",
+            "when_to_ask",
+            "limit_corrected",
+        ));
     }
 
     public function taxes(Request $rq) {

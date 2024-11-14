@@ -64,4 +64,7 @@ class Client extends Model
     public function getUpcomingQuestsCountAttribute(){
         return $this->quests->whereNotIn("status_id", [17, 18, 19])->count();
     }
+    public function getIsForgottenAttribute(){
+        return $this->trust >= 2;
+    }
 }

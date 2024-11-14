@@ -12,6 +12,7 @@
             ["wszyscy", "users", null, null],
             ["krętacze", "user-ninja", "trust", -1],
             ["zaufani", "hand-holding-heart", "trust", 1],
+            ["zapomniani", "ghost", "trust", 2],
             ["z budżetem", "sack-dollar", "budget", 0],
             ["(prawie) patroni", "award", "helped_showcasing", 0],
             ["wolący telefon", "phone", "contact_preference", "telefon"],
@@ -102,6 +103,9 @@
                     @switch($client->trust)
                         @case(1)
                             <i @popper(ponadprzeciętne zaufanie) class="success fa-solid fa-hand-holding-heart"></i>
+                            @break
+                        @case(2)
+                            <i @popper(zapomniany) class="success fa-solid fa-ghost"></i>
                             @break
                         @case(-1)
                             <i @popper(krętacz i oszust) class="error fa-solid fa-user-ninja"></i>

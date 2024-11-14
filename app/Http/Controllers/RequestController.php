@@ -405,7 +405,7 @@ class RequestController extends Controller
                 $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
-        }else if($request->status_id != 4){ // mail do mnie
+        }else if($request->status_id != 4 && !is_archmage()){ // mail do mnie
             Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
             $mailing = true;
             $flash_content .= ", mail wysłany";

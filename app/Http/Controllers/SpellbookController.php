@@ -7,6 +7,7 @@ use App\Models\QuestType;
 use App\Models\Request as ModelsRequest;
 use App\Models\StatusChange;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class SpellbookController extends Controller
@@ -63,5 +64,18 @@ class SpellbookController extends Controller
         }
 
         return redirect()->route("quest", ["id" => $new_quest_id])->with("success", "Zlecenie przemianowane");
+    }
+
+    public function reprice($id, $new_code)
+    {
+        $r = is_request($id) ? ModelsRequest::find($id) : Quest::find($id);
+        $new_price = price_calc($new_code, $r->client_id);
+
+        $r->update([
+            (is_request($id) ? "price_code" : "price_code_override") => $new_price["labels"],
+            "price" => $new_price["price"],
+        ]);
+
+        return back()->with("success", "Cena zmieniona");
     }
 }

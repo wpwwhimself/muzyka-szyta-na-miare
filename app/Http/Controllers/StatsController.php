@@ -814,6 +814,6 @@ class StatsController extends Controller
     }
 
     public function priceCalc(Request $request){
-        return price_calc($request->labels, $request->price_schema, $request->quoting);
+        return price_calc($request->labels, $request->client_id, $request->quoting);
     }
 }

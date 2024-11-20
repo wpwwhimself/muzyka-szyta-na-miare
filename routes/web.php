@@ -154,6 +154,7 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::get('/view/{id}/obliterate', "obliterate");
                 Route::get("/view/{id}/silence", "silence");
                 Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
+                Route::get("/view/{id}/reprice/{new_code}", "reprice");
             });
 
             Route::prefix("quests")->group(function(){
@@ -161,6 +162,7 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::get("/view/{id}/silence", "silence");
                 Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
                 Route::get("/view/{id}/polymorph/{letter}", "polymorph");
+                Route::get("/view/{id}/reprice/{new_code}", "reprice");
             });
         });
     });

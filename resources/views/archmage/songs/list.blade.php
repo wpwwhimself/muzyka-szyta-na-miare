@@ -59,6 +59,9 @@
                 </table>
                 <x-button action="{{ route('costs') }}" name="" icon="money-bill-wave" label="Koszty" :small="true" />
             </x-extendo-section>
+            <x-extendo-section title="Akcje">
+                <x-a :href="route('song-edit', ['id' => $song->id])">Edytuj</x-a>
+            </x-extendo-section>
         </x-extendo-block>
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>

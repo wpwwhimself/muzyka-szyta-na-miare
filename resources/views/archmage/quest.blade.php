@@ -55,7 +55,10 @@
                 :fa-symbol="$quest->song->type->fa_symbol"
             />
         </x-extendo-section>
-        <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>
+        <x-extendo-section title="Akcje">
+            <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>
+            <x-a :href="route('song-edit', ['id' => $quest->song_id])">Edytuj</x-a>
+        </x-extendo-section>
         <x-input type="text" name="title" label="Tytuł" value="{{ $quest->song->title }}" />
         <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
         <div>
@@ -291,33 +294,6 @@
             });
         });
         </script>
-
-        <x-extendo-section title="Podgląd dla ludu">
-            @if($quest->quest_type_letter == "P")
-
-            @if($quest->song->has_showcase_file)
-            <audio controls><source src="{{ route('showcase-file-show', ['id' => $quest->song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
-            @else
-            <span class="grayed-out">Brak showcase'u</span>
-            @endif
-
-            <form id="showcase-file-form" class="flex-right center" method="post" action="{{ route('showcase-file-upload') }}" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="showcase_file" />
-                <input type="hidden" name="id" value="{{ $quest->song_id }}" />
-                <x-button action="#/" id="showcase-file-button" :small="true"
-                    :icon="$quest->song->has_showcase_file ? 'pencil' : 'plus'"
-                    label="{{ $quest->song->has_showcase_file ? 'Podmień' : 'Dodaj' }} plik"
-                    />
-                <script>
-                const button = $("#showcase-file-button");
-                const file_input = $("input[name='showcase_file']");
-                button.click(() => file_input.trigger("click"));
-                file_input.change(() => $("#showcase-file-form").submit());
-                </script>
-            </form>
-            @endif
-        </x-extendo-section>
     </x-extendo-block>
 
     <div class="grid-2">

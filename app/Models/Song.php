@@ -44,6 +44,9 @@ class Song extends Model
     public function workTime() {
         return $this->hasMany(SongWorkTime::class)->orderByDesc("time_spent");
     }
+    public function tags() {
+        return $this->belongsToMany(SongTag::class);
+    }
 
     public function getCostsAttribute() {
         return Cost::where("desc", "like", "%".$this->id."%")

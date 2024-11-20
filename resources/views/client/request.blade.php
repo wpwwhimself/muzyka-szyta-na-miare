@@ -36,17 +36,17 @@
 
 <x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
 
-@if (sumWarnings($warnings))
-<h1 class="warning">
-    <i class="fas fa-triangle-exclamation fa-fade"></i>
-    Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
-</h1>
-@endif
-
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
     <h1>Szczegóły zapytania</h1>
     <x-phase-indicator :status-id="$request->status_id" />
+
+    @if (sumWarnings($warnings))
+    <h1 class="warning">
+        <i class="fas fa-triangle-exclamation fa-fade"></i>
+        Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
+    </h1>
+    @endif
 
     @if ($request->quest_id)
     <h2>
@@ -66,12 +66,10 @@
             <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" :disabled="true" />
             <x-extendo-section title="Link do nagrania">
                 <x-link-interpreter :raw="$request->link" />
-                <x-input type="checkbox" name="accept_link" label="Zgadzam się" />
             </x-extendo-section>
             <x-extendo-section title="Życzenia">
                 <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
                 <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
-                <x-input type="checkbox" name="accept_wishes" label="Zgadzam się" />
             </x-extendo-section>
             @if ($request->hard_deadline)
             <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
@@ -175,11 +173,7 @@
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                 </p>
             @endif
-
-            <x-input type="checkbox" name="accept_quote" label="Zgadzam się" />
         </x-extendo-block>
-
-        <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
     <p class="tutorial">
@@ -242,81 +236,10 @@
         });
         </script>
         @else
-        <div id="opinion-1">
-            <h2>Czy odpowiada Ci powyższa wycena?</h2>
-            <div>
-                <x-button label="Tak" icon="check" action="#/" />
-                <x-button label="Nie" icon="times" action="#/" />
-            </div>
-        </div>
-        <div id="opinion-2" class="gone">
-            <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
-            <div>
-                <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
-                <x-button optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" :small="true" />
-                <x-button optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" :small="true" />
-                <x-button optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
-            </div>
-            <input type="hidden" name="optbc">
-            <div id="opinion-inputs" class="flex-down gone spaced">
-                <x-input type="text" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
-                <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
-                <div class="priority" for="opinion_deadline">
-                    <p>W trybie priorytetowym jestem w stanie wykonać zlecenie poza kolejnością; wiąże się to jednak z podwyższoną ceną.</p>
-                    <div class="flex-right center">
-                        <x-input type="date" name="new-deadline-date" label="Nowy termin, do kiedy (włącznie) oddam pliki" :value="get_next_working_day()->format('Y-m-d')" :disabled="true" />
-                        <x-input type="text" name="new-deadline-price" label="Nowa cena zlecenia" :value="as_pln(price_calc($request->price_code.'z', $request->client_id, true)['price'])" :disabled="true" />
-                    </div>
-                </div>
-                <x-input for="opinion_link opinion_wishes opinion_nothing" type="TEXT" name="comment" label="Komentarz (opcjonalne)" />
-                <x-button for="opinion_link opinion_wishes" action="submit" icon="6" name="new_status" value="6" label="Oddaj do ponownej wyceny" />
-                <x-button for="opinion_nothing" action="submit" icon="8" name="new_status" value="8" label="Zrezygnuj z zapytania" />
-                <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
-            </div>
-        </div>
-        <div id="opinion-3" class="gone">
-            <h2>Na pewno? Termin realizacji też?</h2>
-            @if ($request->delayed_payment)
-            <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
-            @endif
-            <div>
-                <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
-                <x-button label="Nie" icon="times" action="#/" />
-            </div>
-        </div>
-        <script>
-        $(document).ready(function(){
-            $("#opinion-1 a:last, #opinion-3 a:last").click(function(){
-                $("#opinion-1 a.ghost").removeClass("ghost");
-                $(`#opinion-1 a:first`).addClass("ghost");
-
-                $("#opinion-2").removeClass("gone");
-                $("#opinion-3").addClass("gone");
-            });
-
-            $("#opinion-2 a[optbc]").click(function(){
-                let optbc = $(this).attr("optbc");
-                $("input[name='optbc']").val(optbc);
-
-                $("#opinion-2 a[optbc]").addClass("ghost");
-                $(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
-
-                $("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("gone");
-                $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("gone");
-                $("#opinion-2 #opinion-inputs").removeClass("gone");
-                $("#opinion-2 #opinion-submit").removeClass("gone");
-            });
-
-            $("#opinion-1 a:first").click(function(){
-                $("#opinion-1 a.ghost").removeClass("ghost");
-                $(`#opinion-1 a:last`).addClass("ghost");
-
-                $("#opinion-2").addClass("gone");
-                $("#opinion-3").removeClass("gone");
-            });
-        });
-        </script>
+        <x-request.consent :request="$request" />
         @endif
     </div>
+
+    <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
 </form>
 @endsection

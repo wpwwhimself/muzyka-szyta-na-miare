@@ -256,7 +256,7 @@ label{
     font-style: italic;
     color: dimgray;
 }
-input[type="checkbox"]{
+input[type="checkbox"], input[type="radio"]{
     height: 1.2em;
     accent-color: var(--acc);
 }
@@ -1073,7 +1073,7 @@ footer .contact-info{
 }
 
 #phases{
-    margin-top: 2em;
+    margin-block: 2em;
 }
 .archmage-quest-phases{
     margin: 0 !important;

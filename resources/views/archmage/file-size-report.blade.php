@@ -1,13 +1,16 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section>
-    <div class="section-header">
-        <h1>
-        <i class="fa-solid fa-chart-pie"></i> Rozmiary sejfów
-        </h1>
-    </div>
+<x-section title="Podsumowanie" icon="chart-column">
+    <x-stats-highlight-h :data="[
+        'Całkowity rozmiar' => number_format(
+            array_reduce($sizes, fn($total, $safe) => $total + $safe, 0) / pow(2, 20),
+            2, ',', ' '
+        ) . ' MB',
+    ]" />
+</x-section>
 
+<x-section title="Rozmiary sejfów" icon="chart-pie">
     <style>
     .table-row{
         grid-template-columns: 1fr 1fr 3fr;
@@ -52,6 +55,6 @@
         </div>
     @endforelse
     </div>
-</section>
+</x-section>
 
 @endsection

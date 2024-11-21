@@ -79,7 +79,13 @@ Route::domain("podklady.".$domain)->group(function(){
         });
 
         Route::controller(SongController::class)->prefix("songs")->group(function(){
-            Route::get("/", "list")->name("songs");
+            Route::prefix("tags")->group(function(){
+                Route::get("/list", "listTags")->name("song-tags");
+                Route::get("/edit/{id?}", "editTag")->name("song-tag-edit");
+                Route::post("/process", "processTag")->name("song-tag-process");
+            });
+
+            Route::get("/list", "list")->name("songs");
             Route::get("/edit/{id}", "edit")->name("song-edit");
             Route::post("/process", "process")->name("song-process");
         });

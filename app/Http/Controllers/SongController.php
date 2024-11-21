@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use App\Models\Song;
+use App\Models\SongTag;
 use App\Models\Status;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,18 +59,50 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($id);
         $genres = Genre::orderBy("name")->get()->pluck("name");
+        $tags = SongTag::orderBy("name")->get();
         return view(user_role().".songs.edit", array_merge(
             ["title" => $song->title . " | Edycja utworu"],
-            compact("song", "genres"),
+            compact("song", "genres", "tags"),
         ));
     }
 
     public function process(Request $rq): RedirectResponse
     {
-        Song::findOrFail($rq->id)
-            ->update($rq->except("_token"));
+        $song = Song::findOrFail($rq->id);
+        $song->update($rq->except("_token"));
+        $song->tags()->sync(array_keys($rq->tags));
         return redirect()->route("songs")->with("success", "Utwór poprawiony");
     }
+
+    #region tags
+    public function listTags(): View
+    {
+        $tags = SongTag::orderBy("name")->get();
+        return view(user_role().".songs.tags.list", array_merge(
+            ["title" => "Tagi utworów"],
+            compact("tags"),
+        ));
+    }
+
+    public function editTag(string $id = null): View
+    {
+        $tag = SongTag::find($id);
+        return view(user_role().".songs.tags.edit", array_merge(
+            ["title" => $tag ? $tag->name." | Edycja tagu" : "Tworzenie taga"],
+            compact("tag"),
+        ));
+    }
+
+    public function processTag(Request $rq): RedirectResponse
+    {
+        if ($rq->action == "save") {
+            SongTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            SongTag::find($rq->id)->delete();
+        }
+        return redirect()->route("song-tags")->with("success", "Tag poprawiony");
+    }
+    #endregion
 
     /////////////////////////////////////////
 
@@ -100,7 +133,7 @@ class SongController extends Controller
             ->select(["id", "title", "artist"])
             ->distinct()
             ->get();
-    
+
         return $songs;
     }
 
@@ -108,5 +141,11 @@ class SongController extends Controller
         if(Auth::id() != 1) return;
         $id = $rq->id;
         Song::find($id)->update(["link" => $rq->link]);
+    }
+
+    public function getTags()
+    {
+        $tags = SongTag::orderBy("name")->get();
+        return response()->json($tags ?? []);
     }
 }

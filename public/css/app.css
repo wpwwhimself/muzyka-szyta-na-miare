@@ -233,7 +233,17 @@ textarea{
     resize: vertical;
     transition-duration: 0s;
 }
-.select2-dropdown, .select2-selection--single{ background-color: var(--bg) !important; color: var(--fg) !important; }
+.select2-dropdown, .select2-selection{
+    background-color: var(--bg) !important;
+    color: var(--fg) !important;
+    border-color: var(--bg2) !important;
+    width: 10em !important;
+
+    & li {
+        color: var(--fg) !important;
+        background-color: var(--bg) !important;
+    }
+}
 input, select, button, .submit{
     font-size: 1.2em;
     text-align: center;

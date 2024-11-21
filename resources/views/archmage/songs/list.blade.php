@@ -1,14 +1,18 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-<section id="songs-list" class="flex-down spaced">
-    <div class="section-header">
-        <h1><i class="fa-solid fa-list"></i> Lista utworów</h1>
+<x-section id="songs-list" class="flex-down spaced"
+    title="Lista utworów"
+    icon="list"
+>
+    <x-slot name="buttons">
+        <x-a :href="route('song-tags')" icon="tag">Tagi</x-a>
         <form method="get" id="search" class="flex-right" action="{{ route('songs') }}">
             <input type="text" name="search" class="small" value="{{ $search }}" />
             <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
         </form>
-    </div>
+    </x-slot>
+
     {{-- <div class="quests-table"> --}}
         @forelse ($songs as $song)
         <x-extendo-block :key="$song->id"
@@ -59,13 +63,16 @@
                 </table>
                 <x-button action="{{ route('costs') }}" name="" icon="money-bill-wave" label="Koszty" :small="true" />
             </x-extendo-section>
+            <x-extendo-section title="Akcje">
+                <x-a :href="route('song-edit', ['id' => $song->id])">Edytuj</x-a>
+            </x-extendo-section>
         </x-extendo-block>
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>
         @endforelse
     {{-- </div> --}}
     {{ $songs->links() }}
-</section>
+</x-section>
 
 <script>
 // editable songs //

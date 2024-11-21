@@ -31,10 +31,11 @@ Route::controller(QuestController::class)->prefix("quests")->group(function() {
 });
 
 Route::controller(SongController::class)->prefix("songs")->group(function() {
-    Route::get('/{id}', "getById");
+    Route::get("/tags", "getTags");
     Route::get("/info", "getForFront");
     Route::post('/change-link', "changeLink");
     Route::patch("/{id}/{mode?}", "patch");
+    Route::get('/{id}', "getById");
 });
 
 Route::controller(ClientController::class)->prefix("clients")->group(function() {

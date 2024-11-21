@@ -59,9 +59,10 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($id);
         $genres = Genre::orderBy("name")->get()->pluck("name");
+        $tags = SongTag::orderBy("name")->get();
         return view(user_role().".songs.edit", array_merge(
             ["title" => $song->title . " | Edycja utworu"],
-            compact("song", "genres"),
+            compact("song", "genres", "tags"),
         ));
     }
 
@@ -69,7 +70,7 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($rq->id);
         $song->update($rq->except("_token"));
-        $song->tags()->sync($rq->tags);
+        $song->tags()->sync(array_keys($rq->tags));
         return redirect()->route("songs")->with("success", "Utwór poprawiony");
     }
 
@@ -140,5 +141,11 @@ class SongController extends Controller
         if(Auth::id() != 1) return;
         $id = $rq->id;
         Song::find($id)->update(["link" => $rq->link]);
+    }
+
+    public function getTags()
+    {
+        $tags = SongTag::orderBy("name")->get();
+        return response()->json($tags ?? []);
     }
 }

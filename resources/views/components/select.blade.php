@@ -21,6 +21,7 @@
         {{ $disabled ? "disabled" : "" }}
         {{ $required ? "required" : "" }}
         onfocus="highlightInput(this)" onblur="clearHighlightInput(this)"
+        {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "class"])))}}
         >
         @if ($emptyOption)
             <option value="" {{ $value ? "" : "selected" }}></option>

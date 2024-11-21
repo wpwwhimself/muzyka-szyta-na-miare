@@ -162,7 +162,7 @@
                     @foreach ($showcases_missing as $quest)
                     <tr>
                         <td><a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a></td>
-                        <td>{{ $quest->song->id }}</td>
+                        <td><a href="{{ route('song-edit', ['id' => $quest->song->id]) }}">{{ $quest->song->id }}</a></td>
                         <td>{{ $quest->song->full_title }}</td>
                     </tr>
                     @endforeach

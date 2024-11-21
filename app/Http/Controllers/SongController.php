@@ -61,7 +61,7 @@ class SongController extends Controller
         $genres = Genre::orderBy("name")->get()->pluck("name");
         $tags = SongTag::orderBy("name")->get();
         return view(user_role().".songs.edit", array_merge(
-            ["title" => $song->title . " | Edycja utworu"],
+            ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
             compact("song", "genres", "tags"),
         ));
     }

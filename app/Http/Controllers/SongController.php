@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use App\Models\Song;
+use App\Models\SongTag;
 use App\Models\Status;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -66,10 +67,41 @@ class SongController extends Controller
 
     public function process(Request $rq): RedirectResponse
     {
-        Song::findOrFail($rq->id)
-            ->update($rq->except("_token"));
+        $song = Song::findOrFail($rq->id);
+        $song->update($rq->except("_token"));
+        $song->tags()->sync($rq->tags);
         return redirect()->route("songs")->with("success", "Utwór poprawiony");
     }
+
+    #region tags
+    public function listTags(): View
+    {
+        $tags = SongTag::orderBy("name")->get();
+        return view(user_role().".songs.tags.list", array_merge(
+            ["title" => "Tagi utworów"],
+            compact("tags"),
+        ));
+    }
+
+    public function editTag(string $id = null): View
+    {
+        $tag = SongTag::find($id);
+        return view(user_role().".songs.tags.edit", array_merge(
+            ["title" => $tag ? $tag->name." | Edycja tagu" : "Tworzenie taga"],
+            compact("tag"),
+        ));
+    }
+
+    public function processTag(Request $rq): RedirectResponse
+    {
+        if ($rq->action == "save") {
+            SongTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            SongTag::find($rq->id)->delete();
+        }
+        return redirect()->route("song-tags")->with("success", "Tag poprawiony");
+    }
+    #endregion
 
     /////////////////////////////////////////
 
@@ -100,7 +132,7 @@ class SongController extends Controller
             ->select(["id", "title", "artist"])
             ->distinct()
             ->get();
-    
+
         return $songs;
     }
 

@@ -70,7 +70,7 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($rq->id);
         $song->update($rq->except("_token"));
-        $song->tags()->sync(array_keys($rq->tags));
+        $song->tags()->sync(array_keys($rq->tags ?? []));
         return redirect()->route("songs")->with("success", "Utwór poprawiony");
     }
 

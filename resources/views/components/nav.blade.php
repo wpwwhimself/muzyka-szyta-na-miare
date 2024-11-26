@@ -21,6 +21,7 @@
                 [route("requests"), "Zapytania", "envelope-open-text", true],
                 [route("prices"), "Cennik", "barcode", true],
                 [route("songs"), "Utwory", "compact-disc", is_archmage()],
+                [route("files-dashboard"), "Pliki", "file", is_archmage()],
                 [route("clients"), "Klienci", "users", is_archmage()],
                 [route("finance"), "Finanse", "sack-dollar", is_archmage()],
                 [route("showcases"), "Reklama", "bullhorn", is_archmage()],

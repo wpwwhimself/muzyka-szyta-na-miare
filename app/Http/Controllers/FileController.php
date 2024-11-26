@@ -2,13 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileTag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class FileController extends Controller
 {
+    #region dashboard
+    public function dashboard()
+    {
+        $tags = FileTag::orderBy("name")->get();
+
+        return view(user_role().'.files.dashboard', array_merge(
+            ["title" => "Pliki"],
+            compact("tags"),
+        ));
+    }
+
+    public function editTag(int $id = null): View
+    {
+        $tag = FileTag::find($id);
+
+        return view(user_role().'.files.edit-tag', array_merge(
+            ["title" => ($tag) ? "$tag->name | Edytuj tag" : "Dodaj tag"],
+            compact("tag"),
+        ));
+    }
+
+    public function processTag(Request $rq): RedirectResponse
+    {
+        if ($rq->action == "save") {
+            FileTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            FileTag::find($rq->id)->delete();
+        }
+        return redirect()->route("files-dashboard")->with("success", "Tag poprawiony");
+    }
+    #endregion
+
     // https://gist.github.com/zahidhasanemon/afbbf65918703f0e897db518dd77f2ce, modified
     public function fileUpload(Request $rq, $id){
         foreach ($rq->file('file') as $key => $value) {

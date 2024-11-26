@@ -34,7 +34,7 @@ class CreateFilesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create("file_tag", function (Blueprint $table) {
+        Schema::create("file_file_tag", function (Blueprint $table) {
             $table->id();
             $table->foreignId("file_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("file_tag_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
@@ -49,7 +49,7 @@ class CreateFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('file_tag');
+        Schema::dropIfExists('file_file_tag');
         Schema::dropIfExists('files');
         Schema::dropIfExists('file_tags');
     }

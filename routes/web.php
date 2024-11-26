@@ -91,6 +91,14 @@ Route::domain("podklady.".$domain)->group(function(){
         });
 
         Route::controller(FileController::class)->group(function(){
+            Route::prefix("files")->group(function(){
+                Route::get("/", "dashboard")->name("files-dashboard");
+                Route::prefix("tags")->group(function(){
+                    Route::get("/{id?}", "editTag")->name("file-tag-edit");
+                    Route::post("/", "processTag")->name("file-tag-process");
+                });
+            });
+
             Route::post('/safe-u/{id}', 'fileUpload')->name('upload');
             Route::post('/safe-s', 'fileStore')->name('store');
             Route::get('/safe-d/{id}/{filename}', 'fileDownload')->name('download');

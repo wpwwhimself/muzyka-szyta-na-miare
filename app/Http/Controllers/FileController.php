@@ -50,46 +50,56 @@ class FileController extends Controller
     #endregion
 
     #region upload
-    // https://gist.github.com/zahidhasanemon/afbbf65918703f0e897db518dd77f2ce, modified
-    public function fileUpload(Request $rq, $id){
-        foreach ($rq->file('file') as $key => $value) {
-            $filename = $value->getClientOriginalName();
-            $name[] = $filename;
-            $value->storeAs("safe/$id", $filename);
-        }
-
-        return response()->json([
-            'name' => $name,
-        ]);
-    }
-
-    public function fileStore(Request $rq){
-        return back()->with('success', 'Pliki wgrane');
-    }
-
     public function uploadForQuest(string $quest_id)
     {
-        $quest = Quest::find($quest_id);
+        $song = Quest::find($quest_id)->song;
         $tags = FileTag::orderBy("name")->get();
         $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+        $file = null;
 
-        return view(user_role().'.files.upload', compact(
-            "quest",
+        return view(user_role().'.files.edit', compact(
+            "song",
+            "file",
             "tags",
             "clients",
         ));
     }
 
-    public function processUpload(Request $rq)
+    public function edit(int $id): View
     {
-        $quest = Quest::find($rq->quest_id);
-        $song = $quest?->song ?? Song::find($rq->song_id);
+        $file = ModelsFile::findOrFail($id);
+        $tags = FileTag::orderBy("name")->get();
+        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+        $song = null;
+
+        return view(user_role().'.files.edit', compact(
+            "song",
+            "file",
+            "tags",
+            "clients",
+        ));
+    }
+
+    public function process(Request $rq)
+    {
+        $song = Song::find($rq->song_id);
+        $file = ModelsFile::find($rq->id);
 
         $uploaded_files = [];
 
         if ($rq->action == "save") {
+            if ($file) {
+                $uploaded_files = $file->file_paths;
+
+                // delete existing chosen files
+                foreach ($rq->delete_files ?? [] as $extension => $path) {
+                    Storage::delete($path);
+                    unset($uploaded_files[$extension]);
+                }
+            }
+
             // upload files
-            foreach ($rq->file("files") as $file) {
+            foreach ($rq->file("files") ?? [] as $file) {
                 $uploaded_files[$file->getClientOriginalExtension()] = $file->storeAs(
                     "safe/$song->id",
                     Str::random(8).".".$file->getClientOriginalExtension()
@@ -98,19 +108,26 @@ class FileController extends Controller
 
             // upsert database entry
             $file = ModelsFile::updateOrCreate([
+                "id" => $rq->id,
+            ], [
                 "song_id" => $song->id,
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
-            ], [
                 "transposition" => $rq->transposition,
                 "only_for_client_id" => $rq->only_for_client_id,
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,
             ]);
             $file->tags()->sync(array_keys($rq->tags ?? []));
+        } else if ($rq->action == "delete") {
+            foreach ($rq->delete_files ?? [] as $extension => $path) {
+                Storage::delete($path);
+            }
+            $file->delete();
+            return redirect()->route("songs", ["search" => $song->id])->with('success', 'Pliki usunięte');
         }
 
-        return redirect()->route("quest", ["id" => $quest->id])->with('success', 'Pliki wgrane');
+        return redirect()->route("files-edit", ["id" => $file->id])->with('success', 'Pliki wgrane');
     }
     #endregion
 
@@ -145,7 +162,7 @@ class FileController extends Controller
         $path = $rq->file("showcase_file")
             ->storeAs("showcases", $rq->id.".ogg")
         ;
-    
+
         return back()->with("success", "Showcase dodany");
     }
 

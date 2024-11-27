@@ -187,7 +187,10 @@
         :extended="true"
         scissors
     >
+        @if (Auth::user()->client->can_see_files)
         <x-files.list :grouped-files="$files" />
+        @endif
+
         @if (in_array($quest->status_id, [19]))
         <p class="yellowed-out">
             Przywróć zlecenie przyciskiem poniżej<br>

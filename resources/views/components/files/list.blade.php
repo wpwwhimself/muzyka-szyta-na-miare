@@ -9,8 +9,9 @@
         <small>wariant:</small>
         {{ $variant_name }}
     </h4>
-    
+
     @foreach ($versions as $version)
+    @unless ($version->only_for_client_id && Auth::id() != $version->only_for_client_id && !is_archmage())
     <div class="file-container-b">
         <h5>
             @foreach ($version->tags as $tag)
@@ -19,12 +20,18 @@
             @if ($version->transposition)
             <x-file-tag :transpose="$version->transposition" />
             @endif
+
             {{ $version->version_name }}
+
             <small class="ghost" {{ Popper::pop($version->updated_at) }}>
                 {{ $version->updated_at->diffForHumans() }}
             </small>
+
+            @if ($editable)
+            <x-a :href="route('files-edit', ['id' => $version->id])" icon="pen" target="_blank"></x-a>
+            @endif
         </h5>
-        
+
         <div class="ver_desc">
             {{ Illuminate\Mail\Markdown::parse($version->description ?? "") }}
         </div>
@@ -50,6 +57,7 @@
         @endforeach
         </div>
     </div>
+    @endunless
     @endforeach
 </div>
 @empty

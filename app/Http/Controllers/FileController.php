@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\File as ModelsFile;
 use App\Models\FileTag;
+use App\Models\Quest;
+use App\Models\Song;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class FileController extends Controller
@@ -44,6 +49,7 @@ class FileController extends Controller
     }
     #endregion
 
+    #region upload
     // https://gist.github.com/zahidhasanemon/afbbf65918703f0e897db518dd77f2ce, modified
     public function fileUpload(Request $rq, $id){
         foreach ($rq->file('file') as $key => $value) {
@@ -60,6 +66,53 @@ class FileController extends Controller
     public function fileStore(Request $rq){
         return back()->with('success', 'Pliki wgrane');
     }
+
+    public function uploadForQuest(string $quest_id)
+    {
+        $quest = Quest::find($quest_id);
+        $tags = FileTag::orderBy("name")->get();
+        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+
+        return view(user_role().'.files.upload', compact(
+            "quest",
+            "tags",
+            "clients",
+        ));
+    }
+
+    public function processUpload(Request $rq)
+    {
+        $quest = Quest::find($rq->quest_id);
+        $song = $quest?->song ?? Song::find($rq->song_id);
+
+        $uploaded_files = [];
+
+        if ($rq->action == "save") {
+            // upload files
+            foreach ($rq->file("files") as $file) {
+                $uploaded_files[$file->getClientOriginalExtension()] = $file->storeAs(
+                    "safe/$song->id",
+                    Str::random(8).".".$file->getClientOriginalExtension()
+                );
+            }
+
+            // upsert database entry
+            $file = ModelsFile::updateOrCreate([
+                "song_id" => $song->id,
+                "variant_name" => $rq->variant_name ?? "podstawowy",
+                "version_name" => $rq->version_name ?? "wersja główna",
+            ], [
+                "transposition" => $rq->transposition,
+                "only_for_client_id" => $rq->only_for_client_id,
+                "description" => $rq->description,
+                "file_paths" => $uploaded_files,
+            ]);
+            $file->tags()->sync(array_keys($rq->tags ?? []));
+        }
+
+        return redirect()->route("quest", ["id" => $quest->id])->with('success', 'Pliki wgrane');
+    }
+    #endregion
 
     public function show($id, $filename)
     {
@@ -86,22 +139,6 @@ class FileController extends Controller
 
     public function fileDownload($id, $filename){
         return Storage::download("safe/$id/$filename");
-    }
-
-    public function verDescGet(Request $rq)
-    {
-        return Storage::get($rq->path) ?? "";
-    }
-
-    public function verDescMod(Request $rq){
-        $path = "/safe/$rq->ver.md";
-        if($rq->desc == ""){
-            Storage::delete($path);
-            return back()->with("success", "Opis usunięty");
-        }
-
-        Storage::put($path, $rq->desc);
-        return back()->with("success", "Opis dodany");
     }
 
     public function showcaseFileUpload(Request $rq){

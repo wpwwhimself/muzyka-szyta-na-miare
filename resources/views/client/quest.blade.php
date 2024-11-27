@@ -187,70 +187,7 @@
         :extended="true"
         scissors
     >
-        @forelse ($files as $ver_super => $ver_mains)
-            @foreach ($ver_mains as $ver_main => $ver_subs)
-            <x-extendo-section no-shrinking>
-            @php
-                $ids = [];
-                preg_match("/^\d{1,3}/", $ver_main, $ids);
-            @endphp
-            @if(($ids[0] ?? Auth::id()) == Auth::id())
-            <div class="file-container-a">
-                <h4>
-                    <small>wariant:</small>
-                    {{ $ver_main }}
-                </h4>
-                <span class="ghost file-super">{{ $ver_super }}</span>
-                @foreach ($ver_subs as $ver_sub => $ver_bots)
-                @php list($ver_sub_name, $tags) = file_name_and_tags($ver_sub); @endphp
-                <div class="file-container-b">
-                    <h5>
-                        @foreach ($tags as $tag) <x-file-tag :tag="$tag" /> @endforeach
-                        {{ $ver_sub_name }}
-                        <small class="ghost" {{ Popper::pop($last_mod[$ver_main][$ver_sub]) }}>
-                            {{ $last_mod[$ver_main][$ver_sub]->diffForHumans() }}
-                        </small>
-                    </h5>
-                    <div class="ver_desc">
-                        {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}
-                    </div>
-                    <div class="file-container-c">
-                    @if ($quest->paid || $quest->client->can_see_files)
-                        @php usort($ver_bots, "file_order") @endphp
-                        @foreach ($ver_bots as $file)
-                            @if (pathinfo($file)['extension'] == "mp4")
-                            <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" /></video>
-                                @break
-                            @elseif (in_array(pathinfo($file)['extension'], ["mp3", "ogg"]))
-                            <x-file-player
-                                :song-id="$quest->song->id"
-                                :file="$file"
-                                :type="pathinfo($file)['extension']"
-                            />
-                                @break
-                            @elseif (pathinfo($file)['extension'] == "pdf")
-                            <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
-                            @endif
-                        @endforeach
-                        @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
-                            @foreach ($ver_bots as $file)
-                                @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                                <x-file-tile :id="$quest->song->id" :file="$file" />
-                                @endunless
-                            @endforeach
-                        @endif
-                    @else
-                        <p class="grayed-out">Opłać zlecenie, aby otrzymać dostęp</p>
-                    @endif
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            @endif
-            </x-extendo-section>
-            @endforeach
-        @empty
-        <p class="grayed-out">Brak plików</p>
+        <x-files.list :grouped-files="$files" />
         @if (in_array($quest->status_id, [19]))
         <p class="yellowed-out">
             Przywróć zlecenie przyciskiem poniżej<br>
@@ -263,6 +200,7 @@
             Dalsze prace po akceptacji tego etapu.
         </p>
         @endif
+        @if (empty($files))
         <p class="tutorial">
             <i class="fa-solid fa-circle-question"></i>
             Tutaj pojawią się pliki związane<br>
@@ -270,7 +208,7 @@
             Po dokonaniu wpłaty będzie możliwość<br>
             ich pobrania lub odsłuchania.
         </p>
-        @endforelse
+        @endif
 
         <x-extendo-section title="Chmura">
         @if ($quest->has_files_on_external_drive)

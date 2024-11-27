@@ -2,10 +2,6 @@
 
 @section('content')
 
-<div>
-    <x-button action="{{ route('file-size-report') }}" icon="weight-hanging" label="Raport wielkości sejfów" />
-</div>
-
 <div class="grid-2 force-block">
   <section>
     <div class="section-header">

@@ -17,6 +17,7 @@ class File extends Model
         "description",
         "file_paths",
     ];
+    protected $casts = ["file_paths" => "array"];
 
     public function tags()
     {

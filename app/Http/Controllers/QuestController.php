@@ -54,33 +54,8 @@ class QuestController extends Controller
             ->pluck("service", "indicator")->toArray();
         if($quest->client_id != Auth::id() && !is_archmage()) abort(403, "To nie jest Twoje zlecenie");
 
-        $files_raw = collect(Storage::files('safe/'.$quest->song_id))
-            ->sortByDesc(function($file){return Storage::lastModified($file);});
-        $files = []; $last_mod = []; $desc = [];
-
-        if(!empty($files_raw)){
-            foreach($files_raw as $file){
-                $name = [];
-                $name_raw = pathinfo($file, PATHINFO_FILENAME);
-                preg_match("/_(.*)$/", $name_raw, $matches);
-                if(!empty($matches)){
-                    $name[2] = $matches[1];
-                    $name_raw = str_replace("_".$name[2], "", $name_raw);
-                }
-                preg_match("/=(.*)$/", $name_raw, $matches);
-                if(!empty($matches)){
-                    $name[1] = $matches[1];
-                    $name_raw = str_replace("=".$name[1], "", $name_raw);
-                }
-                $name[0] = $name_raw;
-
-                if(!isset($name[1])) $name[1] = "podstawowy";
-                if(!isset($name[2])) $name[2] = "wersja główna";
-                $files[$name[0]][$name[1]][$name[2]][] = $file;
-                $last_mod[$name[1]][$name[2]] = Carbon::parse(Storage::lastModified($file));
-                if(pathinfo($file, PATHINFO_EXTENSION) == "md") $desc[$name[0]][$name[1]][$name[2]] = $file;
-            }
-        }
+        $files = $quest->song->files
+            ->groupBy("variant_name");
 
         $warnings = is_archmage() ? [
             "files" => [
@@ -103,7 +78,7 @@ class QuestController extends Controller
             user_role().".quest",
             array_merge(
                 ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "last_mod", "desc", "warnings"),
+                compact("quest", "prices", "files", "warnings"),
                 (isset($stats_statuses) ? compact("stats_statuses") : []),
             )
         );

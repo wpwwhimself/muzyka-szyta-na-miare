@@ -1019,14 +1019,17 @@ footer .contact-info{
 .pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
 
 .file-tag{
+    display: inline-flex !important;
     border-radius: 1em;
     padding: 0 0.2em;
     user-select: none;
     width: 1.5em;
+    height: 1.2em;
+    vertical-align: middle;
+    color: black;
 
     & svg {
-        height: 1em;
-        color: var(--fg);
+        height: 1.2em;
     }
 }
 

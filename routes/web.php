@@ -92,6 +92,9 @@ Route::domain("podklady.".$domain)->group(function(){
 
         Route::controller(FileController::class)->group(function(){
             Route::prefix("files")->group(function(){
+                Route::get("/uploadForQuest/{quest_id}", "uploadForQuest")->name("files-upload-for-quest");
+                Route::post("/upload", "processUpload")->name("files-upload-process");
+
                 Route::get("/", "dashboard")->name("files-dashboard");
                 Route::prefix("tags")->group(function(){
                     Route::get("/{id?}", "editTag")->name("file-tag-edit");

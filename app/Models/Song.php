@@ -47,6 +47,10 @@ class Song extends Model
     public function tags() {
         return $this->belongsToMany(SongTag::class);
     }
+    public function files()
+    {
+        return $this->hasMany(File::class)->orderByDesc("updated_at");
+    }
 
     public function getCostsAttribute() {
         return Cost::where("desc", "like", "%".$this->id."%")

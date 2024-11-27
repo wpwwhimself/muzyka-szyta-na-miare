@@ -107,7 +107,17 @@
         :warning="$warnings['files']"
         scissors
     >
-        <x-extendo-section title="Skompletowanie">
+        <x-extendo-section title="Wgrywanie">
+            @unless(Auth::id() === 0)
+            <x-a :href="route('files-upload-for-quest', ['quest_id' => $quest->id])" icon="plus">Wgraj</x-a>
+            <x-a
+                href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
+                target="_blank"
+            >
+                Dodaj pliki ręcznie przez cPanel
+            </x-a>
+            @endunless
+
             <x-extendo-section title="Chmura">
                 @if ($quest->client->external_drive)
                 <x-a href="{{ $quest->client->external_drive }}" _target="blank">Link</x-a>
@@ -146,154 +156,7 @@
             </x-extendo-section>
         </x-extendo-section>
 
-        <x-extendo-section title="Wgrywanie">
-            @unless(Auth::id() === 0)
-            {{-- dropzone css --}}
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
-
-            <form class="" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="form-row">
-                    <div class="col-md-12">
-                        <div class="position-relative form-group">
-                            <div class="needsclick dropzone" id="document-dropzone"></div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-            <script>
-                let uploadedDocumentMap = {};
-                Dropzone.autoDiscover = false;
-                let myDropzone = new Dropzone("div#document-dropzone",{
-                    url: '{{ route('upload', ["id" => $quest->song_id]) }}',
-                    autoProcessQueue: true,
-                    uploadMultiple: true,
-                    addRemoveLinks: true,
-                    parallelUploads: 10,
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    successmultiple: function(data, response) {
-                        $.each(response['name'], function (key, val) {
-                            $('form').append('<input type="hidden" name="images[]" value="' + val + '">');
-                            uploadedDocumentMap[data[key].name] = val;
-                        });
-                    },
-                    removedfile: function (file) {
-                        file.previewElement.remove()
-                        let name = '';
-                        if (typeof file.file_name !== 'undefined') {
-                            name = file.file_name;
-                        } else {
-                            name = uploadedDocumentMap[file.name];
-                        }
-                        $('form').find('input[name="images[]"][value="' + name + '"]').remove()
-                    }
-                });
-            </script>
-            {{-- dropzone end --}}
-
-            {{-- fallback wgrywania plików przez cPanel --}}
-            <a
-                href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
-                target="_blank"
-                >
-                Dodaj pliki ręcznie przez cPanel<br>
-            </a>
-            @endunless
-        </x-extendo-section>
-
-        @forelse ($files as $ver_super => $ver_mains)
-            @foreach ($ver_mains as $ver_main => $ver_subs)
-            <x-extendo-section no-shrinking>
-            <div class="file-container-a">
-                <h4>
-                    <small>wariant:</small>
-                    {{ $ver_main }}
-                </h4>
-                <span class="ghost file-super">{{ $ver_super }}</span>
-                @foreach ($ver_subs as $ver_sub => $ver_bots)
-                @php list($ver_sub_name, $tags) = file_name_and_tags($ver_sub); @endphp
-                <div class="file-container-b">
-                    <h5>
-                        @foreach ($tags as $tag) <x-file-tag :tag="$tag" /> @endforeach
-                        {{ $ver_sub_name }}
-                        <small class="ghost" {{ Popper::pop($last_mod[$ver_main][$ver_sub]) }}>
-                            {{ $last_mod[$ver_main][$ver_sub]->diffForHumans() }}
-                        </small>
-                    </h5>
-                    <x-button
-                        action="#/" label="" icon="note-sticky"
-                        value='{{ pathinfo($ver_bots[0], PATHINFO_FILENAME) }}'
-                        />
-                    <div class="ver_desc">
-                        {{ isset($desc[$ver_super][$ver_main][$ver_sub]) ? Illuminate\Mail\Markdown::parse(Storage::get($desc[$ver_super][$ver_main][$ver_sub])) : "" }}
-                    </div>
-                    <div class="file-container-c">
-                    @php usort($ver_bots, "file_order") @endphp
-                    @foreach ($ver_bots as $file)
-                        @if (pathinfo($file)['extension'] == "mp4")
-                        <video controls><source src="{{ route('safe-show', ["id" => $quest->song->id, "filename" => basename($file)]) }}" /></video>
-                            @break
-                        @elseif (in_array(pathinfo($file)['extension'], ["mp3", "ogg"]))
-                        <x-file-player
-                            :song-id="$quest->song->id"
-                            :file="$file"
-                            :type="pathinfo($file)['extension']"
-                        />
-                            @break
-                        @elseif (pathinfo($file)['extension'] == "pdf")
-                        <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
-                        @endif
-                    @endforeach
-                    @foreach ($ver_bots as $file)
-                        @unless (pathinfo($file, PATHINFO_EXTENSION) == "md")
-                        <x-file-tile :id="$quest->song->id" :file="$file" />
-                        @endunless
-                    @endforeach
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            </x-extendo-section>
-            @endforeach
-        @empty
-        <p class="grayed-out">Brak plików</p>
-        @endforelse
-
-        <form id="ver_desc_form" action="{{ route('ver-desc-mod') }}" method="POST" style="display:none;">
-            @csrf
-            <input type="hidden" name="ver" value="0" />
-            <x-input type="TEXT" name="desc" label="Opis wersji XXX" />
-            <x-button action="submit" label="Popraw opis" icon="pen-to-square" />
-        </form>
-
-        <script>
-        $(document).ready(function(){
-            $(".file-container-b .submit").click(function(){
-                const ver = $(this).attr("value");
-                $("#ver_desc_form").show();
-                $("#ver_desc_form label").text("Opis wersji " + ver);
-                $("#ver_desc_form input[name=ver]").val("{{ $quest->song->id }}/" + ver);
-                $.ajax({
-                    url: "/api/get_ver_desc",
-                    type: "get",
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        path: '/safe/{{ $quest->song->id }}/' + ver + '.md'
-                    },
-                    success: function(res){
-                        $("#ver_desc_form textarea").text(res);
-                    },
-                    complete: function(){
-                        $("#ver_desc_form textarea").focus();
-                    }
-                });
-            });
-        });
-        </script>
+        <x-files.list :grouped-files="$files" :editable="true" />
     </x-extendo-block>
 
     <div class="grid-2">

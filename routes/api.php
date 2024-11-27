@@ -52,7 +52,7 @@ Route::controller(StatsController::class)->group(function() {
 });
 
 Route::controller(FileController::class)->group(function() {
-    Route::get("/get_ver_desc", "verDescGet");
+    Route::get("/get_ver_desc/{file_id}", "verDescGet");
 });
 
 Route::controller(WorkClockController::class)->prefix("clock")->group(function() {

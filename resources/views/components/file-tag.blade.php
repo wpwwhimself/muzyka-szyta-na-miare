@@ -3,7 +3,7 @@
     "transpose" => null,
 ])
 
-<div class="file-tag flex-right center middle"
+<div class="file-tag flex-right center middle" {{ $attributes }}
 @if ($tag)
 
     style="background-color: {{ $tag->color }};"
@@ -16,7 +16,7 @@
     style="background-color: cyan;"
     {{ Popper::pop("Transpozycja") }}
 >
-    {{ $transpose }}
+    {{ $transpose > 0 ? "+" : "" }}{{ $transpose }}
 
 @endif
 </div>

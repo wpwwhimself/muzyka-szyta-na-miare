@@ -116,6 +116,7 @@
             >
                 Dodaj pliki ręcznie przez cPanel
             </x-a>
+            <x-a :href="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])" icon="recycle" target="_blank">Dodaj istniejące</x-a>
             @endunless
 
             <x-extendo-section title="Chmura">

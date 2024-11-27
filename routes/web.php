@@ -95,6 +95,8 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::get("/uploadForQuest/{quest_id}", "uploadForQuest")->name("files-upload-for-quest");
                 Route::get("/edit/{id}", "edit")->name("files-edit");
                 Route::post("/process", "process")->name("files-process");
+                Route::get("/addFromExistingSafe/{song_id}", "addFromExisingSafe")->name("files-add-from-existing-safe");
+                Route::post("/addFromExistingSafe", "addFromExistingSafeProcess")->name("files-process-add-from-existing-safe");
 
                 Route::get("/", "dashboard")->name("files-dashboard");
                 Route::prefix("tags")->group(function(){

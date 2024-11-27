@@ -129,6 +129,43 @@ class FileController extends Controller
 
         return redirect()->route("files-edit", ["id" => $file->id])->with('success', 'Pliki wgrane');
     }
+
+    public function addFromExisingSafe(string $song_id)
+    {
+        $song = Song::find($song_id);
+        $files = Storage::allFiles("safe/$song_id");
+        $tags = FileTag::orderBy("name")->get();
+        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+
+        return view(user_role().'.files.add-from-existing-safe', compact(
+            "song",
+            "files",
+            "clients",
+            "tags",
+        ));
+    }
+
+    public function addFromExistingSafeProcess(Request $rq)
+    {
+        $song = Song::find($rq->song_id);
+
+        if ($rq->action == "save") {
+            $file = ModelsFile::create([
+                "song_id" => $song->id,
+                "variant_name" => $rq->variant_name ?? "podstawowy",
+                "version_name" => $rq->version_name ?? "wersja główna",
+                "transposition" => $rq->transposition,
+                "only_for_client_id" => $rq->only_for_client_id,
+                "description" => $rq->description,
+                "file_paths" => collect(array_keys($rq->file_to_recycle ?? []))
+                    ->mapWithKeys(fn($path) => [pathinfo($path, PATHINFO_EXTENSION) => $path])
+                    ->toArray(),
+            ]);
+            $file->tags()->sync(array_keys($rq->tags ?? []));
+        }
+
+        return back()->with("success", "Wpis dodany");
+    }
     #endregion
 
     public function show($id, $filename)

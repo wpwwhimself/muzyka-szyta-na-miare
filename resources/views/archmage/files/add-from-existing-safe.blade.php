@@ -9,7 +9,14 @@
     <x-section title="Wybierz pliki" icon="file">
         <div class="flex-right center">
             @foreach ($files as $file)
+            @if (pathinfo($file, PATHINFO_EXTENSION) == "md")
+            <div>
+                <strong>{{ basename($file) }}:</strong>
+                {{ Illuminate\Mail\Markdown::parse(file_get_contents($file)) }}
+            </div>
+            @else
             <x-input type="checkbox" name="file_to_recycle[{{ preg_replace('/(\[|\])/', '$', $file) }}]" :label="basename($file)" />
+            @endif
             @endforeach
         </div>
     </x-section>

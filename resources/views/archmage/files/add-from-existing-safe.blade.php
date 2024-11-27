@@ -49,7 +49,7 @@
             <div class="flex-right center wrap">
             @forelse ($tags as $tag)
             <div>
-                <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" />
+                <x-input type="checkbox" name="tags[{{ htmlspecialchars($tag->id) }}]" :label="$tag->name" />
                 <x-file-tag :tag="$tag" />
             </div>
             @empty

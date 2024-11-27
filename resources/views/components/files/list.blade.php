@@ -36,6 +36,13 @@
             {{ Illuminate\Mail\Markdown::parse($version->description ?? "") }}
         </div>
 
+        @if ($version->missing_files)
+        <div class="yellowed-out">
+            <i class="fas fa-triangle-exclamation fa-fade warning"></i>
+            Sejf jest niekompletny. Napisz do mnie, żeby dodać pliki.
+        </div>
+        @endif
+
         <div class="file-container-c">
         @foreach ($version->file_paths as $extension => $file)
             @if ($extension == "mp4")

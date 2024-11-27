@@ -158,7 +158,7 @@ class FileController extends Controller
                 "only_for_client_id" => $rq->only_for_client_id,
                 "description" => $rq->description,
                 "file_paths" => collect(array_keys($rq->file_to_recycle ?? []))
-                    ->mapWithKeys(fn($path) => [pathinfo($path, PATHINFO_EXTENSION) => $path])
+                    ->mapWithKeys(fn($path) => [pathinfo($path, PATHINFO_EXTENSION) => Str::replaceArray("$", ["[", "]"], $path)])
                     ->toArray(),
             ]);
             $file->tags()->sync(array_keys($rq->tags ?? []));

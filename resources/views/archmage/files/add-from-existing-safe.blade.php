@@ -9,7 +9,7 @@
     <x-section title="Wybierz pliki" icon="file">
         <div class="flex-right center">
             @foreach ($files as $file)
-            <x-input type="checkbox" name="file_to_recycle[{{ htmlspecialchars($file) }}]" :label="basename($file)" />
+            <x-input type="checkbox" name="file_to_recycle[{{ preg_replace('/(\[|\])/', '$', $file) }}]" :label="basename($file)" />
             @endforeach
         </div>
     </x-section>

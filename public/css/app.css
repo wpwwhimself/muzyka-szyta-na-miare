@@ -319,6 +319,11 @@ video{
     width: 100%;
 }
 
+code {
+    display: block;
+    white-space-collapse: break-spaces;
+}
+
 /* NOŻYCZKI */
 .sc-line{
     border-style: dashed; border-width: 5px;

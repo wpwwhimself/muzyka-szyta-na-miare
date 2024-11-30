@@ -1,7 +1,8 @@
 @props([
-    "songId",
+    "songId" => null,
     "file",
     "type",
+    "isShowcase" => false,
 ])
 
 <div class="file-tile file-player" data-file-name="{{ basename($file) }}">
@@ -20,7 +21,9 @@
     <audio onprogress="showLoader('{{ basename($file) }}')"
         onloadeddata="enableFilePlayer('{{ basename($file) }}')"
     >
-        <source src="{{ route('safe-show', ["id" => $songId, "filename" => basename($file)]) }}"
+        <source src="{{ $isShowcase
+            ? basename($file)
+            : route('safe-show', ["id" => $songId, "filename" => basename($file)]) }}"
             type="audio/{{ $type == "mp3" ? "mpeg" : $type }}"
         />
     </audio>

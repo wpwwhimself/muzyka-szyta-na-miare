@@ -37,15 +37,12 @@ $(document).ready(function(){
                     $("#songs .popup .song-full-title").text(song_title)
                     $("#songs .popup .song-desc").text(song_desc)
 
-                    $("#song-loader").show();
                     player.src = `showcase/show/${song_id}`;
                     player.load();
-                    $("#song-loader").hide();
-                    player.play()
                 });
                 $("#songs #popup-close").click(function() {
                     $("#songs .popup").removeClass("open");
-                    player.pause()
+                    pauseFilePlayer("")
                 })
             }
         }

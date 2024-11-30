@@ -139,7 +139,7 @@
                 <h3 class="song-full-title"></h3>
                 <p class="song-desc"></p>
                 <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
-                <audio controls></audio>
+                <x-file-player type="ogg" file="" is-showcase />
                 <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
             </div>
         </div>

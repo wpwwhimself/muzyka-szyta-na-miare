@@ -120,12 +120,20 @@ class BackController extends Controller
             (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
+        $clients = [];
+        if (is_archmage()) {
+            $clients_raw = Client::all()->toArray();
+            foreach($clients_raw as $client){
+                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
+            }
+        }
+
         $quest_types = QuestType::all()->pluck("type", "id")->toArray();
         $minimal_prices = array_combine($quest_types, QUEST_MINIMAL_PRICES());
 
         return view(user_role().".prices", array_merge(
             ["title" => "Cennik"],
-            compact("prices", "discount", "minimal_prices")
+            compact("prices", "discount", "minimal_prices", "clients")
         ));
     }
 

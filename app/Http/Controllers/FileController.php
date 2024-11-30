@@ -54,7 +54,10 @@ class FileController extends Controller
     {
         $song = Quest::find($quest_id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+        $clients_raw = Client::all()->toArray();
+        foreach($clients_raw as $client){
+            $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
+        }
         $file = null;
 
         return view(user_role().'.files.edit', compact(

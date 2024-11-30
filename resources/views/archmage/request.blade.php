@@ -330,10 +330,8 @@
     </div>
 </form>
 
-<script>
-$(document).ready(function(){
-$("#client_id").select2();
-$("#song_id").select2();
-});
+<script defer>
+$("#client_id").select2({ allowClear: true, placeholder: "Nowy klient" });
+$("#song_id").select2({ allowClear: true, placeholder: "Nowy utwór" });
 </script>
 @endsection

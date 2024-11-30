@@ -68,8 +68,12 @@ const getSong = () => {
     fetch(url + `song-data-by-quest/${id}/`)
         .then(res => res.json())
         .then(data => {
-            song.value = data
-            time_major.value = parseTime(data.work_time_total)
+            song.value = data.song
+            time_major.value = parseTime(data.song.work_time_total)
+
+            if (data.status_id == 15) {
+                window.location.href = `/studio-view/`
+            }
         })
 }
 
@@ -126,6 +130,8 @@ onMounted(() => {
 
     getSong()
 })
+
+setInterval(getSong, 10e3)
 </script>
 
 <template>

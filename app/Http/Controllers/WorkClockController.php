@@ -48,7 +48,7 @@ class WorkClockController extends Controller
     }
 
     public function songDataByQuest($quest_id) {
-        $data = Quest::with("song.workTime")->find($quest_id)->song;
+        $data = Quest::with("song.workTime")->find($quest_id);
 
         return response()->json($data);
     }

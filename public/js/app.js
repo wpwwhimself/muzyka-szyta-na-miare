@@ -60,7 +60,7 @@ const changeFilePlayerButton = (filename, icon) => {
 }
 const enableFilePlayer = (filename) => {
     changeFilePlayerButton(filename, "play")
-    showLoader(filename, false)
+    showSeeker(filename)
 }
 const startFilePlayer = (filename) => {
     document.querySelector(`.file-player[data-file-name="${filename}"] audio`).play()
@@ -71,13 +71,27 @@ const pauseFilePlayer = (filename) => {
     changeFilePlayerButton(filename, "play")
 }
 
-const showLoader = (filename, reveal = true) => {
-    const loader = document.querySelector(`.file-player[data-file-name="${filename}"] .loader`)
+const durToTime = (duration) => {
+    const minutes = Math.floor(duration / 60)
+    const seconds = Math.floor(duration % 60)
+    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
+}
+
+const showSeeker = (filename) => {
+    updateSeeker(filename)
+    document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`).classList.remove("hidden")
+}
+
+const updateSeeker = (filename) => {
+    const seeker = document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`)
     const audio = document.querySelector(`.file-player[data-file-name="${filename}"] audio`)
 
-    loader.innerHTML = (audio.buffered.length)
-        ? Math.round(audio.buffered.end(0) / audio.duration * 100) + "%"
-        : "..."
+    seeker.innerHTML = `${durToTime(audio.currentTime)} / ${durToTime(audio.duration)}`
+    seeker.style.setProperty("--progress", `${(audio.currentTime / audio.duration) * 100}%`)
+}
 
-    (reveal) ? loader.classList.remove("hidden") : loader.classList.add("hidden")
+const seekFilePlayer = (filename, event) => {
+    const audio = document.querySelector(`.file-player[data-file-name="${filename}"] audio`)
+    audio.currentTime = (event.offsetX / event.target.offsetWidth) * audio.duration
+    updateSeeker(filename)
 }

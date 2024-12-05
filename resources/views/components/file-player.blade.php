@@ -16,10 +16,15 @@
         </i>
     </div>
 
-    <span class="loader ghost hidden"></span>
+    <div class="seeker hidden" style="--progress: 0%;"
+        onclick="seekFilePlayer('{{ basename($file) }}', event)"
+    >
+    </div>
 
-    <audio onprogress="showLoader('{{ basename($file) }}')"
+    <audio
         onloadeddata="enableFilePlayer('{{ basename($file) }}')"
+        ontimeupdate="updateSeeker('{{ basename($file) }}')"
+        onended="pauseFilePlayer('{{ basename($file) }}')"
     >
         <source src="{{ $isShowcase
             ? basename($file)

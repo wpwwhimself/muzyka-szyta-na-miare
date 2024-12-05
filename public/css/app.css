@@ -963,6 +963,7 @@ footer .contact-info{
     border-radius: 2em;
     padding: 1em; margin: 0.5em 0;
     position: relative;
+    max-width: 500px !important;
 
     & h4 {
         margin: 0;
@@ -1004,19 +1005,25 @@ footer .contact-info{
     & .hidden {
         display: none;
     }
+
+    & .container {
+        position: relative;
+        width: 2em; height: 2em;
+    }
+    & i {
+        font-size: 2em;
+        position: absolute; top: 0; left: 0;
+        display: block; width: 100%;
+    }
+
+    &.hoverable {
+        & i:last-child { opacity: 0; }
+        &:hover {
+            & i:first-child { opacity: 0; }
+            & i:last-child { opacity: 1; }
+        }
+    }
 }
-.file-tile .container{
-    position: relative;
-    width: 2em; height: 2em;
-}
-.file-tile i{
-    font-size: 2em;
-    position: absolute; top: 0; left: 0;
-    display: block; width: 100%;
-}
-.file-tile.hoverable:hover i:first-child{ opacity: 0; }
-.file-tile.hoverable i:last-child{ opacity: 0; }
-.file-tile.hoverable:hover i:last-child{ opacity: 1; }
 .mp3{ color: rgba(39, 197, 0, 0.8); }
 .mp4, .mid{ color: rgba(255, 0, 0, 0.8); }
 .wav, .flac{ color: rgba(0, 162, 255, 0.8); }
@@ -1037,7 +1044,20 @@ footer .contact-info{
     }
 }
 
-.clickable{
+.file-player {
+    width: 10em;
+    padding-inline: 0.5em;
+    flex-direction: row;
+    align-content: center;
+    gap: 0.5em;
+
+    & .seeker {
+        width: 100%;
+        background: linear-gradient(to right, var(--acc) var(--progress), var(--bg) var(--progress));
+    }
+}
+
+.clickable, [onclick], [onmouseup]{
     user-select: none;
     cursor: pointer;
 }

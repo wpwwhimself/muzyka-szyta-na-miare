@@ -3,8 +3,7 @@ $(document).ready(function(){
      * load and display songs
      * it's set here to accelerate loading speed
      */
-    $.ajax({
-        type: "GET",
+    $.get({
         url: "/api/songs/info",
         success: function (res) {
             if(res.length > 0){
@@ -39,6 +38,9 @@ $(document).ready(function(){
 
                     player.src = `showcase/show/${song_id}`;
                     player.load();
+                    player.addEventListener("canplay", () => {
+                        startFilePlayer("")
+                    })
                 });
                 $("#songs #popup-close").click(function() {
                     $("#songs .popup").removeClass("open");

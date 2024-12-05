@@ -58,6 +58,10 @@ const changeFilePlayerButton = (filename, icon) => {
     document.querySelector(`.file-player[data-file-name="${filename}"] .fa-solid.fa-${icon}`)
         .classList.remove("hidden")
 }
+const disableFilePlayer = (filename) => {
+    changeFilePlayerButton(filename, "circle-notch")
+    showSeeker(filename, false)
+}
 const enableFilePlayer = (filename) => {
     changeFilePlayerButton(filename, "play")
     showSeeker(filename)
@@ -77,9 +81,14 @@ const durToTime = (duration) => {
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 }
 
-const showSeeker = (filename) => {
-    updateSeeker(filename)
-    document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`).classList.remove("hidden")
+const showSeeker = (filename, show = true) => {
+    const seeker = document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`)
+    if (show) {
+        updateSeeker(filename)
+        seeker.classList.remove("hidden")
+    } else {
+        seeker.classList.add("hidden")
+    }
 }
 
 const updateSeeker = (filename) => {

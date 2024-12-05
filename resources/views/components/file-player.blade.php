@@ -7,7 +7,7 @@
 
 <div class="file-tile file-player" data-file-name="{{ basename($file) }}">
     <div class="container">
-        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <i class="hidden fa-solid fa-circle-notch fa-spin"></i>
         <i class="hidden fa-solid fa-play"
             onclick="startFilePlayer('{{ basename($file) }}')">
         </i>
@@ -22,9 +22,11 @@
     </div>
 
     <audio
+        onloadstart="disableFilePlayer('{{ basename($file) }}')"
         onloadeddata="enableFilePlayer('{{ basename($file) }}')"
         ontimeupdate="updateSeeker('{{ basename($file) }}')"
         onended="pauseFilePlayer('{{ basename($file) }}')"
+
     >
         <source src="{{ $isShowcase
             ? basename($file)

@@ -69,7 +69,7 @@ const getSong = () => {
         .then(res => res.json())
         .then(data => {
             song.value = data.song
-            time_major.value = parseTime(data.song.work_time_total)
+            if (!nowWorking.value) time_major.value = parseTime(data.song.work_time_total)
 
             if (data.status_id == 15) {
                 window.location.href = `/studio-view/`

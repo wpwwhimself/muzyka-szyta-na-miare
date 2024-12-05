@@ -16,24 +16,24 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($existing_files as $file)
+            @foreach ($existing_files as $efile)
             <tr>
-                <td>{{ $file->variant_name }}</td>
-                <td>{{ $file->version_name }}</td>
-                <td>{{ $file->transposition }}</td>
+                <td>{{ $efile->variant_name }}</td>
+                <td>{{ $efile->version_name }}</td>
+                <td>{{ $efile->transposition }}</td>
                 <td>
-                    @if ($file->only_for_client_id)
-                    {{ $file->exclusiveClient->client->client_name }}
+                    @if ($efile->only_for_client_id)
+                    {{ $efile->exclusiveClient->client->client_name }}
                     @else
                     <span class="grayed-out">wszyscy</span>
                     @endif
                 </td>
                 <td>
-                    @foreach ($file->tags as $tag)
+                    @foreach ($efile->tags as $tag)
                     <x-file-tag :tag="$tag" />
                     @endforeach
                 </td>
-                <td>{{ implode(", ", array_keys($file->file_paths)) }}</td>
+                <td>{{ implode(", ", array_keys($efile->file_paths)) }}</td>
             </tr>
             @endforeach
         </tbody>

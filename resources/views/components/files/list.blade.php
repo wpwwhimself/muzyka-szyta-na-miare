@@ -20,6 +20,14 @@
             @if ($version->transposition)
             <x-file-tag :transpose="$version->transposition" />
             @endif
+            @if ($version->exclusiveClient && is_archmage())
+            <div class="file-tag flex-right center middle"
+                style="background-color: white;"
+                {{ Popper::pop("Tylko dla: ".$version->exclusiveClient->client->client_name) }}
+            >
+                @svg("mdi-eye")
+            </div>
+            @endif
 
             {{ $version->version_name }}
 

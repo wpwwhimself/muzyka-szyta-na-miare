@@ -135,9 +135,11 @@ setInterval(getSong, 10e3)
 </script>
 
 <template>
-<FontAwesomeIcon :icon="faHourglass" spin size="10x"
+<div class="flex-right center"
     v-if="!(modes && song)"
-/>
+>
+    <FontAwesomeIcon :icon="faHourglass" spin size="10x" />
+</div>
 <div class="flex-down center" v-else>
     <div id="clocks-outer" class="flex-right center">
         <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="8x" />

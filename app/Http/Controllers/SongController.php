@@ -71,7 +71,7 @@ class SongController extends Controller
         $song = Song::findOrFail($rq->id);
         $song->update($rq->except("_token"));
         $song->tags()->sync(array_keys($rq->tags ?? []));
-        return redirect()->route("songs")->with("success", "Utwór poprawiony");
+        return back()->with("success", "Utwór poprawiony");
     }
 
     #region tags

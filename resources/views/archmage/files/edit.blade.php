@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             @foreach ($existing_files as $efile)
-            <tr>
+            <tr class="{{ $file?->id == $efile->id ? 'accent' : '' }}">
                 <td>{{ $efile->variant_name }}</td>
                 <td>{{ $efile->version_name }}</td>
                 <td>{{ $efile->transposition }}</td>

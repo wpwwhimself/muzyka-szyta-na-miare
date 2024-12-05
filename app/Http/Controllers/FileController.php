@@ -59,12 +59,14 @@ class FileController extends Controller
             $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
         }
         $file = null;
+        $existing_files = ModelsFile::where("song_id", $song->id)->get();
 
         return view(user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
             "clients",
+            "existing_files",
         ));
     }
 
@@ -74,12 +76,14 @@ class FileController extends Controller
         $tags = FileTag::orderBy("name")->get();
         $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
         $song = null;
+        $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
 
         return view(user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
             "clients",
+            "existing_files",
         ));
     }
 

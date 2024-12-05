@@ -2,6 +2,45 @@
 
 @section("content")
 
+@if ($existing_files->count())
+<x-section title="Już wgrane pliki" icon="folder-open">
+    <table>
+        <thead>
+            <tr>
+                <th>Wariant</th>
+                <th>Wersja</th>
+                <th>Transpozycja</th>
+                <th>Widoczność</th>
+                <th>Tagi</th>
+                <th>Formaty</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($existing_files as $file)
+            <tr>
+                <td>{{ $file->variant_name }}</td>
+                <td>{{ $file->version_name }}</td>
+                <td>{{ $file->transposition }}</td>
+                <td>
+                    @if ($file->only_for_client_id)
+                    {{ $file->exclusiveClient->client->client_name }}
+                    @else
+                    <span class="grayed-out">wszyscy</span>
+                    @endif
+                </td>
+                <td>
+                    @foreach ($file->tags as $tag)
+                    <x-file-tag :tag="$tag" />
+                    @endforeach
+                </td>
+                <td>{{ implode(", ", array_keys($file->file_paths)) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</x-section>
+@endif
+
 <form action="{{ route('files-process') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="id" value="{{ $file?->id }}" />

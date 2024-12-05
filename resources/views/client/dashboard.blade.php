@@ -2,7 +2,7 @@
 
 @section('content')
     <x-tutorial>
-        <p>To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.</p>
+        To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.
     </x-tutorial>
 
     <div class="grid-2">
@@ -133,7 +133,7 @@
                 {{ as_pln(Auth::user()->client->budget) }}
 
                 <x-tutorial>
-                    <p>Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.</p>
+                    Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
                 </x-tutorial>
             </h2>
 
@@ -162,7 +162,7 @@
     </div>
 
     <x-tutorial>
-        <p>Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia. Możesz najechać na większość symboli, aby pokazać ich znaczenie.</p>
+        Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia. Możesz najechać na większość symboli, aby pokazać ich znaczenie.
     </x-tutorial>
 
     @foreach ([

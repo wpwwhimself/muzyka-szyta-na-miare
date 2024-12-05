@@ -131,7 +131,7 @@
         <h2>
             Utwory, których się podjąłem
             <x-tutorial>
-                <p>Kliknij ikonę płyty, aby odtworzyć próbkę</p>
+                Kliknij ikonę płyty, aby odtworzyć próbkę
             </x-tutorial>
         </h2>
         <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>

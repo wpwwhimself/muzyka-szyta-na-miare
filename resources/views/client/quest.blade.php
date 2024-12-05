@@ -2,7 +2,7 @@
 
 @section('content')
 <x-tutorial>
-    <p>{{ [
+    {{ [
         11 => "Twoje zlecenie zostało przyjęte. Wkrótce rozpocznę nad nim pracę.",
         12 => "Dobre wyczucie, właśnie prowadzę prace nad Twoim zleceniem. W ciągu kolejnych godzin możesz spodziewać się wiadomości na temat postępów.",
         13 => "Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.",
@@ -17,7 +17,7 @@
         31 => "Wycena dla tego zlecenia musiała zostać zmieniona. Aby prace mogły postępować dalej, musisz je zaakceptować.",
         95 => "Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.",
         96 => "Komentarz został przesłany. Odniosę się do niego i przygotuję coś nowego wkrótce.",
-    ][$quest->status_id] }}</p>
+    ][$quest->status_id] }}
 </x-tutorial>
 
 <x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
@@ -129,9 +129,9 @@
             </x-tutorial>
             @if ($quest->delayed_payment)
             <x-warning>
-                Z uwagi na limity przyjmowanych przeze mnie wpłat,<br>
-                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.<br>
-                Po zaakceptowaniu zlecenia dostęp do plików<br>
+                Z uwagi na limity przyjmowanych przeze mnie wpłat,
+                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.
+                Po zaakceptowaniu zlecenia dostęp do plików
                 zostanie przyznany automatycznie.
             </x-warning>
             @endif
@@ -178,9 +178,9 @@
         @endif
         @if (empty($files))
         <x-tutorial>
-            Tutaj pojawią się pliki związane<br>
-            z przygotowywanym dla Ciebie zleceniem.<br>
-            Po dokonaniu wpłaty będzie możliwość<br>
+            Tutaj pojawią się pliki związane
+            z przygotowywanym dla Ciebie zleceniem.
+            Po dokonaniu wpłaty będzie możliwość
             ich pobrania lub odsłuchania.
         </x-tutorial>
         @endif

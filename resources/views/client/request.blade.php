@@ -2,7 +2,7 @@
 
 @section('content')
 <x-tutorial>
-    <p>{{ [
+    {{ [
         1 => "Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.",
         4 => "Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.",
         5 => "Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – przesłać mi do ponownej wyceny z opisem, co się nie zgadza. Ostatecznie możesz zupełnie odrzucić warunki.",
@@ -12,7 +12,7 @@
         9 => "Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.",
         95 => "Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania (zawarte w historii) za pomocą przycisku poniżej.",
         96 => "Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.",
-    ][$request->status_id] }}</p>
+    ][$request->status_id] }}
 </x-tutorial>
 
 @if (sumWarnings($warnings))
@@ -131,8 +131,9 @@
                 @if ($request->price && $request->status_id == 5)
                 <x-tutorial>
                     @if ($request->deadline)
-                    <p>Termin oddania jest liczony do podanego dnia włącznie.<br>
-                        Są duże szanse, że uda mi się wykonać zlecenie szybciej,<br>
+                    <p>
+                        Termin oddania jest liczony do podanego dnia włącznie.
+                        Są duże szanse, że uda mi się wykonać zlecenie szybciej,
                         ale to jest najpóźniejszy dzień.
                     </p>
                     @endif

@@ -1,47 +1,27 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
-<p class="tutorial"><i class="fa-solid fa-circle-question"></i>
-@switch($request->status_id)
-    @case(1)
-        Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.</p>
-        @break
-    @case(4)
-        Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.
-        @break
-    @case(5)
-        Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – przesłać mi do ponownej wyceny z opisem, co się nie zgadza.
-        Ostatecznie możesz zupełnie odrzucić warunki.
-        @break
-    @case(6)
-        Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.
-        @break
-    @case(7)
-        Termin ważności wyceny minął. Jeśli nadal chcesz zrealizować to zlecenie, kliknij przycisk poniżej.
-        @break
-    @case(8)
-        Ta wycena została przez Ciebie odrzucona. Coś musiało pójść nie tak lub coś Ci się nie spodobało.
-        @break
-    @case(9)
-        Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.
-        @break
-    @case(95)
-        Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania (zawarte w historii) za pomocą przycisku poniżej.
-        @break
-    @case(96)
-        Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.
-        @break
-@endswitch
-</p>
-
-<x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
+<x-tutorial>
+    <p>{{ [
+        1 => "Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.",
+        4 => "Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.",
+        5 => "Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – przesłać mi do ponownej wyceny z opisem, co się nie zgadza. Ostatecznie możesz zupełnie odrzucić warunki.",
+        6 => "Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.",
+        7 => "Termin ważności wyceny minął. Jeśli nadal chcesz zrealizować to zlecenie, kliknij przycisk poniżej.",
+        8 => "Ta wycena została przez Ciebie odrzucona. Coś musiało pójść nie tak lub coś Ci się nie spodobało.",
+        9 => "Zapytanie zostało przyjęte. Utworzyłem zlecenie, do którego link znajdziesz poniżej.",
+        95 => "Potrzebuję dodatkowych informacji na temat tego zapytania. Odpowiedz na moje pytania (zawarte w historii) za pomocą przycisku poniżej.",
+        96 => "Odpowiedź została wysłana. Odniosę się do nich i przedstawię wycenę.",
+    ][$request->status_id] }}</p>
+</x-tutorial>
 
 @if (sumWarnings($warnings))
-<h1 class="warning">
-    <i class="fas fa-triangle-exclamation fa-fade"></i>
+<x-warning>
     Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
-</h1>
+</x-warning>
 @endif
+
+<x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
 
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
@@ -147,39 +127,39 @@
             <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
             @endif
 
-            @if ($request->price && $request->status_id == 5)
-            <div class="tutorial">
-                @if ($request->deadline)
-                <p><i class="fa-solid fa-circle-question"></i> Termin oddania jest liczony do podanego dnia włącznie.<br>
-                    Są duże szanse, że uda mi się wykonać zlecenie szybciej,<br>
-                    ale to jest najpóźniejszy dzień.
-                </p>
+            <x-extendo-section>
+                @if ($request->price && $request->status_id == 5)
+                <x-tutorial>
+                    @if ($request->deadline)
+                    <p>Termin oddania jest liczony do podanego dnia włącznie.<br>
+                        Są duże szanse, że uda mi się wykonać zlecenie szybciej,<br>
+                        ale to jest najpóźniejszy dzień.
+                    </p>
+                    @endif
+                    <p>Opłaty projektu będzie można dokonać na 2 sposoby:</p>
+                    <ul>
+                        <li>na numer konta,</li>
+                        <li>BLIKiem na numer telefonu.</li>
+                    </ul>
+                    <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+                </x-tutorial>
                 @endif
-                <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu będzie można dokonać na 2 sposoby:</p>
-                <ul>
-                    <li>na numer konta,</li>
-                    <li>BLIKiem na numer telefonu.</li>
-                </ul>
-                <p><i class="fa-solid fa-circle-question"></i> Pliki będą dostępne z poziomu tej strony internetowej.</p>
-            </div>
-            @endif
-            @if ($request->delayed_payment)
-                <p class="yellowed-out">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
+                @if ($request->delayed_payment)
+                <x-warning>
                     Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
                     <b>proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}</b>.
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
-                </p>
-            @endif
+                </x-warning>
+                @endif
+            </x-extendo-section>
         </x-extendo-block>
 
         <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     </div>
     @if (in_array($request->status_id, [4, 7, 8]))
-    <p class="tutorial">
-        <i class="fa-solid fa-circle-question"></i>
+    <x-tutorial>
         Zapytanie zostało zamknięte, ale nadal możesz je przywrócić w celu ponownego złożenia zamówienia.
-    </p>
+    </x-tutorial>
     @endif
     <div id="phases">
         <input type="hidden" name="id" value="{{ $request->id }}" />
@@ -197,10 +177,9 @@
         </div>
         <div id="statuschanger">
             {{-- @if (in_array($request->status_id, [4, 5, 7, 8, 95])) --}}
-            <p class="tutorial">
-                <i class="fa-solid fa-circle-question"></i>
+            <x-tutorial>
                 W historii zlecenia pojawi się Twój komentarz.
-            </p>
+            </x-tutorial>
             <x-input type="TEXT" name="comment" label="" placeholder="Tutaj wpisz swój komentarz..." />
             {{-- @endif --}}
             <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" />

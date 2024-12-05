@@ -1,10 +1,10 @@
 @extends('layouts.app', compact("title"))
 
 @section('content')
-    <p class="tutorial">
-        <i class="fa-solid fa-circle-question"></i>
-        To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.
-    </p>
+    <x-tutorial>
+        <p>To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.</p>
+    </x-tutorial>
+
     <div class="grid-2">
         <section id="who-am-i" class="sc-line">
             <x-sc-scissors />
@@ -96,10 +96,12 @@
                     label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
                     action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
                     />
-                <p>Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.</p>
-                <p class="yellowed-out">
-                    Uwaga! Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
-                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                <p>
+                    Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
+                    <x-warning>
+                        Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
+                        Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                    </x-warning>
                 </p>
                 <x-button
                     label="Właśnie wystawił{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
@@ -126,12 +128,14 @@
                 </div>
             </div>
 
-            <h2>Stan konta</h2>
-            <p class="tutorial">
-                <i class="fa-solid fa-circle-question"></i>
-                Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
-            </p>
-            <h3>{{ as_pln(Auth::user()->client->budget) }}</h3>
+            <h2>
+                Stan konta:
+                {{ as_pln(Auth::user()->client->budget) }}
+
+                <x-tutorial>
+                    <p>Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.</p>
+                </x-tutorial>
+            </h2>
 
             <div class="section-header">
                 <h1>
@@ -157,11 +161,9 @@
         </section>
     </div>
 
-    <p class="tutorial">
-        <i class="fa-solid fa-circle-question"></i>
-        Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia.
-        Możesz najechać na większość symboli, aby pokazać ich znaczenie.
-    </p>
+    <x-tutorial>
+        <p>Kliknij na poniższe okienka, aby zobaczyć szczegóły zlecenia. Możesz najechać na większość symboli, aby pokazać ich znaczenie.</p>
+    </x-tutorial>
 
     @foreach ([
         ["review", "Zlecenia wymagające odpowiedzi", "bell", $quests_review],

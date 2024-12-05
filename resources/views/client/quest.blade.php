@@ -1,52 +1,24 @@
 @extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
 
 @section('content')
-<p class="tutorial"><i class="fa-solid fa-circle-question"></i>
-@switch($quest->status_id)
-    @case(11)
-        Twoje zlecenie zostało przyjęte. Wkrótce rozpocznę nad nim pracę.
-        @break
-    @case(12)
-        Dobre wyczucie, właśnie prowadzę prace nad Twoim zleceniem. W ciągu kolejnych godzin możesz spodziewać się wiadomości na temat postępów.
-        @break
-    @case(13)
-        Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.
-        @break
-    @case(14)
-        Obecny etap prac został przez Ciebie przyjęty. Wkrótce dostarczę dalszą część materiałów.
-        @break
-    @case(15)
-        Do Twojego zlecenia zostały dodane nowe pliki. Poniżej możesz je przeglądać i wyrazić swoją opinię na ich temat.
-        @break
-    @case(16)
-        Twoje uwagi zostały przekazane. Odniosę się do nich i przygotuję coś nowego wkrótce.
-        @break
-    @case(17)
-        Twoje zlecenie wygasło z powodu zbyt powolnych postępów.
-        @break
-    @case(18)
-        Zlecenie zostało przez Ciebie odrzucone. Coś musiało pójść nie tak lub coś Ci się nie spodobało.
-        @break
-    @case(19)
-        Zlecenie zostało przez Ciebie przyjęte bez zarzutów. Cieszę się, że mogłem coś dla Ciebie przygotować i polecam się do dalszych zleceń.
-        @break
-    @case(21)
-        W tym zleceniu została zgłoszona chęć wprowadzenia zmian. Wkrótce je zweryfikuję i wprowadzę odpowiednie poprawki.
-        @break
-    @case(26)
-        Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.
-        @break
-    @case(31)
-        Wycena dla tego zlecenia musiała zostać zmieniona. Aby prace mogły postępować dalej, musisz je zaakceptować.
-        @break
-    @case(95)
-        Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.
-        @break
-    @case(96)
-        Komentarz został przesłany. Odniosę się do niego i przygotuję coś nowego wkrótce.
-        @break
-@endswitch
-</p>
+<x-tutorial>
+    <p>{{ [
+        11 => "Twoje zlecenie zostało przyjęte. Wkrótce rozpocznę nad nim pracę.",
+        12 => "Dobre wyczucie, właśnie prowadzę prace nad Twoim zleceniem. W ciągu kolejnych godzin możesz spodziewać się wiadomości na temat postępów.",
+        13 => "Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.",
+        14 => "Obecny etap prac został przez Ciebie przyjęty. Wkrótce dostarczę dalszą część materiałów.",
+        15 => "Do Twojego zlecenia zostały dodane nowe pliki. Poniżej możesz je przeglądać i wyrazić swoją opinię na ich temat.",
+        16 => "Twoje uwagi zostały przekazane. Odniosę się do nich i przygotuję coś nowego wkrótce.",
+        17 => "Twoje zlecenie wygasło z powodu zbyt powolnych postępów.",
+        18 => "Zlecenie zostało przez Ciebie odrzucone. Coś musiało pójść nie tak lub coś Ci się nie spodobało.",
+        19 => "Zlecenie zostało przez Ciebie przyjęte bez zarzutów. Cieszę się, że mogłem coś dla Ciebie przygotować i polecam się do dalszych zleceń.",
+        21 => "W tym zleceniu została zgłoszona chęć wprowadzenia zmian. Wkrótce je zweryfikuję i wprowadzę odpowiednie poprawki.",
+        26 => "Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.",
+        31 => "Wycena dla tego zlecenia musiała zostać zmieniona. Aby prace mogły postępować dalej, musisz je zaakceptować.",
+        95 => "Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.",
+        96 => "Komentarz został przesłany. Odniosę się do niego i przygotuję coś nowego wkrótce.",
+    ][$quest->status_id] }}</p>
+</x-tutorial>
 
 <x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
 
@@ -141,29 +113,30 @@
             )) @endphp
         </x-extendo-section>
 
-        @unless ($quest->paid)
-        <div class="tutorial">
-            <p><i class="fa-solid fa-circle-question"></i> Opłaty projektu możesz dokonać na 2 sposoby:</p>
-            <ul>
-                <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
-                    (w tytule wpisz <i>{{ $quest->id }}</i>)</li>
-                <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
-            </ul>
-            <p>
-                Jest ona potrzebna do pobierania plików,<br>
-                chyba, że jesteś np. stałym klientem
-            </p>
-        </div>
-        @if ($quest->delayed_payment)
-        <p class="yellowed-out">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            Z uwagi na limity przyjmowanych przeze mnie wpłat,<br>
-            <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.<br>
-            Po zaakceptowaniu zlecenia dostęp do plików<br>
-            zostanie przyznany automatycznie.
-        </p>
-        @endif
-        @endunless
+        <x-extendo-section>
+            @unless ($quest->paid)
+            <x-tutorial>
+                <p>Opłaty projektu możesz dokonać na 2 sposoby:</p>
+                <ul>
+                    <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
+                        (w tytule wpisz <i>{{ $quest->id }}</i>)</li>
+                    <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
+                </ul>
+                <p>
+                    Jest ona potrzebna do pobierania plików,<br>
+                    chyba, że jesteś np. stałym klientem
+                </p>
+            </x-tutorial>
+            @if ($quest->delayed_payment)
+            <x-warning>
+                Z uwagi na limity przyjmowanych przeze mnie wpłat,<br>
+                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.<br>
+                Po zaakceptowaniu zlecenia dostęp do plików<br>
+                zostanie przyznany automatycznie.
+            </x-warning>
+            @endif
+            @endunless
+        </x-extendo-section>
 
         @if ($quest->hard_deadline) <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
 
@@ -204,13 +177,12 @@
         </p>
         @endif
         @if (empty($files))
-        <p class="tutorial">
-            <i class="fa-solid fa-circle-question"></i>
+        <x-tutorial>
             Tutaj pojawią się pliki związane<br>
             z przygotowywanym dla Ciebie zleceniem.<br>
             Po dokonaniu wpłaty będzie możliwość<br>
             ich pobrania lub odsłuchania.
-        </p>
+        </x-tutorial>
         @endif
 
         <x-extendo-section title="Chmura">
@@ -228,18 +200,16 @@
     @csrf
     <div class="flexright">
         @if (in_array($quest->status_id, [15]))
-        <p class="tutorial">
-            <i class="fa-solid fa-circle-question"></i>
+        <x-tutorial>
             Za pomocą poniższych przycisków możesz przyjąć zlecenie lub,
             jeśli coś Ci się nie podoba w przygotowanych przeze mnie materiałach, poprosić o przygotowanie poprawek.
             Instrukcje do tego celu możesz umieścić w oknie, które pojawi się po wybraniu jednej z poniższych opcji.
             Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
-        </p>
+        </x-tutorial>
         @elseif ($quest->status_id == 19)
-        <p class="tutorial">
-            <i class="fa-solid fa-circle-question"></i>
+        <x-tutorial>
             Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
-        </p>
+        </x-tutorial>
             @if ($quest->history->get(1)->date->diffInDays() >= 30)
             <p class="error" style="text-align: left;">
                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -275,10 +245,9 @@
     </div>
     <div id="statuschanger">
         {{-- @if (in_array($quest->status_id, [15, 18, 19, 95])) --}}
-        <p class="tutorial">
-            <i class="fa-solid fa-circle-question"></i>
+        <x-tutorial>
             W historii zlecenia pojawi się Twój komentarz.
-        </p>
+        </x-tutorial>
         <div class="history-position p-18">
             <x-input type="TEXT" name="comment" label=""
                 placeholder="Tutaj wpisz swój komentarz..."

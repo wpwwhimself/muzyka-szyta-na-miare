@@ -128,11 +128,12 @@
     </div>
 
     <div id="songs">
-        <h2>Utwory, których się podjąłem</h2>
-        <p class="tutorial">
-            <i class="fa-solid fa-circle-question"></i>
-            Kliknij ikonę płyty, aby odtworzyć próbkę
-        </p>
+        <h2>
+            Utwory, których się podjąłem
+            <x-tutorial>
+                <p>Kliknij ikonę płyty, aby odtworzyć próbkę</p>
+            </x-tutorial>
+        </h2>
         <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
         <div class="popup">
             <div class="popup-contents flex-down center">

@@ -204,24 +204,22 @@
 
 <section id="contact">
     <h1>Napisz już teraz</h1>
-    <form method="post" action="{{ route("add-request-back") }}" id='contactform' class="black-back grid-2 hidden">
+    <form method="post" action="{{ route("add-request-back") }}" id='contactform' class="black-back flex-down hidden">
         @csrf
-        <div>
-            <h2>Szczegóły zlecenia</h2>
-            <div class="bulk-box sc-line">
-                <div class="flex-right keep-for-mobile">
-                    @foreach ($quest_types as $id => $type)
-                    <x-input type="radio" name="quest_type[]" :value="$id" :label="$type" :checked="$id == 1" />
-                    @endforeach
-                </div>
-                <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="{{ $random_song->title }}" />
-                <x-input type="text" name="artist[]" label="Wykonawca" placeholder="{{ $random_song->artist }}" />
-                <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="{{ $random_song->link }}" />
-                <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
-                <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
+        <h2>Szczegóły zlecenia</h2>
+        <div class="bulk-box sc-line flex-right center">
+            <div class="flex-down but-mobile-right">
+                @foreach ($quest_types as $id => $type)
+                <x-input type="radio" name="quest_type[]" :value="$id" :label="$type" :checked="$id == 1" />
+                @endforeach
             </div>
-            <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejny utwór" :small="true" />
+            <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="{{ $random_song->title }}" />
+            <x-input type="text" name="artist[]" label="Wykonawca" placeholder="{{ $random_song->artist }}" />
+            <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="{{ $random_song->link }}" />
+            <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
+            <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
         </div>
+        <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejny utwór" />
         <script>
         $(document).ready(function(){
             $("#request_bulk_add").click(function(){
@@ -230,16 +228,22 @@
             });
         });
         </script>
-        <div>
-            <h2>Twoje dane</h2>
+
+        <h2>Twoje dane</h2>
+        <div class="flex-right center">
             <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" />
-            <label>Jak mogę do Ciebie dotrzeć? <i>(wypełnij co najmniej jedno)</i></label>
-            <x-input type="email" name="email" label="Email" />
-            <x-input type="tel" name="phone" label="Numer telefonu" />
-            <x-input type="text" name="other_medium" label="Inna forma kontaktu (np. Whatsapp)" />
+            <div class="section-like sc-line">
+                <label>Jak mogę do Ciebie dotrzeć? <i>(wypełnij co najmniej jedno)</i></label>
+                <div class="flex-right">
+                    <x-input type="email" name="email" label="Email" />
+                    <x-input type="tel" name="phone" label="Numer telefonu" />
+                    <x-input type="text" name="other_medium" label="Inna forma kontaktu (np. Whatsapp)" />
+                </div>
+            </div>
             <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
             <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
         </div>
+
         <input type="hidden" name="intent" value="new" />
         <x-button
             label="Wyślij zapytanie" icon="1" name="new_status" value="1"

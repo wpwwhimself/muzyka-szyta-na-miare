@@ -2,6 +2,10 @@
 
 @section('content')
 
+<div>
+    <x-button action="{{ route('client-mail-prepare') }}" label="Napisz maila" icon="envelope" />
+</div>
+
 <section class="sc-line">
     <x-sc-scissors />
     <div class="section-header">

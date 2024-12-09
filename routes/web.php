@@ -162,6 +162,11 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::get('list/{param?}/{value?}', "list")->name("clients");
             Route::get("view/{id}", "view")->name("client-view");
             Route::post("edit/{id}", "edit")->name("client-edit");
+
+            Route::prefix("mail")->group(function(){
+                Route::get("/{client_id?}", "mailPrepare")->name("client-mail-prepare");
+                Route::post("/send", "mailSend")->name("client-mail-send");
+            });
         });
 
         Route::controller(WorkClockController::class)->prefix("studio-view")->group(function() {

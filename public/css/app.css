@@ -232,7 +232,7 @@ textarea{
     resize: vertical;
     transition-duration: 0s;
 }
-.select2-dropdown, .select2-selection{
+.select2-dropdown, .select2-selection, .select2-selection__choice {
     background-color: var(--bg) !important;
     color: var(--fg) !important;
     border-color: var(--bg2) !important;

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CustomMail;
 use App\Models\Client;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
 {
@@ -110,6 +113,37 @@ class ClientController extends Controller
 
         return back()->with("success", "Dane poprawione");
     }
+
+    #region mailing
+    public function mailPrepare(?int $client_id = null)
+    {
+        $clients = Client::orderBy("client_name")
+            ->whereNotNull("email")
+            ->get()
+            ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])
+            ->toArray();
+
+        return view(user_role().".mail.prepare", compact("clients", "client_id"));
+    }
+
+    public function mailSend(Request $rq)
+    {
+        $failures = 0;
+
+        foreach ($rq->clients as $client_id) {
+            $client = Client::find($client_id);
+
+            try {
+                Mail::to($client->email)
+                    ->send(new CustomMail($client, $rq->subject, $rq->content));
+            } catch (Exception $e) {
+                $failures++;
+            }
+        }
+
+        return back()->with("success", "Mail wysłany" . ($failures ? ", błędów: $failures" : ""));
+    }
+    #endregion
 
     //////////////////////////////////////////
 

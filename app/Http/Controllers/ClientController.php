@@ -130,9 +130,11 @@ class ClientController extends Controller
     {
         $failures = 0;
 
-        foreach ($rq->clients as $client_id) {
-            $client = Client::find($client_id);
+        $clients_for_mailing = $rq->clients
+            ? Client::whereIn("id", $rq->clients)->get()
+            : Client::whereNotNull("email")->get(); // defaults to everybody available!
 
+        foreach ($clients_for_mailing as $client) {
             try {
                 Mail::to($client->email)
                     ->send(new CustomMail($client, $rq->subject, $rq->content));

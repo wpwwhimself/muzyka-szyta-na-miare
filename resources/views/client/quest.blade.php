@@ -1,24 +1,6 @@
 @extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
 
 @section('content')
-<x-tutorial>
-    {{ [
-        11 => "Twoje zlecenie zostało przyjęte. Wkrótce rozpocznę nad nim pracę.",
-        12 => "Dobre wyczucie, właśnie prowadzę prace nad Twoim zleceniem. W ciągu kolejnych godzin możesz spodziewać się wiadomości na temat postępów.",
-        13 => "Prace nad zleceniem zostały zawieszone. Nadal mogę do niego wrócić, ale na razie leży odłożony i czeka na swój czas.",
-        14 => "Obecny etap prac został przez Ciebie przyjęty. Wkrótce dostarczę dalszą część materiałów.",
-        15 => "Do Twojego zlecenia zostały dodane nowe pliki. Poniżej możesz je przeglądać i wyrazić swoją opinię na ich temat.",
-        16 => "Twoje uwagi zostały przekazane. Odniosę się do nich i przygotuję coś nowego wkrótce.",
-        17 => "Twoje zlecenie wygasło z powodu zbyt powolnych postępów.",
-        18 => "Zlecenie zostało przez Ciebie odrzucone. Coś musiało pójść nie tak lub coś Ci się nie spodobało.",
-        19 => "Zlecenie zostało przez Ciebie przyjęte bez zarzutów. Cieszę się, że mogłem coś dla Ciebie przygotować i polecam się do dalszych zleceń.",
-        21 => "W tym zleceniu została zgłoszona chęć wprowadzenia zmian. Wkrótce je zweryfikuję i wprowadzę odpowiednie poprawki.",
-        26 => "Twoje zlecenie zostało przywrócone – w najbliższym czasie skontaktuję się z Tobą z nowymi plikami lub też zmianami w wycenie.",
-        31 => "Wycena dla tego zlecenia musiała zostać zmieniona. Aby prace mogły postępować dalej, musisz je zaakceptować.",
-        95 => "Potrzebuję dodatkowych informacji na temat tego zlecenia. Odpowiedz na moje pytania za pomocą przycisku poniżej.",
-        96 => "Komentarz został przesłany. Odniosę się do niego i przygotuję coś nowego wkrótce.",
-    ][$quest->status_id] }}
-</x-tutorial>
 
 <x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
 

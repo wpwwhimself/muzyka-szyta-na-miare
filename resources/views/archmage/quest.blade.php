@@ -189,6 +189,7 @@
                 $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
             ], fn($val) => !is_null($val)))"
             :warning="$warnings['quote']"
+            :extended="!$quest->paid"
         >
             <div>
                 <div id="price-summary" class="hint-table">

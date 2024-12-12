@@ -27,7 +27,7 @@
         <x-extendo-block key="meta"
             header-icon="cart-flatbed"
             title="Dane zlecenia"
-            :subtitle="ucfirst($request->quest_type->type)"
+            subtitle="Jaki utwór mam przygotować?"
             :extended="true"
         >
             <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" :disabled="true" />
@@ -37,19 +37,13 @@
             </x-extendo-section>
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
-            @if ($request->hard_deadline)
-            <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
-            @endif
         </x-extendo-block>
         <x-extendo-block key="quote"
             header-icon="sack-dollar"
             title="Wycena"
-            :subtitle="implode(' // ', array_filter([
-                as_pln($request->price),
-                $request->deadline ? 'do '.$request->deadline->format('d.m.Y') : null,
-            ], fn($val) => !is_null($val)))"
+            subtitle="Na jakich warunkach go przygotuję?"
             :warning="$warnings['quote']"
-            :extended="sumWarnings($warnings['quote'], true) || $request->status_id == 5"
+            :extended="true"
         >
             @if (!$request->price)
             <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
@@ -111,9 +105,14 @@
                 @endif
             </div>
 
-            @if ($request->deadline)
-            <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
-            @endif
+            <div>
+                @if ($request->hard_deadline)
+                <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
+                @endif
+                @if ($request->deadline)
+                <x-input type="date" name="deadline" label="Do kiedy (włącznie) ja oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
+                @endif
+            </div>
 
             <x-extendo-section>
                 @if ($request->price && $request->status_id == 5)

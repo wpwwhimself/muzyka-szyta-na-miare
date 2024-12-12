@@ -2,17 +2,18 @@
 
 @section('content')
 
-@if (sumWarnings($warnings))
-<x-warning>
-    Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
-</x-warning>
-@endif
-
 <x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
 
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf
-    <h1>Szczegóły zapytania</h1>
+    <h1>
+        Szczegóły zapytania
+        @if (sumWarnings($warnings))
+        <x-warning>
+            Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
+        </x-warning>
+        @endif
+    </h1>
     <x-phase-indicator :status-id="$request->status_id" />
 
     @if ($request->quest_id)

@@ -225,7 +225,7 @@
         $(document).ready(function(){
             $("#request_bulk_add").click(function(){
                 $(".bulk-box:first-of-type").clone().insertBefore($(this));
-                $(".bulk-box:last-of-type :is(input, textarea)").val("");
+                $(".bulk-box:last-of-type input, .bulk-box:last-of-type textarea").val("");
             });
         });
         </script>

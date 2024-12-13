@@ -318,9 +318,9 @@ video{
     width: 100%;
 }
 
-code {
+pre {
     display: block;
-    white-space-collapse: break-spaces;
+    text-align: left;
 }
 
 /* NOŻYCZKI */

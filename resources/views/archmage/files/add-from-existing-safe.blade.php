@@ -12,7 +12,7 @@
             @if (pathinfo($file, PATHINFO_EXTENSION) == "md")
             <div>
                 <strong>{{ basename($file) }}:</strong>
-                <code>{{ Storage::get($file) }}</code>
+                <pre>{{ Storage::get($file) }}</pre>
             </div>
             @else
             <x-input type="checkbox" name="file_to_recycle[{{ preg_replace('/(\[|\])/', '$', $file) }}]" :label="basename($file)" />

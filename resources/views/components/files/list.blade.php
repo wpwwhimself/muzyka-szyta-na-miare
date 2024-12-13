@@ -1,6 +1,7 @@
 @props([
     "groupedFiles",
     "editable" => false,
+    "highlightForClientId" => null,
 ])
 
 @forelse ($groupedFiles as $variant_name => $versions)
@@ -12,7 +13,10 @@
 
     @foreach ($versions as $version)
     @unless ($version->only_for_client_id && Auth::id() != $version->only_for_client_id && !is_archmage())
-    <div class="file-container-b">
+    <div class="{{ implode(" ", array_filter([
+        'file-container-b',
+        !in_array($version->only_for_client_id, [null, Auth::id(), $highlightForClientId]) ? 'ghost' : null,
+    ])) }}">
         <h5>
             @foreach ($version->tags as $tag)
             <x-file-tag :tag="$tag" />

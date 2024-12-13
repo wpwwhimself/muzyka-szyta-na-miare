@@ -14,9 +14,6 @@ header .logo{
 b, strong{
     color: var(--acc);
 }
-.flex-right{
-    flex-wrap: nowrap;
-}
 
 section{
     border: none;
@@ -31,9 +28,6 @@ h1{
     font-size: 2em;
 }
 
-.flex-right{
-    justify-content: center;
-}
 
 #home{
     font-size: 1.25em;

@@ -46,13 +46,13 @@
         </div>
         <ul>
             <li>Każdy aspekt projektu <b>dostosowany do Twoich wymagań</b> – od wykorzystanych instrumentów do budowy utworu</li>
-            <li><b>Szybki</b> czas realizacji – od 2-{{ $average_quest_done }} dni <i class="fas fa-circle-question" @popper(...o ile nie mam<br>za dużo zamówień)></i></li>
+            <li><b>Szybki</b> czas realizacji – od 2-{{ $average_quest_done }} dni <x-tutorial>...o ile nie mam za dużo zamówień</x-tutorial></li>
             <li>Darmowe <b>poprawki na bieżąco</b>, żeby było idealnie</li>
         </ul>
     </div>
 
     <h2>A także:</h2>
-    <div id="offer-other" class="flex-right">
+    <div id="offer-other" class="flex-right center">
         <span class="section-like hidden">
             Schematy akordowe
             <i class="fa-solid fa-circle-info" @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)></i>
@@ -89,14 +89,14 @@
             <p>Córka wyszła właśnie ze studia nagrań; pan nagrywający jest pełen podziwu podkładu i <b>jakości wykonania</b>. Sami pewnie jeszcze nie raz skorzystamy z usług.</p>
         </div>
     </div>
-    <div class="hidden flex-right">
+    <div class="hidden flex-right center">
         <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpiotr.sting%2Fposts%2Fpfbid032Xy9dFowc5VZAr3F88vrYF7KfvnGLrGd2XRyTcG7fHd5yVECh9VqjrTJ26PgdUhpl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
         <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Falicja.stefanowska.12%2Fposts%2Fpfbid0xko4oooyuc2DAWa7k9jKBMSFcgcDgCpZKmzupUP4Qr2yVdffR8ZEvo7zvUTQD6RTl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
         <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Faldona.starzyk%2Fposts%2Fpfbid02Cr5pG2cgwvK6shabfBLEUNm2av9wdc3ZRdzntoF1FQL3pub1Lhd7G5mFFwDUUue1l&show_text=true&width=500" width="500" height="189" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
     </div>
     <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Więcej recenzji</x-a>
     <h2>Współpracuję również z:</h2>
-    <div id="recomms-other" class="flex-right">
+    <div id="recomms-other" class="flex-right center">
         <img class="hidden" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
         <img class="hidden" src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
     </div>
@@ -105,7 +105,7 @@
 <section id="showcases">
     <h1>Co już udało mi się wykonać?</h1>
 
-    <div id="showcase-yts" class="flex-right">
+    <div id="showcase-yts" class="flex-right center">
         @foreach ($client_showcases as $showcase)
         {!! $showcase->embed !!}
         @endforeach
@@ -114,7 +114,7 @@
         <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
 
-    <div id="showcase-fbs" class="flex-right">
+    <div id="showcase-fbs" class="flex-right center">
     @foreach ($showcases as $showcase)
     {!! $showcase->link_ig ?? $showcase->link_fb !!}
     @endforeach

@@ -129,6 +129,7 @@ class StatsController extends Controller
                 ORDER BY re_quest_id, status_changes.id DESC) as x"))
             ->selectRaw("difference, count(*) as count")
             ->groupBy("difference")
+            ->orderBy("difference")
             ->pluck("count", "difference") as $deadline => $count){
                 $label = ($deadline <= -7) ? "<= -7" : (
                     ($deadline >= 7) ? ">= 7" : $deadline
@@ -215,6 +216,7 @@ class StatsController extends Controller
                                 ORDER BY re_quest_id, `date`) as x "))
                             ->selectRaw("difference, count(*) as count")
                             ->groupBy("difference")
+                            ->orderBy("difference")
                             ->pluck("count", "difference"),
                         "total" => StatusChange::where("new_status_id", 15)
                             ->distinct("re_quest_id")

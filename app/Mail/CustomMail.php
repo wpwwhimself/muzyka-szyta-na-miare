@@ -38,6 +38,6 @@ class CustomMail extends Mailable
     {
         return $this
             ->subject($this->subject)
-            ->view('emails.custom-mail');
+            ->view('emails.custom-mail', ["title" => $this->subject]);
     }
 }

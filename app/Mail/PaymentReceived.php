@@ -37,6 +37,6 @@ class PaymentReceived extends Mailable
     {
         return $this
             ->subject(($this->paymentShouldBeDelayed ? "Przedwczesna wpłata" : "Wpłata")." zarejestrowana za zlecenie ".$this->quest->id)
-            ->view('emails.payment-received');
+            ->view('emails.payment-received', ["title" => "Otrzymano wpłatę"]);
     }
 }

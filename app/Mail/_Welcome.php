@@ -35,6 +35,6 @@ class _Welcome extends Mailable
     {
         return $this
             ->subject("Nowa strona internetowa i logowanie")
-            ->view('emails._welcome');
+            ->view('emails._welcome', ["title" => "Witam na stronie " . env("APP_NAME")]);
     }
 }

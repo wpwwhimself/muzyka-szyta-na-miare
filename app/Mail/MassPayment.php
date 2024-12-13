@@ -34,6 +34,6 @@ class MassPayment extends Mailable
     {
         return $this
             ->subject("Wpłata zarejestrowana")
-            ->view('emails.mass-payment');
+            ->view('emails.mass-payment', ["title" => "Zlecenie zaktualizowane"]);
     }
 }

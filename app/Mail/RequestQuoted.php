@@ -34,6 +34,6 @@ class RequestQuoted extends Mailable
     {
         return $this
             ->subject("Wycena zapytania | ".$this->request->full_title)
-            ->view('emails.request-quoted');
+            ->view('emails.request-quoted', ["title" => "Wycena zapytania"]);
     }
 }

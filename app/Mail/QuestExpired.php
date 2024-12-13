@@ -38,6 +38,6 @@ class QuestExpired extends Mailable
     {
         return $this
             ->subject("Wygaszono zlecenie nr ".$this->quest->id)
-            ->view('emails.quest-expired');
+            ->view('emails.quest-expired', ["title" => "Zlecenie wygaszone"]);
     }
 }

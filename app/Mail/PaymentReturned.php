@@ -34,6 +34,6 @@ class PaymentReturned extends Mailable
     {
         return $this
             ->subject("Zwrot wpłaty za zlecenie ".$this->quest->id)
-            ->view('emails.payment-returned');
+            ->view('emails.payment-returned', ["title" => "Zwrócono wpłatę"]);
     }
 }

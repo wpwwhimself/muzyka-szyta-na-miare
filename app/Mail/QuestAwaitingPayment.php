@@ -34,6 +34,6 @@ class QuestAwaitingPayment extends Mailable
     {
         return $this
             ->subject("Zlecenie nr ".$this->quest->id." oczekuje na opłacenie")
-            ->view('emails.quest-awaiting-payment');
+            ->view('emails.quest-awaiting-payment', ["title" => "Zlecenie oczekuje na opinię"]);
     }
 }

@@ -1,6 +1,4 @@
-@extends('layouts.mail', [
-    "title" => "Goniec przynosi wieści"
-])
+@extends('layouts.mail', compact("title"))
 
 @section('content')
     <h2>Zmiana statusu zlecenia</h2>

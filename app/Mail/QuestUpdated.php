@@ -34,6 +34,6 @@ class QuestUpdated extends Mailable
     {
         return $this
             ->subject("Zlecenie nr ".$this->quest->id." zostało zaktualizowane")
-            ->view('emails.quest-updated');
+            ->view('emails.quest-updated', ["title" => "Zlecenie zaktualizowane"]);
     }
 }

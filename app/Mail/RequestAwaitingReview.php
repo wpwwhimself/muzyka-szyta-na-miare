@@ -34,6 +34,6 @@ class RequestAwaitingReview extends Mailable
     {
         return $this
             ->subject("Zapytanie oczekuje na opinię")
-            ->view('emails.request-awaiting-review');
+            ->view('emails.request-awaiting-review', ["title" => "Zapytanie oczekuje na opinię"]);
     }
 }

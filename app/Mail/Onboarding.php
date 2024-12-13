@@ -34,6 +34,6 @@ class Onboarding extends Mailable
     {
         return $this
             ->subject("Pierwsze kroki z Muzyką Szytą Na Miarę")
-            ->view('emails.onboarding');
+            ->view('emails.onboarding', ["title" => "Konto założone"]);
     }
 }

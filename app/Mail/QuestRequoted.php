@@ -38,6 +38,6 @@ class QuestRequoted extends Mailable
     {
         return $this
             ->subject("Zmiana warunków zlecenia | ".$this->quest->song->full_title)
-            ->view('emails.quest-requoted');
+            ->view('emails.quest-requoted', ["title" => "Zmieniona wycena zlecenia"]);
     }
 }

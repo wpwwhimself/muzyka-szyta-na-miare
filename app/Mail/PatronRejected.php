@@ -34,6 +34,6 @@ class PatronRejected extends Mailable
     {
         return $this
             ->subject("Nie przyznano zniżki za reklamę")
-            ->view('emails.patron-rejected');
+            ->view('emails.patron-rejected', ["title" => "Nie przyznano zniżki za reklamę"]);
     }
 }

@@ -42,6 +42,6 @@ class Clarification extends Mailable
     {
         return $this
             ->subject("Prośba o doprecyzowanie | ".($this->is_request ? $this->re_quest->full_title : $this->re_quest->song->full_title))
-            ->view('emails.clarification');
+            ->view('emails.clarification', ["title" => "Prośba o doprecyzowanie"]);
     }
 }

@@ -1,6 +1,4 @@
-@extends('layouts.mail', [
-    "title" => "Zapytanie wygasło"
-])
+@extends('layouts.mail', compact("title"))
 
 @section('content')
     <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>

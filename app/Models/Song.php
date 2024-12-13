@@ -51,6 +51,10 @@ class Song extends Model
     {
         return $this->hasMany(File::class)->orderByDesc("updated_at");
     }
+    public function type()
+    {
+        return $this->belongsTo(QuestType::class, "type_letter", "code");
+    }
 
     public function getCostsAttribute() {
         return Cost::where("desc", "like", "%".$this->id."%")
@@ -84,5 +88,8 @@ class Song extends Model
             $this->artist,
             $this->title ?? 'utwór bez tytułu',
         ], fn($v) => !empty($v)));
+    }
+    public function getTypeLetterAttribute(){
+        return substr($this->id, 0, 1);
     }
 }

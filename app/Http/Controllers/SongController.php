@@ -58,7 +58,7 @@ class SongController extends Controller
     public function edit(string $id): View
     {
         $song = Song::findOrFail($id);
-        $genres = Genre::orderBy("name")->get()->pluck("name");
+        $genres = Genre::orderBy("name")->get()->pluck("name", "id");
         $tags = SongTag::orderBy("name")->get();
         return view(user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],

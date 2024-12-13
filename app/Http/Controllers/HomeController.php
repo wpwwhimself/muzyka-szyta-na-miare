@@ -7,6 +7,7 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Showcase;
 use App\Models\Song;
+use App\Models\SongTag;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,8 @@ class HomeController extends Controller
             "inne" => "inne"
         ];
 
+        $song_tags = SongTag::orderBy("name")->get();
+
         return view("front.podklady", compact(
             "showcases",
             "client_showcases",
@@ -61,6 +64,7 @@ class HomeController extends Controller
             "contact_preferences",
             "random_song",
             "average_quest_done",
+            "song_tags",
         ));
     }
 

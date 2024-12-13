@@ -1,3 +1,17 @@
+function filterSongs(tag_id = undefined) {
+    let visible_songs = 0;
+    document.querySelectorAll("#songs li").forEach(song => {
+        const tags = song.dataset.songTags.split(",").map(parseInt)
+        if (tag_id !== undefined && !tags.includes(tag_id)) {
+            song.classList.add("gone")
+        } else {
+            song.classList.remove("gone")
+            visible_songs++
+        }
+    })
+    document.querySelector("#songs-count").innerHTML = visible_songs
+}
+
 $(document).ready(function(){
     /**
      * load and display songs
@@ -9,8 +23,10 @@ $(document).ready(function(){
             if(res.length > 0){
                 const list = $("#songs ul");
                 $("#songs .grayed-out").remove();
-                for(song of res){
-                    list.append(`<li>
+                for(song of res) {
+                    const tags = song.tags.map(tag => tag.id).join(",");
+
+                    list.append(`<li data-song-tags="${tags}">
                         <span>${song.title ?? 'utwór bez tytułu'}</span>
                         <span class='ghost'>${song.artist ?? ''}</span>
                         ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania"
@@ -21,7 +37,7 @@ $(document).ready(function(){
                         >💽</span>` : ``}
                     </li>`);
                 }
-                list.after($(`<p>Razem: ${res.length}</p>`));
+                list.after($(`<p>Razem: <b id="songs-count">${res.length}</b></p>`));
 
                 $("#song-loader").hide();
 

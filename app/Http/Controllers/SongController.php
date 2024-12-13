@@ -126,7 +126,8 @@ class SongController extends Controller
     }
 
     public function getForFront(){
-        $songs = Song::orderByRaw("ISNULL(title)")
+        $songs = Song::with("tags")
+            ->orderByRaw("ISNULL(title)")
             ->where("id", "not like", "O%")
             ->orderBy("title")
             ->orderBy("artist")

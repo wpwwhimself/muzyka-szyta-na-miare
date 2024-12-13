@@ -134,6 +134,12 @@
                 Kliknij ikonę płyty, aby odtworzyć próbkę
             </x-tutorial>
         </h2>
+        <div class="flex-right center">
+            <x-button action="#/" label="Wszystkie" icon="tag" onclick="filterSongs()" small />
+            @foreach ($song_tags as $tag)
+            <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs({{ $tag->id }})" small />
+            @endforeach
+        </div>
         <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
         <div class="popup">
             <div class="popup-contents flex-down center">

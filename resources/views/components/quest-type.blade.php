@@ -1,6 +1,6 @@
 @props([
   'type' => null,
-  'id' => null, 'label' => null, 'fa-symbol' => null,
+  'id' => null, 'label' => null, 'faSymbol' => null,
   'small' => false,
 ])
 

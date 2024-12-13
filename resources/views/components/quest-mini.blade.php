@@ -5,12 +5,8 @@
         @unless (empty($no))
         <span>{{ $no }}</span>
         @endunless
-        
-        <x-quest-type
-            :id="$quest->quest_type->id ?? 0"
-            :label="$quest->quest_type->type ?? 'nie zdefiniowano'"
-            :fa-symbol="$quest->quest_type->fa_symbol ?? 'fa-circle-question'"
-        />
+
+        <x-quest-type :type="$quest->quest_type" />
 
         <div class="flex-down">
             <h3 class="song-title">
@@ -21,11 +17,11 @@
                 <i class="fas fa-folder" @popper(Sejf istnieje)></i>
                 @endif
             </h3>
-            
+
             @if ($song->artist)
             <span class="song-artist">{{ $song->artist }}</span>
             @endif
-    
+
             @if ($quest->is_priority)
             <b>Priorytet</b>
             @endif

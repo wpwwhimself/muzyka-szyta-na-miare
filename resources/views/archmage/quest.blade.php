@@ -49,11 +49,7 @@
         :extended="in_array($quest->status_id, [11, 12])"
     >
         <x-extendo-section title="Rodzaj">
-            <x-quest-type
-                :id="$quest->song->type->id"
-                :label="$quest->song->type->type"
-                :fa-symbol="$quest->song->type->fa_symbol"
-            />
+            <x-quest-type :type="$quest->quest_type" />
         </x-extendo-section>
         <x-extendo-section title="Akcje">
             <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>

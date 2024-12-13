@@ -6,6 +6,7 @@
     icon="list"
 >
     <x-slot name="buttons">
+        <x-a :href="route('song-genres')" icon="radio">Gatunki</x-a>
         <x-a :href="route('song-tags')" icon="tag">Tagi</x-a>
         <form method="get" id="search" class="flex-right" action="{{ route('songs') }}">
             <input type="text" name="search" class="small" value="{{ $search }}" />

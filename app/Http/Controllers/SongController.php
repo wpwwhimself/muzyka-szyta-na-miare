@@ -74,6 +74,37 @@ class SongController extends Controller
         return back()->with("success", "Utwór poprawiony");
     }
 
+    #region genres
+    public function listGenres(): View
+    {
+        $genres = Genre::orderBy("name")->get();
+        return view(user_role().".songs.genres.list", array_merge(
+            ["title" => "Gatunki utworów"],
+            compact("genres"),
+        ));
+    }
+
+    public function editGenre(string $id = null): View
+    {
+        $genre = Genre::find($id);
+        return view(user_role().".songs.genres.edit", array_merge(
+            ["title" => $genre ? $genre->name." | Edycja gatunku" : "Tworzenie gatunku"],
+            compact("genre"),
+        ));
+    }
+
+    public function processGenre(Request $rq): RedirectResponse
+    {
+        if ($rq->action == "save") {
+            Genre::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            Genre::find($rq->id)->delete();
+        }
+        return redirect()->route("song-genres")->with("success", "Gatunek poprawiony");
+    }
+
+    #endregion
+
     #region tags
     public function listTags(): View
     {

@@ -1,8 +1,23 @@
-function filterSongs(tag_id = undefined) {
+function filterSongs(criterion = undefined, id = undefined) {
+    const filterFunction = {
+        genre: (song, needle, haystack) => haystack === needle,
+        tag: (song, needle, haystack) => haystack.includes(needle)
+    }
+
     let visible_songs = 0;
     document.querySelectorAll("#songs li").forEach(song => {
-        const tags = song.dataset.songTags.split(",").map(parseInt)
-        if (tag_id !== undefined && !tags.includes(tag_id)) {
+        const haystacks = {
+            genre: parseInt(song.getAttribute("data-song-genre")),
+            tag: song.getAttribute("data-song-tags").split(",").map(parseInt)
+        }
+
+        if (criterion === undefined) {
+            song.classList.remove("gone")
+            visible_songs++
+            return
+        }
+
+        if (!filterFunction[criterion](song, parseInt(id), haystacks[criterion])) {
             song.classList.add("gone")
         } else {
             song.classList.remove("gone")
@@ -26,7 +41,7 @@ $(document).ready(function(){
                 for(song of res) {
                     const tags = song.tags.map(tag => tag.id).join(",");
 
-                    list.append(`<li data-song-tags="${tags}">
+                    list.append(`<li data-song-genre="${song.genre_id}" data-song-tags="${tags}">
                         <span>${song.title ?? 'utwór bez tytułu'}</span>
                         <span class='ghost'>${song.artist ?? ''}</span>
                         ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
+use App\Models\Genre;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Showcase;
@@ -54,6 +55,7 @@ class HomeController extends Controller
             "inne" => "inne"
         ];
 
+        $genres = Genre::orderBy("name")->get();
         $song_tags = SongTag::orderBy("name")->get();
 
         return view("front.podklady", compact(
@@ -64,6 +66,7 @@ class HomeController extends Controller
             "contact_preferences",
             "random_song",
             "average_quest_done",
+            "genres",
             "song_tags",
         ));
     }

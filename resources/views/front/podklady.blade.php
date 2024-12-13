@@ -134,12 +134,7 @@
                 Kliknij ikonę płyty, aby odtworzyć próbkę
             </x-tutorial>
         </h2>
-        <div class="flex-right center">
-            <x-button action="#/" label="wszystkie" icon="tags" onclick="filterSongs()" small />
-            @foreach ($song_tags as $tag)
-            <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs({{ $tag->id }})" small />
-            @endforeach
-        </div>
+
         <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
         <div class="popup">
             <div class="popup-contents flex-down center">
@@ -149,6 +144,19 @@
                 <x-file-player type="ogg" file="" is-showcase />
                 <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
             </div>
+        </div>
+
+        <h3>Filtruj:</h3>
+        <div class="flex-right center">
+            <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+
+            @foreach ($genres as $genre)
+            <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+            @endforeach
+
+            @foreach ($song_tags as $tag)
+            <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small />
+            @endforeach
         </div>
     </div>
 </section>

@@ -46,7 +46,7 @@
         </div>
         <ul>
             <li>Każdy aspekt projektu <b>dostosowany do Twoich wymagań</b> – od wykorzystanych instrumentów do budowy utworu</li>
-            <li><b>Szybki</b> czas realizacji – od 1-{{ $average_quest_done }} dni <i class="fas fa-circle-question" @popper(...o ile nie mam<br>za dużo zamówień)></i></li>
+            <li><b>Szybki</b> czas realizacji – od 2-{{ $average_quest_done }} dni <i class="fas fa-circle-question" @popper(...o ile nie mam<br>za dużo zamówień)></i></li>
             <li>Darmowe <b>poprawki na bieżąco</b>, żeby było idealnie</li>
         </ul>
     </div>
@@ -186,7 +186,7 @@
             <li class="hidden">Jak szybko można się spodziewać gotowego podkładu?</li>
             <li class="hidden">
                 <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
-                Zwykle projekty jestem w stanie wykonać <b>w 1-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
+                Zwykle projekty jestem w stanie wykonać <b>w 2-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
                 <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
             </li>
 

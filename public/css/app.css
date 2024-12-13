@@ -65,7 +65,7 @@ section:hover, .section-like:hover{
 .section-header{
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin: 1em 0;
 }
 .section-header:first-of-type{
@@ -78,7 +78,7 @@ section:hover, .section-like:hover{
     display: flex;
     flex-direction: row;
     text-align: right;
-    align-items: flex-end;
+    align-items: center;
     gap: 0.5em;
 }
 small{
@@ -117,6 +117,9 @@ div, form{
 }
 .flex-right.center{
     justify-content: center;
+}
+.flex-right.middle {
+    align-items: center;
 }
 .hover-lift:hover{
     color: inherit;
@@ -294,9 +297,6 @@ input[type="color"] {
 .small{
     font-size: 0.75em;
     margin: 0;
-}
-.quest-mini .small{
-    font-size: 1em; margin: 0;
 }
 .danger{
     background-color: rgb(var(--danger));
@@ -570,17 +570,6 @@ footer .contact-info{
     gap: 1em;
     overflow-x: auto;
 }
-.quest-mini{
-    border-radius: 2em;
-    padding: 1em;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
-    background-color: var(--bg2);
-}
-.quest-mini .song-title, .quest-mini .client-name{ white-space: nowrap; color: var(--fg); }
-.quest-mini .song-title{ padding: 0.2em 0.6em; }
 
 .quest-details{
     display: flex;
@@ -595,23 +584,18 @@ footer .contact-info{
     margin-bottom: 0.25em;
 }
 .quest-meta{
-    align-self: flex-end;
     white-space: nowrap;
-    display: grid;
-    grid-template-columns: 2em 1fr;
-}
-.quest-meta:last-child{
-    grid-template-columns: 1fr 2em;
-    margin-left: 0.5em;
-}
-.quest-meta p{
-    margin: 0;
-}
-.quest-meta:first-child p{ text-align: left; }
-.quest-meta:last-child p{ text-align: right; }
-.quest-meta i{
-    font-style: normal;
-    text-align: center;
+    grid-template-columns: auto 1fr;
+    text-align: left;
+    gap: 0 0.5em;
+
+    & p {
+        margin: 0;
+    }
+    & i{
+        font-style: normal;
+        text-align: center;
+    }
 }
 
 .quest-status{
@@ -652,29 +636,26 @@ footer .contact-info{
     & .quest-main-data>span{
         flex-basis: 100%;
     }
-    & .song-title{
-        margin: 0;
-        background: none;
-        font-size: 1.1em;
+}
+
+.quest-mini {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.5em;
+    align-items: center;
+    border-radius: 1em;
+    padding: 0.5em;
+    text-decoration: none;
+
+    &:hover {
+        background: rgba(var(--q-clr), 0.3);
+        color: var(--fg);
     }
 }
 
-.quest-mini .song-title, .quest-mini .song-artist{
-    text-align: center;
-    margin: 0;
-}
-
 .song-title{
-    font-size: 1.25rem;
-    background-color: rgb(var(--q-clr));
-}
-.song-title-artist{
-    margin-bottom: 0.5em;
-    background-color: rgba(var(--q-clr), 0.5);
-    border-radius: 1em;
-}
-.song-title-artist:hover{
-    color: inherit;
+    margin: 0;
+    font-size: 1.1em;
 }
 
 .bulk-box{
@@ -1297,12 +1278,10 @@ footer .contact-info{
         flex-direction: column;
         align-items: stretch;
     }
-    .quest-mini{
-        margin: 0;
-    }
-    .quest-mini .song-title{
-        font-size: 1em;
-        white-space: normal;
+
+    .quest-mini {
+        display: flex;
+        flex-direction: column;
     }
 
     #quest-box{
@@ -1347,17 +1326,15 @@ footer .contact-info{
     .flex-right, .flex-down{
         gap: 0.2em;
     }
-    .grid-2, .grid-3, .section-header>div{
+    .grid-2:not(.keep-for-mobile),
+    .grid-3:not(.keep-for-mobile),
+    .section-header>div{
         display: flex;
         flex-direction: column;
         align-items: inherit;
     }
     .login-grid-container{
         padding: 0.5em 0;
-    }
-
-    .quest-meta{
-        align-self: flex-end;
     }
 
     #ppp{

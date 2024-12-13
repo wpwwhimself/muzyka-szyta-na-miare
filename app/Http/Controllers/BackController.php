@@ -46,6 +46,9 @@ class BackController extends Controller
 
         if(!is_archmage()){
             $requests = $requests->where("client_id", $client->id);
+            $quests_ongoing = $quests_ongoing->where("client_id", $client->id);
+            $quests_review = $quests_review->where("client_id", $client->id);
+            
             $quests_total = Auth::user()->client->exp;
             $unpaids = Quest::where("client_id", Auth::id())
                 ->whereNotIn("status_id", [18])

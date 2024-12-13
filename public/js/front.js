@@ -17,7 +17,7 @@ $(document).ready(function(){
                             class="clickable"
                             data-song-id="${song.id}"
                             data-song-title="${song.full_title}"
-                            data-song-desc="${song.notes || ''}"
+                            data-song-desc="${song.notes?.replace(/\n/g, '<br>') || ''}"
                         >💽</span>` : ``}
                     </li>`);
                 }
@@ -34,7 +34,7 @@ $(document).ready(function(){
                     const song_desc = $(this).attr("data-song-desc");
 
                     $("#songs .popup .song-full-title").text(song_title)
-                    $("#songs .popup .song-desc").text(song_desc)
+                    $("#songs .popup .song-desc").html(song_desc)
 
                     player.src = `showcase/show/${song_id}`;
                     player.load();

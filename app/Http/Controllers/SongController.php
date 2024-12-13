@@ -130,8 +130,6 @@ class SongController extends Controller
             ->where("id", "not like", "O%")
             ->orderBy("title")
             ->orderBy("artist")
-            ->select(["id", "title", "artist"])
-            ->distinct()
             ->get();
 
         return $songs;

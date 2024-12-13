@@ -135,7 +135,7 @@
             </x-tutorial>
         </h2>
         <div class="flex-right center">
-            <x-button action="#/" label="Wszystkie" icon="tag" onclick="filterSongs()" small />
+            <x-button action="#/" label="wszystkie" icon="tags" onclick="filterSongs()" small />
             @foreach ($song_tags as $tag)
             <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs({{ $tag->id }})" small />
             @endforeach

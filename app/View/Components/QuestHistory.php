@@ -2,11 +2,11 @@
 
 namespace App\View\Components;
 
-use App\Models\Client;
 use App\Models\Request;
 use Illuminate\View\Component;
 use App\Models\Status;
 use App\Models\StatusChange;
+use App\Models\User;
 use Illuminate\Mail\Markdown;
 
 class QuestHistory extends Component
@@ -37,7 +37,7 @@ class QuestHistory extends Component
     public function clientName($id){
         if($id == 1) return "Wojciech Przybyła";
         if($id == null) return _ct_($this->quest->client_name);
-        return _ct_(Client::find($id)->client_name);
+        return _ct_(User::find($id)->name);
     }
     public function entryLabel(StatusChange $entry){
         $output = "";

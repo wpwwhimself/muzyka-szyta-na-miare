@@ -28,14 +28,14 @@
 
             @if (is_archmage())
             <span class="ghost">
-                @if ($client?->client_name)
+                @if (gettype($client) == "object")
                     @if ($client->is_veteran)
                     <i class="fa-solid fa-user-shield" @popper(stały klient)></i> {{ _ct_($client->client_name) }}
                     @else
                     <i class="fa-solid fa-user" @popper(zwykły klient)></i> {{ _ct_($client->client_name) }}
                     @endif
                 @else
-                    <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($client->client_name) }}
+                    <i class="fa-regular fa-user" @popper(nowy klient)></i> {{ _ct_($client) }}
                 @endif
             </span>
             @endif

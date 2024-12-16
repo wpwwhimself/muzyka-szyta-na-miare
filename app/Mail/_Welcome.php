@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Client;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -22,7 +22,7 @@ class _Welcome extends Mailable
     public function __construct($params)
     {
         list($client_id) = $params;
-        $this->client = Client::findOrFail($client_id);
+        $this->client = User::findOrFail($client_id);
         $this->pl = client_polonize($this->client->client_name);
     }
 

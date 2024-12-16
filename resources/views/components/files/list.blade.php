@@ -27,7 +27,7 @@
             @if ($version->exclusiveClient && is_archmage())
             <div class="file-tag flex-right center middle"
                 style="background-color: white;"
-                {{ Popper::pop("Tylko dla: ".$version->exclusiveClient->client->client_name) }}
+                {{ Popper::pop("Tylko dla: ".$version->exclusiveClient->client_name) }}
             >
                 @svg("mdi-eye")
             </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CustomMail;
-use App\Models\Client;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,8 +15,8 @@ class ClientController extends Controller
         $search = strtolower($rq->search ?? "");
 
         $clients_raw = ($param) ?
-            Client::where($param, (in_array($param, ["budget", "helped_showcasing"]) ? ">" : "="), $value) :
-            Client::whereNotNull("client_name")
+            User::where($param, (in_array($param, ["budget", "helped_showcasing"]) ? ">" : "="), $value) :
+            User::where("client_name", "<>", "")
         ;
         $clients_raw = $clients_raw
             ->where(fn($q) => $q
@@ -56,8 +55,7 @@ class ClientController extends Controller
     }
 
     public function view($id){
-        $client = Client::find($id);
-        if(!$client) abort(404, "Nie ma takiego klienta");
+        $client = User::findOrFail($id);
         if(!in_array(Auth::id(), [0, 1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         $contact_preferences = [
@@ -66,18 +64,33 @@ class ClientController extends Controller
             "sms" => "SMS",
             "inne" => "inne",
         ];
+        $trust_levels = [
+            -1 => "krętacz",
+            0 => "neutralne",
+            1 => "zaufany",
+            2 => "zapomniany",
+        ];
+        $patron_levels = [
+            0 => "brak",
+            1 => "oczekuje",
+            2 => "potwierdzony",
+        ];
 
         return view(user_role().".client", array_merge([
             "title" => $client->client_name." | Edycja klienta"
-        ], compact("client", "contact_preferences")));
+        ], compact(
+            "client",
+            "contact_preferences",
+            "trust_levels",
+            "patron_levels",
+        )));
     }
 
     public function edit($id, Request $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
-        $client = Client::find($id);
-        if(!$client) abort(404, "Nie ma takiego klienta");
+        $client = User::findOrFail($id);
         $client->update([
             "client_name" => $rq->client_name,
             "email" => $rq->email,
@@ -117,7 +130,7 @@ class ClientController extends Controller
     #region mailing
     public function mailPrepare(?int $client_id = null)
     {
-        $clients = Client::orderBy("client_name")
+        $clients = User::orderBy("client_name")
             ->whereNotNull("email")
             ->get()
             ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])
@@ -131,8 +144,8 @@ class ClientController extends Controller
         $failures = 0;
 
         $clients_for_mailing = $rq->clients
-            ? Client::whereIn("id", $rq->clients)->get()
-            : Client::whereNotNull("email")->get(); // defaults to everybody available!
+            ? User::whereIn("id", $rq->clients)->get()
+            : User::whereNotNull("email")->get(); // defaults to everybody available!
 
         foreach ($clients_for_mailing as $client) {
             try {
@@ -150,7 +163,7 @@ class ClientController extends Controller
     //////////////////////////////////////////
 
     public function getById(int $id){
-        $data = Client::find($id)->toArray();
+        $data = User::find($id)->toArray();
         foreach($data as $key => $value){
             if(!preg_match("/id/", $key)) $data[$key] = _ct_($value);
         }

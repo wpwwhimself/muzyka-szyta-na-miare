@@ -17,6 +17,6 @@
         Przypominam więc, że do swojego konta może się {{ $pl["kobieta"] ? "Pani" : "Pan" }} zalogować za pomocą hasła o treści:
     </p>
     <h2>
-        {{ $client->user->password }}
+        {{ $client->password }}
     </h2>
 @endsection

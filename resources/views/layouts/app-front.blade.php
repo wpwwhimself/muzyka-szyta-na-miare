@@ -40,7 +40,7 @@
 
     <script>
     const USER_ID = {{ Auth::id() ?? 'null' }};
-    const IS_VETERAN = {{ is_archmage() ? 0 : intval(Auth::user()->client->is_veteran ?? "") }};
+    const IS_VETERAN = {{ is_archmage() ? 0 : intval(Auth::user()->is_veteran ?? "") }};
     </script>
 
     <title>{{ config("app.name") }} ✂🎵 @yield("subtitle")</title>
@@ -67,7 +67,7 @@
 
     <section id="home" class="sc-line">
         <x-sc-scissors />
-        <div class="company-name flex-right">
+        <div class="company-name flex-right center">
             <img src="{{ asset(
                 Str::startsWith(Route::currentRouteName(), "home-")
                     ? "assets/msznm-".Str::afterLast(Route::currentRouteName(), "-").".svg"

@@ -25,7 +25,7 @@
     </p>
     <p>
         <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->user->password }}</b>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->password }}</b>
         </i>
     </p>
 @endsection

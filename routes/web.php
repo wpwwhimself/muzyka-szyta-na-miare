@@ -220,7 +220,7 @@ Route::domain($domain)->group(function(){
 
 /*
 Route::get("/greenlight", function(Request $rq){
-    $clients_with_email = Client::whereNotNull("email")->get();
+    $clients_with_email = User::whereNotNull("email")->get();
     $output = "";
 
     if($rq->ready != 1){

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use App\Models\File as ModelsFile;
 use App\Models\FileTag;
 use App\Models\Quest;
 use App\Models\Song;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -54,7 +54,7 @@ class FileController extends Controller
     {
         $song = Quest::find($quest_id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients_raw = Client::all()->toArray();
+        $clients_raw = User::all()->toArray();
         foreach($clients_raw as $client){
             $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
         }
@@ -74,7 +74,7 @@ class FileController extends Controller
     {
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
-        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+        $clients = User::orderBy("client_name")->get()->pluck("client_name", "id");
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
 
@@ -142,7 +142,7 @@ class FileController extends Controller
         $song = Song::find($song_id);
         $files = Storage::allFiles("safe/$song_id");
         $tags = FileTag::orderBy("name")->get();
-        $clients = Client::orderBy("client_name")->get()->pluck("client_name", "id");
+        $clients = User::orderBy("client_name")->get()->pluck("client_name", "id");
 
         return view(user_role().'.files.add-from-existing-safe', compact(
             "song",

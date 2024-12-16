@@ -1,12 +1,11 @@
 <?php
 
 use App\Models\CalendarFreeDay;
-use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Song;
 use App\Models\User;
-use App\View\Components\FileTag;
+use App\Models\FileTag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -185,7 +184,7 @@ if(!function_exists("generate_password")){
 if(!function_exists("price_calc")){
     function price_calc($labels, $client_id, $quoting = false){
         if($client_id == null) $client_id = $_POST['client_id'] ?? null; //odczyt tak, bo nie chce złapać argumentu
-        $client = Client::find($client_id);
+        $client = User::find($client_id);
         $price_schema = pricing($client_id);
 
         $price = 0; $multiplier = 1; $positions = [];
@@ -280,12 +279,12 @@ if(!function_exists("get_next_working_day")){
 if(!function_exists("can_download_files")){
     function can_download_files($client_id, $quest_id){
         if($client_id == "") return false;
-        $trust = Client::findOrFail($client_id)->trust;
+        $trust = User::findOrFail($client_id)->trust;
         $quest = Quest::findOrFail($quest_id);
         return
             $trust >= 0
             && (
-                Client::find($client_id)->is_veteran
+                User::find($client_id)->is_veteran
                 || $trust == 1
                 || (
                     $quest->delayed_payment !== null
@@ -299,7 +298,7 @@ if(!function_exists("pricing")){
     function pricing($client_id){
         if($client_id == "") return CURRENT_PRICING();
         else{
-            $client_since = Client::find($client_id)->created_at;
+            $client_since = User::find($client_id)->created_at;
             //loop for cycling through pricing schemas
             for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);
@@ -424,35 +423,6 @@ if(!function_exists("is_request")){
 if(!function_exists("as_pln")){
     function as_pln($value){
         return number_format($value, 2, ",", " ")." zł";
-    }
-}
-
-/**
- * Order file array, so as the most important to render are first
- */
-if(!function_exists("file_order")){
-    function file_order($a, $b){
-        $correct_order = ["mp4", "mp3", "ogg"];
-        $ext_a = preg_replace("/.*\.(.*)$/", "$1", $a);
-        $ext_b = preg_replace("/.*\.(.*)$/", "$1", $b);
-        return (array_search($ext_a, $correct_order) < array_search($ext_b, $correct_order)) ? -1 : 1;
-    }
-}
-
-/**
- * Extract file tags from its version name
- */
-if(!function_exists("file_name_and_tags")){
-    function file_name_and_tags($ver_sub){
-        $tags_raw = preg_replace("/^.*\[(.*)\]$/", "$1", $ver_sub);
-        $ver_sub = preg_replace("/^(.*)\[.*\]$/", "$1", $ver_sub);
-
-        if($tags_raw == $ver_sub) return [$ver_sub, []];
-
-        $tags = null;
-        preg_match_all(FileTag::REGEX, $tags_raw, $tags);
-
-        return [$ver_sub, $tags[1]];
     }
 }
 

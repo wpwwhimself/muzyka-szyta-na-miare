@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\MassPayment;
 use App\Mail\PaymentReturned;
 use App\Models\CalendarFreeDay;
-use App\Models\Client;
 use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Invoice;
@@ -16,6 +15,7 @@ use App\Models\Song;
 use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -106,9 +106,9 @@ class StatsController extends Controller
         $recent_gross_alltime = collect($recent_income_alltime)
             ->mergeRecursive($recent_costs_alltime)
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[2]]);
-        $client_exp_raw = Client::withCount("questsDone")
+        $client_exp_raw = User::withCount("questsDone")
             ->pluck("quests_done_count", "client_name")
-            ->mergeRecursive(Client::all()->pluck("extra_exp", "client_name"))
+            ->mergeRecursive(User::all()->pluck("extra_exp", "client_name"))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] + $val[1]])
             ->countBy()
             ->toArray();
@@ -143,7 +143,7 @@ class StatsController extends Controller
                 "general" => [
                     "biznes kręci się od" => BEGINNING()->diff(Carbon::now())->format("%yl %mm %dd"),
                     "skończone questy" => Quest::where("status_id", 19)->count(),
-                    "poznani klienci" => Client::count(),
+                    "poznani klienci" => User::count(),
                     "zarobki w sumie" => as_pln(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " "),
                 ],
                 "quest_types" => [
@@ -166,13 +166,13 @@ class StatsController extends Controller
                     "main" => [
                         "nowe" => Quest::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
                         "ukończone" => Quest::where("updated_at", ">=", Carbon::today()->subMonths(1))->where("status_id", 19)->count(),
-                        "debiutanckie" => Client::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
+                        "debiutanckie" => User::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
                         "max poprawek" => StatusChange::where("date", ">=", Carbon::today()->subMonths(1))->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
                     ],
                     "compared_to" => [
                         "nowe" => Quest::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
                         "ukończone" => Quest::whereBetween("updated_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->where("status_id", 19)->count(),
-                        "debiutanckie" => Client::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
+                        "debiutanckie" => User::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
                         "max poprawek" => StatusChange::whereBetween("date", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
                     ],
                 ],
@@ -190,11 +190,11 @@ class StatsController extends Controller
                         ->orderByDesc("Liczba poprawek")
                         ->limit(10)
                         ->join("quests", "re_quest_id", "quests.id", "left")
-                        ->join("clients", "quests.client_id", "clients.id", "left")
+                        ->join("users", "quests.client_id", "users.id", "left")
                         ->join("songs", "quests.song_id", "songs.id", "left")
                         ->join("genres", "songs.genre_id", "genres.id", "left")
                         ->selectRaw("re_quest_id as 'ID zlecenia',
-                            clients.client_name as 'Klient',
+                            users.client_name as 'Klient',
                             songs.title as 'Tytuł utworu',
                             genres.name as 'Gatunek utworu',
                             count(*) as 'Liczba poprawek'")
@@ -239,18 +239,18 @@ class StatsController extends Controller
             "clients" => [
                 "summary" => [
                     "split" => [
-                        "zaufani" => Client::where("trust", 1)->count(),
-                        "krętacze" => Client::where("trust", -1)->count(),
-                        "patroni" => Client::where("helped_showcasing", 2)->count(),
-                        "bez zleceń" => Client::withCount("questsDone")
+                        "zaufani" => User::where("trust", 1)->count(),
+                        "krętacze" => User::where("trust", -1)->count(),
+                        "patroni" => User::where("helped_showcasing", 2)->count(),
+                        "bez zleceń" => User::withCount("questsDone")
                             ->having("quests_done_count", 0)
                             ->where("extra_exp", 0)
                             ->count(),
-                        "kobiety" => Client::all()
+                        "kobiety" => User::all()
                             ->filter(fn($client) => $client->is_woman)
                             ->count(),
                     ],
-                    "total" => Client::all()->count(),
+                    "total" => User::all()->count(),
                 ],
                 "exp" => [
                     "split" => [
@@ -259,9 +259,9 @@ class StatsController extends Controller
                         "zainteresowani (2-3)" => client_exp_tally($client_exp_raw, 2, 3),
                         "nowicjusze (1)" => client_exp_tally($client_exp_raw, 1, 1),
                     ],
-                    "total" => Client::all()->count(),
+                    "total" => User::all()->count(),
                 ],
-                "new" => Client::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
+                "new" => User::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
                     ->whereDate("created_at", ">=", BEGINNING())
                     ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
                         count(*) as count")
@@ -270,7 +270,7 @@ class StatsController extends Controller
                     ->pluck("count", "month"),
                 "pickiness" => [
                     "high" => [
-                        "rows" => Client::all()
+                        "rows" => User::all()
                             ->sortByDesc("pickiness")
                             ->take(10)
                             ->map(fn($item, $key) => [
@@ -280,10 +280,10 @@ class StatsController extends Controller
                             ->values(),
                     ],
                     // "low" => [
-                    //     "rows" => Client::withCount("questsDone")
+                    //     "rows" => User::withCount("questsDone")
                     //         ->where("trust", ">", -1)
                     //         ->having("quests_done_count", ">", 0)
-                    //         ->join("quests", "client_id", "clients.id")
+                    //         ->join("quests", "client_id", "users.id")
                     //         ->orderByDesc("quests.updated_at")
                     //         ->distinct("client_name")
                     //         ->get()
@@ -297,7 +297,7 @@ class StatsController extends Controller
                     // ],
                 ],
                 "most_active" => [
-                    "rows" => Client::has("questsRecent")
+                    "rows" => User::has("questsRecent")
                         ->with("questsRecent")
                         ->withCount("questsRecent")
                         ->orderByDesc("quests_recent_count")
@@ -404,7 +404,7 @@ class StatsController extends Controller
         ];
         $saturation = json_decode(json_encode($saturation));
 
-        $unpaids = Client::has("questsUnpaid")->orderBy("client_name")->get();
+        $unpaids = User::has("questsUnpaid")->orderBy("client_name")->get();
 
         $recent = StatusChange::where("new_status_id", 32)->orderByDesc("date")->limit(10)->get();
         foreach($recent as $i){
@@ -462,7 +462,7 @@ class StatsController extends Controller
         // roześlij maile, jeśli można
         $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
-            $client = Client::find($client_id);
+            $client = User::find($client_id);
             if($client->email){
                 Mail::to($quest->client->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
@@ -519,7 +519,7 @@ class StatsController extends Controller
     public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-            ->join("clients", "clients.id", "changed_by", "left")
+            ->join("users", "users.id", "changed_by", "left")
             ->orderByDesc("date");
         $losses = Cost::whereDate("created_at", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
             ->orderByDesc("created_at");
@@ -547,7 +547,7 @@ class StatsController extends Controller
         $losses = $losses->merge(
             StatusChange::where("new_status_id", 34)
                 ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-                ->join("clients", "clients.id", "changed_by", "left")
+                ->join("users", "users.id", "changed_by", "left")
                 ->get(["status_changes.*", "date as created_at"])
         )->sortByDesc("created_at");
 
@@ -559,7 +559,7 @@ class StatsController extends Controller
 
     public function invoices(Request $rq){
         $invoices = Invoice::orderByDesc("updated_at")->get();
-        $client = ($rq->fillfor) ? Client::findOrFail($rq->fillfor) : null;
+        $client = ($rq->fillfor) ? User::findOrFail($rq->fillfor) : null;
         $quest_id = $rq->quest;
 
         return view(user_role().".invoices", array_merge(
@@ -569,8 +569,7 @@ class StatsController extends Controller
     }
 
     public function invoice($id, Request $rq){
-        $invoice = Invoice::with("quests")->find($id);
-        if(!$invoice) abort(404, "Nie ma takiej faktury");
+        $invoice = Invoice::with("quests")->findOrFail($id);
 
         return (substr($rq->path(), 0, 3) == "api")
             ? response()->json(["invoice" => $invoice])

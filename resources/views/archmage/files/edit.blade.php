@@ -23,7 +23,7 @@
                 <td>{{ $efile->transposition }}</td>
                 <td>
                     @if ($efile->only_for_client_id)
-                    {{ $efile->exclusiveClient->client->client_name }}
+                    {{ $efile->exclusiveClient->client_name }}
                     @else
                     <span class="grayed-out">wszyscy</span>
                     @endif

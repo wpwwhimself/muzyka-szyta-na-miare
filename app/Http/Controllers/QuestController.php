@@ -7,13 +7,13 @@ use App\Mail\Clarification;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
-use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
 use App\Models\Song;
 use App\Models\SongWorkTime;
 use App\Models\StatusChange;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
@@ -25,28 +25,26 @@ use Illuminate\Support\Str;
 class QuestController extends Controller
 {
     public function list(HttpRequest $rq){
-        $client_id = $rq->client;
         $status_id = $rq->status;
         $paid = $rq->paid;
 
-        $client = Client::find($client_id) ?? Auth::user()->client;
-        if($client_id && $client_id != Auth::id() && !is_archmage()) abort(403, "Widok niedostępny");
+        $client = User::find($rq->client) ?? Auth::user();
+        if($client && $client->id != Auth::id() && !is_archmage()) abort(403, "Widok niedostępny");
 
         $quests = Quest::orderBy("quests.created_at", "desc");
-        if($client){ $quests = $quests->where("client_id", $client->id); }
+        if($client && !is_archmage()){ $quests = $quests->where("client_id", $client->id); }
         if($status_id) $quests = $quests->where("status_id", $status_id);
         if($paid) $quests = $quests->where("paid", $paid);
         $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [
-            "title" => $client_id ? "$client->client_name – zlecenia" : "Lista zleceń",
+            "title" => !is_archmage() ? "$client->client_name – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);
     }
 
     public function show($id){
-        $quest = Quest::find($id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($id);
 
         $prices = DB::table("prices")
             ->where("quest_type_id", $quest->song->type->id)->orWhereNull("quest_type_id")
@@ -88,8 +86,7 @@ class QuestController extends Controller
 
     public function processMod(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::find($rq->quest_id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($rq->quest_id);
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
             return back()->with("error", "Zatrzymaj zegar");
         }
@@ -236,8 +233,7 @@ class QuestController extends Controller
 
     public function updateSong(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $song = Song::find($rq->id);
-        if(!$song) abort(404, "Nie ma takiego utworu");
+        $song = Song::findOrFail($rq->id);
         $song->update([
             "title" => $rq->title,
             "artist" => $rq->artist,
@@ -249,8 +245,7 @@ class QuestController extends Controller
 
     public function updateWishes(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::find($rq->id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($rq->id);
         $quest->update([
             "wishes" => $rq->wishes_quest,
         ]);
@@ -259,8 +254,7 @@ class QuestController extends Controller
 
     public function updateQuote(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::find($rq->id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($rq->id);
         $price_before = $quest->price;
         $price_code_before = $quest->price_code_override;
         $deadline_before = $quest->deadline;
@@ -332,8 +326,7 @@ class QuestController extends Controller
 
     public function updateFilesReady(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::find($rq->quest_id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($rq->quest_id);
         $quest->update([
             "files_ready" => $rq->ready,
         ]);
@@ -342,8 +335,7 @@ class QuestController extends Controller
 
     public function updateFilesExternal(HttpRequest $rq) {
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        $quest = Quest::find($rq->quest_id);
-        if(!$quest) abort(404, "Nie ma takiego zlecenia");
+        $quest = Quest::findOrFail($rq->quest_id);
 
         $quest->update([
             "has_files_on_external_drive" => $rq->external,

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Mail\PatronRejected;
-use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 class BackController extends Controller
 {
     public function dashboard(){
-        $client = Auth::user()->client;
+        $client = Auth::user();
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderBy("updated_at");
@@ -36,20 +36,18 @@ class BackController extends Controller
             ->orderBy("deadline")
             ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
             ->orderByRaw("paid desc")
-            ->orderBy("created_at")
-            ->get();
+            ->orderBy("created_at");
         $quests_review = Quest::whereNotIn("status_id", [17, 18, 19])
             ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
             ->orderByDesc("deadline")
-            ->orderBy("created_at")
-            ->get();
+            ->orderBy("created_at");
 
         if(!is_archmage()){
             $requests = $requests->where("client_id", $client->id);
             $quests_ongoing = $quests_ongoing->where("client_id", $client->id);
             $quests_review = $quests_review->where("client_id", $client->id);
-            
-            $quests_total = Auth::user()->client->exp;
+
+            $quests_total = Auth::user()->exp;
             $unpaids = Quest::where("client_id", Auth::id())
                 ->whereNotIn("status_id", [18])
                 ->where("paid", 0)
@@ -70,7 +68,7 @@ class BackController extends Controller
                     Quest::find($change->re_quest_id);
                 $change->new_status = Status::find($change->new_status_id);
             }
-            $patrons_adepts = Client::where("helped_showcasing", 1)->get();
+            $patrons_adepts = User::where("helped_showcasing", 1)->get();
             $showcases_missing = Quest::where("status_id", 19)
                 ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
                 ->get()
@@ -96,6 +94,8 @@ class BackController extends Controller
                 }
             }
         }
+        $quests_ongoing = $quests_ongoing->get();
+        $quests_review = $quests_review->get();
         $requests = $requests->get();
 
         return view(user_role().".dashboard", array_merge(
@@ -118,14 +118,14 @@ class BackController extends Controller
         $prices = DB::table("prices")->get();
 
         $discount = (is_archmage()) ? null : (
-            (Auth::user()->client->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
-            (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
         $clients = [];
         if (is_archmage()) {
-            $clients_raw = Client::all()->toArray();
+            $clients_raw = User::all()->toArray();
             foreach($clients_raw as $client){
                 $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
             }
@@ -162,7 +162,7 @@ class BackController extends Controller
 
     public function setPatronLevel($client_id, $level){
         if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
-        $client = Client::findOrFail($client_id);
+        $client = User::findOrFail($client_id);
 
         $client->update(["helped_showcasing" => $level]);
         $mailing = false;

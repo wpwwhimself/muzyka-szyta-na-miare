@@ -4,7 +4,7 @@
 
 <div class="grid-2">
     <x-section id="who-am-i" class="sc-line"
-        :title="Auth::user()->client->client_name"
+        :title="Auth::user()->client_name"
         icon="user-check"
     >
         <x-slot name="buttons">
@@ -24,9 +24,9 @@
 
                 <span>Status klienta</span>
                 <span>
-                    @if (Auth::user()->client->trust == -1)
+                    @if (Auth::user()->trust == -1)
                     <i class="fa-solid fa-user-ninja error"></i> niezaufany
-                    @elseif (Auth::user()->client->is_veteran)
+                    @elseif (Auth::user()->is_veteran)
                     <i class="fa-solid fa-user-shield"></i> stały klient
                     @else
                     <i class="fa-solid fa-user"></i> klient początkujący<br>
@@ -34,7 +34,7 @@
                     @endif
                 </span>
 
-                @if (Auth::user()->client->is_patron)
+                @if (Auth::user()->is_patron)
                 <span>Pomoc w reklamie</span>
                 <span>odnotowana</span>
                 @endif
@@ -42,18 +42,18 @@
                 <span>Łącznie zniżek</span>
                 <span>
                     {{
-                        Auth::user()->client->special_prices ? "spersonalizowany cennik"
+                        Auth::user()->special_prices ? "spersonalizowany cennik"
                         : (
-                            (Auth::user()->client->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+                            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
                             +
-                            (Auth::user()->client->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+                            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
                         )*100 . "%"
                     }}
                 </span>
             </div>
         </div>
 
-        @if (Auth::user()->client->trust == -1)
+        @if (Auth::user()->trust == -1)
         <br>
         <div class="section-header error">
             <h1><i class="fa-solid fa-user-ninja"></i> Jesteś na czarnej liście!</h1>
@@ -85,7 +85,7 @@
         </table>
         @endif
 
-        @if ($quests_total && !Auth::user()->client->is_patron && Auth::user()->client->helped_showcasing != 1)
+        @if ($quests_total && !Auth::user()->is_patron && Auth::user()->helped_showcasing != 1)
         <br>
         <div class="section-header showcase-highlight">
             <h1><i class="fa-solid fa-award"></i> Oceń naszą współpracę</h1>
@@ -104,11 +104,11 @@
                 Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
                 <x-warning>
                     Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
-                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
                 </x-warning>
             </p>
             <x-button
-                label="Właśnie wystawił{{ client_polonize(Auth::user()->client->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
+                label="Właśnie wystawił{{ client_polonize(Auth::user()->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                 action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
                 />
         </form>
@@ -116,7 +116,7 @@
     </x-section>
 
     <x-section id="dashboard-finances" title="Finanse" icon="sack-dollar">
-        <h2 @if(Auth::user()->client->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
+        <h2 @if(Auth::user()->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
         <div class="hint-table">
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">
@@ -130,7 +130,7 @@
 
         <h2>
             Stan konta:
-            {{ as_pln(Auth::user()->client->budget) }}
+            {{ as_pln(Auth::user()->budget) }}
 
             <x-tutorial>
                 Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
@@ -203,7 +203,7 @@
 </div>
 
 <div class="flex-right">
-    @unless (Auth::user()->client->trust == -1)
+    @unless (Auth::user()->trust == -1)
     <x-button
         action="{{ route('add-request') }}"
         label="Dodaj nowe zapytanie" icon="plus"

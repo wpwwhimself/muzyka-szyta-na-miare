@@ -7,7 +7,7 @@
 
     <p>
         <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $client->user->password }}</b>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $client->password }}</b>
         </i>
     </p>
 @endsection

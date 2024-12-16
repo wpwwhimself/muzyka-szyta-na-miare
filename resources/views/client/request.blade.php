@@ -2,7 +2,9 @@
 
 @section('content')
 
+@auth
 <x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
+@endauth
 
 <form method="POST" action="{{ route("mod-request-back") }}">
     @csrf

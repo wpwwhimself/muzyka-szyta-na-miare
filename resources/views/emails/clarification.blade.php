@@ -31,7 +31,7 @@
     @if ($re_quest->client)
     <p>
         <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $re_quest->client->user->password }}</b>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $re_quest->client->password }}</b>
         </i>
     </p>
     @endif

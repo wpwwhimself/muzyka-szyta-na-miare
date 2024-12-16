@@ -92,7 +92,7 @@
                             {{ round($client->pickiness * 100) }}%
                         </span>
                         •
-                        {{ _ct_($client->user->password) }}
+                        {{ _ct_($client->password) }}
                     </span>
                 </span>
                 <span class="contact-info">

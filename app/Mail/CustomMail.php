@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Client;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -19,7 +19,7 @@ class CustomMail extends Mailable
      */
     public $pl;
     public function __construct(
-        public Client $client,
+        public User $client,
         public $subject,
         public $content,
     ) {

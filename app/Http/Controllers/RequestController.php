@@ -6,7 +6,6 @@ use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
-use App\Models\Client;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -22,7 +21,7 @@ use Illuminate\Support\Str;
 class RequestController extends Controller
 {
     public function list(HttpRequest $rq){
-        $client = Auth::user()->client;
+        $client = Auth::user();
         $client_id = $rq->client;
         $client_name = $rq->client_name;
         $status_id = $rq->status;
@@ -41,12 +40,11 @@ class RequestController extends Controller
     }
 
     public function show($id){
-        $request = Request::find($id);
-        if(!$request) abort(404, "Nie ma takiego zapytania");
+        $request = Request::findOrFail($id);
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(is_archmage()){
-            $clients_raw = Client::all()->toArray();
+            $clients_raw = User::all()->toArray();
             foreach($clients_raw as $client){
                 $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
             }
@@ -172,7 +170,7 @@ class RequestController extends Controller
             if(is_archmage()){ // arcymag
                 //non-bulk
                 $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
-                $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
+                $client = ($rq->client_id) ? User::find($rq->client_id) : null;
 
                 $request = Request::create([
                     "made_by_me" => true,
@@ -213,7 +211,7 @@ class RequestController extends Controller
                     ]);
                 }
                 if($rq->client_id){
-                    Client::find($rq->client_id)->update([
+                    User::find($rq->client_id)->update([
                         "client_name" => $rq->client_name,
                         "email" => $rq->email,
                         "phone" => $rq->phone,
@@ -252,11 +250,11 @@ class RequestController extends Controller
                     "made_by_me" => false,
 
                     "client_id" => (Auth::check()) ? Auth::id() : null,
-                    "client_name" => (Auth::check()) ? Auth::user()->client->client_name : $rq->client_name,
-                    "email" => (Auth::check()) ? Auth::user()->client->email : $rq->email,
-                    "phone" => (Auth::check()) ? Auth::user()->client->phone : $rq->phone,
-                    "other_medium" => (Auth::check()) ? Auth::user()->client->other_medium : $rq->other_medium,
-                    "contact_preference" => (Auth::check()) ? Auth::user()->client->contact_preference : $rq->contact_preference,
+                    "client_name" => (Auth::check()) ? Auth::user()->client_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
 
                     "quest_type_id" => $rq->quest_type[$i],
                     "title" => $rq->title[$i],
@@ -299,7 +297,7 @@ class RequestController extends Controller
 
         if($intent == "change"){
             $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
-            $client = ($rq->client_id) ? Client::find($rq->client_id) : null;
+            $client = ($rq->client_id) ? User::find($rq->client_id) : null;
 
             // price required when sending quote
             if(
@@ -412,8 +410,7 @@ class RequestController extends Controller
     }
 
     public function finalize($id, $status, $with_priority = false){
-        $request = Request::find($id);
-        if(!$request) abort(404, "Nie ma takiego zapytania");
+        $request = Request::findOrFail($id);
 
         if(in_array($request->status_id, [4,7,8,9]))
             return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
@@ -442,12 +439,8 @@ class RequestController extends Controller
             //add new client if not exists
             if(!$request->client_id){
                 $is_new_client = 1;
-                $user = new User;
-                $user->password = generate_password();
-                $user->save();
-
-                $client = new Client;
-                $client->id = $user->id;
+                $client = new User;
+                $client->password = generate_password();
                 $client->client_name = $request->client_name;
                 $client->email = $request->email;
                 $client->phone = $request->phone;
@@ -455,7 +448,7 @@ class RequestController extends Controller
                 $client->contact_preference = $request->contact_preference;
                 $client->save();
 
-                $request->client_id = $user->id;
+                $request->client_id = $client->id;
 
                 //bind remaining anonymous quests from the same guy
                 Request::whereIn("status_id", [1, 5])
@@ -464,15 +457,15 @@ class RequestController extends Controller
                     ->where("phone", $request->phone)
                     ->where("other_medium", $request->other_medium)
                     ->where("contact_preference", $request->contact_preference)
-                    ->update(["client_id" => $user->id]);
+                    ->update(["client_id" => $client->id]);
             }else{
-                $client = Client::find($request->client_id);
+                $client = User::find($request->client_id);
             }
 
             $quest = new Quest;
             $quest->id = next_quest_id($request->quest_type_id);
             $quest->song_id = $request->song_id ?? $song->id;
-            $quest->client_id = $request->client_id ?? $user->id;
+            $quest->client_id = $request->client_id ?? $client->id;
             $quest->status_id = 11;
             $quest->price_code_override = $price["labels"];
             $quest->price = $price["price"];

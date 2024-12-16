@@ -36,7 +36,7 @@ class StatusChange extends Model
         return $this->hasManyThrough(Invoice::class, InvoiceQuest::class, "quest_id", "id", "re_quest_id", "invoice_id");
     }
     public function changer(){
-        if($this->changed_by > 1) return $this->hasOne(Client::class, "id", "changed_by");
+        if($this->changed_by > 1) return $this->hasOne(User::class, "id", "changed_by");
     }
     public function status(){
         return $this->hasOne(Status::class, "id", "new_status_id");

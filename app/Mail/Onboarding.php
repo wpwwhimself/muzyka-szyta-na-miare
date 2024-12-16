@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Client;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -21,7 +21,7 @@ class Onboarding extends Mailable
     public $pl;
     public function __construct($data)
     {
-        $this->client = is_string($data) ? Client::findOrFail($data) : $data;
+        $this->client = is_string($data) ? User::findOrFail($data) : $data;
         $this->pl = client_polonize($this->client->client_name);
     }
 

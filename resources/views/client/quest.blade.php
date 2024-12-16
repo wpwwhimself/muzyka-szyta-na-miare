@@ -142,7 +142,7 @@
         :extended="true"
         scissors
     >
-        @if (Auth::user()->client->can_see_files)
+        @if (Auth::user()->can_see_files)
         <x-files.list :grouped-files="$files" />
         @endif
 

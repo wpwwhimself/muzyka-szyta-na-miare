@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileTag;
 use App\Models\Genre;
 use App\Models\Song;
 use App\Models\SongTag;
@@ -49,9 +50,11 @@ class SongController extends Controller
             }, $song_work_times[$song->id]["parts"]));
         }
 
+        $tags = FileTag::orderBy("name")->get();
+
         return view(user_role().".songs.list", array_merge(
             ["title" => "Lista utworów"],
-            compact("songs", "song_work_times", "price_codes", "search")
+            compact("songs", "song_work_times", "price_codes", "search", "tags")
         ));
     }
 

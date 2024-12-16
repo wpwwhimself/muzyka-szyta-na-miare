@@ -18,11 +18,11 @@ use Illuminate\View\View;
 class FileController extends Controller
 {
     #region dashboard
-    public function dashboard()
+    public function listTags()
     {
         $tags = FileTag::orderBy("name")->get();
 
-        return view(user_role().'.files.dashboard', array_merge(
+        return view(user_role().'.files.tags.list', array_merge(
             ["title" => "Pliki"],
             compact("tags"),
         ));
@@ -32,7 +32,7 @@ class FileController extends Controller
     {
         $tag = FileTag::find($id);
 
-        return view(user_role().'.files.edit-tag', array_merge(
+        return view(user_role().'.files.tags.edit', array_merge(
             ["title" => ($tag) ? "$tag->name | Edytuj tag" : "Dodaj tag"],
             compact("tag"),
         ));
@@ -41,11 +41,12 @@ class FileController extends Controller
     public function processTag(Request $rq): RedirectResponse
     {
         if ($rq->action == "save") {
-            FileTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+            $tag = FileTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+            return redirect()->route("file-tag-edit", ["id" => $tag->id])->with("success", "Tag poprawiony");
         } else if ($rq->action == "delete") {
             FileTag::find($rq->id)->delete();
+            return redirect()->route("file-tags")->with("success", "Tag usunięty");
         }
-        return redirect()->route("files-dashboard")->with("success", "Tag poprawiony");
     }
     #endregion
 

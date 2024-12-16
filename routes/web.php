@@ -104,8 +104,8 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::get("/addFromExistingSafe/{song_id}", "addFromExisingSafe")->name("files-add-from-existing-safe");
                 Route::post("/addFromExistingSafe", "addFromExistingSafeProcess")->name("files-process-add-from-existing-safe");
 
-                Route::get("/", "dashboard")->name("files-dashboard");
                 Route::prefix("tags")->group(function(){
+                    Route::get("/", "listTags")->name("file-tags");
                     Route::get("/{id?}", "editTag")->name("file-tag-edit");
                     Route::post("/", "processTag")->name("file-tag-process");
                 });

@@ -2,10 +2,6 @@
 
 @section("content")
 
-<div class="flex-right">
-    <x-a :href="route('file-size-report')" icon="weight-hanging">Raport wielkości sejfów</x-a>
-</div>
-
 <x-section title="Tagi" icon="tag">
     <x-slot name="buttons">
         <x-a :href="route('file-tag-edit')" icon="plus">Dodaj</x-a>

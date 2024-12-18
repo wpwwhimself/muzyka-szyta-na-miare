@@ -812,13 +812,13 @@ footer .contact-info{
 
     & .history-position{
         display: inline-flex;
-        --circle-size: 3rem;
+        --circle-size: var(--size-xxl);
 
         & .circle{
             margin: 0;
             justify-content: center;
             border-radius: 100%;
-            font-size: var(--size-xxl);
+            font-size: var(--size-xl);
             width: var(--circle-size); height: var(--circle-size);
             background: var(--bg1);
             &:hover{

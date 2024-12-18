@@ -8,7 +8,7 @@
         <h1><i class="fa-solid fa-{{ $icon }}"></i> {{ $title }}</h1>
 
         @isset($buttons)
-        <div>
+        <div class="flex-right middle">
             {{ $buttons }}
         </div>
         @endisset

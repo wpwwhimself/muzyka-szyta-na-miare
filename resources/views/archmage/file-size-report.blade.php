@@ -14,7 +14,7 @@
     <style>
     .table-row{
         grid-template-columns: 1fr 1fr 3fr;
-        gap: 0.5em;
+        gap: var(--size-xs);
     }
     </style>
     <div class="quests-table">

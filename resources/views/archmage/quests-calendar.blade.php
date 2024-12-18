@@ -38,8 +38,8 @@
         <style>
         .day-tiles > a{
             background-color: var(--bg2);
-            padding: 1em;
-            border-radius: 1em;
+            padding: var(--size-m);
+            border-radius: var(--size-m);
         }
         @media screen and (max-width: 600px){
             .day-tiles{

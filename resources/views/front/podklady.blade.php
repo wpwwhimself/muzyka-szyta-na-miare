@@ -147,7 +147,7 @@
         </div>
 
         <h3>Filtruj:</h3>
-        <div class="flex-right center">
+        <div class="flex-right keep-for-mobile center">
             <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
 
             @foreach ($genres as $genre)

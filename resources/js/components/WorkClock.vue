@@ -198,15 +198,15 @@ setInterval(getSong, 10e3)
 @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400..700&display=swap');
 #clocks-outer {
     align-items: center;
-    margin-bottom: 1em;
+    margin-bottom: var(--size-m);
 }
 #clocks > * {
-    font-size: 3em;
+    font-size: calc(var(--size-xxl) * 1.5);
     font-family: "Sometype Mono";
     line-height: 90%;
 
     &:first-child {
-        font-size: 6em;
+        font-size: calc(var(--size-xxl) * 3);
     }
 }
 .buttons {

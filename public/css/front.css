@@ -1,9 +1,8 @@
 *{
-    font-size: 16px;
     transition: all 0.5s;
 }
 header{
-    padding: 0.5em 4em;
+    padding: var(--size-xs) 4em;
     justify-content: space-between;
     position: sticky; top: 0;
     z-index: 15;
@@ -18,19 +17,15 @@ b, strong{
 section{
     border: none;
     text-align: center;
-    max-width: 90vw; margin: 1em auto;
+    max-width: 90vw; margin: var(--size-m) auto;
 }
 section>div{
-    margin-bottom: 1em;
-}
-
-h1{
-    font-size: 2em;
+    margin-bottom: var(--size-m);
 }
 
 
 #home{
-    font-size: 1.25em;
+    font-size: var(--size-l);
     box-sizing: border-box;
     margin: 3em auto 0; padding: 3em 10em;
     display: flex; justify-content: center; align-items: center; flex-direction: column;
@@ -62,13 +57,13 @@ ul.no-points {
     align-items: center;
     display: grid;
     grid-template-columns: 1fr 3fr 4fr;
-    column-gap: 1em;
+    column-gap: var(--size-m);
     max-width: 80%;
 }
 #offer div:nth-of-type(2){ margin-left: 10%; }
 #offer div:nth-of-type(3){ margin-left: 20%; }
 #offer div>i, .large-icon{
-    font-size: 4em;
+    font-size: calc(2 * var(--size-xxl));
 }
 #offer div>ul{
     text-align: left;
@@ -121,7 +116,7 @@ ul.no-points {
 #showcase-scores img{
     width: 25vw;
     position: relative; z-index: 1;
-    border-radius: 1em;
+    border-radius: var(--size-m);
 }
 #showcase-scores img:hover{
     scale: 2;
@@ -133,21 +128,21 @@ ul.no-points {
     list-style-type: none;
     max-height: 20em;
     display: flex; flex-direction: column; flex-wrap: wrap;
-    gap: 0.1em 0.5em;
+    gap: 0.var(--size-m) var(--size-xs);
     overflow-x: scroll;
 }
 #songs .popup {
     display: none;
     position: fixed; z-index: 99;
     top: 0; left: 0; right: 0; bottom: 0;
-    backdrop-filter: blur(1em);
+    backdrop-filter: blur(var(--size-m));
     justify-content: center; align-items: center;
 
     &.open {
         display: flex;
     }
     & .popup-contents {
-        gap: 1em;
+        gap: var(--size-m);
 
         & h3, p {
             margin: 0;
@@ -160,7 +155,7 @@ ul.no-points {
     display: grid;
     grid-template-columns: 4fr 1fr;
 }
-.front-table span{ padding: 0.2em 0.5em; }
+.front-table span{ padding: var(--size-xxs) var(--size-xs); }
 .front-table span:nth-of-type(odd){ text-align: left;}
 .front-table span:nth-of-type(even){ text-align: right;}
 .front-table span:nth-of-type(4n+1),
@@ -171,7 +166,7 @@ ul.no-points {
     text-align: left;
 }
 #faq li:nth-child(odd){ font-family: Montserrat }
-#faq li:nth-child(even){ margin-bottom: 1em; list-style-type: circle; }
+#faq li:nth-child(even){ margin-bottom: var(--size-m); list-style-type: circle; }
 
 #about div{
     --a-width: 15em;
@@ -179,7 +174,7 @@ ul.no-points {
     text-align: left;
 }
 #about img{
-    border-radius: 1em;
+    border-radius: var(--size-m);
     width: var(--a-width);
 }
 #about p{
@@ -201,7 +196,7 @@ form button{
 }
 .cookie-consent div{
     width: max-content;
-    margin: 0 auto; padding: 0.5em;
+    margin: 0 auto; padding: var(--size-xs);
     background-color: var(--acc); color: black;
     display: flex; flex-direction: row;
     justify-content: center; align-items: center;
@@ -211,8 +206,8 @@ form button{
     margin: 0;
 }
 .cookie-consent button{
-    margin-left: 1em; padding: 0.5em 1em;
-    border: 2px solid var(--bg); border-radius: 1em;
+    margin-left: var(--size-m); padding: var(--size-xs) var(--size-m);
+    border: 2px solid var(--bg); border-radius: var(--size-m);
     background: var(--bg1);
     color: var(--fg);
 }
@@ -224,7 +219,7 @@ form button{
 /* shadows */
 .cookie-consent div,
 #showcase-scores img:hover{
-    box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.3);
+    box-shadow: 0 0 var(--size-m) hsla(0, 0%, 0%, 0.3);
 }
 
 /* animate on scroll */
@@ -257,14 +252,12 @@ span.hidden
 
 
 @media screen and (max-width: 600px){
-    *{
-        font-size: 12px;
-    }
     iframe{
         width: 100%; height: 100%;
     }
     header {
         flex-wrap: nowrap;
+        padding: var(--size-s);
     }
     header nav{
         width: auto;
@@ -274,7 +267,7 @@ span.hidden
     }
 
     #home{
-        padding: 1em;
+        padding: var(--size-m);
     }
     .company-name{
         text-align: center;

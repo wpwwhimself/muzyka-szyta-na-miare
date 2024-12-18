@@ -89,7 +89,7 @@ if(!function_exists("is_archmage")){
  */
 if(!function_exists("_c_")){
     function _c_($data){
-        return (Auth::id() === 0) ? preg_replace("/[\d, zł]/", "⁎", $data) : $data;
+        return (Auth::id() === 0) ? preg_replace("/[\d, zł]/", "⁎", $data) : $data;
     }
 }
 if(!function_exists("_ct_")){
@@ -422,7 +422,7 @@ if(!function_exists("is_request")){
  */
 if(!function_exists("as_pln")){
     function as_pln($value){
-        return number_format($value, 2, ",", " ")." zł";
+        return number_format($value, 2, ",", " ")." zł";
     }
 }
 

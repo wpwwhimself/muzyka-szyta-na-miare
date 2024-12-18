@@ -1,7 +1,7 @@
 <a href="{{ $quest->link_to }}"
     class="quest-mini p-{{ $quest->status_id }} {{ ($quest->is_priority) ? "priority" : "" }}"
 >
-    <span class="flex-right keep-for-mobile middle">
+    <span class="flex-right keep-for-mobile middle nowrap">
         @unless (empty($no))
         <span>{{ $no }}</span>
         @endunless

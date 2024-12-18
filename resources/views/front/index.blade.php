@@ -13,7 +13,7 @@
         ] as [$label, $desc, $slug_part])
 
         <a href="{{ route("home-".$slug_part) }}"
-            class="section-like flex-right"
+            class="section-like flex-right keep-for-mobile center"
         >
             <img src="{{ asset("assets/divisions/$slug_part.svg") }}" alt="logo"
                 class="icon white-on-black"

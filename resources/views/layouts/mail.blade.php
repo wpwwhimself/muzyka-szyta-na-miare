@@ -26,7 +26,7 @@
         border-radius: 1em;
     }
     td.framed-cell h2, td.framed-cell p{
-        margin: 0.2em;
+        margin: var(--size-xxs);
     }
     i{
         color: gray;

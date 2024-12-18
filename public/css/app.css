@@ -655,7 +655,7 @@ footer .contact-info{
 
 .quest-mini {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr 10em 12em;
     gap: var(--size-xs);
     align-items: center;
     border-radius: var(--size-m);

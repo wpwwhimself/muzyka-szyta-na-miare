@@ -28,11 +28,11 @@ class QuestController extends Controller
         $status_id = $rq->status;
         $paid = $rq->paid;
 
-        $client = User::find($rq->client) ?? Auth::user();
+        $client = User::find($rq->client);
         if($client && $client->id != Auth::id() && !is_archmage()) abort(403, "Widok niedostępny");
 
         $quests = Quest::orderBy("quests.created_at", "desc");
-        if($client && !is_archmage()){ $quests = $quests->where("client_id", $client->id); }
+        if($client){ $quests = $quests->where("client_id", $client->id); }
         if($status_id) $quests = $quests->where("status_id", $status_id);
         if($paid) $quests = $quests->where("paid", $paid);
         $quests = $quests->paginate(25);

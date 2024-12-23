@@ -55,10 +55,9 @@ class FileController extends Controller
     {
         $song = Quest::find($quest_id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients_raw = User::all()->toArray();
-        foreach($clients_raw as $client){
-            $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
-        }
+        $clients = User::clients()->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+            ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
 
@@ -75,7 +74,9 @@ class FileController extends Controller
     {
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::orderBy("client_name")->get()->pluck("client_name", "id");
+        $clients = User::clients()->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+            ->toArray();
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
 
@@ -143,7 +144,9 @@ class FileController extends Controller
         $song = Song::find($song_id);
         $files = Storage::allFiles("safe/$song_id");
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::orderBy("client_name")->get()->pluck("client_name", "id");
+        $clients = User::clients()->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+            ->toArray();
 
         return view(user_role().'.files.add-from-existing-safe', compact(
             "song",

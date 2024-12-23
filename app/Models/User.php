@@ -34,6 +34,13 @@ class User extends Authenticatable
         "pickiness",
     ];
 
+    #region scopes
+    public function scopeClients($query)
+    {
+        return $query->whereNotIn("id", [0, 1]);
+    }
+    #endregion
+
     #region relations
     public function quests(){
         return $this->hasMany(Quest::class, "client_id");

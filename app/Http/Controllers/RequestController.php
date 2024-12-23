@@ -44,14 +44,12 @@ class RequestController extends Controller
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(is_archmage()){
-            $clients_raw = User::all()->toArray();
-            foreach($clients_raw as $client){
-                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
-            }
-            $songs_raw = Song::all()->toArray();
-            foreach($songs_raw as $song){
-                $songs[$song["id"]] = Str::limit($song["title"] ?? "bez tytułu ($song[artist])", $pad_size)." «$song[id]»";
-            }
+            $clients = User::clients()->get()
+                ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[email]»")])
+                ->toArray();
+            $songs = Song::all()
+                ->mapWithKeys(fn ($s) => [$s->id => Str::limit($s->title ?? "bez tytułu ($s->artist)", $pad_size)." «$s[id]»"])
+                ->toArray();
         }else{
             if($request->client_id != Auth::id()){
                 if(Auth::id()) abort(403, "To nie jest Twoje zapytanie");
@@ -61,10 +59,9 @@ class RequestController extends Controller
             $songs = [];
         }
 
-        $questTypes_raw = QuestType::all()->toArray();
-        foreach($questTypes_raw as $val){
-            $questTypes[$val["id"]] = $val["type"];
-        }
+        $questTypes = QuestType::all()
+            ->mapWithKeys(fn ($qt) => [$qt->id => $qt->type])
+            ->toArray();
 
         $prices = DB::table("prices")
             ->where("quest_type_id", $request->quest_type_id)->orWhereNull("quest_type_id")

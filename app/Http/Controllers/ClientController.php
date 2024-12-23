@@ -130,7 +130,8 @@ class ClientController extends Controller
     #region mailing
     public function mailPrepare(?int $client_id = null)
     {
-        $clients = User::orderBy("client_name")
+        $clients = User::clients()
+            ->orderBy("client_name")
             ->whereNotNull("email")
             ->get()
             ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])

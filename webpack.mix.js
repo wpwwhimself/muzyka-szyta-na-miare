@@ -11,6 +11,6 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js("resources/js/workTimeClock.js", "public/js")
-    .js("resources/js/studio.js", "public/js")
+mix.js("resources/js/workTimeClock.js", "public/js/react")
+    .js("resources/js/studio.js", "public/js/react")
     .vue();

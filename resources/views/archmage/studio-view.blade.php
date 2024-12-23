@@ -3,7 +3,7 @@
 @section("content")
 
 <div class="grid-2">
-    <script src="{{ mix('js/workTimeClock.js') }}" defer></script>
+    <script src="{{ mix('js/react/workTimeClock.js') }}" defer></script>
     <section id="clock"></section>
 
     <div id="meta" class="flex-down spaced">

@@ -7,7 +7,7 @@
     title="Zlecenia na tapecie"
     extended="perma"
 >
-    <script src="{{ mix('js/studio.js') }}" defer></script>
+    <script src="{{ mix('js/react/studio.js') }}" defer></script>
     <div id="studio" class="no-shrinking" style="width: 100%"></div>
 </x-extendo-block>
 

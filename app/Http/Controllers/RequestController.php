@@ -268,7 +268,7 @@ class RequestController extends Controller
 
                 //mailing do mnie
                 $mailing = null;
-                Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
+                Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
                 $mailing = true;
 
                 BackController::newStatusLog($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
@@ -400,7 +400,7 @@ class RequestController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if($request->status_id != 4 && !is_archmage()){ // mail do mnie
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
+            Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
@@ -502,7 +502,7 @@ class RequestController extends Controller
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
-        Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($request->fresh()));
+        Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
         $mailing = true;
 
         BackController::newStatusLog($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);

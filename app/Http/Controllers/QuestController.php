@@ -206,7 +206,7 @@ class QuestController extends Controller
                 $flash_content .= ", ale wyślij wiadomość";
             }
         }else if(!is_archmage()){ // mail do mnie
-            Mail::to("kontakt@muzykaszytanamiare.pl")->send(new ArchmageQuestMod($quest->fresh()));
+            Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($quest->fresh()));
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }

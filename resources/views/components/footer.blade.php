@@ -7,9 +7,9 @@
     <p class="yellowed-out"><i class="fas fa-bug"></i> Widzisz gdzieś błąd? Napisz!</p>
   </div>
   <div class="contact-info">
-    <a href="mailto:kontakt@muzykaszytanamiare.pl">
+    <a href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">
         <i class="fa-solid fa-envelope"></i>
-        kontakt@muzykaszytanamiare.pl
+        {{ env("MAIL_MAIN_ADDRESS") }}
     </a>
     <a href="https://www.facebook.com/muzykaszytanamiarepl">
         <i class="fa-brands fa-facebook"></i>

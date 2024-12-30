@@ -71,6 +71,10 @@ section{
     margin: var(--size-m) 0 0;
     padding: var(--size-m);
 }
+section, .section-like {
+    container-name: section;
+    container-type: inline-size;
+}
 section:hover, .section-like:hover{
     border-color: var(--fg);
 }
@@ -665,6 +669,12 @@ footer .contact-info{
     &:hover {
         background: rgba(var(--q-clr), 0.3);
         color: var(--fg);
+    }
+}
+@container section (width < 600px) {
+    .quest-mini {
+        display: flex;
+        flex-direction: column;
     }
 }
 
@@ -1290,11 +1300,6 @@ footer .contact-info{
     .dashboard-mini-wrapper{
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .quest-mini {
-        display: flex;
-        flex-direction: column;
     }
 
     #quest-box{

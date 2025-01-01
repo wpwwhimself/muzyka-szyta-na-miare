@@ -72,8 +72,10 @@ section{
     padding: var(--size-m);
 }
 section, .section-like {
-    container-name: section;
-    container-type: inline-size;
+    &.container {
+        container-name: section;
+        container-type: inline-size;
+    }
 }
 section:hover, .section-like:hover{
     border-color: var(--fg);

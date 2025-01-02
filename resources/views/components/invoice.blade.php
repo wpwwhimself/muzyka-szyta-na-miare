@@ -13,7 +13,7 @@
             <h3>Muzyka Szyta Na Miarę</h3>
             <div class="grid-2 name-value">
                 <span>e-mail:</span>
-                <span>{{ env("MAIL_FROM_ADDRESS") }}</span>
+                <span>{{ env("MAIL_MAIN_ADDRESS") }}</span>
                 <span>tel:</span>
                 <span>530 268 000</span>
                 <span>nr konta:</span>

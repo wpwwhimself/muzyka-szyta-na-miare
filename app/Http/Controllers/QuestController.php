@@ -299,7 +299,7 @@ class QuestController extends Controller
         $changes = [];
         foreach([
             "cena" => [$price_before, $quest->price],
-            "do kiedy (włącznie) oddam pliki" => [$deadline_before->format("Y-m-d"), $quest->deadline->format("Y-m-d")],
+            "do kiedy (włącznie) oddam pliki" => [$deadline_before?->format("Y-m-d"), $quest->deadline?->format("Y-m-d")],
             "opóźnienie wpłaty" => [$delayed_payment_before?->format("Y-m-d"), $quest->delayed_payment?->format("Y-m-d")],
             "kod wyceny" => [$price_code_before, $quest->price_code_override],
         ] as $attr => $value){

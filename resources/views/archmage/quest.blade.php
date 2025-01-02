@@ -181,7 +181,7 @@
             title="Wycena"
             :subtitle="implode(' // ', array_filter([
                 _c_(as_pln($quest->price)),
-                'do '.$quest->deadline->format('d.m.Y'),
+                'do '.$quest->deadline?->format('d.m.Y'),
                 $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
             ], fn($val) => !is_null($val)))"
             :warning="$warnings['quote']"

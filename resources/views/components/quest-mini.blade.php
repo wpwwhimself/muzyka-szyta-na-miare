@@ -77,7 +77,7 @@
             @else
                 class="quest-deadline"
             @endif
-            {{ Popper::pop($quest->deadline->format("Y-m-d")) }} >
+            {{ Popper::pop($quest->deadline?->format("Y-m-d")) }} >
             {{ $quest->deadline?->addDay()->diffForHumans() }}
         </p>
         @endif

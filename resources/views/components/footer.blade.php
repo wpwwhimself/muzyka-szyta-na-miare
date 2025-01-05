@@ -11,17 +11,19 @@
         <i class="fa-solid fa-envelope"></i>
         {{ env("MAIL_MAIN_ADDRESS") }}
     </a>
-    <a href="https://www.facebook.com/muzykaszytanamiarepl">
-        <i class="fa-brands fa-facebook"></i>
-        muzykaszytanamiarepl
-    </a>
-    <a href="https://www.instagram.com/muzykaszytanamiarepl/">
-        <i class="fa-brands fa-instagram"></i>
-        muzykaszytanamiarepl
-    </a>
     <a href="callto:+48530268000">
         <i class="fa-solid fa-phone"></i>
+        <i class="fa-brands fa-whatsapp"></i>
         +48 530 268 000
     </a>
+
+    <span>
+        @foreach ($socials as [$icon, $link])
+        <a href="{{ $link }}">
+            <i class="fa-brands fa-{{ $icon }}"></i>
+        </a>
+        @endforeach
+        muzykaszytanamiarepl
+    </span>
 </div>
 </footer>

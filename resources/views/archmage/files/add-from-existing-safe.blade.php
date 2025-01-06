@@ -38,7 +38,10 @@
                         <x-file-tag :tag="$tag" />
                         @endforeach
                     </td>
-                    <td>{{ implode(", ", array_keys($efile->file_paths)) }}</td>
+                    <td>
+                        @foreach ($efile->file_paths as $ext => $path)
+                        <span @popper($path)>{{ $ext }}</span>
+                        @endforeach
                     <td>
                         <input type="radio" name="existing_file_id" value="{{ $efile->id }}" />
                     </td>

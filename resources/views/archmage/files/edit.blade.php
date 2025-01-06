@@ -35,7 +35,7 @@
                 </td>
                 <td>
                     @foreach ($efile->file_paths as $ext => $path)
-                    <span @popper($path)>{{ $ext }}</span>
+                    <span {{ Popper::pop($path) }}>{{ $ext }}</span>
                     @endforeach
                 </td>
             </tr>

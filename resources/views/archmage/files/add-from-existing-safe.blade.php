@@ -40,7 +40,7 @@
                     </td>
                     <td>
                         @foreach ($efile->file_paths as $ext => $path)
-                        <span @popper($path)>{{ $ext }}</span>
+                        <span {{ Popper::pop($path) }}>{{ $ext }}</span>
                         @endforeach
                     <td>
                         <input type="radio" name="existing_file_id" value="{{ $efile->id }}" />

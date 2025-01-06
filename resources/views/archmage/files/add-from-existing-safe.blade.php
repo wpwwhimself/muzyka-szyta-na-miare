@@ -6,6 +6,49 @@
     @csrf
     <input type="hidden" name="song_id" value="{{ $song->id }}" />
 
+    @if ($existing_files->count())
+    <x-section title="Już wgrane pliki" icon="folder-open">
+        <table>
+            <thead>
+                <tr>
+                    <th>Wariant</th>
+                    <th>Wersja</th>
+                    <th>Transpozycja</th>
+                    <th>Widoczność</th>
+                    <th>Tagi</th>
+                    <th>Formaty</th>
+                    <th>Popraw</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($existing_files as $efile)
+                <tr>
+                    <td>{{ $efile->variant_name }}</td>
+                    <td>{{ $efile->version_name }}</td>
+                    <td>{{ $efile->transposition }}</td>
+                    <td>
+                        @if ($efile->only_for_client_id)
+                        {{ $efile->exclusiveClient->client_name }}
+                        @else
+                        <span class="grayed-out">wszyscy</span>
+                        @endif
+                    </td>
+                    <td>
+                        @foreach ($efile->tags as $tag)
+                        <x-file-tag :tag="$tag" />
+                        @endforeach
+                    </td>
+                    <td>{{ implode(", ", array_keys($efile->file_paths)) }}</td>
+                    <td>
+                        <input type="radio" name="existing_file_id" value="{{ $efile->id }}" />
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </x-section>
+    @endif
+
     <x-section title="Wybierz pliki" icon="file">
         <div class="flex-right center">
             @foreach ($files as $file)

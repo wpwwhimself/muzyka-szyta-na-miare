@@ -147,12 +147,14 @@ class FileController extends Controller
         $clients = User::clients()->get()
             ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
             ->toArray();
+        $existing_files = ModelsFile::where("song_id", $song_id)->get();
 
         return view(user_role().'.files.add-from-existing-safe', compact(
             "song",
             "files",
             "clients",
             "tags",
+            "existing_files",
         ));
     }
 
@@ -161,7 +163,9 @@ class FileController extends Controller
         $song = Song::find($rq->song_id);
 
         if ($rq->action == "save") {
-            $file = ModelsFile::create([
+            $file = ModelsFile::updateOrCreate([
+                "id" => $rq->existing_file_id,
+            ], [
                 "song_id" => $song->id,
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",

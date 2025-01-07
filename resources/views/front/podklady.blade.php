@@ -246,7 +246,7 @@
 
         <h2>Twoje dane</h2>
         <div class="flex-right center">
-            <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" />
+            <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" required />
             <div class="section-like sc-line">
                 <label>Jak mogę do Ciebie dotrzeć? <i>(wypełnij co najmniej jedno)</i></label>
                 <div class="flex-right">

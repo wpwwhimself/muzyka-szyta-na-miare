@@ -12,7 +12,7 @@ class QuestMini extends Component
 {
     public bool $is_request;
     public Song|Request $song;
-    public User|string $client;
+    public User|string|null $client;
 
     /**
      * Create a new component instance.

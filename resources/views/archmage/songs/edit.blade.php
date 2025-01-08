@@ -58,6 +58,17 @@
                     @endforeach
                 </div>
             </x-extendo-section>
+
+            <x-extendo-section title="Rolki">
+                <div class="flex-down center">
+                    @foreach ($showcases as $platform => $slink)
+                    <div class="flex-right center middle">
+                        <x-input type="text" name="link_{{ $platform }}" :label="$platform" :value="$slink" small />
+                        @if ($slink) <x-a :href="$slink" target="_blank" /> @endif
+                    </div>
+                    @endforeach
+                </div>
+            </x-extendo-section>
         </div>
     </x-section>
 

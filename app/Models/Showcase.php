@@ -13,6 +13,8 @@ class Showcase extends Model
         "song_id",
         "link_fb",
         "link_ig",
+        "link_yt",
+        "link_tt",
     ];
 
     public function song(){

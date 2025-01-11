@@ -107,8 +107,6 @@ class ClientController extends Controller
                 "default_wishes" => $rq->default_wishes,
                 "special_prices" => $rq->special_prices,
                 "external_drive" => $rq->external_drive,
-            ]);
-            $client->user->update([
                 "password" => $rq->password,
             ]);
 

@@ -18,3 +18,11 @@ This website serves as a CRM for my business and as such is equipped with:
 ## Links
 This website is available [here](https://muzykaszytanamiare.pl/).
 To browse the backend as an observer, you can log in with the password `MSZNMOBSERVER`.
+
+## Screenshots
+This is how the app looks from the back:
+
+![dashboard](screenshots/dashboard.png)
+![quest view](screenshots/quest_view.png)
+![finance](screenshots/finance.png)
+![stats](screenshots/stats.png)

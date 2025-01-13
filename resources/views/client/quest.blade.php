@@ -146,18 +146,13 @@
         <x-files.list :grouped-files="$files" />
         @endif
 
-        @if (in_array($quest->status_id, [19]))
-        <p class="yellowed-out">
-            Przywróć zlecenie przyciskiem poniżej<br>
-            i poproś o ponowne wgranie
-        </p>
-        @endif
         @if ($quest->status_id == 15 && !$quest->files_ready)
         <p class="yellowed-out">
             To nie są jeszcze wszystkie pliki.<br>
             Dalsze prace po akceptacji tego etapu.
         </p>
         @endif
+
         @if (empty($files))
         <x-tutorial>
             Tutaj pojawią się pliki związane
@@ -165,6 +160,13 @@
             Po dokonaniu wpłaty będzie możliwość
             ich pobrania lub odsłuchania.
         </x-tutorial>
+            @if (in_array($quest->status_id, [19]))
+            <p class="yellowed-out">
+                Sejf został usunięty.<br>
+                Przywróć zlecenie przyciskiem poniżej<br>
+                i poproś o ponowne wgranie
+            </p>
+            @endif
         @endif
 
         <x-extendo-section title="Chmura">

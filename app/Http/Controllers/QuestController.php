@@ -28,17 +28,19 @@ class QuestController extends Controller
         $status_id = $rq->status;
         $paid = $rq->paid;
 
-        $client = User::find($rq->client);
-        if($client && $client->id != Auth::id() && !is_archmage()) abort(403, "Widok niedostępny");
+        $client = User::find(is_archmage() ? $rq->client : Auth::id());
 
         $quests = Quest::orderBy("quests.created_at", "desc");
         if($client){ $quests = $quests->where("client_id", $client->id); }
-        if($status_id) $quests = $quests->where("status_id", $status_id);
-        if($paid) $quests = $quests->where("paid", $paid);
+        if (is_archmage()) {
+            if($status_id) $quests = $quests->where("status_id", $status_id);
+            if($paid) $quests = $quests->where("paid", $paid);
+        }
+
         $quests = $quests->paginate(25);
 
         return view(user_role().".quests", [
-            "title" => !is_archmage() ? "$client->client_name – zlecenia" : "Lista zleceń",
+            "title" => ($client && is_archmage()) ? "$client->client_name – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);
     }

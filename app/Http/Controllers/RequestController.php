@@ -21,16 +21,18 @@ use Illuminate\Support\Str;
 class RequestController extends Controller
 {
     public function list(HttpRequest $rq){
-        $client = Auth::user();
-        $client_id = $rq->client;
-        $client_name = $rq->client_name;
         $status_id = $rq->status;
+        $client_name = $rq->client_name;
+
+        $client = User::find(is_archmage() ? $rq->client : Auth::id());
 
         $requests = Request::orderBy("updated_at", "desc");
-        if(!is_archmage()){ $requests = $requests->where("client_id", $client->id); }
-        if($client_id) $requests = $requests->where("client_id", $client_id);
-        if($client_name) $requests = $requests->where("client_name", "regexp", $client_name);
-        if($status_id) $requests = $requests->where("status_id", $status_id);
+        if($client){ $requests = $requests->where("client_id", $client->id); }
+        if (is_archmage()) {
+            if($client_name) $requests = $requests->where("client_name", "regexp", $client_name);
+            if($status_id) $requests = $requests->where("status_id", $status_id);
+        }
+
         $requests = $requests->paginate(25);
 
         return view(user_role().".requests", [

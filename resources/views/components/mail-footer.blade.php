@@ -10,7 +10,7 @@
                 <h3>{{ config("app.name") }}</h3>
             </td>
             <td class="contact-info">
-                <a href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">{{ env("MAIL_MAIN_ADDRESS") }}/a>
+                <a href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">{{ env("MAIL_MAIN_ADDRESS") }}</a>
                 <a href="callto:+48530268000">+48 530 268 000</a>
                 <a href="https://muzykaszytanamiare.pl/">muzykaszytanamiare.pl</a>
                 <a href="https://www.facebook.com/muzykaszytanamiarepl">muzykaszytanamiarepl</a>

@@ -7,20 +7,16 @@
         <thead>
             <tr>
                 <th>Tytuł</th>
-                <th>Youtube</th>
-                <th>Tiktok</th>
-                <th>Instagram</th>
-                <th>Facebook</th>
+                <th>Platforma</th>
+                <th>Link</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($showcases as $showcase)
             <tr>
                 <td><a href="{{ route('songs', ['search' => $showcase->song_id]) }}">{{ $showcase->song->full_title }}</a></td>
-                <td>{!! $showcase->link_yt !!}</td>
-                <td>{!! $showcase->link_tt !!}</td>
-                <td>{!! $showcase->link_ig !!}</td>
-                <td>{!! $showcase->link_fb !!}</td>
+                <td>{{ $showcase->platform }}</td>
+                <td>{!! $showcase->link !!}</td>
             </tr>
             @empty
             <tr>

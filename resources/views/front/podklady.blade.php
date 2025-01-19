@@ -114,9 +114,22 @@
         <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
 
+    <h2>Najnowsze realizacje</h2>
     <div id="showcase-fbs" class="flex-right center">
+    @php $player_dims = [300, 575]; @endphp
     @foreach ($showcases as $showcase)
-    {!! $showcase->link_ig ?? $showcase->link_fb !!}
+        @switch($showcase->platform)
+            @case("yt")
+                <iframe width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" src="https://www.youtube.com/embed/{{ Str::after($showcase->link, "shorts/") }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                @break
+            @case("tt")
+                <iframe src="https://www.tiktok.com/player/v1/{{ Str::after($showcase->link, "video/") }}" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                @break
+            @case("ig")
+                <iframe src="{{ $showcase->link }}embed" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                @break
+            @case("fb")
+        @endswitch
     @endforeach
     </div>
     <x-a href="https://www.instagram.com/muzykaszytanamiarepl/" target="_blank">Inne prezentacje</x-a>

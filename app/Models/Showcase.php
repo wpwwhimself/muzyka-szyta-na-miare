@@ -11,10 +11,8 @@ class Showcase extends Model
 
     protected $fillable = [
         "song_id",
-        "link_fb",
-        "link_ig",
-        "link_yt",
-        "link_tt",
+        "platform",
+        "link",
     ];
 
     public function song(){

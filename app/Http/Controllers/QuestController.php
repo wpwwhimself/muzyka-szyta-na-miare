@@ -62,7 +62,7 @@ class QuestController extends Controller
                 'Pliki nieoznaczone jako komplet' => $quest->status_id != 11 && !$quest->files_ready,
             ],
             "quote" => [
-                'Ostatnia zmiana padła '.$quest->history->get(1)?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->history->get(1)?->date->diffInDays() >= 30,
+                'Ostatnia zmiana padła '.$quest->history->first()?->date->diffForHumans() => in_array($quest->status_id, [16, 26]) && $quest->history->first()?->date->diffInDays() >= 30,
                 'Opóźnienie wpłaty' => $quest->delayed_payment_in_effect,
             ],
         ] : [
@@ -212,8 +212,7 @@ class QuestController extends Controller
             $mailing = true;
             $flash_content .= ", mail wysłany";
         }
-        if($mailing !== null) $quest->history->first()->update(["mail_sent" => $mailing]);
-
+        if($mailing !== null) $quest->fresh()->history->first()->update(["mail_sent" => $mailing]);
 
         return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
     }

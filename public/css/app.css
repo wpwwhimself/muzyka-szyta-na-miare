@@ -91,9 +91,11 @@ section:hover, .section-like:hover{
     }
     & h1, & h2, & h3 {
         margin: 0;
+        white-space: nowrap;
     }
     & > div {
         align-items: flex-end !important;
+        justify-content: flex-end !important;
         gap: var(--size-xs);
     }
 }

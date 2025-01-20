@@ -17,8 +17,6 @@ use Illuminate\View\View;
 
 class SongController extends Controller
 {
-    private const SOCIALS_FOR_REELS = ["yt", "tt", "ig"];
-
     public function list(Request $rq){
         $search = strtolower($rq->search ?? "");
         $songs = Song::orderBy("title")
@@ -66,14 +64,11 @@ class SongController extends Controller
         $song = Song::findOrFail($id);
         $genres = Genre::orderBy("name")->get()->pluck("name", "id");
         $tags = SongTag::orderBy("name")->get();
-
-        $showcases = Showcase::where("song_id", $song->id)->first();
-        $showcases = collect(self::SOCIALS_FOR_REELS)
-            ->mapWithKeys(fn ($s) => [$s => $showcases?->{"link_$s"}]);
+        $showcase = Showcase::where("song_id", $song->id)->first();
 
         return view(user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
-            compact("song", "genres", "tags", "showcases"),
+            compact("song", "genres", "tags", "showcase"),
         ));
     }
 
@@ -83,12 +78,13 @@ class SongController extends Controller
         $song->update($rq->except("_token"));
         $song->tags()->sync(array_keys($rq->tags ?? []));
 
-        if (array_filter($rq->only(array_map(fn ($s) => "link_$s", self::SOCIALS_FOR_REELS)))) {
+        if (array_filter($rq->only(["reel_platform", "reel_link"]))) {
             Showcase::updateOrCreate(
                 ["song_id" => $song->id],
-                collect(self::SOCIALS_FOR_REELS)
-                    ->mapWithKeys(fn ($s) => ["link_$s" => $rq->{"link_$s"}])
-                    ->toArray()
+                [
+                    "platform" => $rq->reel_platform,
+                    "link" => $rq->reel_link,
+                ],
             );
         } else {
             Showcase::where("song_id", $song->id)->delete();

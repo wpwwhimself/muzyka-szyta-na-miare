@@ -62,6 +62,10 @@ class User extends Authenticatable
         return $this->hasMany(Quest::class, "client_id")
             ->whereDate("updated_at", ">=", Carbon::today()->subMonths(3));
     }
+
+    public function comments() {
+        return $this->hasMany(StatusChange::class, "changed_by")->where("new_status_id", 19)->whereNotNull("comment");
+    }
     #endregion
 
     #region attributes
@@ -130,6 +134,7 @@ class User extends Authenticatable
             2 => ["zapomniany", "success fas fa-ghost"],
             -1 => ["krętacz i oszust", "error fas fa-user-ninja"],
         ];
+        if (!in_array($this->trust, array_keys($dict))) return "";
         return view(
             "components.fa-icon",
             [

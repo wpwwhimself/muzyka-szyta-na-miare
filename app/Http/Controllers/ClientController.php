@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CustomMail;
+use App\Models\StatusChange;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -109,6 +110,12 @@ class ClientController extends Controller
                 "external_drive" => $rq->external_drive,
                 "password" => $rq->password,
             ]);
+
+            if ($rq->has("pinned_comment_id")) {
+                $client->update(["helped_showcasing" => 2]);
+                StatusChange::where("changed_by", $client->id)->update(["pinned" => false]);
+                StatusChange::find($rq->pinned_comment_id)->update(["pinned" => true]);
+            }
 
             // budget handling
             if($client->budget != $rq->budget){

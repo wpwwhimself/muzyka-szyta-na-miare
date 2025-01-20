@@ -65,12 +65,12 @@ class ShowcaseController extends Controller
         return back()->with("success", "Dodano pozycję");
     }
 
-    public function pinComment(int $id)
+    public function pinComment(int $comment_id, int $client_id)
     {
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
 
-        $entry = StatusChange::find($id);
-        $entry->update(["pinned" => !$entry->pinned]);
+        StatusChange::where("changed_by", $client_id)->update(["pinned" => false]);
+        StatusChange::find($comment_id)->update(["pinned" => true]);
 
         return back()->with("success", "Zmieniono przypięcie");
     }

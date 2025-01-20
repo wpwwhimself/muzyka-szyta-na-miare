@@ -21,10 +21,6 @@
             "flex-down",
             "center",
         ])>
-            @if (is_archmage())
-                <a class="circle small {{ $item->pinned ? 'active' : '' }}" @popper(Przypięcie komentarza) href="{{ route('showcase-pin-comment', ['id' => $item->id]) }}"></a>
-            @endif
-
             <div @class([
                 "circle",
                 "flex-down",
@@ -43,6 +39,11 @@
                 <i class="fa-solid fa-comment" @popper(Wiadomość wysłana pozamailowo)></i>
                 @endif
             </small>
+            @if (is_archmage() && !is_archmage($item->changed_by))
+            <a @popper(Przypięcie komentarza) href="{{ route('showcase-pin-comment', ['comment_id' => $item->id, 'client_id' => $item->changed_by]) }}">
+                <i class="fa-solid fa-thumbtack {{ $item->pinned ? 'accent' : 'ghost' }}"></i>
+            </a>
+            @endif
         </div>
         @empty
         <p class="grayed-out">historia tego zlecenia jest pusta</p>

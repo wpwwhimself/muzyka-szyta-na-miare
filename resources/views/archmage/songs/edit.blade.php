@@ -62,7 +62,7 @@
             <x-extendo-section title="Rolka">
                 <x-input type="text" name="reel_platform" label="Platforma" :value="$showcase?->platform" />
                 <x-input type="url" name="reel_link" label="Link" :value="$showcase?->link" small />
-                @if ($showcase->link) <x-a :href="$showcase->link" target="_blank" /> @endif
+                @if ($showcase?->link) <x-a :href="$showcase->link" target="_blank" /> @endif
             </x-extendo-section>
         </div>
     </x-section>

@@ -23,6 +23,7 @@ class HomeController extends Controller
     {
         $showcases = Showcase::orderBy("created_at", "desc")->limit(5)->get();
         $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
+        $pinned_comments = StatusChange::where("pinned", true)->orderBy("date", "desc")->get();
 
         $prices = DB::table("prices")->where("operation", "+")->get(["service", "quest_type_id", "price_".strtolower(CURRENT_PRICING())." AS price"]);
 
@@ -60,6 +61,7 @@ class HomeController extends Controller
         return view("front.podklady", compact(
             "showcases",
             "client_showcases",
+            "pinned_comments",
             "prices",
             "quest_types",
             "contact_preferences",

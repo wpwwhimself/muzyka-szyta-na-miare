@@ -17,6 +17,7 @@ class StatusChange extends Model
         "values",
         "mail_sent",
         "date",
+        "pinned",
     ];
     protected $dates = ["date"];
     // const CREATED_AT = "date";

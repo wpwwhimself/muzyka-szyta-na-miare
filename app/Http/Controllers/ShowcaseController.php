@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClientShowcase;
 use App\Models\Showcase;
 use App\Models\Song;
+use App\Models\StatusChange;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,5 +63,15 @@ class ShowcaseController extends Controller
         ]);
 
         return back()->with("success", "Dodano pozycję");
+    }
+
+    public function pinComment(int $id)
+    {
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+
+        $entry = StatusChange::find($id);
+        $entry->update(["pinned" => !$entry->pinned]);
+
+        return back()->with("success", "Zmieniono przypięcie");
     }
 }

@@ -21,6 +21,10 @@
             "flex-down",
             "center",
         ])>
+            @if (is_archmage())
+                <a class="circle small {{ $item->pinned ? 'active' : '' }}" @popper(Przypięcie komentarza) href="{{ route('showcase-pin-comment', ['id' => $item->id]) }}"></a>
+            @endif
+
             <div @class([
                 "circle",
                 "flex-down",

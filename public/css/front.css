@@ -69,29 +69,45 @@ ul.no-points {
     text-align: left;
 }
 
-#recomms img{
-    border-radius: 100%;
+#recomms {
+    & img{
+        border-radius: 100%;
+    }
+    & .section-like{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    & .section-like img{
+        width: 10em;
+    }
+    & p{
+        font-style: italic;
+    }
+    & .flex-right{
+        align-items: center;
+    }
+
+    & .pinned-comments {
+        overflow-x: scroll;
+        white-space: nowrap;
+
+        & > * {
+            display: inline-block;
+            width: calc(var(--size-m) * 20);
+            vertical-align: middle;
+            white-space: normal;
+        }
+    }
 }
-#recomms .section-like{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#recomms .section-like img{
-    width: 10em;
-}
-#recomms p{
-    font-style: italic;
-}
-#recomms-other img{
-    width: 8em;
-    filter: grayscale(1);
-}
-#recomms-other img:hover{
-    filter: grayscale(0.2);
-}
-#recomms .flex-right{
-    align-items: center;
+#recomms-other {
+    & img{
+        width: 8em;
+        filter: grayscale(1);
+    }
+    & img:hover{
+        filter: grayscale(0.2);
+    }
 }
 
 #showcase-mp3s{

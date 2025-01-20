@@ -125,6 +125,7 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::get('/', "list")->name("showcases");
             Route::post('/add', "add")->name("add-showcase");
             Route::post('/add-from-client', "addFromClient")->name("add-client-showcase");
+            Route::get("/pin-comment/{id}", "pinComment")->name("showcase-pin-comment");
         });
 
         Route::controller(StatsController::class)->group(function(){

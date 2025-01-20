@@ -104,18 +104,7 @@
                     {{ $client->created_at->diffForHumans() }}
                 </span>
                 <span>
-                    @switch($client->trust)
-                        @case(1)
-                            <i @popper(ponadprzeciętne zaufanie) class="success fa-solid fa-hand-holding-heart"></i>
-                            @break
-                        @case(2)
-                            <i @popper(zapomniany) class="success fa-solid fa-ghost"></i>
-                            @break
-                        @case(-1)
-                            <i @popper(krętacz i oszust) class="error fa-solid fa-user-ninja"></i>
-                            @break
-                        @default
-                    @endswitch
+                    {!! $client->trust_icon !!}
                     @if ($client->special_prices)
                     <i class="fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>"._ct_($client->special_prices)) }}></i>
                     @endif

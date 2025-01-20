@@ -841,6 +841,13 @@ footer .contact-info{
             &.by-client{
                 border: 2px solid var(--acc);
             }
+
+            &.small {
+                width: calc(var(--circle-size) / 3); height: calc(var(--circle-size) / 3);
+            }
+            &.active {
+                background-color: var(--acc) !important;
+            }
         }
         & .notification-counter{
             max-width: var(--circle-size);

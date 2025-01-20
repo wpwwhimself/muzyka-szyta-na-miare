@@ -93,7 +93,29 @@
         <script src="https://static.elfsight.com/platform/platform.js" async></script>
         <div class="elfsight-app-6b00a039-c4ab-497e-91da-5cecfcf8511b" data-elfsight-app-lazy></div>
     </div>
-    <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Więcej recenzji</x-a>
+    <div class="hidden">
+        <h2>Komentarze klientów</h2>
+        <div class="pinned-comments">
+            @foreach ($pinned_comments as $comment)
+            <div class="section-like">
+                @php
+                $client = $comment->changer;
+                @endphp
+
+                <h2>
+                    {!! $client->exp_icon !!}
+                    {{ $client->client_name }}
+                </h2>
+                <small>
+                    <x-fa-icon pop="Przygotowany utwór" class="fas fa-box" />
+                    {{ $comment->re_quest->song->full_title }}
+                </small>
+                {!! \Illuminate\Mail\Markdown::parse($comment->comment) !!}
+                <div class="grayed-out">{{ $comment->date->diffForHumans() }}</div>
+            </div>
+            @endforeach
+        </div>
+    </div>
     <h2>Współpracuję również z:</h2>
     <div id="recomms-other" class="flex-right center">
         <img class="hidden" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>

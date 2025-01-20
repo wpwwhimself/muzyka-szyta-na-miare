@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\View\ComponentAttributeBag;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -101,6 +102,43 @@ class User extends Authenticatable
 
     public function getIsForgottenAttribute(){
         return $this->trust >= 2;
+    }
+    #endregion
+
+    #region icons
+    public function getExpIconAttribute()
+    {
+        $dict = [
+            "normal" => ["klient", "fas fa-user"],
+            "veteran" => ["stały klient", "fas fa-user-shield"],
+        ];
+        $ddict = $dict[$this->is_veteran ? "veteran" : "normal"];
+        return view(
+            "components.fa-icon",
+            [
+                "pop" => $ddict[0],
+                "attributes" => new ComponentAttributeBag([
+                    "class" => $ddict[1],
+                ]),
+            ]
+        )->render();
+    }
+    public function getTrustIconAttribute()
+    {
+        $dict = [
+            1 => ["ponadprzeciętne zaufanie", "success fas fa-hand-holding-heart"],
+            2 => ["zapomniany", "success fas fa-ghost"],
+            -1 => ["krętacz i oszust", "error fas fa-user-ninja"],
+        ];
+        return view(
+            "components.fa-icon",
+            [
+                "pop" => $dict[$this->trust][0],
+                "attributes" => new ComponentAttributeBag([
+                    "class" => $dict[$this->trust][1],
+                ]),
+            ]
+        )->render();
     }
     #endregion
 }

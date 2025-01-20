@@ -64,7 +64,10 @@ class User extends Authenticatable
     }
 
     public function comments() {
-        return $this->hasMany(StatusChange::class, "changed_by")->where("new_status_id", 19)->whereNotNull("comment");
+        return $this->hasMany(StatusChange::class, "changed_by")
+            ->whereIn("new_status_id", [14, 19])
+            ->whereNotNull("comment")
+            ->orderByDesc("date");
     }
     #endregion
 

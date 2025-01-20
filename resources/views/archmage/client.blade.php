@@ -45,7 +45,7 @@
                 <tbody>
                     @foreach ($client->comments as $comment)
                     <tr {{ $comment->pinned ? "class='active'" : "" }}>
-                        <td><a href="{{ route('quest', ['id' => $comment->re_quest_id]) }}">{{ $comment->re_quest->song->full_title }}</a></td>
+                        <td><a href="{{ route('quest', ['id' => $comment->re_quest_id]) }}">{{ $comment->re_quest?->song->full_title }}</a></td>
                         <td>{{ $comment->comment }}</td>
                         <td><input type="radio" name="pinned_comment_id" value="{{ $comment->id }}" {{ $comment->pinned ? "checked" : "" }} /></td>
                     </tr>

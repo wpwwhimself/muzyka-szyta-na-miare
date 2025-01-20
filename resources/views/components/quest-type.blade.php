@@ -8,4 +8,4 @@
 if ($type) [$id, $label, $faSymbol] = [$type->id, $type->type, $type->fa_symbol];
 @endphp
 
-<i class="quest-type {{ $small ? 'small' : '' }} fa-solid {{ $faSymbol }}" {{ Popper::pop($label) }}></i>
+<i class="quest-type {{ $small ? 'small' : '' }} fa-solid {{ $faSymbol }}" {{ $label ? Popper::pop($label) : null }}></i>

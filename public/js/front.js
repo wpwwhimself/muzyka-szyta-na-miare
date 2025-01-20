@@ -27,6 +27,16 @@ function filterSongs(criterion = undefined, id = undefined) {
     document.querySelector("#songs-count").innerHTML = visible_songs
 }
 
+function filterShowcases(mode) {
+    document.querySelectorAll("#showcases .showcase-section").forEach(section => {
+        if (section.getAttribute("data-mode") === mode) {
+            section.classList.remove("gone")
+        } else {
+            section.classList.add("gone")
+        }
+    })
+}
+
 $(document).ready(function(){
     /**
      * load and display songs

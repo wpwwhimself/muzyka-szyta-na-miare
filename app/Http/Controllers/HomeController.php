@@ -21,7 +21,7 @@ class HomeController extends Controller
 
     public function podklady()
     {
-        $showcases = Showcase::orderBy("created_at", "desc")->limit(3)->get();
+        $showcases = Showcase::orderBy("created_at", "desc")->limit(5)->get();
         $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
 
         $prices = DB::table("prices")->where("operation", "+")->get(["service", "quest_type_id", "price_".strtolower(CURRENT_PRICING())." AS price"]);

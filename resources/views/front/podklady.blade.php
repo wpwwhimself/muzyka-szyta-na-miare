@@ -105,71 +105,90 @@
 <section id="showcases">
     <h1>Co już udało mi się wykonać?</h1>
 
-    <div id="showcase-yts" class="flex-right center">
-        @foreach ($client_showcases as $showcase)
-        {!! $showcase->embed !!}
+    <div class="flex-right keep-for-mobile center">
+        @foreach ([
+            "wszystkie utwory" => "list",
+            "nagrania klientów" => "clients",
+            "za kulisami" => "reels",
+            "nuty" => "scores",
+        ] as $label => $mode)
+        <x-button action="#/" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
         @endforeach
     </div>
-    <div id="showcase-spotify">
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-    </div>
 
-    <h2>Najnowsze realizacje</h2>
-    <div id="showcase-fbs" class="flex-right center">
-    @php $player_dims = [300, 575]; @endphp
-    @foreach ($showcases as $showcase)
-        @switch($showcase->platform)
-            @case("yt")
-                <iframe width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" src="https://www.youtube.com/embed/{{ Str::after($showcase->link, "shorts/") }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                @break
-            @case("tt")
-                <iframe src="https://www.tiktok.com/player/v1/{{ Str::after($showcase->link, "video/") }}" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-                @break
-            @case("ig")
-                <iframe src="{{ $showcase->link }}embed" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-                @break
-            @case("fb")
-        @endswitch
-    @endforeach
-    </div>
-    <x-a href="https://www.instagram.com/muzykaszytanamiarepl/" target="_blank">Inne prezentacje</x-a>
-
-    <div id="showcase-scores">
-        @for ($i = 1; $i <= 3; $i++)
-        <img src="{{ asset("assets/front/nutki$i.jpg") }}" alt="sheet music example {{ $i }}">
-        @endfor
-    </div>
-
-    <div id="songs">
-        <h2>
-            Utwory, których się podjąłem
-            <x-tutorial>
-                Kliknij ikonę płyty, aby odtworzyć próbkę
-            </x-tutorial>
-        </h2>
-
-        <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
-        <div class="popup">
-            <div class="popup-contents flex-down center">
-                <h3 class="song-full-title"></h3>
-                <p class="song-desc"></p>
-                <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
-                <x-file-player type="ogg" file="" is-showcase />
-                <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
-            </div>
+    <div class="showcase-section flex-down spaced gone" data-mode="clients">
+        <div id="showcase-yts" class="flex-right center">
+            @foreach ($client_showcases as $showcase)
+            {!! $showcase->embed !!}
+            @endforeach
         </div>
+        <div id="showcase-spotify">
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/2jjvEwHOBmdAYZT5rb33Ta?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+    </div>
 
-        <h3>Filtruj:</h3>
-        <div class="flex-right keep-for-mobile center">
-            <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+    <div class="showcase-section flex-down spaced gone" data-mode="reels">
+        <h2>Najnowsze realizacje</h2>
+        <div id="showcase-fbs" class="flex-right center">
+        @php $player_dims = [300, 575]; @endphp
+        @foreach ($showcases as $showcase)
+            @switch($showcase->platform)
+                @case("yt")
+                    <iframe width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" src="https://www.youtube.com/embed/{{ Str::after($showcase->link, "shorts/") }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    @break
+                @case("tt")
+                    <iframe src="https://www.tiktok.com/player/v1/{{ Str::after($showcase->link, "video/") }}" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                    @break
+                @case("ig")
+                    <iframe src="{{ $showcase->link }}embed" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                    @break
+                @case("fb")
+            @endswitch
+        @endforeach
+        </div>
+        <p class="ghost">Po więcej rolek zajrzyj na moje social media</p>
+    </div>
 
-            @foreach ($genres as $genre)
-            <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
-            @endforeach
+    <div class="showcase-section flex-down spaced gone" data-mode="scores">
+        <div id="showcase-scores">
+            @for ($i = 1; $i <= 3; $i++)
+            <img src="{{ asset("assets/front/nutki$i.jpg") }}" alt="sheet music example {{ $i }}">
+            @endfor
+        </div>
+    </div>
 
-            @foreach ($song_tags as $tag)
-            <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small />
-            @endforeach
+    <div class="showcase-section flex-down spaced" data-mode="list">
+        <div id="songs">
+            <h2>
+                Wszystkie utwory, których się podjąłem
+                <x-tutorial>
+                    Kliknij ikonę płyty, aby odtworzyć próbkę
+                </x-tutorial>
+            </h2>
+
+            <h3>Filtruj:</h3>
+            <div class="flex-right keep-for-mobile center">
+                <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+
+                @foreach ($genres as $genre)
+                <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+                @endforeach
+
+                @foreach ($song_tags as $tag)
+                <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small />
+                @endforeach
+            </div>
+
+            <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
+            <div class="popup">
+                <div class="popup-contents flex-down center">
+                    <h3 class="song-full-title"></h3>
+                    <p class="song-desc"></p>
+                    <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
+                    <x-file-player type="ogg" file="" is-showcase />
+                    <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
+                </div>
+            </div>
         </div>
     </div>
 </section>

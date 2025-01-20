@@ -90,9 +90,8 @@
         </div>
     </div>
     <div class="hidden flex-right center">
-        <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpiotr.sting%2Fposts%2Fpfbid032Xy9dFowc5VZAr3F88vrYF7KfvnGLrGd2XRyTcG7fHd5yVECh9VqjrTJ26PgdUhpl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-        <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Falicja.stefanowska.12%2Fposts%2Fpfbid0xko4oooyuc2DAWa7k9jKBMSFcgcDgCpZKmzupUP4Qr2yVdffR8ZEvo7zvUTQD6RTl&show_text=true&width=500" width="500" height="208" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-        <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Faldona.starzyk%2Fposts%2Fpfbid02Cr5pG2cgwvK6shabfBLEUNm2av9wdc3ZRdzntoF1FQL3pub1Lhd7G5mFFwDUUue1l&show_text=true&width=500" width="500" height="189" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-6b00a039-c4ab-497e-91da-5cecfcf8511b" data-elfsight-app-lazy></div>
     </div>
     <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Więcej recenzji</x-a>
     <h2>Współpracuję również z:</h2>

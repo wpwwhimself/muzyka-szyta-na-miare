@@ -47,9 +47,15 @@ if(!function_exists("BEGINNING")){
 }
 if(!function_exists("INCOME_LIMIT")){
     function INCOME_LIMIT(){
-        if(Carbon::parse("2024-07-01")->diffInDays(Carbon::today(), false) >= 0) return 3225;
-        if(Carbon::parse("2024-01-01")->diffInDays(Carbon::today(), false) >= 0) return 3181.5;
-        if(Carbon::parse("2023-07-01")->diffInDays(Carbon::today(), false) >= 0) return 2700;
+        $thresholds = [
+            "2025-01-01" => 3499.5,
+            "2024-07-01" => 3225,
+            "2024-01-01" => 3181.5,
+            "2023-07-01" => 2700,
+        ];
+        foreach ($thresholds as $date => $threshold) {
+            if(Carbon::parse($date)->diffInDays(Carbon::today(), false) >= 0) return $threshold;
+        }
         return 1745;
     }
 }

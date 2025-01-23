@@ -18,9 +18,9 @@
         <tbody>
             @foreach ($existing_files as $efile)
             <tr class="{{ $file?->id == $efile->id ? 'accent' : '' }}">
-                <td>{{ $efile->variant_name }}</td>
-                <td>{{ $efile->version_name }}</td>
-                <td>{{ $efile->transposition }}</td>
+                <td onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
+                <td onclick="copyFileField('version_name', '{{ $efile->version_name }}')">{{ $efile->version_name }}</td>
+                <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
                 <td>
                     @if ($efile->only_for_client_id)
                     {{ $efile->exclusiveClient->client_name }}
@@ -42,6 +42,12 @@
             @endforeach
         </tbody>
     </table>
+
+    <script>
+    const copyFileField = (field, value) => {
+        document.getElementById(field).value = value
+    }
+    </script>
 </x-section>
 @endif
 

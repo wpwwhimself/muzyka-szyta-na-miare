@@ -18,6 +18,7 @@
                 :name="$name"
                 :label="$label"
                 :value="$song->{$name}"
+                :links="$name == 'link'"
             />
             @endforeach
 

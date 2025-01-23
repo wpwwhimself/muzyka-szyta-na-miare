@@ -5,7 +5,8 @@
     "disabled" => false,
     "hint" => null,
     "value" => null,
-    "small" => false
+    "small" => false,
+    "links" => false,
 ])
 
 <div {{
@@ -64,5 +65,13 @@
 
     @if($type != "hidden")
     <label for="{{ $name }}">{{ $label }}</label>
+    @endif
+
+    @if (($type == "url" || $links) && $value)
+    <div class="flex-right center">
+        @foreach (explode(",", $value) ?? [] as $link)
+        <x-a :href="$link" target="_blank" />
+        @endforeach
+    </div>
     @endif
 </div>

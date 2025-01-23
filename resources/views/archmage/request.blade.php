@@ -56,7 +56,7 @@
         <x-extendo-block key="client"
             header-icon="user"
             title="Dane klienta"
-            :subtitle="$request->client_name"
+            :subtitle="$request->client"
             :extended="in_array($request->status_id, [1])"
         >
             <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />

@@ -160,10 +160,7 @@
         <x-extendo-block key="client"
             header-icon="user"
             title="Klient"
-            :subtitle="implode(' // ', [
-                $quest->client->id,
-                $quest->client->client_name,
-            ])"
+            :subtitle="$quest->client"
         >
             <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
             <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />

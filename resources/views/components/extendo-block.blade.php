@@ -10,7 +10,7 @@
         <div class="titles flex-right keep-for-mobile">
             <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
             <h2>{{ $title }}</h2>
-            <span class="ghost">{{ $subtitle }}</span>
+            <span class="ghost">{!! $subtitle !!}</span>
         </div>
 
         @if($buttons)

@@ -103,8 +103,7 @@
                 @endphp
 
                 <h2>
-                    {!! $client->exp_icon !!}
-                    {{ $client->client_name }}
+                    {!! $client !!}
                 </h2>
                 <small>
                     <x-fa-icon pop="Przygotowany utwór" class="fas fa-box" />

@@ -36,7 +36,7 @@
         </form>
     </div>
     <style>
-    .table-row{ grid-template-columns: 4em 4fr 4fr 8em 1fr; }
+    .table-row{ grid-template-columns: 4em 4fr 4fr 8em; }
     </style>
     <div class="quests-table">
         <div class="table-header table-row">
@@ -44,7 +44,6 @@
             <span>Nazwisko</span>
             <span>Dane kontaktowe</span>
             <span>Znany od</span>
-            <span>Wyjątki</span>
         </div>
         <hr />
         @forelse ($clients as $name => $client_class)
@@ -82,7 +81,7 @@
                 <span class="client-main-data">
                     <h3 class="song-title">
                         <a href="{{ route('client-view', ['id' => $client->id]) }}">
-                            {{ _ct_($client->client_name) }}
+                            {!! $client !!}
                         </a>
                     </h3>
                     <progress id="client_exp" value="{{ $client->exp }}" max="{{ $client->is_veteran ? $max_exp : VETERAN_FROM() }}"></progress>
@@ -102,21 +101,6 @@
                 </span>
                 <span {{ Popper::pop($client->created_at->toDateString()) }}>
                     {{ $client->created_at->diffForHumans() }}
-                </span>
-                <span>
-                    {!! $client->trust_icon !!}
-                    @if ($client->special_prices)
-                    <i class="fa-solid fa-address-card" {{ Popper::pop("Niestandardowe ceny:<br>"._ct_($client->special_prices)) }}></i>
-                    @endif
-                    @if ($client->default_wishes)
-                    <i class="fa-solid fa-cloud" {{ Popper::pop("Domyślne życzenia:<br>"._ct_($client->default_wishes)) }}></i>
-                    @endif
-                    @if ($client->helped_showcasing)
-                    <i class="showcase-highlight fa-solid fa-award {{ $client->helped_showcasing < 2 ? 'fa-fade' : '' }}" {{ Popper::pop($client->helped_showcasing < 2 ? "Chce być patronem" : "Patron") }}></i>
-                    @endif
-                    @if ($client->budget)
-                    <i class="success fa-solid fa-sack-dollar" {{ Popper::pop("Budżet:<br>"._c_(as_pln($client->budget))) }}></i>
-                    @endif
                 </span>
             </div>
             @endforeach

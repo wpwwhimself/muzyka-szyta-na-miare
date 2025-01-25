@@ -28,7 +28,7 @@
         {!! $platform?->icon !!}
 
         <x-input type="number"
-            name="orderign"
+            name="ordering"
             label="Kolejność"
             :value="$platform?->ordering"
             small

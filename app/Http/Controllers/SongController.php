@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FileTag;
 use App\Models\Genre;
 use App\Models\Showcase;
+use App\Models\ShowcasePlatform;
 use App\Models\Song;
 use App\Models\SongTag;
 use App\Models\Status;
@@ -65,10 +66,12 @@ class SongController extends Controller
         $genres = Genre::orderBy("name")->get()->pluck("name", "id");
         $tags = SongTag::orderBy("name")->get();
         $showcase = Showcase::where("song_id", $song->id)->first();
+        $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
+            ->pluck("name", "code");
 
         return view(user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
-            compact("song", "genres", "tags", "showcase"),
+            compact("song", "genres", "tags", "showcase", "showcase_platforms"),
         ));
     }
 

@@ -22,8 +22,7 @@
                 @foreach ($patrons_adepts as $patron)
                 <tr>
                     <td>
-                        <i class="fa-solid fa-{{ $patron->is_veteran ? 'user-shield' : 'user' }}"></i>
-                        <a href="{{ route('clients', ['search' => $patron->id]) }}">{{ _ct_($patron->client_name) }}</a>
+                        <a href="{{ route('clients', ['search' => $patron->id]) }}">{!! $patron !!}</a>
                     </td>
                     <td>
                         <x-button label="" icon="check" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 2]) }}" :small="true" />
@@ -167,7 +166,7 @@
             <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
             <x-a href="{{ route('requests') }}">Wszystkie</x-a>
         </x-slot>
-        
+
         @forelse ($requests as $request)
         <x-quest-mini :quest="$request" />
         @empty

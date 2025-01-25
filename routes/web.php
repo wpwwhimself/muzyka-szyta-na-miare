@@ -126,6 +126,12 @@ Route::domain("podklady.".$domain)->group(function(){
             Route::post('/add', "add")->name("add-showcase");
             Route::post('/add-from-client', "addFromClient")->name("add-client-showcase");
             Route::get("/pin-comment/{comment_id}/{client_id}", "pinComment")->name("showcase-pin-comment");
+
+            Route::prefix("platforms")->group(function() {
+                Route::get("/", "listPlatforms")->name("showcase-platforms");
+                Route::get("/edit/{id?}", "editPlatform")->name("showcase-platform-edit");
+                Route::post("/process", "processPlatform")->name("showcase-platform-process");
+            });
         });
 
         Route::controller(StatsController::class)->group(function(){

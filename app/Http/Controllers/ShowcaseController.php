@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
 use App\Models\Showcase;
+use App\Models\ShowcasePlatform;
 use App\Models\Song;
 use App\Models\StatusChange;
 use Carbon\Carbon;
@@ -74,4 +75,37 @@ class ShowcaseController extends Controller
 
         return back()->with("success", "Zmieniono przypięcie");
     }
+
+    #region platforms
+    public function listPlatforms()
+    {
+        $platforms = ShowcasePlatform::orderBy("ordering")->get();
+
+        return view(user_role().".showcases.platforms.list", compact(
+            "platforms"
+        ));
+    }
+
+    public function editPlatform($id = null)
+    {
+        $platform = ($id)
+            ? ShowcasePlatform::find($id)
+            : null;
+
+        return view(user_role().".showcases.platforms.edit", compact(
+            "platform"
+        ));
+    }
+
+    public function processPlatform(Request $rq)
+    {
+        if ($rq->action == "save") {
+            ShowcasePlatform::updateOrCreate(["code" => $rq->code], $rq->except(["_token", "action"]));
+        } else if ($rq->action == "delete") {
+            ShowcasePlatform::find($rq->code)->delete();
+        }
+        return redirect()->route("showcase-platform-edit", ["id" => $rq->code])->with("success", "Platforma poprawiona");
+
+    }
+    #endregion
 }

@@ -15,7 +15,13 @@ class Showcase extends Model
         "link",
     ];
 
+    #region relations
     public function song(){
         return $this->belongsTo(Song::class);
     }
+
+    public function platform() {
+        return $this->belongsTo(ShowcasePlatform::class, "platform", "code");
+    }
+    #endregion
 }

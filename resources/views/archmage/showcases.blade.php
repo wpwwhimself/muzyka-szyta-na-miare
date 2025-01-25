@@ -3,6 +3,10 @@
 @section('content')
 
 <x-section id="showcases-list" title="Lista reklam" icon="list">
+    <x-slot name="buttons">
+        <x-a :href="route('showcase-platforms')" icon="hashtag">Platformy</x-a>
+    </x-slot>
+
     <table>
         <thead>
             <tr>

@@ -51,9 +51,13 @@ class FileController extends Controller
     #endregion
 
     #region upload
-    public function uploadForQuest(string $quest_id)
+    public function uploadByEntity(string $entity_name, string|int $id)
     {
-        $song = Quest::find($quest_id)->song;
+        $entities = [
+            "quest" => Quest::class,
+            "file" => ModelsFile::class,
+        ];
+        $song = $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
         $clients = User::clients()->get()
             ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])

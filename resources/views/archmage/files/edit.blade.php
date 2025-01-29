@@ -124,6 +124,7 @@
         <x-button action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
         @if ($file)
         <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" />
+        <x-a :href="route('files-upload-by-entity', ['entity_name' => 'file', 'id' => $file?->id])">Wgraj kolejny</x-a>
         @endif
     </div>
 </form>

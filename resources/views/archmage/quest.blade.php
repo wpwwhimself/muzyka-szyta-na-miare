@@ -105,7 +105,7 @@
     >
         <x-extendo-section title="Wgrywanie">
             @unless(Auth::id() === 0)
-            <x-a :href="route('files-upload-for-quest', ['quest_id' => $quest->id])" icon="plus" target="_blank">Wgraj</x-a>
+            <x-a :href="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])" icon="plus" target="_blank">Wgraj</x-a>
             <x-a
                 href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
                 target="_blank"

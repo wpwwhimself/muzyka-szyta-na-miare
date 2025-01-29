@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\CustomMail;
 use App\Models\StatusChange;
+use App\Models\Top10;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;

@@ -75,9 +75,8 @@ class User extends Authenticatable
             ->orderByDesc("date");
     }
 
-    public function top10Active() {
-        return $this->morphMany(Top10::class, "entity")
-            ->where("type", "active");
+    public function top10() {
+        return $this->morphMany(Top10::class, "entity");
     }
     #endregion
 
@@ -165,7 +164,7 @@ class User extends Authenticatable
             "veteran" => [$this->is_veteran, "fas fa-user-shield", "Stały klient"],
             "patron" => [$this->is_patron, "fas fa-award showcase-highlight", "Patron"],
             "trusted" => [$this->trust > 0, "fas fa-hand-holding-heart success", "Zaufany"],
-            "active" => [$this->top10Active->count() > 0, "fas fa-chart-line success", "Najbardziej aktywny"],
+            "active" => [$this->top10->where("type", "active")->count() > 0, "fas fa-chart-line success", "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()],
             "picky" => [$this->pickiness >= 1.5 && is_archmage(), "fas fa-people-pulling error", "Wybredny"],
             "forgotten" => [$this->is_forgotten && is_archmage(), "fas fa-ghost success", "Zapomniany"],
             "kio" => [$this->trust < 0 && is_archmage(), "fas fa-user-ninja error", "Na czarnej liście"],

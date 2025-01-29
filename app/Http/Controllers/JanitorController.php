@@ -10,6 +10,8 @@ use App\Mail\RequestExpired;
 use App\Models\Quest;
 use App\Models\Request;
 use App\Models\StatusChange;
+use App\Models\Top10;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -50,6 +52,8 @@ class JanitorController extends Controller
 
         $this->re_quests_cleanup();
         $this->safe_cleanup();
+
+        $this->top10_active_update();
 
         $this->exportSummary();
         return response()->json(["message" => "Sprzątacz wykonał swoją robotę"]);
@@ -295,5 +299,23 @@ class JanitorController extends Controller
             }
         }
 
+    }
+
+    private function top10_active_update()
+    {
+        Top10::where("type", "active")->delete();
+
+        $most_active = User::has("questsRecent")
+            ->with("questsRecent")
+            ->withCount("questsRecent")
+            ->orderByDesc("quests_recent_count")
+            ->limit(10)
+            ->get();
+        
+        foreach ($most_active as $user) {
+            $user->top10()->create([
+                "type" => "active",
+            ]);
+        }
     }
 }

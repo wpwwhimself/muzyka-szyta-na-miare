@@ -15,6 +15,7 @@ use App\Models\Song;
 use App\Models\SongWorkTime;
 use App\Models\Status;
 use App\Models\StatusChange;
+use App\Models\Top10;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -297,16 +298,17 @@ class StatsController extends Controller
                     // ],
                 ],
                 "most_active" => [
-                    "rows" => User::has("questsRecent")
-                        ->with("questsRecent")
-                        ->withCount("questsRecent")
-                        ->orderByDesc("quests_recent_count")
-                        ->limit(10)
+                    "rows" => Top10::whereHasMorph(
+                            "entity",
+                            [User::class],
+                            fn($q) => $q->where("type", "active")
+                        )
                         ->get()
                         ->map(fn($item, $key) => [
-                            "Nazwisko" => $item->client_name,
-                            "Liczba zleceń" => $item->quests_recent_count,
+                            "Nazwisko" => $item->entity->client_name,
+                            "Liczba zleceń" => $item->entity->questsRecent()->count(),
                         ])
+                        ->sortByDesc("Liczba zleceń")
                         ->values(),
                 ],
             ],

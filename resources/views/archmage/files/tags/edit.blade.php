@@ -31,6 +31,7 @@
         @if ($tag)
         <x-button action="submit" danger name="action" value="delete" label="Usuń" icon="trash" />
         @endif
+        <x-a :href="route('file-tags')">Wróć</x-a>
     </x-section>
 </form>
 

@@ -19,13 +19,12 @@
             label="Opis"
             :value="$tag?->description"
         />
-    </x-section>
 
-    <div class="flex-right center">
         <x-button action="submit" name="action" value="save" label="Zatwierdź" icon="check" />
         @if ($tag)
         <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" />
         @endif
-    </div>
+        <x-a :href="route('song-tags')">Wróć</x-a>
+    </x-section>
 </form>
 @endsection

@@ -105,9 +105,9 @@ Route::domain("podklady.".$domain)->group(function(){
                 Route::post("/addFromExistingSafe", "addFromExistingSafeProcess")->name("files-process-add-from-existing-safe");
 
                 Route::prefix("tags")->group(function(){
-                    Route::get("/", "listTags")->name("file-tags");
-                    Route::get("/{id?}", "editTag")->name("file-tag-edit");
-                    Route::post("/", "processTag")->name("file-tag-process");
+                    Route::get("/list", "listTags")->name("file-tags");
+                    Route::get("/edit/{id?}", "editTag")->name("file-tag-edit");
+                    Route::post("/process", "processTag")->name("file-tag-process");
                 });
             });
 

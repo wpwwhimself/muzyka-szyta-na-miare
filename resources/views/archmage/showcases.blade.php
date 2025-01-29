@@ -19,7 +19,7 @@
             @forelse ($showcases as $showcase)
             <tr>
                 <td><a href="{{ route('songs', ['search' => $showcase->song_id]) }}">{{ $showcase->song->full_title }}</a></td>
-                <td>{{ $showcase->platform }}</td>
+                <td>{!! $showcase->platformData->icon !!}</td>
                 <td>{!! $showcase->link !!}</td>
             </tr>
             @empty

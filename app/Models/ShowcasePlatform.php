@@ -28,6 +28,30 @@ class ShowcasePlatform extends Model
         return "{$this->icon} {$this->name}";
     }
 
+    public static function reelCount()
+    {
+        $reels_count = Showcase::orderByDesc("created_at")
+            ->select("platform")
+            ->get()
+            ->pluck("platform")
+            ->countBy();
+        $total_count = ShowcasePlatform::all()
+            ->pluck("code")
+            ->flip()
+            ->map(fn ($x) => 0)
+            ->merge($reels_count)
+            ->map(fn ($count, $code) => compact("code", "count"));
+
+        return $total_count;
+    }
+
+    public static function suggest()
+    {
+        return self::reelCount()
+            ->sortBy("count")
+            ->first();
+    }
+
     #region attributes
     public function getIconAttribute()
     {

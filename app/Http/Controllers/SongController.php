@@ -68,10 +68,15 @@ class SongController extends Controller
         $showcase = Showcase::where("song_id", $song->id)->first();
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
             ->pluck("name", "code");
+        
+        $platform_suggestion = ShowcasePlatform::suggest()["code"];
+        if (!$showcase && $platform_suggestion) {
+            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+        }
 
         return view(user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
-            compact("song", "genres", "tags", "showcase", "showcase_platforms"),
+            compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion"),
         ));
     }
 

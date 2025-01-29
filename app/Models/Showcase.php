@@ -20,7 +20,7 @@ class Showcase extends Model
         return $this->belongsTo(Song::class);
     }
 
-    public function platform() {
+    public function platformData() {
         return $this->belongsTo(ShowcasePlatform::class, "platform", "code");
     }
     #endregion

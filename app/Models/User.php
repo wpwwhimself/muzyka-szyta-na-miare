@@ -161,16 +161,56 @@ class User extends Authenticatable
     public function getBadgesAttribute()
     {
         $icons = [
-            "veteran" => [$this->is_veteran, "fas fa-user-shield", "Stały klient"],
-            "patron" => [$this->is_patron, "fas fa-award showcase-highlight", "Patron"],
-            "trusted" => [$this->trust > 0, "fas fa-hand-holding-heart success", "Zaufany"],
-            "active" => [$this->top10->where("type", "active")->count() > 0, "fas fa-chart-line success", "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()],
-            "picky" => [$this->pickiness >= 1.5 && is_archmage(), "fas fa-people-pulling error", "Wybredny"],
-            "forgotten" => [$this->is_forgotten && is_archmage(), "fas fa-ghost success", "Zapomniany"],
-            "kio" => [$this->trust < 0 && is_archmage(), "fas fa-user-ninja error", "Na czarnej liście"],
-            "special_prices" => [$this->special_prices && is_archmage(), "fas fa-address-card", "Niestandardowe ceny:<br>"._ct_($this->special_prices)],
-            "default_wishes" => [$this->default_wishes && is_archmage(), "fas fa-cloud", "Domyślne życzenia:<br>"._ct_($this->default_wishes)],
-            "budget" => [$this->budget && is_archmage(), "fas fa-sack-dollar success", "Budżet:<br>"._c_(as_pln($this->budget))],
+            "veteran" => [
+                $this->is_veteran,
+                "fas fa-user-shield",
+                "Stały klient"
+            ],
+            "patron" => [
+                $this->is_patron && is_archmage(),
+                "fas fa-award showcase-highlight",
+                "Patron"
+            ],
+            "trusted" => [
+                $this->trust > 0,
+                "fas fa-hand-holding-heart success",
+                "Zaufany"
+            ],
+            "active" => [
+                $this->top10->where("type", "active")->count() > 0,
+                "fas fa-chart-line success",
+                "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()
+            ],
+            "picky" => [
+                $this->pickiness >= 1.5 && is_archmage(),
+                "fas fa-people-pulling error",
+                "Wybredny"
+            ],
+            "forgotten" => [
+                $this->is_forgotten && is_archmage(),
+                "fas fa-ghost success",
+                "Zapomniany"
+            ],
+            "kio" => [
+                $this->trust < 0 && is_archmage(),
+                "fas fa-user-ninja error",
+                "Na czarnej liście"
+            ],
+            "special_prices" => [
+                $this->special_prices && is_archmage(),
+                "fas fa-address-card",
+                "Niestandardowe ceny:<br>"._ct_($this->special_prices)
+            ],
+            "default_wishes" => [
+                $this->default_wishes && is_archmage(),
+                "fas fa-cloud",
+                "Domyślne życzenia:<br>"._ct_($this->default_wishes)
+            ],
+            "budget" => [
+                $this->budget && is_archmage(),
+                "fas fa-sack-dollar success",
+                "Budżet:<br>"._c_(as_pln($this->budget))
+            ],
         ];
         return collect($icons)
             ->filter(fn ($data) => $data[0])

@@ -71,7 +71,7 @@ const getSong = () => {
             song.value = data.song
             if (!nowWorking.value) time_major.value = parseTime(data.song.work_time_total)
 
-            if (data.status_id == 15) {
+            if (data.status_id != 12) {
                 window.location.href = `/studio-view/`
             }
         })

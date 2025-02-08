@@ -79,18 +79,7 @@
 <section id="showcases">
     <h1>Posłuchaj, jak brzmię</h1>
 
-    <ul class="flex-right center no-points">
-        @foreach ([
-            ["Shorty Organisty", "Nagrania mojej gry podczas mszy", "https://www.youtube.com/embed/videoseries?si=PPSi-adlexB7K5if&amp;list=PLpS8kGlqkYvS3nI6F_S2ZMchY3oS8VgjU"],
-            ["Gig Vlog Organisty", "Dłuższe składanki zagranych przeze mnie mszy", "https://www.youtube.com/embed/videoseries?si=aWiggJ82p_zxHdzx&amp;list=PLpS8kGlqkYvQAj957C4JmjMwXmFSa9Z4_"],
-        ] as [$label, $desc, $embed_link])
-        <li class="hidden">
-            <h2>{{ $label }}</h2>
-            <p>{{ $desc }}</p>
-            <iframe width="560" height="315" src="{{ $embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </li>
-        @endforeach
-    </ul>
+    <x-front.showcase-reels :showcases="$showcases" />
 </section>
 
 <section id="prices" class="grid-2">

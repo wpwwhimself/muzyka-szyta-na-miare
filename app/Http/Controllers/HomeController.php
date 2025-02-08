@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
 use App\Models\Genre;
+use App\Models\OrganShowcase;
 use App\Models\QuestType;
 use App\Models\Showcase;
 use App\Models\Song;
@@ -74,7 +75,11 @@ class HomeController extends Controller
 
     public function organista()
     {
-        return view("front.organista");
+        $showcases = OrganShowcase::orderBy("created_at", "desc")->limit(5)->get();
+
+        return view("front.organista", compact(
+            "showcases",
+        ));
     }
 
     public function dj()

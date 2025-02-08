@@ -14,6 +14,10 @@ class PricesSeeder extends Seeder
      */
     public function run()
     {
+        /**
+         * niewykorzystane litery:
+         * eflmnptvw
+         */
         DB::table("prices")->insert([
             [
                 "indicator" => "b", "service" => "podkład kameralny", "quest_type_id" => 1,
@@ -91,6 +95,10 @@ class PricesSeeder extends Seeder
             [
                 "indicator" => "-", "service" => "zniżka za opinię", "quest_type_id" => null,
                 "operation" => "*", "price_a" => -0.05, "price_b" => -0.05
+            ],
+            [
+                "indicator" => "#", "service" => "zniżka za przetarty szlak", "quest_type_id" => null,
+                "operation" => "*", "price_a" => -0.75, "price_b" => -0.75
             ],
         ]);
     }

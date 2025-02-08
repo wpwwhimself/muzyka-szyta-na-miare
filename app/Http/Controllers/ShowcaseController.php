@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
+use App\Models\OrganShowcase;
 use App\Models\Showcase;
 use App\Models\ShowcasePlatform;
 use App\Models\Song;
@@ -15,22 +16,8 @@ class ShowcaseController extends Controller
 {
     public function list(){
         $showcases = Showcase::orderBy("updated_at", "desc")->paginate(5);
+        $organ_showcases = OrganShowcase::orderBy("updated_at", "desc")->paginate(5);
         $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->paginate(5);
-
-        $songs_raw = Song::whereDoesntHave('showcase')
-            ->whereHas('quests', function($q){
-                $q->where('status_id', 19);
-            })
-            ->orderByDesc("created_at")
-            ;
-
-        $potential_showcases = clone $songs_raw;
-        $potential_showcases = $potential_showcases->whereDate('created_at', '>', Carbon::today()->subMonth()->format("Y-m-d H:i:s"))->get();
-
-        $songs_raw = $songs_raw->get()->toArray();
-        foreach($songs_raw as $song){
-            $songs[$song["id"]] = "$song[title] ($song[artist]) [$song[id]]";
-        }
 
         $all_songs = Song::orderBy("title")
             ->orderBy("artist")
@@ -40,7 +27,7 @@ class ShowcaseController extends Controller
 
         return view(user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],
-            compact("showcases", "client_showcases", "songs", "all_songs", "potential_showcases")
+            compact("showcases", "organ_showcases", "client_showcases", "all_songs")
         ));
     }
 
@@ -106,6 +93,39 @@ class ShowcaseController extends Controller
         }
         return redirect()->route("showcase-platform-edit", ["id" => $rq->code])->with("success", "Platforma poprawiona");
 
+    }
+    #endregion
+
+    #region organ
+    public function editOrgan(?OrganShowcase $showcase = null)
+    {
+        $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
+            ->pluck("name", "code");
+
+        $platform_suggestion = ShowcasePlatform::suggest()["code"];
+        if (!$showcase && $platform_suggestion) {
+            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+        }
+
+        return view(user_role().".showcases.organ.edit", compact(
+            "showcase",
+            "showcase_platforms",
+            "platform_suggestion",
+        ));
+    }
+
+    public function processOrgan(Request $rq)
+    {
+        if ($rq->action == "save") {
+            $showcase = OrganShowcase::updateOrCreate(
+                ["id" => $rq->id],
+                $rq->except(["_token", "action"])
+            );
+            return redirect()->route("organ-showcase-edit", ["showcase" => $showcase])->with("success", "Rolka poprawiona");
+        } else if ($rq->action == "delete") {
+            OrganShowcase::find($rq->id)->delete();
+            return redirect()->route("showcases")->with("success", "Rolka usunięta");
+        }
     }
     #endregion
 }

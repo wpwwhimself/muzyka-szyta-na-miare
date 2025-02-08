@@ -32,6 +32,34 @@
     {{ $showcases->links() }}
 </x-section>
 
+<x-section id="organ-showcases-list" title="Rolki organowe" icon="list">
+    <x-slot name="buttons">
+        <x-a :href="route('organ-showcase-edit')" icon="plus">Dodaj</x-a>
+    </x-slot>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Platforma</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($organ_showcases as $showcase)
+            <tr>
+                <td>{!! $showcase->platformData?->icon !!}</td>
+                <td>{!! $showcase->link !!}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="2" class="grayed-out">Nie ma żadnych rolek</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+    {{ $organ_showcases->links() }}
+</x-section>
+
 <x-section id="client-showcases-list" title="Reklamy klienta" icon="list">
     <form action="{{ route('add-client-showcase') }}" method="POST" class="flex-right">
         @csrf

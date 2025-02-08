@@ -25,9 +25,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$domain = env("APP_DOMAIN" ?? "muzykaszytanamiare.pl");
-
-Route::domain("podklady.".$domain)->group(function(){
+Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->group(function(){
     Route::get('/', [HomeController::class, "podklady"])->name("home-podklady");
 
     Route::controller(AuthController::class)->prefix("auth")->group(function(){
@@ -213,15 +211,15 @@ Route::domain("podklady.".$domain)->group(function(){
     });
 });
 
-Route::domain("organista.".$domain)->group(function(){
+Route::domain(implode(".", [env("ORGANISTA_SUBDOMAIN"), env("APP_DOMAIN")]))->group(function(){
     Route::get('/', [HomeController::class, "organista"])->name("home-organista");
 });
 
-Route::domain("dj.".$domain)->group(function(){
+Route::domain(implode(".", [env("DJ_SUBDOMAIN"), env("APP_DOMAIN")]))->group(function(){
     Route::get('/', [HomeController::class, "dj"])->name("home-dj");
 });
 
-Route::domain($domain)->group(function(){
+Route::domain(env("APP_DOMAIN"))->group(function(){
     Route::get('/', [HomeController::class, "index"])->name("home");
 });
 

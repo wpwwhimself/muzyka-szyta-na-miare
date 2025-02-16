@@ -122,6 +122,26 @@ class StatsController extends Controller
             }
             return $ret;
         }
+
+        // soft deadlines
+        foreach(DB::table(DB::raw("(SELECT distinct `date`, deadline, datediff(deadline, `date`) as difference
+                FROM status_changes
+                LEFT JOIN quests ON re_quest_id = quests.id
+                WHERE new_status_id = 15 AND deadline is not NULL
+                GROUP BY re_quest_id
+                ORDER BY re_quest_id, `date`) as x "))
+            ->selectRaw("difference, count(*) as count")
+            ->groupBy("difference")
+            ->orderBy("difference")
+            ->pluck("count", "difference") as $deadline => $count){
+                $label = ($deadline <= -1) ? "<= -1" : (
+                    ($deadline >= 7) ? ">= 7" : $deadline
+                );
+                $soft_deadline_count[$label] ??= 0;
+                $soft_deadline_count[$label] += $count;
+            }
+
+        // hard deadlines
         foreach(DB::table(DB::raw("(SELECT distinct `date`, hard_deadline, datediff(hard_deadline, `date`) as difference
                 FROM status_changes
                 LEFT JOIN quests on re_quest_id = quests.id
@@ -208,24 +228,7 @@ class StatsController extends Controller
                         ->pluck("aver", "label"),
                 ],
                 "deadlines" => [
-                    "soft" => [
-                        "split" => DB::table(DB::raw("(SELECT distinct `date`, deadline, datediff(deadline, `date`) as difference
-                                FROM status_changes
-                                LEFT JOIN quests ON re_quest_id = quests.id
-                                WHERE new_status_id = 15 AND deadline is not NULL
-                                GROUP BY re_quest_id
-                                ORDER BY re_quest_id, `date`) as x "))
-                            ->selectRaw("difference, count(*) as count")
-                            ->groupBy("difference")
-                            ->orderBy("difference")
-                            ->pluck("count", "difference"),
-                        "total" => StatusChange::where("new_status_id", 15)
-                            ->distinct("re_quest_id")
-                            ->join("quests", "re_quest_id", "=", "quests.id", "left")
-                            ->select("deadline")
-                            ->whereNotNull("deadline")
-                            ->count(),
-                    ],
+                    "soft" => $soft_deadline_count,
                     "hard" => $hard_deadline_count,
                 ],
                 "requests" => [

@@ -40,15 +40,15 @@ Route::controller(SongController::class)->prefix("songs")->group(function() {
 
 Route::controller(ClientController::class)->prefix("clients")->group(function() {
     Route::get('/{id}', "getById");
-
-    Route::prefix("invoice")->group(function() {
-        Route::get("/{id}", "invoice");
-    });
 });
 
 Route::controller(StatsController::class)->group(function() {
     Route::post('/price_calc', "priceCalc");
     Route::post('/monthly_payment_limit', "monthlyPaymentLimit");
+
+    Route::prefix("invoice")->group(function() {
+        Route::get("/{id}", "invoice");
+    });
 });
 
 Route::controller(FileController::class)->group(function() {

@@ -27,7 +27,13 @@
             @endif
 
             @if (is_archmage())
-            <span class="ghost">{!! $quest->client !!}</span>
+            <span class="ghost">
+                @if ($quest->client)
+                {!! $quest->client !!}
+                @else
+                {{ $quest->client_name }} <i class="fas fa-user-plus" @popper(Nowy klient)></i>
+                @endif
+            </span>
             @endif
         </div>
     </span>

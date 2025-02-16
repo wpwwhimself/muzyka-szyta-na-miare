@@ -20,7 +20,9 @@
             <tr>
                 <td><a href="{{ route('songs', ['search' => $showcase->song_id]) }}">{{ $showcase->song->full_title }}</a></td>
                 <td>{!! $showcase->platformData?->icon !!}</td>
-                <td>{!! $showcase->link !!}</td>
+                <td>
+                    <a href="{{ $showcase->link }}" target="_blank">{{ $showcase->link }}</a>
+                </td>
             </tr>
             @empty
             <tr>
@@ -42,13 +44,21 @@
             <tr>
                 <th>Platforma</th>
                 <th>Link</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @forelse ($organ_showcases as $showcase)
             <tr>
                 <td>{!! $showcase->platformData?->icon !!}</td>
-                <td>{!! $showcase->link !!}</td>
+                <td>
+                    <a href="{{ $showcase->link }}" target="_blank">{{ $showcase->link }}</a>
+                </td>
+                <td>
+                    <a href="{{ route('organ-showcase-edit', ['showcase' => $showcase]) }}">
+                        <i class="fas fa-pencil" @popper(Edytuj)></i>
+                    </a>
+                </td>
             </tr>
             @empty
             <tr>

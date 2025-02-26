@@ -68,7 +68,7 @@ class SongController extends Controller
         $showcase = Showcase::where("song_id", $song->id)->first();
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
             ->pluck("name", "code");
-        
+
         $platform_suggestion = ShowcasePlatform::suggest()["code"];
         if (!$showcase && $platform_suggestion) {
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
@@ -86,7 +86,7 @@ class SongController extends Controller
         $song->update($rq->except("_token"));
         $song->tags()->sync(array_keys($rq->tags ?? []));
 
-        if (array_filter($rq->only(["reel_platform", "reel_link"]))) {
+        if (array_filter($rq->only(["reel_platform", "reel_link"])) && $rq->reel_link) {
             Showcase::updateOrCreate(
                 ["song_id" => $song->id],
                 [

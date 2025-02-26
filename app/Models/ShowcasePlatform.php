@@ -28,9 +28,11 @@ class ShowcasePlatform extends Model
         return "{$this->icon} {$this->name}";
     }
 
-    public static function reelCount()
+    #region suggestions
+    public static function reelCount(bool $organ = false)
     {
-        $reels_count = Showcase::orderByDesc("created_at")
+        $model = "App\\Models\\" . ($organ ? "Organ" : "") . "Showcase";
+        $reels_count = $model::orderByDesc("created_at")
             ->select("platform")
             ->get()
             ->pluck("platform")
@@ -45,12 +47,13 @@ class ShowcasePlatform extends Model
         return $total_count;
     }
 
-    public static function suggest()
+    public static function suggest(bool $organ = false)
     {
-        return self::reelCount()
+        return self::reelCount($organ)
             ->sortBy("count")
             ->first();
     }
+    #endregion
 
     #region attributes
     public function getIconAttribute()

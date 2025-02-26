@@ -102,7 +102,7 @@ class ShowcaseController extends Controller
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
             ->pluck("name", "code");
 
-        $platform_suggestion = ShowcasePlatform::suggest()["code"];
+        $platform_suggestion = ShowcasePlatform::suggest(true)["code"];
         if (!$showcase && $platform_suggestion) {
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         }

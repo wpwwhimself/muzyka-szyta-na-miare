@@ -7,6 +7,7 @@
     <x-button action='{{ route("costs") }}' label="Koszty" icon="money-bill-wave" />
     <x-button action='{{ route("invoices") }}' label="Faktury" icon="file-invoice" />
     <x-button action='{{ route("taxes") }}' label="Podatki" icon="cash-register" />
+    <x-button :action="route('gig-price-suggest')" label="Wycena grania" icon="magnifying-glass-dollar" />
 </div>
 
 <div class="grid-2">

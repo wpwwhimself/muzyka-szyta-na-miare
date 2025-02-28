@@ -169,6 +169,12 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                 });
 
                 Route::get("/taxes", "taxes")->name("taxes");
+
+                Route::prefix("gig-price")->group(function(){
+                    Route::get("/suggest", "gigPriceSuggest")->name("gig-price-suggest");
+                    Route::get("/defaults", "gigPriceDefaults")->name("gig-price-defaults");
+                    Route::post("/defaults", "gigPriceProcessDefaults")->name("gig-price-process-defaults");
+                });
             });
         });
 

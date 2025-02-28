@@ -7,6 +7,7 @@ use App\Mail\PaymentReturned;
 use App\Models\CalendarFreeDay;
 use App\Models\Cost;
 use App\Models\CostType;
+use App\Models\GigPriceDefault;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
@@ -822,4 +823,39 @@ class StatsController extends Controller
     public function priceCalc(Request $request){
         return price_calc($request->labels, $request->client_id, $request->quoting);
     }
+
+    #region gig-price
+    public function gigPriceSuggest()
+    {
+        $defaults = [
+            "Czas" => GigPriceDefault::relatedTo("time")->get(),
+            "Odległość" => GigPriceDefault::relatedTo("distance")->get(),
+            "Zyski" => GigPriceDefault::relatedTo("gain")->get(),
+        ];
+
+        return view(user_role().".gig-price.suggest", array_merge(
+            ["title" => "Wycena grania"],
+            compact("defaults"),
+        ));
+    }
+
+    public function gigPriceDefaults()
+    {
+        $defaults = GigPriceDefault::all();
+
+        return view(user_role().".gig-price.defaults", array_merge(
+            ["title" => "Ustawienia domyślne wyceny grania"],
+            compact("defaults"),
+        ));
+    }
+
+    public function gigPriceProcessDefaults(Request $rq)
+    {
+        foreach ($rq->except("_token") as $name => $value) {
+            GigPriceDefault::find($name)->update(["value" => $value]);
+        }
+
+        return redirect()->route("gig-price-suggest")->with("success", "Ustawienia domyślne zmienione");
+    }
+    #endregion
 }

@@ -69,4 +69,9 @@
 
     <x-button action="submit" label="Popraw dane" icon="pencil" />
 </form>
+
+<x-section title="Opis" icon="text">
+    <x-showcases.description for="podklady" />
+</x-section>
+
 @endsection

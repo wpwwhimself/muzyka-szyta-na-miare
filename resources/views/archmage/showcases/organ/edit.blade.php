@@ -17,4 +17,8 @@
     </x-section>
 </form>
 
+<x-section title="Opis" icon="text">
+    <x-showcases.description for="organista" />
+</x-section>
+
 @endsection

@@ -122,10 +122,8 @@
     </div>
 </section>
 
-<section id="showcases">
-    <h1>Co już udało mi się wykonać?</h1>
-
-    <div class="flex-right keep-for-mobile center">
+<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="compact-disc">
+    <x-slot name="buttons">
         @foreach ([
             "wszystkie utwory" => "list",
             "nagrania klientów" => "clients",
@@ -134,7 +132,7 @@
         ] as $label => $mode)
         <x-button action="#/" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
         @endforeach
-    </div>
+    </x-slot>
 
     <div class="showcase-section flex-down spaced gone" data-mode="clients">
         <div id="showcase-yts" class="flex-right center">
@@ -194,7 +192,7 @@
             </div>
         </div>
     </div>
-</section>
+</x-front.tabbed-section>
 
 <section id="prices" class="grid-2">
     <div class="black-back">

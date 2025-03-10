@@ -15,9 +15,13 @@ b, strong{
 }
 
 section{
-    border: none;
     text-align: center;
-    max-width: 90vw; margin: var(--size-m) auto;
+    margin: var(--size-m) auto;
+    width: 90vw;
+
+    &:not(#showcases, .sc-line) {
+        border: none;
+    }
 }
 section>div{
     margin-bottom: var(--size-m);

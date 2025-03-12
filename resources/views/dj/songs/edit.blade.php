@@ -43,7 +43,7 @@
             @foreach ([
                 ["lyrics", "Tekst"],
                 ["chords", "Akordy"],
-                ["notes", "Akordy"],
+                ["notes", "Notatki"],
             ] as [$name, $label])
             <x-input :name="$name" :label="$label"
                 type="TEXT" :value="$song?->jsonForEdit($name)"

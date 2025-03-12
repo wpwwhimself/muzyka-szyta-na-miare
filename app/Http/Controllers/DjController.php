@@ -42,8 +42,8 @@ class DjController extends Controller
         $data["has_project_file"] = $rq->has("has_project_file");
 
         if ($rq->get("action") == "save") {
-            DjSong::updateOrCreate(["id" => $data["id"]], $data);
-            return back()->with("success", "Utwór poprawiony");
+            $song = DjSong::updateOrCreate(["id" => $data["id"]], $data);
+            return redirect()->route("dj-edit-song", ["id" => $song->id])->with("success", "Utwór poprawiony");
         } else if ($rq->get("action") == "delete") {
             DjSong::find($data["id"])->delete();
             return back()->with("success", "Utwór usunięty");

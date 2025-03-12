@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class DjSong extends Model
 {
@@ -37,7 +38,7 @@ class DjSong extends Model
         [
             "label" => "padaka",
             "icon" => "🐗",
-            "code" => 4,
+            "code" => 5,
         ],
     ];
 
@@ -45,20 +46,53 @@ class DjSong extends Model
         "id",
         "title", "artist",
         "key", "tempo",
-        "songmap",
-        "lyrics", "chords",
+        "songmap", "has_project_file",
+        "lyrics", "chords", "notes",
     ];
+
+    public const PROCESSABLEJSONS = ["lyrics", "chords", "notes"];
 
     protected $appends = [
         "full_title",
     ];
 
+
     #region attributes
-    public function fullTitle()
+    public function getFullTitleAttribute()
     {
-        return Attribute::make(
-            get: fn () => $this->artist ? "$this->artist – $this->title" : $this->title ?? "bez tytułu",
-        );
+        return $this->artist ? "$this->artist – $this->title" : $this->title ?? "bez tytułu";
+    }
+
+    public function jsonForEdit($field)
+    {
+        if (empty($this->{$field})) return null;
+        return collect(json_decode($this->{$field}))
+            ->map(fn ($value, $part) => "//$part\n$value")
+            ->join("\n\n");
+    }
+    #endregion
+
+    #region helpers
+    public static function nextId()
+    {
+        $newest_id = DjSong::orderBy("id", "desc")->value("id") ?? "D000";
+        $newest_id_last = substr($newest_id, 1);
+        if(in_array($newest_id_last, ["000", "ZZZ"])){
+            return "D000";
+        }
+        return "D" . to_base36(from_base36($newest_id_last) + 1, 3);
+    }
+
+    public static function processJsonForEdit($value = null)
+    {
+        if (empty($value)) return null;
+        return collect(preg_split("/(\r?\n){2}(?=\/\/)/", $value))
+            ->mapWithKeys(function ($value) {
+                $parts = [];
+                preg_match("/^\/\/(\w+)\r?\n(.*)$/s", $value, $parts);
+                return [$parts[1] => $parts[2]];
+            })
+            ->toJson();
     }
     #endregion
 }

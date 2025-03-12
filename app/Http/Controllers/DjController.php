@@ -7,14 +7,49 @@ use Illuminate\Http\Request;
 
 class DjController extends Controller
 {
+    public function index()
+    {
+        return view("dj.index");
+    }
+
     #region songs
     public function listSongs()
     {
-        $songs = DjSong::orderBy("name")->paginate(25);
+        $songs = DjSong::orderBy("title")->paginate(25);
 
         return view("dj.songs.list", compact(
             "songs",
         ));
+    }
+
+    public function editSong($id = null)
+    {
+        $song = DjSong::find($id);
+        $tempos = collect(DjSong::TEMPOS)->mapWithKeys(fn ($t) => [$t["code"] => "$t[icon] $t[label]"])->toArray();
+
+        return view("dj.songs.edit", compact(
+            "song",
+            "tempos",
+        ));
+    }
+
+    public function processSong(Request $rq)
+    {
+        $data = $rq->except(["_token", "action"]);
+        foreach (DjSong::PROCESSABLEJSONS as $key) {
+            $data[$key] = DjSong::processJsonForEdit($data[$key]);
+        }
+        $data["has_project_file"] = $rq->has("has_project_file");
+
+        if ($rq->get("action") == "save") {
+            DjSong::updateOrCreate(["id" => $data["id"]], $data);
+            return back()->with("success", "Utwór poprawiony");
+        } else if ($rq->get("action") == "delete") {
+            DjSong::find($data["id"])->delete();
+            return back()->with("success", "Utwór usunięty");
+        }
+
+        abort(400, "Niewłaściwa akcja formularza");
     }
     #endregion
 }

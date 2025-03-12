@@ -24,6 +24,7 @@
                 [route("clients"), "Klienci", "users", is_archmage()],
                 [route("finance"), "Finanse", "sack-dollar", is_archmage()],
                 [route("showcases"), "Reklama", "bullhorn", is_archmage()],
+                [route("dj"), "DJ", "!msznm-dj", is_archmage()],
                 [route("stats"), "Statystyki", "chart-line", is_archmage()],
                 [route("ppp"), "PPP", "circle-question", is_archmage()],
                 [route("settings"), "Ustawienia", "cog", is_archmage()],
@@ -31,7 +32,12 @@
             @if ($condition)
             <a href="{{ $link }}">
                 <li {{ Popper::pop($label) }}>
+                    @if (Str::startsWith($icon, "!"))
+                    @php $icon = substr($icon, 1); @endphp
+                    <img class="icon small" src="{{ asset("assets/$icon.svg") }}" alt="{{ $icon }}">
+                    @else
                     <i class="fas fa-{{ $icon }}"></i>
+                    @endif
                 </li>
             </a>
             @endif

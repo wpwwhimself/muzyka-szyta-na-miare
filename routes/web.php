@@ -212,9 +212,13 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
             });
         });
 
-        Route::controller(DjController::class)->prefix("dj")->group(function () {
+        Route::controller(DjController::class)->middleware("cancastspells")->prefix("dj")->group(function () {
+            Route::get("/", "index")->name("dj");
+
             Route::prefix("songs")->group(function () {
                 Route::get("list", "listSongs")->name("dj-list-songs");
+                Route::get("edit/{id?}", "editSong")->name("dj-edit-song");
+                Route::post("edit", "processSong")->name("dj-process-song");
             });
         });
     });

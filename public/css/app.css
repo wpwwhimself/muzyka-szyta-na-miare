@@ -111,6 +111,11 @@ div, form{
     margin: var(--size-xs);
     /* color set to --acc if it was black pic */
     /* filter: invert(70%) sepia(4%) saturate(5329%) hue-rotate(91deg) brightness(101%) contrast(84%); */
+
+    &.small {
+        height: 1.6666em;
+        display: block;
+    }
 }
 .grid-2, .grid-3{ display: grid; gap: var(--size-m); align-items: flex-start; }
 .grid-2{ grid-template-columns: 1fr 1fr; }

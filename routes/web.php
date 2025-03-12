@@ -219,6 +219,8 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                 Route::get("list", "listSongs")->name("dj-list-songs");
                 Route::get("edit/{id?}", "editSong")->name("dj-edit-song");
                 Route::post("edit", "processSong")->name("dj-process-song");
+
+                Route::get("gig", "gigMode")->name("dj-gig-mode");
             });
         });
     });

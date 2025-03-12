@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DjController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\QuestController;
@@ -62,4 +63,12 @@ Route::controller(WorkClockController::class)->prefix("clock")->group(function()
     Route::get("logs", "logDetails");
     Route::post('start-stop', "startStop");
     Route::get('remove/{song_id}/{status_id}', "remove");
+});
+
+Route::controller(DjController::class)->prefix("dj")->group(function() {
+    Route::prefix("gig-mode")->group(function() {
+        Route::get("init-data", "gigModeInit");
+        Route::get("song/{id}", "gigModeSong");
+        // Route::get("set/{id}", "gigModeSet");
+    });
 });

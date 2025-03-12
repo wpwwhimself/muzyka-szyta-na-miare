@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -54,13 +53,37 @@ class DjSong extends Model
 
     protected $appends = [
         "full_title",
+        "tempo_pretty",
+        "parts",
     ];
 
 
     #region attributes
+    protected $casts = [
+        "has_project_file" => "boolean",
+        "lyrics" => "json",
+        "chords" => "json",
+        "notes" => "json",
+    ];
+
     public function getFullTitleAttribute()
     {
         return $this->artist ? "$this->artist – $this->title" : $this->title ?? "bez tytułu";
+    }
+
+    public function getTempoPrettyAttribute()
+    {
+        $tempo = collect(self::TEMPOS)->firstWhere("code", $this->tempo);
+        if (!$tempo) return null;
+        return "$tempo[icon] $tempo[label]";
+    }
+
+    public function getPartsAttribute()
+    {
+        if (empty($this->songmap)) return null;
+        $parts = [];
+        preg_match_all("/\w+/", $this->songmap, $parts);
+        return $parts[0];
     }
 
     public function jsonForEdit($field)

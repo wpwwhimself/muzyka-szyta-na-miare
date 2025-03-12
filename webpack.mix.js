@@ -13,4 +13,5 @@ const mix = require('laravel-mix');
 
 mix.js("resources/js/workTimeClock.js", "public/js/react")
     .js("resources/js/studio.js", "public/js/react")
+    .js("resources/js/gigMode.js", "public/js/react")
     .vue();

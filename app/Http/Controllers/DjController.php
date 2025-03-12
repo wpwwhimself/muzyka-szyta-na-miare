@@ -52,4 +52,34 @@ class DjController extends Controller
         abort(400, "Niewłaściwa akcja formularza");
     }
     #endregion
+
+    #region gig mode
+    public function gigMode()
+    {
+        return view("dj.gig-mode");
+    }
+
+    public function gigModeInit()
+    {
+        $songs = DjSong::orderBy("title")
+            ->select(["id", "title", "artist",])
+            ->get();
+
+        return response()->json(compact(
+            "songs",
+        ));
+    }
+
+    public function gigModeSong($id)
+    {
+        $song = DjSong::find($id);
+
+        return response()->json($song);
+    }
+
+    public function gigModeSet()
+    {
+
+    }
+    #endregion
 }

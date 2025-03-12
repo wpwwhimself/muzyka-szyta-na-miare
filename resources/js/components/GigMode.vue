@@ -55,7 +55,7 @@ function backToInit() {
 
 function coloredParts(parts) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-        .map((a, i) => ({ letter: a, color: ((26 * 3 + 1) * i) % 360 }))
+        .map((a, i) => ({ letter: a, color: (i / 26 * 360 * 25) % 360 }))
     return parts.map(part => ({ part: part, color: `hsl(${alphabet.find(a => part.startsWith(a.letter)).color}, 70%, 60%)` }))
 }
 // #endregion

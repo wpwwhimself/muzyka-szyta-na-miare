@@ -13,14 +13,16 @@ class Footer extends Component
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        public $stripped = false,
+    ) {
         $this->socials = [
             ["facebook", "https://www.facebook.com/muzykaszytanamiarepl"],
             ["youtube", "https://www.youtube.com/@muzykaszytanamiarepl"],
             ["tiktok", "https://tiktok.com/@muzykaszytanamiarepl"],
             ["instagram", "https://www.instagram.com/muzykaszytanamiarepl/"],
         ];
+        $this->stripped = $stripped;
     }
 
     /**

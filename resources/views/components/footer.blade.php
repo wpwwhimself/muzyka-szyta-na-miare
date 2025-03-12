@@ -6,6 +6,8 @@
     <p><a href="https://creativecommons.org/licenses/by-sa/3.0/pl/">&copy; CC BY-SA 3.0</a> 2019 – {{ date("Y") }}</p>
     <p class="yellowed-out"><i class="fas fa-bug"></i> Widzisz gdzieś błąd? Napisz!</p>
   </div>
+
+  @unless($stripped)
   <div class="contact-info">
     <a href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">
         <i class="fa-solid fa-envelope"></i>
@@ -26,4 +28,5 @@
         muzykaszytanamiarepl
     </span>
 </div>
+@endunless
 </footer>

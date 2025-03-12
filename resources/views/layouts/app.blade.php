@@ -33,7 +33,7 @@
     <title>{{ $title != null ? "$title | " : "" }}{{ config("app.name") }}</title>
 </head>
 <body>
-    <x-header :title="$title" />
+    <x-header :title="$title" :stripped="$stripped ?? false" />
 
     <div id="background-division">
         @for ($i = 0; $i < 2; $i++)
@@ -57,7 +57,7 @@
         @yield("content")
     </div>
 
-    <x-footer />
+    <x-footer :stripped="$stripped ?? false" />
 
     @include("popper::assets")
 </body>

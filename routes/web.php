@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DjController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuestController;
@@ -208,6 +209,12 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                 Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
                 Route::get("/view/{id}/polymorph/{letter}", "polymorph");
                 Route::get("/view/{id}/reprice/{new_code}", "reprice");
+            });
+        });
+
+        Route::controller(DjController::class)->prefix("dj")->group(function () {
+            Route::prefix("songs")->group(function () {
+                Route::get("list", "listSongs")->name("dj-list-songs");
             });
         });
     });

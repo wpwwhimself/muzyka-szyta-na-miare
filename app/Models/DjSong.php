@@ -100,7 +100,7 @@ class DjSong extends Model
     {
         $newest_id = DjSong::orderBy("id", "desc")->value("id") ?? "D000";
         $newest_id_last = substr($newest_id, 1);
-        if(in_array($newest_id_last, ["000", "ZZZ"])){
+        if(in_array($newest_id_last, ["ZZZ"])){
             return "D000";
         }
         return "D" . to_base36(from_base36($newest_id_last) + 1, 3);

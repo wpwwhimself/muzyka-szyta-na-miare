@@ -14,4 +14,8 @@
     @endforelse
 </x-section>
 
+<div>
+    <x-a :href="route('dj')">Wróć</x-a>
+</div>
+
 @endsection

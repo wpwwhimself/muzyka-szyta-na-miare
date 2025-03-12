@@ -89,7 +89,7 @@ class DjSong extends Model
     public function jsonForEdit($field)
     {
         if (empty($this->{$field})) return null;
-        return collect(json_decode($this->{$field}))
+        return collect($this->{$field})
             ->map(fn ($value, $part) => "//$part\n$value")
             ->join("\n\n");
     }
@@ -114,8 +114,7 @@ class DjSong extends Model
                 $parts = [];
                 preg_match("/^\/\/(\w+)\r?\n(.*)$/s", $value, $parts);
                 return [$parts[1] => $parts[2]];
-            })
-            ->toJson();
+            });
     }
     #endregion
 }

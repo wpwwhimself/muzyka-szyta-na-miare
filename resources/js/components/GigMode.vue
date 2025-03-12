@@ -105,9 +105,9 @@ onMounted(() => {
             <div id="song-innards" class="flex-down">
                 <div v-for="part in coloredParts(song.parts)">
                     <h2 :style="{ color: part.color }">{{ part.part }}</h2>
-                    <div class="lyrics" v-if="song.lyrics && song.lyrics[part]">{{ song.lyrics[part] }}</div>
-                    <pre class="chords" v-if="song.chords && song.chords[part]">{{ song.chords[part] }}</pre>
-                    <pre v-if="song.notes && song.notes[part]">{{ song.notes[part] }}</pre>
+                    <div class="lyrics" v-if="song.lyrics && song.lyrics[part.part]">{{ song.lyrics[part.part] }}</div>
+                    <pre class="chords" v-if="song.chords && song.chords[part.part]">{{ song.chords[part.part] }}</pre>
+                    <pre v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</pre>
                 </div>
             </div>
         </Section>

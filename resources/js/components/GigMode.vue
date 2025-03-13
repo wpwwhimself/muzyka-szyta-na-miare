@@ -103,11 +103,11 @@ onMounted(() => {
             </div>
 
             <div id="song-innards" class="flex-down">
-                <div v-for="part in coloredParts(song.parts)">
+                <div v-for="part in coloredParts(song.parts)" class="flex-right">
                     <h2 :style="{ color: part.color }">{{ part.part }}</h2>
                     <div class="lyrics" v-if="song.lyrics && song.lyrics[part.part]">{{ song.lyrics[part.part] }}</div>
                     <pre class="chords" v-if="song.chords && song.chords[part.part]">{{ song.chords[part.part] }}</pre>
-                    <pre v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</pre>
+                    <div class="ghost" v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</div>
                 </div>
             </div>
         </Section>
@@ -125,15 +125,13 @@ onMounted(() => {
     gap: var(--size-m);
 
     & > div {
-        display: grid;
-        gap: var(--size-s);
-        grid-template-columns: auto 1fr auto auto;
+        align-items: flex-start;
 
         & .lyrics {
             white-space-collapse: preserve-breaks;
         }
 
-        & h2 {
+        & h2, & pre {
             margin: 0;
         }
     }

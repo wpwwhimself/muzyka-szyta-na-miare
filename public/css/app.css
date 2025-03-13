@@ -513,6 +513,10 @@ nav li{
 nav .active{
     background-color: var(--acc);
     color: var(--bg);
+
+    & img.icon {
+        filter: brightness(5);
+    }
 }
 
 .pagination{

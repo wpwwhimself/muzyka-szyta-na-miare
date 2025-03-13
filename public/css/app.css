@@ -688,6 +688,8 @@ footer .contact-info{
     padding: var(--size-xs);
     text-decoration: none;
 
+    --q-clr: 128, 128, 128;
+
     &:hover {
         background: rgba(var(--q-clr), 0.3);
         color: var(--fg);

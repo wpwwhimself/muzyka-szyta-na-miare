@@ -7,11 +7,23 @@
         <x-a :href="route('dj-edit-song')" icon="plus">Dodaj</x-a>
     </x-slot>
 
+
     @forelse ($songs as $song)
-    <a href="{{ route('dj-edit-song', ['id' => $song->id]) }}">{{ $song->full_title }}</a>
+    <a href="{{ route('dj-edit-song', ['id' => $song->id]) }}" class="quest-mini">
+        <div class="flex-down">
+            <h3 class="song-title">{{ $song->title }}</h3>
+            <span class="ghost">{{ $song->artist }}</span>
+        </div>
+
+        <div class="quest-meta">
+            <p>{{ $song->tempo_pretty }}</p>
+        </div>
+    </a>
     @empty
     <span class="grayed-out">Brak utworów</span>
     @endforelse
+
+    {{ $songs->links() }}
 </x-section>
 
 <div>

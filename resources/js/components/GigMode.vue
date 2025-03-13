@@ -5,15 +5,15 @@ import Section from "./x/Section.vue"
 import Tile from './x/Tile.vue';
 import Loader from './x/Loader.vue';
 import Button from './x/Button.vue';
+import { set } from 'lodash';
 
 const url = "/api/dj/gig-mode/"
 const params = new URLSearchParams(window.location.search)
 
-const mode = ref("init")
 const songs = ref([])
-// const sets = ref([])
+const sets = ref([])
 const song = ref(null)
-// const set = ref(null)
+const songset = ref(null)
 
 const show_loader = ref(true)
 
@@ -30,7 +30,7 @@ function getInitData() {
         .then(res => res.json())
         .then(data => {
             songs.value = data.songs
-            // sets.value = data.sets
+            sets.value = data.sets
         })
         .finally(() => show_loader.value = false)
 
@@ -39,7 +39,6 @@ function getInitData() {
 function openSong(s) {
     const id = s.id ?? s
     show_loader.value = true
-    mode.value = "song"
     fetch(url + `song/${id}`)
         .then(res => res.json())
         .then(data => {
@@ -48,9 +47,20 @@ function openSong(s) {
         .finally(() => show_loader.value = false)
 }
 
+function openSet(s) {
+    const id = s.id ?? s
+    show_loader.value = true
+    fetch(url + `set/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            songset.value = data
+        })
+        .finally(() => show_loader.value = false)
+}
+
 function backToInit() {
-    mode.value = "init"
     song.value = null
+    songset.value = null
     getInitData()
 }
 
@@ -65,6 +75,8 @@ function coloredParts(parts) {
 onMounted(() => {
     if (params.get("song")) {
         openSong(params.get("song"))
+    } else if (params.get("set")) {
+        openSet(params.get("set"))
     } else {
         getInitData()
     }
@@ -75,54 +87,76 @@ onMounted(() => {
 <template>
 
 <Loader v-if="show_loader" />
-<template v-else>
-    <div v-if="mode == 'init'">
-        <!-- <Section title="Zestawy" :icon="faList">
-        </Section> -->
 
-        <Section title="Utwory" :icon="faCompactDisc">
-            <template #buttons>
-                <Button :icon="faRotateRight" @click="getInitData()">Odśwież</Button>
-            </template>
+<template v-if="!song && !songset">
+    <Section title="Zestawy" :icon="faList">
+        <template #buttons>
+            <Button :icon="faRotateRight" @click="getInitData()">Odśwież</Button>
+        </template>
 
-            <div class="flex-right wrap">
-                <Tile v-for="song in songs" @click="openSong(song)">
-                    <span>{{ song.tempo_pretty }}</span>
-                    <span class="accent">{{ song.title }}</span>
-                    <span>{{ song.artist }}</span>
-                </Tile>
+        <div class="flex-right">
+            <Tile v-for="set in sets" @click="openSet(set)">
+                <span class="accent">{{ set.name }}</span>
+                <span>{{ set.songs_count }} utworów</span>
+            </Tile>
+        </div>
+    </Section>
+
+    <Section title="Utwory" :icon="faCompactDisc">
+        <div class="flex-right">
+            <Tile v-for="song in songs" @click="openSong(song)">
+                <span>{{ song.tempo_pretty }}</span>
+                <span class="accent">{{ song.title }}</span>
+                <span>{{ song.artist }}</span>
+            </Tile>
+        </div>
+    </Section>
+</template>
+
+<template v-if="songset">
+    <Section :title="songset.name" :icon="faList">
+        <template #buttons>
+            <Button :icon="faRotateRight" @click="openSet(songset)">Odśwież</Button>
+            <Button @click="backToInit()">Powrót</Button>
+        </template>
+
+        <div class="flex-right nowrap folding">
+            <Tile v-for="song in songset.songs" @click="openSong(song)">
+                <span>{{ song.tempo_pretty }}</span>
+                <span class="accent">{{ song.title }}</span>
+                <span>{{ song.artist }}</span>
+            </Tile>
+        </div>
+    </Section>
+</template>
+
+<template v-if="song">
+    <Section :title="song.full_title" :icon="faCompactDisc">
+        <template #buttons v-if="!songset">
+            <Button :icon="faRotateRight" @click="openSong(song)">Odśwież</Button>
+            <Button @click="backToInit()">Powrót</Button>
+        </template>
+
+        <div class="grid-3">
+            <div class="flex-down center" v-for="field in headerFields">
+                <span class="grayed-out">{{ field.label }}</span>
+
+                <span v-if="field.name == 'songmap'" class="flex-right center" style="gap: 3px">
+                    <span v-for="part in coloredParts(song.parts)" :style="{ color: part.color }">{{ part.part }}</span>
+                </span>
+                <span v-else>{{ song[field.name] }}</span>
             </div>
-        </Section>
-    </div>
+        </div>
 
-    <div v-if="mode == 'song'">
-        <Section :title="song.full_title" :icon="faCompactDisc">
-            <template #buttons>
-                <Button :icon="faRotateRight" @click="openSong(song)">Odśwież</Button>
-                <Button @click="backToInit()">Powrót</Button>
-            </template>
-
-            <div class="grid-3">
-                <div class="flex-down center" v-for="field in headerFields">
-                    <span class="grayed-out">{{ field.label }}</span>
-
-                    <span v-if="field.name == 'songmap'" class="flex-right center" style="gap: 3px">
-                        <span v-for="part in coloredParts(song.parts)" :style="{ color: part.color }">{{ part.part }}</span>
-                    </span>
-                    <span v-else>{{ song[field.name] }}</span>
-                </div>
+        <div id="song-innards" class="flex-down">
+            <div v-for="part in coloredParts(song.parts)" class="flex-right">
+                <h2 :style="{ color: part.color }">{{ part.part }}</h2>
+                <div class="lyrics" v-if="song.lyrics && song.lyrics[part.part]">{{ song.lyrics[part.part] }}</div>
+                <pre class="chords" v-if="song.chords && song.chords[part.part]">{{ song.chords[part.part] }}</pre>
+                <div class="ghost" v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</div>
             </div>
-
-            <div id="song-innards" class="flex-down">
-                <div v-for="part in coloredParts(song.parts)" class="flex-right">
-                    <h2 :style="{ color: part.color }">{{ part.part }}</h2>
-                    <div class="lyrics" v-if="song.lyrics && song.lyrics[part.part]">{{ song.lyrics[part.part] }}</div>
-                    <pre class="chords" v-if="song.chords && song.chords[part.part]">{{ song.chords[part.part] }}</pre>
-                    <div class="ghost" v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</div>
-                </div>
-            </div>
-        </Section>
-    </div>
+        </div>
+    </Section>
 </template>
 
 </template>

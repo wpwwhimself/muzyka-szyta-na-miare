@@ -7,8 +7,8 @@
 </div>
 
 <div>
-    <x-button :action="route('dj-list-songs')" label="Lista utworów" icon="list" small />
-    <x-button :action="route('dj-list-sets')" label="Lista zestawów" icon="list" small />
+    <x-button :action="route('dj-list-songs')" label="Utwory" icon="compact-disc" small />
+    <x-button :action="route('dj-list-sets')" label="Zestawy" icon="list" small />
 </div>
 
 @endsection

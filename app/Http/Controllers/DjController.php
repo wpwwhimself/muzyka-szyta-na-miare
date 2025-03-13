@@ -106,9 +106,13 @@ class DjController extends Controller
         $songs = DjSong::orderBy("title")
             ->select(["id", "title", "artist", "tempo"])
             ->get();
+        $sets = DjSet::withCount("songs")
+            ->orderBy("name")
+            ->get();
 
         return response()->json(compact(
             "songs",
+            "sets",
         ));
     }
 
@@ -119,9 +123,11 @@ class DjController extends Controller
         return response()->json($song);
     }
 
-    public function gigModeSet()
+    public function gigModeSet($id)
     {
+        $set = DjSet::with("songs")->find($id);
 
+        return response()->json($set);
     }
     #endregion
 }

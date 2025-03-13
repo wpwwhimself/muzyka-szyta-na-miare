@@ -69,6 +69,6 @@ Route::controller(DjController::class)->prefix("dj")->group(function() {
     Route::prefix("gig-mode")->group(function() {
         Route::get("init-data", "gigModeInit");
         Route::get("song/{id}", "gigModeSong");
-        // Route::get("set/{id}", "gigModeSet");
+        Route::get("set/{id}", "gigModeSet");
     });
 });

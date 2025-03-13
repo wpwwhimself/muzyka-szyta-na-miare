@@ -44,7 +44,7 @@
     transition-duration: 0.3s;
 }
 body{
-    font-family: "Raleway", "sans-serif";
+    font-family: "Raleway", "Arial", "sans-serif";
     font-size: var(--size-m);
     margin: 0; padding-bottom: 7em;
     display: flex; flex-direction: column; align-items: stretch;
@@ -54,7 +54,7 @@ body{
     background-color: var(--bg); color: var(--fg);
 }
 h1, h2, h3, h4, h5{
-    font-family: Montserrat;
+    font-family: "Montserrat", "Raleway", "Arial", "sans-serif";
     font-weight: normal;
 }
 h1 {
@@ -100,7 +100,7 @@ section:hover, .section-like:hover{
     }
 }
 small{
-    font-family: Raleway;
+    font-family: "Raleway", "Arial", "sans-serif";
     font-weight: bold;
 }
 div, form{
@@ -254,7 +254,7 @@ section h2, section h3{
 }
 input, select, textarea, button, .submit{
     background: none; color: inherit;
-    font-family: Raleway;
+    font-family: "Raleway", "Arial", "sans-serif";
     border-left: none; border-right: none; border-top: none;
     outline: none;
 }
@@ -480,7 +480,7 @@ header h1{
     margin: 0;
 }
 header h2{
-    font-family: "Raleway";
+    font-family: "Raleway", "Arial", "sans-serif";
     margin: 0;
     text-align: center;
 }
@@ -975,7 +975,7 @@ footer .contact-info{
     align-items: center;
 }
 #clients-stats-graph .value, .bar-container .value{
-    font-family: Montserrat;
+    font-family: "Montserrat", "Raleway", "Arial", "sans-serif";
     font-size: var(--size-xl);
 }
 .bar-container .value{
@@ -1234,7 +1234,7 @@ footer .contact-info{
     font-weight: bold;
 }
 .name-value.summary span:nth-child(even){
-    font-family: Montserrat;
+    font-family: "Montserrat", "Raleway", "Arial", "sans-serif";
 }
 
 /* background divisions */

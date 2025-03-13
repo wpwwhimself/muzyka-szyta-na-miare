@@ -62,7 +62,7 @@ class DjController extends Controller
     public function gigModeInit()
     {
         $songs = DjSong::orderBy("title")
-            ->select(["id", "title", "artist",])
+            ->select(["id", "title", "artist", "tempo"])
             ->get();
 
         return response()->json(compact(

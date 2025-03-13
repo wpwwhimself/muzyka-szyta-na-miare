@@ -7,7 +7,7 @@ defineProps(["icon"])
 
 <template>
     <div class="submit small">
-        <FontAwesomeIcon :icon="icon || faAnglesLeft" />
+        <FontAwesomeIcon :icon="icon ?? faAnglesLeft" />
 
         <slot />
     </div>

@@ -13,7 +13,9 @@ defineProps(["title", "icon"])
             {{ title }}
         </h1>
 
-        <slot name="buttons" />
+        <div class="flex-right">
+            <slot name="buttons" />
+        </div>
     </div>
 
     <slot />

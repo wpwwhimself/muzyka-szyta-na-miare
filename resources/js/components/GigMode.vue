@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { faList, faCompactDisc } from '@fortawesome/free-solid-svg-icons';
+import { faList, faCompactDisc, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import Section from "./x/Section.vue"
 import Tile from './x/Tile.vue';
 import Loader from './x/Loader.vue';
@@ -76,8 +76,13 @@ onMounted(() => {
         </Section> -->
 
         <Section title="Utwory" :icon="faCompactDisc">
+            <template #buttons>
+                <Button :icon="faRotateRight" @click="getInitData()">Odśwież</Button>
+            </template>
+
             <div class="flex-right wrap">
                 <Tile v-for="song in songs" @click="openSong(song)">
+                    <span>{{ song.tempo_pretty }}</span>
                     <span class="accent">{{ song.title }}</span>
                     <span>{{ song.artist }}</span>
                 </Tile>
@@ -88,6 +93,7 @@ onMounted(() => {
     <div v-if="mode == 'song'">
         <Section :title="song.full_title" :icon="faCompactDisc">
             <template #buttons>
+                <Button :icon="faRotateRight" @click="openSong(song)">Odśwież</Button>
                 <Button @click="backToInit()">Powrót</Button>
             </template>
 

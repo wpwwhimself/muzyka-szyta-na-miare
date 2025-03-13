@@ -70,7 +70,7 @@
     <x-button action="submit" label="Popraw dane" icon="pencil" />
 </form>
 
-<x-section title="Opis" icon="text">
+<x-section title="Opis" icon="align-left">
     <x-showcases.description for="podklady" :songdata="$song" />
 </x-section>
 

@@ -37,9 +37,10 @@ function getInitData() {
 }
 
 function openSong(s) {
+    const id = s.id ?? s
     show_loader.value = true
     mode.value = "song"
-    fetch(url + `song/${s.id}`)
+    fetch(url + `song/${id}`)
         .then(res => res.json())
         .then(data => {
             song.value = data
@@ -62,7 +63,11 @@ function coloredParts(parts) {
 
 // #region boot
 onMounted(() => {
-    getInitData()
+    if (params.get("song")) {
+        openSong(params.get("song"))
+    } else {
+        getInitData()
+    }
 })
 // #endregion
 </script>

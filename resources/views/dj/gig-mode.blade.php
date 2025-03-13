@@ -4,6 +4,13 @@
 
 <script src="{{ mix('js/react/gigMode.js') }}" defer></script>
 <div id="container"></div>
-<x-button :action="route('dj')" icon="angles-left" label="Wyjdź" danger />
+<x-button :action="request('song')
+        ? route('dj-edit-song', ['id' => request('song')])
+        : route('dj')
+    "
+    icon="angles-left"
+    label="Wyjdź"
+    danger
+/>
 
 @endsection

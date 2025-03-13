@@ -215,12 +215,18 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
         Route::controller(DjController::class)->middleware("cancastspells")->prefix("dj")->group(function () {
             Route::get("/", "index")->name("dj");
 
+            Route::get("gig", "gigMode")->name("dj-gig-mode");
+
             Route::prefix("songs")->group(function () {
                 Route::get("list", "listSongs")->name("dj-list-songs");
                 Route::get("edit/{id?}", "editSong")->name("dj-edit-song");
                 Route::post("edit", "processSong")->name("dj-process-song");
+            });
 
-                Route::get("gig", "gigMode")->name("dj-gig-mode");
+            Route::prefix("sets")->group(function () {
+                Route::get("list", "listSets")->name("dj-list-sets");
+                Route::get("edit/{id?}", "editSet")->name("dj-edit-set");
+                Route::post("edit", "processSet")->name("dj-process-set");
             });
         });
     });

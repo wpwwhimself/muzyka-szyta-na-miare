@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DjSet;
 use App\Models\DjSong;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,47 @@ class DjController extends Controller
             return redirect()->route("dj-edit-song", ["id" => $song->id])->with("success", "Utwór poprawiony");
         } else if ($rq->get("action") == "delete") {
             DjSong::find($data["id"])->delete();
+            return back()->with("success", "Utwór usunięty");
+        }
+
+        abort(400, "Niewłaściwa akcja formularza");
+    }
+    #endregion
+
+    #region sets
+    public function listSets()
+    {
+        $sets = DjSet::orderBy("title")->paginate(25);
+
+        return view("dj.sets.list", compact(
+            "sets",
+        ));
+    }
+
+    public function editSet($id = null)
+    {
+        $set = DjSet::find($id);
+        $songs = DjSong::orderBy("title")->get()
+            ->map(fn ($s) => "$s->id: $s->full_title")
+            ->mapWithKeys(fn ($s) => [$s => $s])
+            ->toArray();
+
+        return view("dj.sets.edit", compact(
+            "set",
+            "songs",
+        ));
+    }
+
+    public function processSet(Request $rq)
+    {
+        $data = $rq->except(["_token", "action", "songs"]);
+
+        if ($rq->get("action") == "save") {
+            $set = DjSet::updateOrCreate(["id" => $data["id"]], $data);
+            $set->songs()->sync($rq->get("songs"));
+            return redirect()->route("dj-edit-set", ["id" => $set->id])->with("success", "Utwór poprawiony");
+        } else if ($rq->get("action") == "delete") {
+            DjSet::find($data["id"])->delete();
             return back()->with("success", "Utwór usunięty");
         }
 

@@ -57,7 +57,6 @@ class DjSong extends Model
         "parts",
     ];
 
-
     #region attributes
     protected $casts = [
         "has_project_file" => "boolean",
@@ -92,6 +91,13 @@ class DjSong extends Model
         return collect($this->{$field})
             ->map(fn ($value, $part) => "//$part\n$value")
             ->join("\n\n");
+    }
+    #endregion
+
+    #region relations
+    public function sets()
+    {
+        return $this->belongsToMany(DjSet::class);
     }
     #endregion
 

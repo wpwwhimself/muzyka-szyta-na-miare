@@ -57,7 +57,7 @@ class DjController extends Controller
     #region sets
     public function listSets()
     {
-        $sets = DjSet::orderBy("title")->paginate(25);
+        $sets = DjSet::orderBy("name")->paginate(25);
 
         return view("dj.sets.list", compact(
             "sets",

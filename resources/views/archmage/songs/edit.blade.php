@@ -71,7 +71,7 @@
 </form>
 
 <x-section title="Opis" icon="text">
-    <x-showcases.description for="podklady" />
+    <x-showcases.description for="podklady" :songdata="$song" />
 </x-section>
 
 @endsection

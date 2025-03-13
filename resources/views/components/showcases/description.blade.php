@@ -1,16 +1,19 @@
 @props([
     "for",
+    "songdata" => null,
 ])
 
 @php
+$title_holder = $songdata?->title ?? '$tytuł';
+$artist_holder = $songdata?->artist ?? '$wykonawca';
 $openings = [
-    "podklady" => '$tytuł ($wykonawca) | Jak się szyje muzykę
+    "podklady" => $title_holder.' ('.$artist_holder.') | Jak się szyje muzykę
 
-Krótkie demo, jak powstała partia $partia$ do mojego podkładu. $flavortext',
+Krótkie demo, jak powstała partia $partia do mojego podkładu. $flavortext',
     "organista" => '$tytuł | Shorty organisty',
 ];
 $hashtags = [
-    "podklady" => '#muzykaszytanamiarę #podkład #karaoke #cover #$tytuł #$autor #$gatunek #$instrument',
+    "podklady" => '#muzykaszytanamiarę #podkład #karaoke #cover #$autor #$gatunek #$instrument',
     "organista" => '#muzykaszytanamiarę #organy #msza #$pieśńczypsalm',
 ];
 @endphp

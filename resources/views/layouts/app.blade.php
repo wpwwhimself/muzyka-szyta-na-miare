@@ -59,6 +59,8 @@
 
     <x-footer :stripped="$stripped ?? false" />
 
+    @unless ($stripped ?? false)
     @include("popper::assets")
+    @endunless
 </body>
 </html>

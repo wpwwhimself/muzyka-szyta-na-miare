@@ -58,6 +58,27 @@ function openSet(s) {
         .finally(() => show_loader.value = false)
 }
 
+function refresh() {
+    show_loader.value = true
+
+    if (song.value) {
+        fetch(url + `song/${song.value.id}`)
+            .then(res => res.json())
+            .then(data => {
+                song.value = data
+            })
+    }
+    if (songset.value) {
+        fetch(url + `set/${songset.value.id}`)
+            .then(res => res.json())
+            .then(data => {
+                songset.value = data
+            })
+    }
+
+    show_loader.value = false
+}
+
 function backToInit() {
     song.value = null
     songset.value = null
@@ -116,7 +137,7 @@ onMounted(() => {
 <template v-if="songset">
     <Section :title="songset.name" :icon="faList">
         <template #buttons>
-            <Button :icon="faRotateRight" @click="openSet(songset)">Odśwież</Button>
+            <Button :icon="faRotateRight" @click="refresh()">Odśwież</Button>
             <Button @click="backToInit()">Powrót</Button>
         </template>
 
@@ -133,7 +154,7 @@ onMounted(() => {
 <template v-if="song">
     <Section :title="song.full_title" :icon="faCompactDisc">
         <template #buttons v-if="!songset">
-            <Button :icon="faRotateRight" @click="openSong(song)">Odśwież</Button>
+            <Button :icon="faRotateRight" @click="refresh()">Odśwież</Button>
             <Button @click="backToInit()">Powrót</Button>
         </template>
 
@@ -164,6 +185,12 @@ onMounted(() => {
 <style scoped>
 .accent {
     font-weight: bold;
+}
+
+.folding {
+    & span {
+        white-space: nowrap;
+    }
 }
 
 #song-innards {

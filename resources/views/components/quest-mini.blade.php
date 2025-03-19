@@ -46,21 +46,6 @@
         </p>
         @endif
 
-        @if ($quest->hard_deadline)
-        <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
-        <p
-            @if ($quest->hard_deadline?->addDay()->subDays(1)->lte(now()))
-            class="quest-deadline error"
-            @elseif ($quest->hard_deadline?->addDay()->subDays(3)->lte(now()))
-            class="quest-deadline warning"
-            @else
-            class="quest-deadline"
-            @endif
-            {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }} >
-            {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
-        </p>
-        @endif
-
         @if ($quest->deadline)
         <i class="fa-solid fa-calendar" @popper(Do kiedy (włącznie) oddam pliki)></i>
         <p
@@ -75,6 +60,21 @@
             @endif
             {{ Popper::pop($quest->deadline?->format("Y-m-d")) }} >
             {{ $quest->deadline?->addDay()->diffForHumans() }}
+        </p>
+        @endif
+
+        @if ($quest->hard_deadline)
+        <i class="fa-solid fa-calendar-xmark" @popper(Termin od klienta)></i>
+        <p
+            @if ($quest->hard_deadline?->addDay()->subDays(1)->lte(now()))
+            class="quest-deadline error"
+            @elseif ($quest->hard_deadline?->addDay()->subDays(3)->lte(now()))
+            class="quest-deadline warning"
+            @else
+            class="quest-deadline"
+            @endif
+            {{ Popper::pop($quest->hard_deadline->format("Y-m-d")) }} >
+            {{ $quest->hard_deadline?->addDay()->diffForHumans() }}
         </p>
         @endif
     </div>

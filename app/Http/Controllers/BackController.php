@@ -33,7 +33,8 @@ class BackController extends Controller
                 when 11 or 14 or 16 or 21 or 26 or 96 then 5
                 else 99
             end")
-            ->orderBy("deadline")
+            ->orderByRaw("case when deadline <= now() + interval 1 day then 0 else 1 end")
+            ->orderByRaw("case when hard_deadline is not null and hard_deadline < deadline then hard_deadline else deadline end")
             ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
             ->orderByRaw("paid desc")
             ->orderBy("created_at");

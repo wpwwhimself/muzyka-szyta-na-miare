@@ -9,7 +9,7 @@
         @foreach ([
             ["Podkłady i nuty", "Nagrania i partytury", "podklady"],
             ["Organista", "Oprawa ślubów i mszy", "organista"],
-            ["Śpiewający DJ", "Muzyka na żywo", "dj"],
+            ["Imprezy i koncerty", "Muzyka na żywo", "dj"],
         ] as [$label, $desc, $slug_part])
 
         <a href="{{ route("home-".$slug_part) }}"

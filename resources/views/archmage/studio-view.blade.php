@@ -13,12 +13,10 @@
             :subtitle="$quest->song->id . '_' . $quest->song->title"
             :extended="true"
         >
-            <x-extendo-section title="ID">
-                {{ $quest->song->id }}
-            </x-extendo-section>
-
             <x-extendo-section title="Rodzaj">
                 <x-quest-type :type="$quest->quest_type" />
+                <span>{{ $quest->song->genre->name }}</span>
+                <span><strong>wycena</strong>: {{ $quest->price_code_override }}</span>
             </x-extendo-section>
 
             <div>

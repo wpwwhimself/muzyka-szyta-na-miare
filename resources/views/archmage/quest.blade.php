@@ -105,14 +105,13 @@
     >
         <x-extendo-section title="Wgrywanie">
             @unless(Auth::id() === 0)
-            <x-a :href="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])" icon="plus" target="_blank">Wgraj</x-a>
-            <x-a
-                href="https://hydromancer.xaa.pl:2083/cpsess4257804942/frontend/paper_lantern/filemanager/upload-ajax.html?file=&fileop=&dir={{ storage_path() }}%2Fapp%2Fsafe%2F{{ $quest->song_id }}&dirop=&charset=&file_charset=&baseurl=&basedir="
-                target="_blank"
-            >
-                Dodaj pliki ręcznie przez cPanel
-            </x-a>
-            <x-a :href="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])" icon="recycle" target="_blank">Dodaj istniejące</x-a>
+            <x-a :href="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])" icon="plus" target="_blank" onclick="primeReload();">Wgraj</x-a>
+            <x-a :href="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])" icon="recycle" target="_blank" onclick="primeReload();">Dodaj istniejące</x-a>
+            <script>
+            function primeReload() {
+                window.onfocus = function () { location.reload(true) }
+            }
+            </script>
             @endunless
 
             <x-extendo-section title="Chmura">
@@ -143,13 +142,13 @@
                         <i class="error fa-solid fa-xmark"></i> Nic nie widzi
                     @endif
                 </span>
-                @unless ($quest->files_ready)
+
                 <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex-right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-button action="submit" label="Wszystko wgrane" icon="file-circle-check" name="ready" value="1" :small="true" />
+                    <x-button action="submit" :label="!$quest->files_ready ? 'Wszystko wgrane' : 'Jednak nie'"
+                        icon="file-circle-check" name="ready" value="{{ !$quest->files_ready }}" :small="true" />
                 </form>
-                @endunless
             </x-extendo-section>
         </x-extendo-section>
 

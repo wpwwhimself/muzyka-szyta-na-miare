@@ -36,7 +36,7 @@ Moje usługi:
 
 <script>
 function copyDesc(el) {
-    navigator.clipboard.writeText(el.textContent)
+    navigator.clipboard.writeText(el.textContent.trim())
     alert("Opis skopiowany")
 }
 </script>

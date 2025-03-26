@@ -17,7 +17,7 @@ class User extends Authenticatable
     protected $fillable = [
         "password",
         "client_name", "email", "phone", "other_medium", "contact_preference",
-        "trust", "helped_showcasing",
+        "trust", "helped_showcasing", "is_forgotten",
         "budget", "extra_exp",
         "default_wishes", "special_prices",
         "external_drive",
@@ -116,7 +116,7 @@ class User extends Authenticatable
         return $this->quests->whereNotIn("status_id", [17, 18, 19])->count();
     }
 
-    public function getIsForgottenAttribute(){
+    public function getIsFavouriteAttribute(){
         return $this->trust >= 2;
     }
     #endregion
@@ -143,7 +143,7 @@ class User extends Authenticatable
     {
         $dict = [
             1 => ["ponadprzeciętne zaufanie", "success fas fa-hand-holding-heart"],
-            2 => ["zapomniany", "success fas fa-ghost"],
+            2 => ["ulubiony", "success fas fa-heart"],
             -1 => ["krętacz i oszust", "error fas fa-user-ninja"],
         ];
         if (!in_array($this->trust, array_keys($dict))) return "";
@@ -175,6 +175,11 @@ class User extends Authenticatable
                 $this->trust > 0,
                 "fas fa-hand-holding-heart success",
                 "Zaufany"
+            ],
+            "favourite" => [
+                $this->is_favourite,
+                "fas fa-heart success",
+                "Ulubiony"
             ],
             "active" => [
                 $this->top10->where("type", "active")->count() > 0,

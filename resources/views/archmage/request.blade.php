@@ -332,6 +332,13 @@
 
 <script defer>
 $("#client_id").select2({ allowClear: true, placeholder: "Nowy klient" });
-$("#song_id").select2({ allowClear: true, placeholder: "Nowy utwór" });
+$("#song_id").select2({ allowClear: true, placeholder: "Nowy utwór" })
+    .change(function(e){
+        const price_code_field = $(`#price_code`)
+        price_code_field.val($(this).val()
+            ? price_code_field.val() + "#"
+            : price_code_field.val().replace("#", "")
+        ).trigger("change")
+    });
 </script>
 @endsection

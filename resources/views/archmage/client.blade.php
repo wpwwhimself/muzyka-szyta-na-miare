@@ -23,6 +23,7 @@
                 <x-input type="TEXT" name="default_wishes" label="Domyślne życzenia" :value="_ct_($client->default_wishes)" />
                 <x-input type="TEXT" name="special_prices" label="Specjalne warunki cenowe" :value="_ct_($client->special_prices)" />
                 <x-input type="url" name="external_drive" label="Link do chmury" :value="_ct_($client->external_drive)" />
+                <x-input type="checkbox" name="is_forgotten" label="Zapomniany" :value="$client->is_forgotten" />
             </div>
         </x-section>
 

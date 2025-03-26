@@ -200,8 +200,9 @@ if(!function_exists("price_calc")){
             ->get();
 
         if($quoting){
-            if($client?->is_veteran && !preg_match_all("/=/", $labels)) $labels .= "=";
-            if($client?->is_patron && !preg_match_all("/-/", $labels)) $labels .= "-";
+            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
+            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
+            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
         }
 
         $quest_type_present = null;

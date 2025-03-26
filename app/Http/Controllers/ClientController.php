@@ -70,7 +70,7 @@ class ClientController extends Controller
             -1 => "krętacz",
             0 => "neutralne",
             1 => "zaufany",
-            2 => "zapomniany",
+            2 => "ulubiony",
         ];
         $patron_levels = [
             0 => "brak",
@@ -104,6 +104,7 @@ class ClientController extends Controller
         if(is_archmage()){
             $client->update([
                 "trust" => $rq->trust,
+                "is_forgotten" => $rq->has("is_forgotten"),
                 "helped_showcasing" => $rq->helped_showcasing,
                 "extra_exp" => $rq->extra_exp,
                 "default_wishes" => $rq->default_wishes,

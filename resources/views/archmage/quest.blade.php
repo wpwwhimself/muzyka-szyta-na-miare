@@ -105,8 +105,13 @@
     >
         <x-extendo-section title="Wgrywanie">
             @unless(Auth::id() === 0)
-            <x-a :href="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])" icon="plus">Wgraj</x-a>
-            <x-a :href="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])" icon="recycle">Dodaj istniejące</x-a>
+            <x-a :href="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])" icon="plus" target="_blank" onclick="primeReload();">Wgraj</x-a>
+            <x-a :href="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])" icon="recycle" target="_blank" onclick="primeReload();">Dodaj istniejące</x-a>
+            <script>
+            function primeReload() {
+                window.onfocus = function () { location.reload(true) }
+            }
+            </script>
             @endunless
 
             <x-extendo-section title="Chmura">

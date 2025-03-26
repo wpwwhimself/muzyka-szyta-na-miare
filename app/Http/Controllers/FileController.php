@@ -64,6 +64,7 @@ class FileController extends Controller
             ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
+        $quest = ($entity_name == "quest") ? Quest::find($id) : null;
 
         return view(user_role().'.files.edit', compact(
             "song",
@@ -71,6 +72,7 @@ class FileController extends Controller
             "tags",
             "clients",
             "existing_files",
+            "quest",
         ));
     }
 

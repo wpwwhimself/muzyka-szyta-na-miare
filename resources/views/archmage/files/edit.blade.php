@@ -76,7 +76,7 @@
             />
             <x-select
                 name="only_for_client_id" label="Tylko dla klienta"
-                :value="$file?->only_for_client_id"
+                :value="$file?->only_for_client_id ?? $quest?->client_id ?? null"
                 :options="$clients"
                 :empty-option="true"
                 small

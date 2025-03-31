@@ -152,7 +152,7 @@
             </x-extendo-section>
         </x-extendo-section>
 
-        <x-files.list :grouped-files="$files" :editable="true" :highlight-for-client-id="$quest->client_id" />
+        <x-files.list :grouped-files="$files" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
     </x-extendo-block>
 
     <div class="grid-2">

@@ -2,6 +2,7 @@
     "groupedFiles",
     "editable" => false,
     "highlightForClientId" => null,
+    "canDownloadFiles",
 ])
 
 @forelse ($groupedFiles as $variant_name => $versions)
@@ -72,6 +73,7 @@
             @endif
         @endforeach
         @foreach ($version->file_paths as $extension => $file)
+            @continue (!$canDownloadFiles && $extension != "pdf")
             <x-file-tile :id="$version->song_id" :file="$file" />
         @endforeach
         </div>

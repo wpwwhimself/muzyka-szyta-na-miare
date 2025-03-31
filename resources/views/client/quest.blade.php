@@ -143,7 +143,7 @@
         scissors
     >
         @if (Auth::user()->can_see_files)
-        <x-files.list :grouped-files="$files" />
+        <x-files.list :grouped-files="$files" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
         @endif
 
         @if ($quest->status_id == 15 && !$quest->files_ready)

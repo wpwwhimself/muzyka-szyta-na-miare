@@ -40,7 +40,7 @@
             </small>
 
             @if ($editable)
-            <x-a :href="route('files-edit', ['id' => $version->id])" icon="pen" target="_blank"></x-a>
+            <x-a :href="route('files-edit', ['id' => $version->id])" icon="pen" target="_blank" onclick="primeReload()"></x-a>
             @endif
         </h5>
 

@@ -286,16 +286,16 @@ if(!function_exists("get_next_working_day")){
 if(!function_exists("can_download_files")){
     function can_download_files($client_id, $quest_id){
         if($client_id == "") return false;
-        $trust = User::findOrFail($client_id)->trust;
+        $client = User::findOrFail($client_id);
         $quest = Quest::findOrFail($quest_id);
         return
-            $trust >= 0
+            $client->can_see_files
             && (
-                User::find($client_id)->is_veteran
-                || $trust == 1
+                $client->is_veteran
+                || $client->trust >= 1
+                || $quest->paid
                 || (
-                    $quest->delayed_payment !== null
-                    && $quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0
+                    ($quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0 ?? true)
                     && $quest->status_id === 19
                 )
             );

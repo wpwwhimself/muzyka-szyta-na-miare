@@ -134,7 +134,7 @@
 
             <x-extendo-section title="Widoczność">
                 <span>
-                    @if ($quest->paid || can_download_files($quest->client_id, $quest->id))
+                    @if (can_download_files($quest->client_id, $quest->id))
                         <i class="success fa-solid fa-check"></i> Uprawniony do pobierania
                     @elseif ($quest->client->can_see_files)
                         <i class="warning fa-solid fa-eye"></i> Widzi podglądy

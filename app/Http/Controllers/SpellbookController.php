@@ -6,13 +6,48 @@ use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request as ModelsRequest;
 use App\Models\StatusChange;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class SpellbookController extends Controller
 {
     public static $MISSPELL_ERROR = "Zaklęcie tylko dla zaawansowanych";
+
+    public const SPELLS = [
+        "become" => [
+            "become/{user}",
+        ],
+        "obliterate" => [
+            "requests/view/{id}/obliterate",
+        ],
+        "polymorph" => [
+            "quests/view/{id}/polymorph/{letter}",
+        ],
+        "reprice" => [
+            "requests/view/{id}/reprice/{new_code}",
+            "quests/view/{id}/reprice/{new_code}",
+        ],
+        "restatus" => [
+            "quests/view/{id}/restatus/{status_id}",
+        ],
+        "silence" => [
+            "requests/view/{id}/silence",
+            "quests/view/{id}/silence",
+        ],
+        "transmute" => [
+            "requests/view/{id}/transmute/{property}/{value?}",
+            "quests/view/{id}/transmute/{property}/{value?}",
+        ],
+    ];
+
+    public function become(User $user)
+    {
+        Auth::login($user);
+        return back()->with("success", "Jesteś teraz: $user->client_name");
+    }
 
     public function obliterate($id){
         StatusChange::where("re_quest_id", $id)->delete();

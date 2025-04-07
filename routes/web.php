@@ -196,20 +196,9 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
         });
 
         Route::controller(SpellbookController::class)->middleware("cancastspells")->group(function(){
-            Route::prefix("requests")->group(function(){
-                Route::get('/view/{id}/obliterate', "obliterate");
-                Route::get("/view/{id}/silence", "silence");
-                Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
-                Route::get("/view/{id}/reprice/{new_code}", "reprice");
-            });
-
-            Route::prefix("quests")->group(function(){
-                Route::get("/view/{id}/restatus/{status_id}", "restatus");
-                Route::get("/view/{id}/silence", "silence");
-                Route::get("/view/{id}/transmute/{property}/{value?}", "transmute");
-                Route::get("/view/{id}/polymorph/{letter}", "polymorph");
-                Route::get("/view/{id}/reprice/{new_code}", "reprice");
-            });
+            foreach (SpellbookController::SPELLS as $name => $url) {
+                Route::get($url, $name);
+            }
         });
 
         Route::controller(DjController::class)->middleware("cancastspells")->prefix("dj")->group(function () {

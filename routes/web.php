@@ -196,8 +196,10 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
         });
 
         Route::controller(SpellbookController::class)->middleware("cancastspells")->group(function(){
-            foreach (SpellbookController::SPELLS as $name => $url) {
-                Route::get($url, $name);
+            foreach (SpellbookController::SPELLS as $name => $urls) {
+                foreach ($urls as $url) {
+                    Route::get($url, $name);
+                }
             }
         });
 

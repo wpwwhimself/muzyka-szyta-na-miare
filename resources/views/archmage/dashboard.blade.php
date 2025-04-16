@@ -182,6 +182,7 @@
                     <th><i class="fas fa-box"></i> ID</th>
                     <th><i class="fas fa-compact-disc"></i> ID</th>
                     <th>Utwór</th>
+                    <th>Co trzeba zrobić</th>
                 </tr>
             </thead>
             <tbody>
@@ -190,6 +191,19 @@
                     <td><a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a></td>
                     <td><a href="{{ route('song-edit', ['id' => $quest->song->id]) }}">{{ $quest->song->id }}</a></td>
                     <td>{{ $quest->song->full_title }}</td>
+                    <td>
+                        @if ($quest->song->has_recorded_reel)
+                            @if ($quest->song->has_original_mv)
+                            <i class="fas fa-photo-film" @popper(Rolka z teledyskiem)></i>
+                            @else
+                            <i class="fas fa-film" @popper(Rolka)></i>
+                            @endif
+                        @endif
+
+                        @if (!$quest->song->has_showcase_file)
+                        <i class="fas fa-shirt" @popper(Krótki showcase)></i>
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

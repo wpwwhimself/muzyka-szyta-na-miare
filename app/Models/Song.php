@@ -22,6 +22,7 @@ class Song extends Model
         "genre_id",
         "link",
         "price_code", "notes",
+        "has_recorded_reel", "has_original_mv",
     ];
     protected $appends = [
         "full_title",

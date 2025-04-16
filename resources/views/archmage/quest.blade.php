@@ -65,6 +65,11 @@
         <x-input type="TEXT" name="notes" label="Życzenia dotyczące utworu" value="{{ $quest->song->notes }}" />
         <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
 
+        <x-extendo-section title="Rolka">
+            <x-input type="checkbox" name="has_recorded_reel" label="Nagrałem" :value="$quest->song->has_recorded_reel" />
+            <x-input type="checkbox" name="has_original_mv" label="Teledysk" :value="$quest->song->has_original_mv" />
+        </x-extendo-section>
+
         <script>
         $(document).ready(() => {
             $("#title, #artist, #link, #genre, #notes").on("change", function(){
@@ -73,6 +78,14 @@
                     url: `/api/songs/{{ $quest->song->id }}/single`,
                     type: "PATCH",
                     data: JSON.stringify({key: $(this).attr("id"), value: $(this).val()}),
+                })
+            })
+            $("#has_recorded_reel, #has_original_mv").on("change", function(){
+                $.ajax({
+                    headers: {"Accept": "application/json", "Content-Type": "application/json"},
+                    url: `/api/songs/{{ $quest->song->id }}/single`,
+                    type: "PATCH",
+                    data: JSON.stringify({key: $(this).attr("id"), value: $(this).is(":checked")}),
                 })
             })
             $("#wishes").on("change", function(){

@@ -66,8 +66,10 @@
         <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
 
         <x-extendo-section title="Rolka">
-            <x-input type="checkbox" name="has_recorded_reel" label="Nagrałem" :value="$quest->song->has_recorded_reel" />
-            <x-input type="checkbox" name="has_original_mv" label="Teledysk" :value="$quest->song->has_original_mv" />
+            <div class="flex-right middle">
+                <x-input type="checkbox" name="has_recorded_reel" label="Nagrałem się" :value="$quest->song->has_recorded_reel" />
+                <x-input type="checkbox" name="has_original_mv" label="Jest teledysk" :value="$quest->song->has_original_mv" />
+            </div>
         </x-extendo-section>
 
         <script>

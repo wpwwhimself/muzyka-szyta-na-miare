@@ -56,24 +56,42 @@
         </div>
         @endif
 
+        @if (in_array("jpg", array_keys($version->file_paths)))
+        <div class="flex-down center">
+            <x-button
+                :action="route('safe-show', ['id' => $version->song_id, 'filename' => basename($version->file_paths['jpg'])])"
+                target="_blank"
+                label="Mapa utworu"
+                icon="map"
+                small
+            />
+        </div>
+        @endif
+
         <div class="file-container-c">
         @foreach ($version->file_paths as $extension => $file)
-            @if ($extension == "mp4")
-            <video controls><source src="{{ $file }}" /></video>
+            @switch ($extension)
+                @case ("mp4")
+                <video controls><source src="{{ $file }}" /></video>
                 @break
-            @elseif (in_array($extension, ["mp3", "ogg"]))
-            <x-file-player
-                :song-id="$version->song_id"
-                :file="$file"
-                :type="$extension"
-            />
+
+                @case ("mp3")
+                @case ("ogg")
+                <x-file-player
+                    :song-id="$version->song_id"
+                    :file="$file"
+                    :type="$extension"
+                />
                 @break
-            @elseif ($extension == "pdf")
-            <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
-            @endif
+
+                @case ("pdf")
+                    <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
+                @break
+            @endswitch
         @endforeach
         @foreach ($version->file_paths as $extension => $file)
             @continue (!$canDownloadFiles && $extension != "pdf")
+            @continue ($extension == "jpg")
             <x-file-tile :id="$version->song_id" :file="$file" />
         @endforeach
         </div>

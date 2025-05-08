@@ -209,6 +209,11 @@ class FileController extends Controller
             'Expires' => '0',
         ];
 
+        if ($type == "image/jpeg") {
+            // update headers to preview file instead of download
+            $headers["Content-Disposition"] = "inline; filename=$filename";
+        }
+
         return (new Response($file, 200, $headers));
     }
 

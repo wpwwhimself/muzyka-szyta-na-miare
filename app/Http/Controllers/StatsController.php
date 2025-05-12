@@ -8,6 +8,7 @@ use App\Models\CalendarFreeDay;
 use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\GigPriceDefault;
+use App\Models\GigPriceRate;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
 use App\Models\Quest;
@@ -828,14 +829,15 @@ class StatsController extends Controller
     public function gigPriceSuggest()
     {
         $defaults = [
-            "Czas" => GigPriceDefault::relatedTo("time")->get(),
-            "Odległość" => GigPriceDefault::relatedTo("distance")->get(),
-            "Zyski" => GigPriceDefault::relatedTo("gain")->get(),
+            "Dojazd" => GigPriceDefault::relatedTo("drive")->get(),
+            "Granie" => GigPriceDefault::relatedTo("show")->get(),
         ];
+        $rates = GigPriceRate::orderBy("value")->get()
+            ->mapWithKeys(fn ($r) => [$r->value => $r->label . " (" . _c_(as_pln($r->value)) . "/h)"]);
 
         return view(user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],
-            compact("defaults"),
+            compact("defaults", "rates"),
         ));
     }
 
@@ -856,6 +858,36 @@ class StatsController extends Controller
         }
 
         return redirect()->route("gig-price-suggest")->with("success", "Ustawienia domyślne zmienione");
+    }
+
+    public function gigPriceRates()
+    {
+
+        $rates = GigPriceRate::orderBy("value")->get();
+
+        return view(user_role().".gig-price.rates", array_merge(
+            ["title" => "Stawki"],
+            compact("rates"),
+        ));
+    }
+
+    public function gigPriceRate(?GigPriceRate $rate = null)
+    {
+        return view(user_role().".gig-price.rate", array_merge(
+            ["title" => "Stawka"],
+            compact("rate"),
+        ));
+    }
+
+    public function gigPriceProcessRate(Request $rq)
+    {
+        if ($rq->action == "save") {
+            GigPriceRate::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            GigPriceRate::find($rq->id)->delete();
+        }
+
+        return redirect()->route("gig-price-rates")->with("success", "Stawka poprawiona");
     }
     #endregion
 }

@@ -175,6 +175,12 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                     Route::get("/suggest", "gigPriceSuggest")->name("gig-price-suggest");
                     Route::get("/defaults", "gigPriceDefaults")->name("gig-price-defaults");
                     Route::post("/defaults", "gigPriceProcessDefaults")->name("gig-price-process-defaults");
+
+                    Route::prefix("rates")->group(function(){
+                        Route::get("/list", "gigPriceRates")->name("gig-price-rates");
+                        Route::get("/edit/{rate?}", "gigPriceRate")->name("gig-price-rate");
+                        Route::post("/process", "gigPriceProcessRate")->name("gig-price-rate-process");
+                    });
                 });
             });
         });

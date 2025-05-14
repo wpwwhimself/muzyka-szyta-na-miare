@@ -16,8 +16,9 @@
             Dodaj koszt
         </h1>
     </div>
-    <form action="{{ route('mod-cost') }}" method="post">
+    <form action="{{ route('mod-cost') }}" method="post" class="flex-right center">
         @csrf
+        <x-input type="date" name="created_at" label="Data" small :value="date('Y-m-d')" />
         <x-select name="cost_type_id" label="Typ" :options="$types" />
         <x-input type="text" name="desc" label="Opis" :small="true" />
         <x-input type="number" name="amount" step="0.01" min="0" label="Wartość" />
@@ -27,6 +28,7 @@
     <script>
         $(document).ready(function(){
             $(".table-row:not(.table-header)").click(function(){
+                $("#created_at").val($(this).find(".cost-date").attr("data-date"));
                 $("#cost_type_id").val($(this).find(".cost-type").attr("data-typ"));
                 $("#desc").val($(this).find(".cost-desc").text());
                 $("#amount").val($(this).find(".cost-amount").attr("data-amount"));
@@ -59,7 +61,7 @@
         </div>
         @forelse ($costs as $cost)
         <div class="table-row clickable" data-id="{{ $cost->id }}">
-            <span {{ Popper::pop($cost->created_at) }}>{{ $cost->created_at->diffForHumans() }}</span>
+            <span class="cost-date" data-date="{{ $cost->created_at->format('Y-m-d') }}" {{ Popper::pop($cost->created_at->format('d.m.Y')) }}>{{ $cost->created_at->diffForHumans() }}</span>
             <span class="cost-type" data-typ="{{ $cost->cost_type_id }}">{{ _ct_($cost->type->name) }}</span>
             <span class="cost-desc">{{ _ct_($cost->desc) }}</span>
             <span class="cost-amount" data-amount="{{ _c_($cost->amount) }}">{{ _c_(as_pln($cost->amount)) }}</span>

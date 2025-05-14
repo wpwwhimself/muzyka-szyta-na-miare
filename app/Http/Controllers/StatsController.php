@@ -670,6 +670,7 @@ class StatsController extends Controller
             "cost_type_id" => $rq->cost_type_id,
             "desc" => $rq->desc,
             "amount" => $rq->amount,
+            "created_at" => $rq->created_at,
         ];
         if($rq->id) Cost::find($rq->id)->update($fields);
         else Cost::create($fields);

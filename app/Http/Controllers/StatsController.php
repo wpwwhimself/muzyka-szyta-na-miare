@@ -483,6 +483,17 @@ class StatsController extends Controller
 
         return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
     }
+
+    public function financePayout(float $amount) {
+        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        Cost::create([
+            "cost_type_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
+            "desc" => "sam sobie",
+            "amount" => $amount,
+        ]);
+        return back()->with("success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount)));
+    }
+
     public function financeReturn(string $quest_id, bool $budget = false) {
         $quest = Quest::find($quest_id);
         $payments_sum = $quest->payments_sum;
@@ -546,7 +557,7 @@ class StatsController extends Controller
             "Wydano" => $losses_other,
             "Wypłacono" => $losses_payments,
             "Saldo na dziś" => $balance_now,
-            "Można wypłacić" => max($balance_now - setting("min_account_balance"), 0),
+            "Można wypłacić" => round(max($balance_now - setting("min_account_balance"), 0), 2),
         ];
         $gains = $gains->get();
         $losses = $losses->get();

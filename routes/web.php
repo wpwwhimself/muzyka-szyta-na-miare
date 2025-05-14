@@ -153,6 +153,7 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                 Route::get("/", "financeDashboard")->name("finance");
                 Route::get("/summary", "financeSummary")->name("finance-summary");
                 Route::post("/pay", "financePay")->name("finance-pay");
+                Route::get("/payout/{amount}", "financePayout")->name("finance-payout");
                 Route::get("/return/{quest_id}/{budget?}", "financeReturn")->name("finance-return");
 
                 Route::prefix("invoices")->group(function(){

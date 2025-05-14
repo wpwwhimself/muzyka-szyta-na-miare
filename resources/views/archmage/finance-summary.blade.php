@@ -6,6 +6,8 @@
     <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
     <x-button action="{{ route('costs') }}" label="Koszty" icon="money-bill-wave" />
     <x-button action='{{ route("taxes") }}' label="Podatki" icon="cash-register" />
+
+    <x-button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])" label="Wypłać" icon="sack-dollar" small />
 </div>
 
 <section class="sc-line">

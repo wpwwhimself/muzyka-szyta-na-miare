@@ -7,6 +7,10 @@
 
     <x-section title="Dane utworu" icon="compact-disc">
         <div class="flex-right center">
+            <x-extendo-section title="ID">
+                <strong>{{ $song->id }}</strong>
+            </x-extendo-section>
+
             @foreach ([
                 ["text", "title", "Tytuł"],
                 ["text", "artist", "Wykonawca"],

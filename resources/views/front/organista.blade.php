@@ -3,7 +3,7 @@
 
 @section("bullets")
 
-<li>Szukasz zespołu, który uświetni Wasz ślub?</li>
+<li>Szukasz muzyka lub zespołu, który uświetni Wasz ślub?</li>
 <li>Potrzebujesz organisty na mszę jubileuszową lub urodzinową?</li>
 <li>Chcesz wynająć trębacza na ceremonię pogrzebu?</li>
 <strong>Jesteś we właściwym miejscu!</strong>
@@ -24,7 +24,7 @@
         <ul>
             <li>Na <strong>lokalnym instrumencie</strong> <i class="fas fa-circle-question" @popper(...o ile proboszcz pozwoli grać)></i> lub moim własnym</li>
             <li>Akompaniament do wielu <strong>różnych pieśni</strong> i piosenek</li>
-            <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar <strong>psalmów</strong></li>
+            <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar melodii <strong>psalmów</strong></li>
         </ul>
     </div>
     <div class="main black-back hidden">
@@ -48,6 +48,7 @@
         <ul>
             <li>Trębacz podczas <strong>pogrzebu</strong></li>
             <li><strong>Solista</strong> z akompaniatorem</li>
+            <li>Melancholijne utwory odpowiednie do okazji</li>
         </ul>
     </div>
 
@@ -91,7 +92,7 @@
         </span>
         <div class="front-table">
             <span class="hidden">Organy (ślub, jubileusz, ...)</span>
-            <span class="hidden">{{ as_pln(300) }}</span>
+            <span class="hidden">{{ as_pln(350) }}</span>
 
             <span class="hidden">Trąbka (pogrzeb, ślub, ...)</span>
             <span class="hidden">{{ as_pln(100) }}</span>
@@ -107,13 +108,16 @@
             <li class="hidden">Gram pieśni eucharystyczne, ale nie tylko. Na msze okolicznościowe gram pieśni dopasowane do okazji. Mogę również zagrać utwory <strong>na życzenie</strong>.</li>
 
             <li class="hidden">Czy mam własny instrument?</li>
-            <li class="hidden">Preferuję grę na lokalnym instrumencie, ale jeśli go nie ma lub nie ma pozwolenia na grę na nim, jestem w stanie grać na własnych organach z własnym nagłośnieniem.</li>
+            <li class="hidden">Preferuję grę na lokalnym instrumencie, ale jeśli go nie ma lub nie ma pozwolenia na grę na nim, jestem w stanie grać na <b>własnych organach (elektrycznych) z własnym nagłośnieniem</b>.</li>
 
             <li class="hidden">Czy współpracuję z innymi muzykami?</li>
-            <li class="hidden">Jeśli podczas uroczystości ma zaśpiewać/zagrać również ktoś inny, to jestem w stanie tej osobie akompaniować. Proszę tylko o stosowną informację wcześniej.</li>
+            <li class="hidden">Jeśli podczas uroczystości ma zaśpiewać/zagrać również ktoś inny, to jestem w stanie tej osobie akompaniować. Proszę tylko o stosowną informację wcześniej, żeby móc się dogadać z innymi muzykami.</li>
 
             <li class="hidden">Co z zapłatą?</li>
-            <li class="hidden">W zupełności wystarcza mi przekazanie pieniędzy przed lub po uroczystości.</li>
+            <li class="hidden">W zupełności wystarcza mi przekazanie pieniędzy przed uroczystością.</li>
+
+            <li class="hidden">Podpisujemy umowę?</li>
+            <li class="hidden">Ja nie widzę takiej potrzeby – jeśli termin zostanie przez nas uzgodniony i mnie on pasuje, to zobowiązuję się przyjechać na uroczystość.</li>
         </ul>
     </div>
 </section>

@@ -23,9 +23,12 @@
         aby zobaczyć szczegóły zlecenia
     </h3>
 
+    @if ($quest->song->has_safe_files)
     <p>
         Uprzejmie proszę o wyrażenie opinii lub ewentualnych uwag celem wprowadzenia poprawek. Możesz to zrobić, klikając w link powyżej.
     </p>
+    @endif
+
     <p>
         <i>
             Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->password }}</b>

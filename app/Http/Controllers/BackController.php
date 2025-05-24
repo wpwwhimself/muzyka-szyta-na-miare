@@ -55,12 +55,8 @@ class BackController extends Controller
                 ->get();
         }else{
             $recent = StatusChange::whereNotIn("new_status_id", [9, 32, 34])
-                ->where(fn($q) => $q
-                    ->where("changed_by", "!=", 1)
-                    ->orWhereNull("changed_by")
-                )
                 ->orderByDesc("date")
-                ->limit(7)
+                ->limit(10)
                 ->get();
             foreach($recent as $change){
                 $change->is_request = is_request($change->re_quest_id);

@@ -42,7 +42,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ReQuest</th>
+                    <th>Zlecenie/Utwór</th>
                     <th>Klient</th>
                     <th>Status</th>
                     <th>Kiedy</th>
@@ -59,6 +59,9 @@
                         <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
                             {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
                         </a>
+                        @unless ($change->is_request)
+                        <small class="ghost">{{ $change->re_quest?->song->id }}</small>
+                        @endunless
                     </td>
                     <td>
                     @if ($change->is_request)

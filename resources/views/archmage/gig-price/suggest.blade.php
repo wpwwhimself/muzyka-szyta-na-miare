@@ -6,12 +6,22 @@
     <x-slot name="buttons">
         <x-a :href="route('gig-price-defaults')" icon="gear">Domyślne</x-a>
         <x-a :href="route('gig-price-rates')" icon="percent">Stawki</x-a>
+        <x-a :href="route('gig-price-places')" icon="location-dot">Miejsca</x-a>
     </x-slot>
 
     <div id="settings" class="flex-right center">
         @foreach ($defaults as $heading => $fields)
         <div class="section-like flex-down center">
             <h2>{{ $heading }}</h2>
+
+            @if ($heading == "Dojazd")
+            <x-select name="place_id" label="Miejsce"
+                :options="$places"
+                empty-option
+                small
+                onchange="changePlace(event.target.value)"
+            />
+            @endif
 
             @foreach ($fields as $setting)
             <x-input type="number" step="0.01"
@@ -54,6 +64,10 @@
 </x-section>
 
 <script>
+function changePlace(distance_km) {
+    document.querySelector("#settings input[name='travel_distance_km']").value = distance_km;
+}
+
 function calculateGigPrice() {
     // get settings
     const settings = Array.from(document.querySelectorAll("#settings input, #settings select"))

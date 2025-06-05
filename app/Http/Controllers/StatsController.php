@@ -8,6 +8,7 @@ use App\Models\CalendarFreeDay;
 use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\GigPriceDefault;
+use App\Models\GigPricePlace;
 use App\Models\GigPriceRate;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
@@ -846,10 +847,12 @@ class StatsController extends Controller
         ];
         $rates = GigPriceRate::orderBy("value")->get()
             ->mapWithKeys(fn ($r) => [$r->value => $r->label . " (" . _c_(as_pln($r->value)) . "/h)"]);
+        $places = GigPricePlace::orderBy("name")->get()
+            ->mapWithKeys(fn ($p) => [$p->distance_km => $p->name . " (" . $p->distance_km . " km)"]);
 
         return view(user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],
-            compact("defaults", "rates"),
+            compact("defaults", "rates", "places"),
         ));
     }
 
@@ -900,6 +903,35 @@ class StatsController extends Controller
         }
 
         return redirect()->route("gig-price-rates")->with("success", "Stawka poprawiona");
+    }
+
+    public function gigPricePlaces()
+    {
+        $places = GigPricePlace::orderBy("name")->get();
+
+        return view(user_role().".gig-price.places", array_merge(
+            ["title" => "Miejsca"],
+            compact("places"),
+        ));
+    }
+
+    public function gigPricePlace(?GigPricePlace $place = null)
+    {
+        return view(user_role().".gig-price.place", array_merge(
+            ["title" => "Miejsce"],
+            compact("place"),
+        ));
+    }
+
+    public function gigPriceProcessPlace(Request $rq)
+    {
+        if ($rq->action == "save") {
+            GigPricePlace::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
+        } else if ($rq->action == "delete") {
+            GigPricePlace::find($rq->id)->delete();
+        }
+
+        return redirect()->route("gig-price-places")->with("success", "Miejsce poprawione");
     }
     #endregion
 }

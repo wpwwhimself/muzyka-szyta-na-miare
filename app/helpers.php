@@ -247,7 +247,7 @@ if(!function_exists("price_calc")){
         }
 
         return [
-            "price" => _c_(round($price, 2)),
+            "price" => _c_(round($price)),
             "positions" => $positions,
             "override" => $override,
             "labels" => $labels,

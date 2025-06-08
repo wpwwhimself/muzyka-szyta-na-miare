@@ -848,7 +848,7 @@ class StatsController extends Controller
         $rates = GigPriceRate::orderBy("value")->get()
             ->mapWithKeys(fn ($r) => [$r->value => $r->label . " (" . _c_(as_pln($r->value)) . "/h)"]);
         $places = GigPricePlace::orderBy("name")->get()
-            ->mapWithKeys(fn ($p) => [$p->distance_km => $p->name . " (" . $p->distance_km . " km)"]);
+            ->mapWithKeys(fn ($p) => [(strtolower($p->name) . "|" . $p->distance_km) => $p->name . " (" . $p->distance_km . " km)"]);
 
         return view(user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],

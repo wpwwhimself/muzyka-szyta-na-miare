@@ -64,7 +64,8 @@
 </x-section>
 
 <script>
-function changePlace(distance_km) {
+function changePlace(data) {
+    const distance_km = data.split("|")[1];
     document.querySelector("#settings input[name='travel_distance_km']").value = distance_km;
 }
 

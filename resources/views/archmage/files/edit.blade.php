@@ -19,7 +19,10 @@
             @foreach ($existing_files as $efile)
             <tr class="{{ $file?->id == $efile->id ? 'accent' : '' }}">
                 <td onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
-                <td onclick="copyFileField('version_name', '{{ $efile->version_name }}')">{{ $efile->version_name }}</td>
+                <td onclick="copyFileField('version_name', '{{ $efile->version_name }}')">
+                    {{ $efile->version_name }}
+                    @if ($efile->description) <i class="fas fa-note-sticky" {{ Popper::pop(Illuminate\Mail\Markdown::parse($efile->description)) }}></i> @endif
+                </td>
                 <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
                 <td>
                     @if ($efile->only_for_client_id)

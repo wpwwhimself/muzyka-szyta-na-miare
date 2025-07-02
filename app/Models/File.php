@@ -14,7 +14,6 @@ class File extends Model
         "song_id",
         "variant_name", "version_name",
         "transposition",
-        "only_for_client_id",
         "description",
         "file_paths",
     ];
@@ -28,9 +27,9 @@ class File extends Model
     {
         return $this->belongsTo(Song::class);
     }
-    public function exclusiveClient()
+    public function exclusiveClients()
     {
-        return $this->belongsTo(User::class, "only_for_client_id");
+        return $this->belongsToMany(User::class, "file_user", "file_id", "user_id");
     }
 
     public function getMissingFilesAttribute()

@@ -9,6 +9,10 @@
 
     <x-mail-quest-mini :quest="$quest" />
 
+    <p>
+        Jeśli chcesz przywrócić zlecenie, kliknij odpowiedni przycisk na stronie zlecenia.
+    </p>
+
     <h3>
         Kliknij
         <a

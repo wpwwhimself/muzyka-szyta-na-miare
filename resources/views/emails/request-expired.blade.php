@@ -10,7 +10,7 @@
     <x-mail-quest-mini :quest="$request" />
 
     <p>
-        Jeśli chcesz odświeżyć zapytanie, kliknij odpowiedni przycisk na widoku zapytania.
+        Jeśli chcesz odświeżyć zapytanie, kliknij odpowiedni przycisk na stronie zapytania.
     </p>
 
     <h3>

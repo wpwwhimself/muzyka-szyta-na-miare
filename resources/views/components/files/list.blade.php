@@ -13,10 +13,10 @@
     </h4>
 
     @foreach ($versions as $version)
-    @unless ($version->only_for_client_id && Auth::id() != $version->only_for_client_id && !is_archmage())
+    @unless (!$version->exclusiveClients->contains(Auth::user()) && !is_archmage())
     <div class="{{ implode(" ", array_filter([
         'file-container-b',
-        !in_array($version->only_for_client_id, [null, Auth::id(), $highlightForClientId]) ? 'ghost' : null,
+        is_archmage() && !$version->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)) ? 'ghost' : null,
     ])) }}">
         <h5>
             @foreach ($version->tags as $tag)
@@ -25,10 +25,10 @@
             @if ($version->transposition)
             <x-file-tag :transpose="$version->transposition" />
             @endif
-            @if ($version->exclusiveClient && is_archmage())
+            @if ($version->exclusiveClients && is_archmage())
             <div class="file-tag flex-right center middle"
                 style="background-color: white;"
-                {{ Popper::pop("Tylko dla: ".$version->exclusiveClient->client_name) }}
+                {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("client_name")->join(", ")) }}
             >
                 @svg("mdi-eye")
             </div>

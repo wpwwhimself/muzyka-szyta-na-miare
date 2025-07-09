@@ -135,11 +135,11 @@ class FileController extends Controller
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
                 "transposition" => $rq->transposition,
-                "only_for_client_id" => $rq->only_for_client_id,
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,
             ]);
             $file->tags()->sync(array_keys($rq->tags ?? []));
+            $file->exclusiveClients()->sync($rq->only_for_client_id ?? []);
         } else if ($rq->action == "delete") {
             foreach ($rq->delete_files ?? [] as $extension => $path) {
                 Storage::delete($path);
@@ -182,13 +182,13 @@ class FileController extends Controller
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
                 "transposition" => $rq->transposition,
-                "only_for_client_id" => $rq->only_for_client_id,
                 "description" => $rq->description,
                 "file_paths" => collect(array_keys($rq->file_to_recycle ?? []))
                     ->mapWithKeys(fn($path) => [pathinfo($path, PATHINFO_EXTENSION) => Str::replaceArray("$", ["[", "]"], $path)])
                     ->toArray(),
             ]);
             $file->tags()->sync(array_keys($rq->tags ?? []));
+            $file->exclusiveClients()->sync($rq->only_for_client_id ?? []);
         }
 
         return back()->with("success", "Wpis dodany");

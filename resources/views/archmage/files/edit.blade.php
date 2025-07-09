@@ -25,10 +25,10 @@
                 </td>
                 <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
                 <td>
-                    @if ($efile->only_for_client_id)
-                    {{ $efile->exclusiveClient->client_name }}
+                    @if ($efile->exclusiveClients->count())
+                    {{ $efile->exclusiveClients->pluck("client_name")->join(", ") }}
                     @else
-                    <span class="grayed-out">wszyscy</span>
+                    <span class="grayed-out">nikt</span>
                     @endif
                 </td>
                 <td>
@@ -78,8 +78,7 @@
                 small
             />
             <x-select
-                name="only_for_client_id" label="Tylko dla klienta"
-                :value="$file?->only_for_client_id ?? $quest?->client_id ?? null"
+                name="only_for_client_id[]" label="Upoważnieni"
                 :options="$clients"
                 :empty-option="true"
                 small
@@ -133,7 +132,9 @@
 </form>
 
 <script defer>
-$("#only_for_client_id").select2({ allowClear: true, placeholder: "bez ograniczeń" });
+$("[name^=only_for_client_id]").select2({ allowClear: true, multiple: true })
+    .val({{ json_encode($file?->exclusiveClients()->pluck("user_id") ?? [$quest?->client_id] ?? []) }})
+    .trigger("change");
 </script>
 
 @endsection

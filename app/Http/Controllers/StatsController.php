@@ -472,7 +472,7 @@ class StatsController extends Controller
         foreach($clients_quests as $client_id => $quests){
             $client = User::find($client_id);
             if($client->email){
-                Mail::to($quest->client->email)->send(new MassPayment($quests));
+                Mail::to($client->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
             }else{
                 $clients_informed[$client_id] = 0;

@@ -47,7 +47,9 @@
     @endif
 
     @guest
+    @if (Str::contains(request()->getHost(), env("PODKLADY_SUBDOMAIN").".".env("APP_DOMAIN")))
     <a href="{{ route("login") }}" class="auth-link"><li><i class="fa-solid fa-circle-user"></i> Zaloguj się</li></a>
+    @endif
     @endguest
 
     <script>

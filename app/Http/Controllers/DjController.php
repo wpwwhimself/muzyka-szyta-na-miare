@@ -11,7 +11,7 @@ class DjController extends Controller
 {
     public function index()
     {
-        return view("dj.index");
+        return view(user_role().".dj.index");
     }
 
     #region songs
@@ -19,7 +19,7 @@ class DjController extends Controller
     {
         $songs = DjSong::orderBy("title")->paginate(25);
 
-        return view("dj.songs.list", compact(
+        return view(user_role().".dj.songs.list", compact(
             "songs",
         ));
     }
@@ -30,7 +30,7 @@ class DjController extends Controller
         $tempos = collect(DjSong::TEMPOS)->mapWithKeys(fn ($t) => [$t["code"] => "$t[icon] $t[label]"])->toArray();
         $genres = Genre::ordered()->get()->pluck("name", "id");
 
-        return view("dj.songs.edit", compact(
+        return view(user_role().".dj.songs.edit", compact(
             "song",
             "tempos",
             "genres",
@@ -62,7 +62,7 @@ class DjController extends Controller
     {
         $sets = DjSet::orderBy("name")->paginate(25);
 
-        return view("dj.sets.list", compact(
+        return view(user_role().".dj.sets.list", compact(
             "sets",
         ));
     }
@@ -75,7 +75,7 @@ class DjController extends Controller
             ->mapWithKeys(fn ($s) => [$s => $s])
             ->toArray();
 
-        return view("dj.sets.edit", compact(
+        return view(user_role().".dj.sets.edit", compact(
             "set",
             "songs",
         ));
@@ -101,7 +101,7 @@ class DjController extends Controller
     #region gig mode
     public function gigMode()
     {
-        return view("dj.gig-mode");
+        return view(user_role().".dj.gig-mode");
     }
 
     public function gigModeInit()

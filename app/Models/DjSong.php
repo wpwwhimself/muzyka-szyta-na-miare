@@ -25,7 +25,7 @@ class DjSong extends Model
             "code" => 2,
         ],
         [
-            "label" => "średnie",
+            "label" => "umiarkowane",
             "icon" => "🙂",
             "code" => 3,
         ],
@@ -44,7 +44,7 @@ class DjSong extends Model
     protected $fillable = [
         "id",
         "title", "artist",
-        "key", "tempo",
+        "key", "tempo", "genre_id", "changes_description",
         "songmap", "has_project_file",
         "lyrics", "chords", "notes",
     ];
@@ -98,6 +98,11 @@ class DjSong extends Model
     public function sets()
     {
         return $this->belongsToMany(DjSet::class);
+    }
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
     }
     #endregion
 

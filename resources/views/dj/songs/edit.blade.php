@@ -29,6 +29,17 @@
                 :options="$tempos" :value="$song?->tempo"
                 small
             />
+            <x-select name="genre_id" label="Gatunek"
+                :options="$genres" :value="$song?->genre_id"
+                empty-option
+                small
+            />
+            <x-input name="changes_description" label="Opis aranżu"
+                type="TEXT" :value="$song?->changes_description"
+            />
+        </div>
+
+        <div class="flex-right center">
             <x-input name="songmap" label="Mapa utworu"
                 type="text" :value="$song?->songmap"
                 small

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DjSet;
 use App\Models\DjSong;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 
 class DjController extends Controller
@@ -27,10 +28,12 @@ class DjController extends Controller
     {
         $song = DjSong::find($id);
         $tempos = collect(DjSong::TEMPOS)->mapWithKeys(fn ($t) => [$t["code"] => "$t[icon] $t[label]"])->toArray();
+        $genres = Genre::ordered()->get()->pluck("name", "id");
 
         return view("dj.songs.edit", compact(
             "song",
             "tempos",
+            "genres",
         ));
     }
 

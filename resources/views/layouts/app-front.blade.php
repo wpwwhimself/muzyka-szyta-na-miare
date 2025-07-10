@@ -21,7 +21,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
-    <script src="{{ asset("js/front.js") }}" defer></script>
+    <script src="{{ asset("js/front.js") }}"></script>
     <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@sidsbrmnn/scrollspy@1.x/dist/scrollspy.min.js"></script>
     @bukStyles

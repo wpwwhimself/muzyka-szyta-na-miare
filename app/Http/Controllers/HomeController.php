@@ -84,6 +84,13 @@ class HomeController extends Controller
 
     public function dj()
     {
-        return view("front.dj");
+        // $showcases = DjShowcase::orderBy("created_at", "desc")->limit(5)->get(); //todo otworzyć, jak będą showcase'y
+        $showcases = [];
+        $genres = Genre::orderBy("name")->get();
+
+        return view("front.dj", compact(
+            "showcases",
+            "genres",
+        ));
     }
 }

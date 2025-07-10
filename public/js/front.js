@@ -37,19 +37,19 @@ function filterShowcases(mode) {
     })
 }
 
-$(document).ready(function(){
+function getSongList(domain = undefined) {
     /**
      * load and display songs
      * it's set here to accelerate loading speed
      */
     $.get({
-        url: "/api/songs/info",
+        url: "/api/songs/info" + (domain ? "?for=" + domain : ""),
         success: function (res) {
             if(res.length > 0){
                 const list = $("#songs ul");
                 $("#songs .grayed-out").remove();
                 for(song of res) {
-                    const tags = song.tags.map(tag => tag.id).join(",");
+                    const tags = song.tags?.map(tag => tag.id).join(",");
 
                     list.append(`<li data-song-genre="${song.genre_id}" data-song-tags="${tags}">
                         <span>${song.title ?? 'utwór bez tytułu'}</span>
@@ -90,7 +90,9 @@ $(document).ready(function(){
             }
         }
     });
+}
 
+$(document).ready(function(){
     /**
      * scrollspy -- nav highlights
      */

@@ -97,6 +97,11 @@ class DjSong extends Model
     public function getHasShowcaseFileAttribute(){
         return Storage::exists("showcases/$this->id.ogg");
     }
+
+    //* compatibility with Songs
+    public function getNotesAttribute() {
+        return $this->changes_description;
+    }
     #endregion
 
     #region relations

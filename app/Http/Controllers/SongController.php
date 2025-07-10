@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DjSong;
 use App\Models\FileTag;
 use App\Models\Genre;
 use App\Models\Showcase;
@@ -184,12 +185,22 @@ class SongController extends Controller
     }
 
     public function getForFront(){
-        $songs = Song::with("tags")
-            ->orderByRaw("ISNULL(title)")
-            ->where("id", "not like", "O%")
-            ->orderBy("title")
-            ->orderBy("artist")
-            ->get();
+        $song_groups = [
+            "songs" => Song::with("tags")
+                ->where("id", "not like", "O%")
+                ->get(),
+            "dj_songs" => DjSong::all(),
+        ];
+        
+        $songs = $song_groups["dj_songs"];
+        if (request()->get("for") == "podklady") {
+            $songs = $songs->merge($song_groups["songs"]);
+        }
+
+        $songs = $songs->sortBy([
+            fn ($a, $b) => ($a["title"] ?? "bez tytułu") <=> ($b["title"] ?? "bez tytułu"), // nulls last
+            "artist",
+        ]);
 
         return $songs;
     }

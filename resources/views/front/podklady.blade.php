@@ -184,6 +184,7 @@
             </div>
 
             <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
+            <script defer>getSongList("podklady");</script>
             <div class="popup">
                 <div class="popup-contents flex-down center">
                     <h3 class="song-full-title"></h3>

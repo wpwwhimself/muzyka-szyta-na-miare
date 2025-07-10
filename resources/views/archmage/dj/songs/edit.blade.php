@@ -2,13 +2,17 @@
 
 @section("content")
 
-<section>
-    <form action="{{ route('dj-process-song') }}" method="POST">
-        @csrf
+<form action="{{ route('dj-process-song') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="id" value="{{ $song?->id ?? App\Models\DjSong::nextId() }}" />
 
-        <input type="hidden" name="id" value="{{ $song?->id ?? App\Models\DjSong::nextId() }}" />
+    <x-section title="Meta" icon="compact-disc">
+        <div class="flex-right center black-back">
+            <x-input name="id" label="ID"
+                type="text" :value="$song?->id"
+                small disabled
+            />
 
-        <div class="flex-right center">
             @foreach ([
                 ["title", "Tytuł"],
                 ["artist", "Artysta"],
@@ -38,7 +42,9 @@
                 type="TEXT" :value="$song?->changes_description"
             />
         </div>
+    </x-section>
 
+    <x-section title="Pomoce wykonawcze" icon="masks-theater">
         <div class="flex-right center">
             <x-input name="songmap" label="Mapa utworu"
                 type="text" :value="$song?->songmap"
@@ -62,16 +68,47 @@
             />
             @endforeach
         </div>
+    </x-section>
 
-        <div>
-            <x-button :action="route('dj-list-songs')" label="Wróć" icon="angles-left" small />
-            <x-button action="submit" name="action" value="save" icon="check" label="Zapisz" />
-            @if ($song)
-            <x-button :action="route('dj-gig-mode', ['song' => $song->id])" label="Podgląd" icon="microphone" small />
-            <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" danger />
-            @endif
+    @if ($song)
+    <x-section title="Reklama" icon="bullhorn">
+        <div class="flex-right center">
+            <x-extendo-section title="Showcase">
+                @if($song->has_showcase_file)
+                <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
+                @else
+                <span class="grayed-out">Brak showcase'u</span>
+                @endif
+
+                <input type="file" name="showcase_file" />
+                <x-button action="#/" id="showcase-file-button" :small="true"
+                    :icon="$song->has_showcase_file ? 'pencil' : 'plus'"
+                    label="{{ $song->has_showcase_file ? 'Podmień' : 'Dodaj' }} plik"
+                    />
+                <script>
+                const button = $("#showcase-file-button");
+                const file_input = $("input[name='showcase_file']");
+                button.click(() => file_input.trigger("click"));
+                file_input.change(function() {$(this).closest("form").attr("action", "{{ route('showcase-file-upload') }}").submit()})
+                </script>
+            </x-extendo-section>
+
+            <x-extendo-section title="Rolka">
+                <x-select name="reel_platform" label="Platforma" :options="$showcase_platforms" :value="$showcase?->platform ?? $platform_suggestion" />
+                {{-- <x-input type="url" name="reel_link" label="Link" :value="$showcase?->link" small /> --}}
+            </x-extendo-section>
         </div>
-    </form>
-</section>
+    </x-section>
+    @endif
+
+    <div>
+        <x-button :action="route('dj-list-songs')" label="Wróć" icon="angles-left" small />
+        <x-button action="submit" name="action" value="save" icon="check" label="Zapisz" />
+        @if ($song)
+        <x-button :action="route('dj-gig-mode', ['song' => $song->id])" label="Podgląd" icon="microphone" small />
+        <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" danger />
+        @endif
+    </div>
+</form>
 
 @endsection

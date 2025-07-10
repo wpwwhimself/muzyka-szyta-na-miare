@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DjSet;
 use App\Models\DjSong;
 use App\Models\Genre;
+use App\Models\ShowcasePlatform;
 use Illuminate\Http\Request;
 
 class DjController extends Controller
@@ -29,11 +30,23 @@ class DjController extends Controller
         $song = DjSong::find($id);
         $tempos = collect(DjSong::TEMPOS)->mapWithKeys(fn ($t) => [$t["code"] => "$t[icon] $t[label]"])->toArray();
         $genres = Genre::ordered()->get()->pluck("name", "id");
+        // $showcase = //todo odblokować jak już będą showcase'y
+        $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
+            ->pluck("name", "code");
+
+        $platform_suggestion = ShowcasePlatform::suggest()["code"];
+        //todo odblokować, jak już będą showcase'y
+        // if (!$showcase && $platform_suggestion) {
+        //     $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+        // }
 
         return view(user_role().".dj.songs.edit", compact(
             "song",
             "tempos",
             "genres",
+            // "showcase",
+            "showcase_platforms",
+            "platform_suggestion",
         ));
     }
 

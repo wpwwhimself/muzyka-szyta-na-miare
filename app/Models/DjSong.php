@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DjSong extends Model
@@ -91,6 +92,10 @@ class DjSong extends Model
         return collect($this->{$field})
             ->map(fn ($value, $part) => "//$part\n$value")
             ->join("\n\n");
+    }
+
+    public function getHasShowcaseFileAttribute(){
+        return Storage::exists("showcases/$this->id.ogg");
     }
     #endregion
 

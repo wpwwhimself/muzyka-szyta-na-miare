@@ -66,6 +66,9 @@
             <i class="fa-solid fa-circle-info" @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)></i>
         </span>
     </div>
+
+    <h2>Zobacz też:</h2>
+    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />

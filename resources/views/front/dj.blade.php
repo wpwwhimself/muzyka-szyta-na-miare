@@ -66,6 +66,9 @@
         @endforeach
     </div>
     <p>Przyjmuję też zlecenia na granie w okolicznych miejscowościach</p>
+
+    <h2>Zobacz też:</h2>
+    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />

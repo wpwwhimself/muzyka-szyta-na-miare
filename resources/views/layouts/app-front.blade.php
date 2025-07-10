@@ -93,7 +93,7 @@
     <section id="about">
         <h1>O mnie</h1>
         <div class="flex-right center">
-            <img class="hidden" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
+            <img class="hidden photo" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
             <ul class="hidden">
                 <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
                 <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>

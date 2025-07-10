@@ -152,7 +152,7 @@ setInterval(getSong, 10e3)
         </div>
     </div>
 
-    <div class="grid-2">
+    <div class="grid-2" style="align-items: normal;">
         <div class="buttons">
             <div v-for="mode in modes"
                 class="submit tight clickable"
@@ -170,25 +170,33 @@ setInterval(getSong, 10e3)
             </div>
         </div>
 
-        <div>
-            <table id="log-table">
-                <tr v-for="log in song?.work_time"
-                    :class="[
+        <div id="log-table" class="flex-right center">
+            <div v-for="log in song?.work_time"
+                class="plot-column"
+            >
+                <div class="plot-bar-container">
+                    <div :class="[
+                        'plot-bar',
                         log.now_working && 'accent'
                     ].filter(Boolean).join(' ')"
-                >
-                    <td>
-                        {{ modes.find(m => m.id == log.status_id).status_symbol }}
-                        {{ modes.find(m => m.id == log.status_id).status_name }}
-                    </td>
-                    <td class="bin clickable">
-                        <FontAwesomeIcon :icon="faTrash"
-                            @click="() => remove(song.id, log.status_id)"
-                        />
-                    </td>
-                    <td>{{ log.time_spent }}</td>
-                </tr>
-            </table>
+                        :style="{
+                            height: `${parseTime(log.time_spent) / Math.max(...song?.work_time.map(t => parseTime(t.time_spent))) * 100}px`,
+                        }"
+                    ></div>
+                </div>
+
+                <span class="plot-small-label">{{ modes.find(m => m.id == log.status_id).status_symbol }}</span>
+                <span class="plot-big-label">
+                    {{ modes.find(m => m.id == log.status_id).status_symbol }}
+                    <b>{{ modes.find(m => m.id == log.status_id).status_name }}</b>:
+                    {{ log.time_spent }}
+                </span>
+                <span class="bin clickable">
+                    <FontAwesomeIcon :icon="faTrash"
+                        @click="() => remove(song.id, log.status_id)"
+                    />
+                </span>
+            </div>
         </div>
     </div>
 </div>
@@ -213,14 +221,57 @@ setInterval(getSong, 10e3)
     display: grid;
     grid-template-columns: repeat(5, 1fr);
 }
-.bin {
-    opacity: 0;
-
-    #log-table tr:hover & {
-        opacity: 1;
-    }
-}
 .accent {
     font-weight: bold;
+}
+
+#log-table {
+    gap: 0;
+    position: relative;
+
+    & .plot-column {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-rows: auto 1.5em 1.5em;
+        justify-items: center;
+
+        & .plot-bar-container {
+            position: relative;
+            width: 1.25em;
+            height: 100%;
+
+            & .plot-bar {
+                background-color: var(--bg2);
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                border-radius: 0.25em;
+
+                &.accent {
+                    background-color: var(--acc);
+                }
+            }
+        }
+
+        & .plot-big-label {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 2;
+            text-align: center;
+
+            .plot-column:hover & {
+                display: block;
+            }
+        }
+
+        & .bin {
+            opacity: 0;
+
+            .plot-column:hover & {
+                opacity: 1;
+            }
+        }
+    }
 }
 </style>

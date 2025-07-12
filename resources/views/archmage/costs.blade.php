@@ -21,7 +21,7 @@
         <x-input type="date" name="created_at" label="Data" small :value="date('Y-m-d')" />
         <x-select name="cost_type_id" label="Typ" :options="$types" />
         <x-input type="text" name="desc" label="Opis" :small="true" />
-        <x-input type="number" name="amount" step="0.01" min="0" label="Wartość" />
+        <x-input type="number" name="amount" step="0.01" label="Wartość" />
         <input type="hidden" name="id" value="" />
         <x-button action="submit" icon="plus" label="Zatwierdź" />
     </form>

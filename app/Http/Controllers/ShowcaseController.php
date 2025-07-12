@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
+use App\Models\DjShowcase;
 use App\Models\OrganShowcase;
 use App\Models\Showcase;
 use App\Models\ShowcasePlatform;
@@ -17,6 +18,7 @@ class ShowcaseController extends Controller
     public function list(){
         $showcases = Showcase::orderBy("updated_at", "desc")->paginate(5);
         $organ_showcases = OrganShowcase::orderBy("updated_at", "desc")->paginate(5);
+        $dj_showcases = DjShowcase::orderBy("updated_at", "desc")->paginate(5);
         $client_showcases = ClientShowcase::orderBy("updated_at", "desc")->paginate(5);
 
         $all_songs = Song::orderBy("title")
@@ -27,7 +29,7 @@ class ShowcaseController extends Controller
 
         return view(user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],
-            compact("showcases", "organ_showcases", "client_showcases", "all_songs")
+            compact("showcases", "organ_showcases", "dj_showcases", "client_showcases", "all_songs")
         ));
     }
 
@@ -124,6 +126,39 @@ class ShowcaseController extends Controller
             return redirect()->route("organ-showcase-edit", ["showcase" => $showcase])->with("success", "Rolka poprawiona");
         } else if ($rq->action == "delete") {
             OrganShowcase::find($rq->id)->delete();
+            return redirect()->route("showcases")->with("success", "Rolka usunięta");
+        }
+    }
+    #endregion
+
+    #region dj
+    public function editDj(?DjShowcase $showcase = null)
+    {
+        $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
+            ->pluck("name", "code");
+
+        $platform_suggestion = ShowcasePlatform::suggest(true)["code"];
+        if (!$showcase && $platform_suggestion) {
+            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+        }
+
+        return view(user_role().".showcases.dj.edit", compact(
+            "showcase",
+            "showcase_platforms",
+            "platform_suggestion",
+        ));
+    }
+
+    public function processDj(Request $rq)
+    {
+        if ($rq->action == "save") {
+            $showcase = DjShowcase::updateOrCreate(
+                ["id" => $rq->id],
+                $rq->except(["_token", "action"])
+            );
+            return redirect()->route("dj-showcase-edit", ["showcase" => $showcase])->with("success", "Rolka poprawiona");
+        } else if ($rq->action == "delete") {
+            DjShowcase::find($rq->id)->delete();
             return redirect()->route("showcases")->with("success", "Rolka usunięta");
         }
     }

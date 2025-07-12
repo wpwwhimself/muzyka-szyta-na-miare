@@ -66,6 +66,9 @@
         @endforeach
     </div>
     <p>Przyjmuję też zlecenia na granie w okolicznych miejscowościach</p>
+
+    <h2>Zobacz też:</h2>
+    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />
@@ -76,11 +79,57 @@
     <p>🚧 Na razie nie zbieram opinii... Wkrótce się tu pojawią</p>
 </section>
 
-<section id="showcases">
-    <h1>Posłuchaj, jak brzmię</h1>
+<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="compact-disc">
+    <x-slot name="buttons">
+        @foreach ([
+            "rolki" => "reels",
+            "pełny katalog" => "list",
+        ] as $label => $mode)
+        <x-button action="#/" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
+        @endforeach
+    </x-slot>
 
-    <p>🚧 Na razie nie mam co pokazać... Wkrótce coś tu będzie</p>
-</section>
+    <div class="showcase-section flex-down spaced" data-mode="reels">
+        <h2>Najnowsze realizacje</h2>
+        <x-front.showcase-reels :showcases="$showcases" />
+    </div>
+
+    <div class="showcase-section flex-down spaced gone" data-mode="list">
+        <div id="songs">
+            <h2>
+                Wszystkie utwory, jakie mam w repertuarze
+                <x-tutorial>
+                    Kliknij ikonę płyty, aby odtworzyć próbkę
+                </x-tutorial>
+            </h2>
+
+            <h3>Filtruj:</h3>
+            <div class="flex-right keep-for-mobile center">
+                <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+
+                @foreach ($genres as $genre)
+                <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+                @endforeach
+
+                {{-- @foreach ($song_tags as $tag) --}}
+                {{-- <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small /> --}}
+                {{-- @endforeach --}}
+            </div>
+
+            <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
+            <script defer>getSongList("dj");</script>
+            <div class="popup">
+                <div class="popup-contents flex-down center">
+                    <h3 class="song-full-title"></h3>
+                    <p class="song-desc"></p>
+                    <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
+                    <x-file-player type="ogg" file="" is-showcase />
+                    <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
+                </div>
+            </div>
+        </div>
+    </div>
+</x-front.tabbed-section>
 
 <section id="prices" class="grid-2">
     <div class="black-back">

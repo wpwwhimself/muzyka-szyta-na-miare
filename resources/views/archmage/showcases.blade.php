@@ -2,6 +2,8 @@
 
 @section('content')
 
+<div class="grid-2">
+
 <x-section id="showcases-list" title="Lista reklam" icon="list">
     <x-slot name="buttons">
         <x-a :href="route('showcase-platforms')" icon="hashtag">Platformy</x-a>
@@ -34,9 +36,10 @@
     {{ $showcases->links() }}
 </x-section>
 
-<x-section id="organ-showcases-list" title="Rolki organowe" icon="list">
+@foreach (["organ" => "organowe", "dj" => "DJowskie"] as $reel_type => $label_part)
+<x-section id="{{ $reel_type }}-showcases-list" title="Rolki {{ $label_part }}" icon="list">
     <x-slot name="buttons">
-        <x-a :href="route('organ-showcase-edit')" icon="plus">Dodaj</x-a>
+        <x-a :href="route($reel_type.'-showcase-edit')" icon="plus">Dodaj</x-a>
     </x-slot>
 
     <table>
@@ -48,14 +51,14 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($organ_showcases as $showcase)
+            @forelse (${$reel_type."_showcases"} as $showcase)
             <tr>
                 <td>{!! $showcase->platformData?->icon !!}</td>
                 <td>
                     <a href="{{ $showcase->link }}" target="_blank">{{ $showcase->link }}</a>
                 </td>
                 <td>
-                    <a href="{{ route('organ-showcase-edit', ['showcase' => $showcase]) }}">
+                    <a href="{{ route($reel_type.'-showcase-edit', ['showcase' => $showcase]) }}">
                         <i class="fas fa-pencil" @popper(Edytuj)></i>
                     </a>
                 </td>
@@ -67,8 +70,9 @@
             @endforelse
         </tbody>
     </table>
-    {{ $organ_showcases->links() }}
+    {{ ${$reel_type."_showcases"}->links() }}
 </x-section>
+@endforeach
 
 <x-section id="client-showcases-list" title="Reklamy klienta" icon="list">
     <form action="{{ route('add-client-showcase') }}" method="POST" class="flex-right">
@@ -100,5 +104,7 @@
     </table>
     {{ $client_showcases->links() }}
 </x-section>
+
+</div>
 
 @endsection

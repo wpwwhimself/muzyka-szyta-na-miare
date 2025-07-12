@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClientShowcase;
+use App\Models\DjShowcase;
 use App\Models\Genre;
 use App\Models\OrganShowcase;
 use App\Models\QuestType;
@@ -84,6 +85,12 @@ class HomeController extends Controller
 
     public function dj()
     {
-        return view("front.dj");
+        $showcases = DjShowcase::orderBy("created_at", "desc")->limit(5)->get();
+        $genres = Genre::orderBy("name")->get();
+
+        return view("front.dj", compact(
+            "showcases",
+            "genres",
+        ));
     }
 }

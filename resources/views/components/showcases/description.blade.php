@@ -11,10 +11,12 @@ $openings = [
 
 Krótkie demo, jak powstała partia $partia do mojego podkładu. $flavortext',
     "organista" => '$tytuł | Shorty organisty',
+    "dj" => '$tytuł | Shorty ze sceny',
 ];
 $hashtags = [
     "podklady" => '#muzykaszytanamiarę #podkład #karaoke #cover #$autor #$gatunek #$instrument',
     "organista" => '#muzykaszytanamiarę #organy #msza #$pieśńczypsalm',
+    "dj" => '#muzykaszytanamiarę #dj #muzykalive #cover #$autor #$gatunek #$instrument',
 ];
 @endphp
 

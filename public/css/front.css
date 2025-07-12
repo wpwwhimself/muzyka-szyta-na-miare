@@ -193,13 +193,9 @@ ul.no-points {
     align-items: center;
     text-align: left;
 }
-#about img{
+#about .photo{
     border-radius: var(--size-m);
     width: var(--a-width);
-}
-#about p{
-    width: calc(var(--a-width) * 2);
-    text-align: left;
 }
 
 form button{

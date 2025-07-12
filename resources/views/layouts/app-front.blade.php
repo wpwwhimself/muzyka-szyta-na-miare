@@ -21,7 +21,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset("js/app.js") }}" defer></script>
-    <script src="{{ asset("js/front.js") }}" defer></script>
+    <script src="{{ asset("js/front.js") }}"></script>
     <script src="https://kit.fontawesome.com/97bfe258ce.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@sidsbrmnn/scrollspy@1.x/dist/scrollspy.min.js"></script>
     @bukStyles
@@ -93,7 +93,7 @@
     <section id="about">
         <h1>O mnie</h1>
         <div class="flex-right center">
-            <img class="hidden" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
+            <img class="hidden photo" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
             <ul class="hidden">
                 <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
                 <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>

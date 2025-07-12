@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DjSong extends Model
@@ -25,7 +26,7 @@ class DjSong extends Model
             "code" => 2,
         ],
         [
-            "label" => "średnie",
+            "label" => "umiarkowane",
             "icon" => "🙂",
             "code" => 3,
         ],
@@ -44,7 +45,7 @@ class DjSong extends Model
     protected $fillable = [
         "id",
         "title", "artist",
-        "key", "tempo",
+        "key", "tempo", "genre_id", "changes_description",
         "songmap", "has_project_file",
         "lyrics", "chords", "notes",
     ];
@@ -92,12 +93,26 @@ class DjSong extends Model
             ->map(fn ($value, $part) => "//$part\n$value")
             ->join("\n\n");
     }
+
+    public function getHasShowcaseFileAttribute(){
+        return Storage::exists("showcases/$this->id.ogg");
+    }
+
+    //* compatibility with Songs
+    public function getNotesAttribute() {
+        return $this->changes_description;
+    }
     #endregion
 
     #region relations
     public function sets()
     {
         return $this->belongsToMany(DjSet::class);
+    }
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
     }
     #endregion
 

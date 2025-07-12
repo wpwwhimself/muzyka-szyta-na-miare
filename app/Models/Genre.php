@@ -15,6 +15,12 @@ class Genre extends Model
         "name",
     ];
 
+    #region scopes
+    public function scopeOrdered($query) {
+        return $query->orderBy("name");
+    }
+    #endregion
+
     public function songs() {
         return $this->hasMany(Song::class);
     }

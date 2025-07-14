@@ -170,7 +170,7 @@ setInterval(getSong, 10e3)
             </div>
         </div>
 
-        <div id="log-table" class="flex-right center">
+        <div id="log-table" class="flex-right center nowrap">
             <div v-for="log in song?.work_time"
                 class="plot-column"
             >
@@ -226,7 +226,7 @@ setInterval(getSong, 10e3)
 }
 
 #log-table {
-    gap: 0;
+    gap: 0 0.25em;
     position: relative;
 
     & .plot-column {

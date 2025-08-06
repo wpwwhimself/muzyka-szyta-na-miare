@@ -162,6 +162,42 @@ class StatsController extends Controller
                 $hard_deadline_count[$label] += $count;
             }
 
+        // income per hour
+        $income_per_h = DB::table(DB::raw(<<<SQL
+            (
+                select
+                    swt.song_id,
+                    sec_to_time(sum(time_to_sec(swt.time_spent))) as time_spent_sum,
+                    sum(time_to_sec(swt.time_spent)) / 3600 as time_spent_sum_hours
+                from song_work_times swt
+                where swt.now_working = false
+                group by swt.song_id
+            ) swtsummary
+                join (
+                    select
+                        s.id,
+                        substring(q.created_at, 3, 5) as `month`,
+                        count(q.id) as quest_count,
+                        sum(q.price) as quest_price_sum
+                    from songs s
+                        left join quests q on s.id = q.song_id
+                    group by s.id, substring(q.created_at, 3, 5)
+                    order by quest_count desc
+                ) songs_and_quests on songs_and_quests.id = swtsummary.song_id
+        SQL))
+            ->selectRaw(<<<SQL
+                `month`,
+                sum(time_spent_sum_hours) as `time_spent_sum_hours`,
+                sum(quest_price_sum) as `quest_price_sum`,
+                round(sum(quest_price_sum) / sum(time_spent_sum_hours), 2) as `income_per_hour`
+            SQL)
+            ->groupBy("month")
+            ->orderByDesc("month")
+            ->limit(12)
+            ->get()
+            ->mapWithKeys(fn($val) => [$val->month => $val->income_per_hour])
+            ->sortKeys();
+
         $stats = [
             "summary" => [
                 "general" => [
@@ -321,12 +357,13 @@ class StatsController extends Controller
             "finances" => [
                 "income" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
                 "prop" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[1]]),
+                "prop_per_h" => $income_per_h,
                 "costs" => $recent_costs->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
                 "gross" => $recent_gross,
                 "total" => [
                     "main" => $finances_total,
                     "compared_to" => $finances_total_last_year,
-                ]
+                ],
             ],
             "songs" => [
                 "time_summary" => [

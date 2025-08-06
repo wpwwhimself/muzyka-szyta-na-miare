@@ -34,6 +34,7 @@
   <x-barplot title="Koszty" :data="$stats->finances->costs" :all-pln="true" />
   <x-barplot title="Dochody" :data="$stats->finances->gross" :all-pln="true" />
   <x-barplot title="Średnia cena 1 zlecenia" :data="$stats->finances->prop" :all-pln="true" />
+  <x-barplot title="Przychód na godzinę" :data="$stats->finances->prop_per_h" :all-pln="true" />
 </section>
 
 <div class="grid-2 force-block">

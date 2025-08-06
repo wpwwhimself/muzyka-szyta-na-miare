@@ -19,7 +19,9 @@ class StatusChange extends Model
         "date",
         "pinned",
     ];
-    protected $dates = ["date"];
+    protected $casts = [
+        "date" => "datetime",
+    ];
     // const CREATED_AT = "date";
     // const UPDATED_AT = "date";
     public $timestamps = false;

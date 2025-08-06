@@ -12,7 +12,11 @@ class Quest extends Model
 
     public $incrementing = false;
     protected $keyType = "string";
-    protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
+    protected $casts = [
+        "deadline" => "datetime",
+        "hard_deadline" => "datetime",
+        "delayed_payment" => "datetime",
+    ];
 
     protected $fillable = ["id", "price_code_override", "price", "paid", "status_id", "deadline", "delayed_payment", "wishes", "files_ready", "has_files_on_external_drive"];
 

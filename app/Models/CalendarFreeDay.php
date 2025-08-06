@@ -13,6 +13,8 @@ class CalendarFreeDay extends Model
         "date"
     ];
 
-    protected $dates = ["date"];
+    protected $casts = [
+        "date" => "datetime",
+    ];
     const UPDATED_AT = null;
 }

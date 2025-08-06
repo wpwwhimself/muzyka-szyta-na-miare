@@ -10,7 +10,9 @@ class SongWorkTime extends Model
     use HasFactory;
 
     protected $fillable = ["song_id", "status_id", "time_spent", "now_working", "since"];
-    protected $dates = ["since"];
+    protected $casts = [
+        "since" => "datetime",
+    ];
     public $timestamps = false;
 
     public function status() {

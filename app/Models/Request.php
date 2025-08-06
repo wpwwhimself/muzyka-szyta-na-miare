@@ -17,7 +17,11 @@ class Request extends Model
         "price_code", "price", "deadline", "hard_deadline", "delayed_payment",
         "status_id", "quest_id"
     ];
-    protected $dates = ["deadline", "hard_deadline", "delayed_payment"];
+    protected $casts = [
+        "deadline" => "datetime",
+        "hard_deadline" => "datetime",
+        "delayed_payment" => "datetime",
+    ];
 
     // rounded prices
     public function getPriceAttribute($val) {

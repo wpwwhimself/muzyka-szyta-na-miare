@@ -91,7 +91,7 @@
     @forelse ($quests_ongoing as $key => $quest)
     <x-quest-mini :quest="$quest" :no="$key + 1" />
     @empty
-    <p class="grayed-out">brak aktywnych zleceń</p>
+    <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
     @endforelse
 </x-section>
 

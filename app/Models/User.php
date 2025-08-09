@@ -86,7 +86,7 @@ class User extends Authenticatable
     }
 
     public function getIsWomanAttribute(){
-        return (substr(explode(" ", $this->name)[0], -1) == "a");
+        return (substr(explode(" ", $this->client_name)[0], -1) == "a");
     }
 
     public function getIsOldAttribute(){

@@ -116,7 +116,10 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
             Route::get('/safe/{id}/{filename}', 'show')->name('safe-show');
             Route::post('/safe/ver-desc-mod', "verDescMod")->name("ver-desc-mod");
 
-            Route::withoutMiddleware("auth")->get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
+            Route::withoutMiddleware("auth")
+                ->get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
+            Route::withoutMiddleware("auth")->domain(implode(".", [env("DJ_SUBDOMAIN"), env("APP_DOMAIN")]))
+                ->get("/showcase/show/{id}", "showcaseFileShow")->name("showcase-file-show");
             Route::post("/showcase/upload", "showcaseFileUpload")->name("showcase-file-upload");
         });
 
@@ -128,11 +131,11 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
 
             Route::prefix("organ")->group(function() {
                 Route::get("/edit/{showcase?}", "editOrgan")->name("organ-showcase-edit");
-                Route::post("/edit", "processOrgan")->name("organ-showcase-process"); 
+                Route::post("/edit", "processOrgan")->name("organ-showcase-process");
             });
             Route::prefix("dj")->group(function() {
                 Route::get("/edit/{showcase?}", "editDj")->name("dj-showcase-edit");
-                Route::post("/edit", "processDj")->name("dj-showcase-process"); 
+                Route::post("/edit", "processDj")->name("dj-showcase-process");
             });
 
             Route::prefix("platforms")->group(function() {

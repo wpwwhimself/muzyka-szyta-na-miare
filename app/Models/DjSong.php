@@ -54,12 +54,14 @@ class DjSong extends Model
 
     protected $appends = [
         "full_title",
+        "has_showcase_file",
         "tempo_pretty",
         "parts",
     ];
 
     #region attributes
     protected $casts = [
+        "has_showcase_file" => "boolean",
         "has_project_file" => "boolean",
         "lyrics" => "json",
         "chords" => "json",

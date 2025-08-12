@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceReady;
 use App\Mail\MassPayment;
 use App\Mail\PaymentReturned;
 use App\Models\CalendarFreeDay;
@@ -637,9 +638,23 @@ class StatsController extends Controller
     }
     public function invoiceVisibility(Request $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
-        Invoice::find($rq->id)->update(["visible" => $rq->visible]);
+        $invoice = Invoice::find($rq->id);
+        $invoice->update(["visible" => $rq->visible]);
 
-        return back()->with("success", $rq->visible ? "Faktura widoczna" : "Faktura schowana");
+        $res = $rq->visible ? "Faktura widoczna" : "Faktura schowana";
+        $sent = null;
+
+        if ($rq->visible) {
+            $users = $invoice->quests->map(fn ($q) => $q->client)->unique();
+            foreach ($users as $u) {
+                if (!$u->email) continue;
+
+                $sent = Mail::to($u)->send(new InvoiceReady($invoice, $u));
+                if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->client_name;
+            }
+        }
+
+        return back()->with("success", $res);
     }
     public function invoiceAdd(Request $rq){
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());

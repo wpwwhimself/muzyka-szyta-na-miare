@@ -191,7 +191,7 @@ class SongController extends Controller
                 ->get(),
             "dj_songs" => DjSong::all(),
         ];
-        
+
         $songs = $song_groups["dj_songs"];
         if (request()->get("for") == "podklady") {
             $songs = $songs->merge($song_groups["songs"]);
@@ -200,7 +200,7 @@ class SongController extends Controller
         $songs = $songs->sortBy([
             fn ($a, $b) => ($a["title"] ?? "bez tytułu") <=> ($b["title"] ?? "bez tytułu"), // nulls last
             "artist",
-        ]);
+        ])->values();
 
         return $songs;
     }

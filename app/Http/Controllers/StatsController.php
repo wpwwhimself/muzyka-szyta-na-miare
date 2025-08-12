@@ -626,6 +626,7 @@ class StatsController extends Controller
 
     public function invoice($id, Request $rq){
         $invoice = Invoice::with("quests")->findOrFail($id);
+        if (!(is_archmage() || $invoice->quests->map(fn ($q) => $q->client_id)->contains(Auth::id()))) return abort(403, "Nie masz uprawnień do tej faktury.");
 
         return (substr($rq->path(), 0, 3) == "api")
             ? response()->json(["invoice" => $invoice])

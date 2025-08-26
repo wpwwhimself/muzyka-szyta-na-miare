@@ -170,7 +170,7 @@ setInterval(getSong, 10e3)
             </div>
         </div>
 
-        <div id="log-table" class="flex-right center nowrap">
+        <div id="log-table" class="flex-right keep-for-mobile center nowrap">
             <div v-for="log in song?.work_time"
                 class="plot-column"
             >
@@ -238,7 +238,7 @@ setInterval(getSong, 10e3)
         & .plot-bar-container {
             position: relative;
             width: 1.25em;
-            height: 100%;
+            height: 7em;
 
             & .plot-bar {
                 background-color: var(--bg2);

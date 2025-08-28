@@ -43,7 +43,7 @@
             'pliki do '.$quest->deadline?->format('d.m.Y'),
         ]))"
         :warning="$warnings['quote']"
-        :extended="sumWarnings($warnings['quote'], true)"
+        :extended="true"
     >
         <div id="price-summary" class="hint-table">
             <div class="positions"></div>

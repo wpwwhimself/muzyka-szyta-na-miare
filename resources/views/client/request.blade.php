@@ -118,7 +118,6 @@
 
             <x-extendo-section>
                 @if ($request->price && $request->status_id == 5)
-                <x-tutorial>
                     @if ($request->deadline)
                     <p>
                         Termin oddania jest liczony do podanego dnia włącznie.
@@ -132,7 +131,6 @@
                         <li>BLIKiem na numer telefonu.</li>
                     </ul>
                     <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
-                </x-tutorial>
                 @endif
                 @if ($request->delayed_payment)
                 <x-warning>

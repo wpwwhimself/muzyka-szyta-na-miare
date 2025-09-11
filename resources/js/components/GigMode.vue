@@ -185,10 +185,10 @@ onMounted(() => {
         <div id="song-innards" class="flex-down">
             <template v-for="part in coloredParts(song.parts)">
                 <h2 :style="{ color: part.color }">{{ part.part }}</h2>
-                <DjSampleSetTileWrapper :data="song.samples[part.part]" />
-                <div class="lyrics">{{ song.lyrics[part.part] ?? undefined }}</div>
-                <pre class="chords">{{ song.chords[part.part] ?? undefined }}</pre>
-                <div class="ghost">{{ song.extra_notes[part.part] ?? undefined }}</div>
+                <DjSampleSetTileWrapper :data="song.samples ? song.samples[part.part] : null" />
+                <div class="lyrics">{{ song.lyrics ? song.lyrics[part.part] : null }}</div>
+                <pre class="chords">{{ song.chords ? song.chords[part.part] : null }}</pre>
+                <div class="ghost">{{ song.extra_notes ? song.extra_notes[part.part] : null }}</div>
             </template>
         </div>
     </Section>
@@ -212,7 +212,7 @@ onMounted(() => {
     grid-template-columns: 1.5em auto auto auto 1fr;
     gap: var(--size-m);
     align-items: flex-start;
-    
+
     & .lyrics {
         white-space-collapse: preserve-breaks;
     }

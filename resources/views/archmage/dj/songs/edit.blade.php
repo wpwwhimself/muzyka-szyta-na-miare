@@ -50,17 +50,19 @@
                 type="text" :value="$song?->songmap"
                 small
             />
-            <x-input name="has_project_file" label="Plik istnieje"
-                type="checkbox" :value="$song?->has_project_file"
+            <x-select name="dj_sample_set_id" label="Sample"
+                :value="$song?->dj_sample_set_id"
+                :options="$potential_sample_sets" empty-option
                 small
             />
         </div>
 
-        <div class="grid-3">
+        <div class="grid-3" style="grid-template-columns: repeat(4, 1fr);" role="song-helpers">
             @foreach ([
                 ["lyrics", "Tekst"],
                 ["chords", "Akordy"],
-                ["notes", "Notatki"],
+                ["samples", "Sample"],
+                ["extra_notes", "Notatki"],
             ] as [$name, $label])
             <x-input :name="$name" :label="$label"
                 type="TEXT" :value="$song?->jsonForEdit($name)"
@@ -110,5 +112,11 @@
         @endif
     </div>
 </form>
+
+<style>
+[role="song-helpers"] textarea {
+    height: 30em;
+}
+</style>
 
 @endsection

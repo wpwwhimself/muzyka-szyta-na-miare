@@ -236,6 +236,12 @@ Route::domain(implode(".", [env("PODKLADY_SUBDOMAIN"), env("APP_DOMAIN")]))->gro
                 Route::post("edit", "processSong")->name("dj-process-song");
             });
 
+            Route::prefix("sample-sets")->group(function () {
+                Route::get("list", "listSampleSets")->name("dj-list-sample-sets");
+                Route::get("edit/{id?}", "editSampleSet")->name("dj-edit-sample-set");
+                Route::post("edit", "processSampleSet")->name("dj-process-sample-set");
+            });
+
             Route::prefix("sets")->group(function () {
                 Route::get("list", "listSets")->name("dj-list-sets");
                 Route::get("edit/{id?}", "editSet")->name("dj-edit-set");

@@ -18,7 +18,12 @@
         </div>
 
         @if ($set)
-        <x-select name="song" label="Dodaj utwór" :options="$songs" :empty-option="true" :small="true" />
+        <div class="flex-right center middle">
+            <x-select name="song" label="Dodaj utwór" :options="$songs" :empty-option="true" :small="true" />
+            <x-select name="sample_set" label="Dodaj wszystkie utwory z sampla" :options="$sampleSets" :empty-option="true" :small="true" />
+        </div>
+
+        <progress id="loader" class="gone"></progress>
 
         <div id="song_list" class="flex-down center"></div>
 
@@ -34,6 +39,7 @@
                 </span>
             `)
             $("#song").val(null).trigger("change")
+            $("#sample_set").val(null).trigger("change")
         }
 
         songs.forEach((song) => {
@@ -45,6 +51,21 @@
                 if (!ev.target.value) return
                 addSong(ev.target.value)
             })
+        
+        $("#sample_set").select2({ allowClear: true, placeholder: "Wybierz..." })
+            .on("change", (ev) => {
+                if (!ev.target.value) return
+
+                $("#loader").removeClass("gone");
+                fetch(`/api/dj/gig-mode/sample-set/${ev.target.value}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.songs.forEach(song => addSong(`${song.id}: ${song.full_title}`));
+                    })
+                    .finally(() => {
+                        $("#loader").addClass("gone");
+                    });
+            });
         </script>
         @endif
 

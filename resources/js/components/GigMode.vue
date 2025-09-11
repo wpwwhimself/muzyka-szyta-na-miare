@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { faList, faCompactDisc, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faList, faCompactDisc, faVials, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import Section from "./x/Section.vue"
 import Tile from './x/Tile.vue';
 import Loader from './x/Loader.vue';
 import Button from './x/Button.vue';
+import DjSampleSetTileWrapper from './x/DjSampleSetTileWrapper.vue';
 import { set } from 'lodash';
 
 const url = "/api/dj/gig-mode/"
@@ -12,6 +13,7 @@ const params = new URLSearchParams(window.location.search)
 
 const songs = ref([])
 const sets = ref([])
+const sampleSets = ref([])
 const song = ref(null)
 const songset = ref(null)
 
@@ -20,7 +22,7 @@ const show_loader = ref(true)
 const headerFields = [
     { name: "key", label: "Tonacja" },
     { name: "tempo_pretty", label: "Tempo" },
-    { name: "songmap", label: "Mapa utworu" },
+    { name: "dj_sample_set_id", label: "Sample" },
 ]
 
 // #region functions
@@ -31,6 +33,7 @@ function getInitData() {
         .then(data => {
             songs.value = data.songs
             sets.value = data.sets
+            sampleSets.value = data.sampleSets
         })
         .finally(() => show_loader.value = false)
 
@@ -47,10 +50,10 @@ function openSong(s) {
         .finally(() => show_loader.value = false)
 }
 
-function openSet(s) {
+function openSet(s, mode = 'set') {
     const id = s.id ?? s
     show_loader.value = true
-    fetch(url + `set/${id}`)
+    fetch(url + `${mode}/${id}`)
         .then(res => res.json())
         .then(data => {
             songset.value = data
@@ -88,7 +91,7 @@ function backToInit() {
 function coloredParts(parts) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
         .map((a, i) => ({ letter: a, color: (i / 26 * 360 * 17) % 360 }))
-    return parts.map(part => ({ part: part, color: `hsl(${alphabet.find(a => part.startsWith(a.letter)).color}, 70%, 60%)` }))
+    return parts?.map(part => ({ part: part, color: `hsl(${alphabet.find(a => part.startsWith(a.letter)).color}, 70%, 60%)` }))
 }
 // #endregion
 
@@ -117,6 +120,16 @@ onMounted(() => {
 
         <div class="flex-right">
             <Tile v-for="set in sets" @click="openSet(set)">
+                <span class="accent">{{ set.name }}</span>
+                <span>{{ set.songs_count }} utworów</span>
+            </Tile>
+        </div>
+    </Section>
+
+    <Section title="Sample" :icon="faVials">
+        <div class="flex-right">
+            <Tile v-for="set in sampleSets" @click="openSet(set, 'sample-set')">
+                <span>{{ set.id }}</span>
                 <span class="accent">{{ set.name }}</span>
                 <span>{{ set.songs_count }} utworów</span>
             </Tile>
@@ -158,7 +171,7 @@ onMounted(() => {
             <Button @click="backToInit()">Powrót</Button>
         </template>
 
-        <div class="grid-3">
+        <div class="flex-right center middle">
             <div class="flex-down center" v-for="field in headerFields">
                 <span class="grayed-out">{{ field.label }}</span>
 
@@ -170,12 +183,13 @@ onMounted(() => {
         </div>
 
         <div id="song-innards" class="flex-down">
-            <div v-for="part in coloredParts(song.parts)" class="flex-right">
+            <template v-for="part in coloredParts(song.parts)">
                 <h2 :style="{ color: part.color }">{{ part.part }}</h2>
-                <div class="lyrics" v-if="song.lyrics && song.lyrics[part.part]">{{ song.lyrics[part.part] }}</div>
-                <pre class="chords" v-if="song.chords && song.chords[part.part]">{{ song.chords[part.part] }}</pre>
-                <div class="ghost" v-if="song.notes && song.notes[part.part]">{{ song.notes[part.part] }}</div>
-            </div>
+                <DjSampleSetTileWrapper :data="song.samples[part.part]" />
+                <div class="lyrics">{{ song.lyrics[part.part] ?? undefined }}</div>
+                <pre class="chords">{{ song.chords[part.part] ?? undefined }}</pre>
+                <div class="ghost">{{ song.extra_notes[part.part] ?? undefined }}</div>
+            </template>
         </div>
     </Section>
 </template>
@@ -194,18 +208,21 @@ onMounted(() => {
 }
 
 #song-innards {
+    display: grid;
+    grid-template-columns: 1.5em auto auto auto 1fr;
     gap: var(--size-m);
+    align-items: flex-start;
+    
+    & .lyrics {
+        white-space-collapse: preserve-breaks;
+    }
 
-    & > div {
-        align-items: flex-start;
+    & h2 {
+        text-align: center;
+    }
 
-        & .lyrics {
-            white-space-collapse: preserve-breaks;
-        }
-
-        & h2, & pre {
-            margin: 0;
-        }
+    & h2, & pre {
+        margin: 0;
     }
 }
 </style>

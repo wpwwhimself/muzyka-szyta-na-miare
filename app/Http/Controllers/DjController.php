@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DjSampleSet;
 use App\Models\DjSet;
 use App\Models\DjSong;
 use App\Models\Genre;
@@ -30,6 +31,7 @@ class DjController extends Controller
         $song = DjSong::find($id);
         $tempos = collect(DjSong::TEMPOS)->mapWithKeys(fn ($t) => [$t["code"] => "$t[icon] $t[label]"])->toArray();
         $genres = Genre::ordered()->get()->pluck("name", "id");
+        $potential_sample_sets = DjSampleSet::orderBy("name")->get()->mapWithKeys(fn ($s) => [$s->id => $s->full_name]);
         // $showcase = //todo odblokować jak już będą showcase'y
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
             ->pluck("name", "code");
@@ -44,6 +46,7 @@ class DjController extends Controller
             "song",
             "tempos",
             "genres",
+            "potential_sample_sets",
             // "showcase",
             "showcase_platforms",
             "platform_suggestion",
@@ -70,6 +73,41 @@ class DjController extends Controller
     }
     #endregion
 
+    #region sample sets
+    public function listSampleSets()
+    {
+        $sets = DjSampleSet::orderBy("name")->paginate(25);
+
+        return view(user_role().".dj.sample-sets.list", compact(
+            "sets",
+        ));
+    }
+
+    public function editSampleSet($id = null)
+    {
+        $set = DjSampleSet::find($id);
+
+        return view(user_role().".dj.sample-sets.edit", compact(
+            "set",
+        ));
+    }
+
+    public function processSampleSet(Request $rq)
+    {
+        $data = $rq->except(["_token", "action", "songs"]);
+
+        if ($rq->get("action") == "save") {
+            $set = DjSampleSet::updateOrCreate(["id" => $data["id"]], $data);
+            return redirect()->route("dj-edit-sample-set", ["id" => $set->id])->with("success", "Sample poprawiony");
+        } else if ($rq->get("action") == "delete") {
+            DjSampleSet::find($data["id"])->delete();
+            return back()->with("success", "Utwór usunięty");
+        }
+
+        abort(400, "Niewłaściwa akcja formularza");
+    }
+    #endregion
+
     #region sets
     public function listSets()
     {
@@ -87,10 +125,12 @@ class DjController extends Controller
             ->map(fn ($s) => "$s->id: $s->full_title")
             ->mapWithKeys(fn ($s) => [$s => $s])
             ->toArray();
+        $sampleSets = DjSampleSet::orderBy("name")->get()->mapWithKeys(fn ($s) => [$s->id => $s->full_name]);
 
         return view(user_role().".dj.sets.edit", compact(
             "set",
             "songs",
+            "sampleSets",
         ));
     }
 
@@ -125,10 +165,14 @@ class DjController extends Controller
         $sets = DjSet::withCount("songs")
             ->orderBy("name")
             ->get();
+        $sampleSets = DjSampleSet::withCount("songs")
+            ->orderBy("name")
+            ->get();
 
         return response()->json(compact(
             "songs",
             "sets",
+            "sampleSets",
         ));
     }
 
@@ -142,6 +186,13 @@ class DjController extends Controller
     public function gigModeSet($id)
     {
         $set = DjSet::with("songs")->find($id);
+
+        return response()->json($set);
+    }
+
+    public function gigModeSampleSet($id)
+    {
+        $set = DjSampleSet::with("songs")->find($id);
 
         return response()->json($set);
     }

@@ -16,6 +16,7 @@
 
         <div class="quest-meta">
             <p>{{ $song->tempo_pretty }}</p>
+            <p>{{ $song->sampleSet?->full_name }}</p>
         </div>
     </a>
     @empty

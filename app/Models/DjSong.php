@@ -46,26 +46,27 @@ class DjSong extends Model
         "id",
         "title", "artist",
         "key", "tempo", "genre_id", "changes_description",
-        "songmap", "has_project_file",
-        "lyrics", "chords", "notes",
+        "songmap", "dj_sample_set_id",
+        "lyrics", "chords", "samples", "extra_notes",
     ];
 
-    public const PROCESSABLEJSONS = ["lyrics", "chords", "notes"];
+    public const PROCESSABLEJSONS = ["lyrics", "chords", "samples", "extra_notes"];
 
     protected $appends = [
         "full_title",
         "has_showcase_file",
         "tempo_pretty",
         "parts",
+        "notes",
     ];
 
     #region attributes
     protected $casts = [
         "has_showcase_file" => "boolean",
-        "has_project_file" => "boolean",
         "lyrics" => "json",
         "chords" => "json",
-        "notes" => "json",
+        "samples" => "json",
+        "extra_notes" => "json",
     ];
 
     public function getFullTitleAttribute()
@@ -115,6 +116,11 @@ class DjSong extends Model
     public function genre()
     {
         return $this->belongsTo(Genre::class);
+    }
+
+    public function sampleSet()
+    {
+        return $this->belongsTo(DjSampleSet::class, "dj_sample_set_id");
     }
     #endregion
 

@@ -1,5 +1,3 @@
-@extends('errors::minimal')
-
-@section('title', __('Unauthorized'))
-@section('code', '401')
-@section('message', __('Unauthorized'))
+@extends("layouts.shipyard.error")
+@section("title", "Nie wiemy, kim jesteś")
+@section("description", "Musisz być zalogowany do przeglądania tej zawartości. Zaloguj się i spróbuj ponownie.")

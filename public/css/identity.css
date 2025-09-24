@@ -1,0 +1,13 @@
+/**
+ * Set up your page's identity
+ */
+
+:root {
+    /* set up theme in system settings */
+
+    /*** fonts ***/
+    --base-font: "Raleway", sans-serif;
+    --heading-font: "Krona One", sans-serif;
+
+    /* set up accent colors in system settings */
+}

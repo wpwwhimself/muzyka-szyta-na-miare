@@ -2,23 +2,27 @@
 
 namespace App\Models;
 
-use Attribute;
+use App\Traits\Shipyard\HasStandardAttributes;
+use App\Traits\Shipyard\HasStandardFields;
+use App\Traits\Shipyard\HasStandardScopes;
 use Carbon\CarbonInterval;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\ComponentAttributeBag;
 
 class Song extends Model
 {
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
-        "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "label" => "Utwory",
+        "icon" => "disc",
+        "description" => "...",
+        "role" => "technical",
+        "ordering" => 2,
     ];
 
     public $incrementing = false;
@@ -32,6 +36,130 @@ class Song extends Model
         "price_code", "notes",
         "has_recorded_reel", "has_original_mv",
     ];
+
+    #region presentation
+    public function __toString(): string
+    {
+        return $this->full_title;
+    }
+
+    public function optionLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->full_title,
+        );
+    }
+
+    public function displayTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.shipyard.app.h", [
+                "lvl" => 3,
+                "icon" => $this->icon ?? self::META["icon"],
+                "attributes" => new ComponentAttributeBag([
+                    "role" => "card-title",
+                ]),
+                "slot" => $this->full_title,
+            ])->render(),
+        );
+    }
+
+    public function displaySubtitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.shipyard.app.model.badges", [
+                "badges" => $this->badges,
+            ])->render(),
+        );
+    }
+
+    public function displayMiddlePart(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.shipyard.app.model.connections-preview", [
+                "connections" => self::connections(),
+                "model" => $this,
+            ])->render(),
+        );
+    }
+    #endregion
+
+    #region fields
+    use HasStandardFields;
+
+    public const FIELDS = [
+        // "<column_name>" => [
+        //     "type" => "<input_type>",
+        //     "column-types" => [ // for JSON
+        //         "<label>" => "<input_type>",
+        //     ],
+        //     "label" => "",
+        //     "hint" => "",
+        //     "icon" => "",
+        //     // "required" => true,
+        //     // "autofill-from" => ["<route>", "<model_name>"],
+        //     // "character-limit" => 999, // for text fields
+        //     // "hide-for-entmgr" => true,
+        //     // "role" => "",
+        // ],
+    ];
+
+    public const CONNECTIONS = [
+        // "<name>" => [
+        //     "model" => ,
+        //     "mode" => "<one|many>",
+        //     // "field_name" => "",
+        //     // "field_label" => "",
+        // ],
+    ];
+
+    public const ACTIONS = [
+        // [
+        //     "icon" => "",
+        //     "label" => "",
+        //     "show-on" => "<list|edit>",
+        //     "route" => "",
+        //     "role" => "",
+        //     "dangerous" => true,
+        // ],
+    ];
+    #endregion
+
+    // use CanBeSorted;
+    public const SORTS = [
+        // "<name>" => [
+        //     "label" => "",
+        //     "compare-using" => "function|field",
+        //     "discr" => "<function_name|field_name>",
+        // ],
+    ];
+
+    public const FILTERS = [
+        // "<name>" => [
+        //     "label" => "",
+        //     "icon" => "",
+        //     "compare-using" => "function|field",
+        //     "discr" => "<function_name|field_name>",
+        //     "mode" => "<one|many>",
+        //     "operator" => "",
+        //     "options" => [
+        //         "<label>" => <value>,
+        //     ],
+        // ],
+    ];
+
+    #region scopes
+    use HasStandardScopes;
+    #endregion
+
+    #region attributes
+    protected function casts(): array
+    {
+        return [
+            //
+        ];
+    }
+    
     protected $appends = [
         "full_title",
         "has_showcase_file",
@@ -39,32 +167,25 @@ class Song extends Model
         "now_working",
     ];
 
-    public function genre(){
-        return $this->belongsTo(Genre::class);
-    }
-    public function showcase(){
-        return $this->hasOne(Showcase::class);
-    }
-    public function clientShowcase() {
-        return $this->hasMany(ClientShowcase::class);
-    }
-    public function quests(){
-        return $this->hasMany(Quest::class);
-    }
-    public function workTime() {
-        return $this->hasMany(SongWorkTime::class)->orderByDesc("time_spent");
-    }
-    public function tags() {
-        return $this->belongsToMany(SongTag::class);
-    }
-    public function files()
-    {
-        return $this->hasMany(File::class)->orderByDesc("updated_at");
-    }
-    public function type()
-    {
-        return $this->belongsTo(QuestType::class, "type_letter", "code");
-    }
+    use HasStandardAttributes;
+
+    // public function badges(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => [
+    //             [
+    //                 "label" => "",
+    //                 "icon" => "",
+    //                 "class" => "",
+    //                 "style" => "",
+    //                 "condition" => "",
+    //             ],
+    //             [
+    //                 "html" => "",
+    //             ],
+    //         ],
+    //     );
+    // }
 
     public function getCostsAttribute() {
         return Cost::where("desc", "like", "%".$this->id."%")
@@ -102,4 +223,34 @@ class Song extends Model
     public function getTypeLetterAttribute(){
         return substr($this->id, 0, 1);
     }
+    #endregion
+
+    #region relations
+    public function genre(){
+        return $this->belongsTo(Genre::class);
+    }
+    public function showcase(){
+        return $this->hasOne(Showcase::class);
+    }
+    public function clientShowcase() {
+        return $this->hasMany(ClientShowcase::class);
+    }
+    public function quests(){
+        return $this->hasMany(Quest::class);
+    }
+    public function workTime() {
+        return $this->hasMany(SongWorkTime::class)->orderByDesc("time_spent");
+    }
+    public function tags() {
+        return $this->belongsToMany(SongTag::class);
+    }
+    public function files()
+    {
+        return $this->hasMany(File::class)->orderByDesc("updated_at");
+    }
+    public function type()
+    {
+        return $this->belongsTo(QuestType::class, "type_letter", "code");
+    }
+    #endregion
 }

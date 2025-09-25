@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Shipyard\User;
 use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
@@ -110,12 +111,12 @@ class UserNote extends Authenticatable
     ];
 
     public const CONNECTIONS = [
-        // "<name>" => [
-        //     "model" => ,
-        //     "mode" => "<one|many>",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "user" => [
+            "model" => User::class,
+            "mode" => "one",
+            // "field_name" => "",
+            // "field_label" => "",
+        ],
     ];
 
     public const ACTIONS = [
@@ -317,35 +318,9 @@ class UserNote extends Authenticatable
     #endregion
 
     #region relations
-    public function quests(){
-        return $this->hasMany(Quest::class, "client_id");
-    }
-
-    public function questsDone(){
-        return $this->hasMany(Quest::class, "client_id")
-            ->where("status_id", 19);
-    }
-
-    public function questsUnpaid(){
-        return $this->hasMany(Quest::class, "client_id")
-            ->where("paid", 0)
-            ->whereNotIn("status_id", [17, 18]);
-    }
-
-    public function questsRecent() {
-        return $this->hasMany(Quest::class, "client_id")
-            ->whereDate("updated_at", ">=", Carbon::today()->subMonths(3));
-    }
-
-    public function comments() {
-        return $this->hasMany(StatusChange::class, "changed_by")
-            ->whereIn("new_status_id", [14, 19])
-            ->whereNotNull("comment")
-            ->orderByDesc("date");
-    }
-
-    public function top10() {
-        return $this->morphMany(Top10::class, "entity");
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
     #endregion
 }

@@ -10,6 +10,14 @@ class QuestType extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     public function quests(){
         return Quest::where("id", "like", $this->code."%");
     }

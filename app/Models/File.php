@@ -10,6 +10,14 @@ class File extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $fillable = [
         "song_id",
         "variant_name", "version_name",

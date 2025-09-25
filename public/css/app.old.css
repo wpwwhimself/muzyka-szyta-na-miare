@@ -164,9 +164,7 @@ div, form{
 .flex-right :not(.first){ order: 99; }
 
 /* UNI COLORS */
-.showcase-highlight{
-    color: rgb(36, 172, 250);
-}
+
 .ghost{
     opacity: 0.4;
 }

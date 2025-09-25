@@ -10,6 +10,14 @@ class Request extends Model
 {
     use HasFactory, Uuids;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $fillable = [
         "made_by_me",
         "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",

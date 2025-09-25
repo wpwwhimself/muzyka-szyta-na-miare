@@ -9,6 +9,14 @@ class StatusChange extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $fillable = [
         "re_quest_id",
         "new_status_id",

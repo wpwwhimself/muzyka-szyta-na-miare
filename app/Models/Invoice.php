@@ -9,6 +9,14 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $fillable = [
         "full_code_override",
         "visible",

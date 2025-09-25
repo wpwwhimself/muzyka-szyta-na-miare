@@ -9,6 +9,14 @@ class DjSampleSet extends Model
 {
     public $incrementing = false;
     protected $keyType = "string";
+
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
     
     protected $fillable = [
         "id",

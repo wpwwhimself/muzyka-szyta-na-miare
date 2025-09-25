@@ -10,6 +10,14 @@ class ShowcasePlatform extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $primaryKey = 'code';
     public $incrementing = false;
     protected $keyType = 'string';

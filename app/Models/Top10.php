@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Top10 extends Model
 {
     use HasFactory;
+    
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
 
     protected $table = 'top10';
     public $timestamps = false;

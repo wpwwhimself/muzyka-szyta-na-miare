@@ -9,6 +9,14 @@ class FileTag extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $fillable = [
         "name",
         "icon",

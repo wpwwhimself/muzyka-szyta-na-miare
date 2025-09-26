@@ -45,7 +45,7 @@
 </table>
 
 @if ($suggest && $clickDays)
-<x-input type="checkbox" name="work_on_weekends" label="Licz weekendy" :small="true" value="{{ setting('work_on_weekends') }}" />
+<x-input type="checkbox" name="work_on_weekends" label="Licz weekendy" :small="true" value="{{ setting('msznm_work_on_weekends') }}" />
 <script>
     $(document).ready(function(){
         $("tr[date]").click((el)=>{

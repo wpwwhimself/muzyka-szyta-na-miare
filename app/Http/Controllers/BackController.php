@@ -183,26 +183,4 @@ class BackController extends Controller
             compact("page", "titles")
         ));
     }
-
-    public function settings(){
-        $settings = DB::table("settings")->get();
-
-        return view(user_role().".settings", array_merge(
-            ["title" => "Ustawienia"],
-            compact("settings")
-        ));
-    }
-
-    ////////////////////////////////////////////
-
-    public function updateSetting(HttpRequest $rq){
-        if(Auth::id() != 1) return;
-        foreach ($rq->except("_token") as $key => $value) {
-            DB::table("settings")
-                ->where("setting_name", $key)
-                ->update(["value_str" => $value])
-            ;
-        }
-        return back()->with("success", "Ustawienia zaktualizowane");
-    }
 }

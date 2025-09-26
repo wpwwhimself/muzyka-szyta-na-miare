@@ -36,7 +36,7 @@
                 @endif
             </span>
             <span {{ Popper::pop($times[$safe]) }}
-                @if ($times[$safe]->diffInDays() >= setting("safe_old_enough"))
+                @if ($times[$safe]->diffInDays() >= setting("msznm_safe_old_enough"))
                 class="success"
                 @endif
                 >

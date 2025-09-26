@@ -24,9 +24,9 @@ class Calendar extends Component
     {
         $this->clickDays = $clickDays;
         $this->suggest = $suggest;
-        $this->available_day_until = explode(",", setting("available_day_until"));
+        $this->available_day_until = explode(",", setting("msznm_available_day_until"));
 
-        $available_days_needed = setting("available_days_needed");
+        $available_days_needed = setting("msznm_available_days_needed");
         $min_length = 15;
         $length = max(
             $min_length,
@@ -80,7 +80,7 @@ class Calendar extends Component
         $is_free_day = !!(CalendarFreeDay::whereDate("date", Carbon::parse($day))->first());
 
         $return = [];
-        if(in_array($day_no, $workdays_free) || $is_free_day || (in_array($day_no, $weekend) && !setting("work_on_weekends"))) $return[] = "free";
+        if(in_array($day_no, $workdays_free) || $is_free_day || (in_array($day_no, $weekend) && !setting("msznm_work_on_weekends"))) $return[] = "free";
         if(in_array($day_no, $weekend)) $return[] = "weekend";
         return implode(" ", $return);
     }

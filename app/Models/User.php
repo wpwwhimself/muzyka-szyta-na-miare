@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class User extends ShipyardUser
 {
+    public const FROM_SHIPYARD = true;
+
     #region fields
     public const CONNECTIONS = [
         "roles" => [

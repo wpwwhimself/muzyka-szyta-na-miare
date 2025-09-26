@@ -39,5 +39,5 @@
 <p>
     Z uwagi na ograniczoną ilość miejsca na serwerze, procedura obejmuje czyszczenie starych Sejfów.
     Po wywołaniu, Sprzątacz sprawdza wielkość plików we wszystkich Sejfach
-    oraz usuwa katalogi starsze niż {{ setting("safe_old_enough") }} dni.
+    oraz usuwa katalogi starsze niż {{ setting("msznm_safe_old_enough") }} dni.
 </p>

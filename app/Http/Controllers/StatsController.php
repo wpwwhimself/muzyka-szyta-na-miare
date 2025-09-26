@@ -596,7 +596,7 @@ class StatsController extends Controller
             "Wydano" => $losses_other,
             "Wypłacono" => $losses_payments,
             "Saldo na dziś" => $balance_now,
-            "Można wypłacić" => round(max($balance_now - setting("min_account_balance"), 0), 2),
+            "Można wypłacić" => round(max($balance_now - setting("msznm_min_account_balance"), 0), 2),
         ];
         $gains = $gains->get();
         $losses = $losses->get();

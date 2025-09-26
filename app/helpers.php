@@ -10,19 +10,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-/**
- * SETTING GETTER
- */
-if(!function_exists("local_setting")){
-    function local_setting($setting_name){
-        return DB::table("local_settings")->where("setting_name", $setting_name)->value("value_str");
-    }
-}
 if(!function_exists("QUEST_MINIMAL_PRICES")){
     function QUEST_MINIMAL_PRICES(){
         return array_combine(
             [1, 2, 3],
-            explode(",", local_setting("quest_minimal_price"))
+            explode(",", setting("msznm_quest_minimal_price"))
         );
     }
 }
@@ -32,12 +24,12 @@ if(!function_exists("QUEST_MINIMAL_PRICES")){
  */
 if(!function_exists("VETERAN_FROM")){
     function VETERAN_FROM(){
-        return local_setting("veteran_from");
+        return setting("msznm_veteran_from");
     }
 }
 if(!function_exists("CURRENT_PRICING")){
     function CURRENT_PRICING(){
-        return local_setting("current_pricing");
+        return setting("msznm_current_pricing");
     }
 }
 if(!function_exists("BEGINNING")){
@@ -261,7 +253,7 @@ if(!function_exists("price_calc")){
  */
 if(!function_exists("get_next_working_day")){
     function get_next_working_day(){
-        $workdays_capacity = explode(",", local_setting("available_day_until"));
+        $workdays_capacity = explode(",", setting("msznm_available_day_until"));
         $free_days_soon = CalendarFreeDay::where("date", ">=", Carbon::today())
             ->get()->pluck("date")->toArray();
 
@@ -309,7 +301,7 @@ if(!function_exists("pricing")){
             //loop for cycling through pricing schemas
             for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);
-                $this_pricing_since = Carbon::parse(local_setting("pricing_".$next_letter."_since"));
+                $this_pricing_since = Carbon::parse(setting("msznm_pricing_".$next_letter."_since"));
                 if($client_since->lt($this_pricing_since)) return $letter;
             }
         }

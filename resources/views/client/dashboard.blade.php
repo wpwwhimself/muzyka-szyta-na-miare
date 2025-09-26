@@ -30,7 +30,7 @@
                     <i class="fa-solid fa-user-shield"></i> stały klient
                     @else
                     <i class="fa-solid fa-user"></i> klient początkujący<br>
-                    <i>pozostało zleceń: {{ setting("veteran_from") - $quests_total }}</i>
+                    <i>pozostało zleceń: {{ setting("msznm_veteran_from") - $quests_total }}</i>
                     @endif
                 </span>
 

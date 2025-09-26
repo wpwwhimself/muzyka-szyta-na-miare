@@ -1,16 +1,9 @@
-@extends("layouts.app-front")
-@section("subtitle", "Oprawa mszy okolicznościowych w Twoim stylu")
-
-@section("bullets")
-
-<li>Szukasz muzyka lub zespołu, który uświetni Wasz ślub?</li>
-<li>Potrzebujesz organisty na mszę jubileuszową lub urodzinową?</li>
-<li>Chcesz wynająć trębacza na ceremonię pogrzebu?</li>
-<strong>Jesteś we właściwym miejscu!</strong>
-
-@endsection
-
-@section("content")
+<ul class="section-like">
+    <li>Szukasz muzyka lub zespołu, który uświetni Wasz ślub?</li>
+    <li>Potrzebujesz organisty na mszę jubileuszową lub urodzinową?</li>
+    <li>Chcesz wynająć trębacza na ceremonię pogrzebu?</li>
+    <strong>Jesteś we właściwym miejscu!</strong>
+</ul>
 
 <section id="offer">
     <h1>Jak mogę wzbogacić Twoją uroczystość?</h1>
@@ -67,9 +60,6 @@
         @endforeach
     </div>
     <p>Przyjmuję też zlecenia na granie w okolicznych miejscowościach</p>
-
-    <h2>Zobacz też:</h2>
-    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />
@@ -124,5 +114,3 @@
         </ul>
     </div>
 </section>
-
-@endsection

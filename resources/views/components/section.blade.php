@@ -1,11 +1,22 @@
 @props([
-    "title",
-    "icon",
+    "title" => null,
+    "icon" => null,
+    "scissors" => false,
 ])
 
-<section {{ $attributes->class(["container"]) }}>
+<section {{ $attributes->class(["container", "sc-line" => $scissors]) }}>
+    @if ($scissors)
+    <x-sc-scissors />
+    @endif
+
+    @if ($title)
     <div class="section-header">
-        <h1><i class="fa-solid fa-{{ $icon }}"></i> {{ $title }}</h1>
+        <h1>
+            @if ($icon)
+            <x-shipyard.app.icon :name="$icon" />
+            @endif
+            {{ $title }}
+        </h1>
 
         @isset($buttons)
         <div class="flex-right middle">
@@ -13,6 +24,7 @@
         </div>
         @endisset
     </div>
+    @endif
 
     @isset($slot)
     {{ $slot }}

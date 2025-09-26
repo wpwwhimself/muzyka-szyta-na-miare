@@ -1,16 +1,9 @@
-@extends("layouts.app-front")
-@section("subtitle", "Muzyka na żywo taka, jaką chcesz")
-
-@section("bullets")
-
-<li>Szukasz zespołu na koncert?</li>
-<li>Potrzebujesz DJa na wesele lub imprezę?</li>
-<li>Chcesz, żeby muzyka, do jakiej się bawisz, była grana na żywo?</li>
-<strong>Jesteś we właściwym miejscu!</strong>
-
-@endsection
-
-@section("content")
+<ul class="section-like">
+    <li>Szukasz zespołu na koncert?</li>
+    <li>Potrzebujesz DJa na wesele lub imprezę?</li>
+    <li>Chcesz, żeby muzyka, do jakiej się bawisz, była grana na żywo?</li>
+    <strong>Jesteś we właściwym miejscu!</strong>
+</ul>
 
 <section id="offer">
     <h1>Jak mogę uświetnić Twoją imprezę?</h1>
@@ -66,9 +59,6 @@
         @endforeach
     </div>
     <p>Przyjmuję też zlecenia na granie w okolicznych miejscowościach</p>
-
-    <h2>Zobacz też:</h2>
-    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />
@@ -164,5 +154,3 @@
         </ul>
     </div>
 </section>
-
-@endsection

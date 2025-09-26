@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 if (file_exists(__DIR__.'/Shipyard/shipyard.php')) require __DIR__.'/Shipyard/shipyard.php';
 
-Route::get('/', [HomeController::class, "podklady"])->name("home-podklady");
+Route::get('/', [HomeController::class, "index"])->name("home");
 
 Route::controller(AuthController::class)->prefix("auth")->group(function(){
     Route::get('/', "input")->name("login");
@@ -264,10 +264,6 @@ Route::get("/mp/{method}/{params}", function($method, $params = null){
 
 // Route::domain(implode(".", [env("DJ_SUBDOMAIN"), env("APP_DOMAIN")]))->group(function(){
 //     Route::get('/', [HomeController::class, "dj"])->name("home-dj");
-// });
-
-// Route::domain(env("APP_DOMAIN"))->group(function(){
-//     Route::get('/', [HomeController::class, "index"])->name("home");
 // });
 
 /*

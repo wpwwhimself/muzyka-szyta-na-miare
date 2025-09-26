@@ -1,16 +1,9 @@
-@extends("layouts.app-front")
-@section("subtitle", "Podkłady i aranże dopasowane do Twoich potrzeb")
-
-@section("bullets")
-
-<li>Nie możesz znaleźć dobrego podkładu muzycznego do swojej ulubionej piosenki?</li>
-<li>Szukasz nut lub partytury dla siebie i swojego zespołu?</li>
-<li>Masz pomysł na własny utwór i chcesz go wcielić w życie?</li>
-<strong>Jesteś we właściwym miejscu!</strong>
-
-@endsection
-
-@section("content")
+<ul class="section-like">
+    <li>Nie możesz znaleźć dobrego podkładu muzycznego do swojej ulubionej piosenki?</li>
+    <li>Szukasz nut lub partytury dla siebie i swojego zespołu?</li>
+    <li>Masz pomysł na własny utwór i chcesz go wcielić w życie?</li>
+    <strong>Jesteś we właściwym miejscu!</strong>
+</ul>
 
 <section id="offer">
     <h1>Co mogę dla Ciebie zrobić?</h1>
@@ -66,9 +59,6 @@
             <i class="fa-solid fa-circle-info" @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)></i>
         </span>
     </div>
-
-    <h2>Zobacz też:</h2>
-    <x-front.services :except="Str::of(Route::currentRouteName())->afterLast('-')" />
 </section>
 
 <x-sc-hr />
@@ -250,10 +240,6 @@
     </div>
 </section>
 
-@endsection
-
-@section("contact-form")
-
 <section id="contact">
     <h1>Napisz już teraz</h1>
     <form method="post" action="{{ route("add-request-back") }}" id='contactform' class="black-back flex-down hidden">
@@ -303,5 +289,3 @@
             />
     </form>
 </section>
-
-@endsection

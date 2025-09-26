@@ -1,60 +1,66 @@
-*{
-    transition: all 0.5s;
-}
-header{
-    padding: var(--size-xs) 4em;
-    justify-content: space-between;
-    position: sticky; top: 0;
-    z-index: 15;
-}
-header .logo{
-    height: 3em;
-}
 b, strong{
     color: var(--acc);
 }
 
-section{
-    text-align: center;
-    margin: var(--size-m) auto;
-    width: 90vw;
+.company-name{
+    align-items: center;
+    text-align: left;
 
-    &:not(#showcases, .sc-line) {
-        border: none;
+    & .logo{
+        height: 12em;
+    }
+
+    & h1{
+        margin: 0;
+    }
+
+    & p{
+        margin-bottom: 0;
     }
 }
-section>div{
-    margin-bottom: var(--size-m);
-}
-
 
 #home{
-    font-size: var(--size-l);
+    font-size: 1.25em;
     box-sizing: border-box;
     margin: 3em auto 0; padding: 3em 10em;
     display: flex; justify-content: center; align-items: center; flex-direction: column;
+
+    & .appear-cycle {
+        & > span {
+            position: absolute;
+            animation: appearing 9s infinite;
+            opacity: 0;
+            --target-opacity: 1;
+
+            &:nth-child(2) {
+                animation-delay: 3s;
+            }
+            &:nth-child(3) {
+                animation-delay: 6s;
+            }
+        }
+    }
+
+    & li{
+        list-style-type: none;
+    }
 }
-#home li{
-    list-style-type: none;
+
+[role="services"] .icon{
+    height: 5em;
+    margin: var(--size-xs);
+
+    &.small {
+        height: 1.6666em;
+        display: block;
+    }
 }
+
 ul.no-points {
     padding-left: 0;
     & li {
         list-style-type: none;
     }
-}
-.company-name{
-    align-items: center;
-    text-align: left;
-}
-.company-name .logo{
-    height: 12em;
-}
-.company-name h1{
-    margin: 0;
-}
-.company-name p{
-    margin-bottom: 0;
 }
 
 #offer .main{
@@ -111,6 +117,42 @@ ul.no-points {
     }
     & img:hover{
         filter: grayscale(0.2);
+    }
+}
+
+section{
+    text-align: center;
+    margin: 1em auto;
+    width: 90vw;
+
+    &:not(#showcases, .sc-line) {
+        border: none;
+    }
+
+    & > div{
+        margin-bottom: 1em;
+    }
+}
+
+[role="services"] {
+    & h2,
+    & p {
+        margin: 0;
+    }
+
+    & > p {
+        margin-block: 3em 1em;
+        text-align: center;
+    }
+
+    & .icon{
+        height: 5em;
+        margin: var(--size-xs);
+
+        &.small {
+            height: 1.6666em;
+            display: block;
+        }
     }
 }
 

@@ -107,3 +107,11 @@
         </ul>
     </div>
 </section>
+
+<x-shipyard.ui.button
+    label="Złóż zapytanie"
+    icon="send"
+    action="none"
+    onclick="openModal('send-organista-request')"
+    class="major primary"
+/>

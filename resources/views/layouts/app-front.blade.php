@@ -15,8 +15,6 @@
     </x-slot:top>
 
     <x-slot:bottom>
-        tu będzie nawigacja
-
         <x-shipyard.auth.user-badge />
     </x-slot:bottom>
 </x-shipyard.app.big.header>

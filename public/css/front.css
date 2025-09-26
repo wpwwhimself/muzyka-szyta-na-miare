@@ -2,6 +2,12 @@ b, strong{
     color: var(--primary);
 }
 
+.button.major {
+    font-size: 2em;
+    display: block;
+    text-align: center;
+}
+
 .company-name{
     align-items: center;
     text-align: left;

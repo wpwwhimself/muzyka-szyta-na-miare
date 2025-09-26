@@ -246,3 +246,11 @@
         </ul>
     </div>
 </section>
+
+<x-shipyard.ui.button
+    label="Złóż zapytanie"
+    icon="send"
+    action="none"
+    onclick="openModal('send-podklady-request')"
+    class="major primary"
+/>

@@ -55,6 +55,10 @@ Route::middleware("auth")->group(function(){
         Route::get('/add', "add")->name("add-request");
 
         Route::withoutMiddleware("auth")->group(function(){
+            Route::post("/aaaa", "aaaa")->name("requests.new"); //todo uzupełnić
+            Route::post("/aaab", "aaab")->name("organ-requests.new"); //todo uzupełnić
+            Route::post("/aaac", "aaac")->name("dj-requests.new"); //todo uzupełnić
+
             Route::get('/view/{id}', "show")->name("request");
             Route::post('/add-back', "processAdd")->name("add-request-back");
             Route::post('/mod-back', "processMod")->name("mod-request-back");

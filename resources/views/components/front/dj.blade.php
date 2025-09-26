@@ -147,3 +147,11 @@
         </ul>
     </div>
 </section>
+
+<x-shipyard.ui.button
+    label="Złóż zapytanie"
+    icon="send"
+    action="none"
+    onclick="openModal('send-dj-request')"
+    class="major primary"
+/>

@@ -23,7 +23,7 @@
             <x-select name="sample_set" label="Dodaj wszystkie utwory z sampla" :options="$sampleSets" :empty-option="true" :small="true" />
         </div>
 
-        <progress id="loader" class="gone"></progress>
+        <progress id="loader" class="hidden"></progress>
 
         <div id="song_list" class="flex-down center"></div>
 
@@ -51,19 +51,19 @@
                 if (!ev.target.value) return
                 addSong(ev.target.value)
             })
-        
+
         $("#sample_set").select2({ allowClear: true, placeholder: "Wybierz..." })
             .on("change", (ev) => {
                 if (!ev.target.value) return
 
-                $("#loader").removeClass("gone");
+                $("#loader").removeClass("hidden");
                 fetch(`/api/dj/gig-mode/sample-set/${ev.target.value}`)
                     .then(res => res.json())
                     .then(data => {
                         data.songs.forEach(song => addSong(`${song.id}: ${song.full_title}`));
                     })
                     .finally(() => {
-                        $("#loader").addClass("gone");
+                        $("#loader").addClass("hidden");
                     });
             });
         </script>

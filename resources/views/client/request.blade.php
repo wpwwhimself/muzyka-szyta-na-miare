@@ -210,7 +210,7 @@
                 <x-button label="Nie" icon="times" action="#/" />
             </div>
         </div>
-        <div id="opinion-2" class="gone">
+        <div id="opinion-2" class="hidden">
             <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
             <div>
                 <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
@@ -219,7 +219,7 @@
                 <x-button optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
             </div>
             <input type="hidden" name="optbc">
-            <div id="opinion-inputs" class="flex-down gone spaced">
+            <div id="opinion-inputs" class="flex-down hidden spaced">
                 <x-input type="text" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
                 <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
                 <div class="priority" for="opinion_deadline">
@@ -235,7 +235,7 @@
                 <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
             </div>
         </div>
-        <div id="opinion-3" class="gone">
+        <div id="opinion-3" class="hidden">
             <h2>Na pewno? Termin realizacji też?</h2>
             @if ($request->delayed_payment)
             <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
@@ -251,8 +251,8 @@
                 $("#opinion-1 a.ghost").removeClass("ghost");
                 $(`#opinion-1 a:first`).addClass("ghost");
 
-                $("#opinion-2").removeClass("gone");
-                $("#opinion-3").addClass("gone");
+                $("#opinion-2").removeClass("hidden");
+                $("#opinion-3").addClass("hidden");
             });
 
             $("#opinion-2 a[optbc]").click(function(){
@@ -262,18 +262,18 @@
                 $("#opinion-2 a[optbc]").addClass("ghost");
                 $(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
 
-                $("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("gone");
-                $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("gone");
-                $("#opinion-2 #opinion-inputs").removeClass("gone");
-                $("#opinion-2 #opinion-submit").removeClass("gone");
+                $("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("hidden");
+                $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("hidden");
+                $("#opinion-2 #opinion-inputs").removeClass("hidden");
+                $("#opinion-2 #opinion-submit").removeClass("hidden");
             });
 
             $("#opinion-1 a:first").click(function(){
                 $("#opinion-1 a.ghost").removeClass("ghost");
                 $(`#opinion-1 a:last`).addClass("ghost");
 
-                $("#opinion-2").addClass("gone");
-                $("#opinion-3").removeClass("gone");
+                $("#opinion-2").addClass("hidden");
+                $("#opinion-3").removeClass("hidden");
             });
         });
         </script>

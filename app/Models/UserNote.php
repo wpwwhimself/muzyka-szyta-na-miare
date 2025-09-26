@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Shipyard\User;
+use App\Models\User;
 use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
@@ -28,7 +28,7 @@ class UserNote extends Authenticatable
         "icon" => "badge-account-horizontal",
         "description" => "Dane kontaktowe klientów, ich preferencje i zobowiązania",
         "role" => "technical",
-        "ordering" => 1,
+        "ordering" => 98,
     ];
 
     use SoftDeletes, Userstamps;
@@ -205,10 +205,10 @@ class UserNote extends Authenticatable
                     "label" => "Ulubiony"
                 ],
                 "active" => [
-                    "condition" => $this->top10->where("type", "active")->count() > 0,
+                    "condition" => $this->user->top10->where("type", "active")->count() > 0,
                     "icon" => "chart-line",
                     "class" => "accent success",
-                    "label" => "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()
+                    "label" => "Zleceń w ostatnich 3 mc: ".$this->user->questsRecent()->count()
                 ],
                 "picky" => [
                     "condition" => $this->pickiness >= 1.5 && is_archmage(),
@@ -251,11 +251,11 @@ class UserNote extends Authenticatable
     public function exp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->quests->where("status_id", 19)->count() + $this->extra_exp,
+            get: fn () => $this->user->questsDone->count() + $this->extra_exp,
         );
     }
 
-    public function isWoman(): Attribute 
+    public function isWoman(): Attribute
     {
         return Attribute::make(
             get: fn () => substr(explode(" ", $this->client_name)[0], -1) == "a",
@@ -288,7 +288,7 @@ class UserNote extends Authenticatable
         return Attribute::make(
             get: function () {
                 $correction_requests = StatusChange::where("changed_by", $this->id)->whereIn("new_status_id", [16, 26])->count();
-                $quests_total = $this->quests->count();
+                $quests_total = $this->user->quests->count();
                 if($quests_total == 0) return 0;
                 return round($correction_requests / $quests_total, 2);
             }
@@ -305,7 +305,7 @@ class UserNote extends Authenticatable
     public function upcomingQuestsCount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->quests->whereNotIn("status_id", [17, 18, 19])->count(),
+            get: fn () => $this->user->quests->whereNotIn("status_id", [17, 18, 19])->count(),
         );
     }
 

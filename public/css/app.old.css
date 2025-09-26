@@ -30,15 +30,7 @@ section{
     margin: var(--size-m) 0 0;
     padding: var(--size-m);
 }
-section, .section-like {
-    &.container {
-        container-name: section;
-        container-type: inline-size;
-    }
-}
-section:hover, .section-like:hover{
-    border-color: var(--fg);
-}
+
 .section-header{
     display: flex;
     justify-content: space-between;
@@ -287,13 +279,8 @@ input[type="color"] {
     background-color: rgb(var(--danger));
 }
 
-.black-back{
-    background-color: var(--bg1);
-    padding: var(--size-m);
-}
-.gone{
-    display: none;
-}
+
+
 video{
     width: 100%;
 }

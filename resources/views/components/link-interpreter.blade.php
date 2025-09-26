@@ -15,7 +15,7 @@
     @endforeach
     @if($editable)
     <x-button action="#/" class="link-edit-trigger" icon="pencil" label="" :small="true" />
-    <div class="link-edit-field gone">
+    <div class="link-edit-field hidden">
         <x-input type="text" name="link" label="Linki" :value="$link" :small="true" :data-editable="$editable" />
     </div>
     @endif

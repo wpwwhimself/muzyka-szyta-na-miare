@@ -248,7 +248,7 @@ setInterval(getSong, 10e3)
                 border-radius: 0.25em;
 
                 &.accent {
-                    background-color: var(--acc);
+                    background-color: var(--primary);
                 }
             }
         }

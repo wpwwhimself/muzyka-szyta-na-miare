@@ -41,6 +41,11 @@
     }
 }
 
+.black-back{
+    background-color: var(--bg-lite1);
+    padding: 1em;
+}
+
 footer .icon.invert-when-dark {
     filter: invert(1);
 }
@@ -51,6 +56,8 @@ footer .icon.invert-when-dark {
 
     &.top-only {
         border-left: none; border-bottom: none; border-right: none;
+        width: 100vw;
+        position: absolute; left: 0; right: 0;
     }
 
     & .sc-scissors {
@@ -75,6 +82,18 @@ footer .icon.invert-when-dark {
         height: 35px;
     }
 }
+
+section, .section-like {
+    &.container {
+        container-name: section;
+        container-type: inline-size;
+    }
+
+    &:hover {
+        border-color: var(--fg);
+    }
+}
+
 
 .section-like{
     border: 3px solid var(--bg-lite2);

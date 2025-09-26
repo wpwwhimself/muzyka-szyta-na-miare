@@ -1,14 +1,8 @@
-<ul class="section-like">
-    <li>Nie możesz znaleźć dobrego podkładu muzycznego do swojej ulubionej piosenki?</li>
-    <li>Szukasz nut lub partytury dla siebie i swojego zespołu?</li>
-    <li>Masz pomysł na własny utwór i chcesz go wcielić w życie?</li>
-    <strong>Jesteś we właściwym miejscu!</strong>
-</ul>
-
 <section id="offer">
     <h1>Co mogę dla Ciebie zrobić?</h1>
-    <div class="main black-back hidden">
-        <i class="fa-solid fa-volume-up"></i>
+
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 1;">
+        <x-shipyard.app.icon name="volume-high" />
         <div>
             <h2>Podkłady muzyczne</h2>
             <p>Odsłuchuję oryginał i nagrywam podkład według Twoich wymagań</p>
@@ -19,8 +13,8 @@
             <li>Brzmienie niemal <b>identyczne</b> z oryginałem</li>
         </ul>
     </div>
-    <div class="main black-back hidden">
-        <i class="fa-solid fa-music"></i>
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 2;">
+        <x-shipyard.app.icon name="music" />
         <div>
             <h2>Nuty i partytury</h2>
             <p>Odsłuchuję oryginał i przepisuję wszystko, co usłyszę</p>
@@ -31,8 +25,8 @@
             <li><b>Dowolny zakres instrumentów</b> – od partii solowej po orkiestrę</li>
         </ul>
     </div>
-    <div class="main black-back hidden">
-        <i class="fa-solid fa-user"></i>
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 3;">
+        <x-shipyard.app.icon name="account" />
         <div>
             <h2>Z myślą o Tobie</h2>
             <p>To, co dla Ciebie tworzę, może być dokładnie takie, jakie chcesz</p>
@@ -45,18 +39,24 @@
     </div>
 
     <h2>A także:</h2>
-    <div id="offer-other" class="flex-right center">
-        <span class="section-like hidden">
+    <div id="offer-other" class="flex right center">
+        <span class="section-like scroll-hidden stagger" style="--stagger-index: 4;">
             Schematy akordowe
-            <i class="fa-solid fa-circle-info" @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)></i>
+            <span @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)>
+                <x-shipyard.app.icon name="information" />
+            </span>
         </span>
-        <span class="section-like hidden">
+        <span class="section-like scroll-hidden stagger" style="--stagger-index: 5;">
             Osadzenie partii wokalnej
-            <i class="fa-solid fa-circle-info" @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)></i>
+            <span @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)>
+                <x-shipyard.app.icon name="information" />
+            </span>
         </span>
-        <span class="section-like hidden">
+        <span class="section-like scroll-hidden stagger" style="--stagger-index: 6;">
             Korekcja dźwiękowa
-            <i class="fa-solid fa-circle-info" @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)></i>
+            <span @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)>
+                <x-shipyard.app.icon name="information" />
+            </span>
         </span>
     </div>
 </section>
@@ -65,28 +65,11 @@
 
 <section id="recomms">
     <h1>Kto już skorzystał?</h1>
-    <div class="grid-3">
-        <div class="section-like hidden">
-            <img src="{{ asset("assets/front/img/recomms/1.jpg") }}" alt="main3">
-            <h2>Ewelina Spławska</h2><h3>wokalistka</h3>
-            <p>Mega polecam tego pana. Wszystko brzmi <b>genialnie i profesjonalnie</b>. Polecam z całego serduszka.</p>
-        </div>
-        <div class="section-like hidden">
-            <img src="{{ asset("assets/front/img/recomms/2.jpg") }}" alt="main3">
-            <h2>Krzysztof Bajeński</h2><h3>muzyk, producent</h3>
-            <p>Pełen profesjonalizm – tak określiłbym współpracę z Wojtkiem. Człowiek gotowy zawsze do pracy i w pełni zaangażowany. Rzeczy, które wychodzą spod jego ręki są <b>na bardzo wysokim poziomie</b>. Za nami bardzo dużo ciekawych projektów, myślę jednak, że przed nami jeszcze więcej.</p>
-        </div>
-        <div class="section-like hidden">
-            <img src="{{ asset("assets/front/img/recomms/0.png") }}" alt="main3">
-            <h2>Grzegorz Bednarczyk</h2><h3>klient, zamówił podkład do studia</h3>
-            <p>Córka wyszła właśnie ze studia nagrań; pan nagrywający jest pełen podziwu podkładu i <b>jakości wykonania</b>. Sami pewnie jeszcze nie raz skorzystamy z usług.</p>
-        </div>
-    </div>
-    <div class="hidden flex-right center">
+    <div class="scroll-hidden flex right center">
         <script src="https://static.elfsight.com/platform/platform.js" async></script>
         <div class="elfsight-app-6b00a039-c4ab-497e-91da-5cecfcf8511b" data-elfsight-app-lazy></div>
     </div>
-    <div class="hidden">
+    <div class="scroll-hidden">
         <h2>Komentarze klientów</h2>
         <div class="pinned-comments">
             @foreach ($pinned_comments as $comment)
@@ -109,26 +92,32 @@
         </div>
     </div>
     <h2>Współpracuję również z:</h2>
-    <div id="recomms-other" class="flex-right center">
-        <img class="hidden" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
-        <img class="hidden" src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
+    <div id="recomms-other" class="flex right center">
+        <img class="scroll-hidden stagger" style="--stagger-index: 1;" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
+        <img class="scroll-hidden stagger" style="--stagger-index: 2;" src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
     </div>
 </section>
 
-<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="compact-disc">
-    <x-slot name="buttons">
+<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="disc">
+    <x-slot:buttons>
         @foreach ([
             "wszystkie utwory" => "list",
             "nagrania klientów" => "clients",
             "za kulisami" => "reels",
             "nuty" => "scores",
         ] as $label => $mode)
-        <x-button action="#/" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
+        <x-shipyard.ui.button
+            :label="$label"
+            icon="bullhorn"
+            action="none"
+            onclick="filterShowcases('{{ $mode }}')"
+            class="tertiary"
+        />
         @endforeach
-    </x-slot>
+    </x-slot:buttons>
 
-    <div class="showcase-section flex-down spaced gone" data-mode="clients">
-        <div id="showcase-yts" class="flex-right center">
+    <div class="showcase-section flex down spaced hidden" data-mode="clients">
+        <div id="showcase-yts" class="flex right center">
             @foreach ($client_showcases as $showcase)
             {!! $showcase->embed !!}
             @endforeach
@@ -138,20 +127,20 @@
         </div>
     </div>
 
-    <div class="showcase-section flex-down spaced gone" data-mode="reels">
+    <div class="showcase-section flex down spaced hidden" data-mode="reels">
         <h2>Najnowsze realizacje</h2>
         <x-front.showcase-reels :showcases="$showcases" />
     </div>
 
-    <div class="showcase-section flex-down spaced gone" data-mode="scores">
+    <div class="showcase-section flex down spaced hidden" data-mode="scores">
         <div id="showcase-scores">
             @for ($i = 1; $i <= 3; $i++)
-            <img src="{{ asset("assets/front/nutki$i.jpg") }}" alt="sheet music example {{ $i }}">
+            <img src="{{ asset("assets/front/nutki$i.jpg") }}" alt="sheet music example {{ $i }}" class="animatable">
             @endfor
         </div>
     </div>
 
-    <div class="showcase-section flex-down spaced" data-mode="list">
+    <div class="showcase-section flex down spaced" data-mode="list">
         <div id="songs">
             <h2>
                 Wszystkie utwory, których się podjąłem
@@ -161,25 +150,43 @@
             </h2>
 
             <h3>Filtruj:</h3>
-            <div class="flex-right keep-for-mobile center">
-                <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+            <div class="flex right keep-for-mobile center">
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    label="wszystkie"
+                    icon="close-circle"
+                    onclick="filterSongs()"
+                />
 
                 @foreach ($genres as $genre)
-                <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    :label="$genre->name"
+                    icon="radio"
+                    onclick="filterSongs('genre', {{ $genre->id }})"
+                />
                 @endforeach
 
                 @foreach ($song_tags as $tag)
-                <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small />
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    :label="$tag->name"
+                    icon="tag"
+                    onclick="filterSongs('tag', {{ $tag->id }})"
+                />
                 @endforeach
             </div>
 
             <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
             <script defer>getSongList("podklady");</script>
             <div class="popup">
-                <div class="popup-contents flex-down center">
+                <div class="popup-contents flex down center">
                     <h3 class="song-full-title"></h3>
                     <p class="song-desc"></p>
-                    <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
+                    <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
                     <x-file-player type="ogg" file="" is-showcase />
                     <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
                 </div>
@@ -188,8 +195,8 @@
     </div>
 </x-front.tabbed-section>
 
-<section id="prices" class="grid-2">
-    <div class="black-back">
+<section id="prices" class="grid" style="--col-count: 2;">
+    <div class="black-back rounded stagger" style="--stagger-index: 1;">
         <h1>Cennik</h1>
         <span class="yellowed-out">
             <i class="fas fa-triangle-exclamation"></i>
@@ -202,90 +209,40 @@
                 "2" => "Nuty",
                 "3" => "Nagrania"
             ] as $i => $header)
-                <h2 class="header hidden">{{ $header }}</h2>
+                <h2 class="header scroll-hidden">{{ $header }}</h2>
                 @foreach ($prices->where("quest_type_id", $i) as $price)
-                <span class="hidden">{{ $price->service }}</span>
-                <span class="hidden">{{ as_pln($price->price) }}</span>
+                <span class="scroll-hidden">{{ $price->service }}</span>
+                <span class="scroll-hidden">{{ as_pln($price->price) }}</span>
                 @endforeach
             @endforeach
         </div>
     </div>
 
-    <div class="sc-line">
+    <div class="sc-line rounded stagger" style="--stagger-index: 2;">
         <x-sc-scissors />
         <h1>FAQ</h1>
         <ul id="faq">
-            <li class="hidden">Jak tworzone są utwory?</li>
-            <li class="hidden">Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
+            <li class="scroll-hidden">Jak tworzone są utwory?</li>
+            <li class="scroll-hidden">Każdy utwór i podkład przygotowany jest od zera. Nagrania poszczególnych partii są wykonywane w całości przeze mnie. Dotyczy to również dogrywania ewentualnych drugich głosów i chórków. <i>Nie potrafię po prostu usunąć wokalu z nagrania</i>.</li>
 
-            <li class="hidden">Jakie materiały muszę przygotować?</li>
-            <li class="hidden">Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
+            <li class="scroll-hidden">Jakie materiały muszę przygotować?</li>
+            <li class="scroll-hidden">Jestem w stanie przygotować podkład na podstawie istniejącego już utworu (nagranie czy nawet zapis nutowy), przekazanej melodii lub nawet samych wskazówek stylistycznych. W wyjątkowych przypadkach możliwe jest też całkowite powierzenie mi aranżacji.</li>
 
-            <li class="hidden">Czy mój podkład będzie miał linię melodyczną?</li>
-            <li class="hidden"><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
+            <li class="scroll-hidden">Czy mój podkład będzie miał linię melodyczną?</li>
+            <li class="scroll-hidden"><strong>Z reguły nie</strong>, ale jeśli interesuje Cię taka, proszę o dodatkową informację.</li>
 
-            <li class="hidden">Jak szybko można się spodziewać gotowego podkładu?</li>
-            <li class="hidden">
+            <li class="scroll-hidden">Jak szybko można się spodziewać gotowego podkładu?</li>
+            <li class="scroll-hidden">
                 <!-- W związku z moimi studiami projekty wykonuję w weekendy, zwykle jeden wystarcza. -->
                 Zwykle projekty jestem w stanie wykonać <b>w 2-{{ $average_quest_done }} dni</b>, choć wszystko zależy od wielu czynników.
                 <strong>Nie rozpoczynam jednak pracy przed zgromadzeniem kompletu informacji</strong> – dlatego właśnie oczekuję odpowiedzi na każdą wiadomość.
             </li>
 
-            <li class="hidden">Czy możliwe są poprawki w przygotowywanych aranżach?</li>
-            <li class="hidden">Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
+            <li class="scroll-hidden">Czy możliwe są poprawki w przygotowywanych aranżach?</li>
+            <li class="scroll-hidden">Oczywiście. Efekty mojej pracy zawsze przedstawiam do recenzji, gdzie można wskazać elementy utworu, które nie przypadną Ci do gustu. Poprawki najczęściej nie wpływają na wycenę zlecenia.</li>
 
-            <li class="hidden">Co z zapłatą za utwór?</li>
-            <li class="hidden">Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
+            <li class="scroll-hidden">Co z zapłatą za utwór?</li>
+            <li class="scroll-hidden">Wycena zlecenia zostanie Ci przedstawiona przed jego podjęciem. Otrzymasz także informację o możliwych metodach płatności. <i>Nie musisz płacić od razu!</i> Wpłata jest niezbędna do pobrania plików – bez niej możesz je jedynie przeglądać.</li>
         </ul>
     </div>
-</section>
-
-<section id="contact">
-    <h1>Napisz już teraz</h1>
-    <form method="post" action="{{ route("add-request-back") }}" id='contactform' class="black-back flex-down hidden">
-        @csrf
-        <h2>Szczegóły zlecenia</h2>
-        <div class="bulk-box sc-line flex-right center">
-            <div class="flex-down but-mobile-right">
-                @foreach ($quest_types as $id => $type)
-                <x-input type="radio" name="quest_type[]" :value="$id" :label="$type" :checked="$id == 1" />
-                @endforeach
-            </div>
-            <x-input type="text" name="title[]" label="Tytuł utworu" placeholder="{{ $random_song->title }}" />
-            <x-input type="text" name="artist[]" label="Wykonawca" placeholder="{{ $random_song->artist }}" />
-            <x-input type="text" name="link[]" label="Linki do oryginalnych nagrań (oddzielone przecinkami)" :small="true" placeholder="{{ $random_song->link }}" />
-            <x-input type="TEXT" name="wishes[]" label="Jakie są Twoje życzenia? (np. styl, czy z linią melodyczną itp.)" />
-            <x-input type="date" name="hard_deadline[]" label="Kiedy najpóźniej chcesz otrzymać materiały? (opcjonalnie)" />
-        </div>
-        <x-button action="#/" id="request_bulk_add" icon="plus" label="Dodaj kolejny utwór" />
-        <script>
-        $(document).ready(function(){
-            $("#request_bulk_add").click(function(){
-                $(".bulk-box:first-of-type").clone().insertBefore($(this));
-                $(".bulk-box:last-of-type input, .bulk-box:last-of-type textarea").val("");
-            });
-        });
-        </script>
-
-        <h2>Twoje dane</h2>
-        <div class="flex-right center">
-            <x-input type="text" name="client_name" label="Imię i nazwisko" placeholder="Jan Kowalski" required />
-            <div class="section-like sc-line">
-                <label>Jak mogę do Ciebie dotrzeć? <i>(wypełnij co najmniej jedno)</i></label>
-                <div class="flex-right">
-                    <x-input type="email" name="email" label="Email" />
-                    <x-input type="tel" name="phone" label="Numer telefonu" />
-                    <x-input type="text" name="other_medium" label="Inna forma kontaktu (np. Whatsapp)" />
-                </div>
-            </div>
-            <x-select name="contact_preference" label="Preferowana forma kontaktu" :options="$contact_preferences" />
-            <x-input type="number" name="m_test" label="Test antyspamowy – cztery razy pięć?" :required="true" />
-        </div>
-
-        <input type="hidden" name="intent" value="new" />
-        <x-button
-            label="Wyślij zapytanie" icon="1" name="new_status" value="1"
-            action="submit"
-            />
-    </form>
 </section>

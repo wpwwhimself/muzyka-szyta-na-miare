@@ -10,6 +10,14 @@ class User extends ShipyardUser
 {
     public const FROM_SHIPYARD = true;
 
+    public function __toString()
+    {
+        return $this->notes->client_name
+            . view("components.shipyard.app.model.badges", [
+                "badges" => $this->notes->badges,
+            ])->render();
+    }
+
     #region fields
     public const CONNECTIONS = [
         "roles" => [

@@ -86,7 +86,7 @@
 $(document).ready(() => {
     $(".link-edit-trigger").click((e) => {
         const box = e.target.closest(".link-edit-trigger").nextElementSibling;
-        box.classList.toggle("gone");
+        box.classList.toggle("hidden");
         box.querySelector("input[name=link]").focus();
     });
 

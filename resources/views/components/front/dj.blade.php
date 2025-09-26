@@ -1,15 +1,8 @@
-<ul class="section-like">
-    <li>Szukasz zespołu na koncert?</li>
-    <li>Potrzebujesz DJa na wesele lub imprezę?</li>
-    <li>Chcesz, żeby muzyka, do jakiej się bawisz, była grana na żywo?</li>
-    <strong>Jesteś we właściwym miejscu!</strong>
-</ul>
-
 <section id="offer">
     <h1>Jak mogę uświetnić Twoją imprezę?</h1>
 
-    <div class="main black-back hidden">
-        <x-mdi-guitar-electric height="6em" />
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 1;">
+        <x-shipyard.app.icon name="guitar-electric" />
         <div>
             <h2>Impreza z pompą</h2>
             <p>Jednoosobowy koncert, po którym trudno będzie ustać w miejscu</p>
@@ -20,8 +13,8 @@
             <li>Na wesele, na imprezę lub na koncert</li>
         </ul>
     </div>
-    <div class="main black-back hidden">
-        <x-mdi-piano height="6em" />
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 2;">
+        <x-shipyard.app.icon name="piano" />
         <div>
             <h2>Występ kameralny</h2>
             <p>Nastrojowy koncert dla mniejszej publiczności</p>
@@ -32,8 +25,8 @@
             <li>Na koncert lub recital</li>
         </ul>
     </div>
-    <div class="main black-back hidden">
-        <x-mdi-saxophone height="6em" />
+    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 3;">
+        <x-shipyard.app.icon name="saxophone" />
         <div>
             <h2>Żywe instrumenty</h2>
             <p>Miks DJa i instrumentalisty</p>
@@ -46,14 +39,14 @@
 
     <h1>Gdzie gram?</h1>
 
-    <div class="grid-3">
+    <div class="grid" style="--col-count: 3;">
         @foreach ([
             "Wolsztyn",
             "Poznań",
             "Jarocin",
-        ] as $loc)
-        <span class="hidden">
-            <i class="fas fa-location-dot large-icon"></i>
+        ] as $i => $loc)
+        <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
+            <x-shipyard.app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
         </span>
         @endforeach
@@ -69,7 +62,7 @@
     <p>🚧 Na razie nie zbieram opinii... Wkrótce się tu pojawią</p>
 </section>
 
-<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="compact-disc">
+<x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="disc">
     <x-slot name="buttons">
         @foreach ([
             "rolki" => "reels",
@@ -84,7 +77,7 @@
         <x-front.showcase-reels :showcases="$showcases" />
     </div>
 
-    <div class="showcase-section flex-down spaced gone" data-mode="list">
+    <div class="showcase-section flex-down spaced scroll-hidden" data-mode="list">
         <div id="songs">
             <h2>
                 Wszystkie utwory, jakie mam w repertuarze
@@ -112,7 +105,7 @@
                 <div class="popup-contents flex-down center">
                     <h3 class="song-full-title"></h3>
                     <p class="song-desc"></p>
-                    <span id="song-loader" class="hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
+                    <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
                     <x-file-player type="ogg" file="" is-showcase />
                     <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
                 </div>
@@ -121,36 +114,36 @@
     </div>
 </x-front.tabbed-section>
 
-<section id="prices" class="grid-2">
-    <div class="black-back">
+<section id="prices" class="grid" style="--col-count: 2;">
+    <div class="black-back rounded stagger" style="--stagger-index: 1;">
         <h1>Cennik</h1>
         <span class="yellowed-out">
             <i class="fas fa-triangle-exclamation"></i>
             Poniższe ceny mogą się różnić w zależności od kosztów dojazdu
         </span>
         <div class="front-table">
-            {{-- <span class="hidden">Organy (ślub, jubileusz, ...)</span>
-            <span class="hidden">{{ as_pln(300) }}</span>
+            {{-- <span class="scroll-hidden">Organy (ślub, jubileusz, ...)</span>
+            <span class="scroll-hidden">{{ as_pln(300) }}</span>
 
-            <span class="hidden">Trąbka (pogrzeb, ślub, ...)</span>
-            <span class="hidden">{{ as_pln(100) }}</span> --}}
+            <span class="scroll-hidden">Trąbka (pogrzeb, ślub, ...)</span>
+            <span class="scroll-hidden">{{ as_pln(100) }}</span> --}}
             <span>🚧 zostanie uzupełnione wkrótce</span>
         </div>
     </div>
 
-    <div class="sc-line">
+    <div class="sc-line rounded stagger" style="--stagger-index: 2;">
         <x-sc-scissors />
         <h1>FAQ</h1>
 
         <ul id="faq">
-            <li class="hidden">Jaki repertuar gram?</li>
-            <li class="hidden">Specjalizuję się w graniu polskiego i angielskiego rocka. Gram również piosenki z innych gatunków, często rearanżując je, żeby były bardziej akustyczno-taneczne.</li>
+            <li class="scroll-hidden">Jaki repertuar gram?</li>
+            <li class="scroll-hidden">Specjalizuję się w graniu polskiego i angielskiego rocka. Gram również piosenki z innych gatunków, często rearanżując je, żeby były bardziej akustyczno-taneczne.</li>
 
-            <li class="hidden">Czy mam własne nagłośnienie?</li>
-            <li class="hidden ghost">🚧 zostanie uzupełnione wkrótce</li>
+            <li class="scroll-hidden">Czy mam własne nagłośnienie?</li>
+            <li class="scroll-hidden ghost">🚧 zostanie uzupełnione wkrótce</li>
 
-            <li class="hidden">Co z zapłatą?</li>
-            <li class="hidden">W zupełności wystarcza mi przekazanie pieniędzy przed lub po uroczystości.</li>
+            <li class="scroll-hidden">Co z zapłatą?</li>
+            <li class="scroll-hidden">W zupełności wystarcza mi przekazanie pieniędzy przed lub po uroczystości.</li>
         </ul>
     </div>
 </section>

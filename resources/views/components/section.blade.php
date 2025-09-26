@@ -4,7 +4,7 @@
     "scissors" => false,
 ])
 
-<section {{ $attributes->class(["container", "sc-line" => $scissors]) }}>
+<section {{ $attributes->class(["rounded", "container", "sc-line" => $scissors]) }}>
     @if ($scissors)
     <x-sc-scissors />
     @endif

@@ -11,8 +11,8 @@ class Request extends Model
     use HasFactory, Uuids;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Zapytania",
+        "icon" => "chat",
         "description" => "",
         "role" => "",
         "ordering" => 99,

@@ -30,22 +30,10 @@ if (file_exists(__DIR__.'/Shipyard/shipyard.php')) require __DIR__.'/Shipyard/sh
 
 Route::get('/', [HomeController::class, "index"])->name("home");
 
-Route::controller(AuthController::class)->prefix("auth")->group(function(){
-    Route::get('/', "input")->name("login");
-    Route::post('/back', "authenticate")->name("authenticate");
-    Route::post('/register-back', "register")->name("register");
-    Route::get('/logout', "logout")->name("logout");
-});
-
 Route::middleware("auth")->group(function(){
     Route::controller(BackController::class)->group(function(){
         Route::get('/dashboard', "dashboard")->name("dashboard");
         Route::get('/prices', "prices")->name("prices");
-
-        Route::get("/ppp/{page?}", "ppp")->name("ppp");
-
-        Route::get("/settings", "settings")->name("settings");
-        Route::post("/settings", "updateSetting")->name("settings-update");
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
     });
@@ -220,14 +208,6 @@ Route::middleware("auth")->group(function(){
     Route::controller(WorkClockController::class)->prefix("studio-view")->group(function() {
         Route::get("/", "main")->name("studio");
         Route::get("/{quest_id}", "index")->name("studio-view");
-    });
-
-    Route::controller(SpellbookController::class)->middleware("cancastspells")->group(function(){
-        foreach (SpellbookController::SPELLS as $name => $urls) {
-            foreach ($urls as $url) {
-                Route::get($url, $name);
-            }
-        }
     });
 
     Route::controller(DjController::class)->middleware("cancastspells")->prefix("dj")->group(function () {

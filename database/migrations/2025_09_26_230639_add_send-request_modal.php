@@ -100,6 +100,16 @@ return new class extends Migration
                     "timer-sand",
                     false,
                 ],
+                [
+                    "test",
+                    "text",
+                    "Cztery razy pięć?",
+                    "robot",
+                    true,
+                    [
+                        "hint" => "To pytanie jest częścią testu antyspamowego. Poprawna odpowiedź jest konieczna do wysłania zapytania.",
+                    ],
+                ],
             ],
         ]);
 
@@ -178,6 +188,16 @@ return new class extends Migration
                         "hint" => "Mowa tu o nagłośnieniu lub instrumencie",
                     ]),
                 ],
+                [
+                    "test",
+                    "text",
+                    "Cztery razy pięć?",
+                    "robot",
+                    true,
+                    [
+                        "hint" => "To pytanie jest częścią testu antyspamowego. Poprawna odpowiedź jest konieczna do wysłania zapytania.",
+                    ],
+                ],
             ],
         ]);
 
@@ -244,6 +264,16 @@ return new class extends Migration
                     "Jakie są Twoje życzenia?",
                     "cloud",
                     false,
+                ],
+                [
+                    "test",
+                    "text",
+                    "Cztery razy pięć?",
+                    "robot",
+                    true,
+                    [
+                        "hint" => "To pytanie jest częścią testu antyspamowego. Poprawna odpowiedź jest konieczna do wysłania zapytania.",
+                    ],
                 ],
             ],
         ]);

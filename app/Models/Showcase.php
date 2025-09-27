@@ -10,8 +10,8 @@ class Showcase extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Showcase'y",
+        "icon" => "bullhorn",
         "description" => "",
         "role" => "",
         "ordering" => 99,

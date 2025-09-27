@@ -1,11 +1,14 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Szpica Arcymaga")
 
 @section('content')
+
+<div class="grid" style="--col-count: 2;">
 
 @if (count($patrons_adepts) > 0)
 <x-section id="patrons-adepts"
     title="Potencjalni patroni"
-    icon="chalkboard-user"
+    icon="seal"
     style="grid-column: 1 / span 2;"
 >
     <x-slot name="buttons">
@@ -34,7 +37,7 @@
 </x-section>
 @endif
 
-<x-section title="Zapytania" icon="envelope">
+<x-section title="Zapytania" :icon="model_icon('requests')">
     <x-slot name="buttons">
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
@@ -48,7 +51,7 @@
 </x-section>
 
 @if (count($showcases_missing))
-<x-section title="Showcase'y do stworzenia" icon="bullhorn" style="grid-column: 1 / span 2;">
+<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: 1 / span 2;">
     <table>
         <thead>
             <tr>
@@ -86,7 +89,7 @@
 
 <x-section id="dashboard-quests"
     title="Zlecenia w toku"
-    icon="box"
+    :icon="model_icon('quests')"
 >
     @forelse ($quests_ongoing as $key => $quest)
     <x-quest-mini :quest="$quest" :no="$key + 1" />
@@ -111,7 +114,7 @@
 
     <x-section id="dashboard-quests"
         title="Zlecenia czekające"
-        icon="box-open"
+        icon="package-variant"
     >
         @forelse ($quests_review as $key => $quest)
         <x-quest-mini :quest="$quest" :no="$key + 1" />
@@ -122,7 +125,7 @@
 
     <x-section id="recent"
         title="Ostatnie zmiany"
-        icon="clock-rotate-left"
+        icon="history"
     >
         <table>
             <thead>
@@ -226,7 +229,7 @@
                 <tr>
                     <td colspan=5>
                         <span class="grayed-out">
-                            <i class="fa-solid fa-bed"></i>
+                            <x-shipyard.app.icon name="bed" />
                             Sprzątacz dzisiaj śpi
                         </span>
                     </td>
@@ -235,6 +238,8 @@
             </tbody>
         </table>
     </x-section>
+</div>
+
 </div>
 
 @endsection

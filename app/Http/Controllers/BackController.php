@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 class BackController extends Controller
 {
     public function dashboard(){
-        $client = Auth::user();
+        $user = Auth::user();
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderBy("updated_at");
@@ -43,10 +43,10 @@ class BackController extends Controller
             ->orderByDesc("deadline")
             ->orderBy("created_at");
 
-        if(!is_archmage()){
-            $requests = $requests->where("client_id", $client->id);
-            $quests_ongoing = $quests_ongoing->where("client_id", $client->id);
-            $quests_review = $quests_review->where("client_id", $client->id);
+        if($user->hasRole("client", true)){
+            $requests = $requests->where("client_id", $user->id);
+            $quests_ongoing = $quests_ongoing->where("client_id", $user->id);
+            $quests_review = $quests_review->where("client_id", $user->id);
 
             $quests_total = Auth::user()->exp;
             $unpaids = Quest::where("client_id", Auth::id())
@@ -65,7 +65,7 @@ class BackController extends Controller
                     Quest::find($change->re_quest_id);
                 $change->new_status = Status::find($change->new_status_id);
             }
-            $patrons_adepts = User::where("helped_showcasing", 1)->get();
+            $patrons_adepts = User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 1))->get();
             $showcases_missing = Quest::where("status_id", 19)
                 ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
                 ->get()
@@ -95,20 +95,22 @@ class BackController extends Controller
         $quests_review = $quests_review->get();
         $requests = $requests->get();
 
-        return view(user_role().".dashboard", array_merge(
-            [
-                "title" => (is_archmage())
-                ? (Auth::id() == 1 ? "Szpica arcymaga" : "WITAJ, OBSERWATORZE")
-                : "Pulpit"
-            ],
-            compact("quests_ongoing", "quests_review", "requests"),
-            (isset($quests_total) ? compact("quests_total") : []),
-            (isset($patrons_adepts) ? compact("patrons_adepts") : []),
-            (isset($unpaids) ? compact("unpaids") : []),
-            (isset($janitor_log) ? compact("janitor_log") : []),
-            (isset($recent) ? compact("recent") : []),
-            (isset($showcases_missing) ? compact("showcases_missing") : []),
-        ));
+        return view(
+            "pages.".user_role().".dashboard",
+            !is_archmage()
+                ? compact(
+                    "quests_ongoing", "quests_review", "requests",
+                    "quests_total",
+                    "unpaids",
+                )
+                : compact(
+                    "quests_ongoing", "quests_review", "requests",
+                    "recent",
+                    "patrons_adepts",
+                    "showcases_missing",
+                    "janitor_log",
+                )
+        );
     }
 
     public function prices(){

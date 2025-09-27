@@ -105,6 +105,25 @@ section, .section-like {
     }
 }
 
+section {
+    & > .section-header{
+        align-items: flex-start;
+        margin: 1em 0;
+
+        &:first-of-type{
+            margin-top: 0;
+        }
+        & h1, & h2, & h3 {
+            margin: 0;
+            white-space: nowrap;
+        }
+        & > div {
+            align-items: flex-end !important;
+            justify-content: flex-end !important;
+            gap: 1em;
+        }
+    }
+}
 
 .section-like{
     border: 3px solid var(--bg-lite2);

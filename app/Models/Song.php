@@ -77,7 +77,7 @@ class Song extends Model
     {
         return Attribute::make(
             get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::connections(),
+                "connections" => self::getConnections(),
                 "model" => $this,
             ])->render(),
         );
@@ -159,7 +159,7 @@ class Song extends Model
             //
         ];
     }
-    
+
     protected $appends = [
         "full_title",
         "has_showcase_file",

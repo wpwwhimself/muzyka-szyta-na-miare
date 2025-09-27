@@ -46,6 +46,17 @@
     padding: 1em;
 }
 
+.contact-info {
+    & a {
+        text-decoration: none;;
+    }
+
+    & > * {
+        gap: 0.25em;
+        vertical-align: middle;
+    }
+}
+
 footer .icon.invert-when-dark {
     filter: invert(1);
 }

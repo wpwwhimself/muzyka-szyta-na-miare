@@ -19,6 +19,13 @@ return new class extends Migration
             "target_route" => "requests.new",
             "fields" => [
                 [
+                    null,
+                    "heading",
+                    "Napisz coś o sobie",
+                    "badge-account",
+                    false,
+                ],
+                [
                     "client_name",
                     "text",
                     "Imię i nazwisko",
@@ -44,6 +51,13 @@ return new class extends Migration
                     "text",
                     "Inna forma kontaktu (np. Whatsapp)",
                     "human-greeting-proximity",
+                    false,
+                ],
+                [
+                    null,
+                    "heading",
+                    "Napisz coś o zleceniu",
+                    "music",
                     false,
                 ],
                 [
@@ -120,6 +134,13 @@ return new class extends Migration
             "target_route" => "organ-requests.new",
             "fields" => [
                 [
+                    null,
+                    "heading",
+                    "Napisz coś o sobie",
+                    "badge-account",
+                    false,
+                ],
+                [
                     "client_name",
                     "text",
                     "Imię i nazwisko",
@@ -145,6 +166,13 @@ return new class extends Migration
                     "text",
                     "Inna forma kontaktu (np. Whatsapp)",
                     "human-greeting-proximity",
+                    false,
+                ],
+                [
+                    null,
+                    "heading",
+                    "Napisz coś o zleceniu",
+                    "music",
                     false,
                 ],
                 [
@@ -208,6 +236,13 @@ return new class extends Migration
             "target_route" => "dj-requests.new",
             "fields" => [
                 [
+                    null,
+                    "heading",
+                    "Napisz coś o sobie",
+                    "badge-account",
+                    false,
+                ],
+                [
                     "client_name",
                     "text",
                     "Imię i nazwisko",
@@ -233,6 +268,13 @@ return new class extends Migration
                     "text",
                     "Inna forma kontaktu (np. Whatsapp)",
                     "human-greeting-proximity",
+                    false,
+                ],
+                [
+                    null,
+                    "heading",
+                    "Napisz coś o zleceniu",
+                    "music",
                     false,
                 ],
                 [

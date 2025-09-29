@@ -78,7 +78,7 @@ if(!function_exists("user_role")){
 }
 if(!function_exists("is_archmage")){
     function is_archmage($user_id = null){
-        return User::find($user_id ?? Auth::id())->hasRole("archmage");
+        return User::find($user_id ?? Auth::id())?->hasRole("archmage") ?? false;
     }
 }
 

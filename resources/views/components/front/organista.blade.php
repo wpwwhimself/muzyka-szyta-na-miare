@@ -63,11 +63,71 @@
     <p>🚧 Na razie nie zbieram opinii... Wkrótce się tu pojawią</p>
 </section>
 
-<section id="showcases">
-    <h1>Posłuchaj, jak brzmię</h1>
+<x-front.tabbed-section id="showcases" title="Z kim współpracuję" icon="disc">
+    <x-slot:buttons>
+        @foreach ([
+            "samodzielnie" => "piano",
+            "ViolArte" => "violin",
+            "Ewelina Spławska" => "microphone",
+        ] as $label => $icon)
+        <x-shipyard.ui.button
+            :label="$label"
+            :icon="$icon"
+            action="none"
+            onclick="filterShowcases('{{ $label }}')"
+            class="tertiary"
+        />
+        @endforeach
+    </x-slot:buttons>
 
-    <x-front.showcase-reels :showcases="$showcases" />
-</section>
+    <div class="showcase-section flex down spaced" data-mode="samodzielnie">
+        <p>
+            Mogę zagrać <strong>samodzielnie</strong>.
+            Gram wówczas na organach lub na pianinie i śpiewam.
+        </p>
+
+        <x-front.showcase-reels :showcases="$showcases" />
+    </div>
+
+    <div class="showcase-section flex down spaced hidden" data-mode="ViolArte">
+        <p>
+            Często gram z zespołem <strong>ViolArte</strong> z Wolsztyna jako organista.
+            Jest to zespół 4 muzyków, który uświetnia msze i imprezy okoliczonościowe śpiewem i grą na skrzypcach, flecie lub gitarze.
+            Nawet śpiewamy na 4 głosy!
+        </p>
+
+        <x-shipyard.ui.button
+            label="Więcej informacji"
+            icon="open-in-new"
+            action="https://www.facebook.com/profile.php?id=100024867817512"
+            target="_blank"
+            class="primary"
+        />
+
+        <div id="showcase-fbs">
+            <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2F100024867817512%2Fvideos%2F692110923901667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+        </div>
+    </div>
+
+    <div class="showcase-section flex down spaced hidden" data-mode="Ewelina Spławska">
+        <p>
+            Współpracuję z <strong>Eweliną Spławską</strong>, grając w okolicach Wolsztyna.
+            Razem śpiewamy i gramy na pianinie i organach.
+        </p>
+
+        <x-shipyard.ui.button
+            label="Więcej informacji"
+            icon="open-in-new"
+            action="https://www.facebook.com/ewelinasplawska"
+            target="_blank"
+            class="primary"
+        />
+
+        <div id="showcase-fbs">
+            <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Fewelinasplawska%2Fvideos%2F1322933316175087%2F&show_text=false&width=267&t=0" width="267" height="476" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+        </div>
+    </div>
+</x-front.tabbed-section>
 
 <section id="prices" class="grid" style="--col-count: 2;">
     <div class="black-back rounded stagger" style="--stagger-index: 1;">
@@ -77,11 +137,21 @@
             Poniższe ceny mogą się różnić w zależności od kosztów dojazdu
         </span>
         <div class="front-table">
-            <span class="scroll-hidden">Organy (ślub, jubileusz, ...)</span>
-            <span class="scroll-hidden">{{ as_pln(350) }}</span>
+            <h2 class="header scroll-hidden">Organy</h2>
 
-            <span class="scroll-hidden">Trąbka (pogrzeb, ślub, ...)</span>
-            <span class="scroll-hidden">{{ as_pln(100) }}</span>
+            <span class="scroll-hidden">Msza ślubna</span>
+            <span class="scroll-hidden">od {{ as_pln(270) }}</span>
+
+            <span class="scroll-hidden">Msza jubileuszowa/okolicznościowa/pogrzebowa</span>
+            <span class="scroll-hidden">od {{ as_pln(170) }}</span>
+
+            <span class="scroll-hidden">Msza niedzielna</span>
+            <span class="scroll-hidden">{{ as_pln(80) }}</span>
+
+            <h2 class="header scroll-hidden">Trąbka</h2>
+
+            <span class="scroll-hidden">Pogrzeb</span>
+            <span class="scroll-hidden">od {{ as_pln(100) }}</span>
         </div>
     </div>
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
+use App\Mail\NewRequest\Dj;
+use App\Mail\NewRequest\Organista;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
 use App\Models\Quest;
@@ -97,6 +99,7 @@ class RequestController extends Controller
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings", "similar_songs")));
     }
 
+    #region new requests
     public function add(HttpRequest $rq){
         $pad_size = 24; // used by dropdowns for mobile preview fix
 
@@ -145,6 +148,49 @@ class RequestController extends Controller
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
+
+    private function checkFormTest(HttpRequest $rq)
+    {
+        $value = $rq->input("test");
+        $test_ok = strtolower($value) === "dwadzieścia"
+            || strtolower($value) === "dwadziescia"
+            || $value == 20;
+
+        if (!$test_ok) {
+            return back()->with("toast", ["error", "Nie możemy potwierdzić, czy jesteś robotem. Spróbuj ponownie."]);
+        }
+    }
+
+    public function newRequestPodklady(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+        abort(501);
+    }
+
+    public function newRequestOrganista(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+
+        $data = $rq->all();
+
+        Mail::to(env("MAIL_MAIN_ADDRESS"))
+            ->send(new Organista($data));
+
+        return back()->with("toast", ["success", "Zapytanie wysłane. Wkrótce na nie odpowiem"]);
+    }
+
+    public function newRequestDj(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+
+        $data = $rq->all();
+
+        Mail::to(env("MAIL_MAIN_ADDRESS"))
+            ->send(new Dj($data));
+
+        return back()->with("toast", ["success", "Zapytanie wysłane. Wkrótce na nie odpowiem"]);
+    }
+    #endregion
 
     public function finalized($id, $status, $is_new_client){
         $request = Request::findOrFail($id);

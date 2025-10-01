@@ -43,9 +43,11 @@ Route::middleware("auth")->group(function(){
         Route::get('/add', "add")->name("add-request");
 
         Route::withoutMiddleware("auth")->group(function(){
-            Route::post("/aaaa", "aaaa")->name("requests.new"); //todo uzupełnić
-            Route::post("/aaab", "aaab")->name("organ-requests.new"); //todo uzupełnić
-            Route::post("/aaac", "aaac")->name("dj-requests.new"); //todo uzupełnić
+            Route::prefix("new")->group(function(){
+                Route::post("/podklady", "newRequestPodklady")->name("requests.new");
+                Route::post("/organista", "newRequestOrganista")->name("organ-requests.new");
+                Route::post("/dj", "newRequestDj")->name("dj-requests.new");
+            });
 
             Route::get('/view/{id}', "show")->name("request");
             Route::post('/add-back', "processAdd")->name("add-request-back");

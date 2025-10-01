@@ -9,7 +9,7 @@
 
     <div class="flex-right center">
         @forelse ($platforms as $platform)
-        <div class="flex-down center">
+        <div class="flex down center">
             <a href="{{ route('showcase-platform-edit', ['id' => $platform->code]) }}">
                 {!! $platform !!}
             </a>

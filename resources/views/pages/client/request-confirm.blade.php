@@ -1,4 +1,5 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Zapytanie zostało pomyślnie dodane")
 
 @section('content')
 
@@ -7,7 +8,7 @@
 </h2>
 
 <p>Uprzejmie dziękuję za złożenie zamówienia. Wkrótce będę się kontaktował z wyceną dla poniższych zleceń:</p>
-<div class="flex-right">
+<div class="flex right">
     @foreach($requests_created as $request)
     <x-quest-mini :quest="$request" />
     @endforeach

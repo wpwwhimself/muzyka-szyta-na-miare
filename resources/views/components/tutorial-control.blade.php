@@ -1,9 +1,7 @@
 @props(['isVeteran'])
 
 <script>
-$(document).ready(function(){
-  if({{ intval($isVeteran) }}){
-    $(".tutorial").hide();
-  }
-});
+if({{ intval($isVeteran) }}){
+    document.querySelectorAll(".tutorial").forEach(el => el.classList.add("hidden"));
+}
 </script>

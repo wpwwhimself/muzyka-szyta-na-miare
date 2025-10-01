@@ -140,10 +140,10 @@ setInterval(getSong, 10e3)
 >
     <FontAwesomeIcon :icon="faHourglass" spin size="10x" />
 </div>
-<div class="flex-down center" v-else>
+<div class="flex down center" v-else>
     <div id="clocks-outer" class="flex-right center">
         <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="8x" />
-        <div id="clocks" class="flex-down center">
+        <div id="clocks" class="flex down center">
             <strong>{{ renderTime(time_major) }}</strong>
             <strong class="ghost" v-if="nowWorking != 0">
                 {{ modes.find(m => m.id == nowWorking)?.status_symbol }}

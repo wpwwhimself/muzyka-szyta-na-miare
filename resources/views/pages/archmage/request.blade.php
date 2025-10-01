@@ -1,19 +1,21 @@
 @extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
 
 @section('content')
-<x-a href="{{ route('add-request', [
-    'client' => $request->client_id,
-    'client_new' => implode('*', [
-        $request->client_name,
-        $request->email,
-        $request->phone,
-        $request->other_medium,
-        $request->contact_preference,
-    ])
-]) }}" icon="plus">Dodaj kolejne</x-a>
 
-<form method="POST" action="{{ route("mod-request-back") }}">
-    @csrf
+<x-shipyard.app.form method="POST" :action="route('mod-request-back')">
+    <x-slot:actions>
+        <x-a href="{{ route('add-request', [
+            'client' => $request->client_id,
+            'client_new' => implode('*', [
+                $request->client_name,
+                $request->email,
+                $request->phone,
+                $request->other_medium,
+                $request->contact_preference,
+            ])
+        ]) }}" icon="plus">Dodaj kolejne</x-a>
+    </x-slot:actions>
+
     <h1>Szczegóły zapytania</h1>
 
     <x-phase-indicator :status-id="$request->status_id" />
@@ -52,9 +54,9 @@
     <h3>Zlecenie przepisane z numerem <a href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h3>
     @endif
 
-    <div class="flex-down spaced">
+    <div class="flex down">
         <x-extendo-block key="client"
-            header-icon="user"
+            :header-icon="model_icon('users')"
             title="Dane klienta"
             :subtitle="$request->client"
             :extended="in_array($request->status_id, [1])"
@@ -73,7 +75,7 @@
 
             <script>
             function client_fields(dont_clear_fields = false){
-                const empty = $("#client_id").val() == "";
+                const empty = document.querySelector("#client_id").value == "";
                 let cldata = {};
 
                 if(!empty){
@@ -216,7 +218,7 @@
             <div>
                 <div id="song-price-sugg"></div>
                 <div id="special-prices-warning"></div>
-                <x-input type="text" name="price_code" label="Kod wyceny" :hint="$prices" value="{{ $request->price_code }}" />
+                <x-input type="text" name="price_code" label="Kod wyceny" value="{{ $request->price_code }}" />
                 <div id="price-summary" class="hint-table">
                     <div class="positions"></div>
                     <hr />
@@ -328,17 +330,6 @@
         <x-quest-history :quest="$request" :extended="true" />
         @endunless
     </div>
-</form>
+</x-shipyard.app.form>
 
-<script defer>
-$("#client_id").select2({ allowClear: true, placeholder: "Nowy klient" });
-$("#song_id").select2({ allowClear: true, placeholder: "Nowy utwór" })
-    .change(function(e){
-        const price_code_field = $(`#price_code`)
-        price_code_field.val($(this).val()
-            ? price_code_field.val() + "#"
-            : price_code_field.val().replace("#", "")
-        ).trigger("change")
-    });
-</script>
 @endsection

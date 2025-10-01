@@ -81,7 +81,7 @@
         </h1>
     </div>
 
-    <div class="flex-down spaced">
+    <div class="flex down">
         @foreach ($returns as $quest)
         <x-extendo-block :key="$quest->id"
             :header-icon="substr($quest->song->type->fa_symbol, 3)"
@@ -96,7 +96,7 @@
                 <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a>
             </x-extendo-section>
 
-            <div class="flex-down center">
+            <div class="flex down">
                 <x-button
                     :action="route('finance-return', ['quest_id' => $quest->id])"
                     label="Potwierdź zwrot"
@@ -125,7 +125,7 @@
         </h1>
     </div>
 
-    <form action="{{ route('finance-pay') }}" method="post" class="flex-down spaced">
+    <form action="{{ route('finance-pay') }}" method="post" class="flex down">
         @csrf
 
         @php $amount_total = ['immediate' => 0, 'delayed' => 0] @endphp

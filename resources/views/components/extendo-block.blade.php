@@ -6,20 +6,33 @@
 ]) data-ebid="{{ $key }}">
     @if($scissors) <x-sc-scissors /> @endif
 
-    <div class="header flex-right keep-for-mobile no-wrap">
-        <div class="titles flex-right keep-for-mobile">
-            <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
+    <div class="header flex right keep-for-mobile nowrap">
+        <div class="titles flex right keep-for-mobile">
+            <h2><x-shipyard.app.icon :name="$headerIcon" /></h2>
             <h2>{{ $title }}</h2>
             <span class="ghost">{!! $subtitle !!}</span>
         </div>
 
         @if($buttons)
-        <div class="right-side flex-right">{{ $buttons }}</div>
+        <div class="right-side flex right">{{ $buttons }}</div>
         @endif
 
-        <div class="right-side flex-right keep-for-mobile">
+        <div class="right-side flex right keep-for-mobile">
             @unless($extended === "perma")
-            <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
+            <x-shipyard.ui.button
+                icon="unfold-less-horizontal"
+                pop="Zwiń"
+                action="none"
+                onclick="openExtendoBlock(this, '{{ $key }}')"
+                class="toggles tertiary {{ $extended ? '' : 'hidden' }}"
+            />
+            <x-shipyard.ui.button
+                icon="unfold-more-horizontal"
+                pop="Rozwiń"
+                action="none"
+                onclick="openExtendoBlock(this, '{{ $key }}')"
+                class="toggles tertiary {{ $extended ? 'hidden' : '' }}"
+            />
             @endunless
             @if ($warning)
             @php
@@ -35,16 +48,7 @@
         </div>
     </div>
 
-    <div @class(['body', 'flex-right', 'hidden' => !$extended])>
+    <div @class(['body', 'flex right', 'hidden' => !$extended])>
         {{ $slot }}
     </div>
-
-    <script>
-    $(document).ready(() => {
-        $("[data-ebid='{{ $key }}'] [data-ebf='open']").click(function(){
-            $("[data-ebid='{{ $key }}'] .body").toggleClass("hidden")
-            $(this).toggleClass("fa-angles-down").toggleClass("fa-angles-up")
-        })
-    })
-    </script>
 </div>

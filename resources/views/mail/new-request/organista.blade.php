@@ -1,4 +1,5 @@
-@extends("layouts.shipyard.mail")
+@extends("layouts.mail")
+@section("title", "Nowe zapytanie o organy")
 
 @section("content")
 

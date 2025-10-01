@@ -6,7 +6,7 @@
     <script src="{{ mix('js/react/workTimeClock.js') }}" defer></script>
     <section id="clock"></section>
 
-    <div id="meta" class="flex-down spaced">
+    <div id="meta" class="flex down">
         <x-extendo-block key="song"
             header-icon="compact-disc"
             title="Utwór"

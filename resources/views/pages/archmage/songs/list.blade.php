@@ -6,7 +6,7 @@
     <x-a :href="route('file-size-report')" icon="weight-hanging">Raport wielkości sejfów</x-a>
 </div>
 
-<x-section id="songs-list" class="flex-down spaced"
+<x-section id="songs-list" class="flex down"
     title="Lista utworów"
     icon="list"
 >

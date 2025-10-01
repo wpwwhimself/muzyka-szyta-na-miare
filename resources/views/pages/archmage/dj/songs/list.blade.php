@@ -9,7 +9,7 @@
 
     @forelse ($songs as $song)
     <a href="{{ route('dj-edit-song', ['id' => $song->id]) }}" class="quest-mini">
-        <div class="flex-down">
+        <div class="flex down">
             <h3 class="song-title">{{ $song->title }}</h3>
             <span class="ghost">{{ $song->artist }}</span>
         </div>

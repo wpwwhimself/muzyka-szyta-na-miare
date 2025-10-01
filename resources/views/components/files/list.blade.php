@@ -57,7 +57,7 @@
         @endif
 
         @if (in_array("jpg", array_keys($version->file_paths)))
-        <div class="flex-down center">
+        <div class="flex down center">
             <x-button
                 :action="route('safe-show', ['id' => $version->song_id, 'filename' => basename($version->file_paths['jpg'])])"
                 target="_blank"

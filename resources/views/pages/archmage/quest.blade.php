@@ -41,7 +41,7 @@
     </div>
 </form>
 
-<div class="flex-down spaced">
+<div class="flex down">
     <x-extendo-block key="quest"
         header-icon="compact-disc"
         title="Utwór"

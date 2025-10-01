@@ -18,12 +18,14 @@
         @forelse ($history as $item)
         <div @class([
             "history-position",
-            "flex-down",
+            "flex",
+            "down",
             "center",
         ])>
             <div @class([
                 "circle",
-                "flex-down",
+                "flex",
+                "down",
                 "center",
                 "p-".$item->status->id,
                 "by-client" => !is_archmage($item->changed_by),

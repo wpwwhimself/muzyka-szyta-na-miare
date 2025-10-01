@@ -13,7 +13,7 @@
 
 <x-phase-indicator :status-id="$quest->status_id" />
 
-<div class="flex-down spaced">
+<div class="flex down">
     <x-extendo-block key="meta"
         header-icon="compact-disc"
         title="Szczegóły utworu"

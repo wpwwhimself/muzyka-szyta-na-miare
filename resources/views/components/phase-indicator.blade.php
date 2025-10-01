@@ -1,10 +1,16 @@
 <div class="quest-phase p-{{ $statusId }}" status="{{ $statusId }}">
     <div class="quest-phase-label">
         @if ($small)
-            <p><i class="fa-solid {{ $statusSymbol($statusId) }}"></i> {{ $statusName($statusId) }}</p>
+            <p>
+                <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
+                {{ $statusName($statusId) }}
+            </p>
         @else
             <span>Faza:</span>
-            <h3><i class="fa-solid {{ $statusSymbol($statusId) }}"></i> {{ $statusName($statusId) }}</h3>
+            <h3>
+                <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
+                {{ $statusName($statusId) }}
+            </h3>
             <x-tutorial>
                 {{ [
                     1 => "Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.",

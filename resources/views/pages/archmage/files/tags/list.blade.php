@@ -9,7 +9,7 @@
 
     <div class="flex-right center wrap">
         @forelse ($tags as $tag)
-        <div class="flex-down center">
+        <div class="flex down">
             <x-file-tag :tag="$tag" onclick="window.location.href = '{{ route('file-tag-edit', ['id' => $tag->id]) }}'" />
             {{-- <x-a :href="route('file-tag-edit', ['id' => $tag->id])" icon="pen">Edytuj</x-a> --}}
         </div>

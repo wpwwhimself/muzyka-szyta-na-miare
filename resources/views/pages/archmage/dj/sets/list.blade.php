@@ -9,7 +9,7 @@
 
     @forelse ($sets as $set)
     <a href="{{ route('dj-edit-set', ['id' => $set->id]) }}" class="quest-mini">
-        <div class="flex-down">
+        <div class="flex down">
             <h3 class="song-title">{{ $set->name }}</h3>
             <span class="ghost">{{ $set->description }}</span>
         </div>

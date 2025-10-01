@@ -6,6 +6,7 @@ use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
 use App\Mail\NewRequest\Dj;
 use App\Mail\NewRequest\Organista;
+use App\Mail\NewRequest\Podklady;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
 use App\Models\Quest;
@@ -37,7 +38,7 @@ class RequestController extends Controller
 
         $requests = $requests->paginate(25);
 
-        return view(user_role().".requests", [
+        return view("pages.".user_role().".requests", [
             "title" => "Lista zapytań",
             "requests" => $requests,
         ]);
@@ -48,8 +49,8 @@ class RequestController extends Controller
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(is_archmage()){
-            $clients = User::clients()->get()
-                ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[email]»")])
+            $clients = User::all()
+                ->mapWithKeys(fn ($c) => [$c->id => _ct_($c)])
                 ->toArray();
             $songs = Song::all()
                 ->mapWithKeys(fn ($s) => [$s->id => Str::limit($s->title ?? "bez tytułu ($s->artist)", $pad_size)." «$s[id]»"])
@@ -94,7 +95,7 @@ class RequestController extends Controller
             ],
         ];
 
-        return view(user_role().".request", array_merge([
+        return view("pages.".user_role().".request", array_merge([
             "title" => "Zapytanie",
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings", "similar_songs")));
     }
@@ -144,7 +145,7 @@ class RequestController extends Controller
             ->pluck("service", "indicator")->toArray();
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
-        return view(user_role().".add-request", array_merge([
+        return view("pages.".user_role().".add-request", array_merge([
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
@@ -164,7 +165,8 @@ class RequestController extends Controller
     public function newRequestPodklady(HttpRequest $rq)
     {
         $this->checkFormTest($rq);
-        abort(501);
+
+        return $this->processAdd($rq);
     }
 
     public function newRequestOrganista(HttpRequest $rq)
@@ -204,11 +206,10 @@ class RequestController extends Controller
     ////////////////////////////////////////////////////
 
     public function processAdd(HttpRequest $rq){
-        if(isset($rq->m_test) && $rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
         if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
 
         $flash_content = "Zapytania dodane";
-        $loop_length = is_array($rq->quest_type) ? count($rq->quest_type) : 1;
+        $loop_length = is_array($rq->quest_type_id) ? count($rq->quest_type_id) : 1;
         $requests_created = [];
 
         for($i = 0; $i < $loop_length; $i++){
@@ -228,7 +229,7 @@ class RequestController extends Controller
                     "contact_preference" => $rq->contact_preference ?? "email",
 
                     "song_id" => $rq->song_id,
-                    "quest_type_id" => $rq->quest_type,
+                    "quest_type_id" => $rq->quest_type_id,
                     "title" => $rq->title,
                     "artist" => $rq->artist,
                     "link" => yt_cleanup($rq->link),
@@ -241,7 +242,7 @@ class RequestController extends Controller
                     "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
                     "delayed_payment" => $rq->delayed_payment,
-                    "status_id" => $rq->new_status,
+                    "status_id" => 1,
                 ]);
 
                 // nadpisanie zmienionych gotowców
@@ -265,19 +266,10 @@ class RequestController extends Controller
                     ]);
                 }
 
-                if($rq->new_status == 5) BackController::newStatusLog($request->id, 1, null);
-                BackController::newStatusLog($request->id, $rq->new_status, $rq->comment);
+                BackController::newStatusLog($request->id, 1, $rq->comment);
 
                 //mailing
                 $mailing = null;
-                if(
-                    $request->email &&
-                    $rq->new_status == 5
-                ){
-                    Mail::to($request->email)->send(new RequestQuoted($request->fresh()));
-                    $mailing = true;
-                    $flash_content .= ", mail wysłany";
-                }
                 if($request->contact_preference != "email"){
                     $mailing ??= false;
                     $flash_content .= ", ale wyślij wiadomość";
@@ -287,7 +279,7 @@ class RequestController extends Controller
                 //bulk
 
                 // ignore empty requests
-                if (empty($rq->title[$i]) && empty($rq->artist[$i]) && empty($rq->link[$i])) {
+                if (empty($rq->title) && empty($rq->artist) && empty($rq->link)) {
                     continue;
                 }
 
@@ -301,14 +293,14 @@ class RequestController extends Controller
                     "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
                     "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
 
-                    "quest_type_id" => $rq->quest_type[$i],
-                    "title" => $rq->title[$i],
-                    "artist" => $rq->artist[$i],
-                    "link" => yt_cleanup($rq->link[$i]),
-                    "wishes" => $rq->wishes[$i],
+                    "quest_type_id" => $rq->quest_type_id,
+                    "title" => $rq->title,
+                    "artist" => $rq->artist,
+                    "link" => yt_cleanup($rq->link),
+                    "wishes" => $rq->wishes,
 
-                    "hard_deadline" => $rq->hard_deadline[$i],
-                    "status_id" => $rq->new_status,
+                    "hard_deadline" => $rq->hard_deadline,
+                    "status_id" => 1,
                 ]);
 
                 //mailing do mnie
@@ -316,16 +308,13 @@ class RequestController extends Controller
                 Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
                 $mailing = true;
 
-                BackController::newStatusLog($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
+                BackController::newStatusLog($request->id, 1, $rq->wishes, (Auth::check()) ? Auth::id() : null, $mailing);
             }
             $requests_created[] = $request;
         }
 
-        if(Auth::check()) return redirect()->route("dashboard")->with("success", $flash_content);
-        return view("client.request-confirm", array_merge(
-            ["title" => "Zapytanie dodane"],
-            compact("requests_created")
-        ))->with("success", $flash_content);
+        if(Auth::check()) return redirect()->route("dashboard")->with("toast", ["success", $flash_content]);
+        return view("pages.client.request-confirm", compact("requests_created"))->with("toast", ["success", $flash_content]);
     }
 
     public function processMod(HttpRequest $rq){

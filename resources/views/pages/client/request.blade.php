@@ -1,13 +1,20 @@
-@extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
+@extends('layouts.app')
+@section("title", ($request->title ?? "bez tytułu"))
+@section("subtitle", "Zapytanie")
 
 @section('content')
 
-@auth
-<x-a :href="route('requests')" icon="angles-left">Wróć do listy</x-a>
-@endauth
+<x-shipyard.app.form method="POST" :action="route('mod-request-back')">
+    <x-slot:actions>
+        @auth
+        <x-shipyard.ui.button
+            icon="angles-left"
+            label="Wróć do listy"
+            :action="route('requests')"
+        />
+        @endauth
+    </x-slot:actions>
 
-<form method="POST" action="{{ route("mod-request-back") }}">
-    @csrf
     <h1>
         Szczegóły zapytania
         @if (sumWarnings($warnings))
@@ -25,9 +32,9 @@
     </h2>
     @endif
 
-    <div class="flex-down spaced">
+    <div class="flex down">
         <x-extendo-block key="meta"
-            header-icon="cart-flatbed"
+            :header-icon="model_icon('songs')"
             title="Dane zlecenia"
             subtitle="Jaki utwór mam przygotować?"
             :extended="true"
@@ -40,8 +47,9 @@
             <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
             <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
         </x-extendo-block>
+
         <x-extendo-block key="quote"
-            header-icon="sack-dollar"
+            :header-icon="model_icon('prices')"
             title="Wycena"
             subtitle="Na jakich warunkach go przygotuję?"
             :warning="$warnings['quote']"
@@ -206,20 +214,20 @@
         <div id="opinion-1">
             <h2>Czy odpowiada Ci powyższa wycena?</h2>
             <div>
-                <x-button label="Tak" icon="check" action="#/" />
-                <x-button label="Nie" icon="times" action="#/" />
+                <x-button label="Tak" icon="check" action="none" onclick="goToConfirm2()" />
+                <x-button label="Nie" icon="times" action="none" onclick="goToReject()" />
             </div>
         </div>
         <div id="opinion-2" class="hidden">
             <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
             <div>
-                <x-button optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
-                <x-button optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" :small="true" />
-                <x-button optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" :small="true" />
-                <x-button optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
+                <x-button onclick="expandReject(this)" optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
+                <x-button onclick="expandReject(this)" optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" :small="true" />
+                <x-button onclick="expandReject(this)" optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" :small="true" />
+                <x-button onclick="expandReject(this)" optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
             </div>
             <input type="hidden" name="optbc">
-            <div id="opinion-inputs" class="flex-down hidden spaced">
+            <div id="opinion-inputs" class="flex down hidden">
                 <x-input type="text" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
                 <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
                 <div class="priority" for="opinion_deadline">
@@ -245,39 +253,37 @@
                 <x-button label="Nie" icon="times" action="#/" />
             </div>
         </div>
-        <script>
-        $(document).ready(function(){
-            $("#opinion-1 a:last, #opinion-3 a:last").click(function(){
-                $("#opinion-1 a.ghost").removeClass("ghost");
-                $(`#opinion-1 a:first`).addClass("ghost");
+        <script defer>
+        function goToReject() {
+            document.querySelector("#opinion-1 a.ghost").classList.remove("ghost");
+            document.querySelector(`#opinion-1 a:first`).classList.add("ghost");
 
-                $("#opinion-2").removeClass("hidden");
-                $("#opinion-3").addClass("hidden");
-            });
+            document.querySelector("#opinion-2").classList.remove("hidden");
+            document.querySelector("#opinion-3").classList.add("hidden");
+        });
 
-            $("#opinion-2 a[optbc]").click(function(){
-                let optbc = $(this).attr("optbc");
-                $("input[name='optbc']").val(optbc);
+        function expandReject(btn) {
+            let optbc = btn.dataset.optbc;
+            document.querySelector("input[name='optbc']").val(optbc);
 
-                $("#opinion-2 a[optbc]").addClass("ghost");
-                $(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
+            document.querySelector("#opinion-2 a[optbc]").addClass("ghost");
+            document.querySelector(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
 
-                $("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("hidden");
-                $(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("hidden");
-                $("#opinion-2 #opinion-inputs").removeClass("hidden");
-                $("#opinion-2 #opinion-submit").removeClass("hidden");
-            });
+            document.querySelector("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("hidden");
+            document.querySelector(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("hidden");
+            document.querySelector("#opinion-2 #opinion-inputs").removeClass("hidden");
+            document.querySelector("#opinion-2 #opinion-submit").removeClass("hidden");
+        });
 
-            $("#opinion-1 a:first").click(function(){
-                $("#opinion-1 a.ghost").removeClass("ghost");
-                $(`#opinion-1 a:last`).addClass("ghost");
+        document.querySelector("#opinion-1 a:first").click(function(){
+            document.querySelector("#opinion-1 a.ghost").removeClass("ghost");
+            document.querySelector(`#opinion-1 a:last`).addClass("ghost");
 
-                $("#opinion-2").addClass("hidden");
-                $("#opinion-3").removeClass("hidden");
-            });
+            document.querySelector("#opinion-2").addClass("hidden");
+            document.querySelector("#opinion-3").removeClass("hidden");
         });
         </script>
         @endif
     </div>
-</form>
+</x-shipyard.app.form>
 @endsection

@@ -1,4 +1,5 @@
-@extends("layouts.shipyard.mail")
+@extends("layouts.mail")
+@section("title", "Nowe zapytanie o DJa")
 
 @section("content")
 
@@ -7,7 +8,7 @@
 <x-client.contact-info :data="$data" />
 
 <div class="flex down">
-    <span><strong>Rodzaj uroczystości</strong>: {{ $data["occasion"] }}</span>
+    <span><strong>Rodzaj imprezy</strong>: {{ $data["occasion"] }}</span>
     <span><strong>Data</strong>: {{ $data["date"] }}</span>
     <p>{{ $data["wishes"] }}</p>
 </div>

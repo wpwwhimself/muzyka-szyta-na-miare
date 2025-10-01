@@ -47,9 +47,9 @@
             }
         }
         </style>
-        <div class="flex-right center day-tiles">
+        <div class="flex right center day-tiles">
         @forelse ($free_days as $day)
-            <a href="{{ route('qc-mod-free-day', ['date' => $day->date->format("Y-m-d"), 'mode' => 'remove']) }}" class="flex-down center">
+            <a href="{{ route('qc-mod-free-day', ['date' => $day->date->format("Y-m-d"), 'mode' => 'remove']) }}" class="flex down center">
                 <span>{{ $day->date->format("d.m") }}</span>
                 <small class="ghost">{{ $day->date->addDay()->diffForHumans() }}</small>
             </a>

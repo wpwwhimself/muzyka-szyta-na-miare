@@ -6,7 +6,8 @@
 @unless($slot == "" || empty($slot))
 <div @class([
     "extendo-section",
-    "flex-down",
+    "flex",
+    "down",
     "center",
     "no-shrinking" => $noShrinking,
 ])>

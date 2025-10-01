@@ -25,7 +25,7 @@
 
         <progress id="loader" class="hidden"></progress>
 
-        <div id="song_list" class="flex-down center"></div>
+        <div id="song_list" class="flex down center"></div>
 
         <script defer>
         const songs = {!! json_encode($set->songs) !!}

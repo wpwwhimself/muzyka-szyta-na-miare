@@ -72,12 +72,12 @@
         @endforeach
     </x-slot>
 
-    <div class="showcase-section flex-down spaced" data-mode="reels">
+    <div class="showcase-section flex down" data-mode="reels">
         <h2>Najnowsze realizacje</h2>
         <x-front.showcase-reels :showcases="$showcases" />
     </div>
 
-    <div class="showcase-section flex-down spaced scroll-hidden" data-mode="list">
+    <div class="showcase-section flex down scroll-hidden" data-mode="list">
         <div id="songs">
             <h2>
                 Wszystkie utwory, jakie mam w repertuarze
@@ -102,7 +102,7 @@
             <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
             <script defer>getSongList("dj");</script>
             <div class="popup">
-                <div class="popup-contents flex-down center">
+                <div class="popup-contents flex down center">
                     <h3 class="song-full-title"></h3>
                     <p class="song-desc"></p>
                     <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>

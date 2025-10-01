@@ -64,8 +64,8 @@ function getSongList(domain = undefined) {
         .then(res => {
             if(res.length == 0) return;
 
-            const list = $("#songs ul");
-            $("#songs .grayed-out").remove();
+            const list = document.querySelector("#songs ul");
+            document.querySelector("#songs .grayed-out").remove();
             for(song of res) {
                 const tags = song.tags?.map(tag => tag.id).join(",");
 
@@ -80,9 +80,9 @@ function getSongList(domain = undefined) {
                     >💽</span>` : ``}
                 </li>`);
             }
-            list.after($(`<p>Razem: <b id="songs-count">${res.length}</b></p>`));
+            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="songs-count">${res.length}</b></p>`);
 
-            $("#song-loader").hide();
+            document.querySelector("#song-loader").classList.add("hidden");
 
             const player = document.querySelector("#songs audio");
             $("#songs .clickable").click(function(){

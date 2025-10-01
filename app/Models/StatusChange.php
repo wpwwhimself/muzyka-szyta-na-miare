@@ -10,10 +10,10 @@ class StatusChange extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Historia zmian",
+        "icon" => "timeline",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 99,
     ];
 

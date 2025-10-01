@@ -8,7 +8,7 @@
 
         <x-quest-type :type="$quest->quest_type" />
 
-        <div class="flex-down">
+        <div class="flex down">
             <h3 class="song-title">
                 {{ $song->title ?? "bez tytułu" }}
                 @if (is_archmage() && (

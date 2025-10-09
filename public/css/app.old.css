@@ -549,28 +549,7 @@ footer .contact-info{
     }
 }
 
-.quest-mini {
-    display: grid;
-    grid-template-columns: 1fr 10em 12em;
-    gap: var(--size-xs);
-    align-items: center;
-    border-radius: var(--size-m);
-    padding: var(--size-xs);
-    text-decoration: none;
 
-    --q-clr: 128, 128, 128;
-
-    &:hover {
-        background: rgba(var(--q-clr), 0.3);
-        color: var(--fg);
-    }
-}
-@container section (width < 600px) {
-    .quest-mini {
-        display: flex;
-        flex-direction: column;
-    }
-}
 
 .song-title{
     margin: 0;

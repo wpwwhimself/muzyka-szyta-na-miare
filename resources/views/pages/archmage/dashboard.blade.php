@@ -44,7 +44,7 @@
     </x-slot>
 
     @forelse ($requests as $request)
-    <x-quest-mini :quest="$request" />
+    {{-- <x-quest-mini :quest="$request" /> --}}
     @empty
     <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
     @endforelse
@@ -153,13 +153,13 @@
                     </td>
                     <td>
                     @if ($change->is_request)
-                        @if ($change->re_quest?->client)
-                            <a href="{{ route('clients', ['search' => $change->re_quest?->client?->id]) }}">{{ _ct_($change->re_quest?->client->client_name) }}</a>
+                        @if ($change->re_quest?->user)
+                            <a href="{{ route('clients', ['search' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
                         @else
                             {{ _ct_($change->re_quest?->client_name) }}
                         @endif
                     @else
-                        <a href="{{ route('clients', ['search' => $change->re_quest?->client->id]) }}">{{ _ct_($change->re_quest?->client->client_name) }}</a>
+                        <a href="{{ route('clients', ['search' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
                     @endif
                     </td>
                     <td>

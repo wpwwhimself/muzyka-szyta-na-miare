@@ -119,6 +119,29 @@ footer .icon.invert-when-dark {
 .p-4, .p-7, .p-8, .p-17, .p-18, .p-33{ --q-clr: 175, 175, 175; }
 .p-9, .p-19, .p-32, .p-34, .p-14{ --q-clr: 57, 196, 57; }
 
+.quest-mini {
+    display: grid;
+    grid-template-columns: 1fr 10em 12em;
+    gap: var(--size-xs);
+    align-items: center;
+    border-radius: var(--size-m);
+    padding: var(--size-xs);
+    text-decoration: none;
+
+    --q-clr: 128, 128, 128;
+
+    &:hover {
+        background: rgba(var(--q-clr), 0.3);
+        color: var(--fg);
+    }
+}
+@container section (width < 600px) {
+    .quest-mini {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .quest-phase {
     & > .quest-phase-bars{
         display: grid;

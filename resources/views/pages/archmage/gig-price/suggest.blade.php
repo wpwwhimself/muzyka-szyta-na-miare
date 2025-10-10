@@ -9,7 +9,7 @@
         <x-a :href="route('gig-price-places')" icon="location-dot">Miejsca</x-a>
     </x-slot>
 
-    <div id="settings" class="flex-right center">
+    <div id="settings" class="flex right center">
         @foreach ($defaults as $heading => $fields)
         <div class="section flex down center">
             <h2>{{ $heading }}</h2>
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="flex-right">
+    <div class="flex right">
         <x-button action="#/" label="Oblicz" icon="magnifying-glass-dollar" onclick="calculateGigPrice()" />
     </div>
 

@@ -1,10 +1,11 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Zapytania")
 
 @section('content')
 
 <x-section id="requests-list"
     title="Lista zapytań"
-    icon="envelope-open-text"
+    :icon="model_icon('requests')"
 >
     <x-slot name="buttons">
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
@@ -15,8 +16,8 @@
     @empty
     <p class="grayed-out">brak zapytań</p>
     @endforelse
-    
-    {{ $requests->links() }}
+
+    {{ $requests->links("components.shipyard.pagination.default") }}
 </x-section>
 
 @endsection

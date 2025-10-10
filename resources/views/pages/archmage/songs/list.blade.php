@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="flex-right">
+<div class="flex right">
     <x-a :href="route('file-size-report')" icon="weight-hanging">Raport wielkości sejfów</x-a>
 </div>
 
@@ -14,7 +14,7 @@
         <x-a :href="route('song-genres')" icon="radio">Gatunki</x-a>
         <x-a :href="route('song-tags')" icon="tag">Tagi utworów</x-a>
         <x-a :href="route('file-tags')" icon="tag">Tagi plików</x-a>
-        <form method="get" id="search" class="flex-right" action="{{ route('songs') }}">
+        <form method="get" id="search" class="flex right" action="{{ route('songs') }}">
             <input type="text" name="search" class="small" value="{{ $search }}" />
             <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
         </form>

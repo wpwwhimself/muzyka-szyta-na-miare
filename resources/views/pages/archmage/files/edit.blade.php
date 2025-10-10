@@ -60,7 +60,7 @@
     <input type="hidden" name="song_id" value="{{ $file?->song_id ?? $song?->id }}" />
 
     <x-section title="Dane wersji" icon="note-sticky">
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-input type="text"
                 name="variant_name" label="Nazwa wariantu"
                 :value="$file?->variant_name"
@@ -90,13 +90,13 @@
         </div>
     </x-section>
 
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-section title="Tagi" icon="tag">
             <x-slot name="buttons">
                 <x-a :href="route('file-tag-edit')" target="_blank" icon="plus">Dodaj nowy</x-a>
             </x-slot>
 
-            <div class="flex-right center wrap">
+            <div class="flex right center wrap">
             @forelse ($tags as $tag)
             <div>
                 <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" :value="$file?->tags->contains($tag->id)" />
@@ -111,7 +111,7 @@
         <x-section title="Pliki" icon="file">
             @if ($file)
             <h2>Usuń istniejące pliki</h2>
-            <div class="flex-right center">
+            <div class="flex right center">
                 @foreach ($file?->file_paths as $extension => $path)
                 <x-input type="checkbox" name="delete_files[{{ $extension }}]" :label="$extension" />
                 @endforeach

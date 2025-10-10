@@ -4,7 +4,7 @@
 
 <x-invoice :invoice="$invoice" />
 
-<form action="{{ route('invoice-visibility') }}" method="post" class="flex-right hide-for-print">
+<form action="{{ route('invoice-visibility') }}" method="post" class="flex right hide-for-print">
     @csrf
     <input type="hidden" name="id" value="{{ $invoice->id }}" />
     <input type="hidden" name="visible" value="{{ intval(!$invoice->visible) }}" />

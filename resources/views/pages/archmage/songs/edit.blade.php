@@ -6,7 +6,7 @@
     <input type="hidden" name="id" value="{{ $song->id }}">
 
     <x-section title="Dane utworu" icon="compact-disc">
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-extendo-section title="ID">
                 <strong>{{ $song->id }}</strong>
             </x-extendo-section>
@@ -35,7 +35,7 @@
     </x-section>
 
     <x-section title="Reklama" icon="bullhorn">
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-extendo-section title="Showcase">
                 @if($song->has_showcase_file)
                 <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
@@ -57,7 +57,7 @@
             </x-extendo-section>
 
             <x-extendo-section title="Tagi">
-                <div class="flex-right center wrap">
+                <div class="flex right center wrap">
                     @foreach ($tags as $tag)
                     <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" :value="in_array($tag->id, $song->tags->pluck('id')->toArray())" />
                     @endforeach

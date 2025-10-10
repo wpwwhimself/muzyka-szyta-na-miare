@@ -59,7 +59,7 @@
     @endif
 
     <x-section title="Wybierz pliki" icon="file">
-        <div class="flex-right center">
+        <div class="flex right center">
             @foreach ($files as $file)
             @if (pathinfo($file, PATHINFO_EXTENSION) == "md")
             <div>
@@ -73,7 +73,7 @@
         </div>
     </x-section>
 
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-section title="Opisz wersję" icon="note-sticky">
             <x-input type="text"
                 name="variant_name" label="Nazwa wariantu"
@@ -105,7 +105,7 @@
                 <x-a :href="route('file-tag-edit')" target="_blank" icon="plus">Dodaj nowy</x-a>
             </x-slot>
 
-            <div class="flex-right center wrap">
+            <div class="flex right center wrap">
             @forelse ($tags as $tag)
             <div>
                 <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" />

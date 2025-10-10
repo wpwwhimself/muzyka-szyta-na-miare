@@ -8,7 +8,7 @@
     </div>
     <form action="{{ route('invoice-add') }}" method="post">
         @csrf
-        <div class="grid-3">
+        <div class="grid" style="--col-count: 3;">
             <x-input type="text" name="payer_name" label="Nazwa płatnika" value="{{ _ct_($client?->client_name) }}" />
             <x-input type="text" name="payer_title" label="Tytuł płatnika" :small="true" />
             <x-input type="text" name="payer_address" label="Adres" />

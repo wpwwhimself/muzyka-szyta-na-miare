@@ -2,7 +2,7 @@
 
 @section("content")
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <script src="{{ mix('js/react/workTimeClock.js') }}" defer></script>
     <section id="clock"></section>
 

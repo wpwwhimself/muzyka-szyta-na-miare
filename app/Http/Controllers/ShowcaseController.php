@@ -27,7 +27,7 @@ class ShowcaseController extends Controller
             ->get()
             ->mapWithKeys(fn($s) => [$s["id"] => "$s[title] ($s[artist]) [$s[id]]"]);
 
-        return view(user_role().".showcases", array_merge(
+        return view("pages.".user_role().".showcases", array_merge(
             ["title" => "Lista reklam"],
             compact("showcases", "organ_showcases", "dj_showcases", "client_showcases", "all_songs")
         ));
@@ -70,7 +70,7 @@ class ShowcaseController extends Controller
     {
         $platforms = ShowcasePlatform::orderBy("ordering")->get();
 
-        return view(user_role().".showcases.platforms.list", compact(
+        return view("pages.".user_role().".showcases.platforms.list", compact(
             "platforms"
         ));
     }
@@ -81,7 +81,7 @@ class ShowcaseController extends Controller
             ? ShowcasePlatform::find($id)
             : null;
 
-        return view(user_role().".showcases.platforms.edit", compact(
+        return view("pages.".user_role().".showcases.platforms.edit", compact(
             "platform"
         ));
     }
@@ -109,7 +109,7 @@ class ShowcaseController extends Controller
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         }
 
-        return view(user_role().".showcases.organ.edit", compact(
+        return view("pages.".user_role().".showcases.organ.edit", compact(
             "showcase",
             "showcase_platforms",
             "platform_suggestion",
@@ -142,7 +142,7 @@ class ShowcaseController extends Controller
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         }
 
-        return view(user_role().".showcases.dj.edit", compact(
+        return view("pages.".user_role().".showcases.dj.edit", compact(
             "showcase",
             "showcase_platforms",
             "platform_suggestion",

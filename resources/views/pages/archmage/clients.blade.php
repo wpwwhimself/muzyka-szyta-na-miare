@@ -31,7 +31,7 @@
 <section id="clients-list">
     <div class="section-header">
         <h1><i class="fa-solid fa-users"></i> Lista klientów</h1>
-        <form method="get" id="search" class="flex-right" action="">
+        <form method="get" id="search" class="flex right" action="">
             <input type="text" name="search" class="small" value="{{ $search }}" />
             <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
         </form>

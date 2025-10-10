@@ -66,7 +66,7 @@
         <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
 
         <x-extendo-section title="Rolka">
-            <div class="flex-right middle">
+            <div class="flex right middle">
                 <x-input type="checkbox" name="has_recorded_reel" label="Nagrałem się" :value="$quest->song->has_recorded_reel" />
                 <x-input type="checkbox" name="has_original_mv" label="Jest teledysk" :value="$quest->song->has_original_mv" />
             </div>
@@ -103,7 +103,7 @@
     </x-extendo-block>
 
     @if($quest->status_id == 12)
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-song-work-time-log :quest="$quest" :extended="true" />
         <x-quest-history :quest="$quest" :extended="true" />
     </div>
@@ -132,7 +132,7 @@
             <x-extendo-section title="Chmura">
                 @if ($quest->client->external_drive)
                 <x-a href="{{ $quest->client->external_drive }}" _target="blank">Link</x-a>
-                <form action="{{ route('quest-files-external-update') }}" method="post" class="flex-right center">
+                <form action="{{ route('quest-files-external-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
 
@@ -158,7 +158,7 @@
                     @endif
                 </span>
 
-                <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex-right center">
+                <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
                     <x-button action="submit" :label="!$quest->files_ready ? 'Wszystko wgrane' : 'Jednak nie'"
@@ -170,7 +170,7 @@
         <x-files.list :grouped-files="$files" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
     </x-extendo-block>
 
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-extendo-block key="client"
             header-icon="user"
             title="Klient"

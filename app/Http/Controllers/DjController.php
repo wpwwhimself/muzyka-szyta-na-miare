@@ -13,7 +13,7 @@ class DjController extends Controller
 {
     public function index()
     {
-        return view(user_role().".dj.index");
+        return view("pages.".user_role().".dj.index");
     }
 
     #region songs
@@ -21,7 +21,7 @@ class DjController extends Controller
     {
         $songs = DjSong::orderBy("title")->paginate(25);
 
-        return view(user_role().".dj.songs.list", compact(
+        return view("pages.".user_role().".dj.songs.list", compact(
             "songs",
         ));
     }
@@ -42,7 +42,7 @@ class DjController extends Controller
         //     $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         // }
 
-        return view(user_role().".dj.songs.edit", compact(
+        return view("pages.".user_role().".dj.songs.edit", compact(
             "song",
             "tempos",
             "genres",
@@ -78,7 +78,7 @@ class DjController extends Controller
     {
         $sets = DjSampleSet::orderBy("name")->paginate(25);
 
-        return view(user_role().".dj.sample-sets.list", compact(
+        return view("pages.".user_role().".dj.sample-sets.list", compact(
             "sets",
         ));
     }
@@ -87,7 +87,7 @@ class DjController extends Controller
     {
         $set = DjSampleSet::find($id);
 
-        return view(user_role().".dj.sample-sets.edit", compact(
+        return view("pages.".user_role().".dj.sample-sets.edit", compact(
             "set",
         ));
     }
@@ -113,7 +113,7 @@ class DjController extends Controller
     {
         $sets = DjSet::orderBy("name")->paginate(25);
 
-        return view(user_role().".dj.sets.list", compact(
+        return view("pages.".user_role().".dj.sets.list", compact(
             "sets",
         ));
     }
@@ -127,7 +127,7 @@ class DjController extends Controller
             ->toArray();
         $sampleSets = DjSampleSet::orderBy("name")->get()->mapWithKeys(fn ($s) => [$s->id => $s->full_name]);
 
-        return view(user_role().".dj.sets.edit", compact(
+        return view("pages.".user_role().".dj.sets.edit", compact(
             "set",
             "songs",
             "sampleSets",
@@ -154,7 +154,7 @@ class DjController extends Controller
     #region gig mode
     public function gigMode()
     {
-        return view(user_role().".dj.gig-mode");
+        return view("pages.".user_role().".dj.gig-mode");
     }
 
     public function gigModeInit()

@@ -10,7 +10,7 @@
     <x-button :action="route('gig-price-suggest')" label="Wycena grania" icon="magnifying-glass-dollar" />
 </div>
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <section>
         <div class="section-header">
             <h1><i class="fa-solid fa-chart-pie"></i> Podsumowanie</h1>

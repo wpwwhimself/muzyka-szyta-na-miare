@@ -7,7 +7,7 @@
     </div>
     <form action="{{ route("settings-update") }}" method="POST">
         @csrf
-        <div class="grid-3">
+        <div class="grid" style="--col-count: 3;">
             @foreach ($settings as $setting)
             <x-input type="text"
                 name="{{ $setting->setting_name }}" value="{{ $setting->value_str }}"

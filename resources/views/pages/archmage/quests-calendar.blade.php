@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <section>
         <div class="section-header">
             <h1>
@@ -28,7 +28,7 @@
             </h1>
         </div>
 
-        <form action="{{ route('qc-mod-free-day') }}" class="flex-right center">
+        <form action="{{ route('qc-mod-free-day') }}" class="flex right center">
             @csrf
             <x-input type="date" name="date" label="Dodaj dzień" :small="true" min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" />
             <input type="hidden" name="mode" value="add" />

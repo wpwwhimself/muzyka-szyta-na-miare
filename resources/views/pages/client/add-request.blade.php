@@ -10,7 +10,7 @@
         @csrf
         <h1>Dodaj nowe zapytanie</h1>
         <x-section title="Dane zlecenia" icon="cart-flatbed">
-            <div class="bulk-box sc-line flex-right center">
+            <div class="bulk-box sc-line flex right center">
                 <x-select name="quest_type[]" label="Rodzaj zlecenia" :options="$questTypes" :required="true" :small="true" />
                 <x-input type="text" name="title[]" label="Tytuł utworu" />
                 <x-input type="text" name="artist[]" label="Wykonawca" />

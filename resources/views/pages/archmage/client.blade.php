@@ -4,10 +4,10 @@
 <form action="{{ route("client-edit", ['id' => $client->id]) }}" method="POST">
     @csrf
 
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-section title="Dane osobowe" icon="clipboard-user">
             <x-input type="text" name="client_name" label="Nazwisko" :value="_ct_($client->client_name)" />
-            <div class="grid-2">
+            <div class="grid" style="--col-count: 2;">
                 <x-input type="email" name="email" label="Email" :value="_ct_($client->email)" :small="true" />
                 <x-input type="phone" name="phone" label="Telefon" :value="_ct_($client->phone)" :small="true" />
                 <x-input type="text" name="other_medium" label="Inna droga kontaktu" :value="_ct_($client->other_medium)" :small="true" />
@@ -16,7 +16,7 @@
         </x-section>
 
         <x-section title="Dane klienta" icon="suitcase">
-            <div class="grid-2">
+            <div class="grid" style="--col-count: 2;">
                 <x-select name="trust" label="Zaufanie" :value="$client->trust" :options="$trust_levels" :small="true" />
                 <x-input type="number" name="budget" label="Budżet" :value="_c_($client->budget)" :small="true" step="0.01" />
                 <x-input type="number" name="extra_exp" label="Dodatkowe doświadczenie" :value="$client->extra_exp" :small="true" />

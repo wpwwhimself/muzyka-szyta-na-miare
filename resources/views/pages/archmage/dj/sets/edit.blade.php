@@ -8,7 +8,7 @@
 
         <input type="hidden" name="id" value="{{ $set?->id }}" />
 
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-input name="name" label="Nazwa"
                 type="text" :value="$set?->name"
             />
@@ -18,7 +18,7 @@
         </div>
 
         @if ($set)
-        <div class="flex-right center middle">
+        <div class="flex right center middle">
             <x-select name="song" label="Dodaj utwór" :options="$songs" :empty-option="true" :small="true" />
             <x-select name="sample_set" label="Dodaj wszystkie utwory z sampla" :options="$sampleSets" :empty-option="true" :small="true" />
         </div>

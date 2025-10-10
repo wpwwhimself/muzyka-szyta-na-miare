@@ -26,7 +26,7 @@
             <x-file-tag :transpose="$version->transposition" />
             @endif
             @if ($version->exclusiveClients && is_archmage())
-            <div class="file-tag flex-right center middle"
+            <div class="file-tag flex right center middle"
                 style="background-color: white;"
                 {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("client_name")->join(", ")) }}
             >

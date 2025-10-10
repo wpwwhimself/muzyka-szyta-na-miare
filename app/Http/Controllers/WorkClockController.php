@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class WorkClockController extends Controller
 {
     public function main() {
-        return view(user_role().".studio", array_merge([
+        return view("pages.".user_role().".studio", array_merge([
             "title" => "Studio",
         ]));
     }
@@ -30,7 +30,7 @@ class WorkClockController extends Controller
     public function index($quest_id) {
         $quest = Quest::find($quest_id);
 
-        return view(user_role().".studio-view", array_merge([
+        return view("pages.".user_role().".studio-view", array_merge([
             "title" => implode(" | ", [
                 $quest->song->title ?? "Utwór bez tytułu",
                 "Studio"

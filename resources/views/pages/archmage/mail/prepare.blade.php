@@ -5,7 +5,7 @@
 <form action="{{ route('client-mail-send') }}" method="POST">
     @csrf
 
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <x-section title="Adresat" icon="user">
             <x-select name="clients[]" label="Klient" :options="$clients" />
             <script defer>

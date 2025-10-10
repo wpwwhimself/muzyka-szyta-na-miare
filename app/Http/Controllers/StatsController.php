@@ -413,7 +413,7 @@ class StatsController extends Controller
         ];
         $stats = json_decode(json_encode($stats));
 
-        return view(user_role().".stats", array_merge(
+        return view("pages.".user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact("stats"),
         ));
@@ -463,7 +463,7 @@ class StatsController extends Controller
             ->get()
         ;
 
-        return view(user_role().".finance", array_merge(
+        return view("pages.".user_role().".finance", array_merge(
             ["title" => "Centrum Finansowe"],
             compact(
                 "unpaids", "recent", "this_month", "saturation", "returns"
@@ -608,7 +608,7 @@ class StatsController extends Controller
                 ->get(["status_changes.*", "date as created_at"])
         )->sortByDesc("created_at");
 
-        return view(user_role().".finance-summary", array_merge(
+        return view("pages.".user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],
             compact("gains", "losses", "summary")
         ));
@@ -619,7 +619,7 @@ class StatsController extends Controller
         $client = ($rq->fillfor) ? User::findOrFail($rq->fillfor) : null;
         $quest_id = $rq->quest;
 
-        return view(user_role().".invoices", array_merge(
+        return view("pages.".user_role().".invoices", array_merge(
             ["title" => "Lista faktur"],
             compact("invoices", "client", "quest_id")
         ));
@@ -631,7 +631,7 @@ class StatsController extends Controller
 
         return (substr($rq->path(), 0, 3) == "api")
             ? response()->json(["invoice" => $invoice])
-            : view(user_role().".invoice", array_merge(
+            : view("pages.".user_role().".invoice", array_merge(
                 ["title" => "Faktura nr ".$invoice->fullCode],
                 compact("invoice"),
             ));
@@ -724,7 +724,7 @@ class StatsController extends Controller
             "Razem" => Cost::sum("amount"),
         ];
 
-        return view(user_role().".costs", array_merge(
+        return view("pages.".user_role().".costs", array_merge(
             ["title" => "Lista kosztów"],
             compact("costs", "types", "summary"),
         ));
@@ -745,7 +745,7 @@ class StatsController extends Controller
     public function costTypes(){
         $types = CostType::all();
 
-        return view(user_role().".cost-types", array_merge(
+        return view("pages.".user_role().".cost-types", array_merge(
             ["title" => "Typy kosztów"],
             compact("types"),
         ));
@@ -776,7 +776,7 @@ class StatsController extends Controller
         }
         arsort($sizes);
 
-        return view(user_role().".file-size-report", array_merge(
+        return view("pages.".user_role().".file-size-report", array_merge(
             ["title" => "Raport zajętości serwera"],
             compact(
                 "sizes", "times", "songs"
@@ -787,7 +787,7 @@ class StatsController extends Controller
     public function questsCalendar(){
         $free_days = CalendarFreeDay::orderBy("date")->whereDate("date", ">=", Carbon::today())->get();
 
-        return view(user_role().".quests-calendar", array_merge(
+        return view("pages.".user_role().".quests-calendar", array_merge(
             ["title" => "Grafik zleceń"],
             compact(
                 "free_days"
@@ -878,7 +878,7 @@ class StatsController extends Controller
         $money["Dochody"] = $money["Przychody"] - $money["Koszty"];
         $money["Podatek"] = tax_calc($money["Dochody"]);
 
-        return view(user_role().".taxes", array_merge(
+        return view("pages.".user_role().".taxes", array_merge(
             ["title" => "Kwestie podatkowe"],
             compact(
                 "fiscal_year",
@@ -903,7 +903,7 @@ class StatsController extends Controller
         $places = GigPricePlace::orderBy("name")->get()
             ->mapWithKeys(fn ($p) => [(strtolower($p->name) . "|" . $p->distance_km) => $p->name . " (" . $p->distance_km . " km)"]);
 
-        return view(user_role().".gig-price.suggest", array_merge(
+        return view("pages.".user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],
             compact("defaults", "rates", "places"),
         ));
@@ -913,7 +913,7 @@ class StatsController extends Controller
     {
         $defaults = GigPriceDefault::all();
 
-        return view(user_role().".gig-price.defaults", array_merge(
+        return view("pages.".user_role().".gig-price.defaults", array_merge(
             ["title" => "Ustawienia domyślne wyceny grania"],
             compact("defaults"),
         ));
@@ -933,7 +933,7 @@ class StatsController extends Controller
 
         $rates = GigPriceRate::orderBy("value")->get();
 
-        return view(user_role().".gig-price.rates", array_merge(
+        return view("pages.".user_role().".gig-price.rates", array_merge(
             ["title" => "Stawki"],
             compact("rates"),
         ));
@@ -941,7 +941,7 @@ class StatsController extends Controller
 
     public function gigPriceRate(?GigPriceRate $rate = null)
     {
-        return view(user_role().".gig-price.rate", array_merge(
+        return view("pages.".user_role().".gig-price.rate", array_merge(
             ["title" => "Stawka"],
             compact("rate"),
         ));
@@ -962,7 +962,7 @@ class StatsController extends Controller
     {
         $places = GigPricePlace::orderBy("name")->get();
 
-        return view(user_role().".gig-price.places", array_merge(
+        return view("pages.".user_role().".gig-price.places", array_merge(
             ["title" => "Miejsca"],
             compact("places"),
         ));
@@ -970,7 +970,7 @@ class StatsController extends Controller
 
     public function gigPricePlace(?GigPricePlace $place = null)
     {
-        return view(user_role().".gig-price.place", array_merge(
+        return view("pages.".user_role().".gig-price.place", array_merge(
             ["title" => "Miejsce"],
             compact("place"),
         ));

@@ -16,7 +16,7 @@
             Dodaj koszt
         </h1>
     </div>
-    <form action="{{ route('mod-cost') }}" method="post" class="flex-right center">
+    <form action="{{ route('mod-cost') }}" method="post" class="flex right center">
         @csrf
         <x-input type="date" name="created_at" label="Data" small :value="date('Y-m-d')" />
         <x-select name="cost_type_id" label="Typ" :options="$types" />

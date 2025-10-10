@@ -7,7 +7,7 @@
         <x-a :href="route('showcase-platform-edit')" icon="plus">Dodaj</x-a>
     </x-slot>
 
-    <div class="flex-right center">
+    <div class="flex right center">
         @forelse ($platforms as $platform)
         <div class="flex down center">
             <a href="{{ route('showcase-platform-edit', ['id' => $platform->code]) }}">

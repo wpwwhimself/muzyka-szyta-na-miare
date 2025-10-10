@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="grid-2 force-block">
+<div class="grid force-block" style="--col-count: 2;">
   <section>
     <div class="section-header">
       <h1>
@@ -37,7 +37,7 @@
   <x-barplot title="Przychód na godzinę" :data="$stats->finances->prop_per_h" :all-pln="true" />
 </section>
 
-<div class="grid-2 force-block">
+<div class="grid force-block" style="--col-count: 2;">
   <section class="sc-line">
     <x-sc-scissors />
     <div class="section-header">

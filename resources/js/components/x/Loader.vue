@@ -4,7 +4,7 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <template>
-    <div class="loader-wrapper flex-right center middle">
+    <div class="loader-wrapper flex right center middle">
         <FontAwesomeIcon :icon="faCog" spin size="10x" />
     </div>
 </template>

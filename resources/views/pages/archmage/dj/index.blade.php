@@ -2,7 +2,7 @@
 
 @section("content")
 
-<div class="flex-right">
+<div class="flex right">
     <x-button :action="route('dj-gig-mode')" label="Gramy!" icon="microphone" />
 </div>
 

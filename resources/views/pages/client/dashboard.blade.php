@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <x-section id="who-am-i" class="sc-line"
         :title="Auth::user()->client_name"
         icon="user-check"
@@ -176,7 +176,7 @@
     @endforelse
 </x-section>
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <x-section title="Aktualne zlecenia" icon="gears" id="dashboard-quests-ongoing">
         <x-slot name="buttons">
             <x-a :href="route('quests')">Wszystkie</x-a>
@@ -202,7 +202,7 @@
     </x-section>
 </div>
 
-<div class="flex-right">
+<div class="flex right">
     @unless (Auth::user()->trust == -1)
     <x-button
         action="{{ route('add-request') }}"

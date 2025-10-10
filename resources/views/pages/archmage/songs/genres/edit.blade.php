@@ -15,7 +15,7 @@
         />
     </x-section>
 
-    <div class="flex-right center">
+    <div class="flex right center">
         <x-button action="submit" name="action" value="save" label="Zatwierdź" icon="check" />
         @if ($genre)
         <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" />

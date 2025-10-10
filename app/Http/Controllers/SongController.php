@@ -55,7 +55,7 @@ class SongController extends Controller
 
         $tags = FileTag::orderBy("name")->get();
 
-        return view(user_role().".songs.list", array_merge(
+        return view("pages.".user_role().".songs.list", array_merge(
             ["title" => "Lista utworów"],
             compact("songs", "song_work_times", "price_codes", "search", "tags")
         ));
@@ -75,7 +75,7 @@ class SongController extends Controller
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         }
 
-        return view(user_role().".songs.edit", array_merge(
+        return view("pages.".user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
             compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion"),
         ));
@@ -106,7 +106,7 @@ class SongController extends Controller
     public function listGenres(): View
     {
         $genres = Genre::orderBy("name")->get();
-        return view(user_role().".songs.genres.list", array_merge(
+        return view("pages.".user_role().".songs.genres.list", array_merge(
             ["title" => "Gatunki utworów"],
             compact("genres"),
         ));
@@ -115,7 +115,7 @@ class SongController extends Controller
     public function editGenre(string $id = null): View
     {
         $genre = Genre::find($id);
-        return view(user_role().".songs.genres.edit", array_merge(
+        return view("pages.".user_role().".songs.genres.edit", array_merge(
             ["title" => $genre ? $genre->name." | Edycja gatunku" : "Tworzenie gatunku"],
             compact("genre"),
         ));
@@ -137,7 +137,7 @@ class SongController extends Controller
     public function listTags(): View
     {
         $tags = SongTag::orderBy("name")->get();
-        return view(user_role().".songs.tags.list", array_merge(
+        return view("pages.".user_role().".songs.tags.list", array_merge(
             ["title" => "Tagi utworów"],
             compact("tags"),
         ));
@@ -146,7 +146,7 @@ class SongController extends Controller
     public function editTag(string $id = null): View
     {
         $tag = SongTag::find($id);
-        return view(user_role().".songs.tags.edit", array_merge(
+        return view("pages.".user_role().".songs.tags.edit", array_merge(
             ["title" => $tag ? $tag->name." | Edycja tagu" : "Tworzenie taga"],
             compact("tag"),
         ));

@@ -21,7 +21,7 @@
             Potwierdzenie wysłałem też na Twojego maila.
             @endif
         </p>
-        <div class="flex-right">
+        <div class="flex right">
             <x-button
                 action="{{ route('login') }}" label="Zaloguj się" icon="user-circle"
                 />

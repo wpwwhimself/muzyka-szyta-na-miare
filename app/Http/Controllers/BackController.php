@@ -124,16 +124,16 @@ class BackController extends Controller
 
         $clients = [];
         if (is_archmage()) {
-            $clients_raw = User::all()->toArray();
+            $clients_raw = User::has("notes")->get();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
+                $clients[$client["id"]] = _ct_($client->notes->client_name ." «" . $client->id . "»");
             }
         }
 
         $quest_types = QuestType::all()->pluck("type", "id")->toArray();
         $minimal_prices = array_combine($quest_types, QUEST_MINIMAL_PRICES());
 
-        return view(user_role().".prices", array_merge(
+        return view("pages.".user_role().".prices", array_merge(
             ["title" => "Cennik"],
             compact("prices", "discount", "minimal_prices", "clients")
         ));
@@ -180,7 +180,7 @@ class BackController extends Controller
             $titles[$key] = preg_replace('/(.*)doc[\/\\\](.*)\.blade\.php/', "$2", $ttl);
         }
 
-        return view(user_role().".ppp", array_merge(
+        return view("pages.".user_role().".ppp", array_merge(
             ["title" => "Poradnik Przyszłych Pokoleń"],
             compact("page", "titles")
         ));

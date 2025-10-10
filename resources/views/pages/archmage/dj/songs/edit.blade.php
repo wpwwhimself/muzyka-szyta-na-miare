@@ -7,7 +7,7 @@
     <input type="hidden" name="id" value="{{ $song?->id ?? App\Models\DjSong::nextId() }}" />
 
     <x-section title="Meta" icon="compact-disc">
-        <div class="flex-right center black-back">
+        <div class="flex right center black-back">
             <x-input name="id" label="ID"
                 type="text" :value="$song?->id"
                 small disabled
@@ -24,7 +24,7 @@
             @endforeach
         </div>
 
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-input name="key" label="Tonacja wyjściowa"
                 type="text" :value="$song?->key"
                 small
@@ -45,7 +45,7 @@
     </x-section>
 
     <x-section title="Pomoce wykonawcze" icon="masks-theater">
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-input name="songmap" label="Mapa utworu"
                 type="text" :value="$song?->songmap"
                 small
@@ -57,7 +57,7 @@
             />
         </div>
 
-        <div class="grid-3" style="grid-template-columns: repeat(4, 1fr);" role="song-helpers">
+        <div class="grid" style="--col-count: 3;" style="grid-template-columns: repeat(4, 1fr);" role="song-helpers">
             @foreach ([
                 ["lyrics", "Tekst"],
                 ["chords", "Akordy"],
@@ -74,7 +74,7 @@
 
     @if ($song)
     <x-section title="Reklama" icon="bullhorn">
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-extendo-section title="Showcase">
                 @if($song->has_showcase_file)
                 <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>

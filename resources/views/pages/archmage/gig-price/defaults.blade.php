@@ -6,7 +6,7 @@
     <form action="{{ route('gig-price-process-defaults') }}" method="POST">
         @csrf
 
-        <div class="flex-right center">
+        <div class="flex right center">
             @foreach ($defaults as $setting)
             <x-input type="number" step="0.01"
                 :name="$setting->name"
@@ -17,7 +17,7 @@
             @endforeach
         </div>
 
-        <div class="flex-right">
+        <div class="flex right">
             <x-button action="submit" icon="check" label="Zapisz" />
         </div>
     </form>

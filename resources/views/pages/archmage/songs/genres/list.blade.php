@@ -6,7 +6,7 @@
         <x-a :href="route('song-genre-edit')" icon="plus">Dodaj</x-a>
     </x-slot>
 
-    <div class="flex-right wrap">
+    <div class="flex right wrap">
         @forelse ($genres as $genre)
         <x-a :href="route('song-genre-edit', ['id' => $genre->id])" icon="radio">{{ $genre->name }}</x-a>
         @empty

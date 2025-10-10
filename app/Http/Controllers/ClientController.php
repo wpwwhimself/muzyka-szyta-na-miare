@@ -50,7 +50,7 @@ class ClientController extends Controller
             $clients[$k] = collect($v)->sortBy([['exp', "desc"], ['client_name', 'asc']]);
         }
 
-        return view(user_role().".clients", array_merge(
+        return view("pages.".user_role().".clients", array_merge(
             ["title" => "Klienci"],
             compact("clients", "max_exp","classes", "search")
         ));
@@ -78,7 +78,7 @@ class ClientController extends Controller
             2 => "potwierdzony",
         ];
 
-        return view(user_role().".client", array_merge([
+        return view("pages.".user_role().".client", array_merge([
             "title" => $client->client_name." | Edycja klienta"
         ], compact(
             "client",
@@ -144,7 +144,7 @@ class ClientController extends Controller
             ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])
             ->toArray();
 
-        return view(user_role().".mail.prepare", compact("clients", "client_id"));
+        return view("pages.".user_role().".mail.prepare", compact("clients", "client_id"));
     }
 
     public function mailSend(Request $rq)

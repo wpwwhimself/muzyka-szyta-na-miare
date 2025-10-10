@@ -48,7 +48,7 @@
 </x-section>
 
 @if (count($showcases_missing))
-<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: 1 / span 2;">
+<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')">
     <table>
         <thead>
             <tr>
@@ -95,7 +95,7 @@
     @endforelse
 </x-section>
 
-<div class="grid" style="--col-count: 2;">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section id="dashboard-requests" class="sc-line"
         title="Grafik"
         icon="calendar"

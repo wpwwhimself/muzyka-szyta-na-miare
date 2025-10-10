@@ -135,13 +135,13 @@ setInterval(getSong, 10e3)
 </script>
 
 <template>
-<div class="flex-right center"
+<div class="flex right center"
     v-if="!(modes && song)"
 >
     <FontAwesomeIcon :icon="faHourglass" spin size="10x" />
 </div>
 <div class="flex down center" v-else>
-    <div id="clocks-outer" class="flex-right center">
+    <div id="clocks-outer" class="flex right center">
         <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="8x" />
         <div id="clocks" class="flex down center">
             <strong>{{ renderTime(time_major) }}</strong>
@@ -152,7 +152,7 @@ setInterval(getSong, 10e3)
         </div>
     </div>
 
-    <div class="grid-2" style="align-items: normal;">
+    <div class="grid" style="--col-count: 2;" style="align-items: normal;">
         <div class="buttons">
             <div v-for="mode in modes"
                 class="submit tight clickable"
@@ -170,7 +170,7 @@ setInterval(getSong, 10e3)
             </div>
         </div>
 
-        <div id="log-table" class="flex-right keep-for-mobile center nowrap">
+        <div id="log-table" class="flex right keep-for-mobile center nowrap">
             <div v-for="log in song?.work_time"
                 class="plot-column"
             >

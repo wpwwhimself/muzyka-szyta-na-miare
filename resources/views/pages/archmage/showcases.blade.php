@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
 
 <x-section id="showcases-list" title="Lista reklam" icon="list">
     <x-slot name="buttons">
@@ -75,7 +75,7 @@
 @endforeach
 
 <x-section id="client-showcases-list" title="Reklamy klienta" icon="list">
-    <form action="{{ route('add-client-showcase') }}" method="POST" class="flex-right">
+    <form action="{{ route('add-client-showcase') }}" method="POST" class="flex right">
         @csrf
         <x-select name="song_id" label="Utwór" :options="$all_songs" :small="true" />
         <x-input type="text" name="embed" label="Embed" :small="true" />

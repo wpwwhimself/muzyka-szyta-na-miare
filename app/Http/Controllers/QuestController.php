@@ -39,7 +39,7 @@ class QuestController extends Controller
 
         $quests = $quests->paginate(25);
 
-        return view(user_role().".quests", [
+        return view("pages.".user_role().".quests", [
             "title" => ($client && is_archmage()) ? "$client->client_name – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);

@@ -6,7 +6,7 @@
     <form action="{{ route('dj-process-sample-set') }}" method="POST">
         @csrf
 
-        <div class="flex-right center">
+        <div class="flex right center">
             <x-input name="id" label="ID"
                 type="text" :value="$set?->id"
             />

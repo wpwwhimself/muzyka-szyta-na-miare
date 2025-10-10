@@ -1,8 +1,9 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Ceny")
 
 @section('content')
 
-<x-section id="prices" title="Cenniki" icon="barcode">
+<x-section id="prices" title="Cenniki" :icon="model_icon('prices')">
     <table>
         <thead>
             <tr>
@@ -51,8 +52,8 @@
     </table>
 </x-section>
 
-<div class="grid-2">
-    <x-section title="Uwagi" icon="circle-exclamation">
+<div class="grid" style="--col-count: 2;">
+    <x-section title="Uwagi" icon="alert-circle">
         <ul>
             <li>
                 Dla każdego typu zlecenia jest wyznaczona <b>cena minimalna</b>. Obecnie jest to:
@@ -69,8 +70,8 @@
         </ul>
     </x-section>
 
-    <x-section title="Szybka wycena" icon="sack-dollar">
-        <div class="flex-right center">
+    <x-section title="Szybka wycena" icon="cash">
+        <div class="flex right center">
             <div>
                 <x-select name="client_id" label="Klient" :options="$clients" />
                 <div id="song-price-sugg"></div>

@@ -1,3 +1,28 @@
+/******************* common **************/
+
+.grayed-out::before,
+.grayed-out::after,
+.yellowed-out::before,
+.yellowed-out::after {
+    content: " — ";
+}
+
+nav a,
+a.submit,
+a.section,
+.quests-table .table-row,
+.day-tiles a
+{
+    text-decoration: none;
+}
+
+/******************* individual **************/
+
+a {
+    text-decoration-color: rgba(128, 128, 128, 0.5);
+    color: inherit;
+}
+
 #background-division {
     & > * {
         height: 80vh;
@@ -110,6 +135,20 @@ footer .icon.invert-when-dark {
     filter: invert(1);
 }
 
+.grayed-out{
+    font-style: italic;
+    color: gray;
+    grid-column: 1 / span 2;
+}
+
+.hint {
+    font-size: var(--size-xl);
+
+    &.tutorial{
+        color: rgb(172, 53, 118);
+    }
+}
+
 /* quest and request phases */
 .p-1, .p-11{ --q-clr: 245, 174, 185; }
 .p-12{ --q-clr: 50, 127, 226; }
@@ -118,6 +157,19 @@ footer .icon.invert-when-dark {
 .p-6, .p-16, .p-21, .p-26, .p-96{ --q-clr: 207, 60, 60; }
 .p-4, .p-7, .p-8, .p-17, .p-18, .p-33{ --q-clr: 175, 175, 175; }
 .p-9, .p-19, .p-32, .p-34, .p-14{ --q-clr: 57, 196, 57; }
+
+.priority {
+    div&,
+    &.submit {
+        border: 3px solid rgb(var(--danger));
+    }
+
+    b&,
+    & b,
+    &.submit {
+        color: rgb(var(--danger));
+    }
+}
 
 .quest-mini {
     display: grid;
@@ -298,6 +350,11 @@ table {
         font-weight: bold;
         border: 1px solid var(--acc); border-left: none; border-right: none;
     }
+}
+
+.yellowed-out{
+    font-style: italic;
+    color: rgb(var(--warning));
 }
 
 @media (prefers-color-scheme: dark) {

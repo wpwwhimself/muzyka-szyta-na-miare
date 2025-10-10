@@ -95,54 +95,14 @@ div, form{
 .flex-right .first{ order: 1; }
 .flex-right :not(.first){ order: 99; }
 
-/* UNI COLORS */
-
-.ghost{
-    opacity: 0.4;
-}
-div.priority, .submit.priority{
-    border: 3px solid rgb(var(--danger));
-}
-b.priority, .priority b, .submit.priority{
-    color: rgb(var(--danger));
-}
-.grayed-out{
-    font-style: italic;
-    color: gray;
-    grid-column: 1 / span 2;
-}
-.yellowed-out{
-    font-style: italic;
-    color: rgb(var(--warning));
-}
-.grayed-out::before, .grayed-out::after, .yellowed-out::before, .yellowed-out::after{
-    content: " — ";
-}
-.hint {
-    font-size: var(--size-xl);
-
-    &.tutorial{
-        color: rgb(172, 53, 118);
-    }
-}
 
 /* CLICKABLE */
-a{
-    text-decoration-color: rgba(128, 128, 128, 0.5);
-    color: inherit;
-}
+
 a:hover, .accent{
     color: var(--acc);
     text-decoration-color: var(--acc);
 }
-nav a,
-a.submit,
-a.section,
-.quests-table .table-row,
-.day-tiles a
-{
-    text-decoration: none;
-}
+
 .bigger {
     scale: 1.2;
 }

@@ -36,7 +36,9 @@ class Status extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->status_name;
+        return view("components.phase-indicator-mini", [
+            "status" => $this,
+        ])->render();
     }
 
     public function optionLabel(): Attribute

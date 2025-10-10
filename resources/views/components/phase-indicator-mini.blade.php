@@ -2,7 +2,9 @@
     "status"
 ])
 
-<i  class="fa-solid {{ $status->status_symbol }} p-{{ $status->id }}"
+<span class="p-{{ $status->id }}"
     style="color: rgb(var(--q-clr));"
-    {{ Popper::pop($status->status_name) }}>
-</i>
+    {{ Popper::pop($status->status_name) }}
+>
+    <x-shipyard.app.icon :name="$status->icon" />
+</span>

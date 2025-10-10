@@ -151,12 +151,12 @@ section {
     & img{
         border-radius: 100%;
     }
-    & .section-like{
+    & .section{
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    & .section-like img{
+    & .section img{
         width: 10em;
     }
     & p{
@@ -320,7 +320,7 @@ img.scroll-hidden {
     translate: -50px 0;
 }
 
-.scroll-hidden.section-like,
+.scroll-hidden.section,
 h2.scroll-hidden,
 span.scroll-hidden {
     translate: 0 50px;

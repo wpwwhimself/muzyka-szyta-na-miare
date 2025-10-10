@@ -4,13 +4,13 @@
     "scissors" => false,
 ])
 
-<section {{ $attributes->class(["bordered", "padded", "rounded", "container", "sc-line" => $scissors]) }}>
+<section {{ $attributes->class(["bordered", "padded", "rounded", "sc-line" => $scissors]) }}>
     @if ($scissors)
     <x-sc-scissors />
     @endif
 
     @if ($title)
-    <div class="section-header flex right spread">
+    <div class="section-header flex right middle spread">
         <h1>
             @if ($icon)
             <x-shipyard.app.icon :name="$icon" />
@@ -26,7 +26,9 @@
     </div>
     @endif
 
-    @isset($slot)
-    {{ $slot }}
-    @endisset
+    <div role="contents">
+        @isset($slot)
+        {{ $slot }}
+        @endisset
+    </div>
 </section>

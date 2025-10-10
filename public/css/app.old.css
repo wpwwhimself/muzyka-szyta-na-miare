@@ -31,25 +31,6 @@ section{
     padding: var(--size-m);
 }
 
-.section-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: var(--size-m) 0;
-
-    &:first-of-type{
-        margin-top: 0;
-    }
-    & h1, & h2, & h3 {
-        margin: 0;
-        white-space: nowrap;
-    }
-    & > div {
-        align-items: flex-end !important;
-        justify-content: flex-end !important;
-        gap: var(--size-xs);
-    }
-}
 small{
     font-family: "Raleway", "Arial", "sans-serif";
     font-weight: bold;
@@ -156,7 +137,7 @@ a:hover, .accent{
 }
 nav a,
 a.submit,
-a.section-like,
+a.section,
 .quests-table .table-row,
 .day-tiles a
 {

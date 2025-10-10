@@ -40,19 +40,19 @@
 
     <h2>A także:</h2>
     <div id="offer-other" class="flex right center">
-        <span class="section-like scroll-hidden stagger" style="--stagger-index: 4;">
+        <span class="section scroll-hidden stagger" style="--stagger-index: 4;">
             Schematy akordowe
             <span @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)>
                 <x-shipyard.app.icon name="information" />
             </span>
         </span>
-        <span class="section-like scroll-hidden stagger" style="--stagger-index: 5;">
+        <span class="section scroll-hidden stagger" style="--stagger-index: 5;">
             Osadzenie partii wokalnej
             <span @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)>
                 <x-shipyard.app.icon name="information" />
             </span>
         </span>
-        <span class="section-like scroll-hidden stagger" style="--stagger-index: 6;">
+        <span class="section scroll-hidden stagger" style="--stagger-index: 6;">
             Korekcja dźwiękowa
             <span @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)>
                 <x-shipyard.app.icon name="information" />
@@ -73,7 +73,7 @@
         <h2>Komentarze klientów</h2>
         <div class="pinned-comments">
             @foreach ($pinned_comments as $comment)
-            <div class="section-like">
+            <div class="section">
                 @php
                 $client = $comment->changer;
                 @endphp

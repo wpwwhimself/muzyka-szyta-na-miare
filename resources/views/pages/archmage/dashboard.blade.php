@@ -3,13 +3,10 @@
 
 @section('content')
 
-<div class="grid" style="--col-count: 2;">
-
 @if (count($patrons_adepts) > 0)
 <x-section id="patrons-adepts"
     title="Potencjalni patroni"
     icon="seal"
-    style="grid-column: 1 / span 2;"
 >
     <x-slot name="buttons">
         <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Recenzje</x-a>
@@ -44,7 +41,7 @@
     </x-slot>
 
     @forelse ($requests as $request)
-    {{-- <x-quest-mini :quest="$request" /> --}}
+    <x-requests.tile :request="$request" />
     @empty
     <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
     @endforelse
@@ -98,13 +95,12 @@
     @endforelse
 </x-section>
 
-<div class="grid-2">
+<div class="grid" style="--col-count: 2;">
     <x-section id="dashboard-requests" class="sc-line"
         title="Grafik"
         icon="calendar"
+        scissors
     >
-        <x-sc-scissors />
-
         <x-slot name="buttons">
             <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
         </x-slot>
@@ -238,8 +234,6 @@
             </tbody>
         </table>
     </x-section>
-</div>
-
 </div>
 
 @endsection

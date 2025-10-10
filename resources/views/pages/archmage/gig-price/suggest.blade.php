@@ -11,7 +11,7 @@
 
     <div id="settings" class="flex-right center">
         @foreach ($defaults as $heading => $fields)
-        <div class="section-like flex down center">
+        <div class="section flex down center">
             <h2>{{ $heading }}</h2>
 
             @if ($heading == "Dojazd")
@@ -34,7 +34,7 @@
         </div>
         @endforeach
 
-        <div class="section-like flex down center">
+        <div class="section flex down center">
             <h2>Stawki</h2>
 
             <x-select name="gain_active_per_h"

@@ -237,7 +237,7 @@ footer .icon.invert-when-dark {
     }
 }
 
-section, .section-like {
+section, .section {
     &.container {
         container-name: section;
         container-type: inline-size;
@@ -249,26 +249,22 @@ section, .section-like {
 }
 
 section {
-    & > .section-header{
-        align-items: flex-start;
-        margin: 1em 0;
+    &:first-of-type{
+        margin-top: 0;
+    }
+    & h1, & h2, & h3 {
+        margin: 0;
+        white-space: nowrap;
+    }
 
-        &:first-of-type{
-            margin-top: 0;
-        }
-        & h1, & h2, & h3 {
-            margin: 0;
-            white-space: nowrap;
-        }
-        & > div {
-            align-items: flex-end !important;
-            justify-content: flex-end !important;
-            gap: 1em;
+    & [role="contents"] {
+        & > [role="model-card"] {
+            margin-block: 0.5em;
         }
     }
 }
 
-.section-like{
+.section{
     border: 3px solid var(--bg-lite2);
     border-radius: 1em;
     padding: 1em;
@@ -278,6 +274,30 @@ section {
 
 .showcase-highlight {
     color: rgb(36, 172, 250);
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+    text-align: right;
+
+    & td:first-child,
+    & th:first-child {
+        text-align: left;
+    }
+    & tr:hover {
+        background-color: var(--bg2);
+    }
+}
+.table {
+    display: grid;
+
+    & .header,
+    & .footer,
+    & th {
+        font-weight: bold;
+        border: 1px solid var(--acc); border-left: none; border-right: none;
+    }
 }
 
 @media (prefers-color-scheme: dark) {

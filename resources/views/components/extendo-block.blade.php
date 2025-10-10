@@ -1,6 +1,6 @@
 <div @class([
     "extendo-block",
-    "section-like",
+    "section",
     "warning-like" => $warning,
     "sc-line" => $scissors,
 ]) data-ebid="{{ $key }}">

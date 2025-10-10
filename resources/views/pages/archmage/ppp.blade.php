@@ -3,7 +3,7 @@
 @section('content')
 
 <div id="ppp" class="flex-right">
-  <div id="ppp_nav" class="section-like">
+  <div id="ppp_nav" class="section">
     <h2>Rozdziały</h2>
     <ol>
     @foreach ($titles as $ttl)

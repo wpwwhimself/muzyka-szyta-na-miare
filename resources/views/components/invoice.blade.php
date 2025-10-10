@@ -49,7 +49,7 @@
         </section>
     </div>
 
-    <div class="quests-table section-like">
+    <div class="quests-table section">
         <style>
         .table-row{ grid-template-columns: auto auto; }
         .table-row span:last-child{ text-align: right; }

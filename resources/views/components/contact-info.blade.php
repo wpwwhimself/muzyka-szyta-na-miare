@@ -11,10 +11,9 @@
 
     <span class="flex right nowrap middle">
         @foreach (\App\Models\ShowcasePlatform::all() as $platform)
-        {{-- <a href="{{ $link }}"> --}}
-            {{-- <i class="fa-brands fa-{{ $icon }}"></i> --}}
-        {{ $platform->name }}
-        {{-- </a> --}}
+        <a href="{{ $platform->msznm_url }}">
+            <x-shipyard.app.icon :name="$platform->name" mode="url" :data="$platform->icon_url" />
+        </a>
         @endforeach
         muzykaszytanamiarepl
     </span>

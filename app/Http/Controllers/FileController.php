@@ -108,6 +108,7 @@ class FileController extends Controller
 
                 // delete existing chosen files
                 foreach ($rq->delete_files ?? [] as $extension => $path) {
+                    $path = $file->file_paths[$extension];
                     Storage::delete($path);
                     unset($uploaded_files[$extension]);
                 }

@@ -275,7 +275,7 @@ class JanitorController extends Controller
     }
 
     private function safe_cleanup(){
-        $safes = Storage::disk()->directories("safe");
+        $safes = Storage::disk("safe")->directories();
         $sizes = []; $times = [];
 
         foreach($safes as $safe){
@@ -311,7 +311,7 @@ class JanitorController extends Controller
             ->orderByDesc("quests_recent_count")
             ->limit(10)
             ->get();
-        
+
         foreach ($most_active as $user) {
             $user->top10()->create([
                 "type" => "active",

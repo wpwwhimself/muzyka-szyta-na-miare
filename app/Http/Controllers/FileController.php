@@ -115,15 +115,16 @@ class FileController extends Controller
 
             // upload files
             foreach ($rq->file("files") ?? [] as $file) {
-                $uploaded_files[$file->getClientOriginalExtension()] = $file->storeAs(
-                    "safe/$song->id",
+                $uploaded_files[$file->getClientOriginalExtension()] = Storage::disk("safe")->putFileAs(
+                    $song->id,
+                    $file,
                     Str::slug(implode(" ", [
                         Str::random(8),
                         $song->id,
                         $rq->variant_name ?? "podstawowy",
                         $rq->version_name ?? "wersja główna",
                         $rq->transposition,
-                    ])).".".$file->getClientOriginalExtension()
+                    ])).".".$file->getClientOriginalExtension(),
                 );
             }
 

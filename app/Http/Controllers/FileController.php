@@ -126,6 +126,7 @@ class FileController extends Controller
                         $rq->transposition,
                     ])).".".$file->getClientOriginalExtension(),
                 );
+                $uploaded_files[$file->getClientOriginalExtension()] = "safe/".$uploaded_files[$file->getClientOriginalExtension()];
             }
 
             // upsert database entry

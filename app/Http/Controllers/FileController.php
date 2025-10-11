@@ -145,6 +145,7 @@ class FileController extends Controller
             $file->exclusiveClients()->sync($rq->only_for_client_id ?? []);
         } else if ($rq->action == "delete") {
             foreach ($rq->delete_files ?? [] as $extension => $path) {
+                $path = $file->file_paths[$extension];
                 Storage::delete($path);
             }
             $file->delete();

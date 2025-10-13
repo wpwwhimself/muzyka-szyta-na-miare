@@ -96,15 +96,18 @@ return new class extends Migration
         ]);
 
         NavItem::all()->each(function ($item) {
-            if (in_array($item->name, [
-                "Klienci",
-                "Finanse",
-                "Reklama",
-                "DJ",
-                "Statystyki",
-            ])) return;
-
-            $item->roles()->attach("client");
+            $item->roles()->attach(
+                in_array($item->name, [
+                    "Utwory",
+                    "Klienci",
+                    "Finanse",
+                    "Reklama",
+                    "DJ",
+                    "Statystyki",
+                ])
+                    ? "technical"
+                    : "client"
+            );
         });
     }
 

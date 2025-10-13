@@ -251,6 +251,12 @@
     label="Złóż zapytanie o podkład/nuty"
     icon="send"
     action="none"
-    onclick="openModal('send-podklady-request')"
+    onclick="openModal('send-podklady-request', {
+        client_id: {{ Auth::user()?->id ?? 'null' }},
+        client_name: '{{ Auth::user()?->notes?->client_name }}' || null,
+        email: '{{ Auth::user()?->notes?->email }}' || null,
+        phone: '{{ Auth::user()?->notes?->phone }}' || null,
+        other_medium: '{{ Auth::user()?->notes?->other_medium }}' || null,
+    })"
     class="major primary"
 />

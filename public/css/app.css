@@ -142,10 +142,36 @@ footer .icon.invert-when-dark {
 }
 
 .hint {
-    font-size: var(--size-xl);
+    font-size: 1.5em;
 
     &.tutorial{
         color: rgb(172, 53, 118);
+    }
+}
+
+.hint-table {
+    & div {
+        display: grid;
+        grid-template-columns: auto auto;
+        text-align: left;
+    }
+    & .grayed-out {
+        grid-column: 1 / span 2;
+        text-align: center;
+    }
+    & .positions span {
+        padding: 0.25em;
+
+        &:nth-child(4n+3),
+        &:nth-child(4n) {
+            background-color: var(--bg-lite2);
+        }
+    }
+    & div span:nth-child(even) {
+        text-align: right;
+    }
+    & .summary {
+        font-weight: bold;
     }
 }
 

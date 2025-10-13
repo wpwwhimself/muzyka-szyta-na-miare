@@ -522,34 +522,6 @@ footer .contact-info{
     height: auto;
 }
 
-.hint-table div{
-    display: grid;
-    grid-template-columns: auto auto;
-    text-align: left;
-}
-#song-summary{
-    display: none;
-}
-.hint-table .grayed-out{
-    grid-column: 1 / span 2;
-    text-align: center;
-}
-.hint-table .positions span{
-    padding: var(--size-xxs);
-}
-.hint-table .positions span:nth-child(4n+3), .hint-table .positions span:nth-child(4n){
-    background-color: var(--bg2);
-}
-.hint-table div span:nth-child(even){
-    text-align: right;
-}
-#price-summary .overridden span:nth-child(even){
-    text-decoration: line-through;
-}
-.hint-table .summary{
-    font-weight: bold;
-}
-
 #quest-box{
     justify-content: center;
     align-items: flex-start;

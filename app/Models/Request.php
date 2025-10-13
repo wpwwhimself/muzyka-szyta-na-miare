@@ -71,9 +71,8 @@ class Request extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
+            get: fn () => view("components.requests.details", [
+                "request" => $this,
             ])->render(),
         );
     }
@@ -179,12 +178,19 @@ class Request extends Model
     //     );
     // }
 
-    // rounded prices
-    public function getPriceAttribute($val) {
-        return round($val, 2);
+    public function clientName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($v) => $this->user?->notes->client_name ?? $v,
+        );
     }
-    public function setPriceAttribute($val) {
-        $this->attributes["price"] = round($val, 2);
+
+    public function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($v) => $v !== null ? round($v, 2) : null,
+            set: fn ($v) => $v !== null ? round($v, 2) : null,
+        );
     }
 
     public function getIsPriorityAttribute(){

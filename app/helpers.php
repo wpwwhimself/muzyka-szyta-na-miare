@@ -314,7 +314,7 @@ if(!function_exists("quests_unpaid")){
 
         $quests = Quest::where("paid", 0)
             ->whereIn("status_id", $allowed_statuses)
-            ->whereHas("client", function($query){
+            ->whereHas("user.notes", function($query){
                 $query->where("trust", ">", -1);
             })
             ;

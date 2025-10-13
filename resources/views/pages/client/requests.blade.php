@@ -20,12 +20,12 @@
             </p>
         </x-tutorial>
 
-        @unless (Auth::user()->trust == -1)
+        @unless (Auth::user()->notes->trust == -1)
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
         @endunless
     </x-slot>
 
-    @if (Auth::user()->is_old)
+    @if (Auth::user()->notes->is_old)
     <p class="yellowed-out">
         <i class="fa-solid fa-triangle-exclamation"></i>
         Bardzo prawdopodobnym jest, że poniższa lista jest niepełna.

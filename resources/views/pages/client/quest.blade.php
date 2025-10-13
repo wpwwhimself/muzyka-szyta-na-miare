@@ -142,7 +142,7 @@
         :extended="true"
         scissors
     >
-        @if (Auth::user()->can_see_files)
+        @if (Auth::user()->notes->can_see_files)
         <x-files.list :grouped-files="$files" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
         @endif
 

@@ -76,9 +76,8 @@ class Quest extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
+            get: fn () => view("components.quests.details", [
+                "quest" => $this,
             ])->render(),
         );
     }

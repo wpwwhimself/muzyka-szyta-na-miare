@@ -1,11 +1,12 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Pulpit klienta")
 
 @section('content')
 
 <div class="grid" style="--col-count: 2;">
     <x-section id="who-am-i" class="sc-line"
-        :title="Auth::user()->client_name"
-        icon="user-check"
+        :title="Auth::user()->notes->client_name"
+        :icon="model_icon('user_notes')"
     >
         <x-slot name="buttons">
             <x-tutorial>
@@ -24,17 +25,17 @@
 
                 <span>Status klienta</span>
                 <span>
-                    @if (Auth::user()->trust == -1)
-                    <i class="fa-solid fa-user-ninja error"></i> niezaufany
-                    @elseif (Auth::user()->is_veteran)
-                    <i class="fa-solid fa-user-shield"></i> stały klient
+                    @if (Auth::user()->notes->trust == -1)
+                    <span class="error"><x-shipyard.app.icon name="ninja" /></span> niezaufany
+                    @elseif (Auth::user()->notes->is_veteran)
+                    <span><x-shipyard.app.icon name="shield-account" /></span> stały klient
                     @else
-                    <i class="fa-solid fa-user"></i> klient początkujący<br>
+                    <span><x-shipyard.app.icon name="account" /></span> klient początkujący<br>
                     <i>pozostało zleceń: {{ setting("msznm_veteran_from") - $quests_total }}</i>
                     @endif
                 </span>
 
-                @if (Auth::user()->is_patron)
+                @if (Auth::user()->notes->is_patron)
                 <span>Pomoc w reklamie</span>
                 <span>odnotowana</span>
                 @endif
@@ -42,21 +43,21 @@
                 <span>Łącznie zniżek</span>
                 <span>
                     {{
-                        Auth::user()->special_prices ? "spersonalizowany cennik"
+                        Auth::user()->notes->special_prices ? "spersonalizowany cennik"
                         : (
-                            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+                            (Auth::user()->notes->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
                             +
-                            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+                            (Auth::user()->notes->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
                         )*100 . "%"
                     }}
                 </span>
             </div>
         </div>
 
-        @if (Auth::user()->trust == -1)
+        @if (Auth::user()->notes->trust == -1)
         <br>
         <div class="section-header error">
-            <h1><i class="fa-solid fa-user-ninja"></i> Jesteś na czarnej liście!</h1>
+            <h1><x-shipyard.app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
         </div>
         <p>
             Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
@@ -85,10 +86,10 @@
         </table>
         @endif
 
-        @if ($quests_total && !Auth::user()->is_patron && Auth::user()->helped_showcasing != 1)
+        @if ($quests_total && !Auth::user()->notes->is_patron && Auth::user()->notes->helped_showcasing != 1)
         <br>
         <div class="section-header showcase-highlight">
-            <h1><i class="fa-solid fa-award"></i> Oceń naszą współpracę</h1>
+            <h1><x-shipyard.app.icon name="seal" /> Oceń naszą współpracę</h1>
         </div>
         <p>
             Recenzje pomagają mi pozyskiwać nowych klientów.
@@ -97,26 +98,26 @@
         </p>
         <form>
             <x-button
-                label="Przejdź do mojego fanpage'a" icon="up-right-from-square" target="_blank"
+                label="Przejdź do mojego fanpage'a" icon="open-in-new" target="_blank"
                 action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
                 />
             <p>
                 Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
                 <x-warning>
                     Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
-                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
                 </x-warning>
             </p>
             <x-button
-                label="Właśnie wystawił{{ client_polonize(Auth::user()->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
+                label="Właśnie wystawił{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                 action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
                 />
         </form>
         @endif
     </x-section>
 
-    <x-section id="dashboard-finances" title="Finanse" icon="sack-dollar">
-        <h2 @if(Auth::user()->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
+    <x-section id="dashboard-finances" title="Finanse" :icon="model_icon('prices')">
+        <h2 @if(Auth::user()->notes->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
         <div class="hint-table">
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">
@@ -130,7 +131,7 @@
 
         <h2>
             Stan konta:
-            {{ as_pln(Auth::user()->budget) }}
+            {{ as_pln(Auth::user()->notes->budget) }}
 
             <x-tutorial>
                 Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
@@ -177,7 +178,7 @@
 </x-section>
 
 <div class="grid" style="--col-count: 2;">
-    <x-section title="Aktualne zlecenia" icon="gears" id="dashboard-quests-ongoing">
+    <x-section title="Aktualne zlecenia" :icon="model_icon('quests')" id="dashboard-quests-ongoing">
         <x-slot name="buttons">
             <x-a :href="route('quests')">Wszystkie</x-a>
         </x-slot>
@@ -189,7 +190,7 @@
         @endforelse
     </x-section>
 
-    <x-section title="Aktualne zapytania" icon="envelope" id="dashboard-requests">
+    <x-section title="Aktualne zapytania" :icon="model_icon('requests')" id="dashboard-requests">
         <x-slot name="buttons">
             <x-a :href="route('requests')">Wszystkie</x-a>
         </x-slot>
@@ -203,7 +204,7 @@
 </div>
 
 <div class="flex right">
-    @unless (Auth::user()->trust == -1)
+    @unless (Auth::user()->notes->trust == -1)
     <x-button
         action="{{ route('add-request') }}"
         label="Dodaj nowe zapytanie" icon="plus"

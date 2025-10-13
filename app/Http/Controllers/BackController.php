@@ -48,7 +48,7 @@ class BackController extends Controller
             $quests_ongoing = $quests_ongoing->where("client_id", $user->id);
             $quests_review = $quests_review->where("client_id", $user->id);
 
-            $quests_total = Auth::user()->exp;
+            $quests_total = Auth::user()->notes->exp;
             $unpaids = Quest::where("client_id", Auth::id())
                 ->whereNotIn("status_id", [18])
                 ->where("paid", 0)
@@ -117,9 +117,9 @@ class BackController extends Controller
         $prices = DB::table("prices")->get();
 
         $discount = (is_archmage()) ? null : (
-            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            (Auth::user()->notes->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
-            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+            (Auth::user()->notes->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
         $clients = [];

@@ -287,11 +287,11 @@ class RequestController extends Controller
                     "made_by_me" => false,
 
                     "client_id" => (Auth::check()) ? Auth::id() : null,
-                    "client_name" => (Auth::check()) ? Auth::user()->client_name : $rq->client_name,
-                    "email" => (Auth::check()) ? Auth::user()->email : $rq->email,
-                    "phone" => (Auth::check()) ? Auth::user()->phone : $rq->phone,
-                    "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
-                    "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
+                    "client_name" => (Auth::check()) ? Auth::user()->notes->client_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->notes->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->notes->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->notes->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->notes->contact_preference : $rq->contact_preference,
 
                     "quest_type_id" => $rq->quest_type_id,
                     "title" => $rq->title,

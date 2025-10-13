@@ -82,20 +82,57 @@ class Request extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "client_name" => [
+            "type" => "text",
+            "label" => "Imię i nazwisko",
+            "icon" => "badge-account",
+            "required" => true,
+        ],
+        "email" => [
+            "type" => "email",
+            "label" => "Email",
+            "icon" => "email",
+        ],
+        "phone" => [
+            "type" => "tel",
+            "label" => "Numer telefonu",
+            "icon" => "phone",
+        ],
+        "other_medium" => [
+            "type" => "text",
+            "label" => "Inna forma kontaktu",
+            "icon" => "human-greeting-proximity",
+            "hint" => "np. WhatsApp",
+        ],
+        "title" => [
+            "type" => "text",
+            "label" => "Tytuł utworu",
+            "icon" => "music-box",
+            "required" => true,
+        ],
+        "artist" => [
+            "type" => "text",
+            "label" => "Wykonawca",
+            "icon" => "account-music"
+        ],
+        "link" => [
+            "type" => "text",
+            "label" => "Linki do utworu",
+            "icon" => "link",
+            "hint" => "Oddzielone przecinkami",
+        ],
+        "wishes" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. utworu",
+            "icon" => "cloud",
+            "hint" => "np. styl itp.",
+        ],
+        "wishes_quest" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. zlecenia",
+            "icon" => "cloud",
+            "hint" => "np. transpozycja, czy z linią melodyczną itp.",
+        ],
     ];
 
     public const CONNECTIONS = [

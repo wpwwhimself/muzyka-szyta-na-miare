@@ -26,7 +26,7 @@ h2{
 section{
     border-radius: var(--size-m);
     /* background-color: var(--bg1); */
-    border: 3px solid var(--bg2);
+    border: 3px solid var(--bg-lite2);
     margin: var(--size-m) 0 0;
     padding: var(--size-m);
 }
@@ -155,7 +155,7 @@ textarea{
 .select2-dropdown, .select2-selection, .select2-selection__choice {
     background-color: var(--bg) !important;
     color: var(--fg) !important;
-    border-color: var(--bg2) !important;
+    border-color: var(--bg-lite2) !important;
 }
 input, select, button, .submit{
     font-size: var(--size-l);
@@ -232,7 +232,7 @@ pre {
 
 code, pre {
     font-family: 'Courier New', Courier, monospace;
-    background-color: var(--bg2);
+    background-color: var(--bg-lite2);
     border-radius: var(--size-xs);
 }
 
@@ -297,7 +297,7 @@ td:first-child, th:first-child{
     text-align: left;
 }
 tr:hover{
-    background-color: var(--bg2);
+    background-color: var(--bg-lite2);
 }
 .table{
     display: grid;
@@ -319,7 +319,7 @@ header{
     padding: var(--size-m) 4em;
     display: flex; flex-direction: row; align-items: center; justify-content: space-between;
     flex-wrap: wrap;
-    background: var(--bg2);
+    background: var(--bg-lite2);
     /* box-shadow: 0 0 50px #00000077; */
     /* color: black; */
 
@@ -545,41 +545,6 @@ footer .contact-info{
     align-items: center;
 }
 
-#quest-history{
-    max-width: none;
-
-    & .history-position{
-        display: inline-flex;
-        --circle-size: var(--size-xxl);
-
-        & .circle{
-            margin: 0;
-            justify-content: center;
-            border-radius: 100%;
-            font-size: var(--size-xl);
-            width: var(--circle-size); height: var(--circle-size);
-            background: var(--bg1);
-            &:hover{
-                background: rgba(var(--q-clr), 0.5);
-            }
-            &.by-client{
-                border: 2px solid var(--acc);
-            }
-
-            &.small {
-                width: calc(var(--circle-size) / 3); height: calc(var(--circle-size) / 3);
-            }
-            &.active {
-                background-color: var(--acc) !important;
-            }
-        }
-        & .notification-counter{
-            max-width: var(--circle-size);
-            white-space: wrap;
-        }
-    }
-}
-
 #document-dropzone{
     background: none;
 }
@@ -614,8 +579,8 @@ footer .contact-info{
     grid-template-rows: auto auto;
     grid-auto-flow: column;
     text-align: center;
-    border-top: 1px solid var(--bg2);
-    border-bottom: 1px solid var(--bg2);
+    border-top: 1px solid var(--bg-lite2);
+    border-bottom: 1px solid var(--bg-lite2);
     border-radius: 0;
     padding: var(--size-xs) 0;
 }
@@ -704,7 +669,7 @@ footer .contact-info{
 }
 .file-container-a{
     text-align: left;
-    background-color: var(--bg2);
+    background-color: var(--bg-lite2);
     border-radius: 2em;
     padding: var(--size-m); margin: var(--size-xs) 0;
     position: relative;
@@ -883,7 +848,7 @@ footer .contact-info{
     margin: 0;
 }
 #invoice .account h3:first-child{
-    border-bottom: 2px solid var(--bg2);
+    border-bottom: 2px solid var(--bg-lite2);
 }
 #invoice .quests-table{
     margin-top: var(--size-m);
@@ -1076,6 +1041,6 @@ footer .contact-info{
 
 @keyframes blinking {
     50% {
-        border-color: var(--bg2);
+        border-color: var(--bg-lite2);
     }
 }

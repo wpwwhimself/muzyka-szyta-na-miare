@@ -233,10 +233,10 @@
                         });
                     }
                 }
-                $(document).ready(function(){
-                    calcPriceNow();
-                    $("#price_code_override").change(function (e) { calcPriceNow() });
-                });
+                </script>
+                <script defer>
+                calcPriceNow();
+                $("#price_code_override").change(function (e) { calcPriceNow() });
                 </script>
             </div>
 

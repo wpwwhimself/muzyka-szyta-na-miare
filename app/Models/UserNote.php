@@ -94,6 +94,28 @@ class UserNote extends Authenticatable
     use HasStandardFields;
 
     public const FIELDS = [
+        "client_name" => [
+            "type" => "text",
+            "label" => "Imię i nazwisko",
+            "icon" => "badge-account",
+            "required" => true,
+        ],
+        "email" => [
+            "type" => "email",
+            "label" => "Email",
+            "icon" => "email",
+        ],
+        "phone" => [
+            "type" => "tel",
+            "label" => "Numer telefonu",
+            "icon" => "phone",
+        ],
+        "other_medium" => [
+            "type" => "text",
+            "label" => "Inna forma kontaktu",
+            "icon" => "human-greeting-proximity",
+            "hint" => "np. WhatsApp",
+        ],
         // "<column_name>" => [
         //     "type" => "<input_type>",
         //     "column-types" => [ // for JSON

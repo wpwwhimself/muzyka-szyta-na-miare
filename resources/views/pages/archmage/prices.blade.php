@@ -157,10 +157,10 @@
                         }
                     });
                 }
-                $(document).ready(function(){
-                    calcPriceNow();
-                    $("#price_code").change(function (e) { calcPriceNow() });
-                });
+                </script>
+                <script defer>
+                calcPriceNow();
+                $("#price_code").change(function (e) { calcPriceNow() });
                 </script>
             </div>
         </div>

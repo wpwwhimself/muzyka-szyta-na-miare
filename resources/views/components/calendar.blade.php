@@ -46,26 +46,24 @@
 
 @if ($suggest && $clickDays)
 <x-input type="checkbox" name="work_on_weekends" label="Licz weekendy" :small="true" value="{{ setting('msznm_work_on_weekends') }}" />
-<script>
-    $(document).ready(function(){
-        $("tr[date]").click((el)=>{
-            $("#deadline").val($(el.currentTarget).attr("date"));
-        });
+<script defer>
+$("tr[date]").click((el)=>{
+    $("#deadline").val($(el.currentTarget).attr("date"));
+});
 
-        $("#work_on_weekends").change(function(){
-            $.ajax({
-                url: "/api/settings_change",
-                type: "post",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    setting_name: $(this).attr("name"),
-                    value_str: +($(this).prop("checked")) //bool -> int
-                },
-                success: function(res){
-                    window.location.reload();
-                }
-            });
-        });
+$("#work_on_weekends").change(function(){
+    $.ajax({
+        url: "/api/settings_change",
+        type: "post",
+        data: {
+            _token: "{{ csrf_token() }}",
+            setting_name: $(this).attr("name"),
+            value_str: +($(this).prop("checked")) //bool -> int
+        },
+        success: function(res){
+            window.location.reload();
+        }
+    });
 });
 </script>
 @endif

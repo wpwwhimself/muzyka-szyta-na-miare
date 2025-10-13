@@ -25,17 +25,15 @@
         <input type="hidden" name="id" value="" />
         <x-button action="submit" icon="plus" label="Zatwierdź" />
     </form>
-    <script>
-        $(document).ready(function(){
-            $(".table-row:not(.table-header)").click(function(){
-                $("#created_at").val($(this).find(".cost-date").attr("data-date"));
-                $("#cost_type_id").val($(this).find(".cost-type").attr("data-typ"));
-                $("#desc").val($(this).find(".cost-desc").text());
-                $("#amount").val($(this).find(".cost-amount").attr("data-amount"));
-                $("input[name='id']").val($(this).attr("data-id"));
-            });
-        });
-        </script>
+    <script defer>
+    $(".table-row:not(.table-header)").click(function(){
+        $("#created_at").val($(this).find(".cost-date").attr("data-date"));
+        $("#cost_type_id").val($(this).find(".cost-type").attr("data-typ"));
+        $("#desc").val($(this).find(".cost-desc").text());
+        $("#amount").val($(this).find(".cost-amount").attr("data-amount"));
+        $("input[name='id']").val($(this).attr("data-id"));
+    });
+    </script>
 </section>
 
 <section>

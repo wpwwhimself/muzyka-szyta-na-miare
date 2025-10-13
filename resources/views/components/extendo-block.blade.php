@@ -1,9 +1,9 @@
-<div @class([
+<div {{ $attributes->class([
     "extendo-block",
     "section",
     "warning-like" => $warning,
     "sc-line" => $scissors,
-]) data-ebid="{{ $key }}">
+]) }} data-ebid="{{ $key }}">
     @if($scissors) <x-sc-scissors /> @endif
 
     <div class="header flex right keep-for-mobile nowrap">
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div @class(['body', 'flex right', 'hidden' => !$extended])>
+    <div @class(['body', 'hidden' => !$extended])>
         {{ $slot }}
     </div>
 </div>

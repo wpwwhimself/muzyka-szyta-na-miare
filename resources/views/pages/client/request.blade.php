@@ -4,6 +4,41 @@
 
 @section('content')
 
+@php
+$fields = $request::getFields();
+@endphp
+
+<script>
+function calcPriceNow(){
+    const labels = "{{ $request->price_code }}";
+    const client_id = {!! $request->client_id ?? "\"\"" !!};
+    const positions_list = $("#price-summary .positions");
+    const sum_row = $("#price-summary .summary");
+    if(labels == "") $("#price-summary").hide();
+    else{
+        fetch(`/api/price_calc`, {
+            method: "POST",
+            data: JSON.stringify({
+                _token: '{{ csrf_token() }}',
+                labels: labels,
+                client_id: client_id
+            }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                let content = ``;
+                for(line of data.positions){
+                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
+                }
+                positions_list.html(content);
+                sum_row.html(`<span>Razem:</span><span>${data.price} zł${data.minimal_price ? " (cena minimalna)" : ""}</span>`);
+                if(data.override) positions_list.addClass("overridden");
+                    else positions_list.removeClass("overridden");
+            });
+    }
+}
+</script>
+
 <x-shipyard.app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>
         @auth
@@ -16,7 +51,6 @@
     </x-slot:actions>
 
     <h1>
-        Szczegóły zapytania
         @if (sumWarnings($warnings))
         <x-warning>
             Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
@@ -32,20 +66,34 @@
     </h2>
     @endif
 
-    <div class="flex down">
+    <div class="grid but-mobile-down" style="--col-count: 2;">
         <x-extendo-block key="meta"
             :header-icon="model_icon('songs')"
             title="Dane zlecenia"
             subtitle="Jaki utwór mam przygotować?"
             :extended="true"
         >
-            <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" :disabled="true" />
-            <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" :disabled="true" />
-            <x-extendo-section title="Link do nagrania">
+            @foreach ([
+                "title",
+                "artist",
+                "link",
+                "wishes",
+                "wishes_quest",
+            ] as $field)
+                @if ($field == "link")
                 <x-link-interpreter :raw="$request->link" />
-            </x-extendo-section>
-            <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $request->wishes }}" :disabled="true" />
-            <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $request->wishes_quest }}" :disabled="true" />
+
+                @else
+                <x-shipyard.ui.input
+                    :type="'dummy-'.$fields[$field]['type']"
+                    :name="$field"
+                    :label="$fields[$field]['label']"
+                    :icon="$fields[$field]['icon']"
+                    :hint="$fields[$field]['hint'] ?? null"
+                    :value="$request->$field"
+                />
+                @endif
+            @endforeach
         </x-extendo-block>
 
         <x-extendo-block key="quote"
@@ -56,9 +104,11 @@
             :extended="true"
         >
             @if (!$request->price)
-            <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> pojawi się w ciągu najbliższych dni</p>
-            @elseif ($request->price && $request->status_id == 1)
-            <p class="yellowed-out"><i class="fa-solid fa-hourglass-half fa-fade"></i> poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
+            <p class="yellowed-out">pojawi się w ciągu najbliższych dni</p>
+            @else
+
+            @if ($request->status_id == 1)
+            <p class="yellowed-out">poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
             @endif
 
             <div>
@@ -67,38 +117,9 @@
                     <hr />
                     <div class="summary"><span>Razem:</span><span>0 zł</span></div>
                 </div>
-                <script>
-                function calcPriceNow(){
-                    const labels = "{{ $request->price_code }}";
-                    const client_id = {!! $request->client_id ?? "\"\"" !!};
-                    const positions_list = $("#price-summary .positions");
-                    const sum_row = $("#price-summary .summary");
-                    if(labels == "") $("#price-summary").hide();
-                    else{
-                        $.ajax({
-                            url: "/api/price_calc",
-                            type: "post",
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                labels: labels,
-                                client_id: client_id
-                            },
-                            success: function(res){
-                                let content = ``;
-                                for(line of res.positions){
-                                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
-                                }
-                                positions_list.html(content);
-                                sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
-                                if(res.override) positions_list.addClass("overridden");
-                                    else positions_list.removeClass("overridden");
-                            }
-                        });
-                    }
-                }
-                $(document).ready(function(){
-                    calcPriceNow();
-                });
+
+                <script defer>
+                calcPriceNow();
                 </script>
                 @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
                 <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
@@ -114,6 +135,7 @@
                 </span>
                 @endif
             </div>
+            @endif
 
             <div>
                 @if ($request->hard_deadline)
@@ -149,9 +171,9 @@
                 @endif
             </x-extendo-section>
         </x-extendo-block>
-
-        <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     </div>
+
+    <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     @if (in_array($request->status_id, [4, 7, 8]))
     <x-tutorial>
         Zapytanie zostało zamknięte, ale nadal możesz je przywrócić w celu ponownego złożenia zamówienia.
@@ -162,54 +184,12 @@
         <input type="hidden" name="intent" value="review" />
         @if($request->status_id != 5)
         <div class="flexright">
-            @if (in_array($request->status_id, [1, 6, 96]))
-            <x-button action="#/" statuschanger="{{ $request->status_id }}" is-follow-up="1" icon="{{ $request->status_id }}" label="Popraw ostatni komentarz" />
-            @endif
             @if (in_array($request->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
             @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
             @if (in_array($request->status_id, [5])) <x-button action="#/" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
             @if (in_array($request->status_id, [5, 95])) <x-button action="#/" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
             @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#/" statuschanger="1" icon="1" label="Odnów" /> @endif
         </div>
-        <div id="statuschanger">
-            {{-- @if (in_array($request->status_id, [4, 5, 7, 8, 95])) --}}
-            <x-tutorial>
-                W historii zlecenia pojawi się Twój komentarz.
-            </x-tutorial>
-            <x-input type="TEXT" name="comment" label="" placeholder="Tutaj wpisz swój komentarz..." />
-            {{-- @endif --}}
-            <x-button action="submit" name="new_status" icon="paper-plane" value="5" label="Wyślij" />
-        </div>
-        <script>
-        $(document).ready(function(){
-            $("#statuschanger").hide();
-
-            $("a[statuschanger]").click(function(){
-                /*wyczyść możliwe ghosty*/
-                $("a[statuschanger].ghost").removeClass("ghost");
-
-                let status = $(this).attr("statuschanger"); if(status == 9) return;
-                $(`#phases button[type="submit"]`).val(status);
-                $("#statuschanger").show();
-                for(i of [9, 6, 8, 96]){
-                    if(i == status) continue;
-                    $(`a[statuschanger="${i}"]`).addClass("ghost");
-                }
-
-                $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
-
-                const comment_field = document.querySelector("#statuschanger #comment");
-                if($(this).attr("is-follow-up")){
-                    const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
-                    comment_field.innerHTML = last_comment;
-                }else{
-                    comment_field.innerHTML = "";
-                }
-                comment_field.scrollIntoView({behavior: "smooth"});
-                comment_field.focus();
-            });
-        });
-        </script>
         @else
         <div id="opinion-1">
             <h2>Czy odpowiada Ci powyższa wycena?</h2>

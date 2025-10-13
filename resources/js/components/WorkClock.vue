@@ -241,7 +241,7 @@ setInterval(getSong, 10e3)
             height: 7em;
 
             & .plot-bar {
-                background-color: var(--bg2);
+                background-color: var(--bg-lite2);
                 position: absolute;
                 bottom: 0;
                 width: 100%;

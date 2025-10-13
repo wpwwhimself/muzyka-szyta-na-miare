@@ -121,11 +121,11 @@
                     $("#default-wishes-button").attr("data-fill", "").hide().off();
                 }
             }
-            $(document).ready(function(){
-                client_fields(true);
-                if($("#client_id").val() == "") $("[data-function]").parent().hide();
-                $("#client_id").change(function(){ client_fields() });
-            });
+            </script>
+            <script defer>
+            client_fields(true);
+            if($("#client_id").val() == "") $("[data-function]").parent().hide();
+            $("#client_id").change(function(){ client_fields() });
             </script>
         </x-extendo-block>
 
@@ -200,10 +200,10 @@
                         }
                     }
                 }
-                $(document).ready(function(){
-                    song_fields(true);
-                    $("#song_id").change(function(){ song_fields() });
-                });
+                </script>
+                <script defer>
+                song_fields(true);
+                $("#song_id").change(function(){ song_fields() });
             </script>
             @endif
         </x-extendo-block>
@@ -299,10 +299,10 @@
                         }
                     });
                 }
-                $(document).ready(function(){
-                    calcPriceNow();
-                    $("#price_code").change(function (e) { calcPriceNow() });
-                });
+                </script>
+                <script defer>
+                calcPriceNow();
+                $("#price_code").change(function (e) { calcPriceNow() });
                 </script>
                 @if ($request->client?->budget && in_array($request->status_id, [1, 5, 6]))
                 <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">

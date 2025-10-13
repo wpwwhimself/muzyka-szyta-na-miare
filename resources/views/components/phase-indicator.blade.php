@@ -6,7 +6,7 @@
                 {{ $statusName($statusId) }}
             </p>
         @else
-            <span>Faza:</span>
+            <span>Status:</span>
             <h3>
                 <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
                 {{ $statusName($statusId) }}

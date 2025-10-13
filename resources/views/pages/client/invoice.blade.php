@@ -8,12 +8,10 @@
     <x-button action="#/" id="print_invoice"
         icon="download" label="Drukuj"
         />
-    <script>
-    $(document).ready(function(){
-        $("#print_invoice").click(function(){
-            $("header, footer>div>p").addClass("hide-for-print");
-            window.print();
-        });
+    <script defer>
+    $("#print_invoice").click(function(){
+        $("header, footer>div>p").addClass("hide-for-print");
+        window.print();
     });
     </script>
 </div>

@@ -37,7 +37,7 @@
 
         <style>
         .day-tiles > a{
-            background-color: var(--bg2);
+            background-color: var(--bg-lite2);
             padding: var(--size-m);
             border-radius: var(--size-m);
         }

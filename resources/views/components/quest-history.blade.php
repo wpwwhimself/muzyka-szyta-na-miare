@@ -1,20 +1,34 @@
 <x-extendo-block key="history"
-    header-icon="timeline"
+    :header-icon="model_icon('status_changes')"
     title="Historia"
     :extended="$extended"
+    id="quest-history"
 >
     @php
-        $lastComment = is_archmage()
+    $lastComment = is_archmage()
         ? $history->whereNotIn("changed_by", [0, 1])->last() ?? $history->whereNull("changed_by")->last()
         : $history->whereIn("changed_by", [0, 1])->last();
     @endphp
+
     <x-extendo-section :title="is_archmage() ? 'Ostatni komentarz klienta' : 'Ostatni mój komentarz'">
         @if($lastComment?->comment)
-        {!! $entryLabel($lastComment) !!}
+        {!! $lastComment !!}
+        @endif
+
+        @if ($lastComment?->can_be_corrected)
+        <x-shipyard.ui.button
+            label="Popraw ostatni komentarz"
+            icon="message-draw"
+            action="none"
+            onclick="openModal('edit-last-comment', {
+                test: 1,
+            })"
+            class="tertiary"
+        />
         @endif
     </x-extendo-section>
 
-    <div id="quest-history">
+    <div role="circles">
         @forelse ($history as $item)
         <div @class([
             "history-position",
@@ -29,8 +43,10 @@
                 "center",
                 "p-".$item->status->id,
                 "by-client" => !is_archmage($item->changed_by),
-            ]) {{ Popper::arrow()->interactive()->pop($entryLabel($item)) }}>
-                <i class="fas {{ $item->status->status_symbol }} quest-status p-{{ $item->new_status_id }}" data-comment="{{ $item->comment }}"></i>
+            ]) {{ Popper::interactive()->pop(preg_replace("/\"/", "&quot;", $item)) }}
+                data-comment="{{ $item->comment }}"
+            >
+                <x-phase-indicator-mini :status="$item->status" :pop="false" />
             </div>
             <small class="notification-counter">
                 @if ($item->mail_sent >= 1)

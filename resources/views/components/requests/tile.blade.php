@@ -9,7 +9,7 @@
         </div>
 
         <x-shipyard.ui.button
-            :action="route('quest', ['id' => $request->id])"
+            :action="route('request', ['id' => $request->id])"
             icon="arrow-right"
             pop="Szczegóły"
         />

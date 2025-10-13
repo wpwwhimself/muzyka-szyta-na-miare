@@ -79,10 +79,10 @@
                 });
             }
         }
-        $(document).ready(function(){
-            calcPriceNow();
-            $("#price_code").change(function (e) { calcPriceNow() });
-        });
+        </script>
+        <script defer>
+        calcPriceNow();
+        $("#price_code").change(function (e) { calcPriceNow() });
         </script>
 
         @if ($quest->deadline) <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
@@ -240,34 +240,32 @@
         {{-- @endif --}}
         <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" />
     </div>
-    <script>
-    $(document).ready(function(){
-        $("#statuschanger").hide();
+    <script defer>
+    $("#statuschanger").hide();
 
-        $("a[statuschanger]").click(function(){
-            /*wyczyść możliwe ghosty*/
-            $("a[statuschanger].ghost").removeClass("ghost");
+    $("a[statuschanger]").click(function(){
+        /*wyczyść możliwe ghosty*/
+        $("a[statuschanger].ghost").removeClass("ghost");
 
-            let status = $(this).attr("statuschanger");
-            $(`#phases button[type="submit"]`).val(status);
-            $("#statuschanger").show();
-            for(i of [11, 14, 19, 16, 18, 21, 26, 96]){
-                if(i == status) continue;
-                $(`a[statuschanger="${i}"]`).addClass("ghost");
-            }
+        let status = $(this).attr("statuschanger");
+        $(`#phases button[type="submit"]`).val(status);
+        $("#statuschanger").show();
+        for(i of [11, 14, 19, 16, 18, 21, 26, 96]){
+            if(i == status) continue;
+            $(`a[statuschanger="${i}"]`).addClass("ghost");
+        }
 
-            $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
+        $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
 
-            const comment_field = document.querySelector("#statuschanger #comment");
-            if($(this).attr("is-follow-up")){
-                const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
-                comment_field.innerHTML = last_comment;
-            }else{
-                comment_field.innerHTML = "";
-            }
-            comment_field.scrollIntoView({behavior: "smooth"});
-            comment_field.focus();
-        });
+        const comment_field = document.querySelector("#statuschanger #comment");
+        if($(this).attr("is-follow-up")){
+            const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
+            comment_field.innerHTML = last_comment;
+        }else{
+            comment_field.innerHTML = "";
+        }
+        comment_field.scrollIntoView({behavior: "smooth"});
+        comment_field.focus();
     });
     </script>
 </form>

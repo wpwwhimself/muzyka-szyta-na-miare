@@ -43,13 +43,11 @@
         <input type="hidden" name="id" value="" />
         <x-button action="submit" icon="plus" label="Zatwierdź" />
     </form>
-    <script>
-    $(document).ready(function(){
-        $(".table-row:not(.table-header)").click(function(){
-            $("#name").val($(this).find(".cost-name").text());
-            $("#desc").val($(this).find(".cost-desc").text());
-            $("input[name='id']").val($(this).attr("data-id"))
-        });
+    <script defer>
+    $(".table-row:not(.table-header)").click(function(){
+        $("#name").val($(this).find(".cost-name").text());
+        $("#desc").val($(this).find(".cost-desc").text());
+        $("input[name='id']").val($(this).attr("data-id"))
     });
     </script>
 </section>

@@ -4,6 +4,13 @@
 @section("content")
 
 <script>
+function jumpTo(selector) {
+    document.querySelector(selector).scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+}
+
 function openSection(slug) {
     document.querySelectorAll(`[role="service"]`).forEach(el => {
         el.classList.toggle("active", el.getAttribute("data-slug") === slug);
@@ -12,7 +19,7 @@ function openSection(slug) {
         el.classList.toggle("active", el.getAttribute("data-slug") === slug);
     });
 
-    jumpTo(`[role="service"][data-slug="${slug}"] #offer`);
+    jumpTo(`#jump-target`);
 }
 
 function filterSongs(criterion = undefined, id = undefined) {
@@ -110,7 +117,7 @@ function getSongList(domain = undefined) {
 </script>
 
 <x-section id="home" scissors>
-    <div class="company-name flex right center">
+    <div class="company-name flex right but-mobile-down center">
         <img src="{{ asset("msznm.svg") }}" alt="logo" class="logo">
         <div>
             <h1>{{ setting("app_name") }}</h1>
@@ -129,7 +136,7 @@ function getSongList(domain = undefined) {
 </x-section>
 
 <div role="services">
-    <p>Wybierz kategorię, aby dowiedzieć się więcej:</p>
+    <p id="jump-target">Wybierz kategorię, aby dowiedzieć się więcej:</p>
 
     <div class="flex right center">
         @foreach ([
@@ -137,7 +144,7 @@ function getSongList(domain = undefined) {
             ["Organista", "Oprawa ślubów i mszy", "organista"],
             ["Imprezy i koncerty", "Muzyka na żywo", "dj"],
         ] as $i => [$label, $desc, $slug_part])
-        <div class="section flex right keep-for-mobile center middle interactive backdropped stagger"
+        <div class="section flex right center middle interactive backdropped stagger"
             onclick="openSection('{{ $slug_part }}')"
             role="service-button"
             data-slug="{{ $slug_part }}"
@@ -146,7 +153,7 @@ function getSongList(domain = undefined) {
             <img src="{{ asset("assets/divisions/$slug_part.svg") }}" alt="logo"
                 class="icon white-on-black"
             >
-            <div>
+            <div class="service-label">
                 <h2>{{ $label }}</h2>
                 <p>{{ $desc }}</p>
             </div>

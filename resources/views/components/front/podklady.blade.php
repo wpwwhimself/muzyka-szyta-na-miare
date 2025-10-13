@@ -195,7 +195,7 @@
     </div>
 </x-front.tabbed-section>
 
-<section id="prices" class="grid" style="--col-count: 2;">
+<section id="prices" class="grid but-mobile-down" style="--col-count: 2;">
     <div class="black-back rounded stagger" style="--stagger-index: 1;">
         <h1>Cennik</h1>
         <span class="yellowed-out">
@@ -248,7 +248,7 @@
 </section>
 
 <x-shipyard.ui.button
-    label="Złóż zapytanie"
+    label="Złóż zapytanie o podkład/nuty"
     icon="send"
     action="none"
     onclick="openModal('send-podklady-request')"

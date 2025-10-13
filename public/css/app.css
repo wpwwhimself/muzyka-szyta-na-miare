@@ -306,7 +306,6 @@ section {
     }
     & h1, & h2, & h3 {
         margin: 0;
-        white-space: nowrap;
     }
 
     & [role="contents"] {

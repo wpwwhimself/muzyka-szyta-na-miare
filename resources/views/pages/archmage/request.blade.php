@@ -1,6 +1,12 @@
-@extends('layouts.app', ["title" => ($request->title ?? "bez tytułu") . " | $title"])
+@extends('layouts.app')
+@section("title", ($request->title ?? "bez tytułu"))
+@section("subtitle", "Zapytanie")
 
 @section('content')
+
+@php
+$fields = $request::getFields();
+@endphp
 
 <x-shipyard.app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>
@@ -16,11 +22,9 @@
         ]) }}" icon="plus">Dodaj kolejne</x-a>
     </x-slot:actions>
 
-    <h1>Szczegóły zapytania</h1>
-
     <x-phase-indicator :status-id="$request->status_id" />
 
-    <div id="phases" class="archmage-quest-phases">
+    <div id="phases" class="archmage-quest-phases flex right center middle">
         @if ($request->status_id != 9) <x-input type="TEXT" name="comment" label="Komentarz do zmiany" /> @endif
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8, 95]) ? 'review' : 'change' }}" />
@@ -38,11 +42,13 @@
             ["Klient odnawia", 1, [4, 7, 8]],
         ] as [$label, $status_id, $show_on_statuses])
             @if (in_array($request->status_id, $show_on_statuses))
+            @php
+            $new_status = \App\Models\Status::find(abs($status_id));
+            @endphp
             <x-button :action="abs($status_id) == 9 ? route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => $status_id < 0]) : 'submit'"
                 name="new_status"
-                :icon="abs($status_id)"
+                :icon="$new_status->icon"
                 :value="$status_id"
-                :label="''"
                 :pop="$label"
                 :class="$status_id < 0 ? 'priority' : ''"
                 />
@@ -54,24 +60,56 @@
     <h3>Zlecenie przepisane z numerem <a href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h3>
     @endif
 
-    <div class="flex down">
+    <div class="grid but-mobile-down" style="--col-count: 2;">
         <x-extendo-block key="client"
             :header-icon="model_icon('users')"
             title="Dane klienta"
             :subtitle="$request->client"
             :extended="in_array($request->status_id, [1])"
         >
-            <x-select name="client_id" label="Istniejący klient" :options="$clients" :empty-option="true" value="{{ $request->client_id }}" :small="true" />
-            <x-input type="text" name="client_name" label="Nazwisko/Nazwa" :autofocus="true" :required="true" value="{{ _ct_($request->client_name) }}" />
-            <x-input type="email" name="email" label="Adres e-mail" value="{{ _ct_($request->email) }}" :small="true" />
-            <x-input type="tel" name="phone" label="Numer telefonu" value="{{ _ct_($request->phone) }}" :small="true" />
-            <x-input type="text" name="other_medium" label="Inna forma kontaktu" value="{{ _ct_($request->other_medium) }}" :small="true" />
-            <x-input type="text" name="contact_preference" label="Preferencja kontaktowa" placeholder="email" value="{{ _ct_($request->contact_preference) }}" />
+            <span>Powiązanie z klientem: {{ $request->user ?? "brak" }}</span>
+            <div class="flex right middle">
+                @if ($request->client_id)
+                <x-button
+                    :action="route('clients', ['search' => $request->client_id])"
+                    :icon="model_icon('users')"
+                    label="Szczegóły"
+                />
+                <x-button
+                    :action="route('quests', ['client' => $request->client_id])"
+                    :icon="model_icon('quests')"
+                    label="Zlecenia"
+                />
 
-            <div>
-                <x-button action="{{ route('clients', ['search' => $request->client_id]) }}" icon="user" label="Szczegóły" small data-function="client_details" />
-                <x-button action="{{ route('quests', ['client' => $request->client_id]) }}" icon="boxes" label="Zlecenia" small data-function="client_quests" />
+                @else
+                <x-shipyard.ui.button
+                    icon="link"
+                    label="Przypisz klienta"
+                    action="none"
+                    onclick="openModal('select-user-to-request', {
+                        request_id: '{{ $request->id }}',
+                    })"
+                    class="tertiary"
+                />
+
+                @endif
             </div>
+
+            @foreach ([
+                "client_name",
+                "email",
+                "phone",
+                "other_medium",
+            ] as $field_name)
+                <x-shipyard.ui.input
+                    :type="$fields[$field_name]['type']"
+                    :name="$field_name"
+                    :label="$fields[$field_name]['label']"
+                    :icon="$fields[$field_name]['icon']"
+                    :hint="$fields[$field_name]['hint'] ?? null"
+                    :value="$request->$field_name"
+                />
+            @endforeach
 
             <script>
             function client_fields(dont_clear_fields = false){

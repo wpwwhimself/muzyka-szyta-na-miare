@@ -36,6 +36,11 @@ Route::middleware("auth")->group(function(){
         Route::get('/prices', "prices")->name("prices");
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
+
+        Route::prefix("lookup")->group(function() {
+            Route::get("users", "lookupUsers")->name("lookup.users");
+            Route::get("songs", "lookupSongs")->name("lookup.songs");
+        });
     });
 
     Route::controller(RequestController::class)->prefix("requests")->group(function(){
@@ -52,6 +57,11 @@ Route::middleware("auth")->group(function(){
             Route::get('/view/{id}', "show")->name("request");
             Route::post('/add-back', "processAdd")->name("add-request-back");
             Route::post('/mod-back', "processMod")->name("mod-request-back");
+            
+            Route::prefix("select")->group(function() {
+                Route::post("user", "selectUser")->name("requests.select-user");
+                Route::post("song", "selectSong")->name("requests.select-song");
+            });
 
             Route::get('/finalize/{id}/{status}/{with_priority?}', "finalize")->name("request-final");
             Route::get('/finalized/{id}/{status}/{is_new_client}', "finalized")->name("request-finalized");

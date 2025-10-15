@@ -820,13 +820,6 @@ footer .contact-info{
 #phases{
     margin-top: 2em;
 }
-.archmage-quest-phases{
-    margin: 0 !important;
-}
-.archmage-quest-phases .input-container{
-    display: inline-flex;
-    vertical-align: middle;
-}
 
 .invoice-number {
     & .invoice-edit {

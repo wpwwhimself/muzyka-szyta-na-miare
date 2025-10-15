@@ -6,6 +6,7 @@ use App\Mail\PatronRejected;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
+use App\Models\Shipyard\Modal;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BackController extends Controller
 {
@@ -185,4 +187,38 @@ class BackController extends Controller
             compact("page", "titles")
         ));
     }
+
+    #region lookups
+    public function lookupUsers()
+    {
+        $fieldName = Modal::where("name", "select-user-to-request")->first()
+            ->fields[0][5]["fieldName"];
+        $data = User::has("notes")
+            ->get()
+            ->map(fn ($u) => [
+                "id" => $u->id,
+                "name" => $u->notes->client_name,
+                "email" => $u->notes->email,
+                "phone" => $u->notes->phone,
+            ])
+            ->filter(fn ($u) =>
+                Str::contains($u["id"], request("query"))
+                || Str::contains($u["name"], request("query"))
+                || Str::contains($u["email"], request("query"))
+                || Str::contains($u["phone"], request("query"))
+            );
+        $headings = collect([
+            "ID",
+            "Nazwisko",
+            "Email",
+            "Telefon",
+        ]);
+
+        return view("components.shipyard.ui.lookup-results", compact(
+            "data",
+            "headings",
+            "fieldName",
+        ))->render();
+    }
+    #endregion
 }

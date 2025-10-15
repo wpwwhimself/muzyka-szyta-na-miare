@@ -1,5 +1,5 @@
 @props([
-    'label',
+    'label' => null,
     'icon',
     'danger' => false,
     'action',

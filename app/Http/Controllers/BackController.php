@@ -192,21 +192,22 @@ class BackController extends Controller
     public function lookupUsers()
     {
         $fieldName = Modal::where("name", "select-user-to-request")->first()
-            ->fields[0][5]["fieldName"];
+            ->fields[0][5]["selectData"]["fieldName"];
         $data = User::has("notes")
             ->get()
-            ->map(fn ($u) => [
+            ->map(fn ($u) => collect([
                 "id" => $u->id,
                 "name" => $u->notes->client_name,
                 "email" => $u->notes->email,
                 "phone" => $u->notes->phone,
-            ])
+            ]))
             ->filter(fn ($u) =>
-                Str::contains($u["id"], request("query"))
-                || Str::contains($u["name"], request("query"))
-                || Str::contains($u["email"], request("query"))
+                Str::contains($u["id"], request("query"), true)
+                || Str::contains($u["name"], request("query"), true)
+                || Str::contains($u["email"], request("query"), true)
                 || Str::contains($u["phone"], request("query"))
-            );
+            )
+            ->values();
         $headings = collect([
             "ID",
             "Nazwisko",

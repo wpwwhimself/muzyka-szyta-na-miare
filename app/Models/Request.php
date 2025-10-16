@@ -145,6 +145,11 @@ class Request extends Model
             "icon" => "calendar-blank",
             "hint" => "Do kiedy najpóźniej jestem w stanie oddać pierwszą wersję utworu.",
         ],
+        "price_code" => [
+            "type" => "text",
+            "label" => "Kod wyceny",
+            "icon" => "barcode",
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -152,23 +157,23 @@ class Request extends Model
             "model" => User::class,
             "mode" => "one",
             "role" => "archmage",
-            // "field_name" => "",
+            "field_name" => "client_id",
             "field_label" => "Klient",
         ],
         "quest_type" => [
             "model" => QuestType::class,
             "mode" => "one",
-            "field_name" => "Rodzaj zlecenia",
+            "field_label" => "Rodzaj zlecenia",
         ],
         "song" => [
             "model" => Song::class,
             "mode" => "one",
-            "field_name" => "Utwór",
+            "field_label" => "Utwór",
         ],
         "genre" => [
             "model" => Genre::class,
             "mode" => "one",
-            "field_name" => "Gatunek",
+            "field_label" => "Gatunek",
         ],
     ];
 

@@ -16,8 +16,10 @@
     :autofocus="$autofocus"
     :required="$required"
     :disabled="$disabled"
-    :options="collect($options)->map(fn ($v, $k) => ['label' => $k, 'value' => $v])"
-    :select-data="['emptyOption' => $emptyOption]"
+    :select-data="[
+        'options' => collect($options)->map(fn ($v, $k) => ['label' => $k, 'value' => $v]),
+        'emptyOption' => $emptyOption,
+    ]"
     :value="$value"
     :small="$small"
 />

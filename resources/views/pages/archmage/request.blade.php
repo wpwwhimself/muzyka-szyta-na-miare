@@ -88,6 +88,7 @@ $fields = $request::getFields();
                     action="none"
                     onclick="openModal('select-user-to-request', {
                         request_id: '{{ $request->id }}',
+                        query: '{{ $request->client_name }}',
                     })"
                     class="tertiary"
                 />
@@ -101,14 +102,7 @@ $fields = $request::getFields();
                 "phone",
                 "other_medium",
             ] as $field_name)
-                <x-shipyard.ui.input
-                    :type="$fields[$field_name]['type']"
-                    :name="$field_name"
-                    :label="$fields[$field_name]['label']"
-                    :icon="$fields[$field_name]['icon']"
-                    :hint="$fields[$field_name]['hint'] ?? null"
-                    :value="$request->$field_name"
-                />
+            <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
             @endforeach
         </x-extendo-block>
 
@@ -139,6 +133,7 @@ $fields = $request::getFields();
                     action="none"
                     onclick="openModal('select-song-to-request', {
                         request_id: '{{ $request->id }}',
+                        query: '{{ $request->title }}',
                     })"
                     class="tertiary"
                 />
@@ -154,19 +149,12 @@ $fields = $request::getFields();
                 "wishes_quest",
                 "hard_deadline",
             ] as $field_name)
-                <x-shipyard.ui.input
-                    :type="$fields[$field_name]['type']"
-                    :name="$field_name"
-                    :label="$fields[$field_name]['label']"
-                    :icon="$fields[$field_name]['icon']"
-                    :hint="$fields[$field_name]['hint'] ?? null"
-                    :value="$request->$field_name"
-                />
+                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
             @endforeach
-            <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" />
+            <x-shipyard.ui.connection-input :model="$request" connection-name="genre" />
         </x-extendo-block>
 
         <x-extendo-block key="quote"
@@ -174,7 +162,7 @@ $fields = $request::getFields();
             title="Wycena"
             :extended="true"
         >
-            <x-select name="quest_type" label="Rodzaj zlecenia" :small="true" :options="$questTypes" :required="true" value="{{ $request->quest_type_id }}" />
+            <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" />
 
             <div>
                 <div id="song-price-sugg"></div>

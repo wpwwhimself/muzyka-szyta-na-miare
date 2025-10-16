@@ -64,7 +64,7 @@ $fields = $request::getFields();
         <x-extendo-block key="client"
             :header-icon="model_icon('users')"
             title="Dane klienta"
-            :subtitle="$request->client"
+            :subtitle="$request->client_name"
             :extended="in_array($request->status_id, [1])"
         >
             <span>Powiązanie z klientem: {{ $request->user ?? "brak" }}</span>
@@ -110,61 +110,6 @@ $fields = $request::getFields();
                     :value="$request->$field_name"
                 />
             @endforeach
-
-            <script>
-            function client_fields(dont_clear_fields = false){
-                const empty = document.querySelector("#client_id").value == "";
-                let cldata = {};
-
-                if(!empty){
-                    $.ajax({
-                        url: `/api/clients/${$("#client_id").val()}`,
-                        type: "get",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                        },
-                        success: function(res){
-                            res = JSON.parse(res);
-                            $("#client_name").val(res.client_name);
-                            $("#email").val(res.email);
-                            $("#phone").val(res.phone);
-                            $("#other_medium").val(res.other_medium);
-                            $("#contact_preference").val(res.contact_preference);
-                            if(res.default_wishes != null){
-                                $("#default-wishes-button")
-                                    .attr("data-fill", res.default_wishes)
-                                    .show()
-                                    .click(() => {$("#wishes").val($("#default-wishes-button").attr("data-fill"))});
-                            }else{
-                                $("#default-wishes-button")
-                                    .attr("data-fill", "")
-                                    .hide()
-                                    .off();
-                            }
-                            if(res.special_prices != null){$("#special-prices-warning").html(`<i class="fa-solid fa-triangle-exclamation"></i> Klient ma specjalną wycenę:<br>${res.special_prices}`);}
-                            $("[data-function=client_details]").attr("href", "{{ route('clients') }}" + `?search=${$("#client_id").val()}`).show();
-                            $("[data-function=client_quests]").attr("href", "{{ route('quests') }}" + `?client=${$("#client_id").val()}`).show();
-                        }
-                    });
-                }else{
-                    if(!dont_clear_fields){
-                        $("#client_name").val("");
-                        $("#email").val("");
-                        $("#phone").val("");
-                        $("#other_medium").val("");
-                        $("#contact_preference").val("");
-                        $("#special-prices-warning").html("");
-                        $("[data-function]").parent().hide();
-                    }
-                    $("#default-wishes-button").attr("data-fill", "").hide().off();
-                }
-            }
-            </script>
-            <script defer>
-            client_fields(true);
-            if($("#client_id").val() == "") $("[data-function]").parent().hide();
-            $("#client_id").change(function(){ client_fields() });
-            </script>
         </x-extendo-block>
 
         @if (in_array($request->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
@@ -172,82 +117,60 @@ $fields = $request::getFields();
         @endif
 
         <x-extendo-block key="song"
-            header-icon="cart-flatbed"
+            :header-icon="model_icon('songs')"
             title="Dane utworu"
-            :subtitle="$request->song?->full_title ?? $request->title"
+            :subtitle="$request->full_title"
             :extended="in_array($request->status_id, [1, 6, 96])"
             :warning="$warnings['song']"
         >
-            <div>
-                <x-select name="song_id" label="Istniejący utwór" :options="$songs" :empty-option="true" :small="true" :value="$request->song_id" />
-                @unless ($similar_songs->isEmpty())
-                <span class="warning">
-                    <i class="fas fa-triangle-exclamation"></i>
-                    Podobne:
-                    @foreach ($similar_songs as $song)
-                        <span class="clickable" onclick="$(`#song_id`).val('{{ $song->id }}').trigger('change')">{{ $song->id }}</span>
-                    @endforeach
-                </span>
-                @endunless
+            <span>Powiązanie z utworem: {{ $request->song ?? "brak" }}</span>
+            <div class="flex right middle">
+                @if ($request->song_id)
+                <x-button
+                    :action="route('songs', ['search' => $request->song_id])"
+                    :icon="model_icon('songs')"
+                    label="Szczegóły"
+                />
+
+                @else
+                <x-shipyard.ui.button
+                    icon="link"
+                    label="Przypisz utwór"
+                    action="none"
+                    onclick="openModal('select-song-to-request', {
+                        request_id: '{{ $request->id }}',
+                    })"
+                    class="tertiary"
+                />
+
+                @endif
             </div>
-            <x-input type="text" name="title" label="Tytuł utworu" value="{{ $request->title }}" />
-            <x-input type="text" name="artist" label="Wykonawca" value="{{ $request->artist }}" />
-            <div>
-                <x-input type="text" name="link" label="Link do nagrania" :small="true" value="{{ $request->link }}" />
-                <x-link-interpreter :raw="$request->link" />
-            </div>
+
+            @foreach ([
+                "title",
+                "artist",
+                "link",
+                "wishes",
+                "wishes_quest",
+                "hard_deadline",
+            ] as $field_name)
+                <x-shipyard.ui.input
+                    :type="$fields[$field_name]['type']"
+                    :name="$field_name"
+                    :label="$fields[$field_name]['label']"
+                    :icon="$fields[$field_name]['icon']"
+                    :hint="$fields[$field_name]['hint'] ?? null"
+                    :value="$request->$field_name"
+                />
+                @if ($field_name == "link")
+                <x-link-interpreter :raw="$request->$field_name" />
+                @endif
+            @endforeach
             <x-select name="genre_id" label="Gatunek" :options="$genres" :small="true" :empty-option="true" value="{{ $request->genre_id }}" />
-            <div>
-                <x-input type="TEXT" name="wishes" label="Życzenia dotyczące utworu" value="{{ $request->wishes }}" />
-                <x-button label="Wpisz domyślne życzenia" icon="circle-question" action="#/" id="default-wishes-button" :small="true" />
-            </div>
-            <x-input type="TEXT" name="wishes_quest" label="Życzenia dotyczące zlecenia" value="{{ $request->wishes_quest }}" />
-            <x-input type="date" name="hard_deadline" label="Termin narzucony przez klienta" value="{{ $request->hard_deadline?->format('Y-m-d') }}" />
-
-            @if(in_array($request->status_id, [1, 6, 96]))
-            <script>
-            function song_fields(dont_clear_fields = false){
-                    const empty = $("#song_id").val() == "";
-                    let songdata = {};
-
-                    if(!empty){
-                        $.ajax({
-                            url: `/api/songs/${$("#song_id").val()}`,
-                            type: "get",
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                            },
-                            success: function(res){
-                                res = JSON.parse(res);
-                                $("#title").val(res.title);
-                                $("#artist").val(res.artist);
-                                $("#link").val(res.link);
-                                $("#genre_id").val(res.genre_id);
-                                $("#wishes").val(res.notes);
-                                $("#song-price-sugg").html(`Sugerowana cena: ${res.price_code}`);
-                            }
-                        });
-                    }else{
-                        if(!dont_clear_fields){
-                            $("#title").val("");
-                            $("#artist").val("");
-                            $("#link").val("");
-                            $("#genre_id").val("");
-                            $("#wishes").val("").trigger("change");
-                            $("#song-price-sugg").html("");
-                        }
-                    }
-                }
-                </script>
-                <script defer>
-                song_fields(true);
-                $("#song_id").change(function(){ song_fields() });
-            </script>
-            @endif
         </x-extendo-block>
 
         <x-extendo-block key="quote"
-            header-icon="sack-dollar"
+            :header-icon="model_icon('prices')"
             title="Wycena"
             :extended="true"
         >

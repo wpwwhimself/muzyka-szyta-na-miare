@@ -133,6 +133,18 @@ class Request extends Model
             "icon" => "cloud",
             "hint" => "np. transpozycja, czy z linią melodyczną itp.",
         ],
+        "hard_deadline" => [
+            "type" => "date",
+            "label" => "Termin klienta",
+            "icon" => "calendar-account",
+            "hint" => "Do kiedy klient chciałby najpóźniej otrzymać pliki.",
+        ],
+        "deadline" => [
+            "type" => "date",
+            "label" => "Termin wykonania",
+            "icon" => "calendar-blank",
+            "hint" => "Do kiedy najpóźniej jestem w stanie oddać pierwszą wersję utworu.",
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -142,6 +154,21 @@ class Request extends Model
             "role" => "archmage",
             // "field_name" => "",
             "field_label" => "Klient",
+        ],
+        "quest_type" => [
+            "model" => QuestType::class,
+            "mode" => "one",
+            "field_name" => "Rodzaj zlecenia",
+        ],
+        "song" => [
+            "model" => Song::class,
+            "mode" => "one",
+            "field_name" => "Utwór",
+        ],
+        "genre" => [
+            "model" => Genre::class,
+            "mode" => "one",
+            "field_name" => "Gatunek",
         ],
     ];
 
@@ -219,6 +246,13 @@ class Request extends Model
     {
         return Attribute::make(
             get: fn ($v) => $this->user?->notes->client_name ?? $v,
+        );
+    }
+
+    public function fullTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->song?->full_title ?? $this->title,
         );
     }
 

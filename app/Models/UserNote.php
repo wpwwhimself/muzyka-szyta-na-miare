@@ -116,20 +116,19 @@ class UserNote extends Authenticatable
             "icon" => "human-greeting-proximity",
             "hint" => "np. WhatsApp",
         ],
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "trust" => [
+            "type" => "select",
+            "label" => "Zaufanie",
+            "icon" => "",
+            "selectData" => [
+                "options" => [
+                    ["value" => 0, "label" => "neutralne"],
+                    ["value" => 1, "label" => "zaufany"],
+                    ["value" => 2, "label" => "ulubiony"],
+                    ["value" => -1, "label" => "krętacz i oszust"],
+                ],
+            ],
+        ],
     ];
 
     public const CONNECTIONS = [

@@ -150,6 +150,12 @@ class Request extends Model
             "label" => "Kod wyceny",
             "icon" => "barcode",
         ],
+        "delayed_payment" => [
+            "type" => "date",
+            "label" => "Opóźnienie wpłaty",
+            "icon" => "cash-clock",
+            "hint" => "Nie wpłacaj przed tym dniem - muszę utrzymać przychody na odpowiednim poziomie z uwagi na zasady działalności nierejestrowanej.",
+        ],
     ];
 
     public const CONNECTIONS = [

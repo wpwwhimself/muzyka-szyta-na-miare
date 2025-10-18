@@ -165,113 +165,44 @@ $fields = $request::getFields();
             <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" />
 
             <div>
-                <div id="song-price-sugg"></div>
-                <div id="special-prices-warning"></div>
-                <x-input type="text" name="price_code" label="Kod wyceny" value="{{ $request->price_code }}" />
-                <div id="price-summary" class="hint-table">
-                    <div class="positions"></div>
-                    <hr />
-                    <div class="summary"><span>Razem:</span><span>0 zł</span></div>
+                @if (!$request->price_code)
+                <div class="flex down center">
+                    @if ($request->song)
+                    <span>Sugerowana wycena: {{ $request->song->price_code }}</span>
+                    @endif
+
+                    @if ($request->user?->notes->special_prices)
+                    <span>Klient ma specjalne warunki cenowe: {{ $request->user->notes->special_prices }}</span>
+                    @endif
                 </div>
-            </div>
+                @endif
 
-            <div>
-                <div id="delayed-payments-summary" class="hint-table">
-                    <div class="positions"></div>
-                    <hr />
-                    <div class="summary"></div>
-                </div>
-                <script>
-                function calcPriceNow(){
-                    const labels = $("#price_code").val();
-                    const client_id = $("#client_id").val();
-                    const positions_list = $("#price-summary .positions");
-                    const sum_row = $("#price-summary .summary");
-                    if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
-                    else{
-                        $.ajax({
-                            url: "/api/price_calc",
-                            type: "post",
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                labels: labels,
-                                client_id: client_id,
-                                quoting: true
-                            },
-                            success: function(res){
-                                let content = ``;
-                                for(line of res.positions){
-                                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
-                                }
-                                positions_list.html(content);
-                                sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
-                                if(res.override) positions_list.addClass("overridden");
-                                    else positions_list.removeClass("overridden");
+                <x-shipyard.ui.field-input :model="$request" field-name="price_code"
+                    onchange="reQuestCalcPrice(event.target.value, {{ $request->client_id ?? 'null' }});"
+                />
+                <x-re_quests.price-summary :model="$request" />
 
-                                checkMonthlyPaymentLimit(res.price);
-                            }
-                        });
-                    }
-                }
-                function checkMonthlyPaymentLimit(price){
-                    const positions_list = $("#delayed-payments-summary .positions");
-                    const sum_row = $("#delayed-payments-summary .summary");
-
-                    $.ajax({
-                        url: "/api/monthly_payment_limit",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            amount: price,
-                        },
-                        success: function(res){
-                            let when_to_ask = "";
-                            switch(res.when_to_ask){
-                                case 0: when_to_ask = "<span class='success'>od razu</span>"; break;
-                                case 1: when_to_ask = "<span class='warning'>w przyszłym miesiącu</span>"; break;
-                                default: when_to_ask = `<span class='error'>za ${res.when_to_ask} mc</span>`;
-                            }
-                            let content = ``;
-                            content += `<span>Saturacja</span><span>${res.saturation[0]} zł • ${res.saturation[1]} zł • ${res.saturation[2]} zł</span>`;
-                            positions_list.html(content);
-                            sum_row.html(`<span>Kiedy można brać?</span><span>${when_to_ask}</span>`);
-
-                            let delayed_payment;
-                            if(res.when_to_ask == 0){
-                                delayed_payment = undefined;
-                            }else{
-                                let today = new Date();
-                                delayed_payment = (new Date(today.getFullYear(), today.getMonth() + res.when_to_ask, 1));
-                                delayed_payment = `${delayed_payment.getFullYear()}-${(delayed_payment.getMonth() + 1).toString().padStart(2, 0)}-${delayed_payment.getDate().toString().padStart(2, 0)}`;
-                            }
-                            document.getElementById("delayed_payment").value = delayed_payment;
-                        }
-                    });
-                }
-                </script>
-                <script defer>
-                calcPriceNow();
-                $("#price_code").change(function (e) { calcPriceNow() });
-                </script>
-                @if ($request->client?->budget && in_array($request->status_id, [1, 5, 6]))
-                <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
+                @if ($request->user?->notes->budget && in_array($request->status_id, [1, 5, 6]))
+                <span class="{{ $request->user->notes->budget >= $request->price ? 'success' : 'warning' }}">
                     <i class="fa-solid fa-sack-dollar"></i>
-                    Budżet w wysokości <b>{{ _c_(as_pln($request->client->budget)) }}</b> automatycznie
+                    Budżet w wysokości <b>{{ _c_(as_pln($request->user->notes->budget)) }}</b> automatycznie
                     <br>
                     pokryje
-                    @if ($request->client->budget >= $request->price)
+                    @if ($request->user->notes->budget >= $request->price)
                     całą kwotę zlecenia
                     @else
                     część kwoty zlecenia
                     @endif
                 </span>
                 @endif
-                <x-input type="date" name="delayed_payment" label="Opóźnienie wpłaty" value="{{ $request->delayed_payment?->format('Y-m-d') }}" />
-            </div>
 
-            <div>
-                @if (in_array($request->status_id, [1, 6, 96])) <div class="folding"><x-calendar /></div> @endif
-                <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" />
+                <x-re_quests.monthly-payment-limit :model="$request" />
+                <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" />
+
+                <div>
+                    @if (in_array($request->status_id, [1, 6, 96])) <div class="folding"><x-calendar /></div> @endif
+                    <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" />
+                </div>
             </div>
         </x-extendo-block>
 

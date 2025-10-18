@@ -115,6 +115,7 @@ class BackController extends Controller
         );
     }
 
+    #region prices
     public function prices(){
         $prices = DB::table("prices")->get();
 
@@ -140,6 +141,7 @@ class BackController extends Controller
             compact("prices", "discount", "minimal_prices", "clients")
         ));
     }
+    #endregion
 
     public static function newStatusLog($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
         if($re_quest_id){

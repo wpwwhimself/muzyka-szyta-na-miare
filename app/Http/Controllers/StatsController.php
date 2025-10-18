@@ -803,14 +803,84 @@ class StatsController extends Controller
         return back()->with("success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty"));
     }
 
-    public function monthlyPaymentLimit(Request $rq = null){
+    #region price calc
+    public static function runPriceCalc($labels, $client_id, $quoting = false)
+    {
+        if($client_id == null) $client_id = $_POST['client_id'] ?? null; //odczyt tak, bo nie chce złapać argumentu
+        $client = User::find($client_id);
+        $price_schema = pricing($client_id);
+
+        $price = 0; $multiplier = 1; $positions = [];
+
+        $price_list = DB::table("prices")
+            ->select(["indicator", "service", "quest_type_id", "operation", "price_$price_schema AS price"])
+            ->get();
+
+        if($quoting){
+            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
+            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
+            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
+        }
+
+        $quest_type_present = null;
+        foreach($price_list as $cat){
+            preg_match_all("/$cat->indicator/", $labels, $matches);
+            if(count($matches[0]) > 0):
+                // nuty do innego typu zlecenia za pół ceny
+                $quest_type_present ??= $cat->quest_type_id;
+                $price_to_add = $cat->price;
+                if($cat->quest_type_id == 2 && $quest_type_present != 2) $price_to_add /= 2;
+
+                switch($cat->operation){
+                    case "+":
+                        $price += $price_to_add * count($matches[0]);
+                        array_push($positions, [$cat->service, _c_(as_pln($price_to_add * count($matches[0])))]);
+                        break;
+                    case "*":
+                        $multiplier += $price_to_add * count($matches[0]);
+                        $sign = ($price_to_add >= 0) ? "+" : "-";
+                        array_push($positions, [$cat->service, $sign._c_(count($matches[0]) * abs($price_to_add) * 100)."%"]);
+                        break;
+                }
+            endif;
+        }
+
+        $price *= $multiplier;
+        $override = false;
+
+        // minimal price
+        $minimal_price = $quest_type_present ? QUEST_MINIMAL_PRICES()[$quest_type_present] : 0;
+        $minimal_price_output = 0;
+        if($price < $minimal_price){
+            $price = $minimal_price;
+            $minimal_price_output = $minimal_price;
+            $override = true;
+        }
+
+        // manual price override
+        if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
+            $price = floatval(str_replace(",",".",$matches[0][0]));
+            $override = true;
+        }
+
+        return [
+            "price" => _c_(round($price)),
+            "positions" => $positions,
+            "override" => $override,
+            "labels" => $labels,
+            "minimal_price" => $minimal_price_output,
+        ];
+    }
+
+    public static function runMonthlyPaymentLimit($price)
+    {
         //scheduled and received payments
         $saturation = [
             //this month
             StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("new_status_id", 32)->sum("comment")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
@@ -824,7 +894,7 @@ class StatsController extends Controller
             //next month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth()))
@@ -838,7 +908,7 @@ class StatsController extends Controller
             //neeeeeeext month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth()))
@@ -857,11 +927,39 @@ class StatsController extends Controller
             else $when_to_ask++;
         }
 
-        return response()->json(compact(
+        return compact(
             "saturation",
             "when_to_ask",
             "limit_corrected",
-        ));
+        );
+    }
+
+    public function priceCalc(Request $request){
+        $data = $this->runPriceCalc($request->labels, $request->client_id, $request->quoting);
+
+        return response()->json([
+            "data" => $data,
+            "table" => view("components.re_quests.price-summary", [
+                "price" => $data["price"],
+                "positions" => $data["positions"],
+                "override" => $data["override"],
+                "labels" => $data["labels"],
+                "minimalPrice" => $data["minimal_price"],
+            ])->render(),
+        ]);
+    }
+
+    public function monthlyPaymentLimit(Request $rq){
+        $data = $this->runMonthlyPaymentLimit($rq->amount);
+
+        return response()->json([
+            "data" => $data,
+            "table" => view("components.re_quests.monthly-payment-limit", [
+                "saturation" => $data["saturation"],
+                "whenToAsk" => $data["when_to_ask"],
+                "limitCorrected" => $data["limit_corrected"],
+            ])->render(),
+        ]);
     }
 
     public function taxes(Request $rq) {
@@ -886,10 +984,7 @@ class StatsController extends Controller
             ),
         ));
     }
-
-    public function priceCalc(Request $request){
-        return price_calc($request->labels, $request->client_id, $request->quoting);
-    }
+    #endregion price calc
 
     #region gig-price
     public function gigPriceSuggest()

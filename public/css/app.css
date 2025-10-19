@@ -16,6 +16,17 @@ a.section,
     text-decoration: none;
 }
 
+/* loader support */
+#price-summary,
+#delayed-payments-summary {
+    position: relative;
+
+    & .loader {
+        position: absolute;
+        left: 0; right: 0;
+    }
+}
+
 /******************* individual **************/
 
 a {
@@ -70,6 +81,33 @@ a {
     background-color: var(--bg-lite1);
     padding: 1em;
 }
+
+.calendar-table {
+    & td:first-child{
+        white-space: nowrap;
+    }
+
+    & .cal-row {
+        & .free{
+            opacity: 0.5;
+        }
+        & .weekend{
+            color: goldenrod;
+        }
+        & .suggest{
+            color:hsl(108, 100%, 39%) !important;
+        }
+        & a{
+            display: inline-block;
+            margin: 2px;
+        }
+        & .quest-type {
+            font-size: var(--size-m);
+            margin: 0;
+        }
+    }
+}
+
 
 .contact-info {
     & a {
@@ -400,24 +438,18 @@ section {
 table {
     width: 100%;
     border-spacing: 0;
-    text-align: right;
+
+    & td,
+    & th {
+        text-align: right !important;
+    }
 
     & td:first-child,
     & th:first-child {
-        text-align: left;
+        text-align: left !important;
     }
     & tr:hover {
         background-color: var(--bg-lite2);
-    }
-}
-.table {
-    display: grid;
-
-    & .header,
-    & .footer,
-    & th {
-        font-weight: bold;
-        border: 1px solid var(--primary); border-left: none; border-right: none;
     }
 }
 

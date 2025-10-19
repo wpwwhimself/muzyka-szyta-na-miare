@@ -155,13 +155,13 @@ setInterval(getSong, 10e3)
     <div class="grid" style="--col-count: 2;" style="align-items: normal;">
         <div class="buttons">
             <div v-for="mode in modes"
-                class="submit tight clickable"
+                class="submit tight interactive"
                 @click="() => startStop(song.id, mode.id)"
             >
                 {{ mode.status_symbol }}
             </div>
             <div
-                class="submit tight clickable"
+                class="submit tight interactive"
                 style="grid-column: span 2"
                 @click="() => startStop(song.id, 13)"
             >
@@ -191,7 +191,7 @@ setInterval(getSong, 10e3)
                     <b>{{ modes.find(m => m.id == log.status_id).status_name }}</b>:
                     {{ log.time_spent }}
                 </span>
-                <span class="bin clickable">
+                <span class="bin interactive">
                     <FontAwesomeIcon :icon="faTrash"
                         @click="() => remove(song.id, log.status_id)"
                     />

@@ -96,7 +96,7 @@ div, form{
 .flex-right :not(.first){ order: 99; }
 
 
-/* CLICKABLE */
+/* interactive */
 
 a:hover, .accent{
     color: var(--acc);
@@ -767,7 +767,7 @@ footer .contact-info{
     }
 }
 
-.clickable, [onclick], [onmouseup]{
+.interactive, [onclick], [onmouseup]{
     user-select: none;
     cursor: pointer;
 }
@@ -775,26 +775,6 @@ footer .contact-info{
     max-height: 30vh;
     overflow: auto;
     border-radius: 0;
-}
-.calendar-table td:first-child{
-    white-space: nowrap;
-}
-.cal-row .free{
-    opacity: 0.5;
-}
-.cal-row .weekend{
-    color: goldenrod;
-}
-.cal-row .suggest{
-    color:hsl(108, 100%, 39%) !important;
-}
-.cal-row a{
-    display: inline-block;
-    margin: 2px;
-}
-.cal-row .quest-type {
-    font-size: var(--size-m);
-    margin: 0;
 }
 
 .quests-table .song-artist{

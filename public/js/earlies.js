@@ -10,6 +10,8 @@ function openExtendoBlock(btn, key) {
  * runs price calculation
  */
 function reQuestCalcPrice(labels, client_id) {
+    document.querySelector("#price-summary .loader").classList.remove("hidden");
+
     fetch(`/api/price_calc`, {
         method: "POST",
         headers: {
@@ -24,7 +26,7 @@ function reQuestCalcPrice(labels, client_id) {
     })
         .then(res => res.json())
         .then(({data, table}) => {
-            document.querySelector("#price-summary").innerHTML = table;
+            document.querySelector("#price-summary").replaceWith(fromHTML(table));
             checkMonthlyPaymentLimit(data.price);
         });
 }
@@ -33,6 +35,8 @@ function reQuestCalcPrice(labels, client_id) {
  * checks monthly payment limit
  */
 function checkMonthlyPaymentLimit(price) {
+    document.querySelector("#delayed-payments-summary .loader").classList.remove("hidden");
+
     fetch(`/api/monthly_payment_limit`, {
         method: "POST",
         headers: {
@@ -45,7 +49,7 @@ function checkMonthlyPaymentLimit(price) {
     })
         .then(res => res.json())
         .then(({data, table}) => {
-            document.querySelector("#monthly-payment-limit").innerHTML = table;
+            document.querySelector("#delayed-payments-summary").replaceWith(fromHTML(table));
 
             let delayed_payment;
             if(data.when_to_ask == 0){

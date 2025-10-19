@@ -80,7 +80,7 @@ function getSongList(domain = undefined) {
                     <span>${song.title ?? 'utwór bez tytułu'}</span>
                     <span class='ghost'>${song.artist ?? ''}</span>
                     ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania"
-                        class="clickable"
+                        class="interactive"
                         data-song-id="${song.id}"
                         data-song-title="${song.full_title}"
                         data-song-desc="${song.notes?.replace(/\n/g, '<br>') || ''}"
@@ -92,7 +92,7 @@ function getSongList(domain = undefined) {
             document.querySelector("#song-loader").classList.add("hidden");
 
             const player = document.querySelector("#songs audio");
-            $("#songs .clickable").click(function(){
+            $("#songs .interactive").click(function(){
                 $("#songs .popup").addClass("open");
 
                 const song_id = $(this).attr("data-song-id");

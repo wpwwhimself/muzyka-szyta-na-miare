@@ -58,7 +58,7 @@
             <span>Kwota</span>
         </div>
         @forelse ($costs as $cost)
-        <div class="table-row clickable" data-id="{{ $cost->id }}">
+        <div class="table-row interactive" data-id="{{ $cost->id }}">
             <span class="cost-date" data-date="{{ $cost->created_at->format('Y-m-d') }}" {{ Popper::pop($cost->created_at->format('d.m.Y')) }}>{{ $cost->created_at->diffForHumans() }}</span>
             <span class="cost-type" data-typ="{{ $cost->cost_type_id }}">{{ _ct_($cost->type->name) }}</span>
             <span class="cost-desc">{{ _ct_($cost->desc) }}</span>

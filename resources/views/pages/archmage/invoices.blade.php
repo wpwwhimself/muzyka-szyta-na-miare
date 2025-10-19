@@ -48,7 +48,7 @@
                         <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
                         {{ $invoice->fullCode }}
                     </a>
-                    <i class="fas fa-pencil invoice-edit clickable" data-invoice-id="{{ $invoice->id }}"></i>
+                    <i class="fas fa-pencil invoice-edit interactive" data-invoice-id="{{ $invoice->id }}"></i>
                 </td>
                 <td>
                     {{ $invoice->payer_name }}

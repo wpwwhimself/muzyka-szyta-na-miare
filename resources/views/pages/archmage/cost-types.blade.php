@@ -19,7 +19,7 @@
             <span>Opis</span>
         </div>
         @forelse ($types as $type)
-        <div class="table-row clickable" data-id="{{ $type->id }}">
+        <div class="table-row interactive" data-id="{{ $type->id }}">
             <span class="cost-name">{{ _ct_($type->name) }}</span>
             <span class="cost-desc">{{ _ct_($type->desc) }}</span>
         </div>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section("title", ($request->title ?? "bez tytułu"))
+@section("title", $request->full_title)
 @section("subtitle", "Zapytanie")
 
 @section('content')
@@ -7,37 +7,6 @@
 @php
 $fields = $request::getFields();
 @endphp
-
-<script>
-function calcPriceNow(){
-    const labels = "{{ $request->price_code }}";
-    const client_id = {!! $request->client_id ?? "\"\"" !!};
-    const positions_list = $("#price-summary .positions");
-    const sum_row = $("#price-summary .summary");
-    if(labels == "") $("#price-summary").hide();
-    else{
-        fetch(`/api/price_calc`, {
-            method: "POST",
-            data: JSON.stringify({
-                _token: '{{ csrf_token() }}',
-                labels: labels,
-                client_id: client_id
-            }),
-        })
-            .then(res => res.json())
-            .then(data => {
-                let content = ``;
-                for(line of data.positions){
-                    content += `<span>${line[0]}</span><span>${line[1]}</span>`;
-                }
-                positions_list.html(content);
-                sum_row.html(`<span>Razem:</span><span>${data.price} zł${data.minimal_price ? " (cena minimalna)" : ""}</span>`);
-                if(data.override) positions_list.addClass("overridden");
-                    else positions_list.removeClass("overridden");
-            });
-    }
-}
-</script>
 
 <x-shipyard.app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>
@@ -61,8 +30,13 @@ function calcPriceNow(){
 
     @if ($request->quest_id)
     <h2>
-        Zlecenie przepisane z numerem {{ $request->quest_id }}
-        <x-a href="{{ route('quest', ['id' => $request->quest_id]) }}">Przejdź do zlecenia</x-a>
+        Zapytanie zostało przyjęte i jest przepisane na zlecenie {{ $request->quest_id }}
+        <x-shipyard.ui.button
+            label="Przejdź do zlecenia"
+            :icon="model_icon('quests')"
+            :action="route('quest', ['id' => $request->quest_id])"
+            class="primary"
+        />
     </h2>
     @endif
 
@@ -79,19 +53,10 @@ function calcPriceNow(){
                 "link",
                 "wishes",
                 "wishes_quest",
-            ] as $field)
-                @if ($field == "link")
-                <x-link-interpreter :raw="$request->link" />
-
-                @else
-                <x-shipyard.ui.input
-                    :type="'dummy-'.$fields[$field]['type']"
-                    :name="$field"
-                    :label="$fields[$field]['label']"
-                    :icon="$fields[$field]['icon']"
-                    :hint="$fields[$field]['hint'] ?? null"
-                    :value="$request->$field"
-                />
+            ] as $field_name)
+                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+                @if ($field_name == "link")
+                <x-link-interpreter :raw="$request->$field_name" />
                 @endif
             @endforeach
         </x-extendo-block>
@@ -107,20 +72,12 @@ function calcPriceNow(){
             <p class="yellowed-out">pojawi się w ciągu najbliższych dni</p>
             @else
 
-            @if ($request->status_id == 1)
-            <p class="yellowed-out">poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
-            @endif
+                @if ($request->status_id == 1)
+                <p class="yellowed-out">poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
+                @endif
 
-            <div>
-                <div id="price-summary" class="hint-table">
-                    <div class="positions"></div>
-                    <hr />
-                    <div class="summary"><span>Razem:</span><span>0 zł</span></div>
-                </div>
+                <x-re_quests.price-summary :model="$request" />
 
-                <script defer>
-                calcPriceNow();
-                </script>
                 @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
                 <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
                     <i class="fa-solid fa-sack-dollar"></i>
@@ -134,17 +91,14 @@ function calcPriceNow(){
                     @endif
                 </span>
                 @endif
-            </div>
             @endif
 
-            <div>
-                @if ($request->hard_deadline)
-                <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $request->hard_deadline?->format('Y-m-d') }}" :disabled="true" />
-                @endif
-                @if ($request->deadline)
-                <x-input type="date" name="deadline" label="Do kiedy (włącznie) ja oddam pliki" value="{{ $request->deadline?->format('Y-m-d') }}" :disabled="true" />
-                @endif
-            </div>
+            @if ($request->hard_deadline)
+            <x-shipyard.ui.field-input :model="$request" field-name="hard_deadline" />
+            @endif
+            @if ($request->deadline)
+            <x-shipyard.ui.field-input :model="$request" field-name="deadline" />
+            @endif
 
             <x-extendo-section>
                 @if ($request->price && $request->status_id == 5)

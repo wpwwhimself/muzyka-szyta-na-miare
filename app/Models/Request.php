@@ -36,7 +36,7 @@ class Request extends Model
     #region presentation
     public function __toString(): string
     {
-        return ($this->song?->full_title ?? $this->title);
+        return $this->full_title;
     }
 
     public function optionLabel(): Attribute
@@ -268,7 +268,10 @@ class Request extends Model
     public function fullTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->song?->full_title ?? $this->title,
+            get: fn () => $this->song?->full_title ?? implode(' – ', array_filter([
+                $this->artist,
+                $this->title ?? 'utwór bez tytułu',
+            ], fn($v) => !empty($v))),
         );
     }
 
@@ -285,12 +288,6 @@ class Request extends Model
     }
     public function getLinkToAttribute(){
         return route("request", ["id" => $this->id]);
-    }
-    public function getFullTitleAttribute(){
-        return implode(' – ', array_filter([
-            $this->artist,
-            $this->title ?? 'utwór bez tytułu',
-        ], fn($v) => !empty($v)));
     }
     #endregion
 

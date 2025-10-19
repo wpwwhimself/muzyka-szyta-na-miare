@@ -1,12 +1,8 @@
 @extends('layouts.app')
-@section("title", ($request->title ?? "bez tytułu"))
+@section("title", $request->full_title)
 @section("subtitle", "Zapytanie")
 
 @section('content')
-
-@php
-$fields = $request::getFields();
-@endphp
 
 <x-shipyard.app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>

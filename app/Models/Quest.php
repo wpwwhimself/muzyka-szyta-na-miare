@@ -154,9 +154,9 @@ class Quest extends Model
 
     #region attributes
     protected $casts = [
-        "deadline" => "datetime",
-        "hard_deadline" => "datetime",
-        "delayed_payment" => "datetime",
+        "deadline" => "date",
+        "hard_deadline" => "date",
+        "delayed_payment" => "date",
     ];
 
     protected $appends = [

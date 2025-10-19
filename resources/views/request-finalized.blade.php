@@ -13,7 +13,7 @@
             Utworzyłem dla Ciebie konto, gdzie będą umieszczone wszystkie informacje dotyczące nie tylko tego zlecenia, ale także całej współpracy ze mną.
             Aby się zalogować, kliknij poniższy przycisk. Do logowania potrzebne jest jedynie następujące hasło:
         </p>
-        <h3 style="text-align: center;">{{ $request->client->password }}</h3>
+        <h3 style="text-align: center;">{{ $request->user->notes->password }}</h3>
         <p>
             <b>Zachowaj je, bo będzie przydatne!</b>
             Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.

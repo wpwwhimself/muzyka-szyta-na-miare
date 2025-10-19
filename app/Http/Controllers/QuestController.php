@@ -260,10 +260,11 @@ class QuestController extends Controller
         $price_code_before = $quest->price_code_override;
         $deadline_before = $quest->deadline;
         $delayed_payment_before = $quest->delayed_payment;
+        $price_data = StatsController::runPriceCalc($rq->price_code_override, $quest->client_id);
         $quest->update([
             "price_code_override" => $rq->price_code_override,
-            "price" => price_calc($rq->price_code_override, $quest->client_id)["price"],
-            "paid" => ($quest->payments_sum >= price_calc($rq->price_code_override, $quest->client_id)["price"]),
+            "price" => $price_data["price"],
+            "paid" => ($quest->payments_sum >= $price_data["price"]),
             "deadline" => $rq->deadline,
             "delayed_payment" => $rq->delayed_payment,
         ]);

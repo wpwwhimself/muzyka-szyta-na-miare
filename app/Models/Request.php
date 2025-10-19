@@ -6,6 +6,8 @@ use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
 use App\Traits\Uuids;
+use Carbon\Carbon;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +36,7 @@ class Request extends Model
     #region presentation
     public function __toString(): string
     {
-        return "[$this->id] " . $this->song->full_title;
+        return ($this->song?->full_title ?? $this->title);
     }
 
     public function optionLabel(): Attribute
@@ -223,11 +225,14 @@ class Request extends Model
     #endregion
 
     #region attributes
-    protected $casts = [
-        "deadline" => "datetime",
-        "hard_deadline" => "datetime",
-        "delayed_payment" => "datetime",
-    ];
+    protected function casts()
+    {
+        return [
+            "deadline" => "date",
+            "hard_deadline" => "date",
+            "delayed_payment" => "date",
+        ];
+    }
 
     protected $appends = [
 

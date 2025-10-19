@@ -22,6 +22,8 @@ if ($model) {
 <div id="price-summary">
     <x-shipyard.app.loader />
 
+    <h4>Podsumowanie wyceny</h4>
+
     @if ($price)
     <table>
         <tbody @class(["overridden" => $override])>

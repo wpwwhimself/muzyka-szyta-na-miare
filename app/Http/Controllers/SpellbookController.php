@@ -104,7 +104,7 @@ class SpellbookController extends Controller
     public function reprice($id, $new_code)
     {
         $r = is_request($id) ? ModelsRequest::find($id) : Quest::find($id);
-        $new_price = price_calc($new_code, $r->client_id);
+        $new_price = StatsController::runPriceCalc($new_code, $r->client_id);
 
         $r->update([
             (is_request($id) ? "price_code" : "price_code_override") => $new_price["labels"],

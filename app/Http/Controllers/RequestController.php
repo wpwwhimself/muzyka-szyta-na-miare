@@ -217,6 +217,7 @@ class RequestController extends Controller
                 //non-bulk
                 $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
                 $client = ($rq->client_id) ? User::find($rq->client_id) : null;
+                $price_data = StatsController::runPriceCalc($rq->price_code, $rq->client_id, true);
 
                 $request = Request::create([
                     "made_by_me" => true,
@@ -237,8 +238,8 @@ class RequestController extends Controller
                     "wishes" => $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
-                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
-                    "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
+                    "price_code" => $price_data["labels"],
+                    "price" => $price_data["price"],
                     "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
                     "delayed_payment" => $rq->delayed_payment,
@@ -341,6 +342,8 @@ class RequestController extends Controller
                 return back()->with("error", "Uzupełnij wycenę");
             }
 
+            $price_data = StatsController::runPriceCalc($rq->price_code, $rq->client_id, true);
+
             $request->update([
                 "client_id" => $rq->client_id,
                 "client_name" => $rq->client_name,
@@ -350,7 +353,7 @@ class RequestController extends Controller
                 "contact_preference" => $rq->contact_preference ?? "email",
 
                 "song_id" => $rq->song_id,
-                "quest_type_id" => $rq->quest_type,
+                "quest_type_id" => $rq->quest_type_id,
                 "title" => $rq->title,
                 "artist" => $rq->artist,
                 "link" => yt_cleanup($rq->link),
@@ -358,8 +361,8 @@ class RequestController extends Controller
                 "wishes" => $rq->wishes,
                 "wishes_quest" => $rq->wishes_quest,
 
-                "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
-                "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
+                "price_code" => $price_data["labels"],
+                "price" => $price_data["price"],
                 "deadline" => $rq->deadline,
                 "hard_deadline" => $rq->hard_deadline,
                 "delayed_payment" => $rq->delayed_payment,
@@ -450,7 +453,7 @@ class RequestController extends Controller
             return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
 
         $request->status_id = $status;
-        $price = price_calc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
+        $price = StatsController::runPriceCalc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
 
         $is_new_client = 0;
 

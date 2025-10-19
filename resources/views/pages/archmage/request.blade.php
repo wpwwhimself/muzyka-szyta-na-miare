@@ -45,7 +45,10 @@ $fields = $request::getFields();
             @php
             $new_status = \App\Models\Status::find(abs($status_id));
             @endphp
-            <x-button :action="abs($status_id) == 9 ? route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => $status_id < 0]) : 'submit'"
+            <x-shipyard.ui.button
+                :action="abs($status_id) == 9
+                    ? route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => $status_id < 0])
+                    : 'submit'"
                 name="new_status"
                 :icon="$new_status->icon"
                 :value="$status_id"

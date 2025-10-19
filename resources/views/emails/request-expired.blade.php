@@ -24,10 +24,10 @@
         aby zobaczyć szczegóły zapytania
     </h3>
 
-    @if ($request->client)
+    @if ($request->user)
     <p>
         <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->client->password }}</b>
+            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->user->notes->password }}</b>
         </i>
     </p>
     @endif

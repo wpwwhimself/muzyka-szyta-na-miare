@@ -1,5 +1,9 @@
 /******************* common **************/
 
+body {
+    font-size: 14px;
+}
+
 .grayed-out::before,
 .grayed-out::after,
 .yellowed-out::before,

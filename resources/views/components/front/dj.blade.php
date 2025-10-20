@@ -68,7 +68,7 @@
             "rolki" => "reels",
             "pełny katalog" => "list",
         ] as $label => $mode)
-        <x-button action="#/" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
+        <x-button action="none" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
         @endforeach
     </x-slot>
 
@@ -88,14 +88,14 @@
 
             <h3>Filtruj:</h3>
             <div class="flex right keep-for-mobile center">
-                <x-button action="#/" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+                <x-button action="none" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
 
                 @foreach ($genres as $genre)
-                <x-button action="#/" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+                <x-button action="none" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
                 @endforeach
 
                 {{-- @foreach ($song_tags as $tag) --}}
-                {{-- <x-button action="#/" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small /> --}}
+                {{-- <x-button action="none" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small /> --}}
                 {{-- @endforeach --}}
             </div>
 
@@ -107,7 +107,7 @@
                     <p class="song-desc"></p>
                     <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
                     <x-file-player type="ogg" file="" is-showcase />
-                    <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
+                    <x-button label="" icon="times" :small="true" action="none" id="popup-close" />
                 </div>
             </div>
         </div>

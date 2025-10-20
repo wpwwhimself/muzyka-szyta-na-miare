@@ -54,7 +54,7 @@ $fields = $request::getFields();
                 "wishes",
                 "wishes_quest",
             ] as $field_name)
-                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" dummy />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
@@ -94,10 +94,10 @@ $fields = $request::getFields();
             @endif
 
             @if ($request->hard_deadline)
-            <x-shipyard.ui.field-input :model="$request" field-name="hard_deadline" />
+            <x-shipyard.ui.field-input :model="$request" field-name="hard_deadline" dummy />
             @endif
             @if ($request->deadline)
-            <x-shipyard.ui.field-input :model="$request" field-name="deadline" />
+            <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
             @endif
 
             <x-extendo-section>
@@ -109,10 +109,10 @@ $fields = $request::getFields();
                         ale to jest najpóźniejszy dzień.
                     </p>
                     @endif
-                    <p>Opłaty projektu będzie można dokonać na 2 sposoby:</p>
+                    <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
                     <ul>
-                        <li>na numer konta,</li>
-                        <li>BLIKiem na numer telefonu.</li>
+                        <li>przelew na numer konta,</li>
+                        <li>płatność BLIKiem na numer telefonu.</li>
                     </ul>
                     <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
                 @endif
@@ -127,7 +127,6 @@ $fields = $request::getFields();
         </x-extendo-block>
     </div>
 
-    <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
     @if (in_array($request->status_id, [4, 7, 8]))
     <x-tutorial>
         Zapytanie zostało zamknięte, ale nadal możesz je przywrócić w celu ponownego złożenia zamówienia.
@@ -136,88 +135,209 @@ $fields = $request::getFields();
     <div id="phases">
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="review" />
+
         @if($request->status_id != 5)
-        <div class="flexright">
-            @if (in_array($request->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
-            @if (in_array($request->status_id, [5])) <x-button label="Potwierdź" statuschanger="9" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" /> @endif
-            @if (in_array($request->status_id, [5])) <x-button action="#/" statuschanger="6" icon="6" label="Poproś o ponowną wycenę" /> @endif
-            @if (in_array($request->status_id, [5, 95])) <x-button action="#/" statuschanger="8" icon="8" label="Zrezygnuj ze zlecenia" /> @endif
-            @if (in_array($request->status_id, [4, 7, 8])) <x-button action="#/" statuschanger="1" icon="1" label="Odnów" /> @endif
-        </div>
-        @else
-        <div id="opinion-1">
-            <h2>Czy odpowiada Ci powyższa wycena?</h2>
-            <div>
-                <x-button label="Tak" icon="check" action="none" onclick="goToConfirm2()" />
-                <x-button label="Nie" icon="times" action="none" onclick="goToReject()" />
-            </div>
-        </div>
-        <div id="opinion-2" class="hidden">
-            <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
-            <div>
-                <x-button onclick="expandReject(this)" optbc="link" label="Link do nagrania" icon="compact-disc" action="#/" :small="true" />
-                <x-button onclick="expandReject(this)" optbc="wishes" label="Życzenia" icon="note-sticky" action="#/" :small="true" />
-                <x-button onclick="expandReject(this)" optbc="deadline" label="Czas oczekiwania" icon="clock" action="#/" :small="true" />
-                <x-button onclick="expandReject(this)" optbc="nothing" label="Nic, rezygnuję" icon="8" action="#/" :small="true" />
-            </div>
-            <input type="hidden" name="optbc">
-            <div id="opinion-inputs" class="flex down hidden">
-                <x-input type="text" name="opinion_link" label="Podaj nowy link do nagrania" :value="$request->link" />
-                <x-input type="TEXT" name="opinion_wishes" label="Podaj nowe życzenia" :value="$request->wishes" />
-                <div class="priority" for="opinion_deadline">
-                    <p>W trybie priorytetowym jestem w stanie wykonać zlecenie poza kolejnością; wiąże się to jednak z podwyższoną ceną.</p>
-                    <div class="flex right center">
-                        <x-input type="date" name="new-deadline-date" label="Nowy termin, do kiedy (włącznie) oddam pliki" :value="get_next_working_day()->format('Y-m-d')" :disabled="true" />
-                        <x-input type="text" name="new-deadline-price" label="Nowa cena zlecenia" :value="as_pln(price_calc($request->price_code.'z', $request->client_id, true)['price'])" :disabled="true" />
-                    </div>
-                </div>
-                <x-input for="opinion_link opinion_wishes opinion_nothing" type="TEXT" name="comment" label="Komentarz (opcjonalne)" />
-                <x-button for="opinion_link opinion_wishes" action="submit" icon="6" name="new_status" value="6" label="Oddaj do ponownej wyceny" />
-                <x-button for="opinion_nothing" action="submit" icon="8" name="new_status" value="8" label="Zrezygnuj z zapytania" />
-                <x-button for="opinion_deadline" action="{{ route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true]) }}" icon="9" label="Zaakceptuj nową wycenę" :danger="true" />
-            </div>
-        </div>
-        <div id="opinion-3" class="hidden">
-            <h2>Na pewno? Termin realizacji też?</h2>
-            @if ($request->delayed_payment)
-            <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
+        <div class="flex right center">
+            @if (in_array($request->status_id, [95]))
+            <x-shipyard.ui.button
+                label="Odpowiedz"
+                icon="reply-all"
+                action="none"
+                onclick="openModal('restatus-with-comment', {
+                    model: 'request',
+                    id: '{{ $request->id }}',
+                    newStatus: 96,
+                    changedBy: {{ Auth::id() ?? 'null' }},
+                })"
+                class="tertiary"
+            />
+            <x-shipyard.ui.button
+                label="Zrezygnuj ze zlecenia"
+                icon="clipboard-remove"
+                action="none"
+                onclick="openModal('restatus-with-comment', {
+                    model: 'request',
+                    id: '{{ $request->id }}',
+                    newStatus: 8,
+                    changedBy: {{ Auth::id() ?? 'null' }},
+                })"
+                class="tertiary"
+            />
             @endif
-            <div>
-                <x-button label="Tak" icon="9" action="{{ route('request-final', ['id' => $request->id, 'status' => 9]) }}" />
-                <x-button label="Nie" icon="times" action="#/" />
+            @if (in_array($request->status_id, [4, 7, 8]))
+            <x-shipyard.ui.button
+                label="Odnów"
+                icon="star"
+                action="none"
+                onclick="openModal('restatus-with-comment', {
+                    model: 'request',
+                    id: '{{ $request->id }}',
+                    newStatus: 1,
+                    changedBy: {{ Auth::id() ?? 'null' }},
+                })"
+                class="tertiary"
+            />
+            @endif
+        </div>
+
+        @else
+        <div class="backdropped rounded padded flex down center">
+
+            <div id="opinion-1" class="flex down center middle">
+                <h2>Czy odpowiada Ci powyższa wycena?</h2>
+                <div>
+                    <x-shipyard.ui.button label="Tak" icon="check"
+                        action="none"
+                        onclick="goToConfirm2()"
+                    />
+                    <x-shipyard.ui.button label="Nie" icon="close"
+                        action="none"
+                        onclick="goToReject()"
+                        class="tertiary"
+                    />
+                </div>
+            </div>
+            <div id="opinion-2" class="flex down center middle hidden">
+                <h2>Co chciał{{ client_polonize($request->client_name)["kobieta"] ? "a" : "" }}byś zmienić?</h2>
+                <div>
+                    <x-shipyard.ui.button
+                        onclick="expandReject(this)"
+                        data-optbc="link"
+                        label="Link do nagrania"
+                        :icon="model_icon('songs')"
+                        action="none"
+                        class="tertiary"
+                    />
+                    <x-shipyard.ui.button
+                        onclick="expandReject(this)"
+                        data-optbc="wishes"
+                        label="Życzenia"
+                        :icon="model('requests')::getFields()['wishes']['icon']"
+                        action="none"
+                        class="tertiary"
+                    />
+                    <x-shipyard.ui.button
+                        onclick="expandReject(this)"
+                        data-optbc="deadline"
+                        label="Czas oczekiwania"
+                        :icon="model('requests')::getFields()['deadline']['icon']"
+                        action="none"
+                        class="tertiary"
+                    />
+                    <x-shipyard.ui.button
+                        onclick="expandReject(this)"
+                        data-optbc="nothing"
+                        label="Nic, rezygnuję"
+                        icon="clipboard-remove"
+                        action="none"
+                        class="tertiary"
+                    />
+                </div>
+                <input type="hidden" name="optbc">
+                <div id="opinion-inputs" class="flex down hidden">
+                    <x-shipyard.ui.input type="text"
+                        name="opinion_link"
+                        label="Podaj nowy link do nagrania"
+                        :value="$request->link"
+                        data-opinion-role="link"
+                    />
+                    <x-shipyard.ui.input type="TEXT"
+                        name="opinion_wishes"
+                        label="Podaj nowe życzenia"
+                        :value="$request->wishes"
+                        data-opinion-role="wishes"
+                    />
+                    <div class="priority" data-opinion-role="deadline">
+                        <p>W trybie priorytetowym jestem w stanie wykonać zlecenie poza kolejnością; wiąże się to jednak z podwyższoną ceną.</p>
+                        <div class="flex right center">
+                            <x-shipyard.ui.input type="date" name="new-deadline-date" label="Nowy termin, do kiedy (włącznie) oddam pliki" :value="get_next_working_day()" :disabled="true" />
+                            <x-shipyard.ui.input type="text" name="new-deadline-price" label="Nowa cena zlecenia" :value="as_pln(\App\Http\Controllers\StatsController::runPriceCalc($request->price_code.'z', $request->client_id, true)['price'])" :disabled="true" />
+                        </div>
+                    </div>
+                    <x-shipyard.ui.input
+                        data-opinion-role="link wishes nothing"
+                        type="TEXT"
+                        name="comment"
+                        label="Komentarz (opcjonalne)"
+                    />
+
+                    <x-shipyard.ui.button data-opinion-role="link wishes"
+                        action="submit"
+                        icon="clipboard-alert"
+                        name="new_status" value="6"
+                        label="Oddaj do ponownej wyceny"
+                        class="primary"
+                    />
+                    <x-shipyard.ui.button data-opinion-role="nothing" action="submit"
+                        icon="clipboard-remove"
+                        name="new_status" value="8"
+                        label="Zrezygnuj z zapytania"
+                        class="primary"
+                    />
+                    <x-shipyard.ui.button data-opinion-role="deadline" :action="route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => true])"
+                        icon="clipboard-check"
+                        label="Zaakceptuj nową wycenę"
+                        class="danger"
+                    />
+                </div>
+            </div>
+            <div id="opinion-3" class="flex down center middle hidden">
+                <h2>Na pewno? Termin realizacji też?</h2>
+                @if ($request->delayed_payment)
+                <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
+                @endif
+                <div>
+                    <x-shipyard.ui.button
+                        label="Tak"
+                        icon="clipboard-check"
+                        :action="route('request-final', ['id' => $request->id, 'status' => 9])"
+                        class="primary"
+                    />
+                    <x-shipyard.ui.button
+                        label="Nie"
+                        icon="close"
+                        action="none"
+                        class="tertiary"
+                    />
+                </div>
             </div>
         </div>
-        <script defer>
-        function goToReject() {
-            document.querySelector("#opinion-1 a.ghost").classList.remove("ghost");
-            document.querySelector(`#opinion-1 a:first`).classList.add("ghost");
-
-            document.querySelector("#opinion-2").classList.remove("hidden");
-            document.querySelector("#opinion-3").classList.add("hidden");
-        });
-
-        function expandReject(btn) {
-            let optbc = btn.dataset.optbc;
-            document.querySelector("input[name='optbc']").val(optbc);
-
-            document.querySelector("#opinion-2 a[optbc]").addClass("ghost");
-            document.querySelector(`#opinion-2 a[optbc='${optbc}']`).removeClass("ghost");
-
-            document.querySelector("#opinion-2 #opinion-inputs [for^='opinion_']").addClass("hidden");
-            document.querySelector(`#opinion-2 #opinion-inputs [for~='opinion_${optbc}']`).removeClass("hidden");
-            document.querySelector("#opinion-2 #opinion-inputs").removeClass("hidden");
-            document.querySelector("#opinion-2 #opinion-submit").removeClass("hidden");
-        });
-
-        document.querySelector("#opinion-1 a:first").click(function(){
-            document.querySelector("#opinion-1 a.ghost").removeClass("ghost");
-            document.querySelector(`#opinion-1 a:last`).addClass("ghost");
-
-            document.querySelector("#opinion-2").addClass("hidden");
-            document.querySelector("#opinion-3").removeClass("hidden");
-        });
-        </script>
         @endif
     </div>
+
+    <x-quest-history :quest="$request" :extended="in_array($request->status_id, [5, 95])" />
 </x-shipyard.app.form>
+
+<script>
+function goToReject() {
+    document.querySelectorAll("#opinion-1 .button").forEach(btn => {
+        btn.classList.toggle("ghost", btn.classList.contains("primary"));
+    });
+
+    document.querySelector("#opinion-2").classList.remove("hidden");
+    document.querySelector("#opinion-3").classList.add("hidden");
+}
+
+function expandReject(btn) {
+    let optbc = btn.dataset.optbc;
+    document.querySelector("input[name='optbc']").value = optbc;
+
+    document.querySelectorAll("#opinion-2 span[data-optbc]").forEach(btn => {
+        btn.classList.toggle("ghost", btn.dataset.optbc !== optbc);
+    })
+    document.querySelectorAll("#opinion-2 #opinion-inputs [data-opinion-role]").forEach(btn => {
+        btn.classList.toggle("hidden", !btn.dataset.opinionRole.includes(optbc));
+    })
+    document.querySelector("#opinion-2 #opinion-inputs").classList.remove("hidden");
+}
+
+function goToConfirm2() {
+    document.querySelectorAll("#opinion-1 .button").forEach(btn => {
+        btn.classList.toggle("ghost", !btn.classList.contains("primary"));
+    });
+
+    document.querySelector("#opinion-2").classList.add("hidden");
+    document.querySelector("#opinion-3").classList.remove("hidden");
+}
+</script>
 @endsection

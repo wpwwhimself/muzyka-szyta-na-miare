@@ -36,6 +36,7 @@ Route::middleware("auth")->group(function(){
         Route::get('/prices', "prices")->name("prices");
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
+        Route::withoutMiddleware("auth")->post("restatus-with-comment", "restatusReQuestWithComment")->name("re_quests.restatus-with-comment");
 
         Route::prefix("lookup")->group(function() {
             Route::get("users", "lookupUsers")->name("lookup.users");
@@ -57,7 +58,7 @@ Route::middleware("auth")->group(function(){
             Route::get('/view/{id}', "show")->name("request");
             Route::post('/add-back', "processAdd")->name("add-request-back");
             Route::post('/mod-back', "processMod")->name("mod-request-back");
-            
+
             Route::prefix("select")->group(function() {
                 Route::post("user", "selectUser")->name("requests.select-user");
                 Route::post("song", "selectSong")->name("requests.select-song");

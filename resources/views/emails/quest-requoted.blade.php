@@ -1,41 +1,36 @@
-@extends('layouts.mail', compact("title"))
+@extends('layouts.mail')
+@section("title", "Wycena zlecenia zmieniona")
 
 @section('content')
-    <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
-    <p>
-        niestety z uwagi na {{ $reason }}, nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
-        Wobec tego muszę dokonać zmiany w wycenie {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia.
-    </p>
 
-    <x-mail-quest-mini :quest="$quest" />
+<h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
+<p>
+    niestety z uwagi na {{ $reason }}, nie jestem w stanie wykonać zlecenia na warunkach określonych poprzednio.
+    Wobec tego muszę dokonać zmiany w wycenie {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia.
+</p>
 
-    @if ($quest->client->budget)
-    <p><i>
-        *{{ ($quest->client->budget >= $price_difference) ? "Całość" : "Część" }}
-        różnicy kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
-        {{ as_pln($quest->client->budget) }}
-    </i></p>
-    @endif
+<x-quests.tile :quest="$quest" />
 
-    <p>
-        Proszę o przejście do zlecenia, aby zaakceptować lub odrzucić nowe warunki zlecenia.
-    </p>
+@if ($quest->user->notes->budget)
+<p><i>
+    *{{ ($quest->user->notes->budget >= $price_difference) ? "Całość" : "Część" }}
+    różnicy kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
+    {{ as_pln($quest->user->notes->budget) }}
+</i></p>
+@endif
 
-    <h3>
-        Kliknij
-        <a
-            class="button"
-            href="{{ route('quest', ['id' => $quest->id]) }}"
-            >
-            tutaj,
-        </a>
-        aby zobaczyć szczegóły zlecenia
-    </h3>
+<p>
+    Proszę o przejście do zlecenia, aby zaakceptować lub odrzucić nowe warunki zlecenia.
+</p>
 
-    <p>
-        <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->password }}</b>
-        </i>
-    </p>
+<h3>
+    Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia
+</h3>
+
+<p>
+    <i>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->notes->password }}</b>
+    </i>
+</p>
 
 @endsection

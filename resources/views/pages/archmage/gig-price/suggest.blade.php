@@ -55,7 +55,7 @@
     </div>
 
     <div class="flex right">
-        <x-button action="#/" label="Oblicz" icon="magnifying-glass-dollar" onclick="calculateGigPrice()" />
+        <x-button action="none" label="Oblicz" icon="magnifying-glass-dollar" onclick="calculateGigPrice()" />
     </div>
 
     <table id="results">

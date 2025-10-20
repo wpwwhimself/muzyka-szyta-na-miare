@@ -44,7 +44,7 @@
                 @endif
 
                 <input type="file" name="showcase_file" />
-                <x-button action="#/" id="showcase-file-button" :small="true"
+                <x-button action="none" id="showcase-file-button" :small="true"
                     :icon="$song->has_showcase_file ? 'pencil' : 'plus'"
                     label="{{ $song->has_showcase_file ? 'Podmień' : 'Dodaj' }} plik"
                     />

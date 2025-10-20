@@ -1,37 +1,33 @@
-@extends('layouts.mail', compact("title"))
+@extends('layouts.mail')
+@section("title", "Zlecenie zmodyfikowane")
 
 @section('content')
-    <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
-    <p>
-        wprowadziłem zmiany w {{ $pl["kobieta"] ? "Pani" : "Pana" }} zleceniu:
-    </p>
 
-    <x-mail-quest-mini :quest="$quest" />
+<h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
+<p>
+    wprowadziłem zmiany w {{ $pl["kobieta"] ? "Pani" : "Pana" }} zleceniu:
+</p>
 
-    @if ($comment = $quest->history->first()->comment)
-    {{ Illuminate\Mail\Markdown::parse($comment) }}
-    @endif
+<x-quests.tile :quest="$quest" />
 
-    <h3>
-        Kliknij
-        <a
-            class="button"
-            href="{{ route('quest', ['id' => $quest->id]) }}"
-            >
-            tutaj,
-        </a>
-        aby zobaczyć szczegóły zlecenia
-    </h3>
+@if ($comment = $quest->history->first()->comment)
+{{ Illuminate\Mail\Markdown::parse($comment) }}
+@endif
 
-    @if ($quest->song->has_safe_files)
-    <p>
-        Uprzejmie proszę o wyrażenie opinii lub ewentualnych uwag celem wprowadzenia poprawek. Możesz to zrobić, klikając w link powyżej.
-    </p>
-    @endif
+<h3>
+    Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia
+</h3>
 
-    <p>
-        <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->client->password }}</b>
-        </i>
-    </p>
+@if ($quest->song->has_safe_files)
+<p>
+    Uprzejmie proszę o wyrażenie opinii lub ewentualnych uwag celem wprowadzenia poprawek. Możesz to zrobić, klikając w link powyżej.
+</p>
+@endif
+
+<p>
+    <i>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->notes->password }}</b>
+    </i>
+</p>
+
 @endsection

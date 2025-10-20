@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ArchmageQuestMod;
 use App\Mail\PatronRejected;
 use App\Models\Quest;
 use App\Models\QuestType;
@@ -189,6 +190,34 @@ class BackController extends Controller
             compact("page", "titles")
         ));
     }
+
+    #region re_quests
+    public function restatusReQuestWithComment(HttpRequest $rq)
+    {
+        $scope = Str::plural($rq->get("model"));
+        $model = model($scope)::find($rq->get("id"));
+
+        $model->update([
+            "status_id" => $rq->get("newStatus"),
+        ]);
+        $flash_content = "Status ".($scope == "requests" ? "zapytania" : "zlecenia")." zmieniony";
+
+        self::newStatusLog(
+            $model->id,
+            $rq->get("newStatus"),
+            $rq->get("comment"),
+            $rq->get("changedBy")
+        );
+
+        // mail
+        Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($model->fresh()));
+        $mailing = true;
+        $flash_content .= ", mail wysłany";
+        if($mailing !== null) $model->history->first()->update(["mail_sent" => $mailing]);
+
+        return redirect()->route($rq->get("model"), ["id" => $model->id])->with("toast", ["success", $flash_content]);
+    }
+    #endregion
 
     #region lookups
     public function lookupUsers()

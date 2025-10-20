@@ -1,38 +1,34 @@
-@extends('layouts.mail', compact("title"))
+@extends('layouts.mail')
+@section("title", "Zarejestrowano wpłatę")
 
 @section('content')
-    <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
-    <p>
-        otrzymałem od {{ $pl["kobieta"] ? "Pani" : "Pana" }} wpłatę dotyczącą zleceń:
-    </p>
 
-    @foreach ($quests as $quest)
-    <x-mail-quest-mini :quest="$quest" />
-    @endforeach
+<h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
+<p>
+    otrzymałem od {{ $pl["kobieta"] ? "Pani" : "Pana" }} wpłatę dotyczącą zleceń:
+</p>
 
-    @if (!($quest->client->is_veteran || $quest->client->trust == 1))
-    <p>
-        Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniami za pomocą odpowiednich przycisków w widoku zlecenia.
-    </p>
-    @endif
+@foreach ($quests as $quest)
+<x-quests.tile :quest="$quest" />
+@endforeach
 
-    <p>
-        Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
-    </p>
-    <h3>
-        Kliknij
-        <a
-            class="button"
-            href="{{ route('dashboard') }}"
-            >
-            tutaj,
-        </a>
-        aby zalogować się na swoje konto.
-    </h3>
+@if (!($quest->client->notes->is_veteran || $quest->client->notes->trust == 1))
+<p>
+    Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniami za pomocą odpowiednich przycisków w widoku zlecenia.
+</p>
+@endif
 
-    <p>
-        <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quests[0]->client->password }}</b>
-        </i>
-    </p>
+<p>
+    Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
+</p>
+<h3>
+    Kliknij przycisk powyżej, aby zalogować się na swoje konto i zobaczyć szczegóły.
+</h3>
+
+<p>
+    <i>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quests[0]->client->notes->password }}</b>
+    </i>
+</p>
+
 @endsection

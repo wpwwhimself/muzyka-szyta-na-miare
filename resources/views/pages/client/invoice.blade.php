@@ -5,7 +5,7 @@
 <x-invoice :invoice="$invoice" />
 
 <div class="flex right hide-for-print">
-    <x-button action="#/" id="print_invoice"
+    <x-button action="none" id="print_invoice"
         icon="download" label="Drukuj"
         />
     <script defer>

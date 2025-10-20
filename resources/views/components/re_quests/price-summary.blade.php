@@ -37,7 +37,7 @@ if ($model) {
         <tfoot>
             <tr>
                 <th>Razem:</th>
-                <th>
+                <th class="accent primary">
                     {{ _c_(as_pln($price)) }}
                     @if ($minimalPrice)
                     (cena minimalna)

@@ -17,7 +17,7 @@
         icon="angles-left" label="Wróć do faktur"
         />
 
-    <x-button action="#/" id="print_invoice"
+    <x-button action="none" id="print_invoice"
         icon="download" label="Drukuj"
         />
     <script defer>

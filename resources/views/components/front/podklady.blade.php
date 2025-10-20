@@ -188,7 +188,7 @@
                     <p class="song-desc"></p>
                     <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
                     <x-file-player type="ogg" file="" is-showcase />
-                    <x-button label="" icon="times" :small="true" action="#/" id="popup-close" />
+                    <x-button label="" icon="times" :small="true" action="none" id="popup-close" />
                 </div>
             </div>
         </div>

@@ -204,30 +204,30 @@
             @endif
         @endif
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-        @if (in_array($quest->status_id, [11])) <x-button action="#/" statuschanger="21" icon="21" label="Poproś o zmiany" /> @endif
+        @if (in_array($quest->status_id, [11])) <x-button action="none" data-statuschanger="21" icon="21" label="Poproś o zmiany" /> @endif
         @if (in_array($quest->status_id, [16, 21, 26, 96]))
-        <x-button action="#/" statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
-            @if ($quest->status_id == 21) <x-button action="#/" statuschanger="11" icon="11" label="Zrezygnuj ze zmian" /> @endif
+        <x-button action="none" data-statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
+            @if ($quest->status_id == 21) <x-button action="none" data-statuschanger="11" icon="11" label="Zrezygnuj ze zmian" /> @endif
         @endif
-        @if (in_array($quest->status_id, [95])) <x-button action="#/" statuschanger="96" icon="96" label="Odpowiedz" /> @endif
+        @if (in_array($quest->status_id, [95])) <x-button action="none" data-statuschanger="96" icon="96" label="Odpowiedz" /> @endif
         @if (in_array($quest->status_id, [15, 31, 95]))
             @if ($quest->files_ready)
-            <x-button action="#/" statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  />
+            <x-button action="none" data-statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  />
             @else
-            <x-button action="#/" statuschanger="14" icon="14" label="Zaakceptuj etap"  />
+            <x-button action="none" data-statuschanger="14" icon="14" label="Zaakceptuj etap"  />
             @endif
         @endif
-        @if (in_array($quest->status_id, [14, 15])) <x-button action="#/" statuschanger="16" icon="16" :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'" /> @endif
+        @if (in_array($quest->status_id, [14, 15])) <x-button action="none" data-statuschanger="16" icon="16" :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'" /> @endif
         @if (!in_array($quest->status_id, [18, 19]))
             @if ($quest->completed_once)
-                <x-button action="#/" statuschanger="19" icon="18" label="Zrezygnuj z dalszych zmian" />
+                <x-button action="none" data-statuschanger="19" icon="18" label="Zrezygnuj z dalszych zmian" />
             @else
-                <x-button action="#/" statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" />
+                <x-button action="none" data-statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" />
             @endif
         @endif
-        @if (in_array($quest->status_id, [18, 19])) <x-button action="#/" statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
+        @if (in_array($quest->status_id, [18, 19])) <x-button action="none" data-statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
     </div>
-    <div id="statuschanger">
+    <div id="data-statuschanger">
         {{-- @if (in_array($quest->status_id, [15, 18, 19, 95])) --}}
         <x-tutorial>
             W historii zlecenia pojawi się Twój komentarz.
@@ -241,23 +241,23 @@
         <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" />
     </div>
     <script defer>
-    $("#statuschanger").hide();
+    $("#data-statuschanger").hide();
 
-    $("a[statuschanger]").click(function(){
+    $("a[data-statuschanger]").click(function(){
         /*wyczyść możliwe ghosty*/
-        $("a[statuschanger].ghost").removeClass("ghost");
+        $("a[data-statuschanger].ghost").removeClass("ghost");
 
-        let status = $(this).attr("statuschanger");
+        let status = $(this).attr("data-statuschanger");
         $(`#phases button[type="submit"]`).val(status);
-        $("#statuschanger").show();
+        $("#data-statuschanger").show();
         for(i of [11, 14, 19, 16, 18, 21, 26, 96]){
             if(i == status) continue;
-            $(`a[statuschanger="${i}"]`).addClass("ghost");
+            $(`a[data-statuschanger="${i}"]`).addClass("ghost");
         }
 
-        $("#statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
+        $("#data-statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
 
-        const comment_field = document.querySelector("#statuschanger #comment");
+        const comment_field = document.querySelector("#data-statuschanger #comment");
         if($(this).attr("is-follow-up")){
             const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
             comment_field.innerHTML = last_comment;

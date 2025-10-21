@@ -18,6 +18,7 @@ use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -476,14 +477,22 @@ class RequestController extends Controller
             //add new client if not exists
             if(!$request->client_id){
                 $is_new_client = 1;
-                $client = new User;
-                $client->password = generate_password();
-                $client->client_name = $request->client_name;
-                $client->email = $request->email;
-                $client->phone = $request->phone;
-                $client->other_medium = $request->other_medium;
-                $client->contact_preference = $request->contact_preference;
-                $client->save();
+
+                $password = generate_password();
+
+                $client = User::create([
+                    "name" => $request->client_name,
+                    "email" => $request->email ?? Str::uuid()."@test.test",
+                    "password" => Hash::make($password),
+                ]);
+                $client->notes()->create([
+                    "password" => $password,
+                    "client_name" => $request->client_name,
+                    "email" => $request->email,
+                    "phone" => $request->phone,
+                    "other_medium" => $request->other_medium,
+                    "contact_preference" => $request->contact_preference,
+                ]);
 
                 $request->client_id = $client->id;
 
@@ -517,15 +526,16 @@ class RequestController extends Controller
             //     "amount" => $quest->price
             // ]);
 
-            if($client->budget){
+            if($client->notes->budget){
                 $sub_amount = min([$request->price, $client->budget]);
-                $client->budget -= $sub_amount;
+                $client->notes->update([
+                    "budget" => $client->notes->budget - $sub_amount,
+                ]);
                 BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
                 if($sub_amount == $request->price){
                     $quest->paid = true;
                     $quest->save();
                 }
-                $client->save();
                 BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
                 // $invoice->update(["paid" => $sub_amount]);
             }
@@ -550,8 +560,8 @@ class RequestController extends Controller
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
             //send onboarding if new client
-            if($request->client->email && $is_new_client){
-                Mail::to($request->client->email)->send(new Onboarding($request->client));
+            if($request->user->notes->email && $is_new_client){
+                Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
             }
         }
 

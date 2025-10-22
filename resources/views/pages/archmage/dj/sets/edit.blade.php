@@ -70,7 +70,7 @@
         @endif
 
         <div>
-            <x-button :action="route('dj-list-sets')" label="Wróć" icon="angles-left" small />
+            <x-button :action="route('dj-list-sets')" label="Wróć" icon="chevron-left" small />
             <x-button action="submit" name="action" value="save" icon="check" label="Zapisz" />
             @if ($set)
             <x-button :action="route('dj-gig-mode', ['set' => $set->id])" label="Podgląd" icon="microphone" small />

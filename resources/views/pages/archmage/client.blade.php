@@ -1,38 +1,48 @@
 @extends('layouts.app')
+@section("title", $client->notes->client_name)
+@section("subtitle", "Dane klienta")
 
 @section('content')
-<form action="{{ route("client-edit", ['id' => $client->id]) }}" method="POST">
-    @csrf
+<x-shipyard.app.form
+    :action="route('client-edit', ['id' => $client->id])"
+    method="POST"
+>
+    <x-slot:actions>
+        <x-button action="submit" label="Popraw dane" icon="pencil" />
+    </x-slot:actions>
 
-    <div class="grid" style="--col-count: 2;">
-        <x-section title="Dane osobowe" icon="clipboard-user">
-            <x-input type="text" name="client_name" label="Nazwisko" :value="_ct_($client->client_name)" />
-            <div class="grid" style="--col-count: 2;">
-                <x-input type="email" name="email" label="Email" :value="_ct_($client->email)" :small="true" />
-                <x-input type="phone" name="phone" label="Telefon" :value="_ct_($client->phone)" :small="true" />
-                <x-input type="text" name="other_medium" label="Inna droga kontaktu" :value="_ct_($client->other_medium)" :small="true" />
-                <x-select name="contact_preference" label="Preferencja kontaktowa" :value="_ct_($client->contact_preference)" :small="true" :options="$contact_preferences" />
+    <div class="grid but-mobile-down" style="--col-count: 2;">
+        <x-section title="Dane osobowe" :icon="model_icon('user_notes')">
+            <div class="grid but-mobile down" style="--col-count: 2;">
+                @foreach ([
+                    "client_name",
+                    "email",
+                    "phone",
+                    "other_medium",
+                ] as $field_name)
+                <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
+                @endforeach
             </div>
+            
+            @foreach ([
+                "trust",
+                "budget",
+                "extra_exp",
+                "default_wishes",
+                "special_prices",
+                "external_drive",
+                "is_forgotten",
+            ] as $field_name)
+            <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
+            @endforeach
         </x-section>
 
-        <x-section title="Dane klienta" icon="suitcase">
-            <div class="grid" style="--col-count: 2;">
-                <x-select name="trust" label="Zaufanie" :value="$client->trust" :options="$trust_levels" :small="true" />
-                <x-input type="number" name="budget" label="Budżet" :value="_c_($client->budget)" :small="true" step="0.01" />
-                <x-input type="number" name="extra_exp" label="Dodatkowe doświadczenie" :value="$client->extra_exp" :small="true" />
-                <x-input type="TEXT" name="default_wishes" label="Domyślne życzenia" :value="_ct_($client->default_wishes)" />
-                <x-input type="TEXT" name="special_prices" label="Specjalne warunki cenowe" :value="_ct_($client->special_prices)" />
-                <x-input type="url" name="external_drive" label="Link do chmury" :value="_ct_($client->external_drive)" />
-                <x-input type="checkbox" name="is_forgotten" label="Zapomniany" :value="$client->is_forgotten" />
-            </div>
-        </x-section>
-
-        <x-section title="Dane użytkownika" icon="address-card">
-            <x-input type="text" name="password" label="Hasło" :value="_ct_($client->password)" :small="true" />
+        <x-section title="Dane użytkownika" :icon="model_icon('users')">
+            <x-shipyard.ui.field-input :model="$client->notes" field-name="password" />
         </x-section>
 
         <x-section title="Reklama" icon="bullhorn">
-            <x-select name="helped_showcasing" label="Status patrona" :value="$client->helped_showcasing" :options="$patron_levels" :small="true" />
+            <x-shipyard.ui.field-input :model="$client->notes" field-name="helped_showcasing" />
 
             <h2>Przypięty komentarz</h2>
             <table>
@@ -55,7 +65,5 @@
             </table>
         </x-section>
     </div>
-
-    <x-button action="submit" label="Popraw dane" icon="pencil" />
-</form>
+</x-shipyard.app.form>
 @endsection

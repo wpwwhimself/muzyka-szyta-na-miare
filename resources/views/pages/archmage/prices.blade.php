@@ -52,7 +52,7 @@
     </table>
 </x-section>
 
-<div class="grid" style="--col-count: 2;">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section title="Uwagi" icon="alert-circle">
         <ul>
             <li>

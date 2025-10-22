@@ -1,3 +1,5 @@
-<i class="fa-solid fa-fade fa-circle-question hint tutorial"
+<span class="hint tutorial"
     {{ Popper::interactive()->pop($slot) }}
-></i>
+>
+    <x-shipyard.app.icon name="lightbulb-question" />
+</span>

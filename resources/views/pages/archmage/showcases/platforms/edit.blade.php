@@ -38,7 +38,7 @@
         @if ($platform)
         <x-button action="submit" danger name="action" value="delete" label="Usuń" icon="trash" />
         @endif
-        <x-a :href="route('showcase-platforms')" icon="angles-left">Wróć</x-a>
+        <x-a :href="route('showcase-platforms')" icon="chevron-left">Wróć</x-a>
     </x-section>
 </form>
 

@@ -10,6 +10,7 @@
         ["Termin klienta", "calendar-account", $quest->hard_deadline?->diffForHumans(), $quest->hard_deadline?->isPast() ? "accent error" : null],
     ] as [$label, $icon, $value, $class])
     @continue (!$value)
+    @continue (!is_archmage() && $label == "Klient")
 
     <x-shipyard.app.icon-label-value
         :icon="$icon"

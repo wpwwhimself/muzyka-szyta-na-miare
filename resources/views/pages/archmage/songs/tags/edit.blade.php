@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<x-a :href="route('song-tags')" icon="angles-left">Wróć</x-a>
+<x-a :href="route('song-tags')" icon="chevron-left">Wróć</x-a>
 
 <form action="{{ route("song-tag-process") }}" method="POST">
     @csrf

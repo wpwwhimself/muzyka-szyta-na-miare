@@ -4,7 +4,7 @@
 
 <x-section id="requests-list"
     title="Lista zapytań"
-    icon="envelope-open-text"
+    :icon="model_icon('requests')"
 >
     <x-slot name="buttons">
         <x-tutorial>
@@ -35,7 +35,7 @@
     @endif
 
     @forelse ($requests as $request)
-    <x-quest-mini :quest="$request" />
+    <x-requests.tile :request="$request" />
     @empty
     <p class="grayed-out">brak zapytań</p>
     @endforelse

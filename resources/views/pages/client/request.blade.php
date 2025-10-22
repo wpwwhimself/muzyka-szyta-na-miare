@@ -12,7 +12,7 @@ $fields = $request::getFields();
     <x-slot:actions>
         @auth
         <x-shipyard.ui.button
-            icon="angles-left"
+            icon="chevron-left"
             label="Wróć do listy"
             :action="route('requests')"
         />

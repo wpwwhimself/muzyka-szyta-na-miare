@@ -89,7 +89,7 @@
     :icon="model_icon('quests')"
 >
     @forelse ($quests_ongoing as $key => $quest)
-    <x-quest-mini :quest="$quest" :no="$key + 1" />
+    <x-quests.tile :quest="$quest" :no="$key + 1" />
     @empty
     <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
     @endforelse
@@ -113,7 +113,7 @@
         icon="package-variant"
     >
         @forelse ($quests_review as $key => $quest)
-        <x-quest-mini :quest="$quest" :no="$key + 1" />
+        <x-quests.tile :quest="$quest" :no="$key + 1" />
         @empty
         <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse

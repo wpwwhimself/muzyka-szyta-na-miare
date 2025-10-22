@@ -171,7 +171,7 @@
     </x-slot>
 
     @forelse ($quests_review as $quest)
-    <x-quest-mini :quest="$quest" />
+    <x-quests.tile :quest="$quest" />
     @empty
     <p class="grayed-out">brak aktywnych zleceń</p>
     @endforelse
@@ -184,7 +184,7 @@
         </x-slot>
 
         @forelse ($quests_ongoing as $quest)
-        <x-quest-mini :quest="$quest" />
+        <x-quests.tile :quest="$quest" />
         @empty
         <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse
@@ -196,7 +196,7 @@
         </x-slot>
 
         @forelse ($requests as $request)
-        <x-quest-mini :quest="$request" />
+        <x-requests.tile :request="$request" />
         @empty
         <p class="grayed-out">brak aktywnych zapytań</p>
         @endforelse

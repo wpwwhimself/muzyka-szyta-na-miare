@@ -104,7 +104,7 @@
     @endif
 
     <div>
-        <x-button :action="route('dj-list-songs')" label="Wróć" icon="angles-left" small />
+        <x-button :action="route('dj-list-songs')" label="Wróć" icon="chevron-left" small />
         <x-button action="submit" name="action" value="save" icon="check" label="Zapisz" />
         @if ($song)
         <x-button :action="route('dj-gig-mode', ['song' => $song->id])" label="Podgląd" icon="microphone" small />

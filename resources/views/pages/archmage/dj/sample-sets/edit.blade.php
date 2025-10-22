@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <x-button :action="route('dj-list-sample-sets')" label="Wróć" icon="angles-left" small />
+            <x-button :action="route('dj-list-sample-sets')" label="Wróć" icon="chevron-left" small />
             <x-button action="submit" name="action" value="save" icon="check" label="Zapisz" />
             @if ($set)
             <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" danger />

@@ -1,12 +1,9 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Ceny")
 
 @section('content')
 
-<section id="prices">
-    <div class="section-header">
-        <h1><i class="fa-solid fa-barcode"></i> Cennik</h1>
-    </div>
-
+<x-section id="prices" title="Cennik" :icon="model_icon('prices')">
     @if ($discount != 0)
     <p>Podane ceny uwzględniają zniżkę w wysokości {{ $discount * 100 }}%</p>
     @endif
@@ -51,50 +48,42 @@
             @endforeach
         </tbody>
     </table>
-</section>
+</x-section>
 
-<section>
-    <div class="section-header">
-        <h1><i class="fa-solid fa-circle-exclamation"></i> Uwagi</h1>
-    </div>
-
-    <ul>
-        <li>
-            Dla każdego typu zlecenia jest wyznaczona <b>cena minimalna</b>. Obecnie jest to:
-            <ul>
-                @foreach ($minimal_prices as $label => $price)
-                <li>{{ $label }}: {{ as_pln($price) }}</li>
-                @endforeach
-            </ul>
-        </li>
-    </ul>
-</section>
-
-<section>
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-circle-question"></i>
-            Jak naliczam ceny?
-        </h1>
-    </div>
-    <p>
-        Wszystkie wielkości podane w procentach naliczane są w ostatniej kolejności.
-        Jeżeli cena posiada kilka takich składników, procenty są sumowane a następnie mnożone przez kwotę.
-    </p>
-    <p>
-        Na przykład dla zestawu:
-    </p>
-    <ul>
-        <li>50 zł,</li>
-        <li>30%,</li>
-        <li>15 zł,</li>
-        <li>-5%</li>
-    </ul>
-    <p>
-        W pierwszej kolejności dodawane są złotówki (50 + 15 zł),
-        a następnie tę kwotę mnoży się przez procenty ((100 + 30 - 5)%),
-        otrzymując razem: 65 × 125% = 81,25 zł
-    </p>
-</section>
+<div class="grid but-mobile-down" style="--col-count: 2;">
+    <x-section title="Uwagi" icon="alert-circle">
+        <ul>
+            <li>
+                Dla każdego typu zlecenia jest wyznaczona <b>cena minimalna</b>. Obecnie jest to:
+                <ul>
+                    @foreach ($minimal_prices as $label => $price)
+                    <li>{{ $label }}: {{ as_pln($price) }}</li>
+                    @endforeach
+                </ul>
+            </li>
+        </ul>
+    </x-section>
+    
+    <x-section title="Jak naliczam ceny?" icon="lightbulb-question">
+        <p>
+            Wszystkie wielkości podane w procentach naliczane są w ostatniej kolejności.
+            Jeżeli cena posiada kilka takich składników, procenty są sumowane a następnie mnożone przez kwotę.
+        </p>
+        <p>
+            Na przykład dla zestawu:
+        </p>
+        <ul>
+            <li>50 zł,</li>
+            <li>30%,</li>
+            <li>15 zł,</li>
+            <li>-5%</li>
+        </ul>
+        <p>
+            W pierwszej kolejności dodawane są złotówki (50 + 15 zł),
+            a następnie tę kwotę mnoży się przez procenty ((100 + 30 - 5)%),
+            otrzymując razem: 65 × 125% = 81,25 zł
+        </p>
+    </x-section>
+</div>
 
 @endsection

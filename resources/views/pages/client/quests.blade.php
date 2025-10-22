@@ -4,7 +4,7 @@
 
 <x-section id="quests-list"
     title="Lista zleceń"
-    icon="boxes-stacked"
+    :icon="model_icon('quests')"
 >
     <x-slot name="buttons">
         <x-tutorial>
@@ -33,7 +33,7 @@
     @endif
 
     @forelse ($quests as $quest)
-    <x-quest-mini :quest="$quest" />
+    <x-quests.tile :quest="$quest" />
     @empty
     <p class="grayed-out">brak zapytań</p>
     @endforelse

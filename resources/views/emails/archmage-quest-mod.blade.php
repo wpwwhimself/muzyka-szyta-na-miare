@@ -10,7 +10,7 @@
 @if ($isRequest)
 <x-requests.tile :request="$quest" />
 @else
-<x-quest-mini :quest="$quest" />
+<x-quests.tile :quest="$quest" />
 @endif
 
 @if ($comment = $quest->history->first()?->comment)

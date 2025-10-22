@@ -2,7 +2,7 @@
 
 @section('content')
 
-<x-a :href="route('quests')" icon="angles-left">Wróć do listy</x-a>
+<x-a :href="route('quests')" icon="chevron-left">Wróć do listy</x-a>
 
 @if (sumWarnings($warnings))
 <h1 class="warning">

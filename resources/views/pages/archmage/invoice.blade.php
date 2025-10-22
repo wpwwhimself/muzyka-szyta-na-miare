@@ -14,7 +14,7 @@
         />
 
     <x-button action="{{ route('invoices') }}"
-        icon="angles-left" label="Wróć do faktur"
+        icon="chevron-left" label="Wróć do faktur"
         />
 
     <x-button action="none" id="print_invoice"

@@ -8,7 +8,7 @@
         ? route('dj-edit-song', ['id' => request('song')])
         : route('dj')
     "
-    icon="angles-left"
+    icon="chevron-left"
     label="Wyjdź"
     danger
 />

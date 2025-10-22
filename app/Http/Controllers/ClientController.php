@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
@@ -94,6 +95,9 @@ class ClientController extends Controller
 
         $client = User::findOrFail($id);
         $client->update([
+            "email" => $rq->email,
+        ]);
+        $client->notes()->update([
             "client_name" => $rq->client_name,
             "email" => $rq->email,
             "phone" => $rq->phone,
@@ -102,7 +106,7 @@ class ClientController extends Controller
         ]);
 
         if(is_archmage()){
-            $client->update([
+            $client->notes()->update([
                 "trust" => $rq->trust,
                 "is_forgotten" => $rq->has("is_forgotten"),
                 "helped_showcasing" => $rq->helped_showcasing,
@@ -112,22 +116,25 @@ class ClientController extends Controller
                 "external_drive" => $rq->external_drive,
                 "password" => $rq->password,
             ]);
+            $client->update([
+                "password" => Hash::make($rq->password),
+            ]);
 
             if ($rq->has("pinned_comment_id")) {
-                $client->update(["helped_showcasing" => 2]);
+                $client->notes()->update(["helped_showcasing" => 2]);
                 StatusChange::where("changed_by", $client->id)->update(["pinned" => false]);
                 StatusChange::find($rq->pinned_comment_id)->update(["pinned" => true]);
             }
 
             // budget handling
-            if($client->budget != $rq->budget){
+            if($client->notes->budget != $rq->budget){
                 BackController::newStatusLog(
                     null,
                     32,
-                    $rq->budget - $client->budget,
+                    $rq->budget - $client->notes->budget,
                     $client->id
                 );
-                $client->update(["budget" => $rq->budget]);
+                $client->notes()->update(["budget" => $rq->budget]);
             }
         }
 

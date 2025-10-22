@@ -12,7 +12,7 @@
     </x-slot>
 
     @forelse ($requests as $request)
-    <x-quest-mini :quest="$request" />
+    <x-requests.tile :request="$request" />
     @empty
     <p class="grayed-out">brak zapytań</p>
     @endforelse

@@ -50,8 +50,11 @@ class QuestController extends Controller
 
         $prices = DB::table("prices")
             ->where("quest_type_id", $quest->song->type->id)->orWhereNull("quest_type_id")
-            ->orderBy("quest_type_id")->orderBy("indicator")
-            ->pluck("service", "indicator")->toArray();
+            ->orderBy("quest_type_id")
+            ->orderBy("indicator")
+            ->get()
+            ->map(fn ($p) => "<strong>$p->indicator</strong>: $p->service")
+            ->join("<br>");
         if($quest->client_id != Auth::id() && !is_archmage()) abort(403, "To nie jest Twoje zlecenie");
 
         $files = $quest->song->files
@@ -68,20 +71,17 @@ class QuestController extends Controller
         ] : [
             "quote" => [
                 'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment_in_effect,
-                'Zlecenie nieopłacone' => $quest->client->trust == -1
+                'Zlecenie nieopłacone' => $quest->user->notes->trust == -1
                     || $quest->status_id == 19 && !$quest->paid
                     || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
             ],
         ];
 
-        return view(
-            user_role().".quest",
-            array_merge(
-                ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "warnings"),
-                (isset($stats_statuses) ? compact("stats_statuses") : []),
-            )
-        );
+        return view("pages.".user_role().".quest", array_merge(
+            ["title" => "Zlecenie"],
+            compact("quest", "prices", "files", "warnings"),
+            (isset($stats_statuses) ? compact("stats_statuses") : []),
+        ));
     }
 
     ////////////////////////////////////////

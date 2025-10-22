@@ -22,7 +22,7 @@ class FileController extends Controller
     {
         $tags = FileTag::orderBy("name")->get();
 
-        return view(user_role().'.files.tags.list', array_merge(
+        return view("pages.".user_role().'.files.tags.list', array_merge(
             ["title" => "Pliki"],
             compact("tags"),
         ));
@@ -32,7 +32,7 @@ class FileController extends Controller
     {
         $tag = FileTag::find($id);
 
-        return view(user_role().'.files.tags.edit', array_merge(
+        return view("pages.".user_role().'.files.tags.edit', array_merge(
             ["title" => ($tag) ? "$tag->name | Edytuj tag" : "Dodaj tag"],
             compact("tag"),
         ));
@@ -66,7 +66,7 @@ class FileController extends Controller
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
         $quest = ($entity_name == "quest") ? Quest::find($id) : null;
 
-        return view(user_role().'.files.edit', compact(
+        return view("pages.".user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
@@ -86,7 +86,7 @@ class FileController extends Controller
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
 
-        return view(user_role().'.files.edit', compact(
+        return view("pages.".user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
@@ -161,7 +161,7 @@ class FileController extends Controller
             ->toArray();
         $existing_files = ModelsFile::where("song_id", $song_id)->get();
 
-        return view(user_role().'.files.add-from-existing-safe', compact(
+        return view("pages.".user_role().'.files.add-from-existing-safe', compact(
             "song",
             "files",
             "clients",

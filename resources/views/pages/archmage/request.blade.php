@@ -50,7 +50,7 @@
                 :value="$status_id"
                 :pop="$label"
                 :class="$status_id < 0 ? 'priority' : ''"
-                />
+            />
             @endif
         @endforeach
     </div>

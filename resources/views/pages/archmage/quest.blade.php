@@ -1,16 +1,16 @@
-@extends('layouts.app', [
-    "title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"
-])
+@extends('layouts.app')
+@section("title", implode(" | ", [$quest->song->full_title, $quest->id]))
+@section("subtitle", "Zlecenie")
 
 @section('content')
 
-<x-phase-indicator :status-id="$quest->status_id" />
+<x-shipyard.app.form method="POST" :action="route('mod-quest-back')">
+    <x-phase-indicator :status-id="$quest->status_id" />
 
-<form action="{{ route('mod-quest-back') }}" method="POST" id="phases" class="archmage-quest-phases">
-    <div class="flexright">
-        @csrf
+    <div class="archmage-quest-phases flex right center middle">
         <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+        
         @foreach ([
             ["Wprowadzenie/odrzucenie zmian", 11, [21]],
             ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
@@ -27,19 +27,21 @@
             ["Popraw ostatni komentarz", $quest->status_id, [$quest->status_id]],
         ] as [$label, $status_id, $show_on_statuses])
             @if (in_array($quest->status_id, $show_on_statuses))
-            @php $nomail = (!$quest->client->email && in_array($status_id, [15, 95])) @endphp
-            <x-button action="submit"
+            @php
+            $nomail = (!$quest->user->notes->email && in_array($status_id, [15, 95]));
+            $new_status = \App\Models\Status::find(abs($status_id));
+            @endphp
+            <x-shipyard.ui.button action="submit"
                 name="status_id"
-                :icon="$status_id"
+                :icon="$new_status->icon"
                 :value="$status_id"
-                :label="''"
                 :pop="$label"
                 :class="$nomail ? 'warning' : ''"
-                :small="$status_id == $quest->status_id"
-                /> @endif
+            />
+            @endif
         @endforeach
     </div>
-</form>
+</x-shipyard.app.form>
 
 <div class="flex down">
     <x-extendo-block key="quest"
@@ -130,8 +132,8 @@
             @endunless
 
             <x-extendo-section title="Chmura">
-                @if ($quest->client->external_drive)
-                <x-a href="{{ $quest->client->external_drive }}" _target="blank">Link</x-a>
+                @if ($quest->user->notes->external_drive)
+                <x-a href="{{ $quest->user->notes->external_drive }}" _target="blank">Link</x-a>
                 <form action="{{ route('quest-files-external-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
@@ -151,7 +153,7 @@
                 <span>
                     @if (can_download_files($quest->client_id, $quest->id))
                         <i class="success fa-solid fa-check"></i> Uprawniony do pobierania
-                    @elseif ($quest->client->can_see_files)
+                    @elseif ($quest->user->notes->can_see_files)
                         <i class="warning fa-solid fa-eye"></i> Widzi podglądy
                     @else
                         <i class="error fa-solid fa-xmark"></i> Nic nie widzi
@@ -176,10 +178,10 @@
             title="Klient"
             :subtitle="$quest->client"
         >
-            <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->client->client_name) }}" :disabled="true" />
-            <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->client->contact_preference) }}" :small="true" :disabled="true" />
-            <x-input type="text" name="" label="Hasło do konta" value="{{ _ct_($quest->client->password) }}" :small="true" :disabled="true" />
-            <x-input type="text" name="" label="Wybredność" value="{{ round($quest->client->pickiness * 100) }}%" :small="true" :disabled="true" class="{{ $quest->client->pickiness > 1 ? 'error' : 'success' }}" />
+            <x-input type="text" name="" label="Nazwisko" value="{{ _ct_($quest->user->notes->client_name) }}" :disabled="true" />
+            <x-input type="text" name="" label="Preferencja kontaktowa" value="{{ _ct_($quest->user->notes->contact_preference) }}" :small="true" :disabled="true" />
+            <x-input type="text" name="" label="Hasło do konta" value="{{ _ct_($quest->user->notes->password) }}" :small="true" :disabled="true" />
+            <x-input type="text" name="" label="Wybredność" value="{{ round($quest->user->notes->pickiness * 100) }}%" :small="true" :disabled="true" class="{{ $quest->user->notes->pickiness > 1 ? 'error' : 'success' }}" />
 
             <div>
                 <x-button action="{{ route('clients', ['search' => $quest->client_id]) }}" icon="user" label="Szczegóły" small />
@@ -256,7 +258,7 @@
                 @endunless
             </x-extendo-section>
 
-            <form action="{{ route("quest-quote-update") }}" method="post">
+            {{-- <form action="{{ route("quest-quote-update") }}" method="post">
                 @csrf
                 <input type="hidden" name="id" value="{{ $quest->id }}" />
                 <x-input type="text" name="price_code_override" label="Kod wyceny" value="{{ $quest->price_code_override }}" :hint="$prices" />
@@ -280,7 +282,7 @@
                     });
                 });
                 </script>
-            </form>
+            </form> --}}
 
             <x-extendo-section title="Dokumenty">
                 <table>

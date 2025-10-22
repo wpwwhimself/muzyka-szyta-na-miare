@@ -86,16 +86,16 @@ class Price extends Model
     public const FIELDS = [
         // "<column_name>" => [
         //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
+        //     "columnTypes" => [ // for JSON
         //         "<label>" => "<input_type>",
         //     ],
         //     "label" => "",
         //     "hint" => "",
         //     "icon" => "",
         //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
+        //     // "autofillFrom" => ["<route>", "<model_name>"],
+        //     // "characterLimit" => 999, // for text fields
+        //     // "hideForEntmgr" => true,
         //     // "role" => "",
         // ],
     ];

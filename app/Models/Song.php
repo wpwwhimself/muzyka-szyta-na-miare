@@ -90,7 +90,7 @@ class Song extends Model
     public const FIELDS = [
         // "<column_name>" => [
         //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
+        //     "columnTypes" => [ // for JSON
         //         "<label>" => "<input_type>",
         //     ],
         //     "label" => "",

@@ -100,6 +100,12 @@ class UserNote extends Authenticatable
             "icon" => "badge-account",
             "required" => true,
         ],
+        "password" => [
+            "type" => "text",
+            "label" => "Hasło",
+            "icon" => "key",
+            "required" => true,
+        ],
         "email" => [
             "type" => "email",
             "label" => "Email",
@@ -119,13 +125,61 @@ class UserNote extends Authenticatable
         "trust" => [
             "type" => "select",
             "label" => "Zaufanie",
-            "icon" => "",
+            "icon" => "heart",
             "selectData" => [
                 "options" => [
                     ["value" => 0, "label" => "neutralne"],
                     ["value" => 1, "label" => "zaufany"],
                     ["value" => 2, "label" => "ulubiony"],
                     ["value" => -1, "label" => "krętacz i oszust"],
+                ],
+            ],
+        ],
+        "budget" => [
+            "type" => "number",
+            "label" => "Budżet",
+            "icon" => "safe",
+            "hint" => "Kwota nadpłat, wykorzystywana na poczet przyszłych zleceń.",
+            "min" => 0,
+            "step" => 0.01,
+        ],
+        "extra_exp" => [
+            "type" => "number",
+            "label" => "Dodatkowe doświadczenie",
+            "icon" => "folder-arrow-up",
+            "hint" => "Liczba ukończonych zleceń, które nie są zarejestrowane w systemie. Jest dodawana do całkowitej liczby zleceń i decyduje o statusie weterana.",
+            "min" => 0,
+        ],
+        "default_wishes" => [
+            "type" => "TEXT",
+            "label" => "Domyślne życzenia",
+            "icon" => "cloud",
+        ],
+        "special_prices" => [
+            "type" => "TEXT",
+            "label" => "Specjalne warunki cenowe",
+            "icon" => "account-cash",
+        ],
+        "external_drive" => [
+            "type" => "url",
+            "label" => "Link do chmury",
+            "icon" => "google-drive",
+        ],
+        "is_forgotten" => [
+            "type" => "checkbox",
+            "label" => "Zapomniany",
+            "icon" => "ghost",
+            "hint" => "Od dawna nie ma kontaktu z klientem. Nie jest brany pod uwagę podczas przeliczania saturacji przychodów.",
+        ],
+        "helped_showcasing" => [
+            "type" => "select",
+            "label" => "Status patrona",
+            "icon" => "seal",
+            "selectData" => [
+                "options" => [
+                    ["value" => 0, "label" => "brak"],
+                    ["value" => 1, "label" => "oczekuje"],
+                    ["value" => 2, "label" => "potwierdzony"],
                 ],
             ],
         ],

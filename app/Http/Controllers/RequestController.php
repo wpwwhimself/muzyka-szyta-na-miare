@@ -485,6 +485,7 @@ class RequestController extends Controller
                     "email" => $request->email ?? Str::uuid()."@test.test",
                     "password" => Hash::make($password),
                 ]);
+                $client->roles()->attach("client");
                 $client->notes()->create([
                     "password" => $password,
                     "client_name" => $request->client_name,
@@ -546,6 +547,7 @@ class RequestController extends Controller
         }
 
         $request->save();
+        $request = $request->fresh();
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
@@ -554,13 +556,13 @@ class RequestController extends Controller
 
         BackController::newStatusLog($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
 
-        if($status == 9){
+        if ($status == 9){
             //added quest
             BackController::newStatusLog($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
             //send onboarding if new client
-            if($request->user->notes->email && $is_new_client){
+            if ($request->user->notes->email && $is_new_client){
                 Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
             }
         }

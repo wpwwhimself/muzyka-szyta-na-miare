@@ -87,15 +87,15 @@ class QuestController extends Controller
     ////////////////////////////////////////
 
     public function processMod(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
-            return back()->with("error", "Zatrzymaj zegar");
+            return back()->with("toast", ["error", "Zatrzymaj zegar"]);
         }
 
         // wpisywanie wpłaty za zlecenie
         if($rq->status_id == 32){
-            if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
+            if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["error", "Nie podałeś ceny"]);
 
             // opłacenie zlecenia (sprawdzenie nadwyżki)
             $amount_to_pay = $quest->price - $quest->payments_sum;
@@ -142,7 +142,7 @@ class QuestController extends Controller
                 $flash_content .= "; już nie jest krętaczem";
             }
 
-            return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
+            return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["success", $flash_content]);
         }
 
         $is_same_status = $quest->status_id == $rq->status_id;
@@ -214,7 +214,7 @@ class QuestController extends Controller
         }
         if($mailing !== null) $quest->fresh()->history->first()->update(["mail_sent" => $mailing]);
 
-        return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
+        return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["success", $flash_content]);
     }
 
     public function patch($id, $mode = "key-value", HttpRequest $rq){
@@ -233,7 +233,7 @@ class QuestController extends Controller
     ////////////////////////////////////////
 
     public function updateSong(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $song = Song::findOrFail($rq->id);
         $song->update([
             "title" => $rq->title,
@@ -241,20 +241,20 @@ class QuestController extends Controller
             "link" => yt_cleanup($rq->link),
             "notes" => $rq->wishes,
         ]);
-        return back()->with("success", "Utwór zmodyfikowany");
+        return back()->with("toast", ["success", "Utwór zmodyfikowany"]);
     }
 
     public function updateWishes(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
         $quest->update([
             "wishes" => $rq->wishes_quest,
         ]);
-        return back()->with("success", "Zlecenie zmodyfikowane");
+        return back()->with("toast", ["success", "Zlecenie zmodyfikowane"]);
     }
 
     public function updateQuote(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
         $price_before = $quest->price;
         $price_code_before = $quest->price_code_override;
@@ -323,25 +323,25 @@ class QuestController extends Controller
             $mailing,
             $changes
         );
-        return back()->with("success", "Wycena zapytania zmodyfikowana");
+        return back()->with("toast", ["success", "Wycena zapytania zmodyfikowana"]);
     }
 
     public function updateFilesReady(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
         $quest->update([
             "files_ready" => $rq->ready,
         ]);
-        return back()->with("success", "Zawartość sejfu zatwierdzona");
+        return back()->with("toast", ["success", "Zawartość sejfu zatwierdzona"]);
     }
 
     public function updateFilesExternal(HttpRequest $rq) {
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
 
         $quest->update([
             "has_files_on_external_drive" => $rq->external,
         ]);
-        return back()->with("success", "Zmieniono status chmury");
+        return back()->with("toast", ["success", "Zmieniono status chmury"]);
     }
 }

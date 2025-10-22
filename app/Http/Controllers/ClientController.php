@@ -89,7 +89,7 @@ class ClientController extends Controller
     }
 
     public function edit($id, Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         $client = User::findOrFail($id);
@@ -131,7 +131,7 @@ class ClientController extends Controller
             }
         }
 
-        return back()->with("success", "Dane poprawione");
+        return back()->with("toast", ["success", "Dane poprawione"]);
     }
 
     #region mailing
@@ -164,7 +164,7 @@ class ClientController extends Controller
             }
         }
 
-        return back()->with("success", "Mail wysłany" . ($failures ? ", błędów: $failures" : ""));
+        return back()->with("toast", ["success", "Mail wysłany" . ($failures ? ", błędów: $failures" : "")]);
     }
     #endregion
 

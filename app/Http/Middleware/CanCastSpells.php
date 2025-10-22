@@ -18,7 +18,7 @@ class CanCastSpells
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::id() != 1) return back()->with("error", SpellbookController::$MISSPELL_ERROR);
+        if(Auth::id() != 1) return back()->with("toast", ["error", SpellbookController::$MISSPELL_ERROR]);
 
         return $next($request);
     }

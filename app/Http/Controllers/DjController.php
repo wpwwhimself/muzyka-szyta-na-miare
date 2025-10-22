@@ -63,10 +63,10 @@ class DjController extends Controller
 
         if ($rq->get("action") == "save") {
             $song = DjSong::updateOrCreate(["id" => $data["id"]], $data);
-            return redirect()->route("dj-edit-song", ["id" => $song->id])->with("success", "Utwór poprawiony");
+            return redirect()->route("dj-edit-song", ["id" => $song->id])->with("toast", ["success", "Utwór poprawiony"]);
         } else if ($rq->get("action") == "delete") {
             DjSong::find($data["id"])->delete();
-            return back()->with("success", "Utwór usunięty");
+            return back()->with("toast", ["success", "Utwór usunięty"]);
         }
 
         abort(400, "Niewłaściwa akcja formularza");
@@ -98,10 +98,10 @@ class DjController extends Controller
 
         if ($rq->get("action") == "save") {
             $set = DjSampleSet::updateOrCreate(["id" => $data["id"]], $data);
-            return redirect()->route("dj-edit-sample-set", ["id" => $set->id])->with("success", "Sample poprawiony");
+            return redirect()->route("dj-edit-sample-set", ["id" => $set->id])->with("toast", ["success", "Sample poprawiony"]);
         } else if ($rq->get("action") == "delete") {
             DjSampleSet::find($data["id"])->delete();
-            return back()->with("success", "Utwór usunięty");
+            return back()->with("toast", ["success", "Utwór usunięty"]);
         }
 
         abort(400, "Niewłaściwa akcja formularza");
@@ -141,10 +141,10 @@ class DjController extends Controller
         if ($rq->get("action") == "save") {
             $set = DjSet::updateOrCreate(["id" => $data["id"]], $data);
             $set->songs()->sync($rq->get("songs"));
-            return redirect()->route("dj-edit-set", ["id" => $set->id])->with("success", "Utwór poprawiony");
+            return redirect()->route("dj-edit-set", ["id" => $set->id])->with("toast", ["success", "Utwór poprawiony"]);
         } else if ($rq->get("action") == "delete") {
             DjSet::find($data["id"])->delete();
-            return back()->with("success", "Utwór usunięty");
+            return back()->with("toast", ["success", "Utwór usunięty"]);
         }
 
         abort(400, "Niewłaściwa akcja formularza");

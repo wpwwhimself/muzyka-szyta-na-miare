@@ -34,7 +34,7 @@ class ShowcaseController extends Controller
     }
 
     public function add(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         Showcase::create([
             "song_id" => $rq->song_id,
             "link_fb" => (filter_var($rq->link_fb, FILTER_VALIDATE_URL)) ?
@@ -42,27 +42,27 @@ class ShowcaseController extends Controller
             "link_ig" => $rq->link_ig,
         ]);
 
-        return back()->with("success", "Dodano pozycję");
+        return back()->with("toast", ["success", "Dodano pozycję"]);
     }
 
     public function addFromClient(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         ClientShowcase::create([
             "song_id" => $rq->song_id,
             "embed" => $rq->embed,
         ]);
 
-        return back()->with("success", "Dodano pozycję");
+        return back()->with("toast", ["success", "Dodano pozycję"]);
     }
 
     public function pinComment(int $comment_id, int $client_id)
     {
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
 
         StatusChange::where("changed_by", $client_id)->update(["pinned" => false]);
         StatusChange::find($comment_id)->update(["pinned" => true]);
 
-        return back()->with("success", "Zmieniono przypięcie");
+        return back()->with("toast", ["success", "Zmieniono przypięcie"]);
     }
 
     #region platforms
@@ -93,7 +93,7 @@ class ShowcaseController extends Controller
         } else if ($rq->action == "delete") {
             ShowcasePlatform::find($rq->code)->delete();
         }
-        return redirect()->route("showcase-platform-edit", ["id" => $rq->code])->with("success", "Platforma poprawiona");
+        return redirect()->route("showcase-platform-edit", ["id" => $rq->code])->with("toast", ["success", "Platforma poprawiona"]);
 
     }
     #endregion
@@ -123,10 +123,10 @@ class ShowcaseController extends Controller
                 ["id" => $rq->id],
                 $rq->except(["_token", "action"])
             );
-            return redirect()->route("organ-showcase-edit", ["showcase" => $showcase])->with("success", "Rolka poprawiona");
+            return redirect()->route("organ-showcase-edit", ["showcase" => $showcase])->with("toast", ["success", "Rolka poprawiona"]);
         } else if ($rq->action == "delete") {
             OrganShowcase::find($rq->id)->delete();
-            return redirect()->route("showcases")->with("success", "Rolka usunięta");
+            return redirect()->route("showcases")->with("toast", ["success", "Rolka usunięta"]);
         }
     }
     #endregion
@@ -156,10 +156,10 @@ class ShowcaseController extends Controller
                 ["id" => $rq->id],
                 $rq->except(["_token", "action"])
             );
-            return redirect()->route("dj-showcase-edit", ["showcase" => $showcase])->with("success", "Rolka poprawiona");
+            return redirect()->route("dj-showcase-edit", ["showcase" => $showcase])->with("toast", ["success", "Rolka poprawiona"]);
         } else if ($rq->action == "delete") {
             DjShowcase::find($rq->id)->delete();
-            return redirect()->route("showcases")->with("success", "Rolka usunięta");
+            return redirect()->route("showcases")->with("toast", ["success", "Rolka usunięta"]);
         }
     }
     #endregion

@@ -42,10 +42,10 @@ class FileController extends Controller
     {
         if ($rq->action == "save") {
             $tag = FileTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
-            return redirect()->route("file-tag-edit", ["id" => $tag->id])->with("success", "Tag poprawiony");
+            return redirect()->route("file-tag-edit", ["id" => $tag->id])->with("toast", ["success", "Tag poprawiony"]);
         } else if ($rq->action == "delete") {
             FileTag::find($rq->id)->delete();
-            return redirect()->route("file-tags")->with("success", "Tag usunięty");
+            return redirect()->route("file-tags")->with("toast", ["success", "Tag usunięty"]);
         }
     }
     #endregion
@@ -191,7 +191,7 @@ class FileController extends Controller
             $file->exclusiveClients()->sync($rq->only_for_client_id ?? []);
         }
 
-        return back()->with("success", "Wpis dodany");
+        return back()->with("toast", ["success", "Wpis dodany"]);
     }
     #endregion
 
@@ -232,7 +232,7 @@ class FileController extends Controller
             ->storeAs("showcases", $rq->id.".ogg")
         ;
 
-        return back()->with("success", "Showcase dodany");
+        return back()->with("toast", ["success", "Showcase dodany"]);
     }
 
     public function showcaseFileShow($id){

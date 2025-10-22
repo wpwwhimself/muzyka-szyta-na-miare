@@ -420,7 +420,7 @@ class StatsController extends Controller
     }
     public function statsImport(Request $rq){
         $rq->file("json")->storeAs("/", "stats.json");
-        return back()->with("success", "Dane zaktualizowane");
+        return back()->with("toast", ["success", "Dane zaktualizowane"]);
     }
 
     public function financeDashboard(){
@@ -471,9 +471,9 @@ class StatsController extends Controller
         ));
     }
     public function financePay(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest_ids = array_keys($rq->except("_token"));
-        if(empty($quest_ids)) return back()->with("error", "Zaznacz zlecenia");
+        if(empty($quest_ids)) return back()->with("toast", ["error", "Zaznacz zlecenia"]);
 
         $clients_quests = [];
         foreach($quest_ids as $id){
@@ -520,17 +520,17 @@ class StatsController extends Controller
         $clients_informed_output = (isset($clients_informed_count[1]) && $clients_informed_count[1] == count($clients_informed)) ? "wszyscy dostali maile"
             : ($clients_informed_count[0] == count($clients_informed) ? "nikt nie dostał maila" : ($clients_informed_count[1]."/".count($clients_informed)." klientów dostało maila"));
 
-        return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
+        return back()->with("toast", ["success", "Zlecenia opłacone, $clients_informed_output"]);
     }
 
     public function financePayout(float $amount) {
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         Cost::create([
             "cost_type_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
             "desc" => "sam sobie",
             "amount" => $amount,
         ]);
-        return back()->with("success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount)));
+        return back()->with("toast", ["success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount))]);
     }
 
     public function financeReturn(string $quest_id, bool $budget = false) {
@@ -571,7 +571,7 @@ class StatsController extends Controller
             $flash_content .= ", ale wyślij wiadomość";
         }
 
-        return back()->with("success", $flash_content);
+        return back()->with("toast", ["success", $flash_content]);
     }
     public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)
@@ -637,7 +637,7 @@ class StatsController extends Controller
             ));
     }
     public function invoiceVisibility(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $invoice = Invoice::find($rq->id);
         $invoice->update(["visible" => $rq->visible]);
 
@@ -654,10 +654,10 @@ class StatsController extends Controller
             }
         }
 
-        return back()->with("success", $res);
+        return back()->with("toast", ["success", $res]);
     }
     public function invoiceAdd(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $invoice_quests = [];
         $totals = ["amount" => 0, "paid" => 0];
         foreach(Quest::whereIn("id", explode(" ", $rq->quests))->get() as $quest){
@@ -711,7 +711,7 @@ class StatsController extends Controller
             ]);
         }
 
-        return redirect()->route("invoice", ["id" => $invoice->id])->with("success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony");
+        return redirect()->route("invoice", ["id" => $invoice->id])->with("toast", ["success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony"]);
     }
 
     public function costs(){
@@ -730,7 +730,7 @@ class StatsController extends Controller
         ));
     }
     public function modCost(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = [
             "cost_type_id" => $rq->cost_type_id,
             "desc" => $rq->desc,
@@ -740,7 +740,7 @@ class StatsController extends Controller
         if($rq->id) Cost::find($rq->id)->update($fields);
         else Cost::create($fields);
 
-        return back()->with("success", "Gotowe");
+        return back()->with("toast", ["success", "Gotowe"]);
     }
     public function costTypes(){
         $types = CostType::all();
@@ -751,12 +751,12 @@ class StatsController extends Controller
         ));
     }
     public function modCostType(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = ["name" => $rq->name, "desc" => $rq->desc];
         if($rq->id) CostType::find($rq->id)->update($fields);
         else CostType::create($fields);
 
-        return back()->with("success", "Gotowe");
+        return back()->with("toast", ["success", "Gotowe"]);
     }
 
     public function fileSizeReport(){
@@ -800,7 +800,7 @@ class StatsController extends Controller
         }else{
             CalendarFreeDay::where("date", $rq->date)->delete();
         }
-        return back()->with("success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty"));
+        return back()->with("toast", ["success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty")]);
     }
 
     #region price calc
@@ -1020,7 +1020,7 @@ class StatsController extends Controller
             GigPriceDefault::find($name)->update(["value" => $value]);
         }
 
-        return redirect()->route("gig-price-suggest")->with("success", "Ustawienia domyślne zmienione");
+        return redirect()->route("gig-price-suggest")->with("toast", ["success", "Ustawienia domyślne zmienione"]);
     }
 
     public function gigPriceRates()
@@ -1050,7 +1050,7 @@ class StatsController extends Controller
             GigPriceRate::find($rq->id)->delete();
         }
 
-        return redirect()->route("gig-price-rates")->with("success", "Stawka poprawiona");
+        return redirect()->route("gig-price-rates")->with("toast", ["success", "Stawka poprawiona"]);
     }
 
     public function gigPricePlaces()
@@ -1079,7 +1079,7 @@ class StatsController extends Controller
             GigPricePlace::find($rq->id)->delete();
         }
 
-        return redirect()->route("gig-price-places")->with("success", "Miejsce poprawione");
+        return redirect()->route("gig-price-places")->with("toast", ["success", "Miejsce poprawione"]);
     }
     #endregion
 }

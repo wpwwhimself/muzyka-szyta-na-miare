@@ -59,7 +59,7 @@ class RequestController extends Controller
         }else{
             if($request->client_id != Auth::id()){
                 if(Auth::id()) abort(403, "To nie jest Twoje zapytanie");
-                else return redirect()->route("login")->with("error", "Zaloguj się, jeśli to Twoje zapytanie");
+                else return redirect()->route("login")->with("toast", ["error", "Zaloguj się, jeśli to Twoje zapytanie"]);
             };
             $clients = [];
             $songs = [];
@@ -130,7 +130,7 @@ class RequestController extends Controller
                 $client_data
             ));
             BackController::newStatusLog($request->id, 1, "~ spoza strony");
-            return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
+            return redirect()->route("request", ["id" => $request->id])->with("toast", ["success", "Szablon zapytania gotowy"]);
         }
 
         $clients = [];
@@ -207,7 +207,7 @@ class RequestController extends Controller
     ////////////////////////////////////////////////////
 
     public function processAdd(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
 
         $flash_content = "Zapytania dodane";
         $loop_length = is_array($rq->quest_type_id) ? count($rq->quest_type_id) : 1;
@@ -320,7 +320,7 @@ class RequestController extends Controller
     }
 
     public function processMod(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $intent = $rq->intent;
         $request = Request::find($rq->id);
 
@@ -328,7 +328,7 @@ class RequestController extends Controller
 
         if (Auth::id() === 1 && $rq->new_status == 5 && !$rq->genre_id) {
             // archmage forgot to define genre
-            return back()->with("error", "Uzupełnij gatunek");
+            return back()->with("toast", ["error", "Uzupełnij gatunek"]);
         }
 
         if($intent == "change"){
@@ -340,7 +340,7 @@ class RequestController extends Controller
                 $rq->new_status == 5 &&
                 (!$rq->price_code)
             ){
-                return back()->with("error", "Uzupełnij wycenę");
+                return back()->with("toast", ["error", "Uzupełnij wycenę"]);
             }
 
             $price_data = StatsController::runPriceCalc($rq->price_code, $rq->client_id, true);
@@ -444,14 +444,14 @@ class RequestController extends Controller
         }
         if($mailing !== null) $request->history->first()->update(["mail_sent" => $mailing]);
 
-        return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
+        return redirect()->route("request", ["id" => $request->id])->with("toast", ["success", $flash_content]);
     }
 
     public function finalize($id, $status, $with_priority = false){
         $request = Request::findOrFail($id);
 
         if(in_array($request->status_id, [4,7,8,9]))
-            return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
+            return redirect()->route("request", ["id" => $id])->with("toast", ["error", "Zapytanie już zamknięte"]);
 
         $request->status_id = $status;
         $price = StatsController::runPriceCalc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
@@ -579,6 +579,6 @@ class RequestController extends Controller
         $history->save();
 
         $where_to = (!Auth::check()) ? "home" : "dashboard";
-        return redirect()->route($where_to)->with("success", "Komentarz dodany");
+        return redirect()->route($where_to)->with("toast", ["success", "Komentarz dodany"]);
     }
 }

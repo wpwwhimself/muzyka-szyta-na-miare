@@ -99,7 +99,7 @@ class SongController extends Controller
             Showcase::where("song_id", $song->id)->delete();
         }
 
-        return back()->with("success", "Utwór poprawiony");
+        return back()->with("toast", ["success", "Utwór poprawiony"]);
     }
 
     #region genres
@@ -128,7 +128,7 @@ class SongController extends Controller
         } else if ($rq->action == "delete") {
             Genre::find($rq->id)->delete();
         }
-        return redirect()->route("song-genres")->with("success", "Gatunek poprawiony");
+        return redirect()->route("song-genres")->with("toast", ["success", "Gatunek poprawiony"]);
     }
 
     #endregion
@@ -159,7 +159,7 @@ class SongController extends Controller
         } else if ($rq->action == "delete") {
             SongTag::find($rq->id)->delete();
         }
-        return redirect()->route("song-tags")->with("success", "Tag poprawiony");
+        return redirect()->route("song-tags")->with("toast", ["success", "Tag poprawiony"]);
     }
     #endregion
 

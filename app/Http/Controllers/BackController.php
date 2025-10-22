@@ -165,7 +165,7 @@ class BackController extends Controller
     }
 
     public function setPatronLevel($client_id, $level){
-        if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return redirect()->route("dashboard")->with("toast", ["error", OBSERVER_ERROR()]);
         $client = User::findOrFail($client_id);
 
         $client->update(["helped_showcasing" => $level]);
@@ -175,8 +175,8 @@ class BackController extends Controller
             $mailing = true;
         }
 
-        if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", (($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony").($mailing ? ", mail wysłany" : ""));
-        return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
+        if(Auth::id() == 1) return redirect()->route("dashboard")->with("toast", ["success", (($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony").($mailing ? ", mail wysłany" : "")]);
+        return redirect()->route("dashboard")->with("toast", ["success", "Wystawienie opinii odnotowane"]);
     }
 
     public function ppp($page = "0-index"){

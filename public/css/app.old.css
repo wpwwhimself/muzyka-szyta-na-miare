@@ -457,11 +457,6 @@ footer .contact-info{
     white-space: nowrap;
 }
 
-.quest-type{
-    font-size: var(--size-xxl);
-    width: var(--size-l);
-    text-align: center;
-}
 .quests-table{
     gap: var(--size-m);
 

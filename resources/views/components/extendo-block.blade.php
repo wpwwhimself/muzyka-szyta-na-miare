@@ -13,11 +13,11 @@
             <span class="ghost">{!! $subtitle !!}</span>
         </div>
 
-        @if($buttons)
-        <div class="right-side flex right">{{ $buttons }}</div>
-        @endif
-
         <div class="right-side flex right keep-for-mobile">
+            @if($buttons)
+            {{ $buttons }}
+            @endif
+
             @unless($extended === "perma")
             <x-shipyard.ui.button
                 icon="unfold-less-horizontal"

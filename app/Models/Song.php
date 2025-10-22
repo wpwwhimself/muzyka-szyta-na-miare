@@ -88,29 +88,43 @@ class Song extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "title" => [
+            "type" => "text",
+            "label" => "Tytuł utworu",
+            "icon" => "music-box",
+            "required" => true,
+        ],
+        "artist" => [
+            "type" => "text",
+            "label" => "Wykonawca",
+            "icon" => "account-music"
+        ],
+        "link" => [
+            "type" => "text",
+            "label" => "Linki do utworu",
+            "icon" => "link",
+            "hint" => "Oddzielone przecinkami",
+        ],
+        "notes" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. utworu",
+            "icon" => "cloud",
+            "hint" => "np. styl itp.",
+        ],
     ];
 
     public const CONNECTIONS = [
-        // "<name>" => [
-        //     "model" => ,
-        //     "mode" => "<one|many>",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "type" => [
+            "model" => QuestType::class,
+            "mode" => "one",
+            "field_name" => "quest_type_id",
+            "field_label" => "Typ zlecenia",
+        ],
+        "genre" => [
+            "model" => Genre::class,
+            "mode" => "one",
+            "field_label" => "Gatunek",
+        ],
     ];
 
     public const ACTIONS = [

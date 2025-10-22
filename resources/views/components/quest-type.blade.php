@@ -1,11 +1,18 @@
 @props([
   'type' => null,
-  'id' => null, 'label' => null, 'faSymbol' => null,
+  'id' => null, 'label' => null, 'icon' => null,
   'small' => false,
 ])
 
 @php
-if ($type) [$id, $label, $faSymbol] = [$type->id, $type->type, $type->fa_symbol];
+if ($type) [$id, $label, $icon] = [$type->id, $type->type, $type->icon];
 @endphp
 
-<i class="quest-type {{ $small ? 'small' : '' }} fa-solid {{ $faSymbol }}" {{ $label ? Popper::pop($label) : null }}></i>
+<span @class([
+    "quest-type",
+    "small" => $small,
+])
+    @if ($label) {{ Popper::pop($label) }} @endif
+>
+    <x-shipyard.app.icon :name="$icon" />
+</span>

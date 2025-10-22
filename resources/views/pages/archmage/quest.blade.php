@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section("title", implode(" | ", [$quest->song->full_title, $quest->id]))
+@section("title", $quest->song->full_title)
 @section("subtitle", "Zlecenie")
 
 @section('content')
@@ -10,7 +10,7 @@
     <div class="archmage-quest-phases flex right center middle">
         <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-        
+
         @foreach ([
             ["Wprowadzenie/odrzucenie zmian", 11, [21]],
             ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
@@ -43,28 +43,35 @@
     </div>
 </x-shipyard.app.form>
 
-<div class="flex down">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-extendo-block key="quest"
-        header-icon="compact-disc"
+        :header-icon="model_icon('users')"
         title="Utwór"
         :subtitle="$quest->song_id . ' // ' . $quest->song->full_title"
         :extended="in_array($quest->status_id, [11, 12])"
     >
-        <x-extendo-section title="Rodzaj">
-            <x-quest-type :type="$quest->quest_type" />
-        </x-extendo-section>
-        <x-extendo-section title="Akcje">
+        @php $song = $quest->song; @endphp
+
+        <div class="flex right center middle">
+            <x-quest-type :type="$song->type" />
             <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>
             <x-a :href="route('song-edit', ['id' => $quest->song_id])">Edytuj</x-a>
-        </x-extendo-section>
-        <x-input type="text" name="title" label="Tytuł" value="{{ $quest->song->title }}" />
-        <x-input type="text" name="artist" label="Wykonawca" value="{{ $quest->song->artist }}" />
-        <div>
-            <x-input type="text" name="link" label="Linki" value="{{ $quest->song->link }}" :small="true" />
-            <x-link-interpreter :raw="$quest->song->link" />
         </div>
-        <x-input type="text" name="genre" label="Gatunek" value="{{ $quest->song->genre?->name }}" :small="true" :disabled="true" />
-        <x-input type="TEXT" name="notes" label="Życzenia dotyczące utworu" value="{{ $quest->song->notes }}" />
+
+        <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
+
+        @foreach ([
+            "title",
+            "artist",
+            "link",
+            "notes",
+        ] as $field_name)
+            <x-shipyard.ui.field-input :model="$quest->song" :field-name="$field_name" />
+            @if ($field_name == "link")
+            <x-link-interpreter :raw="$quest->song->$field_name" />
+            @endif
+        @endforeach
+
         <x-input type="TEXT" name="wishes" label="Życzenia dotyczące zlecenia" value="{{ $quest->wishes }}" />
 
         <x-extendo-section title="Rolka">
@@ -73,35 +80,6 @@
                 <x-input type="checkbox" name="has_original_mv" label="Jest teledysk" :value="$quest->song->has_original_mv" />
             </div>
         </x-extendo-section>
-
-        <script>
-        $(document).ready(() => {
-            $("#title, #artist, #link, #genre, #notes").on("change", function(){
-                $.ajax({
-                    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-                    url: `/api/songs/{{ $quest->song->id }}/single`,
-                    type: "PATCH",
-                    data: JSON.stringify({key: $(this).attr("id"), value: $(this).val()}),
-                })
-            })
-            $("#has_recorded_reel, #has_original_mv").on("change", function(){
-                $.ajax({
-                    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-                    url: `/api/songs/{{ $quest->song->id }}/single`,
-                    type: "PATCH",
-                    data: JSON.stringify({key: $(this).attr("id"), value: $(this).is(":checked")}),
-                })
-            })
-            $("#wishes").on("change", function(){
-                $.ajax({
-                    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-                    url: `/api/quests/{{ $quest->id }}/single`,
-                    type: "PATCH",
-                    data: JSON.stringify({key: $(this).attr("id"), value: $(this).val()}),
-                })
-            })
-        })
-        </script>
     </x-extendo-block>
 
     @if($quest->status_id == 12)
@@ -172,7 +150,6 @@
         <x-files.list :grouped-files="$files" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
     </x-extendo-block>
 
-    <div class="grid" style="--col-count: 2;">
         <x-extendo-block key="client"
             header-icon="user"
             title="Klient"
@@ -345,7 +322,6 @@
                 <x-button action="{{ route('costs') }}" name="" icon="money-bill-wave" label="Koszty" :small="true" />
             </x-extendo-section>
         </x-extendo-block>
-    </div>
 
     @unless (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
     <x-quest-history :quest="$quest" :extended="true" />

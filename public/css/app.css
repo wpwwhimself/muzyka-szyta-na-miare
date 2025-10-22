@@ -151,7 +151,6 @@ a {
             text-align: left;
         }
         & .right-side{
-            flex-direction: row-reverse;
             align-self: flex-start;
         }
     }
@@ -361,6 +360,10 @@ footer .icon.invert-when-dark {
             color: rgb(var(--q-clr));
         }
     }
+}
+
+.quest-type {
+    font-size: 2em;
 }
 
 .sc-line {

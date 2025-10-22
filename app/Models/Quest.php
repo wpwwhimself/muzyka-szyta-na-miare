@@ -87,20 +87,57 @@ class Quest extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofillFrom" => ["<route>", "<model_name>"],
-        //     // "characterLimit" => 999, // for text fields
-        //     // "hideForEntmgr" => true,
-        //     // "role" => "",
-        // ],
+        "price_code_override" => [
+            "type" => "text",
+            "label" => "Kod wyceny",
+            "icon" => "barcode",
+        ],
+        "price" => [
+            "type" => "number",
+            "label" => "Cena",
+            "icon" => "cash",
+            "min" => 0,
+            "step" => 0.1,
+        ],
+        "paid" => [
+            "type" => "checkbox",
+            "label" => "Opłacone",
+            "icon" => "cash-check",
+        ],
+        "deadline" => [
+            "type" => "date",
+            "label" => "Termin wykonania",
+            "icon" => "calendar-blank",
+            "hint" => "Do kiedy najpóźniej jestem w stanie oddać pierwszą wersję utworu.",
+        ],
+        "hard_deadline" => [
+            "type" => "date",
+            "label" => "Termin klienta",
+            "icon" => "calendar-account",
+            "hint" => "Do kiedy klient chciałby najpóźniej otrzymać pliki.",
+        ],
+        "wishes" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. zlecenia",
+            "icon" => "cloud",
+            "hint" => "np. transpozycja, czy z linią melodyczną itp.",
+        ],
+        "delayed_payment" => [
+            "type" => "date",
+            "label" => "Opóźnienie wpłaty",
+            "icon" => "cash-clock",
+            "hint" => "Nie wpłacaj przed tym dniem - muszę utrzymać przychody na odpowiednim poziomie z uwagi na zasady działalności nierejestrowanej.",
+        ],
+        "files_ready" => [
+            "type" => "checkbox",
+            "label" => "Pliki gotowe",
+            "icon" => "file-check",
+        ],
+        "has_files_on_external_drive" => [
+            "type" => "checkbox",
+            "label" => "Pliki na dysku istnieją",
+            "icon" => "google-drive",
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -110,6 +147,14 @@ class Quest extends Model
             "role" => "archmage",
             // "field_name" => "",
             "field_label" => "Klient",
+        ],
+        "song" => [
+            "model" => Song::class,
+            "mode" => "one",
+        ],
+        "status" => [
+            "model" => Status::class,
+            "mode" => "one",
         ],
     ];
 

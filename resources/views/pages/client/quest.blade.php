@@ -87,13 +87,7 @@
 
         @if ($quest->deadline) <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
 
-        <x-extendo-section title="Wpłaty">
-            <progress id="payments" value="{{ $quest->paid ? $quest->price : $quest->payments_sum }}" max="{{ $quest->price }}"></progress>
-            @php arr_to_list(array_merge(
-                ["Opłacono" => as_pln($quest->paid ? $quest->price : $quest->payments_sum)],
-                !$quest->paid ? ["Pozostało" => as_pln($quest->price - $quest->payments_sum)] : [],
-            )) @endphp
-        </x-extendo-section>
+        <x-quests.payments-bar :quest="$quest" />
 
         <x-extendo-section>
             @unless ($quest->paid)

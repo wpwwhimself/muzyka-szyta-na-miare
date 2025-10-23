@@ -749,19 +749,6 @@ footer .contact-info{
     }
 }
 
-.file-player {
-    width: 10em;
-    padding-inline: var(--size-xs);
-    flex-direction: row;
-    align-content: center;
-    gap: var(--size-xs);
-
-    & .seeker {
-        width: 100%;
-        background: linear-gradient(to right, var(--acc) var(--progress), var(--bg) var(--progress));
-    }
-}
-
 .interactive, [onclick], [onmouseup]{
     user-select: none;
     cursor: pointer;

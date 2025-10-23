@@ -210,10 +210,10 @@ if(!function_exists("can_download_files")){
         $client = User::findOrFail($client_id);
         $quest = Quest::findOrFail($quest_id);
         return
-            $client->can_see_files
+            $client->notes->can_see_files
             && (
-                $client->is_veteran
-                || $client->trust >= 1
+                $client->notes->is_veteran
+                || $client->notes->trust >= 1
                 || $quest->paid
                 || (
                     ($quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0 ?? true)
@@ -351,18 +351,6 @@ if(!function_exists("is_request")){
 if(!function_exists("as_pln")){
     function as_pln($value){
         return number_format($value, 2, ",", " ")." zł";
-    }
-}
-
-/**
- * Turn array to html list
- */
-if(!function_exists("arr_to_list")){
-    function arr_to_list($array, $ordered = false){
-        $list_tag = $ordered ? "ol" : "ul";
-        echo "<$list_tag>";
-        foreach($array as $label => $value) echo "<li><strong>$label</strong>: $value</li>";
-        echo "</$list_tag>";
     }
 }
 

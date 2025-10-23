@@ -105,11 +105,26 @@ class Song extends Model
             "icon" => "link",
             "hint" => "Oddzielone przecinkami",
         ],
+        "price_code" => [
+            "type" => "text",
+            "label" => "Kod wyceny",
+            "icon" => "barcode",
+        ],
         "notes" => [
             "type" => "TEXT",
             "label" => "Życzenia dot. utworu",
             "icon" => "cloud",
             "hint" => "np. styl itp.",
+        ],
+        "has_recorded_reel" => [
+            "type" => "checkbox",
+            "label" => "Nagrałem się do rolki",
+            "icon" => "account-voice",
+        ],
+        "has_original_mv" => [
+            "type" => "checkbox",
+            "label" => "Oryginał ma teledysk",
+            "icon" => "movie-open",
         ],
     ];
 

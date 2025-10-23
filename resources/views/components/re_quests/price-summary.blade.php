@@ -15,14 +15,18 @@ if ($model) {
         "override" => $override,
         "labels" => $labels,
         "minimal_price" => $minimalPrice,
-    ] = \App\Http\Controllers\StatsController::runPriceCalc($model->price_code, $model->client_id, true);
+    ] = \App\Http\Controllers\StatsController::runPriceCalc(
+        $model->price_code_override ?? $model->price_code,
+        $model->client_id,
+        true
+    );
 }
 @endphp
 
 <div id="price-summary">
     <x-shipyard.app.loader />
 
-    <h4>Podsumowanie wyceny</h4>
+    <x-shipyard.app.h lvl="4" icon="cash-register">Podsumowanie wyceny</x-shipyard.app.h>
 
     @if ($price)
     <table>

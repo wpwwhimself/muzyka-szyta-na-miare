@@ -62,3 +62,10 @@ function checkMonthlyPaymentLimit(price) {
             document.getElementById("delayed_payment").value = delayed_payment;
         });
 }
+
+/**
+ * set up page reload
+ */
+function primeReload() {
+    window.onfocus = function () { location.reload(true) }
+}

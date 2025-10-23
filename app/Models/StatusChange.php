@@ -48,6 +48,7 @@ class StatusChange extends Model
                 "pop" => false,
                 "withName" => true,
             ])->render(),
+            "<br>",
             count($details) ? $details->implode("<br>") : null,
             in_array($this->new_status_id, [32, 34]) ? _c_(as_pln($this->comment)) : $this->comment,
             "<span class='grayed-out'>"

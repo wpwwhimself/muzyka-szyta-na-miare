@@ -18,7 +18,7 @@ if ($model) {
 <div id="delayed-payments-summary">
     <x-shipyard.app.loader />
 
-    <h4>Saturacja przychodów</h4>
+    <x-shipyard.app.h lvl="4" icon="sack">Saturacja przychodów</x-shipyard.app.h>
 
     <table>
         <thead>

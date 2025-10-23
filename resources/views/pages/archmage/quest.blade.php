@@ -48,7 +48,7 @@
         :header-icon="model_icon('users')"
         title="Utwór"
         :subtitle="$quest->song_id . ' // ' . $quest->song->full_title"
-        :extended="in_array($quest->status_id, [11, 12])"
+        :extended="true"
     >
         @php $song = $quest->song; @endphp
 
@@ -81,13 +81,50 @@
         </div>
     </x-extendo-block>
 
+    <x-extendo-block key="quote"
+        :header-icon="model_icon('prices')"
+        title="Wycena"
+        :subtitle="implode(' // ', array_filter([
+            _c_(as_pln($quest->price)),
+            'do '.$quest->deadline?->format('d.m.Y'),
+            $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
+        ], fn($val) => !is_null($val)))"
+        :warning="$warnings['quote']"
+        :extended="!$quest->paid"
+    >
+        <x-slot:buttons>
+            <x-shipyard.ui.button
+                icon="cash-edit"
+                pop="Zmień wycenę"
+                action="none"
+                onclick="openModal('quest-quote-update', {
+                    questId: '{{ $quest->id }}',
+                })"
+                class="tertiary"
+            />
+        </x-slot:buttons>
+
+        <x-re_quests.price-summary :model="$quest" />
+        <div class="grid but-mobile-down" style="--col-count: 2;">
+            @foreach ([
+                "deadline",
+                "hard_deadline",
+            ] as $field_name)
+                <x-shipyard.ui.field-input :model="$quest" :field-name="$field_name" dummy />
+            @endforeach
+        </div>
+        <x-quests.payments-bar :quest="$quest" />
+        <x-quests.invoices :quest="$quest" />
+        <x-quests.costs :quest="$quest" />
+    </x-extendo-block>
+
     @if($quest->status_id == 12)
-    <div class="grid" style="--col-count: 2;">
-        <x-song-work-time-log :quest="$quest" :extended="true" />
-        <x-quest-history :quest="$quest" :extended="true" />
-    </div>
+    <x-song-work-time-log :quest="$quest" :extended="true" />
+    <x-quest-history :quest="$quest" :extended="true" />
+
     @elseif (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
     <x-quest-history :quest="$quest" :extended="true" />
+
     @endif
 
     <x-extendo-block key="files"
@@ -192,43 +229,6 @@
             <x-button :action="route('clients', ['search' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
             <x-button :action="route('quests', ['client' => $quest->client_id])" :icon="model_icon('quests')" pop="Zlecenia" />
         </x-slot:buttons>
-    </x-extendo-block>
-
-    <x-extendo-block key="quote"
-        :header-icon="model_icon('prices')"
-        title="Wycena"
-        :subtitle="implode(' // ', array_filter([
-            _c_(as_pln($quest->price)),
-            'do '.$quest->deadline?->format('d.m.Y'),
-            $quest->paid ? '🟢' : ($quest->payments_sum > 0 ? '🟡' : null)
-        ], fn($val) => !is_null($val)))"
-        :warning="$warnings['quote']"
-        :extended="!$quest->paid"
-    >
-        <x-slot:buttons>
-            <x-shipyard.ui.button
-                icon="cash-edit"
-                pop="Zmień wycenę"
-                action="none"
-                onclick="openModal('quest-quote-update', {
-                    questId: '{{ $quest->id }}',
-                })"
-                class="tertiary"
-            />
-        </x-slot:buttons>
-
-        <x-re_quests.price-summary :model="$quest" />
-        <div class="grid but-mobile-down" style="--col-count: 2;">
-            @foreach ([
-                "deadline",
-                "hard_deadline",
-            ] as $field_name)
-                <x-shipyard.ui.field-input :model="$quest" :field-name="$field_name" dummy />
-            @endforeach
-        </div>
-        <x-quests.payments-bar :quest="$quest" />
-        <x-quests.invoices :quest="$quest" />
-        <x-quests.costs :quest="$quest" />
     </x-extendo-block>
 
     @unless (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))

@@ -1,39 +1,52 @@
-@extends('layouts.app', ["title" => ($quest->song->title ?? "bez tytułu")." | $quest->id"])
+@extends('layouts.app')
+@section("title", $quest->song->full_title)
+@section("subtitle", "Zlecenie")
 
 @section('content')
 
-<x-a :href="route('quests')" icon="chevron-left">Wróć do listy</x-a>
-
 @if (sumWarnings($warnings))
-<h1 class="warning">
-    <i class="fas fa-triangle-exclamation fa-fade"></i>
+<h1 class="accent danger">
+    <x-shipyard.app.icon name="alert" />
     Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
 </h1>
 @endif
 
 <x-phase-indicator :status-id="$quest->status_id" />
 
-<div class="flex down">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-extendo-block key="meta"
-        header-icon="compact-disc"
+        :header-icon="model_icon('songs')"
         title="Szczegóły utworu"
         :subtitle="$quest->song->full_title"
         :extended="true"
     >
-        <x-input type="text" name="" label="Rodzaj zlecenia" value="{{ $quest->song->type->type }}" :disabled="true" :small="true" />
-        <x-input type="text" name="" label="Tytuł" value="{{ $quest->song->title }}" :disabled="true" />
-        <x-input type="text" name="" label="Wykonawca" value="{{ $quest->song->artist }}" :disabled="true" />
-        <x-link-interpreter :raw="$quest->song->link" />
-        @if ($quest->song->notes)
-        <x-input type="TEXT" name="wishes" label="Życzenia dot. koncepcji utworu (np. budowa, aranżacja)" value="{{ $quest->song->notes }}" :disabled="true" />
-        @endif
-        @if ($quest->wishes)
-        <x-input type="TEXT" name="wishes_quest" label="Życzenia techniczne (np. liczba partii, transpozycja)" value="{{ $quest->wishes }}" :disabled="true" />
-        @endif
+        @php $song = $quest->song; @endphp
+
+        <div class="flex right center middle">
+            <x-quest-type :type="$song->type" />
+        </div>
+
+        <div class="grid but-mobile-down" style="--col-count: 2;">
+            @foreach ([
+                "title",
+                "artist",
+                "link",
+                "notes",
+            ] as $field_name)
+            <div>
+                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
+                @if ($field_name == "link")
+                <x-link-interpreter :raw="$song->$field_name" />
+                @endif
+            </div>
+            @endforeach
+
+            <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
+        </div>
     </x-extendo-block>
 
     <x-extendo-block key="quote"
-        header-icon="sack-dollar"
+        :header-icon="model_icon('prices')"
         title="Wycena"
         :subtitle="implode(' ', array_filter([
             'do zapłaty:',
@@ -45,51 +58,7 @@
         :warning="$warnings['quote']"
         :extended="true"
     >
-        <div id="price-summary" class="hint-table">
-            <div class="positions"></div>
-            <hr />
-            <div class="summary"><span>Razem:</span><span>0 zł</span></div>
-        </div>
-        <script>
-        function calcPriceNow(){
-            const labels = "{{ $quest->price_code_override }}";
-            const client_id = "{{ $quest->client_id }}";
-            const positions_list = $("#price-summary .positions");
-            const sum_row = $("#price-summary .summary");
-            if(labels == "") positions_list.html(`<p class="grayed-out">podaj kategorie wyceny</p>`);
-            else{
-                $.ajax({
-                    url: "/api/price_calc",
-                    type: "post",
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        labels: labels,
-                        client_id: client_id
-                    },
-                    success: function(res){
-                        let content = ``;
-                        for(line of res.positions){
-                            content += `<span>${line[0]}</span><span>${line[1]}</span>`;
-                        }
-                        positions_list.html(content);
-                        sum_row.html(`<span>Razem:</span><span>${res.price} zł${res.minimal_price ? " (cena minimalna)" : ""}</span>`);
-                        if(res.override) positions_list.addClass("overridden");
-                            else positions_list.removeClass("overridden");
-                    }
-                });
-            }
-        }
-        </script>
-        <script defer>
-        calcPriceNow();
-        $("#price_code").change(function (e) { calcPriceNow() });
-        </script>
-
-        @if ($quest->deadline) <x-input type="date" name="deadline" label="Do kiedy (włącznie) oddam pliki" value="{{ $quest->deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
-
-        <x-quests.payments-bar :quest="$quest" />
-
-        <x-extendo-section>
+        <x-slot:buttons>
             @unless ($quest->paid)
             <x-tutorial>
                 <p>Opłaty projektu możesz dokonać na 2 sposoby:</p>
@@ -112,26 +81,24 @@
             </x-warning>
             @endif
             @endunless
-        </x-extendo-section>
+        </x-slot:buttons>
 
-        @if ($quest->hard_deadline) <x-input type="date" name="hard_deadline" label="Twój termin wykonania" value="{{ $quest->hard_deadline?->format('Y-m-d') }}" :disabled="true" /> @endif
+        <x-re_quests.price-summary :model="$quest" />
+        <div class="grid but-mobile-down" style="--col-count: 2;">
+            @foreach ([
+                "deadline",
+                "hard_deadline",
+            ] as $field_name)
+                <x-shipyard.ui.field-input :model="$quest" :field-name="$field_name" dummy />
+            @endforeach
+        </div>
+        <x-quests.payments-bar :quest="$quest" />
 
-        <x-extendo-section title="Faktury">
-        @if (count($quest->visibleInvoices))
-            @forelse($quest->visibleInvoices as $invoice)
-            <x-button action="{{ route('invoice', ['id' => $invoice->id]) }}"
-                icon="file-invoice" label="{{ $invoice->fullCode }}" :small="true"
-                target="_blank"
-                />
-            @empty
-            <p class="grayed-out">Brak</p>
-            @endforelse
-        @endif
-        </x-extendo-section>
+        <x-quests.invoices :quest="$quest" />
     </x-extendo-block>
 
     <x-extendo-block key="files"
-        header-icon="file-waveform"
+        :header-icon="model_icon('files')"
         title="Pliki"
         :extended="true"
         scissors
@@ -174,9 +141,16 @@
     <x-quest-history :quest="$quest" />
 </div>
 
-<form action="{{ route('mod-quest-back') }}" method="POST" id="phases">
-    @csrf
-    <div class="flexright">
+<x-shipyard.app.form :action="route('mod-quest-back')" method="POST" id="phases">
+    <x-slot:actions>
+        <x-shipyard.ui.button
+            icon="chevron-left"
+            label="Wróć do listy"
+            :action="route('quests')"
+        />
+    </x-slot:actions>
+
+    <div class="flex right center middle">
         @if (in_array($quest->status_id, [15]))
         <x-tutorial>
             Za pomocą poniższych przycisków możesz przyjąć zlecenie lub,
@@ -184,12 +158,14 @@
             Instrukcje do tego celu możesz umieścić w oknie, które pojawi się po wybraniu jednej z poniższych opcji.
             Ta informacja będzie widoczna i na jej podstawie będę mógł wprowadzić poprawki.
         </x-tutorial>
+
         @elseif ($quest->status_id == 19)
         <x-tutorial>
             Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
         </x-tutorial>
+
             @if ($quest->history->get(1)->date->diffInDays() >= 30)
-            <p class="error" style="text-align: left;">
+            <p class="accent error" style="text-align: left;">
                 <i class="fa-solid fa-triangle-exclamation"></i>
                 Ostatnia zmiana padła {{ $quest->history->get(1)->date->diffForHumans() }}.
                 Zażądanie poprawek może wiązać się z dopłatą.
@@ -197,71 +173,143 @@
             </p>
             @endif
         @endif
+
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-        @if (in_array($quest->status_id, [11])) <x-button action="none" data-statuschanger="21" icon="21" label="Poproś o zmiany" /> @endif
-        @if (in_array($quest->status_id, [16, 21, 26, 96]))
-        <x-button action="none" data-statuschanger="{{ $quest->status_id }}" is-follow-up="1" icon="{{ $quest->status_id }}" label="Popraw ostatni komentarz" />
-            @if ($quest->status_id == 21) <x-button action="none" data-statuschanger="11" icon="11" label="Zrezygnuj ze zmian" /> @endif
-        @endif
-        @if (in_array($quest->status_id, [95])) <x-button action="none" data-statuschanger="96" icon="96" label="Odpowiedz" /> @endif
-        @if (in_array($quest->status_id, [15, 31, 95]))
+
+        @switch ($quest->status_id)
+            @case (11)
+            <x-shipyard.ui.button
+                icon="account-alert"
+                label="Poproś o zmiany"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 21,
+                })"
+                class="tertiary"
+            />
+
+            @case (16)
+            @case (21)
+            @case (26)
+            @case (96)
+            <x-shipyard.ui.button
+                icon="comment-edit"
+                label="Popraw ostatni komentarz"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: {{ $quest->status_id }},
+                    comment: '{{ $quest->history->get(1)->comment }}',
+                })"
+                class="tertiary"
+            />
+            @if ($quest->status_id == 21)
+            <x-shipyard.ui.button
+                icon="comment-remove"
+                label="Zrezygnuj ze zmian"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 11,
+                })"
+                class="tertiary"
+            />
+            @endif
+
+            @case (95)
+            <x-shipyard.ui.button
+                icon="reply-all"
+                label="Odpowiedz"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 96,
+                })"
+                class="tertiary"
+            />
+
+            @case (15)
+            @case (31)
+            @case (95)
             @if ($quest->files_ready)
-            <x-button action="none" data-statuschanger="19" icon="19" label="Zaakceptuj i zakończ"  />
+            <x-shipyard.ui.button
+                icon="check-all"
+                label="Zaakceptuj i zakończ"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 19,
+                })"
+                class="tertiary"
+            />
             @else
-            <x-button action="none" data-statuschanger="14" icon="14" label="Zaakceptuj etap"  />
+            <x-shipyard.ui.button
+                icon="check"
+                label="Zaakceptuj etap"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 14,
+                })"
+                class="tertiary"
+            />
             @endif
-        @endif
-        @if (in_array($quest->status_id, [14, 15])) <x-button action="none" data-statuschanger="16" icon="16" :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'" /> @endif
-        @if (!in_array($quest->status_id, [18, 19]))
+
+            @case (14)
+            @case (15)
+            <x-shipyard.ui.button
+                icon="chat-alert"
+                :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 16,
+                })"
+                class="tertiary"
+            />
+
+            @case (18)
+            @case (19)
             @if ($quest->completed_once)
-                <x-button action="none" data-statuschanger="19" icon="18" label="Zrezygnuj z dalszych zmian" />
+            <x-shipyard.ui.button
+                icon="check-all"
+                label="Zrezygnuj z dalszych zmian"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 19,
+                })"
+                class="tertiary"
+            />
             @else
-                <x-button action="none" data-statuschanger="18" icon="18" label="Zrezygnuj ze zlecenia" />
+            <x-shipyard.ui.button
+                icon="package-variant-closed-remove"
+                label="Zrezygnuj ze zlecenia"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 18,
+                })"
+                class="tertiary"
+            />
             @endif
-        @endif
-        @if (in_array($quest->status_id, [18, 19])) <x-button action="none" data-statuschanger="26" icon="26" label="Przywróć zlecenie" /> @endif
+
+            @case (18)
+            @case (19)
+            <x-shipyard.ui.button
+                icon="recycle"
+                label="Przywróć zlecenie"
+                action="none"
+                onclick="openModal('quest-change-status', {
+                    questId: '{{ $quest->id }}',
+                    newStatusId: 26,
+                })"
+                class="tertiary"
+            />
+
+        @endswitch
     </div>
-    <div id="data-statuschanger">
-        {{-- @if (in_array($quest->status_id, [15, 18, 19, 95])) --}}
-        <x-tutorial>
-            W historii zlecenia pojawi się Twój komentarz.
-        </x-tutorial>
-        <div class="history-position p-18">
-            <x-input type="TEXT" name="comment" label=""
-                placeholder="Tutaj wpisz swój komentarz..."
-                />
-        </div>
-        {{-- @endif --}}
-        <x-button action="submit" name="status_id" icon="paper-plane" value="15" label="Wyślij" />
-    </div>
-    <script defer>
-    $("#data-statuschanger").hide();
-
-    $("a[data-statuschanger]").click(function(){
-        /*wyczyść możliwe ghosty*/
-        $("a[data-statuschanger].ghost").removeClass("ghost");
-
-        let status = $(this).attr("data-statuschanger");
-        $(`#phases button[type="submit"]`).val(status);
-        $("#data-statuschanger").show();
-        for(i of [11, 14, 19, 16, 18, 21, 26, 96]){
-            if(i == status) continue;
-            $(`a[data-statuschanger="${i}"]`).addClass("ghost");
-        }
-
-        $("#data-statuschanger .history-position").removeClass((index, className) => className.match(/p-\d*/).join(" ")).addClass("p-"+status);
-
-        const comment_field = document.querySelector("#data-statuschanger #comment");
-        if($(this).attr("is-follow-up")){
-            const last_comment = $(`#quest-history .history-position .p-${status}:last`).attr("data-comment");
-            comment_field.innerHTML = last_comment;
-        }else{
-            comment_field.innerHTML = "";
-        }
-        comment_field.scrollIntoView({behavior: "smooth"});
-        comment_field.focus();
-    });
-    </script>
-</form>
+</x-shipyard.app.form>
 
 @endsection

@@ -5,6 +5,7 @@
 <div id="invoices">
     <x-shipyard.app.h lvl="4" :icon="model_icon('invoices')">Faktury</x-shipyard.app.h>
 
+    @if (is_archmage())
     <div class="flex right nowrap">
         <table>
             <thead>
@@ -46,4 +47,20 @@
             class="tertiary"
         />
     </div>
+
+    @else
+    <div class="flex right">
+        @forelse($quest->visibleInvoices ?? [] as $invoice)
+        <x-shipyard.ui.button
+            :icon="model_icon('invoices')"
+            :label="$invoice->fullCode"
+            :action="route('invoice', ['id' => $invoice->id])"
+            target="_blank"
+        />
+        @empty
+        <p class="grayed-out">Brak przypisanych faktur</p>
+        @endforelse
+    </div>
+
+    @endif
 </div>

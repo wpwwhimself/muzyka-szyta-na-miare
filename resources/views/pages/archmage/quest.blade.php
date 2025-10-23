@@ -45,7 +45,7 @@
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-extendo-block key="quest"
-        :header-icon="model_icon('users')"
+        :header-icon="model_icon('songs')"
         title="Utwór"
         :subtitle="$quest->song_id . ' // ' . $quest->song->full_title"
         :extended="true"

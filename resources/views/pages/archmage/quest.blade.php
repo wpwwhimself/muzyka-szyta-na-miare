@@ -185,7 +185,7 @@
                 </span>
 
                 @elseif ($quest->user->notes->can_see_files)
-                <span class="accent warning">
+                <span class="accent danger">
                     <x-shipyard.app.icon name="eye" />
                     Klient widzi podglądy
                 </span>

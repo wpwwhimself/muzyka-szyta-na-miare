@@ -1,5 +1,5 @@
 <x-extendo-block key="time-log"
-    header-icon="snowplow"
+    :header-icon="model_icon('song_work_times')"
     title="Log tworzenia"
     :subtitle="$quest->song->work_time_total"
     :extended="$extended"
@@ -49,7 +49,11 @@
         </tbody>
     </table>
 
-    @if ($quest->status_id == 12)
-    <x-a :href="route('studio-view', ['quest_id' => $quest->id])">Studio</x-a>
-    @endif
+    <x-slot:buttons>
+        <x-shipyard.ui.button
+            :icon="model_icon('song_work_times')"
+            pop="Studio"
+            :action="route('studio-view', ['quest_id' => $quest->id])"
+        />
+    </x-slot:buttons>
 </x-extendo-block>

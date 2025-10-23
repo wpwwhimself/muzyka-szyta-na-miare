@@ -373,7 +373,7 @@ class UserNote extends Authenticatable
     public function canSeeFiles(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->trust > 1,
+            get: fn () => $this->trust >= 0,
         );
     }
 

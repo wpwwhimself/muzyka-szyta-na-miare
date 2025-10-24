@@ -129,7 +129,7 @@
     <x-slot:actions>
         <x-shipyard.ui.button action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
         @if ($file)
-        <x-shipyard.ui.button action="submit" name="action" value="delete" label="Usuń" icon="trash" />
+        <x-shipyard.ui.button action="submit" name="action" value="delete" label="Usuń" icon="delete" />
         <x-a :href="route('files-upload-by-entity', ['entity_name' => 'file', 'id' => $file?->id])">Wgraj kolejny</x-a>
         @endif
     </x-slot:actions>

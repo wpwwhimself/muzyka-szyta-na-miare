@@ -175,12 +175,104 @@ a {
     }
 }
 
+.file-container-a{
+    text-align: left;
+    background-color: var(--bg-lite2);
+    border-radius: 2em;
+    padding: 1em; margin: 0.25em 0;
+    position: relative;
+    max-width: 500px !important;
+
+    & h4 {
+        margin: 0;
+        border-bottom: 2px solid var(--primary);
+    }
+    & .file-super {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        text-align: center;
+        font-size: 0.5em;
+
+        &::after, &::before {
+            content: "–";
+            margin: 0 1em;
+        }
+    }
+}
+
+.file-container-b{
+    position: relative;
+
+    & h5{
+        margin: 0.25em;
+    }
+
+    & > .submit{
+        position: absolute; right: 0; top: 0;
+        margin: 0;
+        font-size: 0.5em;
+    }
+}
+
+.file-container-c{
+    display: flex;
+    align-items: center; justify-content: center;
+}
+
 .file-player {
     width: 10em;
-    padding-inline: var(--size-xs);
+    padding-inline: 0.25em;
     flex-direction: row;
     align-content: center;
-    gap: var(--size-xs);
+    gap: 0.25em;
+}
+
+.file-tile{
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    width: 3em; height: 4.5em;
+    margin: 3px;
+    border-radius: 1em;
+    background-color: var(--bg-lite);
+
+    & .hidden {
+        display: none;
+    }
+
+    & .container {
+        position: relative;
+        width: 2em; height: 2em;
+    }
+    & i {
+        font-size: 2em;
+        position: absolute; top: 0; left: 0;
+        display: block; width: 100%;
+    }
+
+    &.hoverable {
+        & i:last-child { opacity: 0; }
+        &:hover {
+            & i:first-child { opacity: 0; }
+            & i:last-child { opacity: 1; }
+        }
+    }
+}
+.mp3{ color: rgba(39, 197, 0, 0.8); }
+.mp4, .mid{ color: rgba(255, 0, 0, 0.8); }
+.wav, .flac{ color: rgba(0, 162, 255, 0.8); }
+.pdf, .zip{ color: rgba(150, 153, 155, 0.8); }
+
+.file-tag{
+    display: inline-flex !important;
+    border-radius: 1em;
+    padding: 0 3px;
+    user-select: none;
+    width: 1.5em;
+    height: 1.2em;
+    vertical-align: middle;
+    color: black;
+
+    & svg {
+        height: 1.2em;
+    }
 }
 
 footer .icon.invert-when-dark {

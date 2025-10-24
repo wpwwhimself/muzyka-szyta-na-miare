@@ -22,7 +22,7 @@ class PatronRejected extends Mailable
     public function __construct($data)
     {
         $this->client = is_string($data) ? User::findOrFail($data) : $data;
-        $this->pl = client_polonize($this->client->client_name);
+        $this->pl = client_polonize($this->user->notes->client_name);
     }
 
     /**

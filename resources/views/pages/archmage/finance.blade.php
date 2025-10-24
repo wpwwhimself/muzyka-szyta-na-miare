@@ -86,7 +86,7 @@
         <x-extendo-block :key="$quest->id"
             :header-icon="substr($quest->song->type->fa_symbol, 3)"
             :title="$quest->song->full_title"
-            :subtitle="$quest->client->client_name"
+            :subtitle="$quest->user->notes->client_name"
         >
             <x-extendo-section title="Suma wpłat">
                 {{ _ct_(as_pln($quest->payments_sum)) }}

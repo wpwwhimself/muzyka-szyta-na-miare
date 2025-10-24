@@ -24,7 +24,7 @@ class CustomMail extends Mailable
         public $content,
     ) {
         $this->client = $client;
-        $this->pl = client_polonize($this->client->client_name);
+        $this->pl = client_polonize($this->user->notes->client_name);
         $this->subject = $subject;
         $this->content = $content;
     }

@@ -18,32 +18,43 @@
         'file-container-b',
         is_archmage() && !$version->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)) ? 'ghost' : null,
     ])) }}">
-        <h5>
-            @foreach ($version->tags as $tag)
-            <x-file-tag :tag="$tag" />
-            @endforeach
-            @if ($version->transposition)
-            <x-file-tag :transpose="$version->transposition" />
-            @endif
-            @if ($version->exclusiveClients && is_archmage())
-            <div class="file-tag flex right center middle"
-                style="background-color: white;"
-                {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("client_name")->join(", ")) }}
-            >
-                @svg("mdi-eye")
-            </div>
-            @endif
+        <div class="flex right middle spread nowrap">
+            <span class="heading-wrapper flex right middle nowrap">
+                @foreach ($version->tags as $tag)
+                <x-file-tag :tag="$tag" />
+                @endforeach
 
-            {{ $version->version_name }}
+                @if ($version->transposition)
+                <x-file-tag :transpose="$version->transposition" />
+                @endif
 
-            <small class="ghost" {{ Popper::pop($version->updated_at) }}>
-                {{ $version->updated_at->diffForHumans() }}
-            </small>
+                @if ($version->exclusiveClients && is_archmage())
+                <div class="file-tag flex right center middle"
+                    style="background-color: white;"
+                    {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("notes.client_name")->join(", ")) }}
+                >
+                    <x-shipyard.app.icon name="eye" />
+                </div>
+                @endif
+
+                <h5>
+                    {{ $version->version_name }}
+                    <small class="ghost" {{ Popper::pop($version->updated_at) }}>
+                        {{ $version->updated_at->diffForHumans() }}
+                    </small>
+                </h5>
+            </span>
 
             @if ($editable)
-            <x-a :href="route('files-edit', ['id' => $version->id])" icon="pen" target="_blank" onclick="primeReload()"></x-a>
+            <x-shipyard.ui.button
+                icon="pencil"
+                pop="Edytuj"
+                :action="route('files-edit', ['id' => $version->id])"
+                onclick="primeReload()"
+                target="_blank"
+            />
             @endif
-        </h5>
+        </div>
 
         <div class="ver_desc">
             {{ Illuminate\Mail\Markdown::parse($version->description ?? "") }}
@@ -51,7 +62,9 @@
 
         @if ($version->missing_files)
         <div class="yellowed-out">
-            <i class="fas fa-triangle-exclamation fa-fade warning"></i>
+            <span class="accent warning">
+                <x-shipyard.app.icon name="alert" />
+            </span>
             Sejf jest niekompletny. Napisz do mnie, żeby dodać pliki.
         </div>
         @endif

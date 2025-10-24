@@ -181,12 +181,12 @@ a {
     border-radius: 2em;
     padding: 1em; margin: 0.25em 0;
     position: relative;
-    max-width: 500px !important;
 
     & h4 {
         margin: 0;
         border-bottom: 2px solid var(--primary);
     }
+
     & .file-super {
         position: absolute; bottom: 0; left: 0; right: 0;
         text-align: center;
@@ -201,9 +201,13 @@ a {
 
 .file-container-b{
     position: relative;
+    margin-block: 0.25em;
 
+    & > .heading-wrapper {
+        gap: 0.25em;
+    }
     & h5{
-        margin: 0.25em;
+        margin: 0;
     }
 
     & > .submit{

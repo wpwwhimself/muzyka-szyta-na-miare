@@ -19,7 +19,7 @@ class WorkClockController extends Controller
     }
 
     public function activeQuests(Request $rq) {
-        $data = Quest::with("song", "client", "status")
+        $data = Quest::with("song", "user.notes", "status")
             ->whereIn("status_id", [12])
             ->orderBy("deadline")
             ->get();

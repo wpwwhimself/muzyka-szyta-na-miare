@@ -3,7 +3,7 @@
 @section("content")
 
 <x-extendo-block key="song"
-    header-icon="boxes"
+    :header-icon="model_icon('quests')"
     title="Zlecenia na tapecie"
     extended="perma"
 >

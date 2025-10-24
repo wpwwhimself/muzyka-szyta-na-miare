@@ -82,29 +82,47 @@ class File extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "variant_name" => [
+            "label" => "Nazwa wariantu",
+            "type" => "text",
+            "icon" => "label",
+            "placeholder" => "podstawowy",
+        ],
+        "version_name" => [
+            "label" => "Nazwa wersji",
+            "type" => "text",
+            "icon" => "label-variant",
+            "placeholder" => "wersja główna",
+        ],
+        "transposition" => [
+            "label" => "Transpozycja",
+            "type" => "number",
+            "icon" => "music-note-plus",
+            "placeholder" => 0,
+        ],
+        "description" => [
+            "label" => "Opis",
+            "type" => "TEXT",
+            "icon" => "text",
+        ],
+        "file_paths" => [
+            "label" => "Pliki",
+            "type" => "JSON",
+            "icon" => "file-multiple",
+            "columnTypes" => [
+                "Format" => "text",
+                "Ścieżka" => "text",
+            ],
+        ],
     ];
 
     public const CONNECTIONS = [
-        // "<name>" => [
-        //     "model" => ,
-        //     "mode" => "<one|many>",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "song" => [
+            "model" => Song::class,
+            "mode" => "one",
+            // "field_name" => "",
+            // "field_label" => "",
+        ],
     ];
 
     public const ACTIONS = [

@@ -47,6 +47,8 @@ class FileController extends Controller
             FileTag::find($rq->id)->delete();
             return redirect()->route("file-tags")->with("toast", ["success", "Tag usunięty"]);
         }
+
+        abort(400);
     }
     #endregion
 
@@ -59,8 +61,8 @@ class FileController extends Controller
         ];
         $song = $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::clients()->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+        $clients = User::has("notes")->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
             ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
@@ -80,8 +82,8 @@ class FileController extends Controller
     {
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::clients()->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+        $clients = User::has("notes")->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
             ->toArray();
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
@@ -134,7 +136,7 @@ class FileController extends Controller
                 "song_id" => $song->id,
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
-                "transposition" => $rq->transposition,
+                "transposition" => $rq->transposition ?? 0,
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,
             ]);
@@ -145,10 +147,10 @@ class FileController extends Controller
                 Storage::delete($path);
             }
             $file->delete();
-            return redirect()->route("songs", ["search" => $song->id])->with('success', 'Pliki usunięte');
+            return redirect()->route("songs", ["search" => $song->id])->with('toast', ['success', 'Pliki usunięte']);
         }
 
-        return redirect()->route("files-edit", ["id" => $file->id])->with('success', 'Pliki wgrane');
+        return redirect()->route("files-edit", ["id" => $file->id])->with('toast', ['success', 'Pliki wgrane']);
     }
 
     public function addFromExisingSafe(string $song_id)

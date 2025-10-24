@@ -1,36 +1,40 @@
 @props(['id', 'file'])
 
 <a
-  href="{{ Storage::exists($file)
-    ? route('download', ['id' => $id, 'filename' => basename($file)])
-    : '#/'
-  }}"
-  class="file-tile hoverable {{ pathinfo($file, PATHINFO_EXTENSION) }}">
-  <div class="container">
-    @if (!Storage::exists($file))
-    <i class="fas fa-triangle-exclamation fa-fade warning"></i>
-    @else
-    @switch(pathinfo($file, PATHINFO_EXTENSION))
-      @case("pdf")
-        <i class="fa-solid fa-file-pdf"></i>
-        @break
-      @case("zip")
-        <i class="fa-solid fa-file-zipper"></i>
-        @break
-      @case("mp4")
-        <i class="fa-solid fa-file-video"></i>
-        @break
-      @case("mp3")
-      @case("flac")
-      @case("wav")
-      @case("ogg")
-        <i class="fa-solid fa-file-audio"></i>
-        @break
-      @default
-        <i class="fa-solid fa-file"></i>
-    @endswitch
-    <i class="fa-solid fa-download"></i>
-    @endif
-  </div>
-  <span>{{ pathinfo($file, PATHINFO_EXTENSION) }}</span>
+    href="{{ Storage::exists($file)
+        ? route('download', ['id' => $id, 'filename' => basename($file)])
+        : '#/'
+    }}"
+    class="file-tile {{ pathinfo($file, PATHINFO_EXTENSION) }}"
+>
+    <div class="container flex down center middle">
+        @if (!Storage::exists($file))
+        <span class="accent danger"><x-shipyard.app.icon name="alert" /></span>
+        @else
+        @switch(pathinfo($file, PATHINFO_EXTENSION))
+            @case("pdf")
+            <x-shipyard.app.icon name="file-document" />
+            @break
+
+            @case("zip")
+            <x-shipyard.app.icon name="folder-zip" />
+            @break
+
+            @case("mp4")
+            <x-shipyard.app.icon name="file-video" />
+            @break
+
+            @case("mp3")
+            @case("flac")
+            @case("wav")
+            @case("ogg")
+            <x-shipyard.app.icon name="file-music" />
+            @break
+
+            @default
+            <x-shipyard.app.icon name="file" />
+        @endswitch
+        @endif
+    </div>
+    <span>{{ pathinfo($file, PATHINFO_EXTENSION) }}</span>
 </a>

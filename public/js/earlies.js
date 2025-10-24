@@ -69,3 +69,60 @@ function checkMonthlyPaymentLimit(price) {
 function primeReload() {
     window.onfocus = function () { location.reload(true) }
 }
+
+/**
+ * File player
+ */
+const changeFilePlayerButton = (filename, icon) => {
+    document.querySelectorAll(`.file-player[data-file-name="${filename}"] [role="btn"]`)
+        .forEach(cntnr => {
+            console.log(cntnr.children[0].id, `mdi-${icon}`);
+            cntnr.classList.toggle("hidden", cntnr.children[0].id != `mdi-${icon}`);
+        });
+}
+const disableFilePlayer = (filename) => {
+    changeFilePlayerButton(filename, "loading")
+    showSeeker(filename, false)
+}
+const enableFilePlayer = (filename) => {
+    changeFilePlayerButton(filename, "play")
+    showSeeker(filename)
+}
+const startFilePlayer = (filename) => {
+    document.querySelector(`.file-player[data-file-name="${filename}"] audio`).play()
+    changeFilePlayerButton(filename, "pause")
+}
+const pauseFilePlayer = (filename) => {
+    document.querySelector(`.file-player[data-file-name="${filename}"] audio`).pause()
+    changeFilePlayerButton(filename, "play")
+}
+
+const durToTime = (duration) => {
+    const minutes = Math.floor(duration / 60)
+    const seconds = Math.floor(duration % 60)
+    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
+}
+
+const showSeeker = (filename, show = true) => {
+    const seeker = document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`)
+    if (show) {
+        updateSeeker(filename)
+        seeker.classList.remove("hidden")
+    } else {
+        seeker.classList.add("hidden")
+    }
+}
+
+const updateSeeker = (filename) => {
+    const seeker = document.querySelector(`.file-player[data-file-name="${filename}"] .seeker`)
+    const audio = document.querySelector(`.file-player[data-file-name="${filename}"] audio`)
+
+    seeker.innerHTML = `${durToTime(audio.currentTime)} / ${durToTime(audio.duration)}`
+    seeker.style.setProperty("--progress", `${(audio.currentTime / audio.duration) * 100}%`)
+}
+
+const seekFilePlayer = (filename, event) => {
+    const audio = document.querySelector(`.file-player[data-file-name="${filename}"] audio`)
+    audio.currentTime = (event.offsetX / event.target.offsetWidth) * audio.duration
+    updateSeeker(filename)
+}

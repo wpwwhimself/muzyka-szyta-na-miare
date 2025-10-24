@@ -1,9 +1,10 @@
-@extends('layouts.app', ["title" => "Edycja plików"])
+@extends('layouts.app')
+@section("title", "Edycja pliku")
 
 @section("content")
 
 @if ($existing_files->count())
-<x-section title="Już wgrane pliki" icon="folder-open">
+<x-section title="Już wgrane pliki" :icon="model_icon('files')">
     <table>
         <thead>
             <tr>
@@ -18,15 +19,15 @@
         <tbody>
             @foreach ($existing_files as $efile)
             <tr class="{{ $file?->id == $efile->id ? 'accent' : '' }}">
-                <td onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
-                <td onclick="copyFileField('version_name', '{{ $efile->version_name }}')">
+                <td class="interactive" onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
+                <td class="interactive" onclick="copyFileField('version_name', '{{ $efile->version_name }}')">
                     {{ $efile->version_name }}
                     @if ($efile->description) <i class="fas fa-note-sticky" {{ Popper::pop(Illuminate\Mail\Markdown::parse($efile->description)) }}></i> @endif
                 </td>
-                <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
+                <td class="interactive" onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
                 <td>
                     @if ($efile->exclusiveClients->count())
-                    {{ $efile->exclusiveClients->pluck("client_name")->join(", ") }}
+                    {{ $efile->exclusiveClients->pluck("notes.client_name")->join(", ") }}
                     @else
                     <span class="grayed-out">nikt</span>
                     @endif
@@ -54,38 +55,36 @@
 </x-section>
 @endif
 
-<form action="{{ route('files-process') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+<x-shipyard.app.form :action="route('files-process')" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{{ $file?->id }}" />
     <input type="hidden" name="song_id" value="{{ $file?->song_id ?? $song?->id }}" />
 
-    <x-section title="Dane wersji" icon="note-sticky">
-        <div class="flex right center">
-            <x-input type="text"
-                name="variant_name" label="Nazwa wariantu"
-                :value="$file?->variant_name"
-                placeholder="podstawowy"
-            />
-            <x-input type="text"
-                name="version_name" label="Nazwa wersji"
-                :value="$file?->version_name"
-                placeholder="wersja główna"
-                small
-            />
-            <x-input type="number"
-                name="transposition" label="Transpozycja"
-                :value="$file?->transposition ?? 0"
-                small
-            />
-            <x-select
-                name="only_for_client_id[]" label="Upoważnieni"
-                :options="$clients"
-                :empty-option="true"
-                small
-            />
-            <x-input type="TEXT"
-                name="description" label="Opis"
-                :value="$file?->description"
+    <x-section title="Dane wersji" :icon="model_icon('files')">
+        <div class="grid but-moblie-down" style="--col-count: 3;">
+            @foreach ([
+                "variant_name",
+                "version_name",
+                "transposition",
+                "description",
+            ] as $field_name)
+            <x-shipyard.ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+            @endforeach
+
+            <x-shipyard.ui.input type="select"
+                :select-data="[
+                    'optionsFromScope' => [
+                        '\App\Models\UserNote',
+                        'clients',
+                        'option_label',
+                        'user_id',
+                    ],
+                ]"
+                name="only_for_client_id[]"
+                label="Upoważnieni"
+                :icon="model_icon('users')"
+                :value="$file?->exclusiveClients->pluck('id')->toArray() ?? [$quest?->client_id] ?? []"
+                multiple
+                style="grid-column: 2 / span 2;"
             />
         </div>
     </x-section>
@@ -118,23 +117,22 @@
             </div>
             @endif
 
-            <x-input type="file" name="files[]" label="Wgraj nowe pliki" multiple style="display: initial" />
+            <x-shipyard.ui.input type="file"
+                name="files[]"
+                label="Wgraj nowe pliki"
+                :icon="model_field_icon('files', 'file_paths')"
+                multiple
+            />
         </x-section>
     </div>
 
-    <div>
-        <x-button action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
+    <x-slot:actions>
+        <x-shipyard.ui.button action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
         @if ($file)
-        <x-button action="submit" name="action" value="delete" label="Usuń" icon="trash" />
+        <x-shipyard.ui.button action="submit" name="action" value="delete" label="Usuń" icon="trash" />
         <x-a :href="route('files-upload-by-entity', ['entity_name' => 'file', 'id' => $file?->id])">Wgraj kolejny</x-a>
         @endif
-    </div>
-</form>
-
-<script defer>
-$("[name^=only_for_client_id]").select2({ allowClear: true, multiple: true })
-    .val({{ json_encode($file?->exclusiveClients()->pluck("user_id") ?? [$quest?->client_id] ?? []) }})
-    .trigger("change");
-</script>
+    </x-slot:actions>
+</x-shipyard.app.form>
 
 @endsection

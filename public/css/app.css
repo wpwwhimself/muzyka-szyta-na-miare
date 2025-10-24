@@ -223,11 +223,15 @@ a {
 }
 
 .file-player {
-    width: 10em;
+    width: 10em !important;
     padding-inline: 0.25em;
-    flex-direction: row;
-    align-content: center;
+    flex-direction: row !important;
+    align-content: center !important;
     gap: 0.25em;
+
+    & #mdi-loading {
+        animation: rotate 1s ease-in-out infinite;
+    }
 }
 
 .file-tile{
@@ -235,28 +239,18 @@ a {
     width: 3em; height: 4.5em;
     margin: 3px;
     border-radius: 1em;
-    background-color: var(--bg-lite);
+    background-color: var(--bg);
 
     & .hidden {
         display: none;
     }
 
     & .container {
-        position: relative;
-        width: 2em; height: 2em;
+        width: 2em;
     }
-    & i {
+    & .icon {
         font-size: 2em;
-        position: absolute; top: 0; left: 0;
         display: block; width: 100%;
-    }
-
-    &.hoverable {
-        & i:last-child { opacity: 0; }
-        &:hover {
-            & i:first-child { opacity: 0; }
-            & i:last-child { opacity: 1; }
-        }
     }
 }
 .mp3{ color: rgba(39, 197, 0, 0.8); }

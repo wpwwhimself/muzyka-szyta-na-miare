@@ -923,7 +923,7 @@ class StatsController extends Controller
         $when_to_ask = 0;
         $limit_corrected = INCOME_LIMIT() * 0.9;
         while($when_to_ask < 2){
-            if($saturation[$when_to_ask] + ($rq->amount ?? 0) < $limit_corrected) break;
+            if($saturation[$when_to_ask] + ($price ?? 0) < $limit_corrected) break;
             else $when_to_ask++;
         }
 

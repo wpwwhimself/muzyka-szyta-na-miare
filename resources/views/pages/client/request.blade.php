@@ -19,13 +19,17 @@ $fields = $request::getFields();
         @endauth
     </x-slot:actions>
 
-    <h1>
-        @if (sumWarnings($warnings))
-        <x-warning>
-            Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
-        </x-warning>
-        @endif
-    </h1>
+    @if (sumWarnings($warnings))
+    <div class="flex right center middle accent danger">
+        <h1><x-shipyard.app.icon name="alert" /></h1>
+
+        <div>
+            <h1>Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!</h1>
+            <span>Najedź kursorem na ikony, aby dowiedzieć się więcej</span>
+        </div>
+    </div>
+    @endif
+
     <x-phase-indicator :status-id="$request->status_id" />
 
     @if ($request->quest_id)
@@ -100,30 +104,32 @@ $fields = $request::getFields();
             <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
             @endif
 
-            <x-extendo-section>
-                @if ($request->price && $request->status_id == 5)
-                    @if ($request->deadline)
-                    <p>
-                        Termin oddania jest liczony do podanego dnia włącznie.
-                        Są duże szanse, że uda mi się wykonać zlecenie szybciej,
-                        ale to jest najpóźniejszy dzień.
-                    </p>
-                    @endif
-                    <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
-                    <ul>
-                        <li>przelew na numer konta,</li>
-                        <li>płatność BLIKiem na numer telefonu.</li>
-                    </ul>
-                    <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+            @if ($request->price && $request->status_id == 5)
+                @if ($request->deadline)
+                <p>
+                    Termin oddania jest liczony do podanego dnia włącznie.
+                    Są duże szanse, że uda mi się wykonać zlecenie szybciej,
+                    ale to jest najpóźniejszy dzień.
+                </p>
                 @endif
-                @if ($request->delayed_payment)
+                <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
+                <ul>
+                    <li>przelew na numer konta,</li>
+                    <li>płatność BLIKiem na numer telefonu.</li>
+                </ul>
+                <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+            @endif
+
+            @if ($request->delayed_payment)
+            <div class="accent danger flex right spread middle">
+                <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" dummy />
                 <x-warning>
                     Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
                     <b>proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}</b>.
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                 </x-warning>
-                @endif
-            </x-extendo-section>
+            </div>
+            @endif
         </x-extendo-block>
     </div>
 

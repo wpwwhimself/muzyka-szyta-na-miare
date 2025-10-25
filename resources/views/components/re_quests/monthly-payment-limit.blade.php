@@ -47,11 +47,11 @@ if ($model) {
                         @break
 
                         @case (1)
-                        <span class="accent warning">w przyszłym miesiącu</span>
+                        <span class="accent danger">w przyszłym miesiącu</span>
                         @break
 
                         @default
-                        <span class="accent danger">za {{ $whenToAsk }} mc</span>
+                        <span class="accent error">za {{ $whenToAsk }} mc</span>
                     @endswitch
                 </td>
             </tr>

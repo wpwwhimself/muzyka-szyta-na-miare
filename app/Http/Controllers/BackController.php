@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use andcarpi\Popper\Facades\Popper;
 use App\Mail\ArchmageQuestMod;
 use App\Mail\PatronRejected;
 use App\Models\Quest;
@@ -14,6 +15,7 @@ use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -244,6 +246,42 @@ class BackController extends Controller
             "Nazwisko",
             "Email",
             "Telefon",
+        ]);
+
+        return view("components.shipyard.ui.lookup-results", compact(
+            "data",
+            "headings",
+            "fieldName",
+        ))->render();
+    }
+
+    public function lookupSongs()
+    {
+        $fieldName = Modal::where("name", "select-song-to-request")->first()
+            ->fields[0][5]["selectData"]["fieldName"];
+        $data = Song::get()
+            ->map(fn ($s) => collect([
+                "id" => $s->id,
+                "title" => $s->title,
+                "artist" => $s->artist,
+                "link" => view("components.link-interpreter", ['raw' => $s->link])->render(),
+                "notes" => $s->notes
+                    ? '<span '.Popper::pop(Markdown::parse($s->notes)).'>'.view("components.shipyard.app.icon", ["name" => model_field_icon("songs", "notes")]).'</span>'
+                    : null,
+            ]))
+            ->filter(fn ($s) =>
+                Str::contains($s["id"], request("query"), true)
+                || Str::contains($s["title"], request("query"), true)
+                || Str::contains($s["artist"], request("query"), true)
+                || Str::contains($s["link"], request("query"))
+            )
+            ->values();
+        $headings = collect([
+            "ID",
+            "Tytuł",
+            "Wykonawca",
+            "Linki",
+            "Notatki",
         ]);
 
         return view("components.shipyard.ui.lookup-results", compact(

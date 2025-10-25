@@ -583,4 +583,39 @@ class RequestController extends Controller
         $where_to = (!Auth::check()) ? "home" : "dashboard";
         return redirect()->route($where_to)->with("toast", ["success", "Komentarz dodany"]);
     }
+
+    #region select
+    public function selectUser(HttpRequest $rq)
+    {
+        $user = User::findOrFail($rq->client_id);
+        $request = Request::findOrFail($rq->request_id);
+
+        $request->update([
+            "client_id" => $user->id,
+            "client_name" => $user->notes->client_name,
+            "email" => $user->notes->email,
+            "phone" => $user->notes->phone,
+            "other_medium" => $user->notes->other_medium,
+            "contact_preference" => $user->notes->contact_preference,
+        ]);
+
+        return back()->with("toast", ["success", "Utwór przypisany"]);
+    }
+
+    public function selectSong(HttpRequest $rq)
+    {
+        $song = Song::findOrFail($rq->song_id);
+        $request = Request::findOrFail($rq->request_id);
+
+        $request->update([
+            "song_id" => $song->id,
+            "title" => $song->title,
+            "artist" => $song->artist,
+            "link" => $song->link,
+            "notes" => $song->notes,
+        ]);
+
+        return back()->with("toast", ["success", "Utwór przypisany"]);
+    }
+    #endregion
 }

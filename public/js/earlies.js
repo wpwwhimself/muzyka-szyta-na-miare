@@ -56,7 +56,7 @@ function checkMonthlyPaymentLimit(price) {
                 delayed_payment = undefined;
             }else{
                 let today = new Date();
-                delayed_payment = (new Date(today.getFullYear(), today.getMonth() + res.when_to_ask, 1));
+                delayed_payment = (new Date(today.getFullYear(), today.getMonth() + data.when_to_ask, 1));
                 delayed_payment = `${delayed_payment.getFullYear()}-${(delayed_payment.getMonth() + 1).toString().padStart(2, 0)}-${delayed_payment.getDate().toString().padStart(2, 0)}`;
             }
             document.getElementById("delayed_payment").value = delayed_payment;

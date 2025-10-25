@@ -13,7 +13,21 @@
             <span class="ghost">{!! $subtitle !!}</span>
         </div>
 
-        <div class="right-side flex right keep-for-mobile">
+        <div class="right-side flex right middle keep-for-mobile">
+            @if ($warning)
+            @php
+                $warning_content = [];
+                foreach ($warning as $message => $test) {
+                    $warning_content[] = $message;
+                }
+            @endphp
+            <span class="accent danger"
+                {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
+            >
+                <x-shipyard.app.icon name="alert" />
+            </span>
+            @endif
+
             @if($buttons)
             {{ $buttons }}
             @endif
@@ -34,17 +48,6 @@
                 class="toggles tertiary {{ $extended ? 'hidden' : '' }}"
             />
             @endunless
-            @if ($warning)
-            @php
-                $warning_content = [];
-                foreach ($warning as $message => $test) {
-                    $warning_content[] = $message;
-                }
-            @endphp
-            <i class="fas fa-triangle-exclamation fa-fade warning"
-                {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
-            ></i>
-            @endif
         </div>
     </div>
 

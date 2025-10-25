@@ -66,8 +66,9 @@
             :subtitle="$request->client_name"
             :extended="in_array($request->status_id, [1])"
         >
-            <span>Powiązanie z klientem: {{ $request->user ?? "brak" }}</span>
-            <div class="flex right middle">
+            <div class="flex right center middle">
+                <span>Powiązanie z klientem: {!! $request->user ?? "brak" !!}</span>
+
                 @if ($request->client_id)
                 <x-button
                     :action="route('clients', ['search' => $request->client_id])"
@@ -79,7 +80,6 @@
                     :icon="model_icon('quests')"
                     label="Zlecenia"
                 />
-
                 @else
                 <x-shipyard.ui.button
                     icon="link"
@@ -91,7 +91,6 @@
                     })"
                     class="tertiary"
                 />
-
                 @endif
             </div>
 
@@ -116,8 +115,9 @@
             :extended="in_array($request->status_id, [1, 6, 96])"
             :warning="$warnings['song']"
         >
-            <span>Powiązanie z utworem: {{ $request->song ?? "brak" }}</span>
-            <div class="flex right middle">
+            <div class="flex right center middle">
+                <span>Powiązanie z utworem: {{ $request->song ?? "brak" }}</span>
+
                 @if ($request->song_id)
                 <x-button
                     :action="route('songs', ['search' => $request->song_id])"

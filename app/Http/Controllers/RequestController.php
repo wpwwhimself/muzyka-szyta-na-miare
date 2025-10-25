@@ -483,7 +483,7 @@ class RequestController extends Controller
                 $client = User::create([
                     "name" => $request->client_name,
                     "email" => $request->email ?? Str::uuid()."@test.test",
-                    "password" => Hash::make($password),
+                    "password" => $password,
                 ]);
                 $client->roles()->attach("client");
                 $client->notes()->create([

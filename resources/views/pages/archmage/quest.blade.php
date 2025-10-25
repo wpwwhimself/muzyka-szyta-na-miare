@@ -58,7 +58,7 @@
             <x-a :href="route('song-edit', ['id' => $quest->song_id])">Edytuj</x-a>
         </div>
 
-        <div class="grid but-mobile-down" style="--col-count: 2;">
+        <div class="grid but-halfsize-down" style="--col-count: 2;">
             <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
 
             @foreach ([
@@ -105,7 +105,7 @@
         </x-slot:buttons>
 
         <x-re_quests.price-summary :model="$quest" />
-        <div class="grid but-mobile-down" style="--col-count: 2;">
+        <div class="grid but-halfsize-down" style="--col-count: 2;">
             @foreach ([
                 "deadline",
                 "hard_deadline",
@@ -224,6 +224,13 @@
         ] as $field_name)
             <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
         @endforeach
+
+        <x-shipyard.ui.input type="dummy-text"
+            name="pickiness"
+            label="Wybredność"
+            icon="fencing"
+            :value="$quest->user->notes->pickiness"
+        />
 
         <x-slot:buttons>
             <x-button :action="route('clients', ['search' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />

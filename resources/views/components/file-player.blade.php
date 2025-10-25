@@ -5,7 +5,13 @@
     "isShowcase" => false,
 ])
 
-<div class="file-tile file-player" data-file-name="{{ basename($file) }}">
+<div @class([
+    "file-tile", "file-player",
+    "flex", "down", "center", "middle", "nowrap",
+    "rounded",
+])
+    data-file-name="{{ basename($file) }}"
+>
     <div class="container">
         <span role="btn">
             <x-shipyard.app.icon name="loading" />

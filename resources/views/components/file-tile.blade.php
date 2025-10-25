@@ -5,7 +5,12 @@
         ? route('download', ['id' => $id, 'filename' => basename($file)])
         : '#/'
     }}"
-    class="file-tile {{ pathinfo($file, PATHINFO_EXTENSION) }}"
+    @class([
+        "file-tile",
+        pathinfo($file, PATHINFO_EXTENSION),
+        "flex", "down", "center", "middle", "no-gap",
+        "rounded",
+    ])
 >
     <div class="container flex down center middle">
         @if (!Storage::exists($file))

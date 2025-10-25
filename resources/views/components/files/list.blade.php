@@ -14,10 +14,11 @@
 
     @foreach ($versions as $version)
     @unless (!$version->exclusiveClients->contains(Auth::user()) && !is_archmage())
-    <div class="{{ implode(" ", array_filter([
+    <div @class([
         'file-container-b',
-        is_archmage() && !$version->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)) ? 'ghost' : null,
-    ])) }}">
+        'ghost' => is_archmage() && !$version->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)),
+    ])
+    >
         <div class="flex right middle spread nowrap">
             <span class="heading-wrapper flex right middle nowrap">
                 @foreach ($version->tags as $tag)
@@ -102,6 +103,7 @@
                 @break
             @endswitch
         @endforeach
+
         @foreach ($version->file_paths as $extension => $file)
             @continue (!$canDownloadFiles && $extension != "pdf")
             @continue ($extension == "jpg")

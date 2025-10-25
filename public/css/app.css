@@ -175,6 +175,12 @@ a {
     }
 }
 
+@media screen and (max-width: 600px){
+    .grid .extendo-block {
+        align-self: auto;
+    }
+}
+
 .file-container-a{
     text-align: left;
     background-color: var(--bg-lite2);
@@ -223,9 +229,9 @@ a {
 }
 
 .file-player {
-    width: 10em !important;
+    width: 12em !important;
+    height: auto !important;
     padding-inline: 0.25em;
-    flex-direction: row !important;
     align-content: center !important;
     gap: 0.25em;
 
@@ -235,10 +241,9 @@ a {
 }
 
 .file-tile{
-    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
     width: 3em; height: 4.5em;
     margin: 3px;
-    border-radius: 1em;
+    padding: 0.25em;
     background-color: var(--bg);
 
     & .hidden {

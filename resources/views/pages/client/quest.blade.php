@@ -5,10 +5,14 @@
 @section('content')
 
 @if (sumWarnings($warnings))
-<h1 class="accent danger">
-    <x-shipyard.app.icon name="alert" />
-    Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!
-</h1>
+<div class="flex right center middle accent danger">
+    <h1><x-shipyard.app.icon name="alert" /></h1>
+
+    <div>
+        <h1>Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!</h1>
+        <span>Najedź kursorem na ikony, aby dowiedzieć się więcej</span>
+    </div>
+</div>
 @endif
 
 <x-phase-indicator :status-id="$quest->status_id" />
@@ -72,14 +76,6 @@
                     chyba, że jesteś np. stałym klientem
                 </p>
             </x-tutorial>
-            @if ($quest->delayed_payment)
-            <x-warning>
-                Z uwagi na limity przyjmowanych przeze mnie wpłat,
-                <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.
-                Po zaakceptowaniu zlecenia dostęp do plików
-                zostanie przyznany automatycznie.
-            </x-warning>
-            @endif
             @endunless
         </x-slot:buttons>
 

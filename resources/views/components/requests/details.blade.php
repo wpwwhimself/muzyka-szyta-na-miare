@@ -10,7 +10,6 @@
         ["Termin", model_field_icon("requests", "deadline"), $request->deadline?->diffForHumans(), null],
     ] as [$label, $icon, $value])
     @continue (!$value)
-    @continue (!is_archmage() && $label == "Klient")
 
     <x-shipyard.app.icon-label-value
         :icon="$icon"

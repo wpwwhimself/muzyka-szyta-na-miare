@@ -164,10 +164,10 @@
             Zlecenie zostało przez Ciebie zamknięte, ale nadal możesz je przywrócić w celu wprowadzenia kolejnych zmian.
         </x-tutorial>
 
-            @if ($quest->history->get(1)->date->diffInDays() >= 30)
+            @if ($quest->history->first()?->date->diffInDays() >= 30)
             <p class="accent error" style="text-align: left;">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                Ostatnia zmiana padła {{ $quest->history->get(1)->date->diffForHumans() }}.
+                Ostatnia zmiana padła {{ $quest->history->first()->date->diffForHumans() }}.
                 Zażądanie poprawek może wiązać się z dopłatą.
                 Zobacz <a href="{{ route('prices') }}">cennik</a> po więcej informacji.
             </p>
@@ -176,70 +176,67 @@
 
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
 
-        @switch ($quest->status_id)
-            @case (11)
-            <x-shipyard.ui.button
-                icon="account-alert"
-                label="Poproś o zmiany"
-                action="none"
-                onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 21,
-                })"
-                class="tertiary"
-            />
+        @if (in_array($quest->status_id, [11]))
+        <x-shipyard.ui.button
+            icon="account-alert"
+            label="Poproś o zmiany"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: 21,
+            })"
+            class="tertiary"
+        />
+        @endif
 
-            @case (16)
-            @case (21)
-            @case (26)
-            @case (96)
-            <x-shipyard.ui.button
-                icon="comment-edit"
-                label="Popraw ostatni komentarz"
-                action="none"
-                onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: {{ $quest->status_id }},
-                    comment: '{{ $quest->history->get(1)->comment }}',
-                })"
-                class="tertiary"
-            />
+        @if (in_array($quest->status_id, [16, 21, 26, 96]))
+        <x-shipyard.ui.button
+            icon="comment-edit"
+            label="Popraw ostatni komentarz"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: {{ $quest->status_id }},
+                comment: '{{ $quest->history->first()?->comment }}',
+            })"
+            class="tertiary"
+        />
             @if ($quest->status_id == 21)
             <x-shipyard.ui.button
                 icon="comment-remove"
                 label="Zrezygnuj ze zmian"
                 action="none"
                 onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 11,
+                    quest_id: '{{ $quest->id }}',
+                    status_id: 11,
                 })"
                 class="tertiary"
             />
             @endif
+        @endif
 
-            @case (95)
-            <x-shipyard.ui.button
-                icon="reply-all"
-                label="Odpowiedz"
-                action="none"
-                onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 96,
-                })"
-                class="tertiary"
-            />
+        @if (in_array($quest->status_id, [95]))
+        <x-shipyard.ui.button
+            icon="reply-all"
+            label="Odpowiedz"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: 96,
+            })"
+            class="tertiary"
+        />
+        @endif
 
-            @case (15)
-            @case (31)
-            @case (95)
+        @if (in_array($quest->status_id, [15, 31, 95]))
             @if ($quest->files_ready)
             <x-shipyard.ui.button
                 icon="check-all"
                 label="Zaakceptuj i zakończ"
                 action="none"
                 onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 19,
+                    quest_id: '{{ $quest->id }}',
+                    status_id: 19,
                 })"
                 class="tertiary"
             />
@@ -249,36 +246,36 @@
                 label="Zaakceptuj etap"
                 action="none"
                 onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 14,
+                    quest_id: '{{ $quest->id }}',
+                    status_id: 14,
                 })"
                 class="tertiary"
             />
             @endif
+        @endif
 
-            @case (14)
-            @case (15)
-            <x-shipyard.ui.button
-                icon="chat-alert"
-                :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'"
-                action="none"
-                onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 16,
-                })"
-                class="tertiary"
-            />
+        @if (in_array($quest->status_id, [14, 15]))
+        <x-shipyard.ui.button
+            icon="chat-alert"
+            :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: 16,
+            })"
+            class="tertiary"
+        />
+        @endif
 
-            @case (18)
-            @case (19)
+        @if (in_array($quest->status_id, [18, 19]))
             @if ($quest->completed_once)
             <x-shipyard.ui.button
                 icon="check-all"
                 label="Zrezygnuj z dalszych zmian"
                 action="none"
                 onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 19,
+                    quest_id: '{{ $quest->id }}',
+                    status_id: 19,
                 })"
                 class="tertiary"
             />
@@ -288,27 +285,24 @@
                 label="Zrezygnuj ze zlecenia"
                 action="none"
                 onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 18,
+                    quest_id: '{{ $quest->id }}',
+                    status_id: 18,
                 })"
                 class="tertiary"
             />
             @endif
 
-            @case (18)
-            @case (19)
-            <x-shipyard.ui.button
-                icon="recycle"
-                label="Przywróć zlecenie"
-                action="none"
-                onclick="openModal('quest-change-status', {
-                    questId: '{{ $quest->id }}',
-                    newStatusId: 26,
-                })"
-                class="tertiary"
-            />
-
-        @endswitch
+        <x-shipyard.ui.button
+            icon="recycle"
+            label="Przywróć zlecenie"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: 26,
+            })"
+            class="tertiary"
+        />
+        @endif
     </div>
 </x-shipyard.app.form>
 

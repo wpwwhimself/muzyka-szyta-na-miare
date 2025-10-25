@@ -15,25 +15,17 @@
         </div>
 
         @if (!$quest->paid && is_archmage())
-        <form action="{{ route("mod-quest-back") }}" method="post" id="quest-pay" class="flex right middle nowrap">
-            @csrf
-            <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-            <x-shipyard.ui.input type="number"
-                name="comment"
-                label="Opłać"
-                :icon="model_field_icon('quest', 'price')"
-                step="0.01"
-                :value="$quest->price - $quest->payments_sum"
-            />
-            <x-shipyard.ui.button
-                icon="account-cash"
-                pop="Opłać"
-                action="submit"
-                name="status_id"
-                value="32"
-                class="primary"
-            />
-        </form>
+        <x-shipyard.ui.button
+            icon="account-cash"
+            pop="Opłać"
+            action="none"
+            onclick="openModal(`quest-change-status`, {
+                quest_id: '{{ $quest->id }}',
+                status_id: 32,
+                comment: '{{ $quest->price - $quest->payments_sum }}'
+            })"
+            class="tertiary"
+        />
         @endif
     </div>
 </div>

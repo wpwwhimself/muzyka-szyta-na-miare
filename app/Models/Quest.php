@@ -199,6 +199,7 @@ class Quest extends Model
 
     #region attributes
     protected $casts = [
+        "files_ready" => "boolean",
         "deadline" => "date",
         "hard_deadline" => "date",
         "delayed_payment" => "date",

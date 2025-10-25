@@ -202,8 +202,14 @@
                 <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-button action="submit" :label="!$quest->files_ready ? 'Wszystko wgrane' : 'Jednak nie'"
-                        icon="file-check" name="ready" value="{{ !$quest->files_ready }}" :small="true" />
+                    <x-shipyard.ui.button
+                        :label="!$quest->files_ready ? 'Wszystko wgrane' : 'Jednak nie'"
+                        icon="file-check"
+                        action="submit"
+                        name="ready"
+                        :value="(int) !$quest->files_ready"
+                        class="primary"
+                    />
                 </form>
             </div>
         </x-extendo-section>
@@ -216,21 +222,23 @@
         title="Klient"
         :subtitle="$quest->user"
     >
-        @foreach ([
-            "client_name",
-            // "contact_preference",
-            "password",
-            // "pickiness",
-        ] as $field_name)
-            <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
-        @endforeach
+        <div class="grid but-halfsize-down" style="--col-count: 2;">
+            @foreach ([
+                "client_name",
+                // "contact_preference",
+                "password",
+                // "pickiness",
+            ] as $field_name)
+                <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
+            @endforeach
 
-        <x-shipyard.ui.input type="dummy-text"
-            name="pickiness"
-            label="Wybredność"
-            icon="fencing"
-            :value="$quest->user->notes->pickiness"
-        />
+            <x-shipyard.ui.input type="dummy-text"
+                name="pickiness"
+                label="Wybredność"
+                icon="fencing"
+                :value="$quest->user->notes->pickiness"
+            />
+        </div>
 
         <x-slot:buttons>
             <x-button :action="route('clients', ['search' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />

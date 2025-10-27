@@ -143,7 +143,7 @@ body {
         animation-iteration-count: infinite;
     }
 
-    .grid & {
+    .grid > & {
         align-self: baseline;
     }
 
@@ -180,7 +180,7 @@ body {
 }
 
 @media screen and (max-width: 600px){
-    .grid .extendo-block {
+    .grid > .extendo-block {
         align-self: auto;
     }
 }

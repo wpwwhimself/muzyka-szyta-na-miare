@@ -221,4 +221,11 @@ class SongController extends Controller
         $tags = SongTag::orderBy("name")->get();
         return response()->json($tags ?? []);
     }
+
+    #region downloader
+    public function downloader()
+    {
+        return view("pages.".user_role().".songs.downloader");
+    }
+    #endregion
 }

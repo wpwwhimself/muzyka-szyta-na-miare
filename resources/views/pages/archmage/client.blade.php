@@ -19,6 +19,7 @@
                     "email",
                     "phone",
                     "other_medium",
+                    "contact_preference",
                 ] as $field_name)
                 <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
                 @endforeach

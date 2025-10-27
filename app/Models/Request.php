@@ -106,6 +106,17 @@ class Request extends Model
             "icon" => "human-greeting-proximity",
             "hint" => "np. WhatsApp",
         ],
+        "contact_preference" => [
+            "type" => "select",
+            "label" => "Preferowana forma kontaktu",
+            "icon" => "card-account-phone",
+            "selectData" => [
+                "options" => [
+                    ["value" => "email", "label" => "email"],
+                    ["value" => "sms", "label" => "sms/komunikator"],
+                ],
+            ],
+        ],
         "title" => [
             "type" => "text",
             "label" => "Tytuł utworu",

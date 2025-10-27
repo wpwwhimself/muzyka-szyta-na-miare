@@ -13,12 +13,13 @@
 
     <div class="grid but-mobile-down" style="--col-count: 2;">
         <x-section title="Dane osobowe" :icon="model_icon('user_notes')">
-            <div class="grid but-mobile down" style="--col-count: 2;">
+            <div class="grid but-halfsize-down" style="--col-count: 2;">
                 @foreach ([
                     "client_name",
                     "email",
                     "phone",
                     "other_medium",
+                    "contact_preference",
                 ] as $field_name)
                 <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
                 @endforeach

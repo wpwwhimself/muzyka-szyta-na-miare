@@ -54,6 +54,21 @@ return new class extends Migration
                     false,
                 ],
                 [
+                    "contact_preference",
+                    "select",
+                    "Preferowana forma kontaktu",
+                    "card-account-phone",
+                    false,
+                    [
+                        "selectData" => [
+                            "options" => [
+                                ["value" => "email", "label" => "email"],
+                                ["value" => "sms", "label" => "sms/komunikator"],
+                            ],
+                        ],
+                    ],
+                ],
+                [
                     null,
                     "heading",
                     "Napisz coś o zleceniu",
@@ -169,6 +184,21 @@ return new class extends Migration
                     false,
                 ],
                 [
+                    "contact_preference",
+                    "select",
+                    "Preferowana forma kontaktu",
+                    "card-account-phone",
+                    false,
+                    [
+                        "selectData" => [
+                            "options" => [
+                                ["value" => "email", "label" => "email"],
+                                ["value" => "sms", "label" => "sms/komunikator"],
+                            ],
+                        ],
+                    ],
+                ],
+                [
                     null,
                     "heading",
                     "Napisz coś o zleceniu",
@@ -269,6 +299,21 @@ return new class extends Migration
                     "Inna forma kontaktu (np. Whatsapp)",
                     "human-greeting-proximity",
                     false,
+                ],
+                [
+                    "contact_preference",
+                    "select",
+                    "Preferowana forma kontaktu",
+                    "card-account-phone",
+                    false,
+                    [
+                        "selectData" => [
+                            "options" => [
+                                ["value" => "email", "label" => "email"],
+                                ["value" => "sms", "label" => "sms/komunikator"],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     null,

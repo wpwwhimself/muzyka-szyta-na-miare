@@ -122,6 +122,17 @@ class UserNote extends Authenticatable
             "icon" => "human-greeting-proximity",
             "hint" => "np. WhatsApp",
         ],
+        "contact_preference" => [
+            "type" => "select",
+            "label" => "Preferowana forma kontaktu",
+            "icon" => "card-account-phone",
+            "selectData" => [
+                "options" => [
+                    ["value" => "email", "label" => "email"],
+                    ["value" => "sms", "label" => "sms/komunikator"],
+                ],
+            ],
+        ],
         "trust" => [
             "type" => "select",
             "label" => "Zaufanie",

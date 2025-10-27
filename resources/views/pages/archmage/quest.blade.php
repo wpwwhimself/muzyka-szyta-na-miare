@@ -225,9 +225,8 @@
         <div class="grid but-halfsize-down" style="--col-count: 2;">
             @foreach ([
                 "client_name",
-                // "contact_preference",
+                "contact_preference",
                 "password",
-                // "pickiness",
             ] as $field_name)
                 <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
             @endforeach

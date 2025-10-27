@@ -257,6 +257,7 @@
         email: '{{ Auth::user()?->notes?->email }}' || null,
         phone: '{{ Auth::user()?->notes?->phone }}' || null,
         other_medium: '{{ Auth::user()?->notes?->other_medium }}' || null,
+        contact_preference: '{{ Auth::user()?->notes?->contact_preference }}' || 'email',
     })"
     class="major primary"
 />

@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use andcarpi\Popper\Facades\Popper;
+use App\Mail\ArchmageQuestMod;
 use App\Mail\PatronRejected;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
+use App\Models\Shipyard\Modal;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BackController extends Controller
 {
     public function dashboard(){
-        $client = Auth::user();
+        $user = Auth::user();
 
         $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
             ->orderBy("updated_at");
@@ -43,12 +48,12 @@ class BackController extends Controller
             ->orderByDesc("deadline")
             ->orderBy("created_at");
 
-        if(!is_archmage()){
-            $requests = $requests->where("client_id", $client->id);
-            $quests_ongoing = $quests_ongoing->where("client_id", $client->id);
-            $quests_review = $quests_review->where("client_id", $client->id);
+        if($user->hasRole("client", true)){
+            $requests = $requests->where("client_id", $user->id);
+            $quests_ongoing = $quests_ongoing->where("client_id", $user->id);
+            $quests_review = $quests_review->where("client_id", $user->id);
 
-            $quests_total = Auth::user()->exp;
+            $quests_total = $user->notes->exp;
             $unpaids = Quest::where("client_id", Auth::id())
                 ->whereNotIn("status_id", [18])
                 ->where("paid", 0)
@@ -65,7 +70,7 @@ class BackController extends Controller
                     Quest::find($change->re_quest_id);
                 $change->new_status = Status::find($change->new_status_id);
             }
-            $patrons_adepts = User::where("helped_showcasing", 1)->get();
+            $patrons_adepts = User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 1))->get();
             $showcases_missing = Quest::where("status_id", 19)
                 ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
                 ->get()
@@ -95,47 +100,51 @@ class BackController extends Controller
         $quests_review = $quests_review->get();
         $requests = $requests->get();
 
-        return view(user_role().".dashboard", array_merge(
-            [
-                "title" => (is_archmage())
-                ? (Auth::id() == 1 ? "Szpica arcymaga" : "WITAJ, OBSERWATORZE")
-                : "Pulpit"
-            ],
-            compact("quests_ongoing", "quests_review", "requests"),
-            (isset($quests_total) ? compact("quests_total") : []),
-            (isset($patrons_adepts) ? compact("patrons_adepts") : []),
-            (isset($unpaids) ? compact("unpaids") : []),
-            (isset($janitor_log) ? compact("janitor_log") : []),
-            (isset($recent) ? compact("recent") : []),
-            (isset($showcases_missing) ? compact("showcases_missing") : []),
-        ));
+        return view(
+            "pages.".user_role().".dashboard",
+            !is_archmage()
+                ? compact(
+                    "quests_ongoing", "quests_review", "requests",
+                    "quests_total",
+                    "unpaids",
+                )
+                : compact(
+                    "quests_ongoing", "quests_review", "requests",
+                    "recent",
+                    "patrons_adepts",
+                    "showcases_missing",
+                    "janitor_log",
+                )
+        );
     }
 
+    #region prices
     public function prices(){
         $prices = DB::table("prices")->get();
 
         $discount = (is_archmage()) ? null : (
-            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            (Auth::user()->notes->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
-            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+            (Auth::user()->notes->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
         $clients = [];
         if (is_archmage()) {
-            $clients_raw = User::all()->toArray();
+            $clients_raw = User::has("notes")->get();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = _ct_("$client[client_name] «$client[id]»");
+                $clients[$client["id"]] = _ct_($client->notes->client_name ." «" . $client->id . "»");
             }
         }
 
         $quest_types = QuestType::all()->pluck("type", "id")->toArray();
         $minimal_prices = array_combine($quest_types, QUEST_MINIMAL_PRICES());
 
-        return view(user_role().".prices", array_merge(
+        return view("pages.".user_role().".prices", array_merge(
             ["title" => "Cennik"],
             compact("prices", "discount", "minimal_prices", "clients")
         ));
     }
+    #endregion
 
     public static function newStatusLog($re_quest_id, $new_status_id, $comment, $changed_by = null, $mailing = null, $changes = null){
         if($re_quest_id){
@@ -158,7 +167,7 @@ class BackController extends Controller
     }
 
     public function setPatronLevel($client_id, $level){
-        if(Auth::id() === 0) return redirect()->route("dashboard")->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return redirect()->route("dashboard")->with("toast", ["error", OBSERVER_ERROR()]);
         $client = User::findOrFail($client_id);
 
         $client->update(["helped_showcasing" => $level]);
@@ -168,8 +177,8 @@ class BackController extends Controller
             $mailing = true;
         }
 
-        if(Auth::id() == 1) return redirect()->route("dashboard")->with("success", (($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony").($mailing ? ", mail wysłany" : ""));
-        return redirect()->route("dashboard")->with("success", "Wystawienie opinii odnotowane");
+        if(Auth::id() == 1) return redirect()->route("dashboard")->with("toast", ["success", (($level == 2) ? "Wniosek przyjęty" : "Wniosek odrzucony").($mailing ? ", mail wysłany" : "")]);
+        return redirect()->route("dashboard")->with("toast", ["success", "Wystawienie opinii odnotowane"]);
     }
 
     public function ppp($page = "0-index"){
@@ -178,31 +187,108 @@ class BackController extends Controller
             $titles[$key] = preg_replace('/(.*)doc[\/\\\](.*)\.blade\.php/', "$2", $ttl);
         }
 
-        return view(user_role().".ppp", array_merge(
+        return view("pages.".user_role().".ppp", array_merge(
             ["title" => "Poradnik Przyszłych Pokoleń"],
             compact("page", "titles")
         ));
     }
 
-    public function settings(){
-        $settings = DB::table("settings")->get();
+    #region re_quests
+    public function restatusReQuestWithComment(HttpRequest $rq)
+    {
+        $scope = Str::plural($rq->get("model"));
+        $model = model($scope)::find($rq->get("id"));
 
-        return view(user_role().".settings", array_merge(
-            ["title" => "Ustawienia"],
-            compact("settings")
-        ));
+        $model->update([
+            "status_id" => $rq->get("newStatus"),
+        ]);
+        $flash_content = "Status ".($scope == "requests" ? "zapytania" : "zlecenia")." zmieniony";
+
+        self::newStatusLog(
+            $model->id,
+            $rq->get("newStatus"),
+            $rq->get("comment"),
+            $rq->get("changedBy")
+        );
+
+        // mail
+        Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($model->fresh()));
+        $mailing = true;
+        $flash_content .= ", mail wysłany";
+        if($mailing !== null) $model->history->first()->update(["mail_sent" => $mailing]);
+
+        return redirect()->route($rq->get("model"), ["id" => $model->id])->with("toast", ["success", $flash_content]);
+    }
+    #endregion
+
+    #region lookups
+    public function lookupUsers()
+    {
+        $fieldName = Modal::where("name", "select-user-to-request")->first()
+            ->fields[0][5]["selectData"]["fieldName"];
+        $data = User::has("notes")
+            ->get()
+            ->map(fn ($u) => collect([
+                "id" => $u->id,
+                "name" => $u->notes->client_name,
+                "email" => $u->notes->email,
+                "phone" => $u->notes->phone,
+            ]))
+            ->filter(fn ($u) =>
+                Str::contains($u["id"], request("query"), true)
+                || Str::contains($u["name"], request("query"), true)
+                || Str::contains($u["email"], request("query"), true)
+                || Str::contains($u["phone"], request("query"))
+            )
+            ->values();
+        $headings = collect([
+            "ID",
+            "Nazwisko",
+            "Email",
+            "Telefon",
+        ]);
+
+        return view("components.shipyard.ui.lookup-results", compact(
+            "data",
+            "headings",
+            "fieldName",
+        ))->render();
     }
 
-    ////////////////////////////////////////////
+    public function lookupSongs()
+    {
+        $fieldName = Modal::where("name", "select-song-to-request")->first()
+            ->fields[0][5]["selectData"]["fieldName"];
+        $data = Song::get()
+            ->map(fn ($s) => collect([
+                "id" => $s->id,
+                "title" => $s->title,
+                "artist" => $s->artist,
+                "link" => view("components.link-interpreter", ['raw' => $s->link])->render(),
+                "notes" => $s->notes
+                    ? '<span '.Popper::pop(Markdown::parse($s->notes)).'>'.view("components.shipyard.app.icon", ["name" => model_field_icon("songs", "notes")]).'</span>'
+                    : null,
+            ]))
+            ->filter(fn ($s) =>
+                Str::contains($s["id"], request("query"), true)
+                || Str::contains($s["title"], request("query"), true)
+                || Str::contains($s["artist"], request("query"), true)
+                || Str::contains($s["link"], request("query"))
+            )
+            ->values();
+        $headings = collect([
+            "ID",
+            "Tytuł",
+            "Wykonawca",
+            "Linki",
+            "Notatki",
+        ]);
 
-    public function updateSetting(HttpRequest $rq){
-        if(Auth::id() != 1) return;
-        foreach ($rq->except("_token") as $key => $value) {
-            DB::table("settings")
-                ->where("setting_name", $key)
-                ->update(["value_str" => $value])
-            ;
-        }
-        return back()->with("success", "Ustawienia zaktualizowane");
+        return view("components.shipyard.ui.lookup-results", compact(
+            "data",
+            "headings",
+            "fieldName",
+        ))->render();
     }
+    #endregion
 }

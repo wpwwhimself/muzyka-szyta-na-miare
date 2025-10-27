@@ -39,8 +39,8 @@ class QuestController extends Controller
 
         $quests = $quests->paginate(25);
 
-        return view(user_role().".quests", [
-            "title" => ($client && is_archmage()) ? "$client->client_name – zlecenia" : "Lista zleceń",
+        return view("pages.".user_role().".quests", [
+            "title" => ($client && is_archmage()) ? $client->notes->client_name." – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);
     }
@@ -50,8 +50,11 @@ class QuestController extends Controller
 
         $prices = DB::table("prices")
             ->where("quest_type_id", $quest->song->type->id)->orWhereNull("quest_type_id")
-            ->orderBy("quest_type_id")->orderBy("indicator")
-            ->pluck("service", "indicator")->toArray();
+            ->orderBy("quest_type_id")
+            ->orderBy("indicator")
+            ->get()
+            ->map(fn ($p) => "<strong>$p->indicator</strong>: $p->service")
+            ->join("<br>");
         if($quest->client_id != Auth::id() && !is_archmage()) abort(403, "To nie jest Twoje zlecenie");
 
         $files = $quest->song->files
@@ -68,34 +71,31 @@ class QuestController extends Controller
         ] : [
             "quote" => [
                 'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment_in_effect,
-                'Zlecenie nieopłacone' => $quest->client->trust == -1
+                'Zlecenie nieopłacone' => $quest->user->notes->trust == -1
                     || $quest->status_id == 19 && !$quest->paid
                     || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
             ],
         ];
 
-        return view(
-            user_role().".quest",
-            array_merge(
-                ["title" => "Zlecenie"],
-                compact("quest", "prices", "files", "warnings"),
-                (isset($stats_statuses) ? compact("stats_statuses") : []),
-            )
-        );
+        return view("pages.".user_role().".quest", array_merge(
+            ["title" => "Zlecenie"],
+            compact("quest", "prices", "files", "warnings"),
+            (isset($stats_statuses) ? compact("stats_statuses") : []),
+        ));
     }
 
     ////////////////////////////////////////
 
     public function processMod(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
         if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
-            return back()->with("error", "Zatrzymaj zegar");
+            return back()->with("toast", ["error", "Zatrzymaj zegar"]);
         }
 
         // wpisywanie wpłaty za zlecenie
         if($rq->status_id == 32){
-            if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("error", "Nie podałeś ceny");
+            if(empty($rq->comment)) return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["error", "Nie podałeś ceny"]);
 
             // opłacenie zlecenia (sprawdzenie nadwyżki)
             $amount_to_pay = $quest->price - $quest->payments_sum;
@@ -106,8 +106,9 @@ class QuestController extends Controller
                 BackController::newStatusLog(null, $rq->status_id, $amount_for_budget, $quest->client_id);
 
                 // budżet
-                $quest->client->budget += $amount_for_budget;
-                $quest->client->save();
+                $quest->user->notes->update([
+                    "budget" => $quest->user->notes->budget + $amount_for_budget
+                ]);
             }
 
             // opłacanie faktury
@@ -125,24 +126,24 @@ class QuestController extends Controller
             // sending mail
             $flash_content = "Cena wpisana";
             if($quest->paid){
-                if($quest->client->email){
-                    Mail::to($quest->client->email)->send(new PaymentReceived($quest->fresh()));
+                if($quest->user->notes->email){
+                    Mail::to($quest->user->notes->email)->send(new PaymentReceived($quest->fresh()));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
                 }
-                if($quest->client->contact_preference != "email"){
+                if($quest->user->notes->contact_preference != "email"){
                     // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
                     $flash_content .= ", ale wyślij wiadomość";
                 }
             }
 
             // wycofanie statusu krętacza
-            if ($quest->client->trust == -1 && $quest->client->quests_unpaid->count() == 0) {
-                $quest->client->update(["trust" => 0]);
+            if ($quest->user->notes->trust == -1 && $quest->user->notes->quests_unpaid->count() == 0) {
+                $quest->user->notes->update(["trust" => 0]);
                 $flash_content .= "; już nie jest krętaczem";
             }
 
-            return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
+            return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["success", $flash_content]);
         }
 
         $is_same_status = $quest->status_id == $rq->status_id;
@@ -194,8 +195,8 @@ class QuestController extends Controller
             in_array($quest->status_id, [15, 95])
             || $quest->status_id == 11 && is_archmage()
         ){ // mail do klienta
-            if($quest->client->email){
-                Mail::to($quest->client->email)->send(
+            if($quest->user->notes->email){
+                Mail::to($quest->user->notes->email)->send(
                     $quest->status_id == 95
                     ? new Clarification($quest->fresh())
                     : new QuestUpdated($quest->fresh())
@@ -203,7 +204,7 @@ class QuestController extends Controller
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
             }
-            if($quest->client->contact_preference != "email"){
+            if($quest->user->notes->contact_preference != "email"){
                 $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
@@ -214,7 +215,7 @@ class QuestController extends Controller
         }
         if($mailing !== null) $quest->fresh()->history->first()->update(["mail_sent" => $mailing]);
 
-        return redirect()->route("quest", ["id" => $rq->quest_id])->with("success", $flash_content);
+        return redirect()->route("quest", ["id" => $rq->quest_id])->with("toast", ["success", $flash_content]);
     }
 
     public function patch($id, $mode = "key-value", HttpRequest $rq){
@@ -233,7 +234,7 @@ class QuestController extends Controller
     ////////////////////////////////////////
 
     public function updateSong(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $song = Song::findOrFail($rq->id);
         $song->update([
             "title" => $rq->title,
@@ -241,43 +242,44 @@ class QuestController extends Controller
             "link" => yt_cleanup($rq->link),
             "notes" => $rq->wishes,
         ]);
-        return back()->with("success", "Utwór zmodyfikowany");
+        return back()->with("toast", ["success", "Utwór zmodyfikowany"]);
     }
 
     public function updateWishes(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
         $quest->update([
             "wishes" => $rq->wishes_quest,
         ]);
-        return back()->with("success", "Zlecenie zmodyfikowane");
+        return back()->with("toast", ["success", "Zlecenie zmodyfikowane"]);
     }
 
     public function updateQuote(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
         $price_before = $quest->price;
         $price_code_before = $quest->price_code_override;
         $deadline_before = $quest->deadline;
         $delayed_payment_before = $quest->delayed_payment;
+        $price_data = StatsController::runPriceCalc($rq->price_code_override, $quest->client_id);
         $quest->update([
             "price_code_override" => $rq->price_code_override,
-            "price" => price_calc($rq->price_code_override, $quest->client_id)["price"],
-            "paid" => ($quest->payments_sum >= price_calc($rq->price_code_override, $quest->client_id)["price"]),
+            "price" => $price_data["price"],
+            "paid" => ($quest->payments_sum >= $price_data["price"]),
             "deadline" => $rq->deadline,
             "delayed_payment" => $rq->delayed_payment,
         ]);
         $difference = $quest->price - $price_before;
-        if($quest->client->budget){
-            $sub_amount = min([$difference, $quest->client->budget]);
-            $quest->client->budget -= $sub_amount;
-            BackController::newStatusLog(null, 32, -$sub_amount, $quest->client->id);
+        if($quest->user->notes->budget){
+            $sub_amount = min([$difference, $quest->user->notes->budget]);
+            $quest->user->notes->update([
+                "budget" => $quest->user->notes->budget - $sub_amount
+            ]);
+            BackController::newStatusLog(null, 32, -$sub_amount, $quest->client_id);
             if($sub_amount == $difference){
-                $quest->paid = true;
-                $quest->save();
+                $quest->update(["paid" => true]);
             }
-            $quest->client->save();
-            BackController::newStatusLog($quest->id, 32, $sub_amount, $quest->client->id);
+            BackController::newStatusLog($quest->id, 32, $sub_amount, $quest->client_id);
         }
 
         if($price_before != $quest->price){
@@ -288,11 +290,11 @@ class QuestController extends Controller
 
         // sending mail
         $mailing = null;
-        if($quest->client->email){
-            Mail::to($quest->client->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
+        if($quest->user->notes->email){
+            Mail::to($quest->user->notes->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
             $mailing = true;
         }
-        if($quest->client->contact_preference != "email"){
+        if($quest->user->notes->contact_preference != "email"){
             $mailing ??= false;
         }
 
@@ -322,25 +324,25 @@ class QuestController extends Controller
             $mailing,
             $changes
         );
-        return back()->with("success", "Wycena zapytania zmodyfikowana");
+        return back()->with("toast", ["success", "Wycena zapytania zmodyfikowana"]);
     }
 
     public function updateFilesReady(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
         $quest->update([
             "files_ready" => $rq->ready,
         ]);
-        return back()->with("success", "Zawartość sejfu zatwierdzona");
+        return back()->with("toast", ["success", "Zawartość sejfu zatwierdzona"]);
     }
 
     public function updateFilesExternal(HttpRequest $rq) {
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
 
         $quest->update([
             "has_files_on_external_drive" => $rq->external,
         ]);
-        return back()->with("success", "Zmieniono status chmury");
+        return back()->with("toast", ["success", "Zmieniono status chmury"]);
     }
 }

@@ -118,7 +118,7 @@ onMounted(() => {
             <Button :icon="faRotateRight" @click="getInitData()">Odśwież</Button>
         </template>
 
-        <div class="flex-right">
+        <div class="flex right">
             <Tile v-for="set in sets" @click="openSet(set)">
                 <span class="accent">{{ set.name }}</span>
                 <span>{{ set.songs_count }} utworów</span>
@@ -127,7 +127,7 @@ onMounted(() => {
     </Section>
 
     <Section title="Sample" :icon="faVials">
-        <div class="flex-right">
+        <div class="flex right">
             <Tile v-for="set in sampleSets" @click="openSet(set, 'sample-set')">
                 <span>{{ set.id }}</span>
                 <span class="accent">{{ set.name }}</span>
@@ -137,7 +137,7 @@ onMounted(() => {
     </Section>
 
     <Section title="Utwory" :icon="faCompactDisc">
-        <div class="flex-right">
+        <div class="flex right">
             <Tile v-for="song in songs" @click="openSong(song)">
                 <span>{{ song.tempo_pretty }}</span>
                 <span class="accent">{{ song.title }}</span>
@@ -154,7 +154,7 @@ onMounted(() => {
             <Button @click="backToInit()">Powrót</Button>
         </template>
 
-        <div class="flex-right nowrap folding">
+        <div class="flex right nowrap folding">
             <Tile v-for="song in songset.songs" @click="openSong(song)">
                 <span>{{ song.tempo_pretty }}</span>
                 <span class="accent">{{ song.title }}</span>
@@ -171,18 +171,18 @@ onMounted(() => {
             <Button @click="backToInit()">Powrót</Button>
         </template>
 
-        <div class="flex-right center middle">
-            <div class="flex-down center" v-for="field in headerFields">
+        <div class="flex right center middle">
+            <div class="flex down center" v-for="field in headerFields">
                 <span class="grayed-out">{{ field.label }}</span>
 
-                <span v-if="field.name == 'songmap'" class="flex-right center" style="gap: 3px">
+                <span v-if="field.name == 'songmap'" class="flex right center" style="gap: 3px">
                     <span v-for="part in coloredParts(song.parts)" :style="{ color: part.color }">{{ part.part }}</span>
                 </span>
                 <span v-else>{{ song[field.name] }}</span>
             </div>
         </div>
 
-        <div id="song-innards" class="flex-down">
+        <div id="song-innards" class="flex down">
             <template v-for="part in coloredParts(song.parts)">
                 <h2 :style="{ color: part.color }">{{ part.part }}</h2>
                 <DjSampleSetTileWrapper :data="song.samples ? song.samples[part.part] : null" />

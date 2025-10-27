@@ -22,7 +22,7 @@ class QuestAwaitingReview extends Mailable
     public function __construct($quest)
     {
         $this->quest = is_string($quest) ? Quest::findOrFail($quest) : $quest;
-        $this->pl = client_polonize($this->quest->client->client_name);
+        $this->pl = client_polonize($this->quest->user->notes->client_name);
     }
 
     /**

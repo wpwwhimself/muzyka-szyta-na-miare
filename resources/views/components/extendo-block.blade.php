@@ -1,26 +1,19 @@
-<div @class([
+<div {{ $attributes->class([
     "extendo-block",
-    "section-like",
+    "section",
     "warning-like" => $warning,
     "sc-line" => $scissors,
-]) data-ebid="{{ $key }}">
+]) }} data-ebid="{{ $key }}">
     @if($scissors) <x-sc-scissors /> @endif
 
-    <div class="header flex-right keep-for-mobile no-wrap">
-        <div class="titles flex-right keep-for-mobile">
-            <h2><i class="fas fa-{{ $headerIcon }}"></i></h2>
+    <div class="header flex right keep-for-mobile nowrap">
+        <div class="titles flex right keep-for-mobile">
+            <h2><x-shipyard.app.icon :name="$headerIcon" /></h2>
             <h2>{{ $title }}</h2>
             <span class="ghost">{!! $subtitle !!}</span>
         </div>
 
-        @if($buttons)
-        <div class="right-side flex-right">{{ $buttons }}</div>
-        @endif
-
-        <div class="right-side flex-right keep-for-mobile">
-            @unless($extended === "perma")
-            <i class="fas fa-angles-{{ $extended ? "up" : "down" }} clickable" data-ebf="open"></i>
-            @endunless
+        <div class="right-side flex right middle keep-for-mobile">
             @if ($warning)
             @php
                 $warning_content = [];
@@ -28,23 +21,37 @@
                     $warning_content[] = $message;
                 }
             @endphp
-            <i class="fas fa-triangle-exclamation fa-fade warning"
+            <span class="accent danger"
                 {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
-            ></i>
+            >
+                <x-shipyard.app.icon name="alert" />
+            </span>
             @endif
+
+            @if($buttons)
+            {{ $buttons }}
+            @endif
+
+            @unless($extended === "perma")
+            <x-shipyard.ui.button
+                icon="unfold-less-horizontal"
+                pop="Zwiń"
+                action="none"
+                onclick="openExtendoBlock(this, '{{ $key }}')"
+                class="toggles tertiary {{ $extended ? '' : 'hidden' }}"
+            />
+            <x-shipyard.ui.button
+                icon="unfold-more-horizontal"
+                pop="Rozwiń"
+                action="none"
+                onclick="openExtendoBlock(this, '{{ $key }}')"
+                class="toggles tertiary {{ $extended ? 'hidden' : '' }}"
+            />
+            @endunless
         </div>
     </div>
 
-    <div @class(['body', 'flex-right', 'hidden' => !$extended])>
+    <div @class(['body', 'hidden' => !$extended])>
         {{ $slot }}
     </div>
-
-    <script>
-    $(document).ready(() => {
-        $("[data-ebid='{{ $key }}'] [data-ebf='open']").click(function(){
-            $("[data-ebid='{{ $key }}'] .body").toggleClass("hidden")
-            $(this).toggleClass("fa-angles-down").toggleClass("fa-angles-up")
-        })
-    })
-    </script>
 </div>

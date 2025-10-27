@@ -66,9 +66,9 @@ class JanitorController extends Controller
          * constants
          */
         foreach([
-            "quest_reminder_time",
-            "request_expired_after",
-            "quest_expired_after",
+            "msznm_quest_reminder_time",
+            "msznm_request_expired_after",
+            "msznm_quest_expired_after",
             ] as $name){
             $$name = setting($name);
         }
@@ -288,7 +288,7 @@ class JanitorController extends Controller
             }
             $modtime = new Carbon($modtime);
 
-            if($modtime->diffInDays() >= setting("safe_old_enough")){
+            if($modtime->diffInDays() >= setting("msznm_safe_old_enough")){
                 Storage::deleteDirectory($safe);
                 $this->addToSummary(
                     "safe",

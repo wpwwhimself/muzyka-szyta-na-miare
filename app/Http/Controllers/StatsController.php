@@ -413,14 +413,14 @@ class StatsController extends Controller
         ];
         $stats = json_decode(json_encode($stats));
 
-        return view(user_role().".stats", array_merge(
+        return view("pages.".user_role().".stats", array_merge(
             ["title" => "GUS"],
             compact("stats"),
         ));
     }
     public function statsImport(Request $rq){
         $rq->file("json")->storeAs("/", "stats.json");
-        return back()->with("success", "Dane zaktualizowane");
+        return back()->with("toast", ["success", "Dane zaktualizowane"]);
     }
 
     public function financeDashboard(){
@@ -445,12 +445,12 @@ class StatsController extends Controller
         ];
 
         $saturation = [
-            "split" => $this->monthlyPaymentLimit()->getOriginalContent()["saturation"],
+            "split" => $this->runMonthlyPaymentLimit(0)["saturation"],
             "total" => INCOME_LIMIT(),
         ];
         $saturation = json_decode(json_encode($saturation));
 
-        $unpaids = User::has("questsUnpaid")->orderBy("client_name")->get();
+        $unpaids = User::has("questsUnpaid")->get()->sortBy("notes.client_name");
 
         $recent = StatusChange::where("new_status_id", 32)->orderByDesc("date")->limit(10)->get();
         foreach($recent as $i){
@@ -463,7 +463,7 @@ class StatsController extends Controller
             ->get()
         ;
 
-        return view(user_role().".finance", array_merge(
+        return view("pages.".user_role().".finance", array_merge(
             ["title" => "Centrum Finansowe"],
             compact(
                 "unpaids", "recent", "this_month", "saturation", "returns"
@@ -471,9 +471,9 @@ class StatsController extends Controller
         ));
     }
     public function financePay(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest_ids = array_keys($rq->except("_token"));
-        if(empty($quest_ids)) return back()->with("error", "Zaznacz zlecenia");
+        if(empty($quest_ids)) return back()->with("toast", ["error", "Zaznacz zlecenia"]);
 
         $clients_quests = [];
         foreach($quest_ids as $id){
@@ -486,7 +486,7 @@ class StatsController extends Controller
                 32,
                 $amount_to_pay,
                 $quest->client_id,
-                $quest->client->email,
+                $quest->user->notes->email,
             );
 
             // opłacanie faktury
@@ -509,8 +509,8 @@ class StatsController extends Controller
         $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
             $client = User::find($client_id);
-            if($client->email){
-                Mail::to($client->email)->send(new MassPayment($quests));
+            if($client->notes->email){
+                Mail::to($client->notes->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
             }else{
                 $clients_informed[$client_id] = 0;
@@ -520,17 +520,17 @@ class StatsController extends Controller
         $clients_informed_output = (isset($clients_informed_count[1]) && $clients_informed_count[1] == count($clients_informed)) ? "wszyscy dostali maile"
             : ($clients_informed_count[0] == count($clients_informed) ? "nikt nie dostał maila" : ($clients_informed_count[1]."/".count($clients_informed)." klientów dostało maila"));
 
-        return back()->with("success", "Zlecenia opłacone, $clients_informed_output");
+        return back()->with("toast", ["success", "Zlecenia opłacone, $clients_informed_output"]);
     }
 
     public function financePayout(float $amount) {
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         Cost::create([
             "cost_type_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
             "desc" => "sam sobie",
             "amount" => $amount,
         ]);
-        return back()->with("success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount)));
+        return back()->with("toast", ["success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount))]);
     }
 
     public function financeReturn(string $quest_id, bool $budget = false) {
@@ -571,7 +571,7 @@ class StatsController extends Controller
             $flash_content .= ", ale wyślij wiadomość";
         }
 
-        return back()->with("success", $flash_content);
+        return back()->with("toast", ["success", $flash_content]);
     }
     public function financeSummary(Request $rq){
         $gains = StatusChange::where("new_status_id", 32)
@@ -596,7 +596,7 @@ class StatsController extends Controller
             "Wydano" => $losses_other,
             "Wypłacono" => $losses_payments,
             "Saldo na dziś" => $balance_now,
-            "Można wypłacić" => round(max($balance_now - setting("min_account_balance"), 0), 2),
+            "Można wypłacić" => round(max($balance_now - setting("msznm_min_account_balance"), 0), 2),
         ];
         $gains = $gains->get();
         $losses = $losses->get();
@@ -608,7 +608,7 @@ class StatsController extends Controller
                 ->get(["status_changes.*", "date as created_at"])
         )->sortByDesc("created_at");
 
-        return view(user_role().".finance-summary", array_merge(
+        return view("pages.".user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],
             compact("gains", "losses", "summary")
         ));
@@ -619,7 +619,7 @@ class StatsController extends Controller
         $client = ($rq->fillfor) ? User::findOrFail($rq->fillfor) : null;
         $quest_id = $rq->quest;
 
-        return view(user_role().".invoices", array_merge(
+        return view("pages.".user_role().".invoices", array_merge(
             ["title" => "Lista faktur"],
             compact("invoices", "client", "quest_id")
         ));
@@ -631,13 +631,13 @@ class StatsController extends Controller
 
         return (substr($rq->path(), 0, 3) == "api")
             ? response()->json(["invoice" => $invoice])
-            : view(user_role().".invoice", array_merge(
+            : view("pages.".user_role().".invoice", array_merge(
                 ["title" => "Faktura nr ".$invoice->fullCode],
                 compact("invoice"),
             ));
     }
     public function invoiceVisibility(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $invoice = Invoice::find($rq->id);
         $invoice->update(["visible" => $rq->visible]);
 
@@ -654,10 +654,10 @@ class StatsController extends Controller
             }
         }
 
-        return back()->with("success", $res);
+        return back()->with("toast", ["success", $res]);
     }
     public function invoiceAdd(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $invoice_quests = [];
         $totals = ["amount" => 0, "paid" => 0];
         foreach(Quest::whereIn("id", explode(" ", $rq->quests))->get() as $quest){
@@ -711,7 +711,7 @@ class StatsController extends Controller
             ]);
         }
 
-        return redirect()->route("invoice", ["id" => $invoice->id])->with("success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony");
+        return redirect()->route("invoice", ["id" => $invoice->id])->with("toast", ["success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony"]);
     }
 
     public function costs(){
@@ -724,13 +724,13 @@ class StatsController extends Controller
             "Razem" => Cost::sum("amount"),
         ];
 
-        return view(user_role().".costs", array_merge(
+        return view("pages.".user_role().".costs", array_merge(
             ["title" => "Lista kosztów"],
             compact("costs", "types", "summary"),
         ));
     }
     public function modCost(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = [
             "cost_type_id" => $rq->cost_type_id,
             "desc" => $rq->desc,
@@ -740,23 +740,23 @@ class StatsController extends Controller
         if($rq->id) Cost::find($rq->id)->update($fields);
         else Cost::create($fields);
 
-        return back()->with("success", "Gotowe");
+        return back()->with("toast", ["success", "Gotowe"]);
     }
     public function costTypes(){
         $types = CostType::all();
 
-        return view(user_role().".cost-types", array_merge(
+        return view("pages.".user_role().".cost-types", array_merge(
             ["title" => "Typy kosztów"],
             compact("types"),
         ));
     }
     public function modCostType(Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = ["name" => $rq->name, "desc" => $rq->desc];
         if($rq->id) CostType::find($rq->id)->update($fields);
         else CostType::create($fields);
 
-        return back()->with("success", "Gotowe");
+        return back()->with("toast", ["success", "Gotowe"]);
     }
 
     public function fileSizeReport(){
@@ -776,7 +776,7 @@ class StatsController extends Controller
         }
         arsort($sizes);
 
-        return view(user_role().".file-size-report", array_merge(
+        return view("pages.".user_role().".file-size-report", array_merge(
             ["title" => "Raport zajętości serwera"],
             compact(
                 "sizes", "times", "songs"
@@ -787,7 +787,7 @@ class StatsController extends Controller
     public function questsCalendar(){
         $free_days = CalendarFreeDay::orderBy("date")->whereDate("date", ">=", Carbon::today())->get();
 
-        return view(user_role().".quests-calendar", array_merge(
+        return view("pages.".user_role().".quests-calendar", array_merge(
             ["title" => "Grafik zleceń"],
             compact(
                 "free_days"
@@ -800,17 +800,87 @@ class StatsController extends Controller
         }else{
             CalendarFreeDay::where("date", $rq->date)->delete();
         }
-        return back()->with("success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty"));
+        return back()->with("toast", ["success", "Dzień wolny ".($rq->mode == "add" ? "dodany" : "usunięty")]);
     }
 
-    public function monthlyPaymentLimit(Request $rq = null){
+    #region price calc
+    public static function runPriceCalc($labels, $client_id, $quoting = false)
+    {
+        if($client_id == null) $client_id = $_POST['client_id'] ?? null; //odczyt tak, bo nie chce złapać argumentu
+        $client = User::find($client_id);
+        $price_schema = pricing($client_id);
+
+        $price = 0; $multiplier = 1; $positions = [];
+
+        $price_list = DB::table("prices")
+            ->select(["indicator", "service", "quest_type_id", "operation", "price_$price_schema AS price"])
+            ->get();
+
+        if($quoting){
+            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
+            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
+            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
+        }
+
+        $quest_type_present = null;
+        foreach($price_list as $cat){
+            preg_match_all("/$cat->indicator/", $labels, $matches);
+            if(count($matches[0]) > 0):
+                // nuty do innego typu zlecenia za pół ceny
+                $quest_type_present ??= $cat->quest_type_id;
+                $price_to_add = $cat->price;
+                if($cat->quest_type_id == 2 && $quest_type_present != 2) $price_to_add /= 2;
+
+                switch($cat->operation){
+                    case "+":
+                        $price += $price_to_add * count($matches[0]);
+                        array_push($positions, [$cat->service, _c_(as_pln($price_to_add * count($matches[0])))]);
+                        break;
+                    case "*":
+                        $multiplier += $price_to_add * count($matches[0]);
+                        $sign = ($price_to_add >= 0) ? "+" : "-";
+                        array_push($positions, [$cat->service, $sign._c_(count($matches[0]) * abs($price_to_add) * 100)."%"]);
+                        break;
+                }
+            endif;
+        }
+
+        $price *= $multiplier;
+        $override = false;
+
+        // minimal price
+        $minimal_price = $quest_type_present ? QUEST_MINIMAL_PRICES()[$quest_type_present] : 0;
+        $minimal_price_output = 0;
+        if($price < $minimal_price){
+            $price = $minimal_price;
+            $minimal_price_output = $minimal_price;
+            $override = true;
+        }
+
+        // manual price override
+        if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
+            $price = floatval(str_replace(",",".",$matches[0][0]));
+            $override = true;
+        }
+
+        return [
+            "price" => _c_(round($price)),
+            "positions" => $positions,
+            "override" => $override,
+            "labels" => $labels,
+            "minimal_price" => $minimal_price_output,
+        ];
+    }
+
+    public static function runMonthlyPaymentLimit($price)
+    {
         //scheduled and received payments
         $saturation = [
             //this month
             StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("new_status_id", 32)->sum("comment")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", "<", Carbon::today()->addMonth()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
@@ -824,7 +894,7 @@ class StatsController extends Controller
             //next month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonth()->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonth()->lastOfMonth()))
@@ -838,7 +908,7 @@ class StatsController extends Controller
             //neeeeeeext month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("client", fn($q) => $q->where("trust", ">", -1)->where("trust", "<", 2))
+                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonths(2)->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonths(2)->lastOfMonth()))
@@ -853,15 +923,43 @@ class StatsController extends Controller
         $when_to_ask = 0;
         $limit_corrected = INCOME_LIMIT() * 0.82;
         while($when_to_ask < 2){
-            if($saturation[$when_to_ask] + ($rq->amount ?? 0) < $limit_corrected) break;
+            if($saturation[$when_to_ask] + ($price ?? 0) < $limit_corrected) break;
             else $when_to_ask++;
         }
 
-        return response()->json(compact(
+        return compact(
             "saturation",
             "when_to_ask",
             "limit_corrected",
-        ));
+        );
+    }
+
+    public function priceCalc(Request $request){
+        $data = $this->runPriceCalc($request->labels, $request->client_id, $request->quoting);
+
+        return response()->json([
+            "data" => $data,
+            "table" => view("components.re_quests.price-summary", [
+                "price" => $data["price"],
+                "positions" => $data["positions"],
+                "override" => $data["override"],
+                "labels" => $data["labels"],
+                "minimalPrice" => $data["minimal_price"],
+            ])->render(),
+        ]);
+    }
+
+    public function monthlyPaymentLimit(Request $rq){
+        $data = $this->runMonthlyPaymentLimit($rq->amount);
+
+        return response()->json([
+            "data" => $data,
+            "table" => view("components.re_quests.monthly-payment-limit", [
+                "saturation" => $data["saturation"],
+                "whenToAsk" => $data["when_to_ask"],
+                "limitCorrected" => $data["limit_corrected"],
+            ])->render(),
+        ]);
     }
 
     public function taxes(Request $rq) {
@@ -878,7 +976,7 @@ class StatsController extends Controller
         $money["Dochody"] = $money["Przychody"] - $money["Koszty"];
         $money["Podatek"] = tax_calc($money["Dochody"]);
 
-        return view(user_role().".taxes", array_merge(
+        return view("pages.".user_role().".taxes", array_merge(
             ["title" => "Kwestie podatkowe"],
             compact(
                 "fiscal_year",
@@ -886,10 +984,7 @@ class StatsController extends Controller
             ),
         ));
     }
-
-    public function priceCalc(Request $request){
-        return price_calc($request->labels, $request->client_id, $request->quoting);
-    }
+    #endregion price calc
 
     #region gig-price
     public function gigPriceSuggest()
@@ -903,7 +998,7 @@ class StatsController extends Controller
         $places = GigPricePlace::orderBy("name")->get()
             ->mapWithKeys(fn ($p) => [(strtolower($p->name) . "|" . $p->distance_km) => $p->name . " (" . $p->distance_km . " km)"]);
 
-        return view(user_role().".gig-price.suggest", array_merge(
+        return view("pages.".user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],
             compact("defaults", "rates", "places"),
         ));
@@ -913,7 +1008,7 @@ class StatsController extends Controller
     {
         $defaults = GigPriceDefault::all();
 
-        return view(user_role().".gig-price.defaults", array_merge(
+        return view("pages.".user_role().".gig-price.defaults", array_merge(
             ["title" => "Ustawienia domyślne wyceny grania"],
             compact("defaults"),
         ));
@@ -925,7 +1020,7 @@ class StatsController extends Controller
             GigPriceDefault::find($name)->update(["value" => $value]);
         }
 
-        return redirect()->route("gig-price-suggest")->with("success", "Ustawienia domyślne zmienione");
+        return redirect()->route("gig-price-suggest")->with("toast", ["success", "Ustawienia domyślne zmienione"]);
     }
 
     public function gigPriceRates()
@@ -933,7 +1028,7 @@ class StatsController extends Controller
 
         $rates = GigPriceRate::orderBy("value")->get();
 
-        return view(user_role().".gig-price.rates", array_merge(
+        return view("pages.".user_role().".gig-price.rates", array_merge(
             ["title" => "Stawki"],
             compact("rates"),
         ));
@@ -941,7 +1036,7 @@ class StatsController extends Controller
 
     public function gigPriceRate(?GigPriceRate $rate = null)
     {
-        return view(user_role().".gig-price.rate", array_merge(
+        return view("pages.".user_role().".gig-price.rate", array_merge(
             ["title" => "Stawka"],
             compact("rate"),
         ));
@@ -955,14 +1050,14 @@ class StatsController extends Controller
             GigPriceRate::find($rq->id)->delete();
         }
 
-        return redirect()->route("gig-price-rates")->with("success", "Stawka poprawiona");
+        return redirect()->route("gig-price-rates")->with("toast", ["success", "Stawka poprawiona"]);
     }
 
     public function gigPricePlaces()
     {
         $places = GigPricePlace::orderBy("name")->get();
 
-        return view(user_role().".gig-price.places", array_merge(
+        return view("pages.".user_role().".gig-price.places", array_merge(
             ["title" => "Miejsca"],
             compact("places"),
         ));
@@ -970,7 +1065,7 @@ class StatsController extends Controller
 
     public function gigPricePlace(?GigPricePlace $place = null)
     {
-        return view(user_role().".gig-price.place", array_merge(
+        return view("pages.".user_role().".gig-price.place", array_merge(
             ["title" => "Miejsce"],
             compact("place"),
         ));
@@ -984,7 +1079,7 @@ class StatsController extends Controller
             GigPricePlace::find($rq->id)->delete();
         }
 
-        return redirect()->route("gig-price-places")->with("success", "Miejsce poprawione");
+        return redirect()->route("gig-price-places")->with("toast", ["success", "Miejsce poprawione"]);
     }
     #endregion
 }

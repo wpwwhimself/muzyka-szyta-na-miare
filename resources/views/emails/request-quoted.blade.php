@@ -1,37 +1,30 @@
-@extends('layouts.mail', compact("title"))
+@extends('layouts.mail')
+@section("title", "Zapytanie wycenione")
 
 @section('content')
-    <h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
-    <p>
-        uprzejmie dziękuję za @if ($request->client_id) ponowne @endif zainteresowanie moimi usługami.
-        Wycena {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia została już przeze mnie przygotowana.
-    </p>
 
-    <x-mail-quest-mini :quest="$request" />
+<h2>{{ $pl["kobieta"] ? "Szanowna Pani" : "Szanowny Panie" }} {{ $pl["imiewolacz"] }},</h2>
+<p>
+    uprzejmie dziękuję za @if ($request->client_id) ponowne @endif zainteresowanie moimi usługami.
+    Wycena {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia została już przeze mnie przygotowana.
+</p>
 
-    @if ($comment = $request->history->first()->comment)
-    {{ Illuminate\Mail\Markdown::parse($comment) }}
-    @endif
+<x-requests.tile :request="$request" />
 
-    <p>Uprzejmie proszę o zapoznanie się i wyrażenie swojej opinii za pomocą przycisków dostępnych pod wyceną.</p>
+@if ($comment = $request->history->first()->comment)
+{{ Illuminate\Mail\Markdown::parse($comment) }}
+@endif
 
-    <h3>
-        Kliknij
-        <a
-            class="button"
-            href="{{ route('request', ['id' => $request->id]) }}"
-            >
-            tutaj,
-        </a>
-        aby zobaczyć szczegóły zapytania
-    </h3>
+<p>Uprzejmie proszę o zapoznanie się i wyrażenie swojej opinii za pomocą przycisków dostępnych pod wyceną.</p>
 
-    @if ($request->client)
-    <p>
-        <i>
-            Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->client->password }}</b>
-        </i>
-    </p>
-    @endif
+<h3>Kliknij przycisk powyżej, aby zobaczyć szczegóły zapytania</h3>
+
+@if ($request->user)
+<p>
+    <i>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->user->notes->password }}</b>
+    </i>
+</p>
+@endif
 
 @endsection

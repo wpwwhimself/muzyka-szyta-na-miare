@@ -55,7 +55,7 @@ class SongController extends Controller
 
         $tags = FileTag::orderBy("name")->get();
 
-        return view(user_role().".songs.list", array_merge(
+        return view("pages.".user_role().".songs.list", array_merge(
             ["title" => "Lista utworów"],
             compact("songs", "song_work_times", "price_codes", "search", "tags")
         ));
@@ -75,7 +75,7 @@ class SongController extends Controller
             $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
         }
 
-        return view(user_role().".songs.edit", array_merge(
+        return view("pages.".user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
             compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion"),
         ));
@@ -99,14 +99,14 @@ class SongController extends Controller
             Showcase::where("song_id", $song->id)->delete();
         }
 
-        return back()->with("success", "Utwór poprawiony");
+        return back()->with("toast", ["success", "Utwór poprawiony"]);
     }
 
     #region genres
     public function listGenres(): View
     {
         $genres = Genre::orderBy("name")->get();
-        return view(user_role().".songs.genres.list", array_merge(
+        return view("pages.".user_role().".songs.genres.list", array_merge(
             ["title" => "Gatunki utworów"],
             compact("genres"),
         ));
@@ -115,7 +115,7 @@ class SongController extends Controller
     public function editGenre(string $id = null): View
     {
         $genre = Genre::find($id);
-        return view(user_role().".songs.genres.edit", array_merge(
+        return view("pages.".user_role().".songs.genres.edit", array_merge(
             ["title" => $genre ? $genre->name." | Edycja gatunku" : "Tworzenie gatunku"],
             compact("genre"),
         ));
@@ -128,7 +128,7 @@ class SongController extends Controller
         } else if ($rq->action == "delete") {
             Genre::find($rq->id)->delete();
         }
-        return redirect()->route("song-genres")->with("success", "Gatunek poprawiony");
+        return redirect()->route("song-genres")->with("toast", ["success", "Gatunek poprawiony"]);
     }
 
     #endregion
@@ -137,7 +137,7 @@ class SongController extends Controller
     public function listTags(): View
     {
         $tags = SongTag::orderBy("name")->get();
-        return view(user_role().".songs.tags.list", array_merge(
+        return view("pages.".user_role().".songs.tags.list", array_merge(
             ["title" => "Tagi utworów"],
             compact("tags"),
         ));
@@ -146,7 +146,7 @@ class SongController extends Controller
     public function editTag(string $id = null): View
     {
         $tag = SongTag::find($id);
-        return view(user_role().".songs.tags.edit", array_merge(
+        return view("pages.".user_role().".songs.tags.edit", array_merge(
             ["title" => $tag ? $tag->name." | Edycja tagu" : "Tworzenie taga"],
             compact("tag"),
         ));
@@ -159,7 +159,7 @@ class SongController extends Controller
         } else if ($rq->action == "delete") {
             SongTag::find($rq->id)->delete();
         }
-        return redirect()->route("song-tags")->with("success", "Tag poprawiony");
+        return redirect()->route("song-tags")->with("toast", ["success", "Tag poprawiony"]);
     }
     #endregion
 
@@ -202,7 +202,12 @@ class SongController extends Controller
             "artist",
         ])->values();
 
-        return $songs;
+        $table = view("components.front.song-list", ["songs" => $songs])->render();
+
+        return [
+            "data" => $songs,
+            "table" => $table,
+        ];
     }
 
     public function changeLink(Request $rq){
@@ -216,4 +221,11 @@ class SongController extends Controller
         $tags = SongTag::orderBy("name")->get();
         return response()->json($tags ?? []);
     }
+
+    #region downloader
+    public function downloader()
+    {
+        return view("pages.".user_role().".songs.downloader");
+    }
+    #endregion
 }

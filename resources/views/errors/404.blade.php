@@ -1,9 +1,3 @@
-@extends('layouts.app', ["title" => "Nie znaleziono"])
-
-@section('content')
-
-<div id="error-page">
-    <h1 class="error">404</h1>
-    <p>{{ $exception->getMessage() ?? "Nie znaleziono" }}</p>
-</div>
-@endsection
+@extends("layouts.shipyard.error")
+@section("title", "Nie znaleziono")
+@section("description", "Strona, której szukasz, nie istnieje. Pewnie została usunięta lub przeniesiona.")

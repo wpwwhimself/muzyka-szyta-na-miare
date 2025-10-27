@@ -1,0 +1,20 @@
+<div class="contact-info flex down no-gap">
+    <a class="flex right nowrap middle" href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">
+        <x-shipyard.app.icon name="email" />
+        {{ env("MAIL_MAIN_ADDRESS") }}
+    </a>
+    <a class="flex right nowrap middle" href="callto:+48530268000">
+        <x-shipyard.app.icon name="phone" />
+        <x-shipyard.app.icon name="whatsapp" />
+        +48 530 268 000
+    </a>
+
+    <span class="flex right nowrap middle">
+        @foreach (\App\Models\ShowcasePlatform::all() as $platform)
+        <a href="{{ $platform->msznm_url }}">
+            <x-shipyard.app.icon :name="$platform->name" mode="url" :data="$platform->icon_url" />
+        </a>
+        @endforeach
+        muzykaszytanamiarepl
+    </span>
+</div>

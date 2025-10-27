@@ -22,7 +22,7 @@ class FileController extends Controller
     {
         $tags = FileTag::orderBy("name")->get();
 
-        return view(user_role().'.files.tags.list', array_merge(
+        return view("pages.".user_role().'.files.tags.list', array_merge(
             ["title" => "Pliki"],
             compact("tags"),
         ));
@@ -32,7 +32,7 @@ class FileController extends Controller
     {
         $tag = FileTag::find($id);
 
-        return view(user_role().'.files.tags.edit', array_merge(
+        return view("pages.".user_role().'.files.tags.edit', array_merge(
             ["title" => ($tag) ? "$tag->name | Edytuj tag" : "Dodaj tag"],
             compact("tag"),
         ));
@@ -42,11 +42,13 @@ class FileController extends Controller
     {
         if ($rq->action == "save") {
             $tag = FileTag::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
-            return redirect()->route("file-tag-edit", ["id" => $tag->id])->with("success", "Tag poprawiony");
+            return redirect()->route("file-tag-edit", ["id" => $tag->id])->with("toast", ["success", "Tag poprawiony"]);
         } else if ($rq->action == "delete") {
             FileTag::find($rq->id)->delete();
-            return redirect()->route("file-tags")->with("success", "Tag usunięty");
+            return redirect()->route("file-tags")->with("toast", ["success", "Tag usunięty"]);
         }
+
+        abort(400);
     }
     #endregion
 
@@ -59,14 +61,14 @@ class FileController extends Controller
         ];
         $song = $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::clients()->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+        $clients = User::has("notes")->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
             ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
         $quest = ($entity_name == "quest") ? Quest::find($id) : null;
 
-        return view(user_role().'.files.edit', compact(
+        return view("pages.".user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
@@ -80,13 +82,13 @@ class FileController extends Controller
     {
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::clients()->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[id]»")])
+        $clients = User::has("notes")->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
             ->toArray();
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();
 
-        return view(user_role().'.files.edit', compact(
+        return view("pages.".user_role().'.files.edit', compact(
             "song",
             "file",
             "tags",
@@ -137,7 +139,7 @@ class FileController extends Controller
                 "song_id" => $song->id,
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
-                "transposition" => $rq->transposition,
+                "transposition" => $rq->transposition ?? 0,
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,
             ]);
@@ -149,10 +151,10 @@ class FileController extends Controller
                 Storage::delete($path);
             }
             $file->delete();
-            return redirect()->route("songs", ["search" => $song->id])->with('success', 'Pliki usunięte');
+            return redirect()->route("songs", ["search" => $song->id])->with('toast', ['success', 'Pliki usunięte']);
         }
 
-        return redirect()->route("files-edit", ["id" => $file->id])->with('success', 'Pliki wgrane');
+        return redirect()->route("files-edit", ["id" => $file->id])->with('toast', ['success', 'Pliki wgrane']);
     }
 
     public function addFromExisingSafe(string $song_id)
@@ -165,7 +167,7 @@ class FileController extends Controller
             ->toArray();
         $existing_files = ModelsFile::where("song_id", $song_id)->get();
 
-        return view(user_role().'.files.add-from-existing-safe', compact(
+        return view("pages.".user_role().'.files.add-from-existing-safe', compact(
             "song",
             "files",
             "clients",
@@ -195,7 +197,7 @@ class FileController extends Controller
             $file->exclusiveClients()->sync($rq->only_for_client_id ?? []);
         }
 
-        return back()->with("success", "Wpis dodany");
+        return back()->with("toast", ["success", "Wpis dodany"]);
     }
     #endregion
 
@@ -236,7 +238,7 @@ class FileController extends Controller
             ->storeAs("showcases", $rq->id.".ogg")
         ;
 
-        return back()->with("success", "Showcase dodany");
+        return back()->with("toast", ["success", "Showcase dodany"]);
     }
 
     public function showcaseFileShow($id){

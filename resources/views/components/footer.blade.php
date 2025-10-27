@@ -8,25 +8,6 @@
   </div>
 
   @unless($stripped)
-  <div class="contact-info">
-    <a href="mailto:{{ env("MAIL_MAIN_ADDRESS") }}">
-        <i class="fa-solid fa-envelope"></i>
-        {{ env("MAIL_MAIN_ADDRESS") }}
-    </a>
-    <a href="callto:+48530268000">
-        <i class="fa-solid fa-phone"></i>
-        <i class="fa-brands fa-whatsapp"></i>
-        +48 530 268 000
-    </a>
 
-    <span>
-        @foreach ($socials as [$icon, $link])
-        <a href="{{ $link }}">
-            <i class="fa-brands fa-{{ $icon }}"></i>
-        </a>
-        @endforeach
-        muzykaszytanamiarepl
-    </span>
-</div>
 @endunless
 </footer>

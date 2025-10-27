@@ -135,15 +135,15 @@ setInterval(getSong, 10e3)
 </script>
 
 <template>
-<div class="flex-right center"
+<div class="flex right center"
     v-if="!(modes && song)"
 >
     <FontAwesomeIcon :icon="faHourglass" spin size="10x" />
 </div>
-<div class="flex-down center" v-else>
-    <div id="clocks-outer" class="flex-right center">
+<div class="flex down center" v-else>
+    <div id="clocks-outer" class="flex right center">
         <FontAwesomeIcon :icon="faCog" :spin="nowWorking != 0" size="8x" />
-        <div id="clocks" class="flex-down center">
+        <div id="clocks" class="flex down center">
             <strong>{{ renderTime(time_major) }}</strong>
             <strong class="ghost" v-if="nowWorking != 0">
                 {{ modes.find(m => m.id == nowWorking)?.status_symbol }}
@@ -152,16 +152,16 @@ setInterval(getSong, 10e3)
         </div>
     </div>
 
-    <div class="grid-2" style="align-items: normal;">
+    <div class="grid" style="--col-count: 2; align-items: normal;">
         <div class="buttons">
             <div v-for="mode in modes"
-                class="submit tight clickable"
+                class="button submit tight interactive"
                 @click="() => startStop(song.id, mode.id)"
             >
                 {{ mode.status_symbol }}
             </div>
             <div
-                class="submit tight clickable"
+                class="button submit tight interactive"
                 style="grid-column: span 2"
                 @click="() => startStop(song.id, 13)"
             >
@@ -170,7 +170,7 @@ setInterval(getSong, 10e3)
             </div>
         </div>
 
-        <div id="log-table" class="flex-right keep-for-mobile center nowrap">
+        <div id="log-table" class="flex right keep-for-mobile center nowrap">
             <div v-for="log in song?.work_time"
                 class="plot-column"
             >
@@ -191,7 +191,7 @@ setInterval(getSong, 10e3)
                     <b>{{ modes.find(m => m.id == log.status_id).status_name }}</b>:
                     {{ log.time_spent }}
                 </span>
-                <span class="bin clickable">
+                <span class="bin interactive">
                     <FontAwesomeIcon :icon="faTrash"
                         @click="() => remove(song.id, log.status_id)"
                     />
@@ -202,19 +202,26 @@ setInterval(getSong, 10e3)
 </div>
 </template>
 
+<style>
+.extendo-block {
+    align-self: initial !important;
+}
+</style>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400..700&display=swap');
+
 #clocks-outer {
     align-items: center;
-    margin-bottom: var(--size-m);
+    margin-bottom: 1em;
 }
 #clocks > * {
-    font-size: calc(var(--size-xxl) * 1.5);
+    font-size: 3em;
     font-family: "Sometype Mono";
     line-height: 90%;
 
     &:first-child {
-        font-size: calc(var(--size-xxl) * 3);
+        font-size: 5em;
     }
 }
 .buttons {
@@ -241,14 +248,14 @@ setInterval(getSong, 10e3)
             height: 7em;
 
             & .plot-bar {
-                background-color: var(--bg2);
+                background-color: var(--bg-lite2);
                 position: absolute;
                 bottom: 0;
                 width: 100%;
                 border-radius: 0.25em;
 
                 &.accent {
-                    background-color: var(--acc);
+                    background-color: var(--primary);
                 }
             }
         }

@@ -31,34 +31,6 @@ class QuestHistory extends Component
         $this->extended = $extended;
     }
 
-    public function statusName($id){
-        return Status::find($id)->status_name;
-    }
-    public function clientName($id){
-        if($id == 1) return "Wojciech Przybyła";
-        if($id == null) return _ct_($this->quest->client_name);
-        return _ct_(User::find($id)->client_name);
-    }
-    public function entryLabel(StatusChange $entry){
-        $output = "";
-        $details = [];
-        if($entry->values) foreach(json_decode($entry->values) as $key => $val){
-            $details[] = "- **$key**: $val";
-        }
-        $content = [
-            "<span class='quest-status p-".$entry->status->id."'><i class='fas ".$entry->status->status_symbol."'></i> ".$entry->status->status_name."</span>",
-            count($details) ? implode("\n", $details) : null,
-            in_array($entry->new_status_id, [32, 34]) ? _c_(as_pln($entry->comment)) : $entry->comment,
-            "<span class='grayed-out'>".$this->clientName($entry->changed_by).", ".$entry->date."</span>",
-        ];
-        foreach($content as $value){
-            if(empty($value)) continue;
-            $value = preg_replace('/"/', "&quot;", $value);
-            $output .= Markdown::parse($value);
-        }
-        return $output;
-    }
-
     /**
      * Get the view / contents that represent the component.
      *

@@ -2,7 +2,7 @@
     "showcases",
 ])
 
-<div id="showcase-fbs" class="flex-right center">
+<div id="showcase-fbs" class="flex right center">
     @php $player_dims = [300, 575]; @endphp
     @forelse ($showcases as $showcase)
         @switch($showcase->platform)

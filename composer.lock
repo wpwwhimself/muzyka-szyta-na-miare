@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8f17613453de6f59eeda9d5e5634f11",
+    "content-hash": "d4150cea05201d6436d3e4e353c97e59",
     "packages": [
         {
             "name": "andcarpi/laravel-popper",
@@ -6229,6 +6229,125 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wildside/userstamps",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mattiverse/Laravel-Userstamps.git",
+                "reference": "c69a8fbba20d444fa2f0f13cd0815563768a9bb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mattiverse/Laravel-Userstamps/zipball/c69a8fbba20d444fa2f0f13cd0815563768a9bb6",
+                "reference": "c69a8fbba20d444fa2f0f13cd0815563768a9bb6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "illuminate/database": "^9.0|^10.0|^11.0|^12.0",
+                "laravel/pint": "^1.21",
+                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.0|^11.0|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mattiverse\\Userstamps\\UserstampsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mattiverse\\Userstamps\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt McDonald",
+                    "email": "matt.mcdonald@outlook.com"
+                }
+            ],
+            "description": "Laravel Userstamps provides an Eloquent trait which automatically maintains `created_by` and `updated_by` columns on your model, populated by the currently authenticated user in your application.",
+            "keywords": [
+                "created_by",
+                "deleted_by",
+                "eloquent",
+                "laravel",
+                "updated_by",
+                "userstamps"
+            ],
+            "support": {
+                "issues": "https://github.com/mattiverse/Laravel-Userstamps/issues",
+                "source": "https://github.com/mattiverse/Laravel-Userstamps/tree/3.1.0"
+            },
+            "time": "2025-06-09T07:03:35+00:00"
+        },
+        {
+            "name": "wpwwhimself/shipyard",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../shipyard",
+                "reference": "b4528335161398c081e223bd6a142d7b01354e51"
+            },
+            "require": {
+                "andcarpi/laravel-popper": "^0.9.4",
+                "illuminate/console": "^12.7",
+                "illuminate/support": "^12.7",
+                "laravel/sanctum": "*",
+                "postare/blade-mdi": "^1.1",
+                "wildside/userstamps": "*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wpwwhimself\\Shipyard\\ShipyardServiceProvider"
+                    ],
+                    "aliases": {
+                        "Shipyard": "Wpwwhimself\\Shipyard\\Facades\\Shipyard"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wpwwhimself\\Shipyard\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wojciech Przybyła",
+                    "email": "contact@wpww.pl"
+                }
+            ],
+            "description": "A starting piece for WPWW's website, with many useful things to accelerate building new things",
+            "homepage": "https://github.com/wpwwhimself/shipyard",
+            "keywords": [
+                "framework",
+                "laravel",
+                "shipyard",
+                "wpwwhimself"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         }
     ],
     "packages-dev": [
@@ -8783,7 +8902,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "wpwwhimself/shipyard": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

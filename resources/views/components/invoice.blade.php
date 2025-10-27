@@ -2,16 +2,16 @@
 
 <div id="invoice">
     <h1>Faktura nr {{ $invoice->fullCode }}</h1>
-    <div class="dates grid-2 name-value">
+    <div class="dates grid name-value" style="--col-count: 2;">
         <span>Data wystawienia:</span>
         <span>{{ $invoice->created_at->format("Y-m-d") }}</span>
     </div>
-    <div class="grid-2">
+    <div class="grid" style="--col-count: 2;">
         <section class="account">
             <h3>Sprzedawca</h3>
             <h2>Wojciech Przybyła</h2>
             <h3>Muzyka Szyta Na Miarę</h3>
-            <div class="grid-2 name-value">
+            <div class="grid name-value" style="--col-count: 2;">
                 <span>e-mail:</span>
                 <span>{{ env("MAIL_MAIN_ADDRESS") }}</span>
                 <span>tel:</span>
@@ -22,9 +22,9 @@
         </section>
         <section class="account">
             <h3>Nabywca</h3>
-            <h2>{{ _ct_($invoice->payer_name ?? $invoice->quest->client->client_name) }}</h2>
+            <h2>{{ _ct_($invoice->payer_name ?? $invoice->quest->user->notes->client_name) }}</h2>
             <h3>{{ _ct_($invoice->payer_title) }}</h3>
-            <div class="grid-2 name-value">
+            <div class="grid name-value" style="--col-count: 2;">
                 @if ($invoice->payer_address)
                     <span>adres:</span>
                     <span>{{ _ct_($invoice->payer_address) }}</span>
@@ -49,7 +49,7 @@
         </section>
     </div>
 
-    <div class="quests-table section-like">
+    <div class="quests-table section">
         <style>
         .table-row{ grid-template-columns: auto auto; }
         .table-row span:last-child{ text-align: right; }
@@ -89,7 +89,7 @@
         @endforeach
     </div>
 
-    <div class="grid-2 name-value summary">
+    <div class="grid name-value summary" style="--col-count: 2;">
         <span>Razem do zapłaty:</span>
         <span>{{ _c_(as_pln($invoice->amount)) }}</span>
         @if ($invoice->paid)

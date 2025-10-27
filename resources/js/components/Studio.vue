@@ -39,24 +39,23 @@ setInterval(getQuests, 10e3)
 />
 <template v-else>
     <span v-if="quests.length == 0" class="grayed-out">brak zleceń</span>
-    <div class="quests-table" v-else>
-        <div class="table-header table-row">
-            <span></span>
-            <span>Zlecenie</span>
-            <span>Utwór</span>
-            <span>Klient</span>
-            <span></span>
-        </div>
-        <hr>
+    <div class="flex down" v-else>
         <div v-for="quest in quests" :class="[
-            `table-row`,
+            `card`,
+            `flex`, `right`, `middle`, `spread`,
             `p-${quest.status_id}`,
         ].filter(Boolean).join(' ')">
-            <span style="color: rgb(var(--q-clr))"><FontAwesomeIcon :icon="dIcons[quest.status_id]" /></span>
-            <span><a :href="`/quests/view/${quest.id}`">{{ quest.id }}</a></span>
-            <span><a :href="`/songs?search=${quest.song_id}`">{{ quest.song.full_title }}</a></span>
-            <span><a :href="`/clients/list?search=${quest.client.client_name}`">{{ quest.client.client_name }}</a></span>
-            <span><a :href="`/studio-view/${quest.id}`" class="submit tight"><FontAwesomeIcon :icon="faAnglesRight" /></a></span>
+            <div class="flex right middle">
+                <span style="color: rgb(var(--q-clr))"><FontAwesomeIcon :icon="dIcons[quest.status_id]" /></span>
+                <div>
+                    <h3>{{ quest.song.full_title }}</h3>
+                    <span><a :href="`/quests/view/${quest.id}`">{{ quest.id }}</a></span>
+                </div>
+            </div>
+
+            <span><a :href="`/clients/list?search=${quest.user.notes.client_name}`">{{ quest.user.notes.client_name }}</a></span>
+
+            <a :href="`/studio-view/${quest.id}`" class="button submit tight"><FontAwesomeIcon :icon="faAnglesRight" /></a>
         </div>
     </div>
 </template>

@@ -1,3 +1,5 @@
-<i class="fa-solid fa-bounce fa-triangle-exclamation hint warning"
+<span class="hint accent danger"
     {{ Popper::interactive()->pop($slot) }}
-></i>
+>
+    <x-shipyard.app.icon name="alert" />
+</span>

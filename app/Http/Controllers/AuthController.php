@@ -31,17 +31,17 @@ class AuthController extends Controller
             if($credentials === $user->password){
                 Auth::login(User::find($user->id), $remember);
                 $request->session()->regenerate();
-                return redirect()->intended("dashboard")->with("success", "Zalogowano");
+                return redirect()->intended("dashboard")->with("toast", ["success", "Zalogowano"]);
             }
         }
 
-        return back()->with("error", "Nieprawidłowe dane logowania");
+        return back()->with("toast", ["error", "Nieprawidłowe dane logowania"]);
     }
 
     public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect("/")->with("success", "Wylogowano");
+        return redirect("/")->with("toast", ["success", "Wylogowano"]);
     }
 }

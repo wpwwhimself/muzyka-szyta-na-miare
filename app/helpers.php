@@ -10,19 +10,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-/**
- * SETTING GETTER
- */
-if(!function_exists("setting")){
-    function setting($setting_name){
-        return DB::table("settings")->where("setting_name", $setting_name)->value("value_str");
-    }
-}
 if(!function_exists("QUEST_MINIMAL_PRICES")){
     function QUEST_MINIMAL_PRICES(){
         return array_combine(
             [1, 2, 3],
-            explode(",", setting("quest_minimal_price"))
+            explode(",", setting("msznm_quest_minimal_price"))
         );
     }
 }
@@ -32,12 +24,12 @@ if(!function_exists("QUEST_MINIMAL_PRICES")){
  */
 if(!function_exists("VETERAN_FROM")){
     function VETERAN_FROM(){
-        return setting("veteran_from");
+        return setting("msznm_veteran_from");
     }
 }
 if(!function_exists("CURRENT_PRICING")){
     function CURRENT_PRICING(){
-        return setting("current_pricing");
+        return setting("msznm_current_pricing");
     }
 }
 if(!function_exists("BEGINNING")){
@@ -86,7 +78,8 @@ if(!function_exists("user_role")){
 }
 if(!function_exists("is_archmage")){
     function is_archmage($user_id = null){
-        return in_array($user_id ?? Auth::id(), [0, 1], true);
+        $user_id ??= Auth::id();
+        return User::find($user_id)?->hasRole("archmage") ?? false;
     }
 }
 
@@ -170,7 +163,7 @@ if(!function_exists("from_base36")){
  */
 if(!function_exists("generate_password")){
     function generate_password(){
-        $existing_passwords = User::pluck("password")->toArray();
+        $existing_passwords = User::all()->map(fn ($u) => $u->notes?->password)->filter()->toArray();
         $chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789";
         do{
             //sprawdź unikatowość
@@ -185,83 +178,11 @@ if(!function_exists("generate_password")){
 }
 
 /**
- * Big ol' calculation of quests' prices
- */
-if(!function_exists("price_calc")){
-    function price_calc($labels, $client_id, $quoting = false){
-        if($client_id == null) $client_id = $_POST['client_id'] ?? null; //odczyt tak, bo nie chce złapać argumentu
-        $client = User::find($client_id);
-        $price_schema = pricing($client_id);
-
-        $price = 0; $multiplier = 1; $positions = [];
-
-        $price_list = DB::table("prices")
-            ->select(["indicator", "service", "quest_type_id", "operation", "price_$price_schema AS price"])
-            ->get();
-
-        if($quoting){
-            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
-            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
-            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
-        }
-
-        $quest_type_present = null;
-        foreach($price_list as $cat){
-            preg_match_all("/$cat->indicator/", $labels, $matches);
-            if(count($matches[0]) > 0):
-                // nuty do innego typu zlecenia za pół ceny
-                $quest_type_present ??= $cat->quest_type_id;
-                $price_to_add = $cat->price;
-                if($cat->quest_type_id == 2 && $quest_type_present != 2) $price_to_add /= 2;
-
-                switch($cat->operation){
-                    case "+":
-                        $price += $price_to_add * count($matches[0]);
-                        array_push($positions, [$cat->service, _c_(as_pln($price_to_add * count($matches[0])))]);
-                        break;
-                    case "*":
-                        $multiplier += $price_to_add * count($matches[0]);
-                        $sign = ($price_to_add >= 0) ? "+" : "-";
-                        array_push($positions, [$cat->service, $sign._c_(count($matches[0]) * abs($price_to_add) * 100)."%"]);
-                        break;
-                }
-            endif;
-        }
-
-        $price *= $multiplier;
-        $override = false;
-
-        // minimal price
-        $minimal_price = $quest_type_present ? QUEST_MINIMAL_PRICES()[$quest_type_present] : 0;
-        $minimal_price_output = 0;
-        if($price < $minimal_price){
-            $price = $minimal_price;
-            $minimal_price_output = $minimal_price;
-            $override = true;
-        }
-
-        // manual price override
-        if(preg_match_all("/\d+[\.\,]?\d+/", $labels, $matches)){
-            $price = floatval(str_replace(",",".",$matches[0][0]));
-            $override = true;
-        }
-
-        return [
-            "price" => _c_(round($price)),
-            "positions" => $positions,
-            "override" => $override,
-            "labels" => $labels,
-            "minimal_price" => $minimal_price_output,
-        ];
-    }
-}
-
-/**
  * Next working day
  */
 if(!function_exists("get_next_working_day")){
     function get_next_working_day(){
-        $workdays_capacity = explode(",", setting("available_day_until"));
+        $workdays_capacity = explode(",", setting("msznm_available_day_until"));
         $free_days_soon = CalendarFreeDay::where("date", ">=", Carbon::today())
             ->get()->pluck("date")->toArray();
 
@@ -289,10 +210,10 @@ if(!function_exists("can_download_files")){
         $client = User::findOrFail($client_id);
         $quest = Quest::findOrFail($quest_id);
         return
-            $client->can_see_files
+            $client->notes->can_see_files
             && (
-                $client->is_veteran
-                || $client->trust >= 1
+                $client->notes->is_veteran
+                || $client->notes->trust >= 1
                 || $quest->paid
                 || (
                     ($quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0 ?? true)
@@ -309,7 +230,7 @@ if(!function_exists("pricing")){
             //loop for cycling through pricing schemas
             for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
                 $next_letter = chr(ord($letter) + 1);
-                $this_pricing_since = Carbon::parse(setting("pricing_".$next_letter."_since"));
+                $this_pricing_since = Carbon::parse(setting("msznm_pricing_".$next_letter."_since"));
                 if($client_since->lt($this_pricing_since)) return $letter;
             }
         }
@@ -322,7 +243,7 @@ if(!function_exists("quests_unpaid")){
 
         $quests = Quest::where("paid", 0)
             ->whereIn("status_id", $allowed_statuses)
-            ->whereHas("client", function($query){
+            ->whereHas("user.notes", function($query){
                 $query->where("trust", ">", -1);
             })
             ;
@@ -430,18 +351,6 @@ if(!function_exists("is_request")){
 if(!function_exists("as_pln")){
     function as_pln($value){
         return number_format($value, 2, ",", " ")." zł";
-    }
-}
-
-/**
- * Turn array to html list
- */
-if(!function_exists("arr_to_list")){
-    function arr_to_list($array, $ordered = false){
-        $list_tag = $ordered ? "ol" : "ul";
-        echo "<$list_tag>";
-        foreach($array as $label => $value) echo "<li><strong>$label</strong>: $value</li>";
-        echo "</$list_tag>";
     }
 }
 

@@ -1,11 +1,196 @@
 @extends("layouts.app-front")
-@section("subtitle", "Kompleksowe usługi muzyczne dopasowane do Ciebie")
+@section("title", setting("app_name"))
 
 @section("content")
 
-<section id="links">
-    <h1>Wybierz, czego potrzebujesz:</h1>
-    <x-front.services />
-</section>
+<script>
+function jumpTo(selector) {
+    document.querySelector(selector).scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+}
+
+function openSection(slug) {
+    document.querySelectorAll(`[role="service"]`).forEach(el => {
+        el.classList.toggle("active", el.getAttribute("data-slug") === slug);
+    });
+    document.querySelectorAll(`[role="service-button"]`).forEach(el => {
+        el.classList.toggle("active", el.getAttribute("data-slug") === slug);
+    });
+
+    jumpTo(`#jump-target`);
+}
+
+function filterSongs(domain, criterion = undefined, id = undefined) {
+    const filterFunction = {
+        genre: (song, needle, haystack) => haystack === needle,
+        tag: (song, needle, haystack) => haystack.includes(needle)
+    }
+
+    let visible_songs = 0;
+    document.querySelectorAll(`#songs ul#${domain}-song-list li`).forEach(song => {
+        const haystacks = {
+            genre: parseInt(song.getAttribute("data-song-genre")),
+            tag: song.getAttribute("data-song-tags").split(",").map(parseInt)
+        }
+
+        if (criterion === undefined) {
+            song.classList.remove("hidden")
+            visible_songs++
+            return
+        }
+
+        if (!filterFunction[criterion](song, parseInt(id), haystacks[criterion])) {
+            song.classList.add("hidden")
+        } else {
+            song.classList.remove("hidden")
+            visible_songs++
+        }
+    })
+    document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs
+}
+
+function filterShowcases(mode) {
+    document.querySelectorAll("#showcases .showcase-section").forEach(section => {
+        if (section.getAttribute("data-mode") === mode) {
+            section.classList.remove("hidden")
+        } else {
+            section.classList.add("hidden")
+        }
+    })
+}
+
+function getSongList(domain = undefined) {
+    /**
+     * load and display songs
+     * it's set here to accelerate loading speed
+     */
+    fetch("/api/songs/info" + (domain ? "?for=" + domain : ""))
+        .then(res => res.json())
+        .then(({data, table}) => {
+            const list = document.querySelector(`#songs ul#${domain}-song-list`);
+            list.replaceWith(fromHTML(table));
+            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="${domain}-songs-count">${data.length}</b></p>`);            
+        });
+}
+
+function openSongDemo(song_id = undefined, song_title = undefined, song_desc = undefined) {
+    const player = document.querySelector("#songs audio");
+    const popup = document.querySelector("#song-demo-popup");
+
+    popup.classList.toggle("open", song_id !== undefined);
+    
+    if (song_id == undefined) {
+        pauseFilePlayer("");
+    }
+
+    popup.querySelector(".song-full-title").innerHTML = song_title;
+    popup.querySelector(".song-desc").innerHTML = song_desc;
+
+    if (song_id !== undefined) {
+        player.src = `showcase/show/${song_id}`;
+        player.load();
+        player.addEventListener("canplay", () => {
+            startFilePlayer("");
+        });
+    }
+}
+</script>
+
+<x-section id="home" scissors>
+    <div class="company-name flex right but-mobile-down center">
+        <img src="{{ asset("msznm.svg") }}" alt="logo" class="logo">
+        <div>
+            <h1>{{ setting("app_name") }}</h1>
+            <p>Wojciech Przybyła</p>
+            <h2>
+                <span class="appear-cycle">
+                    <span>Podkłady i aranże</span>
+                    <span>Msze i uroczystości</span>
+                    <span>Imprezy i koncerty</span>
+                </span><br>
+                dostosowane do<br>
+                Twoich potrzeb
+            </h2>
+        </div>
+    </div>
+</x-section>
+
+<div role="services">
+    <p id="jump-target">Wybierz kategorię, aby dowiedzieć się więcej:</p>
+
+    <div class="flex right center">
+        @foreach ([
+            ["Podkłady i nuty", "Nagrania i partytury", "podklady"],
+            ["Organista", "Oprawa ślubów i mszy", "organista"],
+            ["Imprezy i koncerty", "Muzyka na żywo", "dj"],
+        ] as $i => [$label, $desc, $slug_part])
+        <div class="section flex right center middle interactive backdropped stagger"
+            onclick="openSection('{{ $slug_part }}')"
+            role="service-button"
+            data-slug="{{ $slug_part }}"
+            style="--stagger-index: {{ $i + 1 }};"
+        >
+            <img src="{{ asset("assets/divisions/$slug_part.svg") }}" alt="logo"
+                class="icon white-on-black"
+            >
+            <div class="service-label">
+                <h2>{{ $label }}</h2>
+                <p>{{ $desc }}</p>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+<div role="service" data-slug="podklady" class="animatable stagger">
+    <x-front.podklady />
+</div>
+
+<div role="service" data-slug="organista" class="animatable stagger">
+    <x-front.organista />
+</div>
+
+<div role="service" data-slug="dj" class="animatable stagger">
+    <x-front.dj />
+</div>
+
+<div id="song-demo-popup" class="popup">
+    <div class="popup-contents flex down center">
+        <h3 class="song-full-title"></h3>
+        <p class="song-desc"></p>
+        
+        <x-file-player type="ogg" file="" is-showcase />
+
+        <x-shipyard.ui.button
+            label="Zamknij"
+            icon="close"
+            action="none"
+            onclick="openSongDemo();"
+            class="tertiary"
+        />
+    </div>
+</div>
+
+@endsection
+
+@section("appends")
+
+<script>
+/**
+ * animate on scroll
+ */
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.remove("scroll-hidden");
+        }
+    });
+});
+
+const hiddenElements = document.querySelectorAll(".scroll-hidden");
+hiddenElements.forEach((el) => observer.observe(el));
+</script>
 
 @endsection

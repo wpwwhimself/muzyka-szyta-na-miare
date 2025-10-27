@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
@@ -50,7 +51,7 @@ class ClientController extends Controller
             $clients[$k] = collect($v)->sortBy([['exp', "desc"], ['client_name', 'asc']]);
         }
 
-        return view(user_role().".clients", array_merge(
+        return view("pages.".user_role().".clients", array_merge(
             ["title" => "Klienci"],
             compact("clients", "max_exp","classes", "search")
         ));
@@ -78,7 +79,7 @@ class ClientController extends Controller
             2 => "potwierdzony",
         ];
 
-        return view(user_role().".client", array_merge([
+        return view("pages.".user_role().".client", array_merge([
             "title" => $client->client_name." | Edycja klienta"
         ], compact(
             "client",
@@ -89,11 +90,14 @@ class ClientController extends Controller
     }
 
     public function edit($id, Request $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         $client = User::findOrFail($id);
         $client->update([
+            "email" => $rq->email,
+        ]);
+        $client->notes()->update([
             "client_name" => $rq->client_name,
             "email" => $rq->email,
             "phone" => $rq->phone,
@@ -102,7 +106,7 @@ class ClientController extends Controller
         ]);
 
         if(is_archmage()){
-            $client->update([
+            $client->notes()->update([
                 "trust" => $rq->trust,
                 "is_forgotten" => $rq->has("is_forgotten"),
                 "helped_showcasing" => $rq->helped_showcasing,
@@ -112,26 +116,29 @@ class ClientController extends Controller
                 "external_drive" => $rq->external_drive,
                 "password" => $rq->password,
             ]);
+            $client->update([
+                "password" => Hash::make($rq->password),
+            ]);
 
             if ($rq->has("pinned_comment_id")) {
-                $client->update(["helped_showcasing" => 2]);
+                $client->notes()->update(["helped_showcasing" => 2]);
                 StatusChange::where("changed_by", $client->id)->update(["pinned" => false]);
                 StatusChange::find($rq->pinned_comment_id)->update(["pinned" => true]);
             }
 
             // budget handling
-            if($client->budget != $rq->budget){
+            if($client->notes->budget != $rq->budget){
                 BackController::newStatusLog(
                     null,
                     32,
-                    $rq->budget - $client->budget,
+                    $rq->budget - $client->notes->budget,
                     $client->id
                 );
-                $client->update(["budget" => $rq->budget]);
+                $client->notes()->update(["budget" => $rq->budget]);
             }
         }
 
-        return back()->with("success", "Dane poprawione");
+        return back()->with("toast", ["success", "Dane poprawione"]);
     }
 
     #region mailing
@@ -144,7 +151,7 @@ class ClientController extends Controller
             ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])
             ->toArray();
 
-        return view(user_role().".mail.prepare", compact("clients", "client_id"));
+        return view("pages.".user_role().".mail.prepare", compact("clients", "client_id"));
     }
 
     public function mailSend(Request $rq)
@@ -164,7 +171,7 @@ class ClientController extends Controller
             }
         }
 
-        return back()->with("success", "Mail wysłany" . ($failures ? ", błędów: $failures" : ""));
+        return back()->with("toast", ["success", "Mail wysłany" . ($failures ? ", błędów: $failures" : "")]);
     }
     #endregion
 

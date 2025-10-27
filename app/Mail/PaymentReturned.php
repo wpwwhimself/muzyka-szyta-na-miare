@@ -22,7 +22,7 @@ class PaymentReturned extends Mailable
     public function __construct($data)
     {
         $this->quest = is_string($data) ? Quest::findOrFail($data) : $data;
-        $this->pl = client_polonize($this->quest->client->client_name);
+        $this->pl = client_polonize($this->quest->user->notes->client_name);
     }
 
     /**

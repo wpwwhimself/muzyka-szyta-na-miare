@@ -1,23 +1,20 @@
-@extends('layouts.mail', compact("title"))
+@extends('layouts.mail')
+@section('title', 'Zmiana statusu zlecenia')
 
 @section('content')
-    <h2>Zmiana statusu zlecenia</h2>
-    <p>
-        {{ $isRequest ? ($quest->client_name ?? $quest->client?->client_name) : $quest->client->client_name }} zmienił(a) status zlecenia:
-    </p>
 
-    <x-mail-quest-mini :quest="$quest" />
+<p>
+    {{ $quest->client_name }} zmienił(a) status zlecenia:
+</p>
 
-    @if ($comment = $quest->history->first()?->comment)
-    {{ Illuminate\Mail\Markdown::parse($comment) }}
-    @endif
+@if ($isRequest)
+<x-requests.tile :request="$quest" />
+@else
+<x-quests.tile :quest="$quest" />
+@endif
 
-    <h3>
-        <a
-            class="button"
-            href="{{ route($isRequest ? 'request' : 'quest', ['id' => $quest->id]) }}"
-            >
-            Szczegóły zlecenia
-        </a>
-    </h3>
+@if ($comment = $quest->history->first()?->comment)
+{{ Illuminate\Mail\Markdown::parse($comment) }}
+@endif
+
 @endsection

@@ -2,13 +2,28 @@
 
 namespace App\Models;
 
+use App\Traits\Shipyard\HasStandardAttributes;
+use App\Traits\Shipyard\HasStandardFields;
+use App\Traits\Shipyard\HasStandardScopes;
 use App\Traits\Uuids;
+use Carbon\Carbon;
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\View\ComponentAttributeBag;
 
 class Request extends Model
 {
     use HasFactory, Uuids;
+
+    public const META = [
+        "label" => "Zapytania",
+        "icon" => "chat",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
 
     protected $fillable = [
         "made_by_me",
@@ -17,18 +32,266 @@ class Request extends Model
         "price_code", "price", "deadline", "hard_deadline", "delayed_payment",
         "status_id", "quest_id"
     ];
-    protected $casts = [
-        "deadline" => "datetime",
-        "hard_deadline" => "datetime",
-        "delayed_payment" => "datetime",
+
+    #region presentation
+    public function __toString(): string
+    {
+        return $this->full_title;
+    }
+
+    public function optionLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->__toString(),
+        );
+    }
+
+    public function displayTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.shipyard.app.h", [
+                "lvl" => 3,
+                "icon" => $this->quest_type->icon ?? self::META["icon"],
+                "attributes" => new ComponentAttributeBag([
+                    "role" => "card-title",
+                ]),
+                "slot" => $this->song?->title ?? $this->title ?? "Bez tytułu",
+            ])->render(),
+        );
+    }
+
+    public function displaySubtitle(): Attribute
+    {
+        return Attribute::make(
+            // get: fn () => view("components.shipyard.app.model.badges", [
+            //     "badges" => $this->badges,
+            // ])->render(),
+            get: fn () => $this->song?->artist ?? $this->artist,
+        );
+    }
+
+    public function displayMiddlePart(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.requests.details", [
+                "request" => $this,
+            ])->render(),
+        );
+    }
+    #endregion
+
+    #region fields
+    use HasStandardFields;
+
+    public const FIELDS = [
+        "client_name" => [
+            "type" => "text",
+            "label" => "Imię i nazwisko",
+            "icon" => "badge-account",
+            "required" => true,
+        ],
+        "email" => [
+            "type" => "email",
+            "label" => "Email",
+            "icon" => "email",
+        ],
+        "phone" => [
+            "type" => "tel",
+            "label" => "Numer telefonu",
+            "icon" => "phone",
+        ],
+        "other_medium" => [
+            "type" => "text",
+            "label" => "Inna forma kontaktu",
+            "icon" => "human-greeting-proximity",
+            "hint" => "np. WhatsApp",
+        ],
+        "contact_preference" => [
+            "type" => "select",
+            "label" => "Preferowana forma kontaktu",
+            "icon" => "card-account-phone",
+            "selectData" => [
+                "options" => [
+                    ["value" => "email", "label" => "email"],
+                    ["value" => "sms", "label" => "sms/komunikator"],
+                ],
+            ],
+        ],
+        "title" => [
+            "type" => "text",
+            "label" => "Tytuł utworu",
+            "icon" => "music-box",
+            "required" => true,
+        ],
+        "artist" => [
+            "type" => "text",
+            "label" => "Wykonawca",
+            "icon" => "account-music"
+        ],
+        "link" => [
+            "type" => "text",
+            "label" => "Linki do utworu",
+            "icon" => "link",
+            "hint" => "Oddzielone przecinkami",
+        ],
+        "wishes" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. utworu",
+            "icon" => "cloud",
+            "hint" => "np. styl itp.",
+        ],
+        "wishes_quest" => [
+            "type" => "TEXT",
+            "label" => "Życzenia dot. zlecenia",
+            "icon" => "cloud",
+            "hint" => "np. transpozycja, czy z linią melodyczną itp.",
+        ],
+        "hard_deadline" => [
+            "type" => "date",
+            "label" => "Termin klienta",
+            "icon" => "calendar-account",
+            "hint" => "Do kiedy klient chciałby najpóźniej otrzymać pliki.",
+        ],
+        "deadline" => [
+            "type" => "date",
+            "label" => "Termin wykonania",
+            "icon" => "calendar-blank",
+            "hint" => "Do kiedy najpóźniej jestem w stanie oddać pierwszą wersję utworu.",
+        ],
+        "price_code" => [
+            "type" => "text",
+            "label" => "Kod wyceny",
+            "icon" => "barcode",
+        ],
+        "delayed_payment" => [
+            "type" => "date",
+            "label" => "Opóźnienie wpłaty",
+            "icon" => "cash-clock",
+            "hint" => "Nie wpłacaj przed tym dniem - muszę utrzymać przychody na odpowiednim poziomie z uwagi na zasady działalności nierejestrowanej.",
+        ],
     ];
 
-    // rounded prices
-    public function getPriceAttribute($val) {
-        return round($val, 2);
+    public const CONNECTIONS = [
+        "user" => [
+            "model" => User::class,
+            "mode" => "one",
+            "role" => "archmage",
+            "field_name" => "client_id",
+            "field_label" => "Klient",
+        ],
+        "quest_type" => [
+            "model" => QuestType::class,
+            "mode" => "one",
+            "field_label" => "Rodzaj zlecenia",
+        ],
+        "song" => [
+            "model" => Song::class,
+            "mode" => "one",
+            "field_label" => "Utwór",
+        ],
+        "genre" => [
+            "model" => Genre::class,
+            "mode" => "one",
+            "field_label" => "Gatunek",
+        ],
+    ];
+
+    public const ACTIONS = [
+        // [
+        //     "icon" => "",
+        //     "label" => "",
+        //     "show-on" => "<list|edit>",
+        //     "route" => "",
+        //     "role" => "",
+        //     "dangerous" => true,
+        // ],
+    ];
+    #endregion
+
+    // use CanBeSorted;
+    public const SORTS = [
+        // "<name>" => [
+        //     "label" => "",
+        //     "compare-using" => "function|field",
+        //     "discr" => "<function_name|field_name>",
+        // ],
+    ];
+
+    public const FILTERS = [
+        // "<name>" => [
+        //     "label" => "",
+        //     "icon" => "",
+        //     "compare-using" => "function|field",
+        //     "discr" => "<function_name|field_name>",
+        //     "mode" => "<one|many>",
+        //     "operator" => "",
+        //     "options" => [
+        //         "<label>" => <value>,
+        //     ],
+        // ],
+    ];
+
+    #region scopes
+    use HasStandardScopes;
+    #endregion
+
+    #region attributes
+    protected function casts()
+    {
+        return [
+            "deadline" => "date",
+            "hard_deadline" => "date",
+            "delayed_payment" => "date",
+        ];
     }
-    public function setPriceAttribute($val) {
-        $this->attributes["price"] = round($val, 2);
+
+    protected $appends = [
+
+    ];
+
+    use HasStandardAttributes;
+
+    // public function badges(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => [
+    //             [
+    //                 "label" => "",
+    //                 "icon" => "",
+    //                 "class" => "",
+    //                 "style" => "",
+    //                 "condition" => "",
+    //             ],
+    //             [
+    //                 "html" => "",
+    //             ],
+    //         ],
+    //     );
+    // }
+
+    public function clientName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($v) => $this->user?->notes->client_name ?? $v,
+        );
+    }
+
+    public function fullTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->song?->full_title ?? implode(' – ', array_filter([
+                $this->artist,
+                $this->title ?? 'utwór bez tytułu',
+            ], fn($v) => !empty($v))),
+        );
+    }
+
+    public function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($v) => $v !== null ? round($v, 2) : null,
+            set: fn ($v) => $v !== null ? round($v, 2) : null,
+        );
     }
 
     public function getIsPriorityAttribute(){
@@ -37,14 +300,10 @@ class Request extends Model
     public function getLinkToAttribute(){
         return route("request", ["id" => $this->id]);
     }
-    public function getFullTitleAttribute(){
-        return implode(' – ', array_filter([
-            $this->artist,
-            $this->title ?? 'utwór bez tytułu',
-        ], fn($v) => !empty($v)));
-    }
+    #endregion
 
-    public function client(){
+    #region relations
+    public function user(){
         return $this->belongsTo(User::class, "client_id");
     }
     public function status(){
@@ -62,4 +321,8 @@ class Request extends Model
     public function quest(){
         return $this->belongsTo(Quest::class);
     }
+    #endregion
+
+    #region helpers
+    #endregion
 }

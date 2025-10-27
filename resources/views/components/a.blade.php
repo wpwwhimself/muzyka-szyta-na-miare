@@ -1,5 +1,12 @@
-@props(['href', 'icon' => 'angles-right'])
+@props([
+    'href',
+    'icon' => 'chevron-double-right',
+])
 
 <x-button
-  action="{{ $href }}" {{ $attributes }} :small="true" label="{{ $slot }}" icon="{{ $icon }}"
-  />
+  :action="$href"
+  :small="true"
+  :label="$slot"
+  :icon="$icon"
+  {{ $attributes }}
+/>

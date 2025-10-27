@@ -5,18 +5,26 @@
     "isShowcase" => false,
 ])
 
-<div class="file-tile file-player" data-file-name="{{ basename($file) }}">
+<div @class([
+    "file-tile", "file-player",
+    "flex", "down", "center", "middle", "nowrap",
+    "rounded",
+])
+    data-file-name="{{ basename($file) }}"
+>
     <div class="container">
-        <i class="hidden fa-solid fa-circle-notch fa-spin"></i>
-        <i class="hidden fa-solid fa-play"
-            onclick="startFilePlayer('{{ basename($file) }}')">
-        </i>
-        <i class="hidden fa-solid fa-pause fa-fade"
-            onclick="pauseFilePlayer('{{ basename($file) }}')">
-        </i>
+        <span role="btn">
+            <x-shipyard.app.icon name="loading" />
+        </span>
+        <span role="btn" onclick="startFilePlayer('{{ basename($file) }}')" class="hidden interactive">
+            <x-shipyard.app.icon name="play" />
+        </span>
+        <span role="btn" onclick="pauseFilePlayer('{{ basename($file) }}')" class="hidden interactive">
+            <x-shipyard.app.icon name="pause" />
+        </span>
     </div>
 
-    <div class="seeker hidden" style="--progress: 0%;"
+    <div class="seeker interactive hidden" style="--progress: 0%;"
         onclick="seekFilePlayer('{{ basename($file) }}', event)"
     >
     </div>

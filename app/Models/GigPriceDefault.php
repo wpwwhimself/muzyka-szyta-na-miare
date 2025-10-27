@@ -9,6 +9,14 @@ class GigPriceDefault extends Model
 {
     use HasFactory;
 
+    public const META = [
+        "label" => "",
+        "icon" => "",
+        "description" => "",
+        "role" => "",
+        "ordering" => 99,
+    ];
+
     protected $primaryKey = 'name';
     public $incrementing = false;
     protected $keyType = 'string';

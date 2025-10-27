@@ -23,7 +23,7 @@ class _Welcome extends Mailable
     {
         list($client_id) = $params;
         $this->client = User::findOrFail($client_id);
-        $this->pl = client_polonize($this->client->client_name);
+        $this->pl = client_polonize($this->user->notes->client_name);
     }
 
     /**

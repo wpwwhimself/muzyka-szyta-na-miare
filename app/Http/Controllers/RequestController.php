@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
+use App\Mail\NewRequest\Dj;
+use App\Mail\NewRequest\Organista;
+use App\Mail\NewRequest\Podklady;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
 use App\Models\Quest;
@@ -15,6 +18,7 @@ use App\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -35,7 +39,7 @@ class RequestController extends Controller
 
         $requests = $requests->paginate(25);
 
-        return view(user_role().".requests", [
+        return view("pages.".user_role().".requests", [
             "title" => "Lista zapytań",
             "requests" => $requests,
         ]);
@@ -46,8 +50,8 @@ class RequestController extends Controller
         $pad_size = 30; // used by dropdowns for mobile preview fix
 
         if(is_archmage()){
-            $clients = User::clients()->get()
-                ->mapWithKeys(fn ($c) => [$c->id => _ct_("$c->client_name «$c[email]»")])
+            $clients = User::all()
+                ->mapWithKeys(fn ($c) => [$c->id => _ct_($c)])
                 ->toArray();
             $songs = Song::all()
                 ->mapWithKeys(fn ($s) => [$s->id => Str::limit($s->title ?? "bez tytułu ($s->artist)", $pad_size)." «$s[id]»"])
@@ -55,7 +59,7 @@ class RequestController extends Controller
         }else{
             if($request->client_id != Auth::id()){
                 if(Auth::id()) abort(403, "To nie jest Twoje zapytanie");
-                else return redirect()->route("login")->with("error", "Zaloguj się, jeśli to Twoje zapytanie");
+                else return redirect()->route("login")->with("toast", ["error", "Zaloguj się, jeśli to Twoje zapytanie"]);
             };
             $clients = [];
             $songs = [];
@@ -92,11 +96,12 @@ class RequestController extends Controller
             ],
         ];
 
-        return view(user_role().".request", array_merge([
+        return view("pages.".user_role().".request", array_merge([
             "title" => "Zapytanie",
         ], compact("request", "prices", "questTypes", "clients", "songs", "genres", "warnings", "similar_songs")));
     }
 
+    #region new requests
     public function add(HttpRequest $rq){
         $pad_size = 24; // used by dropdowns for mobile preview fix
 
@@ -125,7 +130,7 @@ class RequestController extends Controller
                 $client_data
             ));
             BackController::newStatusLog($request->id, 1, "~ spoza strony");
-            return redirect()->route("request", ["id" => $request->id])->with("success", "Szablon zapytania gotowy");
+            return redirect()->route("request", ["id" => $request->id])->with("toast", ["success", "Szablon zapytania gotowy"]);
         }
 
         $clients = [];
@@ -141,10 +146,54 @@ class RequestController extends Controller
             ->pluck("service", "indicator")->toArray();
         $genres = DB::table("genres")->pluck("name", "id")->toArray();
 
-        return view(user_role().".add-request", array_merge([
+        return view("pages.".user_role().".add-request", array_merge([
             "title" => "Nowe zapytanie"
         ], compact("questTypes", "prices", "clients", "songs", "genres")));
     }
+
+    private function checkFormTest(HttpRequest $rq)
+    {
+        $value = $rq->input("test");
+        $test_ok = strtolower($value) === "dwadzieścia"
+            || strtolower($value) === "dwadziescia"
+            || $value == 20;
+
+        if (!$test_ok) {
+            return back()->with("toast", ["error", "Nie możemy potwierdzić, czy jesteś robotem. Spróbuj ponownie."]);
+        }
+    }
+
+    public function newRequestPodklady(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+
+        return $this->processAdd($rq);
+    }
+
+    public function newRequestOrganista(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+
+        $data = $rq->all();
+
+        Mail::to(env("MAIL_MAIN_ADDRESS"))
+            ->send(new Organista($data));
+
+        return back()->with("toast", ["success", "Zapytanie wysłane. Wkrótce na nie odpowiem"]);
+    }
+
+    public function newRequestDj(HttpRequest $rq)
+    {
+        $this->checkFormTest($rq);
+
+        $data = $rq->all();
+
+        Mail::to(env("MAIL_MAIN_ADDRESS"))
+            ->send(new Dj($data));
+
+        return back()->with("toast", ["success", "Zapytanie wysłane. Wkrótce na nie odpowiem"]);
+    }
+    #endregion
 
     public function finalized($id, $status, $is_new_client){
         $request = Request::findOrFail($id);
@@ -158,11 +207,10 @@ class RequestController extends Controller
     ////////////////////////////////////////////////////
 
     public function processAdd(HttpRequest $rq){
-        if(isset($rq->m_test) && $rq->m_test != 20) return redirect()->route("home")->with("error", "Cztery razy pięć nie równa się $rq->m_test");
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
 
         $flash_content = "Zapytania dodane";
-        $loop_length = is_array($rq->quest_type) ? count($rq->quest_type) : 1;
+        $loop_length = is_array($rq->quest_type_id) ? count($rq->quest_type_id) : 1;
         $requests_created = [];
 
         for($i = 0; $i < $loop_length; $i++){
@@ -170,6 +218,7 @@ class RequestController extends Controller
                 //non-bulk
                 $song = ($rq->song_id) ? Song::find($rq->song_id) : null;
                 $client = ($rq->client_id) ? User::find($rq->client_id) : null;
+                $price_data = StatsController::runPriceCalc($rq->price_code, $rq->client_id, true);
 
                 $request = Request::create([
                     "made_by_me" => true,
@@ -182,7 +231,7 @@ class RequestController extends Controller
                     "contact_preference" => $rq->contact_preference ?? "email",
 
                     "song_id" => $rq->song_id,
-                    "quest_type_id" => $rq->quest_type,
+                    "quest_type_id" => $rq->quest_type_id,
                     "title" => $rq->title,
                     "artist" => $rq->artist,
                     "link" => yt_cleanup($rq->link),
@@ -190,12 +239,12 @@ class RequestController extends Controller
                     "wishes" => $rq->wishes,
                     "wishes_quest" => $rq->wishes_quest,
 
-                    "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
-                    "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
+                    "price_code" => $price_data["labels"],
+                    "price" => $price_data["price"],
                     "deadline" => $rq->deadline,
                     "hard_deadline" => $rq->hard_deadline,
                     "delayed_payment" => $rq->delayed_payment,
-                    "status_id" => $rq->new_status,
+                    "status_id" => 1,
                 ]);
 
                 // nadpisanie zmienionych gotowców
@@ -219,19 +268,10 @@ class RequestController extends Controller
                     ]);
                 }
 
-                if($rq->new_status == 5) BackController::newStatusLog($request->id, 1, null);
-                BackController::newStatusLog($request->id, $rq->new_status, $rq->comment);
+                BackController::newStatusLog($request->id, 1, $rq->comment);
 
                 //mailing
                 $mailing = null;
-                if(
-                    $request->email &&
-                    $rq->new_status == 5
-                ){
-                    Mail::to($request->email)->send(new RequestQuoted($request->fresh()));
-                    $mailing = true;
-                    $flash_content .= ", mail wysłany";
-                }
                 if($request->contact_preference != "email"){
                     $mailing ??= false;
                     $flash_content .= ", ale wyślij wiadomość";
@@ -241,7 +281,7 @@ class RequestController extends Controller
                 //bulk
 
                 // ignore empty requests
-                if (empty($rq->title[$i]) && empty($rq->artist[$i]) && empty($rq->link[$i])) {
+                if (empty($rq->title) && empty($rq->artist) && empty($rq->link)) {
                     continue;
                 }
 
@@ -249,20 +289,20 @@ class RequestController extends Controller
                     "made_by_me" => false,
 
                     "client_id" => (Auth::check()) ? Auth::id() : null,
-                    "client_name" => (Auth::check()) ? Auth::user()->client_name : $rq->client_name,
-                    "email" => (Auth::check()) ? Auth::user()->email : $rq->email,
-                    "phone" => (Auth::check()) ? Auth::user()->phone : $rq->phone,
-                    "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
-                    "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
+                    "client_name" => (Auth::check()) ? Auth::user()->notes->client_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->notes->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->notes->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->notes->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->notes->contact_preference : $rq->contact_preference,
 
-                    "quest_type_id" => $rq->quest_type[$i],
-                    "title" => $rq->title[$i],
-                    "artist" => $rq->artist[$i],
-                    "link" => yt_cleanup($rq->link[$i]),
-                    "wishes" => $rq->wishes[$i],
+                    "quest_type_id" => $rq->quest_type_id,
+                    "title" => $rq->title,
+                    "artist" => $rq->artist,
+                    "link" => yt_cleanup($rq->link),
+                    "wishes" => $rq->wishes,
 
-                    "hard_deadline" => $rq->hard_deadline[$i],
-                    "status_id" => $rq->new_status,
+                    "hard_deadline" => $rq->hard_deadline,
+                    "status_id" => 1,
                 ]);
 
                 //mailing do mnie
@@ -270,20 +310,17 @@ class RequestController extends Controller
                 Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
                 $mailing = true;
 
-                BackController::newStatusLog($request->id, $rq->new_status, $rq->wishes[$i], (Auth::check()) ? Auth::id() : null, $mailing);
+                BackController::newStatusLog($request->id, 1, $rq->wishes, (Auth::check()) ? Auth::id() : null, $mailing);
             }
             $requests_created[] = $request;
         }
 
-        if(Auth::check()) return redirect()->route("dashboard")->with("success", $flash_content);
-        return view("client.request-confirm", array_merge(
-            ["title" => "Zapytanie dodane"],
-            compact("requests_created")
-        ))->with("success", $flash_content);
+        if(Auth::check()) return redirect()->route("dashboard")->with("toast", ["success", $flash_content]);
+        return view("pages.client.request-confirm", compact("requests_created"))->with("toast", ["success", $flash_content]);
     }
 
     public function processMod(HttpRequest $rq){
-        if(Auth::id() === 0) return back()->with("error", OBSERVER_ERROR());
+        if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $intent = $rq->intent;
         $request = Request::find($rq->id);
 
@@ -291,7 +328,7 @@ class RequestController extends Controller
 
         if (Auth::id() === 1 && $rq->new_status == 5 && !$rq->genre_id) {
             // archmage forgot to define genre
-            return back()->with("error", "Uzupełnij gatunek");
+            return back()->with("toast", ["error", "Uzupełnij gatunek"]);
         }
 
         if($intent == "change"){
@@ -303,8 +340,10 @@ class RequestController extends Controller
                 $rq->new_status == 5 &&
                 (!$rq->price_code)
             ){
-                return back()->with("error", "Uzupełnij wycenę");
+                return back()->with("toast", ["error", "Uzupełnij wycenę"]);
             }
+
+            $price_data = StatsController::runPriceCalc($rq->price_code, $rq->client_id, true);
 
             $request->update([
                 "client_id" => $rq->client_id,
@@ -315,7 +354,7 @@ class RequestController extends Controller
                 "contact_preference" => $rq->contact_preference ?? "email",
 
                 "song_id" => $rq->song_id,
-                "quest_type_id" => $rq->quest_type,
+                "quest_type_id" => $rq->quest_type_id,
                 "title" => $rq->title,
                 "artist" => $rq->artist,
                 "link" => yt_cleanup($rq->link),
@@ -323,8 +362,8 @@ class RequestController extends Controller
                 "wishes" => $rq->wishes,
                 "wishes_quest" => $rq->wishes_quest,
 
-                "price_code" => price_calc($rq->price_code, $rq->client_id, true)["labels"],
-                "price" => price_calc($rq->price_code, $rq->client_id, true)["price"],
+                "price_code" => $price_data["labels"],
+                "price" => $price_data["price"],
                 "deadline" => $rq->deadline,
                 "hard_deadline" => $rq->hard_deadline,
                 "delayed_payment" => $rq->delayed_payment,
@@ -405,17 +444,17 @@ class RequestController extends Controller
         }
         if($mailing !== null) $request->history->first()->update(["mail_sent" => $mailing]);
 
-        return redirect()->route("request", ["id" => $request->id])->with("success", $flash_content);
+        return redirect()->route("request", ["id" => $request->id])->with("toast", ["success", $flash_content]);
     }
 
     public function finalize($id, $status, $with_priority = false){
         $request = Request::findOrFail($id);
 
         if(in_array($request->status_id, [4,7,8,9]))
-            return redirect()->route("request", ["id" => $id])->with("error", "Zapytanie już zamknięte");
+            return redirect()->route("request", ["id" => $id])->with("toast", ["error", "Zapytanie już zamknięte"]);
 
         $request->status_id = $status;
-        $price = price_calc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
+        $price = StatsController::runPriceCalc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
 
         $is_new_client = 0;
 
@@ -438,14 +477,23 @@ class RequestController extends Controller
             //add new client if not exists
             if(!$request->client_id){
                 $is_new_client = 1;
-                $client = new User;
-                $client->password = generate_password();
-                $client->client_name = $request->client_name;
-                $client->email = $request->email;
-                $client->phone = $request->phone;
-                $client->other_medium = $request->other_medium;
-                $client->contact_preference = $request->contact_preference;
-                $client->save();
+
+                $password = generate_password();
+
+                $client = User::create([
+                    "name" => $request->client_name,
+                    "email" => $request->email ?? Str::uuid()."@test.test",
+                    "password" => $password,
+                ]);
+                $client->roles()->attach("client");
+                $client->notes()->create([
+                    "password" => $password,
+                    "client_name" => $request->client_name,
+                    "email" => $request->email,
+                    "phone" => $request->phone,
+                    "other_medium" => $request->other_medium,
+                    "contact_preference" => $request->contact_preference,
+                ]);
 
                 $request->client_id = $client->id;
 
@@ -479,15 +527,16 @@ class RequestController extends Controller
             //     "amount" => $quest->price
             // ]);
 
-            if($client->budget){
+            if($client->notes->budget){
                 $sub_amount = min([$request->price, $client->budget]);
-                $client->budget -= $sub_amount;
+                $client->notes->update([
+                    "budget" => $client->notes->budget - $sub_amount,
+                ]);
                 BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
                 if($sub_amount == $request->price){
                     $quest->paid = true;
                     $quest->save();
                 }
-                $client->save();
                 BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
                 // $invoice->update(["paid" => $sub_amount]);
             }
@@ -498,6 +547,7 @@ class RequestController extends Controller
         }
 
         $request->save();
+        $request = $request->fresh();
 
         //mail do mnie, bo zmiany w zapytaniu
         $mailing = null;
@@ -506,14 +556,14 @@ class RequestController extends Controller
 
         BackController::newStatusLog($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
 
-        if($status == 9){
+        if ($status == 9){
             //added quest
             BackController::newStatusLog($request->quest_id, 11, null, $request->client_id);
             //add client ID to history
             StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
             //send onboarding if new client
-            if($request->client->email && $is_new_client){
-                Mail::to($request->client->email)->send(new Onboarding($request->client));
+            if ($request->user->notes->email && $is_new_client){
+                Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
             }
         }
 
@@ -531,6 +581,41 @@ class RequestController extends Controller
         $history->save();
 
         $where_to = (!Auth::check()) ? "home" : "dashboard";
-        return redirect()->route($where_to)->with("success", "Komentarz dodany");
+        return redirect()->route($where_to)->with("toast", ["success", "Komentarz dodany"]);
     }
+
+    #region select
+    public function selectUser(HttpRequest $rq)
+    {
+        $user = User::findOrFail($rq->client_id);
+        $request = Request::findOrFail($rq->request_id);
+
+        $request->update([
+            "client_id" => $user->id,
+            "client_name" => $user->notes->client_name,
+            "email" => $user->notes->email,
+            "phone" => $user->notes->phone,
+            "other_medium" => $user->notes->other_medium,
+            "contact_preference" => $user->notes->contact_preference,
+        ]);
+
+        return back()->with("toast", ["success", "Utwór przypisany"]);
+    }
+
+    public function selectSong(HttpRequest $rq)
+    {
+        $song = Song::findOrFail($rq->song_id);
+        $request = Request::findOrFail($rq->request_id);
+
+        $request->update([
+            "song_id" => $song->id,
+            "title" => $song->title,
+            "artist" => $song->artist,
+            "link" => $song->link,
+            "notes" => $song->notes,
+        ]);
+
+        return back()->with("toast", ["success", "Utwór przypisany"]);
+    }
+    #endregion
 }

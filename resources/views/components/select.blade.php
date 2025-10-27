@@ -9,26 +9,17 @@
     'small' => false
 ])
 
-<div {{
-    $attributes
-        ->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "placeholder", "small"])))
-        ->merge(["class" => ($small) ? "input-container input-small" : "input-container"])
-    }}>
-    <select
-        name="{{ $name }}"
-        id="{{ $name }}"
-        {{ $autofocus ? "autofocus" : "" }}
-        {{ $disabled ? "disabled" : "" }}
-        {{ $required ? "required" : "" }}
-        onfocus="highlightInput(this)" onblur="clearHighlightInput(this)"
-        {{ $attributes->filter(fn($val, $key) => (!in_array($key, ["autofocus", "required", "class"])))}}
-        >
-        @if ($emptyOption)
-            <option value="" {{ $value ? "" : "selected" }}></option>
-        @endif
-        @foreach ($options as $key => $val)
-            <option value="{{ $key }}" {{  $value == $key ? "selected" : "" }}>{{ $val }}</option>
-        @endforeach
-    </select>
-    <label for="{{ $name }}">{{ $label }}</label>
-</div>
+<x-shipyard.ui.input
+    type="select"
+    :name="$name"
+    :label="$label"
+    :autofocus="$autofocus"
+    :required="$required"
+    :disabled="$disabled"
+    :select-data="[
+        'options' => collect($options)->map(fn ($v, $k) => ['label' => $k, 'value' => $v]),
+        'emptyOption' => $emptyOption,
+    ]"
+    :value="$value"
+    :small="$small"
+/>

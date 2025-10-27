@@ -3,13 +3,13 @@
     "transpose" => null,
 ])
 
-<div class="file-tag flex-right center middle" {{ $attributes }}
+<div class="file-tag flex right center middle" {{ $attributes }}
 @if ($tag)
 
     style="background-color: {{ $tag->color }};"
     {{ Popper::pop($tag->name) }}
 >
-    @svg("mdi-".$tag->icon)
+    <x-shipyard.app.icon :name="$tag->icon" />
 
 @elseif ($transpose)
 

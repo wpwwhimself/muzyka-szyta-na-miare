@@ -68,7 +68,7 @@
                 <p>Opłaty projektu możesz dokonać na 2 sposoby:</p>
                 <ul>
                     <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
-                        (w tytule wpisz <i>{{ $quest->id }}</i>)</li>
+                        (w tytule wpisz <span class="mono">{{ $quest->id }}</span>)</li>
                     <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
                 </ul>
                 <p>

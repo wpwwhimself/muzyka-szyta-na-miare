@@ -33,15 +33,15 @@ $fields = $request::getFields();
     <x-phase-indicator :status-id="$request->status_id" />
 
     @if ($request->quest_id)
-    <h2>
-        Zapytanie zostało przyjęte i jest przepisane na zlecenie {{ $request->quest_id }}
+    <div class="flex right center middle">
+        <h2>Zapytanie zostało przyjęte i jest przepisane na zlecenie <span class="mono">{{ $request->quest_id }}</span></h2>
         <x-shipyard.ui.button
             label="Przejdź do zlecenia"
             :icon="model_icon('quests')"
             :action="route('quest', ['id' => $request->quest_id])"
             class="primary"
         />
-    </h2>
+    </div>
     @endif
 
     <div class="grid but-mobile-down" style="--col-count: 2;">

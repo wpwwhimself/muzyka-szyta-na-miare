@@ -56,7 +56,7 @@
     </div>
 
     @if ($request->quest_id)
-    <h3>Zlecenie przepisane z numerem <a href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h3>
+    <h3>Zlecenie przepisane z numerem <a class="mono" href="{{ $request->quest->link_to }}">{{ $request->quest_id }}</a></h3>
     @endif
 
     <div class="grid but-mobile-down" style="--col-count: 2;">

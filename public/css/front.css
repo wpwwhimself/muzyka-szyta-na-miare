@@ -126,7 +126,7 @@ section {
         max-width: 80%;
     }
 
-    & .main .icon,
+    & .main .icon:not(.hint .icon),
     & .location .icon {
         font-size: 5em;
     }
@@ -229,18 +229,18 @@ section {
     gap: 0.var(--size-m) var(--size-xs);
     overflow-x: scroll;
 }
-#songs .popup {
+#song-demo-popup {
     display: none;
     position: fixed; z-index: 99;
     top: 0; left: 0; right: 0; bottom: 0;
-    backdrop-filter: blur(var(--size-m));
+    backdrop-filter: blur(1em);
     justify-content: center; align-items: center;
 
     &.open {
         display: flex;
     }
     & .popup-contents {
-        gap: var(--size-m);
+        gap: 1em;
 
         & h3, p {
             margin: 0;

@@ -22,14 +22,14 @@ function openSection(slug) {
     jumpTo(`#jump-target`);
 }
 
-function filterSongs(criterion = undefined, id = undefined) {
+function filterSongs(domain, criterion = undefined, id = undefined) {
     const filterFunction = {
         genre: (song, needle, haystack) => haystack === needle,
         tag: (song, needle, haystack) => haystack.includes(needle)
     }
 
     let visible_songs = 0;
-    document.querySelectorAll("#songs li").forEach(song => {
+    document.querySelectorAll(`#songs ul#${domain}-song-list li`).forEach(song => {
         const haystacks = {
             genre: parseInt(song.getAttribute("data-song-genre")),
             tag: song.getAttribute("data-song-tags").split(",").map(parseInt)
@@ -48,7 +48,7 @@ function filterSongs(criterion = undefined, id = undefined) {
             visible_songs++
         }
     })
-    document.querySelector("#songs-count").innerHTML = visible_songs
+    document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs
 }
 
 function filterShowcases(mode) {
@@ -68,51 +68,33 @@ function getSongList(domain = undefined) {
      */
     fetch("/api/songs/info" + (domain ? "?for=" + domain : ""))
         .then(res => res.json())
-        .then(res => {
-            if(res.length == 0) return;
-
-            const list = document.querySelector("#songs ul");
-            document.querySelector("#songs .grayed-out").remove();
-            for(song of res) {
-                const tags = song.tags?.map(tag => tag.id).join(",");
-
-                list.append(`<li data-song-genre="${song.genre_id}" data-song-tags="${tags}">
-                    <span>${song.title ?? 'utwór bez tytułu'}</span>
-                    <span class='ghost'>${song.artist ?? ''}</span>
-                    ${song.has_showcase_file ? `<span title="Posłuchaj próbki mojego wykonania"
-                        class="interactive"
-                        data-song-id="${song.id}"
-                        data-song-title="${song.full_title}"
-                        data-song-desc="${song.notes?.replace(/\n/g, '<br>') || ''}"
-                    >💽</span>` : ``}
-                </li>`);
-            }
-            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="songs-count">${res.length}</b></p>`);
-
-            document.querySelector("#song-loader").classList.add("hidden");
-
-            const player = document.querySelector("#songs audio");
-            $("#songs .interactive").click(function(){
-                $("#songs .popup").addClass("open");
-
-                const song_id = $(this).attr("data-song-id");
-                const song_title = $(this).attr("data-song-title");
-                const song_desc = $(this).attr("data-song-desc");
-
-                $("#songs .popup .song-full-title").text(song_title)
-                $("#songs .popup .song-desc").html(song_desc)
-
-                player.src = `showcase/show/${song_id}`;
-                player.load();
-                player.addEventListener("canplay", () => {
-                    startFilePlayer("")
-                })
-            });
-            $("#songs #popup-close").click(function() {
-                $("#songs .popup").removeClass("open");
-                pauseFilePlayer("")
-            })
+        .then(({data, table}) => {
+            const list = document.querySelector(`#songs ul#${domain}-song-list`);
+            list.replaceWith(fromHTML(table));
+            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="${domain}-songs-count">${data.length}</b></p>`);            
         });
+}
+
+function openSongDemo(song_id = undefined, song_title = undefined, song_desc = undefined) {
+    const player = document.querySelector("#songs audio");
+    const popup = document.querySelector("#song-demo-popup");
+
+    popup.classList.toggle("open", song_id !== undefined);
+    
+    if (song_id == undefined) {
+        pauseFilePlayer("");
+    }
+
+    popup.querySelector(".song-full-title").innerHTML = song_title;
+    popup.querySelector(".song-desc").innerHTML = song_desc;
+
+    if (song_id !== undefined) {
+        player.src = `showcase/show/${song_id}`;
+        player.load();
+        player.addEventListener("canplay", () => {
+            startFilePlayer("");
+        });
+    }
 }
 </script>
 
@@ -172,6 +154,23 @@ function getSongList(domain = undefined) {
 
 <div role="service" data-slug="dj" class="animatable stagger">
     <x-front.dj />
+</div>
+
+<div id="song-demo-popup" class="popup">
+    <div class="popup-contents flex down center">
+        <h3 class="song-full-title"></h3>
+        <p class="song-desc"></p>
+        
+        <x-file-player type="ogg" file="" is-showcase />
+
+        <x-shipyard.ui.button
+            label="Zamknij"
+            icon="close"
+            action="none"
+            onclick="openSongDemo();"
+            class="tertiary"
+        />
+    </div>
 </div>
 
 @endsection

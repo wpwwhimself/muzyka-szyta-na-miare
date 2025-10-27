@@ -79,37 +79,28 @@
 
     <div class="showcase-section flex down scroll-hidden" data-mode="list">
         <div id="songs">
-            <h2>
-                Wszystkie utwory, jakie mam w repertuarze
-                <x-tutorial>
-                    Kliknij ikonę płyty, aby odtworzyć próbkę
-                </x-tutorial>
-            </h2>
+            <h2>Wszystkie utwory, jakie mam w repertuarze</h2>
+            <p>
+                Kliknij ikonę <span class="accent primary">
+                    <x-shipyard.app.icon :name="model_icon('songs')" />
+                </span>, aby odtworzyć próbkę
+            </p>
 
             <h3>Filtruj:</h3>
             <div class="flex right keep-for-mobile center">
-                <x-button action="none" label="wszystkie" icon="circle-xmark" onclick="filterSongs()" small />
+                <x-button action="none" label="wszystkie" icon="circle-xmark" onclick="filterSongs(`dj`)" small />
 
                 @foreach ($genres as $genre)
-                <x-button action="none" :label="$genre->name" icon="radio" onclick="filterSongs('genre', {{ $genre->id }})" small />
+                <x-button action="none" :label="$genre->name" icon="radio" onclick="filterSongs(`dj`, 'genre', {{ $genre->id }})" small />
                 @endforeach
 
                 {{-- @foreach ($song_tags as $tag) --}}
-                {{-- <x-button action="none" :label="$tag->name" icon="tag" onclick="filterSongs('tag', {{ $tag->id }})" small /> --}}
+                {{-- <x-button action="none" :label="$tag->name" icon="tag" onclick="filterSongs(`dj`, 'tag', {{ $tag->id }})" small /> --}}
                 {{-- @endforeach --}}
             </div>
 
-            <ul><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
+            <ul id="dj-song-list"><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>
             <script defer>getSongList("dj");</script>
-            <div class="popup">
-                <div class="popup-contents flex down center">
-                    <h3 class="song-full-title"></h3>
-                    <p class="song-desc"></p>
-                    <span id="song-loader" class="scroll-hidden"><i class="fa-solid fa-spin fa-circle-notch"></i></span>
-                    <x-file-player type="ogg" file="" is-showcase />
-                    <x-button label="" icon="times" :small="true" action="none" id="popup-close" />
-                </div>
-            </div>
         </div>
     </div>
 </x-front.tabbed-section>

@@ -202,7 +202,12 @@ class SongController extends Controller
             "artist",
         ])->values();
 
-        return $songs;
+        $table = view("components.front.song-list", ["songs" => $songs])->render();
+
+        return [
+            "data" => $songs,
+            "table" => $table,
+        ];
     }
 
     public function changeLink(Request $rq){

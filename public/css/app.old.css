@@ -569,26 +569,6 @@ footer .contact-info{
     }
 }
 
-.stats-highlight-h{
-    display: grid;
-    grid-template-rows: auto auto;
-    grid-auto-flow: column;
-    text-align: center;
-    border-top: 1px solid var(--bg-lite2);
-    border-bottom: 1px solid var(--bg-lite2);
-    border-radius: 0;
-    padding: var(--size-xs) 0;
-}
-.stats-highlight-h p, .stats-highlight-h h3{
-    margin: 0;
-    display: flex; justify-content: center; align-items: center;
-    flex-wrap: wrap;
-    gap: var(--size-xxs);
-}
-.stats-highlight-h h3{
-    font-size: var(--size-xxl);
-}
-
 #clients-list .table-row{
     --q-clr: 255, 255, 255;
 }
@@ -606,52 +586,6 @@ footer .contact-info{
 }
 .client-budget input{
     width: 4em;
-}
-#clients-stats-graph, .plot{
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: 1fr auto;
-    text-align: center;
-    gap: var(--size-xs);
-}
-#clients-stats-graph{
-    grid-template-rows: 1fr auto auto;
-}
-.bar{
-    background: var(--acc);
-    /* background: linear-gradient(to bottom, rgb(var(--ui-clr-1)), var(--fg)); */
-    width: 100%;
-    border-radius: var(--size-xs);
-}
-.horizontal .bar{
-    width: unset;
-    height: var(--size-l);
-}
-.bar-container{
-    display: flex; justify-content: center; align-items: flex-end; position: relative;
-}
-.bar-container.horizontal{
-    justify-content: left;
-    align-items: center;
-}
-#clients-stats-graph .value, .bar-container .value{
-    font-family: "Montserrat", "Raleway", "Arial", "sans-serif";
-    font-size: var(--size-xl);
-}
-.bar-container .value{
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 100%; text-align: center;
-}
-.bar-container.horizontal .value{
-    text-align: left;
-    font-size: var(--size-m);
-    left: var(--size-xs);
-}
-.plot .label.vertical{
-    rotate: 90deg;
-    transform-origin: 0 0;
-    translate: 2em var(--size-xs);
 }
 
 .quest-links>a:not(:first-child){

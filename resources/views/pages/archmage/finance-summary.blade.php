@@ -2,106 +2,93 @@
 
 @section('content')
 
-<div>
-    <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
-    <x-button action="{{ route('costs') }}" label="Koszty" icon="money-bill-wave" />
-    <x-button action='{{ route("taxes") }}' label="Podatki" icon="cash-register" />
+<div class="flex right center middle">
+    <x-shipyard.ui.button :action="route('finance')" label="Wróć" icon="chevron-double-left" />
+    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('costs')" />
+    <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
 
-    <x-button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])" label="Wypłać" icon="sack-dollar" small />
+    <x-shipyard.ui.button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])" label="Wypłać" icon="sack-dollar" small />
 </div>
 
-<section class="sc-line">
-    <x-sc-scissors />
-    <div class="section-header">
-      <h1><i class="fa-solid fa-chart-column"></i> Podsumowanie – {{ \Carbon\Carbon::today()->subMonths(request()->get("subMonths", 0))->format("m.Y") }}</h1>
-      @if (request()->get("subMonths"))
-        <x-a href="{{ route('finance-summary') }}">Ten miesiąc</x-a>
-      @else
-        <x-a href="{{ route('finance-summary', ['subMonths' => 1]) }}">Poprzedni miesiąc</x-a>
-      @endif
-    </div>
+<x-section scissors :title="'Podsumowanie – '.\Carbon\Carbon::today()->subMonths(request()->get('subMonths', 0))->format('m.Y')" icon="finance">
+    <x-slot:buttons>
+    @if (request()->get("subMonths"))
+    <x-a href="{{ route('finance-summary') }}">Ten miesiąc</x-a>
+    @else
+    <x-a href="{{ route('finance-summary', ['subMonths' => 1]) }}">Poprzedni miesiąc</x-a>
+    @endif
+    </x-slot:buttons>
+
     <x-stats-highlight-h :data="$summary" :all-pln="true" />
-    <div>
-    </div>
-</section>
+</x-section>
 
-<section>
-  <div class="section-header">
-    <h1><i class="fa-solid fa-angles-down"></i> Wpływy</h1>
-  </div>
+<x-section title="Wpływy" icon="cash-plus">
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Klient</th>
+                <th>Zlecenie</th>
+                <th>Faktura</th>
+                <th>Kwota</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($gains as $pos)
+            <tr>
+                <td>{{ $pos->date->format("d.m.Y") }}</td>
+                <td><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{!! $pos->changer !!}</a></td>
+                <td>
+                    @if ($pos->re_quest_id)
+                    <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>
+                    @else
+                    <td class="grayed-out">budżet</td>
+                    @endif
+                </td>
+                <td>
+                    @if ($pos->invoice->first())
+                    <a href="{{ route('invoice', ['id' => $pos->invoice->first()->id]) }}">{{ $pos->invoice->first()->full_code }}</a>
+                    @endif
+                </td>
+                <td>{{ _c_(as_pln($pos->comment)) }}</td>
+            </tr>
+            @empty
+            <tr><td class="grayed-out">Brak danych</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</x-section>
 
-  <div id="gains" class="quests-table">
-    <style>
-      #gains .table-row{ grid-template-columns: 1fr 2fr 1fr 1fr 1fr; }
-      #gains .table-row span:last-child{ text-align: right; }
-    </style>
-    <div class="table-header table-row">
-        <span>Data</span>
-        <span>Klient</span>
-        <span>Zlecenie</span>
-        <span>Faktura</span>
-        <span>Kwota</span>
-    </div>
-    @forelse ($gains as $pos)
-    <div class="table-row">
-        <span>{{ $pos->date->format("d.m.Y") }}</span>
-        <span><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{{ _ct_($pos->client_name) }}</a></span>
-        <span>
-          @if ($pos->re_quest_id)
-          <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>
-          @else
-          <span class="grayed-out">budżet</span>
-          @endif
-        </span>
-        <span>
-          @if ($pos->invoice->first())
-          <a href="{{ route('invoice', ['id' => $pos->invoice->first()->id]) }}">{{ $pos->invoice->first()->full_code }}</a>
-          @endif
-        </span>
-        <span>{{ _c_(as_pln($pos->comment)) }}</span>
-    </div>
-    @empty
-    <p class="grayed-out">Brak danych</p>
-    @endforelse
-  </div>
-</section>
-
-<section>
-  <div class="section-header">
-    <h1>
-        <i class="fa-solid fa-money-bill-wave"></i> Wydatki
-    </h1>
-  </div>
-
-  <div id="losses" class="quests-table">
-    <style>
-      #losses .table-row{ grid-template-columns: 1fr 2fr 1fr 1fr; }
-      #losses .table-row span:last-child{ text-align: right; }
-    </style>
-    <div class="table-header table-row">
-        <span>Data</span>
-        <span>Typ</span>
-        <span>Opis</span>
-        <span>Kwota</span>
-    </div>
-    @forelse ($losses as $pos)
-    <div class="table-row">
-        @if (get_class($pos) == "App\Models\Cost")
-        <span>{{ $pos->created_at->format("d.m.Y") }}</span>
-        <span>{{ _ct_($pos->type->name) }}</span>
-        <span>{{ $pos->desc }}</span>
-        <span>{{ _c_(as_pln($pos->amount)) }}</span>
-        @else
-        <span>{{ $pos->date->format("d.m.Y") }}</span>
-        <span>zwrot wpłaty</span>
-        <span><a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a></span>
-        <span>{{ _c_(as_pln(-$pos->comment)) }}</span>
-        @endif
-    </div>
-    @empty
-    <p class="grayed-out">Brak danych</p>
-    @endforelse
-  </div>
-</section>
+<x-section title="Wydatki" icon="cash-minus">
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Typ</th>
+                <th>Opis</th>
+                <th>Kwota</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($losses as $pos)
+            <tr>
+                @if (get_class($pos) == "App\Models\Cost")
+                <td>{{ $pos->created_at->format("d.m.Y") }}</td>
+                <td>{{ _ct_($pos->type->name) }}</td>
+                <td>{{ $pos->desc }}</td>
+                <td>{{ _c_(as_pln($pos->amount)) }}</td>
+                @else
+                <td>{{ $pos->date->format("d.m.Y") }}</td>
+                <td>zwrot wpłaty</td>
+                <td><a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a></td>
+                <td>{{ _c_(as_pln(-$pos->comment)) }}</td>
+                @endif
+            </tr>
+            @empty
+            <tr><td class="grayed-out">Brak danych</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</x-section>
 
 @endsection

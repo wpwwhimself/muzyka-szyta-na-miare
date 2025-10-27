@@ -445,12 +445,12 @@ class StatsController extends Controller
         ];
 
         $saturation = [
-            "split" => $this->monthlyPaymentLimit()->getOriginalContent()["saturation"],
+            "split" => $this->runMonthlyPaymentLimit(0)["saturation"],
             "total" => INCOME_LIMIT(),
         ];
         $saturation = json_decode(json_encode($saturation));
 
-        $unpaids = User::has("questsUnpaid")->orderBy("client_name")->get();
+        $unpaids = User::has("questsUnpaid")->get()->sortBy("notes.client_name");
 
         $recent = StatusChange::where("new_status_id", 32)->orderByDesc("date")->limit(10)->get();
         foreach($recent as $i){
@@ -486,7 +486,7 @@ class StatsController extends Controller
                 32,
                 $amount_to_pay,
                 $quest->client_id,
-                $quest->client->email,
+                $quest->user->notes->email,
             );
 
             // opłacanie faktury
@@ -509,8 +509,8 @@ class StatsController extends Controller
         $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
             $client = User::find($client_id);
-            if($client->email){
-                Mail::to($client->email)->send(new MassPayment($quests));
+            if($client->notes->email){
+                Mail::to($client->notes->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
             }else{
                 $clients_informed[$client_id] = 0;

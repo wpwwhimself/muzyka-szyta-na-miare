@@ -12,7 +12,7 @@
 <x-quests.tile :quest="$quest" />
 @endforeach
 
-@if (!($quest->client->notes->is_veteran || $quest->client->notes->trust == 1))
+@if (!($quest->user->notes->is_veteran || $quest->user->notes->trust == 1))
 <p>
     Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniami za pomocą odpowiednich przycisków w widoku zlecenia.
 </p>
@@ -27,7 +27,7 @@
 
 <p>
     <i>
-        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quests[0]->client->notes->password }}</b>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quests[0]->user->notes->password }}</b>
     </i>
 </p>
 

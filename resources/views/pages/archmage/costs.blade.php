@@ -1,74 +1,68 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Koszty")
+@section("subtitle", "Centrum finansowe")
 
 @section('content')
 
-<div>
-    <x-button action="{{ route('cost-types') }}" label="Typy" icon="cog" />
-    <x-button action="{{ route('finance') }}" label="Wróć" icon="angles-right" />
-    <x-button action="{{ route('finance-summary') }}" label="Podsumowanie" icon="chart-column" />
+<div class="flex right center middle">
+    <x-shipyard.ui.button :action="route('cost-types')" label="Typy" :icon="model_icon('cost-types')" />
+    <x-shipyard.ui.button :action="route('finance')" label="Wróć" icon="chevron-double-left" />
+    <x-shipyard.ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
 </div>
 
-
-<section>
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-plus"></i>
-            Dodaj koszt
-        </h1>
-    </div>
-    <form action="{{ route('mod-cost') }}" method="post" class="flex right center">
-        @csrf
-        <x-input type="date" name="created_at" label="Data" small :value="date('Y-m-d')" />
-        <x-select name="cost_type_id" label="Typ" :options="$types" />
-        <x-input type="text" name="desc" label="Opis" :small="true" />
-        <x-input type="number" name="amount" step="0.01" label="Wartość" />
-        <input type="hidden" name="id" value="" />
-        <x-button action="submit" icon="plus" label="Zatwierdź" />
-    </form>
-    <script defer>
-    $(".table-row:not(.table-header)").click(function(){
-        $("#created_at").val($(this).find(".cost-date").attr("data-date"));
-        $("#cost_type_id").val($(this).find(".cost-type").attr("data-typ"));
-        $("#desc").val($(this).find(".cost-desc").text());
-        $("#amount").val($(this).find(".cost-amount").attr("data-amount"));
-        $("input[name='id']").val($(this).attr("data-id"));
-    });
-    </script>
-</section>
-
-<section>
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-money-bill-wave"></i>
-            Zapisane koszty
-        </h1>
-    </div>
+<x-section title="Zapisane koszty" :icon="model_icon('costs')">
+    <x-slot:buttons>
+        <x-shipyard.ui.button
+            label="Dodaj"
+            icon="plus"
+            action="none"
+            onclick="openModal('mod-cost', {
+                created_at: '{{ date('Y-m-d') }}',
+            })"
+            class="tertiary"
+        />
+    </x-slot:buttons>
 
     <x-stats-highlight-h :data="$summary" :all-pln="true" />
 
-    <div class="quests-table">
-        <style>
-        .table-row{ grid-template-columns: 1fr 1fr 2fr 1fr; }
-        .table-row span:last-child{ text-align: right; }
-        </style>
-        <div class="table-header table-row">
-            <span>Data</span>
-            <span>Typ</span>
-            <span>Opis</span>
-            <span>Kwota</span>
-        </div>
-        @forelse ($costs as $cost)
-        <div class="table-row interactive" data-id="{{ $cost->id }}">
-            <span class="cost-date" data-date="{{ $cost->created_at->format('Y-m-d') }}" {{ Popper::pop($cost->created_at->format('d.m.Y')) }}>{{ $cost->created_at->diffForHumans() }}</span>
-            <span class="cost-type" data-typ="{{ $cost->cost_type_id }}">{{ _ct_($cost->type->name) }}</span>
-            <span class="cost-desc">{{ _ct_($cost->desc) }}</span>
-            <span class="cost-amount" data-amount="{{ _c_($cost->amount) }}">{{ _c_(as_pln($cost->amount)) }}</span>
-        </div>
-        @empty
-        <p class="grayed-out">Brak danych</p>
-        @endforelse
-    </div>
-    {{ $costs->links() }}
-</section>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Typ</th>
+                <th>Opis</th>
+                <th>Kwota</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($costs as $cost)
+            <tr>
+                <td>{{ $cost->created_at->format('d.m.Y') }}</td>
+                <td>{{ $cost->type->name }}</td>
+                <td>{{ $cost->desc }}</td>
+                <td>{{ as_pln($cost->amount) }}</td>
+                <td>
+                    <x-shipyard.ui.button
+                        icon="pencil"
+                        pop="Edytuj"
+                        action="none"
+                        onclick="openModal('mod-cost', {
+                            id: '{{ $cost->id }}',
+                            created_at: '{{ $cost->created_at->format('Y-m-d') }}',
+                            type: '{{ $cost->cost_type_id }}',
+                            desc: '{{ $cost->desc }}',
+                            amount: '{{ $cost->amount }}',
+                        })"
+                        class="tertiary"
+                    />
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    {{ $costs->links("components.shipyard.pagination.default") }}
+</x-section>
 
 @endsection

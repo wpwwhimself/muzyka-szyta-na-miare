@@ -35,6 +35,57 @@ a.section,
     text-align: center;
 }
 
+/*** plot ***/
+
+#clients-stats-graph,
+.plot {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr auto;
+    text-align: center;
+    gap: 0.25em;
+}
+
+#clients-stats-graph{
+    grid-template-rows: 1fr auto auto;
+}
+.bar{
+    background: var(--primary);
+    /* background: linear-gradient(to bottom, rgb(var(--ui-clr-1)), var(--fg)); */
+    width: 100%;
+    border-radius: 0.25em;
+}
+.horizontal .bar{
+    width: unset;
+    height: 1.25em;
+}
+.bar-container{
+    display: flex; justify-content: center; align-items: flex-end; position: relative;
+}
+.bar-container.horizontal{
+    justify-content: left;
+    align-items: center;
+}
+#clients-stats-graph .value, .bar-container .value{
+    font-family: "Montserrat", "Raleway", "Arial", "sans-serif";
+    font-size: 1.5em;
+}
+.bar-container .value{
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; text-align: center;
+}
+.bar-container.horizontal .value{
+    text-align: left;
+    font-size: 1em;
+    left: 0.25em;
+}
+.plot .label.vertical{
+    rotate: 90deg;
+    transform-origin: 0 0;
+    translate: 2em 0.25em;
+}
+
 /******************* individual **************/
 
 a {
@@ -43,7 +94,7 @@ a {
 }
 
 body {
-    font-size: 16px;
+    --font-size: 16px !important;
 }
 
 #background-division {
@@ -119,7 +170,6 @@ body {
         }
     }
 }
-
 
 .contact-info {
     & a {
@@ -551,6 +601,24 @@ section {
 
 .showcase-highlight {
     color: rgb(36, 172, 250);
+}
+
+.stats-highlight-h{
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-auto-flow: column;
+    text-align: center;
+    border-top: 1px solid var(--bg-lite2);
+    border-bottom: 1px solid var(--bg-lite2);
+    border-radius: 0;
+    padding: 0.25em 0;
+
+    & p, & h3{
+        margin: 0;
+        display: flex; justify-content: center; align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
 }
 
 table {

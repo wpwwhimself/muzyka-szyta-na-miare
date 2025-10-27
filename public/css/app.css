@@ -42,6 +42,10 @@ a {
     color: inherit;
 }
 
+body {
+    font-size: 16px;
+}
+
 #background-division {
     & > * {
         height: 80vh;

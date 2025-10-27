@@ -52,8 +52,8 @@
     <table>
         <thead>
             <tr>
-                <th><i class="fas fa-box"></i> ID</th>
-                <th><i class="fas fa-compact-disc"></i> ID</th>
+                <th>ID questa</th>
+                <th>ID utworu</th>
                 <th>Utwór</th>
                 <th>Co trzeba zrobić</th>
             </tr>
@@ -67,14 +67,14 @@
                 <td>
                     @if ($quest->song->has_recorded_reel)
                         @if ($quest->song->has_original_mv)
-                        <i class="fas fa-photo-film" @popper(Rolka z teledyskiem)></i>
+                        <span @popper(Rolka z teledyskiem)><x-shipyard.app.icon name="video-vintage" /></span>
                         @else
-                        <i class="fas fa-film" @popper(Rolka)></i>
+                        <span @popper(Rolka)><x-shipyard.app.icon name="movie-roll" /></span>
                         @endif
                     @endif
 
                     @if (!$quest->song->has_showcase_file)
-                    <i class="fas fa-shirt" @popper(Krótki showcase)></i>
+                    <span @popper(Krótki showcase)><x-shipyard.app.icon name="tshirt-crew" /></span>
                     @endif
                 </td>
             </tr>

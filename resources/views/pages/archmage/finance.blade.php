@@ -11,7 +11,7 @@
     <x-shipyard.ui.button :action="route('gig-price-suggest')" label="Wycena grania" icon="chat-alert" />
 </div>
 
-<div class="grid" style="--col-count: 2;">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section title="Podsumowanie" icon="finance">
         <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
         <x-barplot title="Saturacja wpływów w kolejnych miesiącach" :data="$saturation" :all-pln="true" :percentages="true" />

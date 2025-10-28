@@ -132,7 +132,7 @@ class BackController extends Controller
         if (is_archmage()) {
             $clients_raw = User::has("notes")->get();
             foreach($clients_raw as $client){
-                $clients[$client["id"]] = _ct_($client->notes->client_name ." «" . $client->id . "»");
+                $clients[] = ["value" => $client->id, "label" => _ct_($client->notes->client_name ." «" . $client->id . "»")];
             }
         }
 

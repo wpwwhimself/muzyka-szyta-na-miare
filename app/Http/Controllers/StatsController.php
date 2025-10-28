@@ -817,9 +817,9 @@ class StatsController extends Controller
             ->get();
 
         if($quoting){
-            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
-            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
-            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
+            if($client?->notes->is_veteran && !strpos($labels, "=")) $labels .= "=";
+            if($client?->notes->is_patron && !strpos($labels, "-")) $labels .= "-";
+            if($client?->notes->is_favourite && !strpos($labels, "!")) $labels .= "!";
         }
 
         $quest_type_present = null;

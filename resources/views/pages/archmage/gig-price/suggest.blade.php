@@ -1,12 +1,13 @@
 @extends("layouts.app")
+@section("title", "Wycena grania")
 
 @section("content")
 
-<x-section :title="$title" icon="magnifying-glass-dollar">
+<x-section :title="$title" :icon="model_icon('gig-price-rates')">
     <x-slot name="buttons">
-        <x-a :href="route('gig-price-defaults')" icon="gear">Domyślne</x-a>
-        <x-a :href="route('gig-price-rates')" icon="percent">Stawki</x-a>
-        <x-a :href="route('gig-price-places')" icon="location-dot">Miejsca</x-a>
+        <x-a :href="route('admin.model.list', ['model' => 'gig-price-defaults'])" :icon="model_icon('gig-price-defaults')">Domyślne</x-a>
+        <x-a :href="route('admin.model.list', ['model' => 'gig-price-rates'])" :icon="model_icon('gig-price-rates')">Stawki</x-a>
+        <x-a :href="route('admin.model.list', ['model' => 'gig-price-places'])" :icon="model_icon('gig-price-places')">Miejsca</x-a>
     </x-slot>
 
     <div id="settings" class="flex right center">
@@ -15,10 +16,14 @@
             <h2>{{ $heading }}</h2>
 
             @if ($heading == "Dojazd")
-            <x-select name="place_id" label="Miejsce"
-                :options="$places"
-                empty-option
-                small
+            <x-shipyard.ui.input type="select"
+                :select-data="[
+                    'options' => $places,
+                    'emptyOption' => 'inne',
+                ]"
+                name="place_id"
+                label="Miejsce"
+                :icon="model_icon('gig-price-places')"
                 onchange="changePlace(event.target.value)"
             />
             @endif
@@ -37,25 +42,29 @@
         <div class="section flex down center">
             <h2>Stawki</h2>
 
-            <x-select name="gain_active_per_h"
+            <x-shipyard.ui.input type="select" name="gain_active_per_h"
                 label="Stawka aktywna (granie)"
-                :options="$rates"
+                :select-data="['options' => $rates]"
             />
-            <x-select name="gain_passive_per_h"
+            <x-shipyard.ui.input type="select" name="gain_passive_per_h"
                 label="Stawka pasywna (dojazd, czekanie)"
-                :options="$rates"
-                small
+                :select-data="['options' => $rates]"
             />
             <x-input type="checkbox"
                 name="my_gear"
                 label="Własny sprzęt"
-                small
             />
         </div>
     </div>
 
-    <div class="flex right">
-        <x-button action="none" label="Oblicz" icon="magnifying-glass-dollar" onclick="calculateGigPrice()" />
+    <div class="flex right center">
+        <x-shipyard.ui.button
+            action="none"
+            class="tertiary"
+            label="Oblicz"
+            :icon="model_icon('gig-price-rates')"
+            onclick="calculateGigPrice()"
+        />
     </div>
 
     <table id="results">

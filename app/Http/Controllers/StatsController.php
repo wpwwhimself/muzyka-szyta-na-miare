@@ -994,92 +994,14 @@ class StatsController extends Controller
             "Granie" => GigPriceDefault::relatedTo("show")->get(),
         ];
         $rates = GigPriceRate::orderBy("value")->get()
-            ->mapWithKeys(fn ($r) => [$r->value => $r->label . " (" . _c_(as_pln($r->value)) . "/h)"]);
+            ->map(fn ($r) => ["value" => $r->value, "label" => $r->label . " (" . _c_(as_pln($r->value)) . "/h)"]);
         $places = GigPricePlace::orderBy("name")->get()
-            ->mapWithKeys(fn ($p) => [(strtolower($p->name) . "|" . $p->distance_km) => $p->name . " (" . $p->distance_km . " km)"]);
+            ->map(fn ($p) => ["value" => (strtolower($p->name) . "|" . $p->distance_km), "label" => $p->name . " (" . $p->distance_km . " km)"]);
 
         return view("pages.".user_role().".gig-price.suggest", array_merge(
             ["title" => "Wycena grania"],
             compact("defaults", "rates", "places"),
         ));
-    }
-
-    public function gigPriceDefaults()
-    {
-        $defaults = GigPriceDefault::all();
-
-        return view("pages.".user_role().".gig-price.defaults", array_merge(
-            ["title" => "Ustawienia domyślne wyceny grania"],
-            compact("defaults"),
-        ));
-    }
-
-    public function gigPriceProcessDefaults(Request $rq)
-    {
-        foreach ($rq->except("_token") as $name => $value) {
-            GigPriceDefault::find($name)->update(["value" => $value]);
-        }
-
-        return redirect()->route("gig-price-suggest")->with("toast", ["success", "Ustawienia domyślne zmienione"]);
-    }
-
-    public function gigPriceRates()
-    {
-
-        $rates = GigPriceRate::orderBy("value")->get();
-
-        return view("pages.".user_role().".gig-price.rates", array_merge(
-            ["title" => "Stawki"],
-            compact("rates"),
-        ));
-    }
-
-    public function gigPriceRate(?GigPriceRate $rate = null)
-    {
-        return view("pages.".user_role().".gig-price.rate", array_merge(
-            ["title" => "Stawka"],
-            compact("rate"),
-        ));
-    }
-
-    public function gigPriceProcessRate(Request $rq)
-    {
-        if ($rq->action == "save") {
-            GigPriceRate::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
-        } else if ($rq->action == "delete") {
-            GigPriceRate::find($rq->id)->delete();
-        }
-
-        return redirect()->route("gig-price-rates")->with("toast", ["success", "Stawka poprawiona"]);
-    }
-
-    public function gigPricePlaces()
-    {
-        $places = GigPricePlace::orderBy("name")->get();
-
-        return view("pages.".user_role().".gig-price.places", array_merge(
-            ["title" => "Miejsca"],
-            compact("places"),
-        ));
-    }
-
-    public function gigPricePlace(?GigPricePlace $place = null)
-    {
-        return view("pages.".user_role().".gig-price.place", array_merge(
-            ["title" => "Miejsce"],
-            compact("place"),
-        ));
-    }
-
-    public function gigPriceProcessPlace(Request $rq)
-    {
-        if ($rq->action == "save") {
-            GigPricePlace::updateOrCreate(["id" => $rq->id], $rq->except("_token"));
-        } else if ($rq->action == "delete") {
-            GigPricePlace::find($rq->id)->delete();
-        }
-
-        return redirect()->route("gig-price-places")->with("toast", ["success", "Miejsce poprawione"]);
     }
     #endregion
 }

@@ -191,20 +191,6 @@ Route::middleware("auth")->group(function(){
 
             Route::prefix("gig-price")->group(function(){
                 Route::get("/suggest", "gigPriceSuggest")->name("gig-price-suggest");
-                Route::get("/defaults", "gigPriceDefaults")->name("gig-price-defaults");
-                Route::post("/defaults", "gigPriceProcessDefaults")->name("gig-price-process-defaults");
-
-                Route::prefix("rates")->group(function(){
-                    Route::get("/list", "gigPriceRates")->name("gig-price-rates");
-                    Route::get("/edit/{rate?}", "gigPriceRate")->name("gig-price-rate");
-                    Route::post("/process", "gigPriceProcessRate")->name("gig-price-rate-process");
-                });
-
-                Route::prefix("places")->group(function(){
-                    Route::get("/list", "gigPricePlaces")->name("gig-price-places");
-                    Route::get("/edit/{place?}", "gigPricePlace")->name("gig-price-place");
-                    Route::post("/process", "gigPriceProcessPlace")->name("gig-price-place-process");
-                });
             });
         });
     });

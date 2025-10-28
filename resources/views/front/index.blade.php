@@ -156,6 +156,25 @@ function openSongDemo(song_id = undefined, song_title = undefined, song_desc = u
     <x-front.dj />
 </div>
 
+<section id="about">
+    <h1>O mnie</h1>
+    <div class="flex right center">
+        <img class="photo rounded" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
+        <ul>
+            <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
+            <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
+            <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
+            <li>Jestem stałym członkiem <b>2 zespołów muzycznych</b>:
+                <a href="https://www.facebook.com/profile.php?id=100060053047728">Dixie Kings</a>
+                oraz
+                <a href="https://www.facebook.com/orkiestrawihajster">Orkiestry Tanecznej Wihajster</a>
+            </li>
+            <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako software developer</li>
+            <li>Mam za sobą <b>studia magisterskie</b> z matematyki i informatyki</li>
+        </ul>
+    </div>
+</section>
+
 <div id="song-demo-popup" class="popup">
     <div class="popup-contents flex down center">
         <h3 class="song-full-title"></h3>

@@ -2,6 +2,14 @@
 
 @section("body")
 
+<script>
+// #region redirect from subdomains
+if (window.location.hostname != "{{ env("APP_DOMAIN") }}") {
+    window.location.href = `{{ env("APP_URL") }}${window.location.pathname}`
+}
+// #endregion
+</script>
+
 <x-shipyard.app.big.header>
     <x-slot:top>
         <x-shipyard.app.logo />

@@ -128,3 +128,15 @@ const seekFilePlayer = (filename, event) => {
     audio.currentTime = (event.offsetX / event.target.offsetWidth) * audio.duration
     updateSeeker(filename)
 }
+
+function printInvoice() {
+    const tags_to_hide = [
+        "header",
+        "footer [role='top-part']",
+        "footer [role='middle-part']",
+    ];
+    tags_to_hide.forEach(selector => {
+        document.querySelector(selector).classList.add("hide-for-print");
+    });
+    window.print();
+}

@@ -645,12 +645,12 @@ class StatsController extends Controller
         $sent = null;
 
         if ($rq->visible) {
-            $users = $invoice->quests->map(fn ($q) => $q->client)->unique();
+            $users = $invoice->quests->map(fn ($q) => $q->user)->unique();
             foreach ($users as $u) {
-                if (!$u->email) continue;
+                if (!$u->notes->email) continue;
 
-                $sent = Mail::to($u)->send(new InvoiceReady($invoice, $u));
-                if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->client_name;
+                $sent = Mail::to($u->notes->email)->send(new InvoiceReady($invoice, $u));
+                if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->notes->client_name;
             }
         }
 

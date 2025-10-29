@@ -1,36 +1,19 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Faktury")
 
 @section('content')
 
-<section>
-    <div class="section-header">
-        <h1><i class="fa-solid fa-plus"></i> Dodaj nową</h1>
-    </div>
-    <form action="{{ route('invoice-add') }}" method="post">
-        @csrf
-        <div class="grid" style="--col-count: 3;">
-            <x-input type="text" name="payer_name" label="Nazwa płatnika" value="{{ _ct_($client?->client_name) }}" />
-            <x-input type="text" name="payer_title" label="Tytuł płatnika" :small="true" />
-            <x-input type="text" name="payer_address" label="Adres" />
-            <x-input type="text" name="payer_nip" value="" label="NIP" :small="true" />
-            <x-input type="text" name="payer_regon" value="" label="REGON" :small="true" />
-            <x-input type="text" name="payer_email" label="E-mail" :small="true" value="{{ _ct_($client?->email) }}" />
-            <x-input type="text" name="payer_phone" label="Telefon" :small="true" value="{{ _ct_($client?->phone) }}" />
-            <x-input type="text" name="quests" label="Zlecenia (oddz. spacjami)" :small="true" value="{{ $quest_id }}" />
-        </div>
-        <input type="hidden" id="id" name="id" value="" />
-        <x-button action="submit" id="invoice-add-btn" label="Dodaj" icon="check" />
-        <x-button action="submit" id="invoice-edit-btn" label="Popraw" icon="pencil" />
-    </form>
-</section>
+<x-section title="Lista faktur" :icon="model_icon('invoices')">
+    <x-slot:buttons>
+        <x-shipyard.ui.button
+            label="Dodaj nową"
+            icon="plus"
+            action="none"
+            onclick="openModal('edit-invoice', {});"
+            class="tertiary"
+        />
+    </x-slot:buttons>
 
-<section>
-    <div class="section-header">
-        <h1>
-            <i class="fa-solid fa-file-invoice"></i>
-            Lista faktur
-        </h1>
-    </div>
     <table>
         <thead>
             <tr>
@@ -38,6 +21,7 @@
                 <th>Płatnik</th>
                 <th>Dotyczy</th>
                 <th>Kwota</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +32,6 @@
                         <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
                         {{ $invoice->fullCode }}
                     </a>
-                    <i class="fas fa-pencil invoice-edit interactive" data-invoice-id="{{ $invoice->id }}"></i>
                 </td>
                 <td>
                     {{ $invoice->payer_name }}
@@ -60,6 +43,40 @@
                 @endforeach
                 </td>
                 <td class="{{ $invoice->isPaid ? '' : 'error' }}">{{ _c_(as_pln($invoice->amount)) }}</td>
+                <td>
+                    <x-shipyard.ui.button
+                        pop="Edytuj"
+                        icon="pencil"
+                        action="none"
+                        onclick="openModal('edit-invoice', {
+                            id: {{ $invoice->id }},
+                            payer_name: '{{ $invoice->payer_name }}',
+                            payer_title: '{{ $invoice->payer_title }}',
+                            payer_address: '{{ $invoice->payer_address }}',
+                            payer_nip: '{{ $invoice->payer_nip }}',
+                            payer_regon: '{{ $invoice->payer_regon }}',
+                            payer_email: '{{ $invoice->payer_email }}',
+                            payer_phone: '{{ $invoice->payer_phone }}',
+                            quests: '{{ $invoice->quests->pluck('id')->implode(' ') }}',
+                        });"
+                        class="tertiary"
+                    />
+                    <x-shipyard.ui.button
+                        pop="Utwórz nową na tego samego płatnika"
+                        icon="content-duplicate"
+                        action="none"
+                        onclick="openModal('edit-invoice', {
+                            payer_name: '{{ $invoice->payer_name }}',
+                            payer_title: '{{ $invoice->payer_title }}',
+                            payer_address: '{{ $invoice->payer_address }}',
+                            payer_nip: '{{ $invoice->payer_nip }}',
+                            payer_regon: '{{ $invoice->payer_regon }}',
+                            payer_email: '{{ $invoice->payer_email }}',
+                            payer_phone: '{{ $invoice->payer_phone }}',
+                        });"
+                        class="tertiary"
+                    />
+                </td>
             </tr>
         @empty
             <tr>
@@ -68,36 +85,6 @@
         @endforelse
         </tbody>
     </table>
-</section>
-
-<script>
-$(document).ready(function() {
-    $("#invoice-edit-btn").hide()
-
-    $(".invoice-edit").click(function() {
-        fetch("/api/invoice/" + $(this).attr("data-invoice-id"))
-            .then(res => res.json())
-            .then(res => {
-                const invoice = res.invoice
-
-                $("#invoice-edit-btn").show()
-                $("#invoice-add-btn").hide()
-                for (let field of [
-                    "id",
-                    "payer_name",
-                    "payer_title",
-                    "payer_address",
-                    "payer_nip",
-                    "payer_regon",
-                    "payer_email",
-                    "payer_phone",
-                ]) {
-                    $("#" + field).val(invoice[field])
-                }
-                $("#quests").val(invoice.quests.map(q => q.id).join(" "))
-            })
-    })
-})
-</script>
+</x-section>
 
 @endsection

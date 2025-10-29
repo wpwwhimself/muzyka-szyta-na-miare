@@ -41,8 +41,11 @@
             icon="plus"
             pop="Dodaj"
             action="none"
-            onclick="openModal('create-invoice', {
-                questId: '{{ $quest->id }}'
+            onclick="openModal('edit-invoice', {
+                payer_name: '{{ $quest->user->notes->client_name }}',
+                payer_email: '{{ $quest->user->notes->email }}',
+                payer_phone: '{{ $quest->user->notes->phone }}',
+                quests: '{{ $quest->id }}'
             });"
             class="tertiary"
         />

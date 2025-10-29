@@ -24,7 +24,7 @@ class InvoiceReady extends Mailable
     ) {
         $this->invoice = $invoice;
         $this->user = $user;
-        $this->pl = client_polonize($this->user->client_name);
+        $this->pl = client_polonize($this->user->notes->client_name);
     }
 
     /**

@@ -323,6 +323,7 @@ body {
     height: 1.2em;
     vertical-align: middle;
     color: black;
+    font-family: var(--heading-font);
 
     & svg {
         height: 1.2em;

@@ -96,14 +96,19 @@
             </x-slot>
 
             <div class="flex right center wrap">
-            @forelse ($tags as $tag)
-            <div>
-                <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" :value="$file?->tags->contains($tag->id)" />
-                <x-file-tag :tag="$tag" />
-            </div>
-            @empty
-            <span class="grayed-out">Brak utworzonych tagów</span>
-            @endforelse
+                @forelse ($tags as $tag)
+                <div class="input-container">
+                    <x-file-tag :tag="$tag" />
+                    <input type="checkbox"
+                        name="tags[{{ $tag->id }}]"
+                        @if ($file?->tags->contains($tag->id))
+                        checked
+                        @endif
+                    />
+                </div>
+                @empty
+                <span class="grayed-out">Brak utworzonych tagów</span>
+                @endforelse
             </div>
         </x-section>
 

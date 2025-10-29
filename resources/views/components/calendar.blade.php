@@ -27,7 +27,7 @@
             <td>
                 @foreach ($meta["quests"] as $quest)
                 <x-shipyard.app.icon-label-value
-                    :icon="$quest->song->has_safe_files ? 'files' : $quest->quest_type->icon"
+                    :icon="$quest->song->has_safe_files ? model_icon('files') : $quest->quest_type->icon"
                     label="Zlecenie"
                 >
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >

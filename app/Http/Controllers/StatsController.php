@@ -111,9 +111,10 @@ class StatsController extends Controller
         $recent_gross_alltime = collect($recent_income_alltime)
             ->mergeRecursive($recent_costs_alltime)
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[2]]);
-        $client_exp_raw = User::withCount("questsDone")
-            ->pluck("quests_done_count", "client_name")
-            ->mergeRecursive(User::all()->pluck("extra_exp", "client_name"))
+        $client_exp_raw = User::has("notes")->withCount("questsDone")
+            ->get()
+            ->mapWithKeys(fn ($u) => [$u->notes->client_name => $u->quests_done_count])
+            ->mergeRecursive(User::has("notes")->get()->mapWithKeys(fn ($u) => [$u->notes->client_name => $u->extra_exp]))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] + $val[1]])
             ->countBy()
             ->toArray();
@@ -251,11 +252,11 @@ class StatsController extends Controller
                         ->orderByDesc("Liczba poprawek")
                         ->limit(10)
                         ->join("quests", "re_quest_id", "quests.id", "left")
-                        ->join("users", "quests.client_id", "users.id", "left")
+                        ->join("user_notes", "quests.client_id", "user_notes.user_id", "left")
                         ->join("songs", "quests.song_id", "songs.id", "left")
                         ->join("genres", "songs.genre_id", "genres.id", "left")
                         ->selectRaw("re_quest_id as 'ID zlecenia',
-                            users.client_name as 'Klient',
+                            user_notes.client_name as 'Klient',
                             songs.title as 'Tytuł utworu',
                             genres.name as 'Gatunek utworu',
                             count(*) as 'Liczba poprawek'")
@@ -283,18 +284,19 @@ class StatsController extends Controller
             "clients" => [
                 "summary" => [
                     "split" => [
-                        "zaufani" => User::where("trust", 1)->count(),
-                        "krętacze" => User::where("trust", -1)->count(),
-                        "patroni" => User::where("helped_showcasing", 2)->count(),
+                        "zaufani" => User::whereHas("notes", fn ($q) => $q->where("trust", 1))->count(),
+                        "krętacze" => User::whereHas("notes", fn ($q) => $q->where("trust", -1))->count(),
+                        "patroni" => User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 2))->count(),
                         "bez zleceń" => User::withCount("questsDone")
                             ->having("quests_done_count", 0)
-                            ->where("extra_exp", 0)
+                            ->whereHas("notes", fn ($q) => $q->where("extra_exp", 0))
                             ->count(),
-                        "kobiety" => User::all()
-                            ->filter(fn($client) => $client->is_woman)
+                        "kobiety" => User::has("notes")
+                            ->get()
+                            ->filter(fn($client) => $client->notes->is_woman)
                             ->count(),
                     ],
-                    "total" => User::all()->count(),
+                    "total" => User::has("notes")->get()->count(),
                 ],
                 "exp" => [
                     "split" => [
@@ -303,7 +305,7 @@ class StatsController extends Controller
                         "zainteresowani (2-3)" => client_exp_tally($client_exp_raw, 2, 3),
                         "nowicjusze (1)" => client_exp_tally($client_exp_raw, 1, 1),
                     ],
-                    "total" => User::all()->count(),
+                    "total" => User::has("notes")->get()->count(),
                 ],
                 "new" => User::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
                     ->whereDate("created_at", ">=", BEGINNING())
@@ -314,12 +316,13 @@ class StatsController extends Controller
                     ->pluck("count", "month"),
                 "pickiness" => [
                     "high" => [
-                        "rows" => User::all()
-                            ->sortByDesc("pickiness")
+                        "rows" => User::with("notes")
+                            ->get()
+                            ->sortByDesc("notes.pickiness")
                             ->take(10)
                             ->map(fn($item, $key) => [
-                                "Nazwisko" => $item->client_name,
-                                "Wybredność" => $item->pickiness * 100 . "%",
+                                "Nazwisko" => $item->notes->client_name,
+                                "Wybredność" => $item->notes->pickiness * 100 . "%",
                             ])
                             ->values(),
                     ],
@@ -348,7 +351,7 @@ class StatsController extends Controller
                         )
                         ->get()
                         ->map(fn($item, $key) => [
-                            "Nazwisko" => $item->entity->client_name,
+                            "Nazwisko" => $item->entity->notes->client_name,
                             "Liczba zleceń" => $item->entity->questsRecent()->count(),
                         ])
                         ->sortByDesc("Liczba zleceń")
@@ -552,8 +555,9 @@ class StatsController extends Controller
                 ->where("changed_by", $quest->client_id)
                 ->update(["re_quest_id" => null]);
 
-            $quest->client->budget += $payments_sum;
-            $quest->client->save();
+            $quest->user->notes->update([
+                "budget" => $quest->user->notes->budget += $payments_sum,
+            ]);
         }
 
         // oznacz jako nieopłacony
@@ -561,12 +565,12 @@ class StatsController extends Controller
 
         $flash_content = "Zwrot wpisany" . (($budget) ? ", budżet zmieniony" : "");
 
-        if($quest->client->email && !$budget){
-            Mail::to($quest->client->email)->send(new PaymentReturned($quest->fresh()));
+        if($quest->user->notes->email && !$budget){
+            Mail::to($quest->user->notes->email)->send(new PaymentReturned($quest->fresh()));
             StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
             $flash_content .= ", mail wysłany";
         }
-        if($quest->client->contact_preference != "email"){
+        if($quest->user->notes->contact_preference != "email"){
             // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
             $flash_content .= ", ale wyślij wiadomość";
         }

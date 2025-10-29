@@ -3,6 +3,15 @@
 @section("subtitle", "Edycja utworu")
 
 @section('content')
+
+<script>
+function setFormToFileUpload() {
+    const form = document.querySelector('form');
+    form.action = `{{ route("showcase-file-upload") }}`;
+    form.submit();
+}
+</script>
+
 <x-shipyard.app.form :action="route('song-process')" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{{ $song->id }}">
 
@@ -39,13 +48,6 @@
             <span class="grayed-out">Brak showcase'u</span>
             @endif
 
-            <script>
-            function setFormToFileUpload() {
-                const form = document.querySelector('form');
-                form.action = `{{ route("showcase-file-upload") }}`;
-                form.submit();
-            }
-            </script>
             <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music"
                 onchange="setFormToFileUpload();"
             />

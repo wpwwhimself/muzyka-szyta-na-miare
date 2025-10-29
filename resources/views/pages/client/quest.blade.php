@@ -264,6 +264,19 @@
         @endif
 
         @if (in_array($quest->status_id, [18, 19]))
+        <x-shipyard.ui.button
+            icon="recycle"
+            label="Przywróć zlecenie"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: 26,
+            })"
+            class="tertiary"
+        />
+        @endif
+
+        @if (in_array($quest->status_id, [15, 16, 26, 95, 96]))
             @if ($quest->completed_once)
             <x-shipyard.ui.button
                 icon="check-all"
@@ -287,17 +300,6 @@
                 class="tertiary"
             />
             @endif
-
-        <x-shipyard.ui.button
-            icon="recycle"
-            label="Przywróć zlecenie"
-            action="none"
-            onclick="openModal('quest-change-status', {
-                quest_id: '{{ $quest->id }}',
-                status_id: 26,
-            })"
-            class="tertiary"
-        />
         @endif
     </div>
 </x-shipyard.app.form>

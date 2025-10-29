@@ -45,7 +45,7 @@ class Quest extends Model
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->__toString(),
+            get: fn () => "[$this->id] " . $this->song->full_title,
         );
     }
 

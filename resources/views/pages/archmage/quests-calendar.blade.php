@@ -1,33 +1,19 @@
 @extends("layouts.app")
+@section("title", "Kalendarz zleceń i dni wolne")
 
 @section('content')
 
 <div class="grid" style="--col-count: 2;">
-    <section>
-        <div class="section-header">
-            <h1>
-                <i class="fa-solid fa-calendar"></i>
-                Grafik nadchodzących zleceń
-            </h1>
-        </div>
+    <x-section title="Grafik nadchodzących zleceń" icon="calendar">
         <x-calendar :click-days="true" :suggest="false" :with-today="true" />
         <script>
-        $(document).ready(() => {
-            $("tr[date]").click((el)=>{
-                $("#date").val($(el.currentTarget).attr("date"));
-            });
-        });
+        function handleCalendarClick(date) {
+            document.querySelector("#date").value = date;
+        }
         </script>
-    </section>
+    </x-section>
 
-    <section>
-        <div class="section-header">
-            <h1>
-              <i class="fa-solid fa-calendar-day"></i>
-              Dni wolne
-            </h1>
-        </div>
-
+    <x-section title="Dni wolne" :icon="model_icon('calendar-free-days')">
         <form action="{{ route('qc-mod-free-day') }}" class="flex right center">
             @csrf
             <x-input type="date" name="date" label="Dodaj dzień" :small="true" min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" />
@@ -35,21 +21,9 @@
             <x-button action="submit" label="Dodaj" icon="check" :small="true" />
         </form>
 
-        <style>
-        .day-tiles > a{
-            background-color: var(--bg-lite2);
-            padding: var(--size-m);
-            border-radius: var(--size-m);
-        }
-        @media screen and (max-width: 600px){
-            .day-tiles{
-                flex-direction: row;
-            }
-        }
-        </style>
-        <div class="flex right center day-tiles">
+        <div class="flex right but-mobile-down center day-tiles">
         @forelse ($free_days as $day)
-            <a href="{{ route('qc-mod-free-day', ['date' => $day->date->format("Y-m-d"), 'mode' => 'remove']) }}" class="flex down center">
+            <a href="{{ route('qc-mod-free-day', ['date' => $day->date->format("Y-m-d"), 'mode' => 'remove']) }}" class="flex down center middle no-gap rounded padded backdropped">
                 <span>{{ $day->date->format("d.m") }}</span>
                 <small class="ghost">{{ $day->date->addDay()->diffForHumans() }}</small>
             </a>
@@ -59,6 +33,6 @@
         </div>
 
         <p>Najbliższy dzień pracujący: <b>{{ get_next_working_day()->format("d.m.Y") }}</b></p>
-    </section>
+    </x-section>
 </div>
 @endsection

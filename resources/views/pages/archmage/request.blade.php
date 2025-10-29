@@ -200,7 +200,16 @@
                 <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" />
 
                 <div>
-                    @if (in_array($request->status_id, [1, 6, 96])) <div class="folding"><x-calendar /></div> @endif
+                    @if (in_array($request->status_id, [1, 6, 96]))
+                    <div class="folding"><x-calendar /></div>
+                    <script>
+                    function handleCalendarClick(date) {
+                        if (document.querySelector("#deadline")) {
+                            document.querySelector("#deadline").value = date;
+                        }
+                    }
+                    </script>
+                    @endif
                     <x-shipyard.ui.field-input :model="$request" field-name="deadline" />
                 </div>
             </div>

@@ -148,9 +148,14 @@ body {
 .calendar-table {
     & td:first-child{
         white-space: nowrap;
+        vertical-align: top;
     }
 
     & .cal-row {
+        & > td {
+            padding-bottom: 0.5em;
+        }
+
         & .free{
             opacity: 0.5;
         }
@@ -159,14 +164,6 @@ body {
         }
         & .suggest{
             color:hsl(108, 100%, 39%) !important;
-        }
-        & a{
-            display: inline-block;
-            margin: 2px;
-        }
-        & .quest-type {
-            font-size: var(--size-m);
-            margin: 0;
         }
     }
 }

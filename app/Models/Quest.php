@@ -229,6 +229,20 @@ class Quest extends Model
     //     );
     // }
 
+    public function clientName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($v) => $this->user->notes->client_name ?? $v,
+        );
+    }
+
+    public function fullTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->song->full_title,
+        );
+    }
+
     // rounded prices
     public function getPriceAttribute($val) {
         return round($val, 2);

@@ -9,7 +9,7 @@
     Oznacza to, że jest ono traktowane jako {{ $treat_as }}.
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 <p>
     Jeśli chcesz przywrócić zlecenie, kliknij odpowiedni przycisk na stronie zlecenia.

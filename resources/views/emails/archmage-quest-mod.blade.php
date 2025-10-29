@@ -8,9 +8,9 @@
 </p>
 
 @if ($isRequest)
-<x-requests.tile :request="$quest" />
+<x-requests.tile-mail :request="$quest" />
 @else
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 @endif
 
 @if ($comment = $quest->history->first()?->comment)

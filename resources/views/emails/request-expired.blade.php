@@ -9,7 +9,7 @@
     Znaczy to, że jego warunki już nie obowiązują.
 </p>
 
-<x-requests.tile :request="$request" />
+<x-requests.tile-mail :request="$request" />
 
 <p>
     Jeśli chcesz odświeżyć zapytanie, kliknij odpowiedni przycisk na stronie zapytania.

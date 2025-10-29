@@ -8,7 +8,7 @@
     zamówione przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} zlecenie czeka na dokonanie wpłaty:
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 <h3>
     Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia

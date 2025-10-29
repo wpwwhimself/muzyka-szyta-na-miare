@@ -8,7 +8,7 @@
     wprowadziłem zmiany w {{ $pl["kobieta"] ? "Pani" : "Pana" }} zleceniu:
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 @if ($comment = $quest->history->first()->comment)
 {{ Illuminate\Mail\Markdown::parse($comment) }}

@@ -9,7 +9,7 @@
     Wycena {{ $pl["kobieta"] ? "Pani" : "Pana" }} zlecenia została już przeze mnie przygotowana.
 </p>
 
-<x-requests.tile :request="$request" />
+<x-requests.tile-mail :request="$request" />
 
 @if ($comment = $request->history->first()->comment)
 {{ Illuminate\Mail\Markdown::parse($comment) }}

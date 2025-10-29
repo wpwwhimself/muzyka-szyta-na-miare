@@ -9,7 +9,7 @@
 </p>
 
 @foreach ($quests as $quest)
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 @endforeach
 
 @if (!($quest->user->notes->is_veteran || $quest->user->notes->trust == 1))

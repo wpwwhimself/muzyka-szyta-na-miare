@@ -8,7 +8,7 @@
     otrzymałem od {{ $pl["kobieta"] ? "Pani" : "Pana" }} wpłatę dotyczącą zlecenia:
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 @if ($paymentShouldBeDelayed)
 <p>

@@ -8,7 +8,7 @@
     nie otrzymałem jeszcze definitywnej opinii co do zamówionego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} zlecenia:
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 <h3>
     Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia

@@ -10,9 +10,9 @@
 </p>
 
 @if ($re_quest->is_request)
-<x-requests.tile :request="$re_quest" />
+<x-requests.tile-mail :request="$re_quest" />
 @else
-<x-quests.tile :quest="$re_quest" />
+<x-quests.tile-mail :quest="$re_quest" />
 @endif
 
 @if ($comment = $re_quest->history->first()->comment)

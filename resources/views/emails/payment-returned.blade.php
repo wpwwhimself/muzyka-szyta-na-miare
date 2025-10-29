@@ -8,7 +8,7 @@
     wysłałem zwrot wpłaty, jaką otrzymałem od {{ $pl["kobieta"] ? "Pani" : "Pana" }} w ramach zlecenia:
 </p>
 
-<x-quests.tile :quest="$quest" />
+<x-quests.tile-mail :quest="$quest" />
 
 <h3>
     Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia

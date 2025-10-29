@@ -34,18 +34,25 @@
 </x-section>
 @endif
 
-<x-section title="Zapytania" :icon="model_icon('requests')">
+<x-extendo-block key="requests"
+    title="Zapytania"
+    :subtitle="'Aktywne: ' . $requests->count()"
+    :header-icon="model_icon('requests')"
+    :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0"
+>
     <x-slot name="buttons">
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
     </x-slot>
 
-    @forelse ($requests as $request)
-    <x-requests.tile :request="$request" />
-    @empty
-    <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
-    @endforelse
-</x-section>
+    <div class="flex down">
+        @forelse ($requests as $request)
+        <x-requests.tile :request="$request" />
+        @empty
+        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
+        @endforelse
+    </div>
+</x-extendo-block>
 
 @if (count($showcases_missing))
 <x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')">
@@ -84,18 +91,18 @@
 </x-section>
 @endif
 
-<x-section id="dashboard-quests"
-    title="Zlecenia w toku"
-    :icon="model_icon('quests')"
->
-    @forelse ($quests_ongoing as $key => $quest)
-    <x-quests.tile :quest="$quest" :no="$key + 1" />
-    @empty
-    <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
-    @endforelse
-</x-section>
-
 <div class="grid but-mobile-down" style="--col-count: 2;">
+    <x-section id="dashboard-quests"
+        title="Zlecenia w toku"
+        :icon="model_icon('quests')"
+    >
+        @forelse ($quests_ongoing as $key => $quest)
+        <x-quests.tile :quest="$quest" :no="$key + 1" />
+        @empty
+        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
+        @endforelse
+    </x-section>
+
     <x-section id="dashboard-requests" class="sc-line"
         title="Grafik"
         icon="calendar"

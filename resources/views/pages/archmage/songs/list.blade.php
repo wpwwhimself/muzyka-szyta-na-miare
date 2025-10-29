@@ -1,4 +1,5 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Lista utworów")
 
 @section('content')
 
@@ -8,19 +9,19 @@
 
 <x-section id="songs-list" class="flex down"
     title="Lista utworów"
-    icon="list"
+    :icon="model_icon('songs')"
 >
-    <x-slot name="buttons">
-        <x-a :href="route('song-genres')" icon="radio">Gatunki</x-a>
-        <x-a :href="route('song-tags')" icon="tag">Tagi utworów</x-a>
-        <x-a :href="route('file-tags')" icon="tag">Tagi plików</x-a>
-        <form method="get" id="search" class="flex right" action="{{ route('songs') }}">
-            <input type="text" name="search" class="small" value="{{ $search }}" />
-            <x-button action="submit" icon="magnifying-glass" label="" :small="true" />
+    <x-slot:buttons>
+        <x-a :href="route('song-genres')" :icon="model_icon('genres')">Gatunki</x-a>
+        <x-a :href="route('song-tags')" :icon="model_icon('song-tags')">Tagi utworów</x-a>
+        <x-a :href="route('file-tags')" :icon="model_icon('file-tags')">Tagi plików</x-a>
+        <form method="get" id="search" class="flex right middle nowrap" action="{{ route('songs') }}">
+            <x-shipyard.ui.input type="text" name="search" label="Szukaj" :value="$search" />
+            <x-button action="submit" icon="search" label="" :small="true" />
         </form>
-    </x-slot>
+    </x-slot:buttons>
 
-    {{-- <div class="quests-table"> --}}
+    <div class="flex down">
         @forelse ($songs as $song)
         <x-extendo-block :key="$song->id"
             :header-icon="preg_replace('/fa-/', '', $song->type->fa_symbol)"
@@ -77,34 +78,9 @@
         @empty
         <p class="grayed-out">Nie ma żadnych utworów</p>
         @endforelse
-    {{-- </div> --}}
-    {{ $songs->links() }}
+    </div>
+
+    {{ $songs->links("components.shipyard.pagination.default") }}
 </x-section>
-
-<script>
-// editable songs //
-$(document).ready(() => {
-    $(".link-edit-trigger").click((e) => {
-        const box = e.target.closest(".link-edit-trigger").nextElementSibling;
-        box.classList.toggle("hidden");
-        box.querySelector("input[name=link]").focus();
-    });
-
-    $("input[name=link]").change((e) => {
-        $.ajax({
-            type: "post",
-            url: "/api/song_link_change",
-            data: {
-                id: e.target.getAttribute("data-editable"),
-                link: e.target.value,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function (res) {
-                window.location.reload();
-            }
-        });
-    });
-});
-</script>
 
 @endsection

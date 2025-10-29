@@ -170,11 +170,13 @@
         <x-a href="{{ route('quests') }}">Wszystkie</x-a>
     </x-slot>
 
-    @forelse ($quests_review as $quest)
-    <x-quests.tile :quest="$quest" />
-    @empty
-    <p class="grayed-out">brak aktywnych zleceń</p>
-    @endforelse
+    <div class="flex down">
+        @forelse ($quests_review as $quest)
+        <x-quests.tile :quest="$quest" />
+        @empty
+        <p class="grayed-out">brak aktywnych zleceń</p>
+        @endforelse
+    </div>
 </x-section>
 
 <div class="grid" style="--col-count: 2;">
@@ -183,11 +185,13 @@
             <x-a :href="route('quests')">Wszystkie</x-a>
         </x-slot>
 
-        @forelse ($quests_ongoing as $quest)
-        <x-quests.tile :quest="$quest" />
-        @empty
-        <p class="grayed-out">brak aktywnych zleceń</p>
-        @endforelse
+        <div class="flex down">
+            @forelse ($quests_ongoing as $quest)
+            <x-quests.tile :quest="$quest" />
+            @empty
+            <p class="grayed-out">brak aktywnych zleceń</p>
+            @endforelse
+        </div>
     </x-section>
 
     <x-section title="Aktualne zapytania" :icon="model_icon('requests')" id="dashboard-requests">
@@ -195,11 +199,13 @@
             <x-a :href="route('requests')">Wszystkie</x-a>
         </x-slot>
 
-        @forelse ($requests as $request)
-        <x-requests.tile :request="$request" />
-        @empty
-        <p class="grayed-out">brak aktywnych zapytań</p>
-        @endforelse
+        <div class="flex down">
+            @forelse ($requests as $request)
+            <x-requests.tile :request="$request" />
+            @empty
+            <p class="grayed-out">brak aktywnych zapytań</p>
+            @endforelse
+        </div>
     </x-section>
 </div>
 

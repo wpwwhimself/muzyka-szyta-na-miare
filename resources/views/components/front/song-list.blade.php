@@ -17,7 +17,7 @@
             onclick="openSongDemo(
                 `{{ $song->id }}`,
                 `{{ $song->full_title }}`,
-                `{{ $song->notes?->replace('\n', '<br>') || '' }}`
+                `{{ Str::of($song->notes ?? '')->replace('\n', '<br>') || '' }}`
             )"
         >
             <x-shipyard.app.icon :name="model_icon('songs')" />

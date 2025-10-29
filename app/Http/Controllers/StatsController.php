@@ -316,7 +316,7 @@ class StatsController extends Controller
                     ->pluck("count", "month"),
                 "pickiness" => [
                     "high" => [
-                        "rows" => User::with("notes")
+                        "rows" => User::has("notes")
                             ->get()
                             ->sortByDesc("notes.pickiness")
                             ->take(10)

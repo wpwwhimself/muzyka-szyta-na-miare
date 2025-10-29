@@ -220,6 +220,10 @@ section {
     }
 }
 
+.showcase-section {
+    text-align: center;
+}
+
 #songs ul{
     text-align: left;
     padding: 0;

@@ -96,11 +96,13 @@
         title="Zlecenia w toku"
         :icon="model_icon('quests')"
     >
-        @forelse ($quests_ongoing as $key => $quest)
-        <x-quests.tile :quest="$quest" :no="$key + 1" />
-        @empty
-        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
-        @endforelse
+        <div class="flex down">
+            @forelse ($quests_ongoing as $key => $quest)
+            <x-quests.tile :quest="$quest" :no="$key + 1" />
+            @empty
+            <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
+            @endforelse
+        </div>
     </x-section>
 
     <x-section id="dashboard-requests" class="sc-line"
@@ -119,11 +121,13 @@
         title="Zlecenia czekające"
         icon="package-variant"
     >
-        @forelse ($quests_review as $key => $quest)
-        <x-quests.tile :quest="$quest" :no="$key + 1" />
-        @empty
-        <p class="grayed-out">brak aktywnych zleceń</p>
-        @endforelse
+        <div class="flex down">
+            @forelse ($quests_review as $key => $quest)
+            <x-quests.tile :quest="$quest" :no="$key + 1" />
+            @empty
+            <p class="grayed-out">brak aktywnych zleceń</p>
+            @endforelse
+        </div>
     </x-section>
 
     <x-section id="recent"

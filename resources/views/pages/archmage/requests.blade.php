@@ -11,11 +11,13 @@
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
     </x-slot>
 
-    @forelse ($requests as $request)
-    <x-requests.tile :request="$request" />
-    @empty
-    <p class="grayed-out">brak zapytań</p>
-    @endforelse
+    <div class="flex down">
+        @forelse ($requests as $request)
+        <x-requests.tile :request="$request" />
+        @empty
+        <p class="grayed-out">brak zapytań</p>
+        @endforelse
+    </div>
 
     {{ $requests->links("components.shipyard.pagination.default") }}
 </x-section>

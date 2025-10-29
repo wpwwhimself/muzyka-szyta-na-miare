@@ -63,21 +63,27 @@
 </section>
 
 <x-front.tabbed-section id="showcases" title="Jak to brzmi?" icon="disc">
-    <x-slot name="buttons">
+    <x-slot:buttons>
         @foreach ([
             "rolki" => "reels",
             "pełny katalog" => "list",
         ] as $label => $mode)
-        <x-button action="none" :label="$label" icon="bullhorn" onclick="filterShowcases('{{ $mode }}')" small />
+        <x-shipyard.ui.button
+            :label="$label"
+            icon="bullhorn"
+            action="none"
+            onclick="filterShowcases('{{ $mode }}')"
+            class="tertiary"
+        />
         @endforeach
-    </x-slot>
+    </x-slot:buttons>
 
-    <div class="showcase-section flex down" data-mode="reels">
+    <div class="showcase-section flex down spaced" data-mode="reels">
         <h2>Najnowsze realizacje</h2>
         <x-front.showcase-reels :showcases="$showcases" />
     </div>
 
-    <div class="showcase-section flex down scroll-hidden" data-mode="list">
+    <div class="showcase-section flex down spaced hidden" data-mode="list">
         <div id="songs">
             <h2>Wszystkie utwory, jakie mam w repertuarze</h2>
             <p>
@@ -88,15 +94,35 @@
 
             <h3>Filtruj:</h3>
             <div class="flex right keep-for-mobile center">
-                <x-button action="none" label="wszystkie" icon="circle-xmark" onclick="filterSongs(`dj`)" small />
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    label="wszystkie"
+                    icon="close-circle"
+                    onclick="filterSongs(`podklady`)"
+                />
 
                 @foreach ($genres as $genre)
-                <x-button action="none" :label="$genre->name" icon="radio" onclick="filterSongs(`dj`, 'genre', {{ $genre->id }})" small />
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    :label="$genre->name"
+                    icon="radio"
+                    onclick="filterSongs(`podklady`, 'genre', {{ $genre->id }})"
+                />
                 @endforeach
 
-                {{-- @foreach ($song_tags as $tag) --}}
-                {{-- <x-button action="none" :label="$tag->name" icon="tag" onclick="filterSongs(`dj`, 'tag', {{ $tag->id }})" small /> --}}
-                {{-- @endforeach --}}
+                {{--
+                @foreach ($song_tags as $tag)
+                <x-shipyard.ui.button
+                    action="none"
+                    class="tertiary"
+                    :label="$tag->name"
+                    icon="tag"
+                    onclick="filterSongs(`podklady`, 'tag', {{ $tag->id }})"
+                />
+                @endforeach
+                --}}
             </div>
 
             <ul id="dj-song-list"><p class="grayed-out">Lista zostanie uzupełniona wkrótce</p></ul>

@@ -1,4 +1,5 @@
-@extends('layouts.app', compact("title"))
+@extends('layouts.app')
+@section("title", "Zapytania")
 
 @section('content')
 
@@ -34,13 +35,15 @@
     </p>
     @endif
 
-    @forelse ($requests as $request)
-    <x-requests.tile :request="$request" />
-    @empty
-    <p class="grayed-out">brak zapytań</p>
-    @endforelse
+    <div class="flex down">
+        @forelse ($requests as $request)
+        <x-requests.tile :request="$request" />
+        @empty
+        <p class="grayed-out">brak zapytań</p>
+        @endforelse
+    </div>
 
-    {{ $requests->links() }}
+    {{ $requests->links("components.shipyard.pagination.default") }}
 </x-section>
 
 @endsection

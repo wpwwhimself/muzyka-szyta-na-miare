@@ -42,7 +42,7 @@
                     @if ($pos->re_quest_id)
                     <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>
                     @else
-                    <td class="grayed-out">budżet</td>
+                    <span class="grayed-out">budżet</span>
                     @endif
                 </td>
                 <td>

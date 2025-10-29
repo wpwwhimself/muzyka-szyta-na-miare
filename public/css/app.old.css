@@ -280,13 +280,6 @@ code, pre {
     background-color: var(--bg1);
 }
 
-.diff-hot{
-    color: hsl(45, 100%, 50%)
-}
-.diff-cold{
-    color: hsl(225, 100%, 68%)
-}
-
 /* TABLES */
 table{
     width: 100%;

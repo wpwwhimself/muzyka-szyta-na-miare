@@ -146,13 +146,13 @@ body {
 }
 
 .calendar-table {
-    & td:first-child{
-        white-space: nowrap;
-        vertical-align: top;
+    & th {
+        text-align: center !important;
     }
-
     & .cal-row {
         & > td {
+            white-space: nowrap;
+            vertical-align: top;
             padding-bottom: 0.5em;
         }
 

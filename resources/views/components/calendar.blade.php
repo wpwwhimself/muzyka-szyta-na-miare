@@ -2,7 +2,8 @@
     <thead>
         <tr>
             <th>Dzień</th>
-            <th>ReQuesty</th>
+            <th>Mój termin</th>
+            <th>Termin klienta</th>
         </tr>
     </thead>
     <tbody>
@@ -24,42 +25,47 @@
 
                 {{ $date }}
             </td>
+
+            @foreach (["", "_hard"] as $suffix)
             <td>
-                @foreach ($meta["quests"] as $quest)
+                @foreach ($meta["quests$suffix"] as $quest)
                 <x-shipyard.app.icon-label-value
                     :icon="$quest->song->has_safe_files ? model_icon('files') : $quest->quest_type->icon"
                     label="Zlecenie"
                 >
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
-                        {!! $quest->song->full_title !!}
+                        {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
                 @endforeach
 
-                @foreach ($meta["quests_done"] as $quest)
+                {{--
+                @foreach ($meta["quests_done$suffix"] as $quest)
                 <x-shipyard.app.icon-label-value
                     icon="check"
                     label="Zakończone zlecenie"
                     class="ghost"
                 >
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
-                        {!! $quest->song->full_title !!}
+                        {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
                 @endforeach
+                --}}
 
-                @foreach ($meta["requests"] as $request)
+                @foreach ($meta["requests$suffix"] as $request)
                 <x-shipyard.app.icon-label-value
                     :icon="model_icon('requests')"
                     label="Zapytanie"
                     class="ghost"
                 >
-                    <a class="request ghost" href="{{ route('request', ['id' => $request->id]) }}" target="_blank" >
-                        {!! $request->full_title !!}
+                    <a class="request" href="{{ route('request', ['id' => $request->id]) }}" target="_blank" >
+                        {!! $request->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
                 @endforeach
             </td>
+            @endforeach
         </tr>
     @endforeach
     </tbody>

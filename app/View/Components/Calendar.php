@@ -48,6 +48,9 @@ class Calendar extends Component
             $quests = Quest::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [15, 95, 17, 18, 19])->get();
             $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
             $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
+            $quests_hard = Quest::where("hard_deadline", date("Y-m-d", $date))->whereNotIn("status_id", [15, 95, 17, 18, 19])->get();
+            $quests_done_hard = Quest::where("hard_deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
+            $requests_hard = Request::where("hard_deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
 
             $items_count = count($quests) + count($requests);
             if(
@@ -62,6 +65,9 @@ class Calendar extends Component
                 "quests" => $quests,
                 "quests_done" => $quests_done,
                 "requests" => $requests,
+                "quests_hard" => $quests_hard,
+                "quests_done_hard" => $quests_done_hard,
+                "requests_hard" => $requests_hard,
                 "suggest_date" => ($suggestion_ready == 1),
             ];
 

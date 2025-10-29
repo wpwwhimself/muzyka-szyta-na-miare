@@ -91,10 +91,10 @@ class JanitorController extends Controller
                 "subject" => $request->id,
                 "comment" => "7_FORGOT",
             ];
-            if($request->client?->email || $request->email){
-                Mail::to($request->email ?? $request->client->email)->send(new RequestExpired($request->fresh()));
+            if($request->user?->notes->email ?? $request->email){
+                Mail::to($request->user?->notes->email ?? $request->email)->send(new RequestExpired($request->fresh()));
                 BackController::newStatusLog($request->id, 7, "Brak reakcji", 1, 1);
-                $summaryEntry["mailing"] = 1 + intval($request->client?->contact_preference == "email" || $request->contact_preference == "email");
+                $summaryEntry["mailing"] = 1 + intval(($request->user?->notes->contact_preference ?? $request->contact_preference) == "email");
             }else{
                 BackController::newStatusLog($request->id, 7, "Brak reakcji", 1, null);
                 $summaryEntry["mailing"] = 0;
@@ -107,8 +107,8 @@ class JanitorController extends Controller
          */
         $quests = Quest::whereIn("status_id", [15, 31, 95])
             ->where(function($q){
-                $q->whereHas('client', function($q){ $q->where('trust', '<', 1); })
-                    ->orWhereHas('client', function($q){ $q->where('trust', 1); })->where("paid", true);
+                $q->whereHas('user.notes', function($q){ $q->where('trust', '<', 1); })
+                    ->orWhereHas('user.notes', function($q){ $q->where('trust', 1); })->where("paid", true);
             })
             ->where(function($q) use ($quest_expired_after){
                 $q->where(function($qq) use ($quest_expired_after){
@@ -119,7 +119,7 @@ class JanitorController extends Controller
             })
             ->get();
         foreach($quests as $quest){
-            if ($quest->client->is_forgotten) continue;
+            if ($quest->user->notes->is_forgotten) continue;
 
             [$new_status, $new_comment] = $quest->paid ? [19, "19_ALLGOOD"] : [17, "17_FORGOT"];
             $quest->update(["status_id" => $new_status]);
@@ -129,10 +129,10 @@ class JanitorController extends Controller
                 "subject" => $quest->id,
                 "comment" => $new_comment,
             ];
-            if($quest->client->email){
-                Mail::to($quest->client->email)->send(new QuestExpired($quest->fresh(), "brak opinii"));
+            if($quest->user->notes->email){
+                Mail::to($quest->user->notes->email)->send(new QuestExpired($quest->fresh(), "brak opinii"));
                 BackController::newStatusLog($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, 1);
-                $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
+                $summaryEntry["mailing"] = 1 + intval($quest->user->notes->contact_preference == "email");
             }else{
                 BackController::newStatusLog($quest->id, $new_status, self::$OPERATIONS[$new_comment], 1, null);
                 $summaryEntry["mailing"] = 0;
@@ -145,7 +145,7 @@ class JanitorController extends Controller
          */
         $quests = Quest::where("paid", 0)
             ->where("status_id", 19)
-            ->whereHas('client', function($q){
+            ->whereHas('user.notes', function($q){
                 $q->where('trust', '<', 1);
             })
             ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
@@ -154,20 +154,20 @@ class JanitorController extends Controller
                 ->orWhereNull("delayed_payment"))
             ->get();
         foreach($quests as $quest){
-            if ($quest->client->is_forgotten) continue;
+            if ($quest->user->notes->is_forgotten) continue;
 
             $quest->update(["status_id" => 17]);
-            $quest->client->update(["trust" => -1]);
+            $quest->user->notes->update(["trust" => -1]);
             $summaryEntry = [
                 "procedure" => "re_quests",
                 "subject_type" => "quest",
                 "subject" => $quest->id,
                 "comment" => "17_UNPAID",
             ];
-            if($quest->client->email){
-                Mail::to($quest->client->email)->send(new QuestExpired($quest->fresh(), "brak wpłaty"));
+            if($quest->user->notes->email){
+                Mail::to($quest->user->notes->email)->send(new QuestExpired($quest->fresh(), "brak wpłaty"));
                 BackController::newStatusLog($quest->id, 17, "Brak wpłaty", 1, 1);
-                $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
+                $summaryEntry["mailing"] = 1 + intval($quest->user->notes->contact_preference == "email");
             }else{
                 BackController::newStatusLog($quest->id, 17, "Brak wpłaty", 1, null);
                 $summaryEntry["mailing"] = 0;
@@ -185,7 +185,7 @@ class JanitorController extends Controller
                 &&
                 !$request->updated_at->isToday()
                 &&
-                !$request->client?->is_forgotten
+                !$request->user?->notes->is_forgotten
             ){
                 $summaryEntry = [
                     "procedure" => "re_quests",
@@ -193,10 +193,10 @@ class JanitorController extends Controller
                     "subject" => $request->id,
                     "comment" => $request->status_id."_REMINDED",
                 ];
-                if($request->client?->email ?? $request->email){
-                    Mail::to($request->client?->email ?? $request->email)->send(new RequestAwaitingReview($request->fresh()));
+                if($request->user?->notes->email ?? $request->email){
+                    Mail::to($request->user?->notes->email ?? $request->email)->send(new RequestAwaitingReview($request->fresh()));
                     StatusChange::where("re_quest_id", $request->id)->whereIn("new_status_id", [5, 95])->orderByDesc("date")->first()->increment("mail_sent");
-                    $summaryEntry["mailing"] = 1 + intval(($request->client?->contact_preference ?? $request->contact_preference) == "email");
+                    $summaryEntry["mailing"] = 1 + intval(($request->user?->notes->contact_preference ?? $request->contact_preference) == "email");
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
@@ -214,7 +214,7 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
                 &&
-                !$quest->client->is_forgotten
+                !$quest->user->notes->is_forgotten
             ){
                 $summaryEntry = [
                     "procedure" => "re_quests",
@@ -222,10 +222,10 @@ class JanitorController extends Controller
                     "subject" => $quest->id,
                     "comment" => $quest->status_id."_REMINDED",
                 ];
-                if($quest->client->email){
-                    Mail::to($quest->client->email)->send(new QuestAwaitingReview($quest->fresh()));
+                if($quest->user->notes->email){
+                    Mail::to($quest->user->notes->email)->send(new QuestAwaitingReview($quest->fresh()));
                     StatusChange::where("re_quest_id", $quest->id)->whereIn("new_status_id", [15, 31, 95])->orderByDesc("date")->first()->increment("mail_sent");
-                    $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
+                    $summaryEntry["mailing"] = 1 + intval($quest->user->notes->contact_preference == "email");
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }
@@ -248,7 +248,7 @@ class JanitorController extends Controller
                 &&
                 !$quest->updated_at->isToday()
                 &&
-                !$quest->client->is_forgotten
+                !$quest->user->notes->is_forgotten
             ){
                 $summaryEntry = [
                     "procedure" => "re_quests",
@@ -256,8 +256,8 @@ class JanitorController extends Controller
                     "subject" => $quest->id,
                     "comment" => "33_REMINDED",
                 ];
-                if($quest->client->email){
-                    Mail::to($quest->client->email)->send(new QuestAwaitingPayment($quest->fresh()));
+                if($quest->user->notes->email){
+                    Mail::to($quest->user->notes->email)->send(new QuestAwaitingPayment($quest->fresh()));
                     //status
                     $status = StatusChange::where("re_quest_id", $quest->id)->where("new_status_id", 33)->first();
                     if($status){
@@ -265,7 +265,7 @@ class JanitorController extends Controller
                     }else{
                         BackController::newStatusLog($quest->id, 33, null, 1, true);
                     }
-                    $summaryEntry["mailing"] = 1 + intval($quest->client->contact_preference == "email");
+                    $summaryEntry["mailing"] = 1 + intval($quest->user->notes->contact_preference == "email");
                 }else{
                     $summaryEntry["mailing"] = 0;
                 }

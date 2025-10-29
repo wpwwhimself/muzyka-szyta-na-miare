@@ -245,7 +245,7 @@
         </div>
 
         <x-slot:buttons>
-            <x-button :action="route('clients', ['search' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
+            <x-button :action="route('client-view', ['id' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
             <x-button :action="route('quests', ['client' => $quest->client_id])" :icon="model_icon('quests')" pop="Zlecenia" />
         </x-slot:buttons>
     </x-extendo-block>

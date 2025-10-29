@@ -90,7 +90,9 @@
         </div>
         <x-quests.payments-bar :quest="$quest" />
 
+        @if ($quest->visibleInvoices->count() > 0)
         <x-quests.invoices :quest="$quest" />
+        @endif
     </x-extendo-block>
 
     <x-extendo-block key="files"

@@ -486,6 +486,12 @@ footer .icon.invert-when-dark {
             & .notification-counter{
                 max-width: var(--circle-size);
                 white-space: wrap;
+                text-align: center;
+
+                & > .icon {
+                    display: inline-block;
+                    --icon-size: 1.1em;
+                }
             }
         }
     }

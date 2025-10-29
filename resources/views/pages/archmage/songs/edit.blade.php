@@ -1,81 +1,82 @@
 @extends('layouts.app')
+@section("title", $song->full_title)
+@section("subtitle", "Edycja utworu")
 
 @section('content')
-<form action="{{ route("song-process") }}" method="POST" enctype="multipart/form-data">
-    @csrf
+<x-shipyard.app.form :action="route('song-process')" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{{ $song->id }}">
 
-    <x-section title="Dane utworu" icon="compact-disc">
-        <div class="flex right center">
-            <x-extendo-section title="ID">
-                <strong>{{ $song->id }}</strong>
-            </x-extendo-section>
+    <div class="grid but-mobile-down" style="--col-count: 2;">
+        <x-section title="Dane utworu" :icon="model_icon('songs')">
+            <div class="grid but-halfsize-down" style="--col-count: 2;">
+                <x-shipyard.ui.input type="dummy-text" name="id" label="ID" icon="barcode" :value="$song->id" />
 
-            @foreach ([
-                ["text", "title", "Tytuł"],
-                ["text", "artist", "Wykonawca"],
-                ["text", "link", "Link"],
-                ["TEXT", "notes", "Notatki"],
-                ["text", "price_code", "Kod wyceny"],
-            ] as [$type, $name, $label])
-            <x-input :type="$type"
-                :name="$name"
-                :label="$label"
-                :value="$song->{$name}"
-                :links="$name == 'link'"
-            />
-            @endforeach
+                @foreach ([
+                    "title",
+                    "artist",
+                    "link",
+                    "notes",
+                    "price_code",
+                ] as $field_name)
+                <div>
+                    <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
 
-            <x-select
-                name="genre_id" label="Gatunek"
-                :value="$song->genre_id"
-                :options="$genres"
-            />
-        </div>
-    </x-section>
-
-    <x-section title="Reklama" icon="bullhorn">
-        <div class="flex right center">
-            <x-extendo-section title="Showcase">
-                @if($song->has_showcase_file)
-                <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
-                @else
-                <span class="grayed-out">Brak showcase'u</span>
-                @endif
-
-                <input type="file" name="showcase_file" />
-                <x-button action="none" id="showcase-file-button" :small="true"
-                    :icon="$song->has_showcase_file ? 'pencil' : 'plus'"
-                    label="{{ $song->has_showcase_file ? 'Podmień' : 'Dodaj' }} plik"
-                    />
-                <script>
-                const button = $("#showcase-file-button");
-                const file_input = $("input[name='showcase_file']");
-                button.click(() => file_input.trigger("click"));
-                file_input.change(function() {$(this).closest("form").attr("action", "{{ route('showcase-file-upload') }}").submit()})
-                </script>
-            </x-extendo-section>
-
-            <x-extendo-section title="Tagi">
-                <div class="flex right center wrap">
-                    @foreach ($tags as $tag)
-                    <x-input type="checkbox" name="tags[{{ $tag->id }}]" :label="$tag->name" :value="in_array($tag->id, $song->tags->pluck('id')->toArray())" />
-                    @endforeach
+                    @if ($field_name == "link")
+                    <x-link-interpreter :raw="$song->$field_name" />
+                    @endif
                 </div>
-            </x-extendo-section>
+                @endforeach
 
-            <x-extendo-section title="Rolka">
-                <x-select name="reel_platform" label="Platforma" :options="$showcase_platforms" :value="$showcase?->platform ?? $platform_suggestion" />
-                <x-input type="url" name="reel_link" label="Link" :value="$showcase?->link" small />
-            </x-extendo-section>
-        </div>
-    </x-section>
+                <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
+            </div>
+        </x-section>
+
+        <x-section title="Reklama" :icon="model_icon('showcases')">
+            <x-shipyard.app.h lvl="4" :icon="model_icon('showcases')">Showcase</x-shipyard.app.h>
+            @if($song->has_showcase_file)
+            <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
+            @else
+            <span class="grayed-out">Brak showcase'u</span>
+            @endif
+            <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music" />
+
+            <x-shipyard.app.h lvl="4" :icon="model_icon('song-tags')">Tagi</x-shipyard.app.h>
+            <div class="flex right center wrap">
+                @foreach ($tags as $tag)
+                <x-shipyard.ui.input type="checkbox"
+                    name="tags[{{ $tag->id }}]"
+                    :label="$tag->name"
+                    icon="tag"
+                    value="1"
+                    :checked="in_array($tag->id, $song->tags->pluck('id')->toArray())"
+                />
+                @endforeach
+            </div>
+
+            <x-shipyard.app.h lvl="4" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>
+            <x-shipyard.ui.input type="select"
+                name="reel_platform"
+                label="Platforma"
+                :icon="model_icon('showcase-platforms')"
+                :select-data="[
+                    'options' => $showcase_platforms,
+                ]"
+                :value="$showcase?->platform ?? $platform_suggestion['code']"
+            />
+            <x-shipyard.ui.input type="url"
+                name="reel_link"
+                label="Link"
+                icon="link"
+                :value="$showcase?->link"
+            />
+        </x-section>
+    </div>
 
     <x-button action="submit" label="Popraw dane" icon="pencil" />
-</form>
+</x-shipyard.app.form>
 
-<x-section title="Opis" icon="align-left">
+<x-extendo-block key="reel_desc" title="Opis" header-icon="text">
     <x-showcases.description for="podklady" :songdata="$song" />
-</x-section>
+</x-extendo-block>
 
 @endsection

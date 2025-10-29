@@ -68,11 +68,15 @@ class SongController extends Controller
         $tags = SongTag::orderBy("name")->get();
         $showcase = Showcase::where("song_id", $song->id)->first();
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
-            ->pluck("name", "code");
+            ->map(fn ($p) => ["value" => $p->code, "label" => $p->name]);
 
-        $platform_suggestion = ShowcasePlatform::suggest()["code"];
+        $platform_suggestion = ShowcasePlatform::suggest();
         if (!$showcase && $platform_suggestion) {
-            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+            $showcase_platforms = $showcase_platforms->map(fn ($p) =>
+                $p["value"] == $platform_suggestion["code"]
+                    ? [...$p, "label" => ($p["label"] . " (sugerowana)")]
+                    : $p
+            );
         }
 
         return view("pages.".user_role().".songs.edit", array_merge(

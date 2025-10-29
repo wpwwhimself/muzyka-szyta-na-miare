@@ -38,7 +38,17 @@
             @else
             <span class="grayed-out">Brak showcase'u</span>
             @endif
-            <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music" />
+
+            <script>
+            function setFormToFileUpload() {
+                const form = document.querySelector('form');
+                form.action = `{{ route("showcase-file-upload") }}`;
+                form.submit();
+            }
+            </script>
+            <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music"
+                onchange="setFormToFileUpload();"
+            />
 
             <x-shipyard.app.h lvl="4" :icon="model_icon('song-tags')">Tagi</x-shipyard.app.h>
             <div class="flex right center wrap">

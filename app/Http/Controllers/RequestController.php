@@ -613,6 +613,8 @@ class RequestController extends Controller
             "artist" => $song->artist,
             "link" => $song->link,
             "notes" => $song->notes,
+            "genre_id" => $song->genre_id,
+            "quest_type_id" => $song->type->id,
         ]);
 
         return back()->with("toast", ["success", "Utwór przypisany"]);

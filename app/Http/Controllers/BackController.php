@@ -259,7 +259,13 @@ class BackController extends Controller
     {
         $fieldName = Modal::where("name", "select-song-to-request")->first()
             ->fields[0][5]["selectData"]["fieldName"];
-        $data = Song::get()
+        $data = Song::where(fn ($q) => $q
+            ->where("id", "regexp", request("query"))
+            ->orWhere("title", "regexp", request("query"))
+            ->orWhere("artist", "regexp", request("query"))
+            ->orWhere("link", "regexp", request("query"))
+        )
+            ->get()
             ->map(fn ($s) => collect([
                 "id" => $s->id,
                 "title" => $s->title,
@@ -269,12 +275,6 @@ class BackController extends Controller
                     ? '<span '.Popper::pop(Markdown::parse($s->notes)).'>'.view("components.shipyard.app.icon", ["name" => model_field_icon("songs", "notes")]).'</span>'
                     : null,
             ]))
-            ->filter(fn ($s) =>
-                Str::contains($s["id"], request("query"), true)
-                || Str::contains($s["title"], request("query"), true)
-                || Str::contains($s["artist"], request("query"), true)
-                || Str::contains($s["link"], request("query"))
-            )
             ->values();
         $headings = collect([
             "ID",

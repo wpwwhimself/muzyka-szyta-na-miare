@@ -87,7 +87,7 @@
                     action="none"
                     onclick="openModal('select-user-to-request', {
                         request_id: '{{ $request->id }}',
-                        query: '{{ $request->client_name }}',
+                        query: `{{ $request->client_name }}`,
                     })"
                     class="tertiary"
                 />
@@ -133,7 +133,7 @@
                     action="none"
                     onclick="openModal('select-song-to-request', {
                         request_id: '{{ $request->id }}',
-                        query: '{{ $request->title }}',
+                        query: `{{ $request->title }}`,
                     })"
                     class="tertiary"
                 />

@@ -72,14 +72,14 @@ class JanitorController extends Controller
             ] as $name){
             $$name = setting($name);
         }
-        $request_reminder_time = floor($quest_reminder_time / 2);
+        $msznm_request_reminder_time = floor($msznm_quest_reminder_time / 2);
 
         /**
          * expiring requests
          */
         $requests = Request::whereIn("status_id", [5, 95])
-            ->where(function ($query) use ($request_expired_after){
-                $query->where("updated_at", "<=", Carbon::now()->subDays($request_expired_after)->toDateString())
+            ->where(function ($query) use ($msznm_request_expired_after){
+                $query->where("updated_at", "<=", Carbon::now()->subDays($msznm_request_expired_after)->toDateString())
                 ->orWhere("deadline", "<=", Carbon::today()->toDateString());
             })
             ->get();
@@ -110,11 +110,11 @@ class JanitorController extends Controller
                 $q->whereHas('user.notes', function($q){ $q->where('trust', '<', 1); })
                     ->orWhereHas('user.notes', function($q){ $q->where('trust', 1); })->where("paid", true);
             })
-            ->where(function($q) use ($quest_expired_after){
-                $q->where(function($qq) use ($quest_expired_after){
-                    $qq->where("paid", false)->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString());
-                })->orWhere(function($qq) use ($quest_expired_after){
-                    $qq->where("paid", true)->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after / 2)->toDateString());
+            ->where(function($q) use ($msznm_quest_expired_after){
+                $q->where(function($qq) use ($msznm_quest_expired_after){
+                    $qq->where("paid", false)->where("updated_at", "<=", Carbon::now()->subDays($msznm_quest_expired_after)->toDateString());
+                })->orWhere(function($qq) use ($msznm_quest_expired_after){
+                    $qq->where("paid", true)->where("updated_at", "<=", Carbon::now()->subDays($msznm_quest_expired_after / 2)->toDateString());
                 });
             })
             ->get();
@@ -148,7 +148,7 @@ class JanitorController extends Controller
             ->whereHas('user.notes', function($q){
                 $q->where('trust', '<', 1);
             })
-            ->where("updated_at", "<=", Carbon::now()->subDays($quest_expired_after)->toDateString())
+            ->where("updated_at", "<=", Carbon::now()->subDays($msznm_quest_expired_after)->toDateString())
             ->where(fn($q) => $q
                 ->whereDate("delayed_payment", "<", Carbon::today()->subMonth())
                 ->orWhereNull("delayed_payment"))
@@ -181,7 +181,7 @@ class JanitorController extends Controller
         $requests = Request::whereIn("status_id", [5, 95])->get();
         foreach($requests as $request){
             if(
-                $request->updated_at->diffInDays(Carbon::now()) % $request_reminder_time == $request_reminder_time - 1
+                $request->updated_at->diffInDays(Carbon::now()) % $msznm_request_reminder_time == $msznm_request_reminder_time - 1
                 &&
                 !$request->updated_at->isToday()
                 &&
@@ -210,7 +210,7 @@ class JanitorController extends Controller
         $quests = Quest::whereIn("status_id", [15, 31, 95])->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
+                $quest->updated_at->diffInDays(Carbon::now()) % $msznm_quest_reminder_time == $msznm_quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
                 &&
@@ -244,7 +244,7 @@ class JanitorController extends Controller
             )->get();
         foreach($quests as $quest){
             if(
-                $quest->updated_at->diffInDays(Carbon::now()) % $quest_reminder_time == $quest_reminder_time - 1
+                $quest->updated_at->diffInDays(Carbon::now()) % $msznm_quest_reminder_time == $msznm_quest_reminder_time - 1
                 &&
                 !$quest->updated_at->isToday()
                 &&

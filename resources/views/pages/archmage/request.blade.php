@@ -68,10 +68,11 @@
         >
             <div class="flex right center middle">
                 <span>Powiązanie z klientem: {!! $request->user ?? "brak" !!}</span>
+                <input type="hidden" name="client_id" value="{{ $request->client_id }}" />
 
                 @if ($request->client_id)
                 <x-button
-                    :action="route('clients', ['search' => $request->client_id])"
+                    :action="route('client-view', ['id' => $request->client_id])"
                     :icon="model_icon('users')"
                     label="Szczegóły"
                 />
@@ -118,6 +119,7 @@
         >
             <div class="flex right center middle">
                 <span>Powiązanie z utworem: {{ $request->song ?? "brak" }}</span>
+                <input type="hidden" name="song_id" value="{{ $request->song_id }}" />
 
                 @if ($request->song_id)
                 <x-button

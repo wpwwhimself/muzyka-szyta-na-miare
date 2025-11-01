@@ -102,11 +102,15 @@ class ShowcaseController extends Controller
     public function editOrgan(?OrganShowcase $showcase = null)
     {
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
-            ->pluck("name", "code");
+            ->map(fn ($p) => ["value" => $p->code, "label" => $p->name]);
 
-        $platform_suggestion = ShowcasePlatform::suggest(true)["code"];
+        $platform_suggestion = ShowcasePlatform::suggest(true);
         if (!$showcase && $platform_suggestion) {
-            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+            $showcase_platforms = $showcase_platforms->map(fn ($p) =>
+                $p["value"] == $platform_suggestion["code"]
+                    ? [...$p, "label" => ($p["label"] . " (sugerowana)")]
+                    : $p
+            );
         }
 
         return view("pages.".user_role().".showcases.organ.edit", compact(
@@ -135,11 +139,15 @@ class ShowcaseController extends Controller
     public function editDj(?DjShowcase $showcase = null)
     {
         $showcase_platforms = ShowcasePlatform::orderBy("ordering")->get()
-            ->pluck("name", "code");
+            ->map(fn ($p) => ["value" => $p->code, "label" => $p->name]);
 
-        $platform_suggestion = ShowcasePlatform::suggest(true)["code"];
+        $platform_suggestion = ShowcasePlatform::suggest(true);
         if (!$showcase && $platform_suggestion) {
-            $showcase_platforms[$platform_suggestion] .= " (sugerowana)";
+            $showcase_platforms = $showcase_platforms->map(fn ($p) =>
+                $p["value"] == $platform_suggestion["code"]
+                    ? [...$p, "label" => ($p["label"] . " (sugerowana)")]
+                    : $p
+            );
         }
 
         return view("pages.".user_role().".showcases.dj.edit", compact(

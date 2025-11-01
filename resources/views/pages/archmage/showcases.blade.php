@@ -33,7 +33,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ $showcases->links() }}
+    {{ $showcases->links("components.shipyard.pagination.default") }}
 </x-section>
 
 @foreach (["organ" => "organowe", "dj" => "DJowskie"] as $reel_type => $label_part)
@@ -70,7 +70,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ ${$reel_type."_showcases"}->links() }}
+    {{ ${$reel_type."_showcases"}->links("components.shipyard.pagination.default") }}
 </x-section>
 @endforeach
 
@@ -102,7 +102,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ $client_showcases->links() }}
+    {{ $client_showcases->links("components.shipyard.pagination.default") }}
 </x-section>
 
 </div>

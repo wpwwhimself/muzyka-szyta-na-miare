@@ -95,6 +95,7 @@ class ClientController extends Controller
 
         $client = User::findOrFail($id);
         $client->update([
+            "name" => $rq->client_name,
             "email" => $rq->email,
         ]);
         $client->notes()->update([

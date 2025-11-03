@@ -17,7 +17,7 @@
 
 <p>Uprzejmie proszę o zapoznanie się i wyrażenie swojej opinii za pomocą przycisków dostępnych pod wyceną.</p>
 
-<h3>Kliknij przycisk powyżej, aby zobaczyć szczegóły zapytania</h3>
+<h3>Kliknij link powyżej, aby zobaczyć szczegóły zapytania</h3>
 
 @if ($request->user)
 <p>

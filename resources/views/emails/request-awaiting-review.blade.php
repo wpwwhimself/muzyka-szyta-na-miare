@@ -11,7 +11,7 @@
 <x-requests.tile-mail :request="$request" />
 
 <h3>
-    Kliknij przycisk powyżej, aby zobaczyć szczegóły zapytania
+    Kliknij link powyżej, aby zobaczyć szczegóły zapytania
 </h3>
 
 <p>

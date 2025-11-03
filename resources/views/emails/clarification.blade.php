@@ -23,7 +23,7 @@
     Uprzejmie proszę o odpowiedź. Przyspieszy to moje prace nad {{ $is_request ? "zapytaniem" : "zleceniem" }}.
 </p>
 
-<h3>Kliknij przycisk powyżej, aby zobaczyć szczegóły {{ $is_request ? "zapytania" : "zlecenia" }}</h3>
+<h3>Kliknij link powyżej, aby zobaczyć szczegóły {{ $is_request ? "zapytania" : "zlecenia" }}</h3>
 
 @if ($re_quest->user)
 <p>

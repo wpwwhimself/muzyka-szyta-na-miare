@@ -22,7 +22,7 @@
     Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.
 </p>
 <h3>
-    Kliknij przycisk powyżej, aby zalogować się na swoje konto i zobaczyć szczegóły.
+    Kliknij link powyżej, aby zalogować się na swoje konto i zobaczyć szczegóły.
 </h3>
 
 <p>

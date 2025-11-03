@@ -15,7 +15,7 @@
 @endif
 
 <h3>
-    Kliknij przycisk powyżej, aby zobaczyć szczegóły zlecenia
+    Kliknij link powyżej, aby zobaczyć szczegóły zlecenia
 </h3>
 
 @if ($quest->song->has_safe_files)

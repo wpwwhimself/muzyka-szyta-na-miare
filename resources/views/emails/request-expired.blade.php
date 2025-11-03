@@ -16,7 +16,7 @@
 </p>
 
 <h3>
-    Kliknij przycisk powyżej, aby zobaczyć szczegóły zapytania
+    Kliknij link powyżej, aby zobaczyć szczegóły zapytania
 </h3>
 
 @if ($request->user)

@@ -3,16 +3,7 @@
 
 @section('content')
 
-<div class="grid" style="--col-count: 2;">
-    <x-section title="Grafik nadchodzących zleceń" icon="calendar">
-        <x-calendar :click-days="true" :suggest="false" :with-today="true" />
-        <script>
-        function handleCalendarClick(date) {
-            document.querySelector("#date").value = date;
-        }
-        </script>
-    </x-section>
-
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section title="Dni wolne" :icon="model_icon('calendar-free-days')">
         <form action="{{ route('qc-mod-free-day') }}" class="flex right center">
             @csrf
@@ -33,6 +24,15 @@
         </div>
 
         <p>Najbliższy dzień pracujący: <b>{{ get_next_working_day()->format("d.m.Y") }}</b></p>
+    </x-section>
+
+    <x-section title="Grafik nadchodzących zleceń" icon="calendar">
+        <x-calendar :click-days="true" :suggest="false" :with-today="true" />
+        <script>
+        function handleCalendarClick(date) {
+            document.querySelector("#date").value = date;
+        }
+        </script>
     </x-section>
 </div>
 @endsection

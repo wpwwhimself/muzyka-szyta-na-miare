@@ -13,6 +13,7 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\SpellbookController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\WorkClockController;
+use App\Http\Middleware\Shipyard\EnsureUserHasRole;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -233,6 +234,14 @@ Route::middleware("auth")->group(function(){
             Route::get("edit/{id?}", "editSet")->name("dj-edit-set");
             Route::post("edit", "processSet")->name("dj-process-set");
         });
+    });
+
+    Route::controller(SpellbookController::class)->middleware(EnsureUserHasRole::class.":spellcaster")->group(function () {
+        foreach (SpellbookController::SPELLS as $spell => $routes) {
+            foreach ($routes as $route) {
+                Route::get($route, $spell);
+            }
+        }
     });
 });
 

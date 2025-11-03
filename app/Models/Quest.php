@@ -30,7 +30,7 @@ class Quest extends Model
         "id",
         "price_code_override", "price", "paid",
         "status_id",
-        "deadline", "delayed_payment",
+        "deadline", "hard_deadline", "delayed_payment",
         "wishes",
         "files_ready",
         "has_files_on_external_drive",
@@ -145,7 +145,7 @@ class Quest extends Model
             "model" => User::class,
             "mode" => "one",
             "role" => "archmage",
-            // "field_name" => "",
+            "field_name" => "client_id",
             "field_label" => "Klient",
         ],
         "song" => [

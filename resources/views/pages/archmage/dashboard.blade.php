@@ -21,7 +21,7 @@
             @foreach ($patrons_adepts as $patron)
             <tr>
                 <td>
-                    <a href="{{ route('clients', ['search' => $patron->id]) }}">{!! $patron !!}</a>
+                    <a href="{{ route('client-view', ['id' => $patron->id]) }}">{!! $patron !!}</a>
                 </td>
                 <td>
                     <x-button label="" icon="check" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 2]) }}" :small="true" />
@@ -36,11 +36,17 @@
 
 <x-extendo-block key="requests"
     title="Zapytania"
-    :subtitle="'Aktywne: ' . $requests->count()"
     :header-icon="model_icon('requests')"
     :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0"
 >
     <x-slot name="buttons">
+        <x-shipyard.app.icon-label-value
+            icon="counter"
+            label="Liczba"
+        >
+            {{ $requests->count() }}
+        </x-shipyard.app.icon-label-value>
+
         <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
     </x-slot>
@@ -95,7 +101,17 @@
     <x-section id="dashboard-quests"
         title="Zlecenia w toku"
         :icon="model_icon('quests')"
+        :extended="true"
     >
+        <x-slot:buttons>
+            <x-shipyard.app.icon-label-value
+                icon="counter"
+                label="Liczba"
+            >
+                {{ $quests_ongoing->count() }}
+            </x-shipyard.app.icon-label-value>
+        </x-slot:buttons>
+
         <div class="flex down">
             @forelse ($quests_ongoing as $key => $quest)
             <x-quests.tile :quest="$quest" :no="$key + 1" />
@@ -108,6 +124,7 @@
     <x-section id="dashboard-requests" class="sc-line"
         title="Grafik"
         icon="calendar"
+        :extended="true"
         scissors
     >
         <x-slot name="buttons">
@@ -120,7 +137,17 @@
     <x-section id="dashboard-quests"
         title="Zlecenia czekające"
         icon="package-variant"
+        :extended="false"
     >
+        <x-slot:buttons>
+            <x-shipyard.app.icon-label-value
+                icon="counter"
+                label="Liczba"
+            >
+                {{ $quests_review->count() }}
+            </x-shipyard.app.icon-label-value>
+        </x-slot:buttons>
+
         <div class="flex down">
             @forelse ($quests_review as $key => $quest)
             <x-quests.tile :quest="$quest" :no="$key + 1" />
@@ -133,6 +160,7 @@
     <x-section id="recent"
         title="Ostatnie zmiany"
         icon="history"
+        :extended="false"
     >
         <table>
             <thead>
@@ -145,11 +173,9 @@
             </thead>
             <tbody>
                 @forelse ($recent as $change)
-                @if ($change->re_quest?->status_id == $change->new_status_id)
-                <tr>
-                @else
-                <tr class="ghost">
-                @endif
+                <tr @class([
+                    "ghost" => $change->re_quest?->status_id == $change->new_status_id,
+                ])>
                     <td>
                         <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
                             {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
@@ -161,16 +187,22 @@
                     <td>
                     @if ($change->is_request)
                         @if ($change->re_quest?->user)
-                            <a href="{{ route('clients', ['search' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                            <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
                         @else
                             {{ _ct_($change->re_quest?->client_name) }}
                         @endif
                     @else
-                        <a href="{{ route('clients', ['search' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
                     @endif
                     </td>
                     <td>
                         <x-phase-indicator-mini :status="$change->new_status" />
+
+                        @if ($change->comment)
+                        <span {{ Popper::pop($change->comment) }}>
+                            <x-shipyard.app.icon name="comment" />
+                        </span>
+                        @endif
                     </td>
                     <td {{ Popper::pop($change->date) }}>
                         {{ $change->date->diffForHumans() }}

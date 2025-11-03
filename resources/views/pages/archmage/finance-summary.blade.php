@@ -37,7 +37,7 @@
             @forelse ($gains as $pos)
             <tr>
                 <td>{{ $pos->date->format("d.m.Y") }}</td>
-                <td><a href="{{ route('clients', ['search' => $pos->changed_by]) }}">{!! $pos->changer !!}</a></td>
+                <td><a href="{{ route('client-view', ['id' => $pos->changed_by]) }}">{!! $pos->changer !!}</a></td>
                 <td>
                     @if ($pos->re_quest_id)
                     <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>

@@ -39,7 +39,7 @@
                 <tr class="ghost">
                 @endif
                     <td>
-                        <a href="{{ route('clients', ['search' => $item->changer->id]) }}">
+                        <a href="{{ route('client-view', ['id' => $item->changer->id]) }}">
                             {!! $item->changer !!}
                         </a>
                     </td>
@@ -122,7 +122,7 @@
             ])"
         >
             <x-slot:buttons>
-                <x-button label="Klient" :icon="model_icon('users')" :action="route('clients', ['search' => $client->id])" />
+                <x-button label="Klient" :icon="model_icon('users')" :action="route('client-view', ['id' => $client->id])" />
             </x-slot:buttons>
 
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp

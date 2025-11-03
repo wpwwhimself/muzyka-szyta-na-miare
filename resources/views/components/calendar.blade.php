@@ -2,8 +2,7 @@
     <thead>
         <tr>
             <th>Dzień</th>
-            <th>Mój termin</th>
-            <th>Termin klienta</th>
+            <th>Zlecenia</th>
         </tr>
     </thead>
     <tbody>
@@ -26,12 +25,16 @@
                 {{ $date }}
             </td>
 
-            @foreach (["", "_hard"] as $suffix)
             <td>
+            @foreach (["", "_hard"] as $suffix)
                 @foreach ($meta["quests$suffix"] as $quest)
                 <x-shipyard.app.icon-label-value
                     :icon="$quest->song->has_safe_files ? model_icon('files') : $quest->quest_type->icon"
                     label="Zlecenie"
+                    @class([
+                        "accent danger" => $suffix == "_hard",
+                        "accent error" => $quest->hard_deadline?->addDay()->isPast(),
+                    ])
                 >
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
                         {!! $quest->song->title ?? "bez tytułu" !!}
@@ -44,7 +47,10 @@
                 <x-shipyard.app.icon-label-value
                     icon="check"
                     label="Zakończone zlecenie"
-                    class="ghost"
+                    @class([
+                        "ghost",
+                        "accent danger" => $suffix == "_hard",
+                    ])
                 >
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
                         {!! $quest->song->title ?? "bez tytułu" !!}
@@ -57,15 +63,18 @@
                 <x-shipyard.app.icon-label-value
                     :icon="model_icon('requests')"
                     label="Zapytanie"
-                    class="ghost"
+                    @class([
+                        "ghost",
+                        "accent danger" => $suffix == "_hard",
+                    ])
                 >
                     <a class="request" href="{{ route('request', ['id' => $request->id]) }}" target="_blank" >
                         {!! $request->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
                 @endforeach
-            </td>
             @endforeach
+            </td>
         </tr>
     @endforeach
     </tbody>

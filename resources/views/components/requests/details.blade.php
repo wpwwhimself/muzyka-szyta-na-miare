@@ -6,13 +6,13 @@
     @foreach ([
         ["Klient", $request->client_id ? "account" : "account-plus", $request->client_name, null],
         ["Cena", model_icon("prices"), $request->price ? as_pln($request->price) : null, null],
-        ["Termin", model_field_icon("requests", "deadline"), $request->deadline?->diffForHumans(),
-            $request->deadline?->isPast() ? "accent error" : (
+        ["Termin", model_field_icon("requests", "deadline"), $request->deadline?->addDay()->diffForHumans(),
+            $request->deadline?->addDay()->isPast() ? "accent error" : (
             $request->deadline?->subDays(2)->isPast() ? "accent danger" :
             null
         )],
-        ["Termin klienta", model_field_icon("requests", "hard_deadline"), $request->hard_deadline?->diffForHumans(),
-            $request->hard_deadline?->isPast() ? "accent error" : (
+        ["Termin klienta", model_field_icon("requests", "hard_deadline"), $request->hard_deadline?->addDay()->diffForHumans(),
+            $request->hard_deadline?->addDay()->isPast() ? "accent error" : (
             $request->hard_deadline?->subDays(2)->isPast() ? "accent danger" :
             null
         )],

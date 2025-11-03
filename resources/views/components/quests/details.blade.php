@@ -6,13 +6,13 @@
     @foreach ([
         ["Klient", model_icon("users"), $quest->user->notes->client_name, null],
         ["Cena", model_icon("prices"), as_pln($quest->price), $quest->paid ? "accent success" : null],
-        ["Termin", "calendar-blank", $quest->deadline?->diffForHumans(),
-            $quest->deadline?->isPast() ? "accent error" : (
+        ["Termin", "calendar-blank", $quest->deadline?->addDay()->diffForHumans(),
+            $quest->deadline?->addDay()->isPast() ? "accent error" : (
             $quest->deadline?->subDays(2)->isPast() ? "accent danger" :
             null
         )],
-        ["Termin klienta", "calendar-account", $quest->hard_deadline?->diffForHumans(),
-            $quest->hard_deadline?->isPast() ? "accent error" : (
+        ["Termin klienta", "calendar-account", $quest->hard_deadline?->addDay()->diffForHumans(),
+            $quest->hard_deadline?->addDay()->isPast() ? "accent error" : (
             $quest->hard_deadline?->subDays(2)->isPast() ? "accent danger" :
             null
         )],

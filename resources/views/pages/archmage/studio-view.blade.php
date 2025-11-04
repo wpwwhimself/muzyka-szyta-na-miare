@@ -1,4 +1,6 @@
-@extends("layouts.app", ["stripped" => true])
+@extends("layouts.minimal")
+@section("title", $quest->full_title)
+@section("subtitle", "Studio")
 
 @section("content")
 

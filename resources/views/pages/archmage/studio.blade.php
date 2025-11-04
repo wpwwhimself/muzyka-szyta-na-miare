@@ -1,4 +1,6 @@
-@extends("layouts.app", ["stripped" => true])
+@extends("layouts.minimal")
+@section("title", "Lista zleceń")
+@section("subtitle", "Studio")
 
 @section("content")
 

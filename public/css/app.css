@@ -627,6 +627,10 @@ footer .icon.invert-when-dark {
 }
 
 section, .section {
+    &:not(.black-back) {
+        background: var(--bg);
+    }
+    
     &.container {
         container-name: section;
         container-type: inline-size;

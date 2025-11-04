@@ -31,6 +31,8 @@ if (file_exists(__DIR__.'/Shipyard/shipyard.php')) require __DIR__.'/Shipyard/sh
 
 Route::get('/', [HomeController::class, "index"])->name("home");
 
+Route::redirect("/profile", "/dashboard");
+
 Route::middleware("auth")->group(function(){
     Route::controller(BackController::class)->group(function(){
         Route::get('/dashboard', "dashboard")->name("dashboard");

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Shipyard\AuthController;
 use App\Mail\CustomMail;
 use App\Models\StatusChange;
 use App\Models\Top10;
@@ -95,7 +96,6 @@ class ClientController extends Controller
 
         $client = User::findOrFail($id);
         $client->update([
-            "name" => $rq->client_name,
             "email" => $rq->email,
         ]);
         $client->notes()->update([
@@ -118,6 +118,7 @@ class ClientController extends Controller
                 "password" => $rq->password,
             ]);
             $client->update([
+                "name" => substr($rq->password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
                 "password" => Hash::make($rq->password),
             ]);
 

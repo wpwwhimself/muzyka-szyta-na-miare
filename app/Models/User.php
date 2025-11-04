@@ -12,10 +12,9 @@ class User extends ShipyardUser
 
     public function __toString()
     {
-        return $this->notes->client_name
-            . view("components.shipyard.app.model.badges", [
-                "badges" => $this->notes->badges,
-            ])->render();
+        return $this->hasRole("client", true)
+            ? $this->notes->__toString()
+            : $this->name;
     }
 
     #region fields

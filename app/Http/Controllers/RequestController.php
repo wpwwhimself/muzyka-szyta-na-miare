@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Shipyard\AuthController;
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
 use App\Mail\NewRequest\Dj;
@@ -481,7 +482,7 @@ class RequestController extends Controller
                 $password = generate_password();
 
                 $client = User::create([
-                    "name" => $request->client_name,
+                    "name" => substr($password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
                     "email" => $request->email ?? Str::uuid()."@test.test",
                     "password" => $password,
                 ]);

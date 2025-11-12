@@ -169,6 +169,14 @@ class Song extends Model
     ];
 
     public const FILTERS = [
+        "id" => [
+            "label" => "ID",
+            // "icon" => "",
+            "compare-using" => "field",
+            "discr" => "id",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
         // "<name>" => [
         //     "label" => "",
         //     "icon" => "",

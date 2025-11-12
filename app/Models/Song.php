@@ -20,7 +20,7 @@ class Song extends Model
     public const META = [
         "label" => "Utwory",
         "icon" => "disc",
-        "description" => "...",
+        "description" => "Przetworzone utwory muzyczne.",
         "role" => "technical",
         "ordering" => 2,
     ];
@@ -156,6 +156,11 @@ class Song extends Model
 
     // use CanBeSorted;
     public const SORTS = [
+        "title" => [
+            "label" => "tytuł",
+            "compare-using" => "field",
+            "discr" => "title",
+        ],
         // "<name>" => [
         //     "label" => "",
         //     "compare-using" => "function|field",

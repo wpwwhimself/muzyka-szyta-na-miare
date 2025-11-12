@@ -31,7 +31,7 @@
             icon="account-cash"
             pop="Opłać"
             action="none"
-            onclick="openModal(`quest-change-status`, {
+            onclick="openModal(`pay-for-quest`, {
                 quest_id: '{{ $quest->id }}',
                 status_id: 32,
                 comment: '{{ $quest->price - $quest->payments_sum }}'

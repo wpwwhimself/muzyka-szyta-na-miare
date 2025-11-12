@@ -130,6 +130,18 @@
         >
             <x-slot:buttons>
                 @unless(Auth::id() === 0)
+                <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
+                    @csrf
+                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                    <x-shipyard.ui.button
+                        pop="Przełącz komplet"
+                        :icon="$quest->files_ready ? 'tray-alert' : 'tray-full'"
+                        action="submit"
+                        name="ready"
+                        :value="(int) !$quest->files_ready"
+                        class="primary"
+                    />
+                </form>
                 <x-shipyard.ui.button
                     icon="plus"
                     pop="Wgraj"
@@ -193,18 +205,17 @@
 
                     @endif
 
-                    <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
-                        @csrf
-                        <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                        <x-shipyard.ui.button
-                            :label="!$quest->files_ready ? 'Wszystko wgrane' : 'Jednak nie'"
-                            icon="file-check"
-                            action="submit"
-                            name="ready"
-                            :value="(int) !$quest->files_ready"
-                            class="primary"
-                        />
-                    </form>
+                    @if ($quest->files_ready)
+                    <span class="accent success">
+                        <x-shipyard.app.icon name="tray-full" />
+                        Pliki w komplecie
+                    </span>
+                    @else
+                    <span class="accent danger">
+                        <x-shipyard.app.icon name="tray-alert" />
+                        Brak kompletu
+                    </span>
+                    @endif
                 </div>
             </x-extendo-section>
 

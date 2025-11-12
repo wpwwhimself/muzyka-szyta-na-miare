@@ -133,6 +133,11 @@ class CostType extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForAdding($query): void
+    {
+        $query;
+    }
     #endregion
 
     #region attributes

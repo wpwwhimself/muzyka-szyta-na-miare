@@ -93,10 +93,14 @@ class UserNote extends Authenticatable
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
-            ])->render(),
+            get: fn () => view("components.shipyard.app.model.fields-preview", [
+                    "model" => $this,
+                    "fields" => [
+                        "email",
+                        "phone",
+                        "other_medium",
+                    ],
+                ])->render(),
         );
     }
     #endregion
@@ -230,6 +234,16 @@ class UserNote extends Authenticatable
 
     // use CanBeSorted;
     public const SORTS = [
+        "name" => [
+            "label" => "nazwisko",
+            "compare-using" => "field",
+            "discr" => "client_name",
+        ],
+        "exp" => [
+            "label" => "doświadczenie",
+            "compare-using" => "function",
+            "discr" => "exp",
+        ],
         // "<name>" => [
         //     "label" => "",
         //     "compare-using" => "function|field",
@@ -238,6 +252,30 @@ class UserNote extends Authenticatable
     ];
 
     public const FILTERS = [
+        "name" => [
+            "label" => "Nazwisko",
+            "icon" => "account-badge",
+            "compare-using" => "field",
+            "discr" => "client_name",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
+        "email" => [
+            "label" => "Email",
+            "icon" => "at",
+            "compare-using" => "field",
+            "discr" => "email",
+            "type" => "email",
+            "operator" => "regexp",
+        ],
+        "phone" => [
+            "label" => "Telefon",
+            "icon" => "phone",
+            "compare-using" => "field",
+            "discr" => "phone",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
         // "<name>" => [
         //     "label" => "",
         //     "icon" => "",

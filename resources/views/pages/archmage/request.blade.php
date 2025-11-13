@@ -63,7 +63,7 @@
         <x-extendo-block key="client"
             :header-icon="model_icon('users')"
             title="Dane klienta"
-            :subtitle="$request->client_name"
+            :subtitle="$request->user ?? $request->client_name"
             :extended="in_array($request->status_id, [1])"
         >
             <div class="flex right center middle">

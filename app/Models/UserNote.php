@@ -46,7 +46,7 @@ class UserNote extends Authenticatable
     #region presentation
     public function __toString(): string
     {
-        return $this->client_name;
+        return $this->name_and_badges;
     }
 
     public function optionLabel(): Attribute
@@ -54,6 +54,17 @@ class UserNote extends Authenticatable
         return Attribute::make(
             get: fn () => "$this->client_name ($this->email)",
         );
+    }
+
+    public function nameAndBadges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => implode(" ", [
+                $this->client_name,
+                $this->display_subtitle,
+            ]),
+        );
+
     }
 
     public function displayTitle(): Attribute

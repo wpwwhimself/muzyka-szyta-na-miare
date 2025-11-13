@@ -12,9 +12,7 @@ class User extends ShipyardUser
 
     public function __toString()
     {
-        return $this->hasRole("client", true)
-            ? $this->notes->__toString()
-            : $this->name;
+        return $this->notes ?? $this->name;
     }
 
     #region fields

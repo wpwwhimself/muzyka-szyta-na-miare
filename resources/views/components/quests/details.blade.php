@@ -4,7 +4,7 @@
 
 <div>
     @foreach ([
-        ["Klient", model_icon("users"), $quest->user->notes->client_name, null],
+        ["Klient", model_icon("users"), $quest->user, null],
         ["Cena", model_icon("prices"), as_pln($quest->price), $quest->paid ? "accent success" : null],
         ["Termin", "calendar-blank", $quest->deadline?->addDay()->diffForHumans(),
             $quest->deadline?->addDay()->isPast() ? "accent error" : (
@@ -24,7 +24,7 @@
         :label="$label"
         :class="$class"
     >
-        {{ $value }}
+        {!! $value !!}
     </x-shipyard.app.icon-label-value>
     @endforeach
 </div>

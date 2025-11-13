@@ -236,7 +236,7 @@
     <x-extendo-block key="client"
         :header-icon="model_icon('users')"
         title="Klient"
-        :subtitle="$quest->user->notes"
+        :subtitle="$quest->user"
     >
         <div class="grid but-halfsize-down" style="--col-count: 2;">
             @foreach ([

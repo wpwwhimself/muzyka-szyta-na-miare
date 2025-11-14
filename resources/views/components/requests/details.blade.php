@@ -4,7 +4,7 @@
 
 <div>
     @foreach ([
-        ["Klient", $request->client_id ? "account" : "account-plus", $request->user ?? $request->client_name, null],
+        ["Klient", $request->client_id ? "account" : "account-plus", $request->user?->name_and_badges ?? $request->client_name, null],
         ["Cena", model_icon("prices"), $request->price ? as_pln($request->price) : null, null],
         ["Termin", model_field_icon("requests", "deadline"), $request->deadline?->addDay()->diffForHumans(),
             $request->deadline?->addDay()->isPast() ? "accent error" : (

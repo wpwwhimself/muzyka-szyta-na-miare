@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Shipyard\Role;
 use App\Models\Shipyard\User as ShipyardUser;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends ShipyardUser
 {
@@ -13,6 +14,13 @@ class User extends ShipyardUser
     public function __toString()
     {
         return $this->notes ?? $this->name;
+    }
+
+    public function nameAndBadges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->notes->name_and_badges,
+        );
     }
 
     #region fields

@@ -46,13 +46,13 @@ class UserNote extends Authenticatable
     #region presentation
     public function __toString(): string
     {
-        return $this->name_and_badges;
+        return $this->client_name;
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => "$this->client_name ($this->email)",
+            get: fn () => "[$this->id] $this->client_name",
         );
     }
 

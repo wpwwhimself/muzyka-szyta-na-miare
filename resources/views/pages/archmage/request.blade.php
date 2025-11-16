@@ -6,7 +6,7 @@
 
 <x-shipyard.app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>
-        <x-a href="{{ route('add-request', [
+        <x-a href="{!! route('add-request', [
             'client' => $request->client_id,
             'client_new' => implode('*', [
                 $request->client_name,
@@ -15,7 +15,7 @@
                 $request->other_medium,
                 $request->contact_preference,
             ])
-        ]) }}" icon="plus">Dodaj kolejne</x-a>
+        ]) !!}" icon="plus">Dodaj kolejne</x-a>
     </x-slot:actions>
 
     <x-phase-indicator :status-id="$request->status_id" />

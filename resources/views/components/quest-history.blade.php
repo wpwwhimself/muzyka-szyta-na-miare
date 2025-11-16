@@ -3,6 +3,7 @@
     title="Historia"
     :extended="$extended"
     id="quest-history"
+    {{ $attributes }}
 >
     @php
     $lastComment = is_archmage()

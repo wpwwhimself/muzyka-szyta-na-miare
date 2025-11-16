@@ -327,9 +327,17 @@ class RequestController extends Controller
 
         $is_same_status = $request->status_id == $rq->new_status;
 
-        if (Auth::id() === 1 && $rq->new_status == 5 && !$rq->genre_id) {
-            // archmage forgot to define genre
-            return back()->with("toast", ["error", "Uzupełnij gatunek"]);
+        // archmage validation
+        if (Auth::id() === 1 && $rq->new_status == 5) {
+            // forgot to define genre
+            if (!$rq->genre_id) {
+                return back()->with("toast", ["error", "Uzupełnij gatunek"]);
+            }
+
+            // tries to send quote by mail to client without it
+            if (!$rq->email && $rq->contact_preference == "email") {
+                return back()->with("toast", ["error", "Brakuje adresu email klienta lub klient nie ma takiej preferencji"]);
+            }
         }
 
         if($intent == "change"){

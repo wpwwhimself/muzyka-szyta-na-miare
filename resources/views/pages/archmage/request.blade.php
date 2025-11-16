@@ -60,11 +60,15 @@
     @endif
 
     <div class="grid but-mobile-down" style="--col-count: 2;">
+        @if (in_array($request->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
+        <x-quest-history :quest="$request" :extended="true" style="grid-column: span 2;" />
+        @endif
+
         <x-extendo-block key="client"
             :header-icon="model_icon('users')"
             title="Dane klienta"
             :subtitle="$request->user ?? $request->client_name"
-            :extended="in_array($request->status_id, [1])"
+            :extended="in_array($request->status_id, [1, 6])"
         >
             <div class="flex right center middle">
                 <span>Powiązanie z klientem: {!! $request->user ?? "brak" !!}</span>
@@ -105,10 +109,6 @@
             <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
             @endforeach
         </x-extendo-block>
-
-        @if (in_array($request->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
-        <x-quest-history :quest="$request" :extended="true" />
-        @endif
 
         <x-extendo-block key="song"
             :header-icon="model_icon('songs')"

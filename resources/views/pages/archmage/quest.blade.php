@@ -44,6 +44,10 @@
 </x-shipyard.app.form>
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
+    @if (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
+    <x-quest-history :quest="$quest" :extended="true" style="grid-column: span 2;" />
+    @endif
+
     <div class="flex down">
         <x-extendo-block key="quest"
             :header-icon="model_icon('songs')"
@@ -227,10 +231,6 @@
 
     @if($quest->status_id == 12)
     <x-quest-history :quest="$quest" :extended="true" />
-
-    @elseif (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
-    <x-quest-history :quest="$quest" :extended="true" />
-
     @endif
 
     <x-extendo-block key="client"

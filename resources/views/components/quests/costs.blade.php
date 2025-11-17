@@ -16,7 +16,7 @@
             <tbody>
                 @forelse ($quest->song->costs as $cost)
                 <tr>
-                    <td>{{ $cost->type->name }}</td>
+                    <td>{{ $cost->typable->name }}</td>
                     <td>{{ _c_(as_pln($cost->amount)) }}</td>
                 </tr>
                 @empty

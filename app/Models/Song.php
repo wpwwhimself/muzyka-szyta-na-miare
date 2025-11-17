@@ -230,7 +230,7 @@ class Song extends Model
     // }
 
     public function getCostsAttribute() {
-        return Cost::where("desc", "like", "%".$this->id."%")
+        return MoneyTransaction::where("description", "like", "%".$this->id."%")
             ->orderByDesc("created_at")
             ->get();
     }

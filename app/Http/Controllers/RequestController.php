@@ -10,6 +10,8 @@ use App\Mail\NewRequest\Organista;
 use App\Mail\NewRequest\Podklady;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
+use App\Models\IncomeType;
+use App\Models\MoneyTransaction;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
@@ -537,16 +539,32 @@ class RequestController extends Controller
             // ]);
 
             if($client->notes->budget){
-                $sub_amount = min([$request->price, $client->budget]);
+                $sub_amount = min([$request->price, $client->notes->budget]);
                 $client->notes->update([
                     "budget" => $client->notes->budget - $sub_amount,
                 ]);
                 BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
+                MoneyTransaction::create([
+                    "typable_type" => IncomeType::class,
+                    "typable_id" => 2,
+                    "relatable_type" => User::class,
+                    "relatable_id" => $client->id,
+                    "date" => today(),
+                    "amount" => -$sub_amount,
+                ]);
                 if($sub_amount == $request->price){
                     $quest->paid = true;
                     $quest->save();
                 }
                 BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
+                MoneyTransaction::create([
+                    "typable_type" => IncomeType::class,
+                    "typable_id" => 1,
+                    "relatable_type" => Quest::class,
+                    "relatable_id" => $quest->id,
+                    "date" => today(),
+                    "amount" => $sub_amount,
+                ]);
                 // $invoice->update(["paid" => $sub_amount]);
             }
 

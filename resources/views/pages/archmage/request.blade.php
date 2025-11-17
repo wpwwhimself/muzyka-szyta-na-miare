@@ -185,8 +185,8 @@
                 <x-re_quests.price-summary :model="$request" />
 
                 @if ($request->user?->notes->budget && in_array($request->status_id, [1, 5, 6]))
-                <span class="{{ $request->user->notes->budget >= $request->price ? 'success' : 'warning' }}">
-                    <i class="fa-solid fa-sack-dollar"></i>
+                <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
+                    <x-shipyard.app.icon name="safe-square" />
                     Budżet w wysokości <b>{{ _c_(as_pln($request->user->notes->budget)) }}</b> automatycznie
                     <br>
                     pokryje

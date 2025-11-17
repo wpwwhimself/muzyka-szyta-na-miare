@@ -7,8 +7,10 @@ use App\Mail\Clarification;
 use App\Mail\PaymentReceived;
 use App\Mail\QuestRequoted;
 use App\Mail\QuestUpdated;
+use App\Models\IncomeType;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
+use App\Models\MoneyTransaction;
 use App\Models\Quest;
 use App\Models\Song;
 use App\Models\SongWorkTime;
@@ -102,8 +104,24 @@ class QuestController extends Controller
             $amount_for_budget = $rq->comment - $amount_to_pay;
 
             BackController::newStatusLog($rq->quest_id, $rq->status_id, min($rq->comment, $amount_to_pay), $quest->client_id);
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest->id,
+                "date" => today(),
+                "amount" => min($rq->comment, $amount_to_pay),
+            ]);
             if($amount_for_budget > 0){
                 BackController::newStatusLog(null, $rq->status_id, $amount_for_budget, $quest->client_id);
+                MoneyTransaction::create([
+                    "typable_type" => IncomeType::class,
+                    "typable_id" => 2,
+                    "relatable_type" => User::class,
+                    "relatable_id" => $quest->client_id,
+                    "date" => today(),
+                    "amount" => $amount_for_budget,
+                ]);
 
                 // budżet
                 $quest->user->notes->update([
@@ -121,7 +139,12 @@ class QuestController extends Controller
             $invoice = $invoice?->mainInvoice;
             $invoice?->update(["paid" => $invoice->paid + $rq->comment]);
 
-            $quest->update(["paid" => (StatusChange::where(["new_status_id" => $rq->status_id, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
+            $quest->update(["paid" => (MoneyTransaction::where([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest->id,
+            ])->sum("amount") >= $quest->price)]);
 
             // sending mail
             $flash_content = "Cena wpisana";
@@ -276,10 +299,26 @@ class QuestController extends Controller
                 "budget" => $quest->user->notes->budget - $sub_amount
             ]);
             BackController::newStatusLog(null, 32, -$sub_amount, $quest->client_id);
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 2,
+                "relatable_type" => User::class,
+                "relatable_id" => $quest->client_id,
+                "date" => today(),
+                "amount" => -$sub_amount,
+            ]);
             if($sub_amount == $difference){
                 $quest->update(["paid" => true]);
             }
             BackController::newStatusLog($quest->id, 32, $sub_amount, $quest->client_id);
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest->id,
+                "date" => today(),
+                "amount" => $sub_amount,
+            ]);
         }
 
         if($price_before != $quest->price){

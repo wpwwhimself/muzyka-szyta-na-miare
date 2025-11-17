@@ -11,8 +11,10 @@ use App\Models\CostType;
 use App\Models\GigPriceDefault;
 use App\Models\GigPricePlace;
 use App\Models\GigPriceRate;
+use App\Models\IncomeType;
 use App\Models\Invoice;
 use App\Models\InvoiceQuest;
+use App\Models\MoneyTransaction;
 use App\Models\Quest;
 use App\Models\Request as ModelsRequest;
 use App\Models\Song;
@@ -40,17 +42,18 @@ class StatsController extends Controller
             )
         );
         arsort($quest_pricings);
-        $recent_income = StatusChange::where("new_status_id", 32)
+        $recent_income = MoneyTransaction::where("typable_type", IncomeType::class)
             ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
             ->selectRaw("DATE_FORMAT(date, '%y-%m') as month,
-                sum(comment) as sum,
-                round(avg(comment), 2) as mean")
+                sum(amount) as sum,
+                round(avg(amount), 2) as mean")
             ->groupBy("month")
             ->orderBy("month")
             ->get();
-        $recent_costs = Cost::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
-            ->where("cost_type_id", "<>", 3)
-            ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
+        $recent_costs = MoneyTransaction::where("typable_type", CostType::class)
+            ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
+            ->where("typable_id", "<>", 3)
+            ->selectRaw("DATE_FORMAT(date, '%y-%m') as month,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
             ->groupBy("month")
@@ -67,36 +70,38 @@ class StatsController extends Controller
         $recent_gross = $recent_income->mergeRecursive($recent_costs)
             ->mapWithKeys(fn($val, $month) => [$month => $val[0] - $val[2]]);
         $finances_total = [
-            "przychody" => StatusChange::where("new_status_id", 32)
+            "przychody" => MoneyTransaction::where("typable_type", IncomeType::class)
                 ->whereDate("date", ">=", Carbon::today()->subYear())
-                ->sum("comment"),
-            "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYear())
-                ->where("cost_type_id", "<>", 3)
+                ->sum("amount"),
+            "koszty" => MoneyTransaction::where("typable_type", CostType::class)
+                ->whereDate("date", ">=", Carbon::today()->subYear())
+                ->where("typable_id", "<>", 3)
                 ->sum("amount"),
         ];
         $finances_total_last_year = [
-            "przychody" => StatusChange::where("new_status_id", 32)
+            "przychody" => MoneyTransaction::where("typable_type", IncomeType::class)
                 ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
-                ->sum("comment"),
-            "koszty" => Cost::whereDate("created_at", ">=", Carbon::today()->subYears(2))->whereDate("created_at", "<", Carbon::today()->subYear())
-                ->where("cost_type_id", "<>", 3)
+                ->sum("amount"),
+            "koszty" => MoneyTransaction::where("typable_type", CostType::class)
+                ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
+                ->where("typable_id", "<>", 3)
                 ->sum("amount"),
         ];
         $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
         $finances_total_last_year["dochody"] = $finances_total_last_year["przychody"] - $finances_total_last_year["koszty"];
-        $recent_income_alltime = StatusChange::where("new_status_id", 32)
+        $recent_income_alltime = MoneyTransaction::where("typable_type", IncomeType::class)
             ->whereDate("date", ">=", "2020-01-01")
             ->selectRaw("DATE_FORMAT(date, '%y-') as year,
-                sum(comment) as sum,
-                round(avg(comment), 2) as mean")
+                sum(amount) as sum,
+                round(avg(amount), 2) as mean")
             ->groupBy("year")
             ->orderBy("year")
             ->get();
-        $recent_costs_alltime = Cost::selectRaw("DATE_FORMAT(created_at, '%y-') as year,
+        $recent_costs_alltime = MoneyTransaction::where("typable_type", CostType::class)->selectRaw("DATE_FORMAT(created_at, '%y-') as year,
                 sum(amount) as sum,
                 round(avg(amount), 2) as mean")
-            ->whereDate("created_at", ">=", "2020-01-01")
-            ->where("cost_type_id", "<>", 3)
+            ->whereDate("date", ">=", "2020-01-01")
+            ->where("typable_id", "<>", 3)
             ->groupBy("year")
             ->orderBy("year")
             ->get();
@@ -206,7 +211,7 @@ class StatsController extends Controller
                     "biznes kręci się od" => BEGINNING()->diff(Carbon::now())->format("%yl %mm %dd"),
                     "skończone questy" => Quest::where("status_id", 19)->count(),
                     "poznani klienci" => User::count(),
-                    "zarobki w sumie" => as_pln(StatusChange::where("new_status_id", 32)->sum("comment"), 2, ",", " "),
+                    "zarobki w sumie" => as_pln(MoneyTransaction::where("typable_type", IncomeType::class)->sum("amount"), 2, ",", " "),
                 ],
                 "quest_types" => [
                     "split" => DB::table("quests")
@@ -428,22 +433,19 @@ class StatsController extends Controller
 
     public function financeDashboard(){
         $this_month = [
-            "zarobiono" => StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())
+            "zarobiono" => MoneyTransaction::where("typable_type", IncomeType::class)
+                ->whereDate("date", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
-                ->where("new_status_id", 32)
-                ->sum("comment"),
-            "wydano" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
-                ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
-                ->where("cost_type_id", "!=", 3)
-                ->sum("amount")
-                -
-                StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())
+                ->sum("amount"),
+            "wydano" => MoneyTransaction::where("typable_type", CostType::class)
+                ->whereDate("date", ">=", Carbon::today()->firstOfMonth())
                 ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
-                ->where("new_status_id", 34)
-                ->sum("comment"),
-            "wypłacono" => Cost::whereDate("created_at", ">=", Carbon::today()->firstOfMonth())
-                ->whereDate("created_at", "<=", Carbon::today()->lastOfMonth())
-                ->where("cost_type_id", 3)
+                ->where("typable_id", "!=", 3)
+                ->sum("amount"),
+            "wypłacono" => MoneyTransaction::where("typable_type", CostType::class)
+                ->whereDate("date", ">=", Carbon::today()->firstOfMonth())
+                ->whereDate("date", "<=", Carbon::today()->lastOfMonth())
+                ->where("typable_id", 3)
                 ->sum("amount"),
         ];
 
@@ -455,7 +457,7 @@ class StatsController extends Controller
 
         $unpaids = User::has("questsUnpaid")->get()->sortBy("notes.client_name");
 
-        $recent = StatusChange::where("new_status_id", 32)->orderByDesc("date")->limit(10)->get();
+        $recent = MoneyTransaction::where("typable_type", IncomeType::class)->orderByDesc("created_at")->limit(10)->get();
         foreach($recent as $i){
             $i->quest = Quest::find($i->re_quest_id);
             $i->new_status = Status::find($i->new_status_id);
@@ -491,6 +493,14 @@ class StatsController extends Controller
                 $quest->client_id,
                 $quest->user->notes->email,
             );
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $id,
+                "date" => today(),
+                "amount" => $amount_to_pay,
+            ]);
 
             // opłacanie faktury
             $invoice = InvoiceQuest::where("quest_id", $id)
@@ -502,7 +512,12 @@ class StatsController extends Controller
             $invoice = $invoice?->mainInvoice;
             $invoice?->update(["paid" => $invoice->paid + $amount_to_pay]);
 
-            $quest->update(["paid" => (StatusChange::where(["new_status_id" => 32, "re_quest_id" => $quest->id])->sum("comment") >= $quest->price)]);
+            $quest->update(["paid" => (MoneyTransaction::where([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest->id,
+            ])->sum("amount") >= $quest->price)]);
 
             // zbierz zlecenia dla konkretnych adresatów
             $clients_quests[$quest->client_id][] = $quest;
@@ -528,8 +543,8 @@ class StatsController extends Controller
 
     public function financePayout(float $amount) {
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
-        Cost::create([
-            "cost_type_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
+        MoneyTransaction::where("typable_type", CostType::class)->create([
+            "typable_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
             "desc" => "sam sobie",
             "amount" => $amount,
         ]);
@@ -548,12 +563,30 @@ class StatsController extends Controller
                 -$payments_sum,
                 $quest->client_id
             );
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest_id,
+                "date" => today(),
+                "amount" => -$payments_sum,
+            ]);
         } else {
             // przesunięcie na budżet
             StatusChange::where("re_quest_id", $quest_id)
                 ->where("new_status_id", 32)
                 ->where("changed_by", $quest->client_id)
                 ->update(["re_quest_id" => null]);
+            MoneyTransaction::where([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest_id,
+            ])->update([
+                "relatable_type" => User::class,
+                "relatable_id" => $quest->client_id,
+                "typable_id" => 2,
+            ]);
 
             $quest->user->notes->update([
                 "budget" => $quest->user->notes->budget += $payments_sum,
@@ -578,25 +611,35 @@ class StatsController extends Controller
         return back()->with("toast", ["success", $flash_content]);
     }
     public function financeSummary(Request $rq){
-        $gains = StatusChange::where("new_status_id", 32)
+        $gains = MoneyTransaction::where("typable_type", IncomeType::class)
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-            ->join("users", "users.id", "changed_by", "left")
             ->orderByDesc("date");
-        $losses = Cost::whereDate("created_at", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-            ->orderByDesc("created_at");
-
-        $losses_payments = (clone $losses)->where("cost_type_id", 3)->sum("amount");
-        $losses_other = (clone $losses)->where("cost_type_id", "<>", 3)->sum("amount")
-            -
-            StatusChange::where("new_status_id", 34)
+        $losses = MoneyTransaction::where(fn ($q) => $q
+            ->where("typable_type", CostType::class)
+            ->orWhere(fn ($q) => $q
+                ->where("typable_type", IncomeType::class)
+                ->where("typable_id", 1)
+                ->where("amount", "<", 0)
+            )
+        )
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-            ->sum("comment");
+            ->orderByDesc("date");
 
-        $balance_now = StatusChange::whereIn("new_status_id", [32, 34])->sum("comment")
-            - Cost::whereDate("created_at", ">=", BEGINNING())->sum("amount");
+        $losses_payments = (clone $losses)->where("typable_id", 3)->sum("amount");
+        $losses_other = (clone $losses)->where("typable_id", "<>", 3)->sum("amount")
+            -
+            MoneyTransaction::where("typable_type", IncomeType::class)
+                ->where("typable_id", 1)
+                ->where("relatable_type", Quest::class)
+                ->where("amount", "<", 0)
+                ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
+                ->sum("amount");
+
+        $balance_now = MoneyTransaction::where(["typable_type" => IncomeType::class, "typable_id" => 1])->sum("amount")
+            - MoneyTransaction::where("typable_type", CostType::class)->whereDate("date", ">=", BEGINNING())->sum("amount");
 
         $summary = [
-            "Zarobiono" => $gains->sum("comment"),
+            "Zarobiono" => $gains->sum("amount"),
             "Wydano" => $losses_other,
             "Wypłacono" => $losses_payments,
             "Saldo na dziś" => $balance_now,
@@ -606,11 +649,13 @@ class StatsController extends Controller
         $losses = $losses->get();
 
         $losses = $losses->merge(
-            StatusChange::where("new_status_id", 34)
+            MoneyTransaction::where("typable_type", IncomeType::class)
+                ->where("typable_id", 1)
+                ->where("relatable_type", Quest::class)
+                ->where("amount", "<", 0)
                 ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-                ->join("users", "users.id", "changed_by", "left")
-                ->get(["status_changes.*", "date as created_at"])
-        )->sortByDesc("created_at");
+                ->get(["money_transactions.*", "date"])
+        )->sortByDesc("date");
 
         return view("pages.".user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],
@@ -719,13 +764,13 @@ class StatsController extends Controller
     }
 
     public function costs(){
-        $costs = Cost::orderByDesc("created_at")->paginate(25);
+        $costs = MoneyTransaction::where("typable_type", CostType::class)->orderByDesc("date")->paginate(25);
         $types = CostType::all()->pluck("name", "id");
         $types = collect(array_map(fn($el) => _ct_($el), $types->toArray()));
         $summary = [
-            "Zwykłe" => Cost::where("cost_type_id", "<>", 3)->sum("amount"),
-            "Wypłaty" => Cost::where("cost_type_id", 3)->sum("amount"),
-            "Razem" => Cost::sum("amount"),
+            "Zwykłe" => MoneyTransaction::where("typable_type", CostType::class)->where("typable_id", "<>", 3)->sum("amount"),
+            "Wypłaty" => MoneyTransaction::where("typable_type", CostType::class)->where("typable_id", 3)->sum("amount"),
+            "Razem" => MoneyTransaction::where("typable_type", CostType::class)->sum("amount"),
         ];
 
         return view("pages.".user_role().".costs", array_merge(
@@ -736,13 +781,14 @@ class StatsController extends Controller
     public function modCost(Request $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = [
-            "cost_type_id" => $rq->cost_type_id,
-            "desc" => $rq->desc,
+            "typable_id" => $rq->cost_type_id,
+            "typable_type" => CostType::class,
+            "description" => $rq->desc,
             "amount" => $rq->amount,
-            "created_at" => $rq->created_at,
+            "date" => $rq->created_at,
         ];
-        if($rq->id) Cost::find($rq->id)->update($fields);
-        else Cost::create($fields);
+        if($rq->id) MoneyTransaction::find($rq->id)->update($fields);
+        else MoneyTransaction::create($fields);
 
         return back()->with("toast", ["success", "Gotowe"]);
     }
@@ -881,7 +927,7 @@ class StatsController extends Controller
         //scheduled and received payments
         $saturation = [
             //this month
-            StatusChange::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("new_status_id", 32)->sum("comment")
+            MoneyTransaction::whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("typable_type", IncomeType::class)->sum("amount")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
@@ -970,11 +1016,11 @@ class StatsController extends Controller
         $fiscal_year = $rq->fiscalYear ?? date("Y") - 1;
 
         $money = [
-            "Przychody" => StatusChange::where("new_status_id", 32)
+            "Przychody" => MoneyTransaction::where("typable_type", IncomeType::class)
                 ->whereBetween("date", ["$fiscal_year-01-01", "$fiscal_year-12-31"])
-                ->sum("comment"),
-            "Koszty" => Cost::whereBetween("created_at", ["$fiscal_year-01-01", "$fiscal_year-12-31"])
-                ->whereNotIn("cost_type_id", [3])
+                ->sum("amount"),
+            "Koszty" => MoneyTransaction::where("typable_type", CostType::class)->whereBetween("created_at", ["$fiscal_year-01-01", "$fiscal_year-12-31"])
+                ->whereNotIn("typable_id", [3])
                 ->sum("amount"),
         ];
         $money["Dochody"] = $money["Przychody"] - $money["Koszty"];

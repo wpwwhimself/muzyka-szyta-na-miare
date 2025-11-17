@@ -3,7 +3,7 @@
 ])
 
 <div id="costs">
-    <x-shipyard.app.h lvl="4" :icon="model_icon('costs')">Koszty</x-shipyard.app.h>
+    <x-shipyard.app.h lvl="4" :icon="model_icon('cost-types')">Koszty</x-shipyard.app.h>
 
     <div class="flex right nowrap">
         <table>
@@ -32,7 +32,7 @@
         </table>
 
         <x-shipyard.ui.button
-            :icon="model_icon('costs')"
+            :icon="model_icon('cost-types')"
             pop="Koszty"
             :action="route('costs')"
         />

@@ -87,9 +87,6 @@ class StatusChange extends Model
             : Quest::find($this->re_quest_id);
     }
 
-    public function invoice(){
-        return $this->hasManyThrough(Invoice::class, InvoiceQuest::class, "quest_id", "id", "re_quest_id", "invoice_id");
-    }
     public function changer(){
         if($this->changed_by > 1) return $this->hasOne(User::class, "id", "changed_by");
     }

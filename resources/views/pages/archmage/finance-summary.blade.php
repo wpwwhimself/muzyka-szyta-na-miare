@@ -4,7 +4,7 @@
 
 <div class="flex right center middle">
     <x-shipyard.ui.button :action="route('finance')" label="Wróć" icon="chevron-double-left" />
-    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('costs')" />
+    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('cost-types')" />
     <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
 
     <x-shipyard.ui.button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])" label="Wypłać" icon="sack-dollar" small />
@@ -37,10 +37,14 @@
             @forelse ($gains as $pos)
             <tr>
                 <td>{{ $pos->date->format("d.m.Y") }}</td>
-                <td><a href="{{ route('client-view', ['id' => $pos->changed_by]) }}">{!! $pos->changer !!}</a></td>
                 <td>
-                    @if ($pos->re_quest_id)
-                    <a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a>
+                    <a href="{{ route('client-view', ['id' => $pos->relatable->user?->id ?? $pos->relatable->id]) }}">
+                        {!! $pos->relatable->user ?? $pos->relatable !!}
+                    </a>
+                </td>
+                <td>
+                    @if ($pos->relatable instanceof \App\Models\Quest)
+                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a>
                     @else
                     <span class="grayed-out">budżet</span>
                     @endif
@@ -50,7 +54,7 @@
                     <a href="{{ route('invoice', ['id' => $pos->invoice->first()->id]) }}">{{ $pos->invoice->first()->full_code }}</a>
                     @endif
                 </td>
-                <td>{{ _c_(as_pln($pos->comment)) }}</td>
+                <td>{{ _c_(as_pln($pos->amount)) }}</td>
             </tr>
             @empty
             <tr><td class="grayed-out">Brak danych</td></tr>
@@ -72,16 +76,16 @@
         <tbody>
             @forelse ($losses as $pos)
             <tr>
-                @if (get_class($pos) == "App\Models\Cost")
-                <td>{{ $pos->created_at->format("d.m.Y") }}</td>
-                <td>{{ _ct_($pos->type->name) }}</td>
-                <td>{{ $pos->desc }}</td>
+                @if ($pos->typable instanceof \App\Models\CostType)
+                <td>{{ $pos->date->format("d.m.Y") }}</td>
+                <td>{{ _ct_($pos->typable->name) }}</td>
+                <td>{{ $pos->description }}</td>
                 <td>{{ _c_(as_pln($pos->amount)) }}</td>
-                @else
+                @elseif ($pos->typable instanceof \App\Models\IncomeType)
                 <td>{{ $pos->date->format("d.m.Y") }}</td>
                 <td>zwrot wpłaty</td>
-                <td><a href="{{ route('quest', ['id' => $pos->re_quest_id]) }}">{{ $pos->re_quest_id }}</a></td>
-                <td>{{ _c_(as_pln(-$pos->comment)) }}</td>
+                <td><a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a></td>
+                <td>{{ _c_(as_pln(-$pos->amount)) }}</td>
                 @endif
             </tr>
             @empty

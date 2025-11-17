@@ -5,7 +5,7 @@
 
 <div class="flex right center middle">
     <x-shipyard.ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
-    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('costs')" />
+    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('cost-types')" />
     <x-shipyard.ui.button :action="route('invoices')" label="Faktury" :icon="model_icon('invoices')" />
     <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
     <x-shipyard.ui.button :action="route('gig-price-suggest')" label="Wycena grania" icon="chat-alert" />
@@ -39,22 +39,22 @@
                 <tr class="ghost">
                 @endif
                     <td>
-                        <a href="{{ route('client-view', ['id' => $item->changer->id]) }}">
-                            {!! $item->changer !!}
+                        <a href="{{ route('client-view', ['id' => $item->relatable->user?->id ?? $item->relatable->id]) }}">
+                            {!! $item->relatable->user ?? $item->relatable !!}
                         </a>
                     </td>
                     <td>
-                        @if($item->re_quest_id)
-                        <a href="{{ route('quest', ['id' => $item->re_quest_id]) }}">
-                            {{ $item->quest->song->title ?? "utwór bez tytułu" }}
+                        @if($item->relatable instanceof App\Models\Quest)
+                        <a href="{{ route('quest', ['id' => $item->relatable->id]) }}">
+                            {{ $item->relatable->song }}
                         </a>
-                        <x-phase-indicator-mini :status="$item->quest->status" />
+                        <x-phase-indicator-mini :status="$item->relatable->status" />
                         @else
                         <span class="grayed-out">budżet</span>
                         @endif
                     </td>
                     <td>
-                        {{ _c_(as_pln($item->comment)) }}
+                        {{ _c_(as_pln($item->amount)) }}
                     </td>
                     <td {{ Popper::pop($item->date) }}>
                         {{ $item->date->diffForHumans() }}

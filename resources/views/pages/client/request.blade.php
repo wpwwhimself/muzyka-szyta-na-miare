@@ -82,13 +82,13 @@ $fields = $request::getFields();
 
                 <x-re_quests.price-summary :model="$request" />
 
-                @if ($request->client?->budget && in_array($request->status_id, [5, 6]))
-                <span class="{{ $request->client->budget >= $request->price ? 'success' : 'warning' }}">
-                    <i class="fa-solid fa-sack-dollar"></i>
-                    Budżet w wysokości <b>{{ as_pln($request->client->budget) }}</b> automatycznie
+                @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
+                <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
+                    <x-shipyard.app.icon name="safe-square" />
+                    Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
                     <br>
                     pokryje
-                    @if ($request->client->budget >= $request->price)
+                    @if ($request->user->notes->budget >= $request->price)
                     całą kwotę zlecenia
                     @else
                     część kwoty zlecenia

@@ -10,7 +10,7 @@
     <x-shipyard.ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
 </div>
 
-<x-section title="Zapisane koszty" :icon="model_icon('costs')">
+<x-section title="Zapisane koszty" :icon="model_icon('cost-types')">
     <x-slot:buttons>
         <x-shipyard.ui.button
             label="Dodaj"
@@ -38,9 +38,9 @@
         <tbody>
             @foreach ($costs as $cost)
             <tr>
-                <td>{{ $cost->created_at->format('d.m.Y') }}</td>
-                <td>{{ $cost->type->name }}</td>
-                <td>{{ $cost->desc }}</td>
+                <td>{{ $cost->date->format('d.m.Y') }}</td>
+                <td>{{ $cost->typable->name }}</td>
+                <td>{{ $cost->description }}</td>
                 <td>{{ as_pln($cost->amount) }}</td>
                 <td>
                     <x-shipyard.ui.button
@@ -49,9 +49,9 @@
                         action="none"
                         onclick="openModal('mod-cost', {
                             id: '{{ $cost->id }}',
-                            created_at: '{{ $cost->created_at->format('Y-m-d') }}',
-                            type: '{{ $cost->cost_type_id }}',
-                            desc: '{{ $cost->desc }}',
+                            created_at: '{{ $cost->date->format('Y-m-d') }}',
+                            cost_type_id: '{{ $cost->typable->id }}',
+                            desc: '{{ $cost->description }}',
                             amount: '{{ $cost->amount }}',
                         })"
                         class="tertiary"

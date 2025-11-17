@@ -164,7 +164,7 @@ class UserNote extends Authenticatable
         "budget" => [
             "type" => "number",
             "label" => "Budżet",
-            "icon" => "safe",
+            "icon" => "safe-square",
             "hint" => "Kwota nadpłat, wykorzystywana na poczet przyszłych zleceń.",
             "min" => 0,
             "step" => 0.01,

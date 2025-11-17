@@ -6,39 +6,40 @@ use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\View\ComponentAttributeBag;
+use Mattiverse\Userstamps\Traits\Userstamps;
 
-class Cost extends Model
+class IncomeType extends Model
 {
-    use HasFactory;
+    //
 
     public const META = [
-        "label" => "Koszty",
-        "icon" => "cash-minus",
-        "description" => "Koszty związane z działalnością - na sprzęt, outsourcing, rachunki itp.",
+        "label" => "Rodzaje wpłat",
+        "icon" => "cash-plus",
+        "description" => "Grupy, do których przypisywane są wpłaty.",
         "role" => "archmage",
-        "ordering" => 81,
+        "ordering" => 80,
     ];
 
+    use SoftDeletes, Userstamps;
+
     protected $fillable = [
-        "cost_type_id",
+        "name",
         "desc",
-        "amount",
-        "created_at",
     ];
 
     #region presentation
     public function __toString(): string
     {
-        return $this->type;
+        return $this->name;
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->type,
+            get: fn () => $this->name,
         );
     }
 
@@ -51,7 +52,7 @@ class Cost extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->type,
+                "slot" => $this->name,
             ])->render(),
         );
     }
@@ -59,19 +60,14 @@ class Cost extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->desc,
         );
     }
 
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
-            ])->render(),
+            get: fn () => null,
         );
     }
     #endregion
@@ -80,31 +76,19 @@ class Cost extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        "desc" => [
+        "description" => [
             "type" => "TEXT",
             "label" => "Opis",
             "icon" => "text",
         ],
-        "amount" => [
-            "type" => "number",
-            "label" => "Wartość",
-            "icon" => "cash",
-            "step" => 0.01,
-        ],
-        "created_at" => [
-            "type" => "date",
-            "label" => "Data transakcji",
-            "icon" => "calendar",
-            "required" => true,
-        ],
     ];
 
     public const CONNECTIONS = [
-        "type" => [
-            "model" => CostType::class,
-            "mode" => "one",
+        "transactions" => [
+            "model" => MoneyTransaction::class,
+            "mode" => "many",
             // "field_name" => "",
-            "field_label" => "Typ",
+            // "field_label" => "",
         ],
     ];
 
@@ -135,8 +119,7 @@ class Cost extends Model
         //     "icon" => "",
         //     "compare-using" => "function|field",
         //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
+        //     "type" => "<input type>",
         //     "options" => [
         //         "<label>" => <value>,
         //     ],
@@ -151,7 +134,7 @@ class Cost extends Model
     protected function casts(): array
     {
         return [
-            //
+            "is_expense" => "boolean",
         ];
     }
 
@@ -181,8 +164,9 @@ class Cost extends Model
     #endregion
 
     #region relations
-    public function type(){
-        return $this->belongsTo(CostType::class, "cost_type_id");
+    public function transactions()
+    {
+        return $this->morphMany(MoneyTransaction::class, "typable");
     }
     #endregion
 

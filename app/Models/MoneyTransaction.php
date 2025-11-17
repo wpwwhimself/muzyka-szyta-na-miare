@@ -6,27 +6,33 @@ use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\View\ComponentAttributeBag;
+use Mattiverse\Userstamps\Traits\Userstamps;
 
-class CostType extends Model
+class MoneyTransaction extends Model
 {
-    use HasFactory;
+    //
 
     public const META = [
-        "label" => "Rodzaje kosztów",
-        "icon" => "cash-minus",
-        "description" => "Grupy, do których przypisywane są koszty.",
-        "role" => "archmage",
-        "ordering" => 80,
+        "label" => "Transakcje",
+        "icon" => "cash-register",
+        "description" => "Wpłaty i wydatki.",
+        "role" => "",
+        "ordering" => 81,
     ];
 
-    public $timestamps = false;
+    use SoftDeletes, Userstamps, HasUuids;
 
     protected $fillable = [
-        "name",
-        "desc",
+        "typable_type", "typable_id",
+        "relatable_type", "relatable_id",
+        "date",
+        "amount",
+        "description",
+        "is_hidden",
     ];
 
     #region presentation
@@ -59,14 +65,19 @@ class CostType extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->desc,
+            get: fn () => view("components.shipyard.app.model.badges", [
+                "badges" => $this->badges,
+            ])->render(),
         );
     }
 
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => null,
+            get: fn () => view("components.shipyard.app.model.connections-preview", [
+                "connections" => self::getConnections(),
+                "model" => $this,
+            ])->render(),
         );
     }
     #endregion
@@ -75,17 +86,50 @@ class CostType extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        "desc" => [
+        "date" => [
+            "type" => "date",
+            "label" => "Data transakcji",
+            "hint" => "",
+            "icon" => "calendar",
+            "required" => true,
+        ],
+        "amount" => [
+            "type" => "number",
+            "label" => "Kwota",
+            "hint" => "",
+            "icon" => "cash",
+            "required" => true,
+            "step" => 0.01,
+        ],
+        "description" => [
             "type" => "TEXT",
             "label" => "Opis",
+            "hint" => "",
             "icon" => "text",
+        ],
+        "is_hidden" => [
+            "type" => "checkbox",
+            "label" => "Ukryta",
+            "hint" => "Ukryte transakcje nie są liczone do podsumowań, statystyk i symulacji.",
+            "icon" => "eye-off",
         ],
     ];
 
     public const CONNECTIONS = [
-        "costs" => [
-            "model" => Cost::class,
-            "mode" => "many",
+        "typable" => [
+            "model" => [
+                CostType::class,
+                IncomeType::class,
+            ],
+            "mode" => "one",
+            // "field_name" => "",
+            // "field_label" => "",
+        ],
+        "relatable" => [
+            "model" => [
+                Quest::class,
+            ],
+            "mode" => "one",
             // "field_name" => "",
             // "field_label" => "",
         ],
@@ -118,8 +162,7 @@ class CostType extends Model
         //     "icon" => "",
         //     "compare-using" => "function|field",
         //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
+        //     "type" => "<input type>",
         //     "options" => [
         //         "<label>" => <value>,
         //     ],
@@ -128,18 +171,13 @@ class CostType extends Model
 
     #region scopes
     use HasStandardScopes;
-
-    public function scopeForAdding($query): void
-    {
-        $query;
-    }
     #endregion
 
     #region attributes
     protected function casts(): array
     {
         return [
-            //
+            "date" => "date",
         ];
     }
 
@@ -169,13 +207,24 @@ class CostType extends Model
     #endregion
 
     #region relations
-    public function costs(){
-        return $this->hasMany(Cost::class);
+    public function typable()
+    {
+        return $this->morphTo();
     }
 
-    public function transactions()
+    public function relatable()
     {
-        return $this->morphMany(MoneyTransaction::class, "typable");
+        return $this->morphTo();
+    }
+
+    public function invoice()
+    {
+        return $this->hasManyThrough(
+            Invoice::class,
+            InvoiceQuest::class,
+            "quest_id", "id",
+            "relatable_id", "invoice_id"
+        );
     }
     #endregion
 

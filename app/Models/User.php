@@ -11,9 +11,17 @@ class User extends ShipyardUser
 {
     public const FROM_SHIPYARD = true;
 
+    #region presentation
     public function __toString()
     {
         return $this->notes ?? $this->name;
+    }
+
+    public function optionLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "[$this->id] $this",
+        );
     }
 
     public function nameAndBadges(): Attribute
@@ -22,6 +30,7 @@ class User extends ShipyardUser
             get: fn () => $this->notes->name_and_badges,
         );
     }
+    #endregion
 
     #region fields
     public const CONNECTIONS = [

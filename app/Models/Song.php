@@ -181,12 +181,14 @@ class Song extends Model
             "label" => "Tytuł",
             "compare-using" => "field",
             "discr" => "title",
+            "type" => "text",
             "operator" => "regexp",
         ],
         "artist" => [
             "label" => "Wykonawca",
             "compare-using" => "field",
             "discr" => "artist",
+            "type" => "text",
             "operator" => "regexp",
         ],
     ];

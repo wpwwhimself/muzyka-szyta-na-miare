@@ -8,8 +8,7 @@
 if ($pop !== false) $pop = $status->status_name;
 @endphp
 
-<span class="p-{{ $status->id }}"
-    style="color: rgb(var(--q-clr));"
+<span style="color: {{ $status->color }};"
     {{ $pop ? Popper::pop($pop) : null }}
 >
     <x-shipyard.app.icon :name="$status->icon" />

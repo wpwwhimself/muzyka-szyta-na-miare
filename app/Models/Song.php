@@ -177,17 +177,18 @@ class Song extends Model
             "type" => "text",
             "operator" => "regexp",
         ],
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
-        //     "options" => [
-        //         "<label>" => <value>,
-        //     ],
-        // ],
+        "title" => [
+            "label" => "Tytuł",
+            "compare-using" => "field",
+            "discr" => "title",
+            "operator" => "regexp",
+        ],
+        "artist" => [
+            "label" => "Wykonawca",
+            "compare-using" => "field",
+            "discr" => "artist",
+            "operator" => "regexp",
+        ],
     ];
 
     #region scopes

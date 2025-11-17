@@ -27,14 +27,6 @@ a.section,
     }
 }
 
-.loader-bar,
-.seeker {
-    width: 100%;
-    background: linear-gradient(to right, var(--primary) var(--progress), var(--bg-lite) var(--progress));
-    border-radius: 0.5em;
-    text-align: center;
-}
-
 /*** plot ***/
 
 #clients-stats-graph,

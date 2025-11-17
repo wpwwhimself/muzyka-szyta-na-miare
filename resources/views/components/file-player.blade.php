@@ -24,7 +24,7 @@
         </span>
     </div>
 
-    <div class="seeker interactive hidden" style="--progress: 0%;"
+    <div class="seeker progress-bar interactive hidden" style="--progress: 0%;"
         onclick="seekFilePlayer('{{ basename($file) }}', event)"
     >
     </div>

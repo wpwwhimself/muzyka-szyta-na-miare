@@ -18,13 +18,13 @@
     @endif
 
     <div class="flex right middle nowrap">
-        <div class="loader-bar" style="--progress: {{ $quest->paid ? 100 : round($quest->payments_sum / $quest->price * 100) }}%">
+        <x-shipyard.app.progress-bar :progress="$quest->paid ? 100 : round($quest->payments_sum / $quest->price * 100)">
             Opłacono: {{ as_pln($quest->payments_sum) }}
             @if (!$quest->paid)
             —
             Pozostało: {{ as_pln($quest->price - $quest->payments_sum) }}
             @endif
-        </div>
+        </x-shipyard.app.progress-bar>
 
         @if (!$quest->paid && is_archmage())
         <x-shipyard.ui.button

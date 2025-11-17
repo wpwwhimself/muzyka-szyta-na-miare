@@ -16,9 +16,9 @@
         />
     </x-slot:buttons>
 
-    <div class="loader-bar" style="--progress: 0%">
+    <x-shipyard.app.progress-bar progress="0">
         Inicjowanie...
-    </div>
+    </x-shipyard.app.progress-bar>
 
     <h2 class="flex right center middle">
         <span @popper(Dodanie do kolejki) role="progress-mark" data-lvl="1" class="accent"><x-shipyard.app.icon name="tray-plus" /></span>
@@ -29,7 +29,7 @@
 
 <script defer>
 function updateLoader(progress, text, light_up_progress = undefined) {
-    const loader = document.querySelector(".loader-bar");
+    const loader = document.querySelector(".progress-bar");
     const progresses = document.querySelectorAll("[role='progress-mark']");
 
     loader.style.setProperty("--progress", `${progress}%`);

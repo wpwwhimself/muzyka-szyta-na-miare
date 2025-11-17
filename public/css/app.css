@@ -424,15 +424,6 @@ footer .icon.invert-when-dark {
     }
 }
 
-/* quest and request phases */
-.p-1, .p-11{ --q-clr: 245, 174, 185; }
-.p-12{ --q-clr: 50, 127, 226; }
-.p-13{ --q-clr: 163, 124, 87; }
-.p-5, .p-15, .p-31, .p-95{ --q-clr: 145, 87, 168; }
-.p-6, .p-16, .p-21, .p-26, .p-96{ --q-clr: 207, 60, 60; }
-.p-4, .p-7, .p-8, .p-17, .p-18, .p-33{ --q-clr: 175, 175, 175; }
-.p-9, .p-19, .p-32, .p-34, .p-14{ --q-clr: 57, 196, 57; }
-
 .priority {
     div&,
     &.submit {
@@ -516,68 +507,6 @@ footer .icon.invert-when-dark {
     .quest-mini {
         display: flex;
         flex-direction: column;
-    }
-}
-
-.quest-phase {
-    & > .quest-phase-bars{
-        display: grid;
-        --bar-size: 1em;
-        grid-template-columns: repeat(9, 1fr);
-        margin: 0.2em;
-        column-gap: calc(var(--bar-size) * 1.5);
-        padding: 0 0 0 calc(var(--bar-size) / 2);
-
-        & div {
-            color: var(--bg-lite2);
-            background-color: currentColor;
-            height: var(--bar-size);
-            position: relative;
-            border-radius: 0;
-
-            &::before, &::after{
-                content: "";
-                position: absolute;
-                border: calc(var(--bar-size) / 2) solid transparent;
-                box-sizing: border-box;
-                width: var(--bar-size);
-                height: var(--bar-size);
-            }
-            &::before {
-                left: calc(-1 * var(--bar-size));
-                border-top-color: inherit;
-                border-right-color: inherit;
-                border-bottom-color: inherit;
-            }
-            &::after {
-                right: calc(-1 * var(--bar-size));
-                border-left-color: inherit;
-            }
-
-            &:first-child::before {
-                border: none;
-                background-color: currentColor;
-            }
-            &:last-child::after {
-                border: none;
-                background-color: currentColor;
-                right: calc(-1 * var(--bar-size) / 2);
-            }
-        }
-
-        & .highlighted {
-            color: rgb(var(--q-clr));
-        }
-    }
-
-    & > .quest-phase-label{
-        display: flex;
-        justify-content: center; align-items: baseline;
-
-        & h3, & p {
-            margin: 0 0.25em;
-            color: rgb(var(--q-clr));
-        }
     }
 }
 

@@ -43,10 +43,9 @@ setInterval(getQuests, 10e3)
         <div v-for="quest in quests" :class="[
             `card`,
             `flex`, `right`, `middle`, `spread`,
-            `p-${quest.status_id}`,
         ].filter(Boolean).join(' ')">
             <div class="flex right middle">
-                <span style="color: rgb(var(--q-clr))"><FontAwesomeIcon :icon="dIcons[quest.status_id]" /></span>
+                <span><FontAwesomeIcon :icon="dIcons[quest.status_id]" /></span>
                 <div>
                     <h3>{{ quest.song.full_title }}</h3>
                     <span><a :href="`/quests/view/${quest.id}`">{{ quest.id }}</a></span>

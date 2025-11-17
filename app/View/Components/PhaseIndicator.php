@@ -27,6 +27,9 @@ class PhaseIndicator extends Component
     public function statusSymbol($statusId){
         return Status::find($statusId)->icon;
     }
+    public function statusColor($statusId){
+        return Status::find($statusId)->color;
+    }
 
     public function bars($statusId){
         /**

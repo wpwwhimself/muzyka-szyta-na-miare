@@ -31,6 +31,7 @@ class Status extends Model
         "status_name",
         "status_symbol",
         "icon",
+        "color",
     ];
 
     #region presentation
@@ -56,7 +57,7 @@ class Status extends Model
                 "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
-                    "class" => "p-$this->id",
+                    "style" => "color: $this->color;",
                 ]),
                 "slot" => $this->status_name,
             ])->render(),

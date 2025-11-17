@@ -37,6 +37,11 @@ class Status extends Model
     #region presentation
     public function __toString(): string
     {
+        return $this->status_name;
+    }
+
+    public function nameAndLabel(): string
+    {
         return view("components.phase-indicator-mini", [
             "status" => $this,
         ])->render();
@@ -83,20 +88,22 @@ class Status extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "status_name" => [
+            "type" => "text",
+            "label" => "Nazwa",
+            "icon" => "account-badge-horizontal",
+            "required" => true,
+        ],
+        "icon" => [
+            "type" => "icon",
+            "label" => "Ikona",
+            "icon" => "image",
+        ],
+        "color" => [
+            "type" => "color",
+            "label" => "Kolor",
+            "icon" => "palette",
+        ],
     ];
 
     public const CONNECTIONS = [

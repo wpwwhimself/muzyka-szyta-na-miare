@@ -33,6 +33,7 @@ return new class extends Migration
             $table->date("date");
             $table->float("amount", 2)->default(0);
             $table->text("description")->nullable();
+            $table->boolean("is_hidden")->default(false);
 
             $table->foreignId("created_by")->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId("updated_by")->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();

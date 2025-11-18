@@ -38,7 +38,7 @@ class MoneyTransaction extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->name;
+        return $this->date->format("d.m.Y") .": ". as_pln($this->amount);
     }
 
     public function optionLabel(): Attribute
@@ -123,15 +123,17 @@ class MoneyTransaction extends Model
             ],
             "mode" => "one",
             // "field_name" => "",
-            // "field_label" => "",
+            "field_label" => "Rodzaj transakcji",
+            "field_icon" => "ev-plug-type1",
         ],
         "relatable" => [
             "model" => [
                 Quest::class,
+                User::class,
             ],
             "mode" => "one",
             // "field_name" => "",
-            // "field_label" => "",
+            "field_label" => "Powiązane z:",
         ],
     ];
 

@@ -159,6 +159,7 @@ Route::middleware("auth")->group(function(){
     Route::controller(StatsController::class)->group(function(){
         Route::prefix("stats")->group(function(){
             Route::get("/", "dashboard")->name("stats");
+            Route::get("/gigs", "gigsDashboard")->name("stats-gigs");
             Route::post("/import", "statsImport")->name("stats-import");
 
             Route::get("/file-size", "fileSizeReport")->name("file-size-report");

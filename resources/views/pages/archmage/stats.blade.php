@@ -48,4 +48,12 @@
   <x-stats-highlight-h title="Średni czas z podziałem na gatunki</small>" :data="$stats->songs->time_genres" :bracketed-numbers="'comparison-raw'" />
 </x-section>
 
+<div class="flex right center middle">
+  <x-shipyard.ui.button
+    label="Grania"
+    icon="trumpet"
+    :action="route('stats-gigs')"
+  />
+</div>
+
 @endsection

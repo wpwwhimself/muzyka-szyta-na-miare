@@ -76,7 +76,7 @@ class IncomeType extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        "description" => [
+        "desc" => [
             "type" => "TEXT",
             "label" => "Opis",
             "icon" => "text",
@@ -84,12 +84,12 @@ class IncomeType extends Model
     ];
 
     public const CONNECTIONS = [
-        "transactions" => [
-            "model" => MoneyTransaction::class,
-            "mode" => "many",
-            // "field_name" => "",
-            // "field_label" => "",
-        ],
+        // "transactions" => [
+        //     "model" => MoneyTransaction::class,
+        //     "mode" => "many",
+        //     // "field_name" => "",
+        //     // "field_label" => "",
+        // ],
     ];
 
     public const ACTIONS = [

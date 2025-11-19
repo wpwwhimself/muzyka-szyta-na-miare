@@ -19,7 +19,7 @@ class Status extends Model
         "icon" => "list-status",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 61,
     ];
 
     use HasFactory;

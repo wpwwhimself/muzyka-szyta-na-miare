@@ -22,7 +22,7 @@ class Request extends Model
         "icon" => "chat",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 21,
     ];
 
     protected $fillable = [

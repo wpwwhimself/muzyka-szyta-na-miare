@@ -19,7 +19,7 @@ class FileTag extends Model
         "icon" => "tag",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 66,
+        "ordering" => 12,
     ];
 
     protected $fillable = [

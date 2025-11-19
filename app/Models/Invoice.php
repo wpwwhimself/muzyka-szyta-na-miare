@@ -19,7 +19,7 @@ class Invoice extends Model
         "icon" => "invoice-list",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 43,
     ];
 
     protected $fillable = [

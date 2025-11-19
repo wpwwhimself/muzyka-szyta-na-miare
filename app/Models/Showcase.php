@@ -14,7 +14,7 @@ class Showcase extends Model
         "icon" => "bullhorn",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 31,
     ];
 
     protected $fillable = [

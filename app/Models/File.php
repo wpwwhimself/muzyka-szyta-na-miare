@@ -20,7 +20,7 @@ class File extends Model
         "icon" => "file-multiple",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 65,
+        "ordering" => 11,
     ];
 
     protected $fillable = [

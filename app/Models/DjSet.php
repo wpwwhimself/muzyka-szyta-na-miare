@@ -10,11 +10,11 @@ class DjSet extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Zestawy DJa",
+        "icon" => "tray-full",
         "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "role" => "archmage",
+        "ordering" => 72,
     ];
 
     protected $fillable = [

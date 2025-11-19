@@ -18,7 +18,7 @@ class CalendarFreeDay extends Model
         "icon" => "calendar-lock",
         "description" => "Oznaczenia dni jako wolnych. Te dni nie będą brane pod uwagę podczas sugerowania terminów realizacji questów.",
         "role" => "technical",
-        "ordering" => 99,
+        "ordering" => 81,
     ];
 
     protected $fillable = [

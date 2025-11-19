@@ -20,7 +20,7 @@ class IncomeType extends Model
         "icon" => "cash-plus",
         "description" => "Grupy, do których przypisywane są wpłaty.",
         "role" => "archmage",
-        "ordering" => 80,
+        "ordering" => 41,
     ];
 
     use SoftDeletes, Userstamps;

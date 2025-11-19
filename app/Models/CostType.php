@@ -19,7 +19,7 @@ class CostType extends Model
         "icon" => "cash-minus",
         "description" => "Grupy, do których przypisywane są koszty.",
         "role" => "archmage",
-        "ordering" => 80,
+        "ordering" => 40,
     ];
 
     public $timestamps = false;

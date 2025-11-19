@@ -19,7 +19,7 @@ class GigPricePlace extends Model
         "icon" => "map-marker-distance",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 81,
+        "ordering" => 52,
     ];
 
     protected $fillable = [

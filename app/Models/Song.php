@@ -22,7 +22,7 @@ class Song extends Model
         "icon" => "disc",
         "description" => "Przetworzone utwory muzyczne.",
         "role" => "technical",
-        "ordering" => 2,
+        "ordering" => 1,
     ];
 
     public $incrementing = false;

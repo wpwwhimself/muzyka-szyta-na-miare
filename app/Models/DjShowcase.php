@@ -10,11 +10,11 @@ class DjShowcase extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Rolki DJowe",
+        "icon" => "guitar-electric",
         "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "role" => "archmage",
+        "ordering" => 33,
     ];
 
     protected $fillable = [

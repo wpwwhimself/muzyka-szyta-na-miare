@@ -10,11 +10,11 @@ class InvoiceQuest extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Pozycje faktury",
+        "icon" => "invoice-list-outline",
         "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "role" => "archmage",
+        "ordering" => 44,
     ];
 
     protected $fillable = [

@@ -20,7 +20,7 @@ class QuestType extends Model
         "icon" => "ev-plug-type1",
         "description" => "",
         "role" => "technical",
-        "ordering" => 99,
+        "ordering" => 23,
     ];
 
     public $timestamps = false;

@@ -12,11 +12,11 @@ class DjSong extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Utwory DJa",
+        "icon" => "music",
         "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "role" => "archmage",
+        "ordering" => 71,
     ];
 
     public $incrementing = false;

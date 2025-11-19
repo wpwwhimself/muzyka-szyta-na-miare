@@ -19,7 +19,7 @@ class ClientShowcase extends Model
         "icon" => "video-account",
         "description" => "Nagrania przesłane przez klientów, promowane na stronie.",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 36,
     ];
 
     protected $fillable = [

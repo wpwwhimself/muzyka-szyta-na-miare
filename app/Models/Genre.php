@@ -19,7 +19,7 @@ class Genre extends Model
         "icon" => "book-music",
         "description" => "Kategorie utworów, pozwalające pogrupować je pod kątem ich ogólnej charakterystyki.",
         "role" => "",
-        "ordering" => 70,
+        "ordering" => 3,
     ];
 
     public $timestamps = false;

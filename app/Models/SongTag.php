@@ -19,7 +19,7 @@ class SongTag extends Model
         "icon" => "tag",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 3,
+        "ordering" => 2,
     ];
 
     protected $fillable = ["name", "description"];

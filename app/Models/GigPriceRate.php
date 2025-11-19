@@ -19,7 +19,7 @@ class GigPriceRate extends Model
         "icon" => "speaker-message",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 80,
+        "ordering" => 51,
     ];
 
     protected $fillable = [

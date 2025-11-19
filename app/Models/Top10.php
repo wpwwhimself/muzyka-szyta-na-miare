@@ -10,10 +10,10 @@ class Top10 extends Model
     use HasFactory;
     
     public const META = [
-        "label" => "",
-        "icon" => "",
-        "description" => "",
-        "role" => "",
+        "label" => "Najlepsi",
+        "icon" => "chart-line",
+        "description" => "Dane przedstawiane w statystykach najlepszych - najlepsi klienci, najpopularniejsze zlecenia itp.",
+        "role" => "archmage",
         "ordering" => 99,
     ];
 

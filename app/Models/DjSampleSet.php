@@ -11,11 +11,11 @@ class DjSampleSet extends Model
     protected $keyType = "string";
 
     public const META = [
-        "label" => "",
-        "icon" => "",
+        "label" => "Zestawy sampli DJa",
+        "icon" => "puzzle",
         "description" => "",
-        "role" => "",
-        "ordering" => 99,
+        "role" => "archmage",
+        "ordering" => 73,
     ];
     
     protected $fillable = [

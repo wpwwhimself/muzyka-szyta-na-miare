@@ -19,7 +19,7 @@ class ShowcasePlatform extends Model
         "icon" => "account-group",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 30,
     ];
 
     protected $primaryKey = 'code';

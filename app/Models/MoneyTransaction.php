@@ -21,7 +21,7 @@ class MoneyTransaction extends Model
         "icon" => "cash-register",
         "description" => "Wpłaty i wydatki.",
         "role" => "",
-        "ordering" => 81,
+        "ordering" => 42,
     ];
 
     use SoftDeletes, Userstamps, HasUuids;

@@ -17,7 +17,7 @@ class StatusChange extends Model
         "icon" => "timeline",
         "description" => "",
         "role" => "technical",
-        "ordering" => 99,
+        "ordering" => 62,
     ];
 
     protected $fillable = [

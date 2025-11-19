@@ -19,7 +19,7 @@ class Cost extends Model
         "icon" => "cash-minus",
         "description" => "Koszty związane z działalnością - na sprzęt, outsourcing, rachunki itp.",
         "role" => "archmage",
-        "ordering" => 81,
+        "ordering" => 99,
     ];
 
     protected $fillable = [

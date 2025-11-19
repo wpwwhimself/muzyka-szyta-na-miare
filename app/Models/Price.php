@@ -18,7 +18,7 @@ class Price extends Model
         "icon" => "cash",
         "description" => "Poziomy cenowe dla różnych usług.",
         "role" => "technical",
-        "ordering" => 2,
+        "ordering" => 99,
     ];
 
     protected $fillable = [

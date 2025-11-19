@@ -19,7 +19,7 @@ class OrganShowcase extends Model
         "icon" => "piano",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 99,
+        "ordering" => 32,
     ];
 
     protected $fillable = [

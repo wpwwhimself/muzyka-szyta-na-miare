@@ -20,7 +20,7 @@ class Quest extends Model
         "icon" => "package-variant-closed",
         "description" => "",
         "role" => "",
-        "ordering" => 99,
+        "ordering" => 22,
     ];
 
     public $incrementing = false;

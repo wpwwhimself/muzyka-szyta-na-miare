@@ -19,7 +19,7 @@ class GigPriceDefault extends Model
         "icon" => "car-cog",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 82,
+        "ordering" => 53,
     ];
 
     protected $primaryKey = 'name';

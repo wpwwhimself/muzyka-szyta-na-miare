@@ -192,6 +192,12 @@ class MoneyTransaction extends Model
     {
         return $query->where("is_hidden", false);
     }
+
+    public function scopeFromGigs($query)
+    {
+        return $query->with("typable")
+            ->whereHas("typable", fn ($t) => $t->where("name", "regexp", "granie:"));
+    }
     #endregion
 
     #region attributes

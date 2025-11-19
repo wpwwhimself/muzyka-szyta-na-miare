@@ -168,6 +168,8 @@ Route::middleware("auth")->group(function(){
                 Route::get("/", "questsCalendar")->name("quests-calendar");
                 Route::get("/add-free-day", "qcModFreeDay")->name("qc-mod-free-day");
             });
+
+            Route::post("/gig-transaction/add", "addGigTransaction")->name("gig-transaction.add");
         });
 
         Route::prefix("finance")->group(function(){

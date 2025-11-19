@@ -6,7 +6,6 @@ use App\Mail\InvoiceReady;
 use App\Mail\MassPayment;
 use App\Mail\PaymentReturned;
 use App\Models\CalendarFreeDay;
-use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\GigPriceDefault;
 use App\Models\GigPricePlace;
@@ -29,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class StatsController extends Controller
 {
@@ -438,226 +438,51 @@ class StatsController extends Controller
 
     public function gigsDashboard()
     {
-        $gig_transactions = MoneyTransaction::where("typable_type", IncomeType::class)
-            ->whereIn("typable_id", IncomeType::where("name", "regexp", "granie:")->pluck("id"))
+        $gig_transactions = MoneyTransaction::fromGigs()
             ->get();
-        
-        dd($gig_transactions);
+        $one_month_back = $gig_transactions->filter(fn ($gt) => $gt->date->gte(today()->subMonths(1)));
+        $two_months_back = $gig_transactions->filter(fn ($gt) => $gt->date->gte(today()->subMonths(2)) && $gt->date->lt(today()->subMonths(1)));
+        $monthly = $gig_transactions->groupBy(fn ($gt) => $gt->date->format("Y-m"))
+            ->map(fn ($ts) => $ts->sum("amount"))
+            ->sortKeysDesc();
+        $year_back_month = today()->subMonths(12)->format("Y-m");
 
         $stats = [
             "summary" => [
                 "general" => [
-                    "łącznie grań" => MoneyTransaction::where("status_id", 19)->count(),
-                    "poznani klienci" => User::count(),
-                    "zarobki w sumie" => as_pln(MoneyTransaction::visible()->where("typable_type", IncomeType::class)->sum("amount"), 2, ",", " "),
+                    "łącznie grań" => $gig_transactions->count(),
+                    "zarobki w sumie" => as_pln($gig_transactions->sum("amount")),
                 ],
-                "quest_types" => [
-                    "split" => DB::table("quests")
-                        ->selectRaw("type, count(*) as count")
-                        ->join("quest_types", DB::raw("left(quests.song_id, 1)"), "quest_types.code")
-                        ->groupBy("type")
-                        ->orderByDesc("count")
-                        ->pluck("count", "type"),
-                    "total" => Quest::count(),
+            "gig_types" => [
+                    "split" => $gig_transactions->countBy(fn ($gt) => $gt->typable->name),
+                    "total" => $gig_transactions->count(),
                 ],
-                "quest_pricings" => [
-                    "split" => array_slice($quest_pricings, 0, 6),
-                    "total" => Song::where("price_code", "not regexp", "^\d*\.\d*$")->count(),
-                ],
-                "income_total" => $recent_gross_alltime,
             ],
-            "quests" => [
+            "gigs" => [
                 "recent" => [
                     "main" => [
-                        "nowe" => Quest::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
-                        "ukończone" => Quest::where("updated_at", ">=", Carbon::today()->subMonths(1))->where("status_id", 19)->count(),
-                        "debiutanckie" => User::where("created_at", ">=", Carbon::today()->subMonths(1))->count(),
-                        "max poprawek" => StatusChange::where("date", ">=", Carbon::today()->subMonths(1))->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
+                        "samodzielnie" => $one_month_back->filter(fn ($gt) => Str::contains($gt->typable->name, "sam"))->count(),
+                        "gościnnie" => $one_month_back->filter(fn ($gt) => Str::contains($gt->typable->name, "z kimś"))->count(),
+                        "organy" => $one_month_back->filter(fn ($gt) => Str::contains($gt->typable->name, "organy"))->count(),
+                        "koncert" => $one_month_back->filter(fn ($gt) => Str::contains($gt->typable->name, "koncert"))->count(),
                     ],
                     "compared_to" => [
-                        "nowe" => Quest::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
-                        "ukończone" => Quest::whereBetween("updated_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->where("status_id", 19)->count(),
-                        "debiutanckie" => User::whereBetween("created_at", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->count(),
-                        "max poprawek" => StatusChange::whereBetween("date", [Carbon::today()->subMonths(2), Carbon::today()->subMonths(1)])->whereIn("new_status_id", [16, 26])->groupBy("re_quest_id")->selectRaw("count(*) as count")->orderByDesc("count")->limit(1)->value("count"),
+                        "samodzielnie" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "sam"))->count(),
+                        "gościnnie" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "z kimś"))->count(),
+                        "organy" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "organy"))->count(),
+                        "koncert" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "koncert"))->count(),
                     ],
-                ],
-                "statuses" => [
-                    "split" => Quest::join("statuses", "statuses.id", "status_id")
-                        ->groupBy("status_name", "status_id")
-                        ->orderBy("status_id")
-                        ->selectRaw("status_id, status_name, count(*) as count")
-                        ->pluck("count", "status_name"),
-                    "total" => Quest::count(),
-                ],
-                "corrections" => [
-                    "rows" => StatusChange::whereIn("new_status_id", [16, 26])
-                        ->groupBy("re_quest_id")
-                        ->orderByDesc("Liczba poprawek")
-                        ->limit(10)
-                        ->join("quests", "re_quest_id", "quests.id", "left")
-                        ->join("user_notes", "quests.client_id", "user_notes.user_id", "left")
-                        ->join("songs", "quests.song_id", "songs.id", "left")
-                        ->join("genres", "songs.genre_id", "genres.id", "left")
-                        ->selectRaw("re_quest_id as 'ID zlecenia',
-                            user_notes.client_name as 'Klient',
-                            songs.title as 'Tytuł utworu',
-                            genres.name as 'Gatunek utworu',
-                            count(*) as 'Liczba poprawek'")
-                        ->get(),
-                    "footer" => DB::table(DB::raw("(SELECT re_quest_id, count(*) as count
-                            FROM status_changes
-                            WHERE new_status_id in (16, 26) AND date > '2023-01-01'
-                            GROUP BY re_quest_id) as x"))
-                        ->selectRaw("'średnio poprawek' as label, avg(count) as aver")
-                        ->pluck("aver", "label"),
-                ],
-                "deadlines" => [
-                    "soft" => $soft_deadline_count,
-                    "hard" => $hard_deadline_count,
-                ],
-                "requests" => [
-                    "split" => ModelsRequest::join("statuses", "statuses.id", "status_id")
-                        ->groupBy("status_name", "status_id")
-                        ->orderByDesc("status_id")
-                        ->selectRaw("status_id, status_name, count(*) as count")
-                        ->pluck("count", "status_name"),
-                    "total" => ModelsRequest::count(),
-                ],
-            ],
-            "clients" => [
-                "summary" => [
-                    "split" => [
-                        "zaufani" => User::whereHas("notes", fn ($q) => $q->where("trust", 1))->count(),
-                        "krętacze" => User::whereHas("notes", fn ($q) => $q->where("trust", -1))->count(),
-                        "patroni" => User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 2))->count(),
-                        "bez zleceń" => User::withCount("questsDone")
-                            ->having("quests_done_count", 0)
-                            ->whereHas("notes", fn ($q) => $q->where("extra_exp", 0))
-                            ->count(),
-                        "kobiety" => User::has("notes")
-                            ->get()
-                            ->filter(fn($client) => $client->notes->is_woman)
-                            ->count(),
-                    ],
-                    "total" => User::has("notes")->get()->count(),
-                ],
-                "exp" => [
-                    "split" => [
-                        "weterani (".VETERAN_FROM()."+)" => client_exp_tally($client_exp_raw, VETERAN_FROM()),
-                        "biegli (4-".(VETERAN_FROM()-1).")" => client_exp_tally($client_exp_raw, 4, VETERAN_FROM()-1),
-                        "zainteresowani (2-3)" => client_exp_tally($client_exp_raw, 2, 3),
-                        "nowicjusze (1)" => client_exp_tally($client_exp_raw, 1, 1),
-                    ],
-                    "total" => User::has("notes")->get()->count(),
-                ],
-                "new" => User::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
-                    ->whereDate("created_at", ">=", BEGINNING())
-                    ->selectRaw("DATE_FORMAT(created_at, '%y-%m') as month,
-                        count(*) as count")
-                    ->groupBy("month")
-                    ->orderBy("month")
-                    ->pluck("count", "month"),
-                "pickiness" => [
-                    "high" => [
-                        "rows" => User::has("notes")
-                            ->get()
-                            ->sortByDesc("notes.pickiness")
-                            ->take(10)
-                            ->map(fn($item, $key) => [
-                                "Nazwisko" => $item->notes->client_name,
-                                "Wybredność" => $item->notes->pickiness * 100 . "%",
-                            ])
-                            ->values(),
-                    ],
-                    // "low" => [
-                    //     "rows" => User::withCount("questsDone")
-                    //         ->where("trust", ">", -1)
-                    //         ->having("quests_done_count", ">", 0)
-                    //         ->join("quests", "client_id", "users.id")
-                    //         ->orderByDesc("quests.updated_at")
-                    //         ->distinct("client_name")
-                    //         ->get()
-                    //         ->sortBy("pickiness")
-                    //         ->take(5)
-                    //         ->map(fn($item, $key) => [
-                    //             "Nazwisko" => $item->client_name,
-                    //             "Wybredność" => $item->pickiness * 100 . "%",
-                    //         ])
-                    //         ->values(0),
-                    // ],
-                ],
-                "most_active" => [
-                    "rows" => Top10::whereHasMorph(
-                            "entity",
-                            [User::class],
-                            fn($q) => $q->where("type", "active")
-                        )
-                        ->get()
-                        ->map(fn($item, $key) => [
-                            "Nazwisko" => $item->entity->notes->client_name,
-                            "Liczba zleceń" => $item->entity->questsRecent()->count(),
-                        ])
-                        ->sortByDesc("Liczba zleceń")
-                        ->values(),
                 ],
             ],
             "finances" => [
-                "income" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
-                "prop" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[1]]),
-                "prop_per_h" => $income_per_h,
-                "costs" => $recent_costs->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
-                "gross" => $recent_gross,
-                "total" => [
-                    "main" => $finances_total,
-                    "compared_to" => $finances_total_last_year,
-                ],
-            ],
-            "songs" => [
-                "time_summary" => [
-                    "średnio na całość" => DB::table(DB::raw("(".SongWorkTime::groupBy("song_id")
-                            ->selectRaw("sec_to_time(sum(time_to_sec(time_spent))) as sum, song_id")
-                            ->toSql().") as x"))
-                        ->selectRaw("date_format(sec_to_time(avg(time_to_sec(sum))), '%k:%i') as mean")
-                        ->value("mean"),
-                    "średnio elementów" => DB::table(DB::raw("(".SongWorkTime::groupBy("song_id")
-                            ->selectRaw("count(song_id) as count")
-                            ->toSql().") as x"))
-                        ->where("count", ">", 1)
-                        ->average("count"),
-                ],
-                "time_genres" => [
-                    "main" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                    "main_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, avg(time_spent) as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                    "compared_to_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            // ->whereDate("since", "<", Carbon::today()->subMonth()) //TODO naprawić
-                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, avg(time_spent) as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                ],
+                "income" => $monthly->filter(fn ($amount, $month) => $month >= $year_back_month)
+                    ->map(fn ($amount, $month) => [
+                        "value" => $amount,
+                        "value_label" => as_pln($amount),
+                        "label" => $month,
+                    ]),
             ],
         ];
-        $stats = json_decode(json_encode($stats));
 
         return view("pages.".user_role().".stats.gigs", compact(
             "stats",
@@ -1293,4 +1118,14 @@ class StatsController extends Controller
         ));
     }
     #endregion
+
+    public function addGigTransaction(Request $rq)
+    {
+        $data = $rq->except("_token");
+        $data["typable_type"] = IncomeType::class;
+
+        MoneyTransaction::create($data);
+
+        return redirect()->route("stats-gigs")->with("toast", ["success", "Dodano transakcję"]);
+    }
 }

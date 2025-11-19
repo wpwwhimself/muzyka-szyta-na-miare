@@ -38,10 +38,10 @@ class ShipyardTheme
     public const FONTS = [
         "base" => ["Raleway", "sans-serif"],
         "heading" => ["Montserrat", "sans-serif"],
-        "mono" => ["Ubuntu Mono", "monospace"],
+        "mono" => ["Space Mono", "monospace"],
     ];
 
     // if fonts come from Google Fonts, add the URL here
-    public const FONT_IMPORT_URL = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap';
+    public const FONT_IMPORT_URL = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap';
     #endregion
 }

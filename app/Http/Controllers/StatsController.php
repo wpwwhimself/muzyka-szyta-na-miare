@@ -1123,6 +1123,7 @@ class StatsController extends Controller
     {
         $data = $rq->except("_token");
         $data["typable_type"] = IncomeType::class;
+        $data["is_hidden"] = true;
 
         MoneyTransaction::create($data);
 

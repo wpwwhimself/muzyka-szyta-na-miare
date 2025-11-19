@@ -52,6 +52,13 @@ return new class extends Migration
                         "step" => 0.01,
                     ],
                 ],
+                [
+                    "description",
+                    "text",
+                    "Opis",
+                    model_field_icon("money-transactions", "description"),
+                    false,
+                ],
             ],
         ]);
     }

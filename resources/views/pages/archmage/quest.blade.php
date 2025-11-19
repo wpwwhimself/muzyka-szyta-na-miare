@@ -229,10 +229,6 @@
         <x-song-work-time-log :quest="$quest" :extended="true" />
     </div>
 
-    @if($quest->status_id == 12)
-    <x-quest-history :quest="$quest" :extended="true" />
-    @endif
-
     <x-extendo-block key="client"
         :header-icon="model_icon('users')"
         title="Klient"

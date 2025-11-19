@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Shipyard\AuthController;
 use App\Mail\CustomMail;
+use App\Models\IncomeType;
+use App\Models\MoneyTransaction;
 use App\Models\StatusChange;
 use App\Models\Top10;
 use App\Models\User;
@@ -136,6 +138,14 @@ class ClientController extends Controller
                     $rq->budget - $client->notes->budget,
                     $client->id
                 );
+                MoneyTransaction::create([
+                    "typable_type" => IncomeType::class,
+                    "typable_id" => 2,
+                    "relatable_type" => User::class,
+                    "relatable_id" => $client->id,
+                    "amount" => $rq->budget - $client->notes->budget,
+                    "date" => today(),
+                ]);
                 $client->notes()->update(["budget" => $rq->budget]);
             }
         }

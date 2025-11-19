@@ -30,7 +30,7 @@
                 icon="plus"
                 action="none"
                 onclick="openModal('add-gig-transaction', {
-                    date: '{{ today() }}',
+                    date: '{{ today()->format('Y-m-d') }}',
                 });"
                 class="tertiary"
             />

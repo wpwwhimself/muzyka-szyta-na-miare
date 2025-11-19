@@ -57,7 +57,7 @@ class MoneyTransaction extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->name,
+                "slot" => $this,
             ])->render(),
         );
     }
@@ -65,9 +65,7 @@ class MoneyTransaction extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->description,
         );
     }
 
@@ -151,24 +149,40 @@ class MoneyTransaction extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "data transakcji",
+            "compare-using" => "field",
+            "discr" => "date",
+        ],
+        "amount" => [
+            "label" => "kwota",
+            "compare-using" => "field",
+            "discr" => "amount",
+        ],
     ];
 
     public const FILTERS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "type" => "<input type>",
-        //     "options" => [
-        //         "<label>" => <value>,
-        //     ],
-        // ],
+        "date" => [
+            "label" => "Data transakcji",
+            // "icon" => "",
+            "compare-using" => "field",
+            "discr" => "date",
+            "type" => "date",
+        ],
+        "type" => [
+            "label" => "Rodzaj transakcji",
+            "icon" => "ev-plug-type1",
+            "compare-using" => "field",
+            "discr" => "typable_type",
+            "type" => "select",
+            "selectData" => [
+                "options" => [
+                    ["label" => "Koszt", "value" => CostType::class],
+                    ["label" => "Przychod", "value" => IncomeType::class],
+                ],
+                "emptyOption" => true,
+            ],
+        ],
     ];
 
     #region scopes

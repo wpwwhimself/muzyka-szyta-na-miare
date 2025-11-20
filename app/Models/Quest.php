@@ -28,8 +28,8 @@ class Quest extends Model
 
     protected $fillable = [
         "id",
+        "song_id", "client_id", "status_id",
         "price_code_override", "price", "paid",
-        "status_id",
         "deadline", "hard_deadline", "delayed_payment",
         "wishes",
         "files_ready",

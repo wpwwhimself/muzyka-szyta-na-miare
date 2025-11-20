@@ -143,14 +143,12 @@ class Song extends Model
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "wrench",
+            "label" => "Edytuj po staremu",
+            "show-on" => "edit",
+            "route" => "song-edit",
+        ],
     ];
     #endregion
 

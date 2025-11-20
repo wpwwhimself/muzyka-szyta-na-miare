@@ -78,7 +78,6 @@ function primeReload() {
 const changeFilePlayerButton = (filename, icon) => {
     document.querySelectorAll(`.file-player[data-file-name="${filename}"] [role="btn"]`)
         .forEach(cntnr => {
-            console.log(cntnr.children[0].id, `mdi-${icon}`);
             cntnr.classList.toggle("hidden", cntnr.children[0].id != `mdi-${icon}`);
         });
 }

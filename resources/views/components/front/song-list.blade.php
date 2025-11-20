@@ -1,8 +1,9 @@
 @props([
     "songs",
+    "for",
 ])
 
-<ul>
+<ul id="{{ $for }}-song-list">
     @foreach ($songs as $song)
     <li
         data-song-genre="{{ $song->genre_id }}"
@@ -17,7 +18,7 @@
             onclick="openSongDemo(
                 `{{ $song->id }}`,
                 `{{ $song->full_title }}`,
-                `{{ Str::of($song->notes ?? '')->replace('\n', '<br>') || '' }}`
+                `{{ Str::of($song->notes ?? '')->replace('\n', '<br>') }}`
             )"
         >
             <x-shipyard.app.icon :name="model_icon('songs')" />

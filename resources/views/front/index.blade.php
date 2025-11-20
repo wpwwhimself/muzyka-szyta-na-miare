@@ -71,16 +71,16 @@ function getSongList(domain = undefined) {
         .then(({data, table}) => {
             const list = document.querySelector(`#songs ul#${domain}-song-list`);
             list.replaceWith(fromHTML(table));
-            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="${domain}-songs-count">${data.length}</b></p>`);            
+            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="${domain}-songs-count">${data.length}</b></p>`);
         });
 }
 
 function openSongDemo(song_id = undefined, song_title = undefined, song_desc = undefined) {
-    const player = document.querySelector("#songs audio");
     const popup = document.querySelector("#song-demo-popup");
+    const player = popup.querySelector("audio");
 
     popup.classList.toggle("open", song_id !== undefined);
-    
+
     if (song_id == undefined) {
         pauseFilePlayer("");
     }
@@ -176,10 +176,10 @@ function openSongDemo(song_id = undefined, song_title = undefined, song_desc = u
 </section>
 
 <div id="song-demo-popup" class="popup">
-    <div class="popup-contents flex down center">
+    <div class="popup-contents flex down center middle">
         <h3 class="song-full-title"></h3>
         <p class="song-desc"></p>
-        
+
         <x-file-player type="ogg" file="" is-showcase />
 
         <x-shipyard.ui.button

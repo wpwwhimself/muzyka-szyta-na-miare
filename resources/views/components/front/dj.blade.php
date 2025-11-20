@@ -99,7 +99,7 @@
                     class="tertiary"
                     label="wszystkie"
                     icon="close-circle"
-                    onclick="filterSongs(`podklady`)"
+                    onclick="filterSongs(`dj`)"
                 />
 
                 @foreach ($genres as $genre)
@@ -108,7 +108,7 @@
                     class="tertiary"
                     :label="$genre->name"
                     icon="radio"
-                    onclick="filterSongs(`podklady`, 'genre', {{ $genre->id }})"
+                    onclick="filterSongs(`dj`, 'genre', {{ $genre->id }})"
                 />
                 @endforeach
 

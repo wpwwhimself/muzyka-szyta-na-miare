@@ -140,6 +140,11 @@ class Song extends Model
             "mode" => "one",
             "field_label" => "Gatunek",
         ],
+        "quests" => [
+            "model" => Quest::class,
+            "mode" => "many",
+            "readonly" => true,
+        ],
     ];
 
     public const ACTIONS = [

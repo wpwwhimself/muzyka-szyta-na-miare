@@ -424,6 +424,12 @@ footer .icon.invert-when-dark {
     }
 }
 
+.phase-bar {
+    & > [role="label"] > * {
+        margin: 0;
+    }
+}
+
 .priority {
     div&,
     &.submit {
@@ -551,7 +557,7 @@ section, .section {
     &:not(.black-back) {
         background: var(--bg);
     }
-    
+
     &.container {
         container-name: section;
         container-type: inline-size;

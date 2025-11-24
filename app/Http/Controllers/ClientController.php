@@ -97,9 +97,11 @@ class ClientController extends Controller
         if(!in_array(Auth::id(), [1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         $client = User::findOrFail($id);
-        $client->update([
-            "email" => $rq->email,
-        ]);
+        if ($rq->email) {
+            $client->update([
+                "email" => $rq->email,
+            ]);
+        }
         $client->notes()->update([
             "client_name" => $rq->client_name,
             "email" => $rq->email,

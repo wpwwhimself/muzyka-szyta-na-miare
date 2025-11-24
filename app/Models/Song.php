@@ -22,7 +22,7 @@ class Song extends Model
         "icon" => "disc",
         "description" => "Przetworzone utwory muzyczne.",
         "role" => "technical",
-        "ordering" => 1,
+        "ordering" => 2,
     ];
 
     public $incrementing = false;
@@ -35,6 +35,7 @@ class Song extends Model
         "link",
         "price_code",
         "has_recorded_reel", "has_original_mv",
+        "composition_id",
     ];
 
     #region presentation
@@ -46,7 +47,7 @@ class Song extends Model
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->full_title,
+            get: fn () => "[$this->id] $this->full_title",
         );
     }
 
@@ -138,6 +139,11 @@ class Song extends Model
             "model" => Quest::class,
             "mode" => "many",
             "readonly" => true,
+        ],
+        "composition" => [
+            "model" => Composition::class,
+            "mode" => "one",
+            "field_label" => "Kompozycja nadrzędna",
         ],
     ];
 
@@ -293,6 +299,11 @@ class Song extends Model
     public function type()
     {
         return $this->belongsTo(QuestType::class, "type_letter", "code");
+    }
+
+    public function composition()
+    {
+        return $this->belongsTo(Composition::class);
     }
     #endregion
 }

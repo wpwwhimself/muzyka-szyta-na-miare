@@ -30,7 +30,8 @@ class Request extends Model
         "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",
         "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes",
         "price_code", "price", "deadline", "hard_deadline", "delayed_payment",
-        "status_id", "quest_id"
+        "status_id", "quest_id",
+        "composition_id",
     ];
 
     #region presentation

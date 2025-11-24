@@ -6,35 +6,38 @@ use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\View\ComponentAttributeBag;
+use Mattiverse\Userstamps\Traits\Userstamps;
 
-class SongTag extends Model
+class Composition extends Model
 {
-    use HasFactory;
+    //
 
     public const META = [
-        "label" => "Tagi utworów",
-        "icon" => "tag",
-        "description" => "",
+        "label" => "Kompozycje",
+        "icon" => "music",
+        "description" => "Byty nadrzędne dla utworów. Każda kompozycja może mieć wiele wykonań, przechowywanych jako utwory.",
         "role" => "archmage",
-        "ordering" => 3,
+        "ordering" => 1,
     ];
 
-    protected $fillable = ["name", "description"];
-    public $timestamps = false;
+    protected $fillable = [
+        "title",
+        "composer",
+    ];
 
     #region presentation
     public function __toString(): string
     {
-        return $this->name;
+        return $this->full_title;
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->name,
+            get: fn () => $this->full_title,
         );
     }
 
@@ -47,7 +50,7 @@ class SongTag extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->name,
+                "slot" => $this->full_title,
             ])->render(),
         );
     }
@@ -76,29 +79,30 @@ class SongTag extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "title" => [
+            "type" => "text",
+            "label" => "Tytuł",
+            "icon" => "badge-account",
+        ],
+        "composer" => [
+            "type" => "text",
+            "label" => "Kompozytor",
+            "icon" => "account-music",
+        ],
     ];
 
     public const CONNECTIONS = [
-        // "<name>" => [
-        //     "model" => ,
-        //     "mode" => "<one|many>",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "songs" => [
+            "model" => Song::class,
+            "mode" => "many",
+            "readonly" => true,
+            // "field_name" => "",
+            "field_label" => "Przypisane:",
+        ],
+        "tags" => [
+            "model" => SongTag::class,
+            "mode" => "many",
+        ],
     ];
 
     public const ACTIONS = [
@@ -123,17 +127,14 @@ class SongTag extends Model
     ];
 
     public const FILTERS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
-        //     "options" => [
-        //         "<label>" => <value>,
-        //     ],
-        // ],
+        "title" => [
+            "label" => "Tytuł",
+            "icon" => "badge-account",
+            "compare-using" => "field",
+            "discr" => "title",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
     ];
 
     #region scopes
@@ -171,12 +172,27 @@ class SongTag extends Model
     //         ],
     //     );
     // }
+
+    public function fullTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => implode(' – ', array_filter([
+                $this->composer,
+                $this->title ?? 'utwór bez tytułu',
+            ], fn($v) => !empty($v))),
+        );
+    }
     #endregion
 
     #region relations
     public function songs()
     {
-        return $this->belongsToMany(Song::class);
+        return $this->hasMany(Song::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(SongTag::class);
     }
     #endregion
 

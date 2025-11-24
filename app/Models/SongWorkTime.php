@@ -19,7 +19,7 @@ class SongWorkTime extends Model
         "icon" => "wrench-clock",
         "description" => "",
         "role" => "archmage",
-        "ordering" => 4,
+        "ordering" => 9,
     ];
 
     protected $fillable = [

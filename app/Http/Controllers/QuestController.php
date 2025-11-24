@@ -285,12 +285,15 @@ class QuestController extends Controller
         $deadline_before = $quest->deadline;
         $delayed_payment_before = $quest->delayed_payment;
         $price_data = StatsController::runPriceCalc($rq->price_code_override, $quest->client_id);
+        $delayed_payment_data = StatsController::runMonthlyPaymentLimit($price_data["price"]);
         $quest->update([
             "price_code_override" => $rq->price_code_override,
             "price" => $price_data["price"],
             "paid" => ($quest->payments_sum >= $price_data["price"]),
             "deadline" => $rq->deadline,
-            "delayed_payment" => $rq->delayed_payment,
+            "delayed_payment" => $delayed_payment_data["when_to_ask"] > 0
+                ? today()->addMonths($delayed_payment_data["when_to_ask"])->firstOfMonth()->format("Y-m-d")
+                : null,
         ]);
         $difference = $quest->price - $price_before;
         if($quest->user->notes->budget){

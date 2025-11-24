@@ -103,7 +103,9 @@
                     pop="Zmień wycenę"
                     action="none"
                     onclick="openModal('quest-quote-update', {
-                        questId: '{{ $quest->id }}',
+                        id: '{{ $quest->id }}',
+                        price_code_override: '{{ $quest->price_code_override }}',
+                        deadline: '{{ $quest->deadline?->format('Y-m-d') }}',
                     })"
                     class="tertiary"
                 />

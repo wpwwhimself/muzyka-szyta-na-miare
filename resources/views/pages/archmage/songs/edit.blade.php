@@ -24,7 +24,6 @@ function setFormToFileUpload() {
                     "title",
                     "artist",
                     "link",
-                    "notes",
                     "price_code",
                 ] as $field_name)
                 <div>

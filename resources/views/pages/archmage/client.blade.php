@@ -24,7 +24,7 @@
                 <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
                 @endforeach
             </div>
-            
+
             @foreach ([
                 "trust",
                 "budget",
@@ -65,6 +65,25 @@
                 </tbody>
             </table>
         </x-section>
+
+        <x-shipyard.app.section title="Statystyki" icon="finance">
+            <div class="flex right center middle">
+                @foreach ([
+                    ["Pierwsze zlecenie", "star", $client->created_at->format("Y-m-d")],
+                    ["Doświadczenie", "abacus", $client->notes->exp],
+                    ["Zlecenia w toku", model_icon('quests'), $client->notes->upcoming_quests_count ?? 0],
+                ] as [$label, $icon, $value])
+                <x-shipyard.app.icon-label-value
+                    :icon="$icon"
+                    :label="$label"
+                >
+                    {{ $value }}
+                </x-shipyard.app.icon-label-value>
+                @endforeach
+
+                <x-shipyard.app.model.badges :badges="$client->notes->badges" />
+            </div>
+        </x-shipyard.app.section>
     </div>
 </x-shipyard.app.form>
 @endsection

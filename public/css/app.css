@@ -441,6 +441,10 @@ footer .icon.invert-when-dark {
     &.submit {
         color: rgb(var(--danger));
     }
+
+    &.button {
+        --accent-color: var(--danger);
+    }
 }
 
 #quest-history {

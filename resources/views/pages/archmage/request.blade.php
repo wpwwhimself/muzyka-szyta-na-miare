@@ -49,7 +49,7 @@
                 :icon="$new_status->icon"
                 :value="$status_id"
                 :pop="$label"
-                :class="$status_id < 0 ? 'priority' : ''"
+                :class="$status_id < 0 ? 'priority' : 'primary'"
             />
             @endif
         @endforeach

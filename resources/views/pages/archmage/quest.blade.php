@@ -35,8 +35,8 @@
                 name="status_id"
                 :icon="$new_status->icon"
                 :value="$status_id"
-                :pop="$label"
-                :class="$nomail ? 'warning' : ''"
+                :pop="$label . ($nomail ? ' (bez maila)' : '')"
+                :class="$nomail ? 'danger' : 'primary'"
             />
             @endif
         @endforeach

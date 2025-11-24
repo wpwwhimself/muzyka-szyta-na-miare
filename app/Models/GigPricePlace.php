@@ -79,24 +79,18 @@ class GigPricePlace extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "selectData" => [ // for select
-        //         "options" => ["label" => "", "value" => ""],
-        //         "emptyOption" => "",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofillFrom" => ["<route>", "<model_name>"],
-        //     // "characterLimit" => 999, // for text fields
-        //     // "hideForEntmgr" => true,
-        //     // "role" => "",
-        // ],
+        "description" => [
+            "type" => "TEXT",
+            "label" => "Opis",
+            "icon" => "text",
+        ],
+        "distance_km" => [
+            "type" => "number",
+            "label" => "Odległość [km]",
+            "icon" => "number",
+            "step" => 1,
+            "min" => 0,
+        ],
     ];
 
     public const CONNECTIONS = [

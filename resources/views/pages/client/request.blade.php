@@ -56,7 +56,6 @@ $fields = $request::getFields();
                 "artist",
                 "link",
                 "wishes",
-                "wishes_quest",
             ] as $field_name)
                 <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" dummy />
                 @if ($field_name == "link")

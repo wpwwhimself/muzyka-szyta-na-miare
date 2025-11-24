@@ -33,7 +33,7 @@ class Song extends Model
         "title", "artist",
         "genre_id",
         "link",
-        "price_code", "notes",
+        "price_code",
         "has_recorded_reel", "has_original_mv",
     ];
 
@@ -109,12 +109,6 @@ class Song extends Model
             "type" => "text",
             "label" => "Kod wyceny",
             "icon" => "barcode",
-        ],
-        "notes" => [
-            "type" => "TEXT",
-            "label" => "Życzenia dot. utworu",
-            "icon" => "cloud",
-            "hint" => "np. styl itp.",
         ],
         "has_recorded_reel" => [
             "type" => "checkbox",

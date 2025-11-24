@@ -148,7 +148,6 @@
                 "artist",
                 "link",
                 "wishes",
-                "wishes_quest",
                 "hard_deadline",
             ] as $field_name)
                 <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />

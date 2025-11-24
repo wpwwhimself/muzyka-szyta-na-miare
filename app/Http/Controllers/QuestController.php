@@ -263,7 +263,6 @@ class QuestController extends Controller
             "title" => $rq->title,
             "artist" => $rq->artist,
             "link" => yt_cleanup($rq->link),
-            "notes" => $rq->wishes,
         ]);
         return back()->with("toast", ["success", "Utwór zmodyfikowany"]);
     }
@@ -272,7 +271,7 @@ class QuestController extends Controller
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
         $quest->update([
-            "wishes" => $rq->wishes_quest,
+            "wishes" => $rq->wishes,
         ]);
         return back()->with("toast", ["success", "Zlecenie zmodyfikowane"]);
     }

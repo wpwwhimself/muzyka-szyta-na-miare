@@ -118,9 +118,9 @@ class Quest extends Model
         ],
         "wishes" => [
             "type" => "TEXT",
-            "label" => "Życzenia dot. zlecenia",
+            "label" => "Życzenia",
             "icon" => "cloud",
-            "hint" => "np. transpozycja, czy z linią melodyczną itp.",
+            "hint" => "np. budowa utworu, transpozycja, czy z linią melodyczną itp.",
         ],
         "delayed_payment" => [
             "type" => "date",

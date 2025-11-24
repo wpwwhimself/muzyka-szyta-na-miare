@@ -24,7 +24,6 @@
             <x-shipyard.ui.field-input :model="$quest->song" field-name="link" dummy />
             <x-link-interpreter :raw="$quest->song->link" />
 
-            <x-shipyard.ui.field-input :model="$quest->song" field-name="notes" dummy />
             <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
         </x-extendo-block>
 

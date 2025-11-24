@@ -240,7 +240,6 @@ class RequestController extends Controller
                     "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
                     "wishes" => $rq->wishes,
-                    "wishes_quest" => $rq->wishes_quest,
 
                     "price_code" => $price_data["labels"],
                     "price" => $price_data["price"],
@@ -258,7 +257,6 @@ class RequestController extends Controller
                         "link" => yt_cleanup($rq->link),
                         "genre_id" => $rq->genre_id,
                         "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
-                        "notes" => $rq->wishes,
                     ]);
                 }
                 if($rq->client_id){
@@ -371,7 +369,6 @@ class RequestController extends Controller
                 "link" => yt_cleanup($rq->link),
                 "genre_id" => $rq->genre_id,
                 "wishes" => $rq->wishes,
-                "wishes_quest" => $rq->wishes_quest,
 
                 "price_code" => $price_data["labels"],
                 "price" => $price_data["price"],
@@ -389,7 +386,6 @@ class RequestController extends Controller
                     "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
                     "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
-                    "notes" => $rq->wishes,
                 ]);
             }
             if($client){
@@ -480,7 +476,6 @@ class RequestController extends Controller
                 $song->link = yt_cleanup($request->link);
                 $song->genre_id = $request->genre_id;
                 $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
-                $song->notes = $request->wishes;
                 $song->save();
 
                 $request->song_id = $song->id;
@@ -530,7 +525,7 @@ class RequestController extends Controller
             $quest->deadline = ($with_priority) ? get_next_working_day() : $request->deadline;
             $quest->hard_deadline = $request->hard_deadline;
             $quest->delayed_payment = $request->delayed_payment;
-            $quest->wishes = $request->wishes_quest;
+            $quest->wishes = $request->wishes;
             $quest->save();
 
             // $invoice = Invoice::create([

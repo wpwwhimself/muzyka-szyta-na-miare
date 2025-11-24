@@ -72,7 +72,6 @@
                     "link",
                     "has_recorded_reel",
                     "has_original_mv",
-                    "notes",
                 ] as $field_name)
                 <div>
                     <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
@@ -234,7 +233,7 @@
     <x-extendo-block key="client"
         :header-icon="model_icon('users')"
         title="Klient"
-        :subtitle="$quest->user"
+        :subtitle="$quest->user->name_and_badges"
     >
         <div class="grid but-halfsize-down" style="--col-count: 2;">
             @foreach ([

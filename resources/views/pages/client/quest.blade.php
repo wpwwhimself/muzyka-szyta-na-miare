@@ -35,7 +35,6 @@
                 "title",
                 "artist",
                 "link",
-                "notes",
             ] as $field_name)
             <div>
                 <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />

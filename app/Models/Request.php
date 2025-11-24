@@ -28,7 +28,7 @@ class Request extends Model
     protected $fillable = [
         "made_by_me",
         "client_id", "client_name", "email", "phone", "other_medium", "contact_preference",
-        "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes", "wishes_quest",
+        "song_id", "quest_type_id", "title", "artist", "link", "genre_id", "wishes",
         "price_code", "price", "deadline", "hard_deadline", "delayed_payment",
         "status_id", "quest_id"
     ];
@@ -136,15 +136,9 @@ class Request extends Model
         ],
         "wishes" => [
             "type" => "TEXT",
-            "label" => "Życzenia dot. utworu",
+            "label" => "Życzenia",
             "icon" => "cloud",
-            "hint" => "np. styl itp.",
-        ],
-        "wishes_quest" => [
-            "type" => "TEXT",
-            "label" => "Życzenia dot. zlecenia",
-            "icon" => "cloud",
-            "hint" => "np. transpozycja, czy z linią melodyczną itp.",
+            "hint" => "np. styl, budowa utworu, transpozycja, czy z linią melodyczną itp.",
         ],
         "hard_deadline" => [
             "type" => "date",

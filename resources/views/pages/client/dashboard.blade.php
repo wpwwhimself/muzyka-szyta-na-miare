@@ -4,60 +4,38 @@
 @section('content')
 
 <div class="grid" style="--col-count: 2;">
-    <x-section title="Zlecenia wymagające odpowiedzi" icon="bell" id="dashboarrd-quests-review" style="grid-column: span 2;">
+    <x-section title="Na tapecie" subtitle="Aktualne zlecenia i zapytania" :icon="model_icon('quests')" style="grid-column: span 2;">
         <x-slot name="buttons">
             <x-tutorial>
                 Kliknij na poniższe wiersze, aby zobaczyć szczegóły zlecenia. Możesz najechać na większość symboli, aby pokazać ich znaczenie.
             </x-tutorial>
-            <x-a href="{{ route('quests') }}">Wszystkie</x-a>
         </x-slot>
 
         <div class="flex down">
-            @forelse ($quests_review as $quest)
-            <x-quests.tile :quest="$quest" />
+            @forelse (
+                $quests_review
+                    ->merge($quests_ongoing)
+                    ->merge($requests)
+            as $item)
+                @if ($item instanceof \App\Models\Request)
+                <x-requests.tile :request="$item" />
+                @else
+                <x-quests.tile :quest="$item" />
+                @endif
             @empty
             <p class="grayed-out">brak aktywnych zleceń</p>
             @endforelse
         </div>
     </x-section>
 
-    <x-section title="Aktualne zlecenia" :icon="model_icon('quests')" id="dashboard-quests-ongoing">
-        <x-slot name="buttons">
-            <x-a :href="route('quests')">Wszystkie</x-a>
-        </x-slot>
-
-        <div class="flex down">
-            @forelse ($quests_ongoing as $quest)
-            <x-quests.tile :quest="$quest" />
-            @empty
-            <p class="grayed-out">brak aktywnych zleceń</p>
-            @endforelse
-        </div>
-    </x-section>
-
-    <x-section title="Aktualne zapytania" :icon="model_icon('requests')" id="dashboard-requests">
-        <x-slot name="buttons">
-            <x-a :href="route('requests')">Wszystkie</x-a>
-        </x-slot>
-
-        <div class="flex down">
-            @forelse ($requests as $request)
-            <x-requests.tile :request="$request" />
-            @empty
-            <p class="grayed-out">brak aktywnych zapytań</p>
-            @endforelse
-        </div>
-    </x-section>
-
-    <x-section id="who-am-i" class="sc-line"
-        :title="Auth::user()->notes->client_name"
+    <x-section id="who-am-i"
+        title="Moje dane"
+        :subtitle="Auth::user()->notes"
         :icon="model_icon('user_notes')"
         :extended="false"
+        scissors
     >
         <x-slot name="buttons">
-            <x-tutorial>
-                To jest Twój pulpit klienta. Znajdziesz tu m.in. podsumowanie Twoich zleceń oraz informacje dotyczące spraw finansowych.
-            </x-tutorial>
             <x-a href="{{ route('client-view', ['id' => Auth::id()]) }}">Edytuj profil</x-a>
         </x-slot>
 

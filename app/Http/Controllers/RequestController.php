@@ -10,6 +10,7 @@ use App\Mail\NewRequest\Organista;
 use App\Mail\NewRequest\Podklady;
 use App\Mail\Onboarding;
 use App\Mail\RequestQuoted;
+use App\Models\Composition;
 use App\Models\IncomeType;
 use App\Models\MoneyTransaction;
 use App\Models\Quest;
@@ -369,6 +370,7 @@ class RequestController extends Controller
                 "link" => yt_cleanup($rq->link),
                 "genre_id" => $rq->genre_id,
                 "wishes" => $rq->wishes,
+                "composition_id" => $rq->composition_id,
 
                 "price_code" => $price_data["labels"],
                 "price" => $price_data["price"],
@@ -386,6 +388,7 @@ class RequestController extends Controller
                     "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
                     "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
+                    "composition_id" => $rq->composition_id,
                 ]);
             }
             if($client){
@@ -476,9 +479,21 @@ class RequestController extends Controller
                 $song->link = yt_cleanup($request->link);
                 $song->genre_id = $request->genre_id;
                 $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
+
+                // add new composition if not exists
+                $composition = Composition::firstOrCreate(
+                    ["id" => $request->composition_id],
+                    [
+                        "title" => $request->title,
+                        "composer" => $request->artist,
+                    ]
+                );
+                $song->composition_id = $composition->id;
+
                 $song->save();
 
                 $request->song_id = $song->id;
+                $request->composition_id = $composition->id;
             }
             //add new client if not exists
             if(!$request->client_id){
@@ -637,6 +652,7 @@ class RequestController extends Controller
             "notes" => $song->notes,
             "genre_id" => $song->genre_id,
             "quest_type_id" => $song->type->id,
+            "composition_id" => $song->composition_id,
         ]);
 
         return back()->with("toast", ["success", "Utwór przypisany"]);

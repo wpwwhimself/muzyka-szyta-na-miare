@@ -147,6 +147,17 @@
                 "title",
                 "artist",
                 "link",
+            ] as $field_name)
+                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+                @if ($field_name == "link")
+                <x-link-interpreter :raw="$request->$field_name" />
+                @endif
+            @endforeach
+
+            <x-shipyard.ui.connection-input :model="$request" connection-name="genre" />
+            <x-shipyard.ui.connection-input :model="$request" connection-name="composition" />
+
+            @foreach ([
                 "wishes",
                 "hard_deadline",
             ] as $field_name)
@@ -155,7 +166,6 @@
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
             @endforeach
-            <x-shipyard.ui.connection-input :model="$request" connection-name="genre" />
         </x-extendo-block>
 
         <x-extendo-block key="quote"

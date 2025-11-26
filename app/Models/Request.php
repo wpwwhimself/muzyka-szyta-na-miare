@@ -189,6 +189,11 @@ class Request extends Model
             "mode" => "one",
             "field_label" => "Gatunek",
         ],
+        "composition" => [
+            "model" => Composition::class,
+            "mode" => "one",
+            "field_label" => "Oryginalna kompozycja",
+        ],
     ];
 
     public const ACTIONS = [
@@ -309,6 +314,10 @@ class Request extends Model
     }
     public function song(){
         return $this->belongsTo(Song::class);
+    }
+    public function composition()
+    {
+        return $this->belongsTo(Composition::class);
     }
     public function history(){
         return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");

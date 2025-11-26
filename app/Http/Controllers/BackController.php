@@ -271,9 +271,7 @@ class BackController extends Controller
                 "title" => $s->title,
                 "artist" => $s->artist,
                 "link" => view("components.link-interpreter", ['raw' => $s->link])->render(),
-                "notes" => $s->notes
-                    ? '<span '.Popper::pop(Markdown::parse($s->notes)).'>'.view("components.shipyard.app.icon", ["name" => model_field_icon("songs", "notes")]).'</span>'
-                    : null,
+                "composition" => $s->composition?->full_title,
             ]))
             ->values();
         $headings = collect([
@@ -281,7 +279,7 @@ class BackController extends Controller
             "Tytuł",
             "Wykonawca",
             "Linki",
-            "Notatki",
+            "Kompozycja",
         ]);
 
         return view("components.shipyard.ui.lookup-results", compact(

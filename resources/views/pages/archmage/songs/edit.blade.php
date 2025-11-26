@@ -37,10 +37,23 @@ function setFormToFileUpload() {
 
                 <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
             </div>
+
+            <x-shipyard.app.h lvl="3" :icon="model_icon('compositions')">Dane kompozycji</x-shipyard.app.h>
+            @php
+            $composition = $song->composition;
+            @endphp
+            @if ($composition)
+            <div class="grid but-halfsize-down" style="--col-count: 2;">
+                <x-shipyard.ui.field-input :model="$composition" field-name="title" dummy />
+                <x-shipyard.ui.field-input :model="$composition" field-name="composer" dummy />
+            </div>
+            @else
+            <span class="ghost">Brak powiązania</span>
+            @endif
         </x-section>
 
         <x-section title="Reklama" :icon="model_icon('showcases')">
-            <x-shipyard.app.h lvl="4" :icon="model_icon('showcases')">Showcase</x-shipyard.app.h>
+            <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Showcase</x-shipyard.app.h>
             @if($song->has_showcase_file)
             <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
             @else
@@ -51,7 +64,7 @@ function setFormToFileUpload() {
                 onchange="setFormToFileUpload();"
             />
 
-            <x-shipyard.app.h lvl="4" :icon="model_icon('song-tags')">Tagi</x-shipyard.app.h>
+            <x-shipyard.app.h lvl="3" :icon="model_icon('song-tags')">Tagi</x-shipyard.app.h>
             <div class="flex right center wrap">
                 @foreach ($tags as $tag)
                 <x-shipyard.ui.input type="checkbox"
@@ -64,7 +77,7 @@ function setFormToFileUpload() {
                 @endforeach
             </div>
 
-            <x-shipyard.app.h lvl="4" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>
+            <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>
             <x-shipyard.ui.input type="select"
                 name="reel_platform"
                 label="Platforma"
@@ -83,7 +96,19 @@ function setFormToFileUpload() {
         </x-section>
     </div>
 
-    <x-button action="submit" label="Popraw dane" icon="pencil" />
+    <div class="flex right middle center">
+        <x-shipyard.ui.button
+            label="Popraw dane"
+            icon="pencil"
+            class="primary"
+            action="submit"
+        />
+        <x-shipyard.ui.button
+            label="Edytuj mocniej"
+            icon="database"
+            :action="route('admin.model.edit', ['model' => 'songs', 'id' => $song->id])"
+        />
+    </div>
 </x-shipyard.app.form>
 
 <x-extendo-block key="reel_desc" title="Opis" header-icon="text">

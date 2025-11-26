@@ -150,7 +150,7 @@ class Composition extends Model
     }
 
     protected $appends = [
-
+        "full_title",
     ];
 
     use HasStandardAttributes;

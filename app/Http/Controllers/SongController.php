@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Composition;
 use App\Models\DjSong;
 use App\Models\FileTag;
 use App\Models\Genre;
@@ -188,10 +189,11 @@ class SongController extends Controller
         return Song::find($id)->toJson();
     }
 
-    public function getForFront(){
+    public function getForFront()
+    {
         $song_groups = [
-            "songs" => Song::with("tags")
-                ->where("id", "not like", "O%")
+            "songs" => Composition::with("songs", "tags")
+                ->whereHas("songs", fn ($q) => $q->where("id", "not like", "O%"))
                 ->get(),
             "dj_songs" => DjSong::all(),
         ];
@@ -203,7 +205,7 @@ class SongController extends Controller
 
         $songs = $songs->sortBy([
             fn ($a, $b) => ($a["title"] ?? "bez tytułu") <=> ($b["title"] ?? "bez tytułu"), // nulls last
-            "artist",
+            "composer",
         ])->values();
 
         $table = view("components.front.song-list", [
@@ -215,6 +217,14 @@ class SongController extends Controller
             "data" => $songs,
             "table" => $table,
         ];
+    }
+
+    public function getComposition(Composition $composition)
+    {
+        return response()->json([
+            "composition" => $composition,
+            "songs" => $composition->songs,
+        ]);
     }
 
     public function changeLink(Request $rq){

@@ -75,6 +75,18 @@ function getSongList(domain = undefined) {
         });
 }
 
+function startDemo(song_id) {
+    const popup = document.querySelector("#song-demo-popup");
+    const player = popup.querySelector("audio");
+
+    player.src = `showcase/show/${song_id}`;
+    player.parentElement.classList.remove("hidden");
+    player.load();
+    player.addEventListener("canplay", () => {
+        startFilePlayer("");
+    });
+}
+
 function openSongDemo(song_id = undefined, song_title = undefined, song_desc = undefined) {
     const popup = document.querySelector("#song-demo-popup");
     const player = popup.querySelector("audio");
@@ -86,14 +98,47 @@ function openSongDemo(song_id = undefined, song_title = undefined, song_desc = u
     }
 
     popup.querySelector(".song-full-title").innerHTML = song_title;
-    popup.querySelector(".song-desc").innerHTML = song_desc;
 
     if (song_id !== undefined) {
-        player.src = `showcase/show/${song_id}`;
-        player.load();
-        player.addEventListener("canplay", () => {
-            startFilePlayer("");
-        });
+        startDemo(song_id);
+    }
+}
+
+function openCompositionDemos(composition_id = undefined) {
+    const popup = document.querySelector("#song-demo-popup");
+    const player = popup.querySelector("audio");
+    const loader = popup.querySelector(".loader");
+
+    popup.classList.toggle("open", composition_id !== undefined);
+
+    popup.querySelector(".song-full-title").innerHTML = "";
+    popup.querySelector(".song-list").innerHTML = "";
+
+    if (composition_id == undefined) {
+        pauseFilePlayer("");
+    } else {
+        loader.classList.remove("hidden");
+        player.parentElement.classList.add("hidden");
+
+        fetch(`/api/songs/compositions/${composition_id}`)
+            .then(res => res.json())
+            .then(({composition, songs}) => {
+                popup.querySelector(".song-full-title").innerHTML = composition.full_title;
+                songs.forEach(song => {
+                    popup.querySelector(".song-list").innerHTML += `<li>
+                        ${song.full_title}
+                        ${song.has_showcase_file
+                            ? `<span class="interactive accent primary" onclick="startDemo('${song.id}')">
+                                <x-shipyard.app.icon :name="model_icon('songs')" />
+                            </span>`
+                            : ""
+                        }
+                    </li>`;
+                });
+            })
+            .finally(() => {
+                loader.classList.add("hidden");
+            });
     }
 }
 </script>
@@ -176,9 +221,17 @@ function openSongDemo(song_id = undefined, song_title = undefined, song_desc = u
 </section>
 
 <div id="song-demo-popup" class="popup">
+    <x-shipyard.app.loader />
+
     <div class="popup-contents flex down center middle">
         <h3 class="song-full-title"></h3>
-        <p class="song-desc"></p>
+        <h4 class="ghost">Aranże, jakie wykonałem:</h4>
+        <ul class="song-list"></ul>
+        <p class="ghost">
+            Kliknij ikonę <span class="accent primary">
+                <x-shipyard.app.icon :name="model_icon('songs')" />
+            </span>, aby odtworzyć próbkę
+        </p>
 
         <x-file-player type="ogg" file="" is-showcase />
 

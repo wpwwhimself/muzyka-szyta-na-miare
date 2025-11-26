@@ -145,8 +145,8 @@
             <h2>Wszystkie utwory, których się podjąłem</h2>
             <p>
                 Kliknij ikonę <span class="accent primary">
-                    <x-shipyard.app.icon :name="model_icon('songs')" />
-                </span>, aby odtworzyć próbkę
+                    <x-shipyard.app.icon :name="model_icon('compositions')" />
+                </span>, aby przejrzeć wykonane aranże
             </p>
 
             <h3>Filtruj:</h3>

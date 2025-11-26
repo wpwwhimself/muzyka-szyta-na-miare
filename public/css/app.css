@@ -132,7 +132,7 @@ body {
     }
 }
 
-.black-back{
+.backdropped {
     background-color: var(--bg-lite1);
     padding: 1em;
 }
@@ -558,8 +558,8 @@ footer .icon.invert-when-dark {
 }
 
 section, .section {
-    &:not(.black-back) {
-        background: var(--bg);
+    &:not(.backdropped) {
+        background: transparent;
     }
 
     &.container {

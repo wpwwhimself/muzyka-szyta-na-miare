@@ -1,7 +1,7 @@
 <section id="offer">
     <h1>Co mogę dla Ciebie zrobić?</h1>
 
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 1;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
         <x-shipyard.app.icon name="volume-high" />
         <div>
             <h2>Podkłady muzyczne</h2>
@@ -13,7 +13,7 @@
             <li>Brzmienie niemal <b>identyczne</b> z oryginałem</li>
         </ul>
     </div>
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 2;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
         <x-shipyard.app.icon name="music" />
         <div>
             <h2>Nuty i partytury</h2>
@@ -25,7 +25,7 @@
             <li><b>Dowolny zakres instrumentów</b> – od partii solowej po orkiestrę</li>
         </ul>
     </div>
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 3;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
         <x-shipyard.app.icon name="account" />
         <div>
             <h2>Z myślą o Tobie</h2>
@@ -187,7 +187,7 @@
 </x-front.tabbed-section>
 
 <section id="prices" class="grid but-mobile-down" style="--col-count: 2;">
-    <div class="black-back rounded stagger" style="--stagger-index: 1;">
+    <div class="backdropped rounded stagger" style="--stagger-index: 1;">
         <h1>Cennik</h1>
         <span class="yellowed-out">
             <i class="fas fa-triangle-exclamation"></i>

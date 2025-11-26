@@ -7,7 +7,7 @@
     <input type="hidden" name="id" value="{{ $song?->id ?? App\Models\DjSong::nextId() }}" />
 
     <x-section title="Meta" icon="compact-disc">
-        <div class="flex right center black-back">
+        <div class="flex right center backdropped">
             <x-input name="id" label="ID"
                 type="text" :value="$song?->id"
                 small disabled

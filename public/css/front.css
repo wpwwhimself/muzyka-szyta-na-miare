@@ -316,7 +316,7 @@ section {
     transition-timing-function: ease-in-out;
     opacity: 0;
 }
-.scroll-hidden.black-back,
+.scroll-hidden.backdropped,
 ul.scroll-hidden,
 li.scroll-hidden,
 img.scroll-hidden {

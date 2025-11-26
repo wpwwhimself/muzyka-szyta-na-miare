@@ -1,6 +1,6 @@
 <template>
 
-<div class="touch-tile black-back flex down center middle">
+<div class="touch-tile backdropped flex down center middle">
     <slot />
 </div>
 

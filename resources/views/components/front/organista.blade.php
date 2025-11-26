@@ -1,7 +1,7 @@
 <section id="offer">
     <h1>Jak mogę wzbogacić Twoją uroczystość?</h1>
 
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 1;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
         <x-shipyard.app.icon name="book-cross" />
         <div>
             <h2>Organy</h2>
@@ -13,7 +13,7 @@
             <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar melodii <strong>psalmów</strong></li>
         </ul>
     </div>
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 2;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
         <x-shipyard.app.icon name="piano" />
         <div>
             <h2>Pianino</h2>
@@ -25,7 +25,7 @@
             <li>W utworach spoza repertuaru kościelnego</li>
         </ul>
     </div>
-    <div class="main rounded black-back scroll-hidden stagger" style="--stagger-index: 3;">
+    <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
         <x-shipyard.app.icon name="trumpet" />
         <div>
             <h2>Trąbka</h2>
@@ -130,7 +130,7 @@
 </x-front.tabbed-section>
 
 <section id="prices" class="grid but-mobile-down" style="--col-count: 2;">
-    <div class="black-back rounded stagger" style="--stagger-index: 1;">
+    <div class="backdropped rounded stagger" style="--stagger-index: 1;">
         <h1>Cennik</h1>
         <span class="yellowed-out">
             <i class="fas fa-triangle-exclamation"></i>

@@ -64,19 +64,6 @@ function setFormToFileUpload() {
                 onchange="setFormToFileUpload();"
             />
 
-            <x-shipyard.app.h lvl="3" :icon="model_icon('song-tags')">Tagi</x-shipyard.app.h>
-            <div class="flex right center wrap">
-                @foreach ($tags as $tag)
-                <x-shipyard.ui.input type="checkbox"
-                    name="tags[{{ $tag->id }}]"
-                    :label="$tag->name"
-                    icon="tag"
-                    value="1"
-                    :checked="in_array($tag->id, $song->tags->pluck('id')->toArray())"
-                />
-                @endforeach
-            </div>
-
             <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>
             <x-shipyard.ui.input type="select"
                 name="reel_platform"

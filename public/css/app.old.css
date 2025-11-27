@@ -759,9 +759,3 @@ footer .contact-info{
         margin-block: 20vh;
     }
 }
-
-@keyframes blinking {
-    50% {
-        border-color: var(--bg-lite2);
-    }
-}

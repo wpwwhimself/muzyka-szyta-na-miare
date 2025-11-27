@@ -132,6 +132,12 @@ body {
     }
 }
 
+@keyframes blinking {
+    50% {
+        border-color: var(--bg-lite2);
+    }
+}
+
 .backdropped {
     background-color: var(--bg-lite1);
     padding: 1em;
@@ -185,7 +191,7 @@ body {
     padding: 1em;
 
     &.warning-like{
-        border-color: rgb(var(--danger));
+        border-color: var(--danger);
         animation-name: blinking;
         animation-duration: 1s;
         animation-iteration-count: infinite;
@@ -433,13 +439,13 @@ footer .icon.invert-when-dark {
 .priority {
     div&,
     &.submit {
-        border: 3px solid rgb(var(--danger));
+        border: 3px solid var(--danger);
     }
 
     b&,
     & b,
     &.submit {
-        color: rgb(var(--danger));
+        color: var(--danger);
     }
 
     &.button {

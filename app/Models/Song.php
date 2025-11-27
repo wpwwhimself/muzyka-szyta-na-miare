@@ -124,12 +124,6 @@ class Song extends Model
     ];
 
     public const CONNECTIONS = [
-        "type" => [
-            "model" => QuestType::class,
-            "mode" => "one",
-            "field_name" => "quest_type_id",
-            "field_label" => "Typ zlecenia",
-        ],
         "genre" => [
             "model" => Genre::class,
             "mode" => "one",

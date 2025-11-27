@@ -59,7 +59,6 @@
 
             <div class="flex right center middle">
                 <x-quest-type :type="$song->type" />
-                <x-a :href="route('songs', ['search' => $quest->song_id])">Szczegóły</x-a>
                 <x-a :href="route('song-edit', ['id' => $quest->song_id])">Edytuj</x-a>
             </div>
 

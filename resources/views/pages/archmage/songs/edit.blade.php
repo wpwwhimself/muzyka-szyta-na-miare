@@ -46,6 +46,12 @@ function setFormToFileUpload() {
             <div class="grid but-halfsize-down" style="--col-count: 2;">
                 <x-shipyard.ui.field-input :model="$composition" field-name="title" dummy />
                 <x-shipyard.ui.field-input :model="$composition" field-name="composer" dummy />
+                <x-shipyard.ui.connection-input :model="$composition" connection-name="tags" dummy />
+                <x-shipyard.ui.button
+                    label="Edytuj kompozycję"
+                    :icon="model_icon('compositions')"
+                    :action="route('admin.model.edit', ['model' => 'compositions', 'id' => $composition->id])"
+                />
             </div>
             @else
             <span class="ghost">Brak powiązania</span>
@@ -80,6 +86,10 @@ function setFormToFileUpload() {
                 icon="link"
                 :value="$showcase?->link"
             />
+
+            <x-extendo-block key="reel_desc" title="Opis" header-icon="text">
+                <x-showcases.description for="podklady" :songdata="$song" />
+            </x-extendo-block>
         </x-section>
     </div>
 
@@ -97,9 +107,5 @@ function setFormToFileUpload() {
         />
     </div>
 </x-shipyard.app.form>
-
-<x-extendo-block key="reel_desc" title="Opis" header-icon="text">
-    <x-showcases.description for="podklady" :songdata="$song" />
-</x-extendo-block>
 
 @endsection

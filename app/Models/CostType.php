@@ -83,9 +83,10 @@ class CostType extends Model
     ];
 
     public const CONNECTIONS = [
-        "costs" => [
-            "model" => Cost::class,
+        "transactions" => [
+            "model" => MoneyTransaction::class,
             "mode" => "many",
+            "readonly" => true,
             // "field_name" => "",
             // "field_label" => "",
         ],

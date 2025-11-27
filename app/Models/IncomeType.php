@@ -84,12 +84,13 @@ class IncomeType extends Model
     ];
 
     public const CONNECTIONS = [
-        // "transactions" => [
-        //     "model" => MoneyTransaction::class,
-        //     "mode" => "many",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "transactions" => [
+            "model" => MoneyTransaction::class,
+            "mode" => "many",
+            "readonly" => true,
+            // "field_name" => "",
+            // "field_label" => "",
+        ],
     ];
 
     public const ACTIONS = [

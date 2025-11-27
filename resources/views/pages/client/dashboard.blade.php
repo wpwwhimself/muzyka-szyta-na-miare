@@ -140,7 +140,11 @@
         @endif
     </x-section>
 
-    <x-section id="dashboard-finances" title="Finanse" :icon="model_icon('prices')" :extended="false">
+    <x-section id="dashboard-finances" title="Finanse" :icon="model_icon('prices')" :extended="false"
+        :warning="[
+            'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $unpaids->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
+        ]"
+    >
         <h2 @if(Auth::user()->notes->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
         <div class="hint-table">
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>

@@ -124,7 +124,7 @@ $fields = $request::getFields();
                 <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" dummy />
                 <x-warning>
                     Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-                    <b>proszę o dokonanie wpłaty po {{ $request->delayed_payment->format('d.m.Y') }}</b>.
+                    <b>proszę o dokonanie wpłaty później niż {{ $request->delayed_payment->format('d.m.Y') }}</b>.
                     Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                 </x-warning>
             </div>
@@ -289,7 +289,7 @@ $fields = $request::getFields();
             <div id="opinion-3" class="flex down center middle hidden">
                 <h2>Na pewno? Termin realizacji też?</h2>
                 @if ($request->delayed_payment)
-                <p class="yellowed-out">To, że musisz zapłacić później, też?</p>
+                <p class="yellowed-out">To, że musisz zapłacić nie wcześniej niż {{ $request->delayed_payment->format('d.m.Y') }}, też?</p>
                 @endif
                 <div>
                     <x-shipyard.ui.button

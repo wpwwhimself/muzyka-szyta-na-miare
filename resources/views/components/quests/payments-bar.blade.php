@@ -10,7 +10,7 @@
         <x-shipyard.ui.field-input :model="$quest" field-name="delayed_payment" dummy />
         <x-warning>
             Z uwagi na limity przyjmowanych przeze mnie wpłat,
-            <b>proszę o dokonanie wpłaty po {{ $quest->delayed_payment->format('d.m.Y') }}</b>.
+            <b>proszę o dokonanie wpłaty nie wcześniej niż {{ $quest->delayed_payment->format('d.m.Y') }}</b>.
             Po zaakceptowaniu zlecenia dostęp do plików
             zostanie przyznany automatycznie.
         </x-warning>

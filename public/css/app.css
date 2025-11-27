@@ -448,12 +448,7 @@ footer .icon.invert-when-dark {
 }
 
 #quest-history {
-    & .body {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: space-around;
-        text-align: center;
-    }
+    text-align: center;
 
     & [role="circles"] {
         max-width: none;
@@ -465,6 +460,7 @@ footer .icon.invert-when-dark {
             & .circle{
                 margin: 0;
                 justify-content: center;
+                align-items: center;
                 border-radius: 100%;
                 font-size: 1.5em;
                 width: var(--circle-size); height: var(--circle-size);

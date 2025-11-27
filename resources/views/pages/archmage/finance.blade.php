@@ -70,34 +70,37 @@
 <x-section title="Zwroty pieniędzy do wykonania" icon="cash-refund">
     <div class="flex down">
         @foreach ($returns as $quest)
-        <x-extendo-block :key="$quest->id"
-            :header-icon="substr($quest->song->type->fa_symbol, 3)"
-            :title="$quest->song->full_title"
-            :subtitle="$quest->user->notes->client_name"
+        <x-shipyard.app.section
+            :icon="$quest->song->type->icon"
+            :title="$quest->user"
         >
-            <x-extendo-section title="Suma wpłat">
-                {{ _ct_(as_pln($quest->payments_sum)) }}
-            </x-extendo-section>
-
-            <x-extendo-section title="ID zlecenia">
-                <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a>
-            </x-extendo-section>
-
-            <div class="flex down">
-                <x-button
+            <x-slot:actions>
+                <x-shipyard.ui.button
                     :action="route('finance-return', ['quest_id' => $quest->id])"
                     label="Potwierdź zwrot"
                     icon="check"
-                    :small="true"
+                    class="primary"
                 />
-                <x-button
+                <x-shipyard.ui.button
                     :action="route('finance-return', ['quest_id' => $quest->id, 'budget' => true])"
                     label="Przesuń na budżet"
-                    icon="sack-dollar"
-                    :small="true"
+                    icon="safe-square"
+                    class="primary"
                 />
+            </x-slot:actions>
+
+            <div class="flex right center middle">
+                <a href="{{ route("quest", ["id" => $quest->id]) }}">
+                    {{ $quest }}
+                </a>
+                <x-shipyard.app.icon-label-value
+                    icon="cash"
+                    label="Suma wpłat"
+                >
+                    {{ _ct_(as_pln($quest->payments_sum)) }}
+                </x-shipyard.app.icon-label-value>
             </div>
-        </x-extendo-block>
+        </x-shipyard.app.section>
         @endforeach
     </div>
 </x-section>
@@ -112,7 +115,7 @@
         @foreach ($unpaids as $client)
         <x-extendo-block :key="$client->id"
             :header-icon="model_icon('users')"
-            :title="$client->notes->client_name"
+            :title="$client->notes"
             :subtitle="implode(' // ', [
                 $client->questsUnpaid->count(),
                 $client->questsUnpaid

@@ -264,7 +264,8 @@ class Quest extends Model
         return route("quest", ["id" => $this->id]);
     }
     public function getPaymentsSumAttribute(){
-        return $this->payments->sum("amount");
+        return $this->payments->where("typable_type", IncomeType::class)->where("typable_id", 1)->sum("amount")
+            - $this->payments->where("typable_type", CostType::class)->where("typable_id", 6)->sum("amount");
     }
     public function getPaymentRemainingAttribute() {
         return $this->price - $this->payments_sum;

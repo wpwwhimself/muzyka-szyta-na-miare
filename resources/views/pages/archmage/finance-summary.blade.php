@@ -76,17 +76,15 @@
         <tbody>
             @forelse ($losses as $pos)
             <tr>
-                @if ($pos->typable instanceof \App\Models\CostType)
                 <td>{{ $pos->date->format("d.m.Y") }}</td>
                 <td>{{ _ct_($pos->typable->name) }}</td>
-                <td>{{ $pos->description }}</td>
+                <td>
+                    @if ($pos->relatable)
+                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a>
+                    @endif
+                    {{ $pos->description }}
+                </td>
                 <td>{{ _c_(as_pln($pos->amount)) }}</td>
-                @elseif ($pos->typable instanceof \App\Models\IncomeType)
-                <td>{{ $pos->date->format("d.m.Y") }}</td>
-                <td>zwrot wpłaty</td>
-                <td><a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a></td>
-                <td>{{ _c_(as_pln(-$pos->amount)) }}</td>
-                @endif
             </tr>
             @empty
             <tr><td class="grayed-out">Brak danych</td></tr>

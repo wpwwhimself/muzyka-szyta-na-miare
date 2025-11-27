@@ -623,12 +623,12 @@ class StatsController extends Controller
                 $quest->client_id
             );
             MoneyTransaction::create([
-                "typable_type" => IncomeType::class,
-                "typable_id" => 1,
+                "typable_type" => CostType::class,
+                "typable_id" => 6,
                 "relatable_type" => Quest::class,
                 "relatable_id" => $quest_id,
                 "date" => today(),
-                "amount" => -$payments_sum,
+                "amount" => $payments_sum,
             ]);
         } else {
             // przesunięcie na budżet
@@ -676,29 +676,14 @@ class StatsController extends Controller
             ->where("amount", ">", 0)
             ->orderByDesc("date");
         $losses = MoneyTransaction::visible()
-            ->where(fn ($q) => $q
-                ->where("typable_type", CostType::class)
-                ->orWhere(fn ($q) => $q
-                    ->where("typable_type", IncomeType::class)
-                    ->where("typable_id", 1)
-                    ->where("amount", "<", 0)
-                )
-            )
+            ->where("typable_type", CostType::class)
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
             ->orderByDesc("date");
 
-        $losses_payments = (clone $losses)->where("typable_id", 3)->sum("amount");
-        $losses_other = (clone $losses)->where("typable_id", "<>", 3)->sum("amount")
-            -
-            MoneyTransaction::visible()
-                ->where("typable_type", IncomeType::class)
-                ->where("typable_id", 1)
-                ->where("relatable_type", Quest::class)
-                ->where("amount", "<", 0)
-                ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-                ->sum("amount");
+        $losses_payments = (clone $losses)->whereIn("typable_id", [3, 6])->sum("amount");
+        $losses_other = (clone $losses)->sum("amount") - $losses_payments;
 
-        $balance_now = MoneyTransaction::visible()->where(["typable_type" => IncomeType::class, "typable_id" => 1])->sum("amount")
+        $balance_now = MoneyTransaction::visible()->where(["typable_type" => IncomeType::class])->sum("amount")
             - MoneyTransaction::visible()->where("typable_type", CostType::class)->whereDate("date", ">=", BEGINNING())->sum("amount");
 
         $summary = [
@@ -710,16 +695,6 @@ class StatsController extends Controller
         ];
         $gains = $gains->get();
         $losses = $losses->get();
-
-        $losses = $losses->merge(
-            MoneyTransaction::visible()
-                ->where("typable_type", IncomeType::class)
-                ->where("typable_id", 1)
-                ->where("relatable_type", Quest::class)
-                ->where("amount", "<", 0)
-                ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
-                ->get(["money_transactions.*", "date"])
-        )->sortByDesc("date");
 
         return view("pages.".user_role().".finance-summary", array_merge(
             ["title" => "Raport przepływów"],

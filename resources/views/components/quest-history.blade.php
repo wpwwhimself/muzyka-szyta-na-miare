@@ -15,18 +15,6 @@
         @if($lastComment?->comment)
         {!! $lastComment !!}
         @endif
-
-        @if ($lastComment?->can_be_corrected)
-        <x-shipyard.ui.button
-            label="Popraw ostatni komentarz"
-            icon="message-draw"
-            action="none"
-            onclick="openModal('edit-last-comment', {
-                test: 1,
-            })"
-            class="tertiary"
-        />
-        @endif
     </x-extendo-section>
 
     <div role="circles">

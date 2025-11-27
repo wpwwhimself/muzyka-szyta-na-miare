@@ -673,6 +673,7 @@ class StatsController extends Controller
         $gains = MoneyTransaction::visible()
             ->where("typable_type", IncomeType::class)
             ->whereDate("date", "like", (Carbon::today()->subMonths($rq->subMonths ?? 0)->format("Y-m"))."%")
+            ->where("amount", ">", 0)
             ->orderByDesc("date");
         $losses = MoneyTransaction::visible()
             ->where(fn ($q) => $q

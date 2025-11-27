@@ -264,7 +264,7 @@ class Quest extends Model
         return route("quest", ["id" => $this->id]);
     }
     public function getPaymentsSumAttribute(){
-        return $this->payments->sum("comment");
+        return $this->payments->sum("amount");
     }
     public function getPaymentRemainingAttribute() {
         return $this->price - $this->payments_sum;
@@ -291,7 +291,7 @@ class Quest extends Model
         return $this->hasMany(StatusChange::class, "re_quest_id")->orderByDesc("date")->orderByDesc("new_status_id");
     }
     public function payments(){
-        return $this->hasMany(StatusChange::class, "re_quest_id")->whereIn("new_status_id", [32, 34]);
+        return $this->hasMany(MoneyTransaction::class, "relatable_id");
     }
     public function visibleInvoices(){
         return $this->belongsToMany(Invoice::class, InvoiceQuest::class, "quest_id", "invoice_id")->where("visible", true);

@@ -52,7 +52,7 @@ class UserNote extends Authenticatable
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => "[$this->id] $this->client_name",
+            get: fn () => "[$this->user_id] $this->client_name",
         );
     }
 

@@ -181,6 +181,10 @@ class SongWorkTime extends Model
     #endregion
 
     #region relations
+    public function song() {
+        return $this->belongsTo(Song::class);
+    }
+
     public function status() {
         return $this->belongsTo(Status::class);
     }

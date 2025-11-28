@@ -152,6 +152,11 @@ class Status extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("id");
+    }
     #endregion
 
     #region attributes

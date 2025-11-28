@@ -139,6 +139,12 @@ class Composition extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("title")
+            ->orderBy("composer");
+    }
     #endregion
 
     #region attributes

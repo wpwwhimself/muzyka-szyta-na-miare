@@ -130,6 +130,11 @@ class CostType extends Model
     #region scopes
     use HasStandardScopes;
 
+    public function scopeForConnection($query)
+    {
+        return $this->orderByDesc("name");
+    }
+
     public function scopeForAdding($query): void
     {
         $query;

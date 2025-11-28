@@ -139,6 +139,11 @@ class QuestType extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("type");
+    }
     #endregion
 
     #region attributes

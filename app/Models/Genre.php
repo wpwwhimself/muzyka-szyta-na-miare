@@ -142,6 +142,11 @@ class Genre extends Model
     #region scopes
     use HasStandardScopes;
 
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("name");
+    }
+
     public function scopeOrdered($query) {
         return $query->orderBy("name");
     }

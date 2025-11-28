@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Shipyard\HasStandardFields;
+use App\Traits\Shipyard\HasStandardScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Top10 extends Model
 {
     use HasFactory;
-    
+
     public const META = [
         "label" => "Najlepsi",
         "icon" => "chart-line",
@@ -25,6 +27,9 @@ class Top10 extends Model
         'entity_type',
         'type',
     ];
+
+    use HasStandardScopes, HasStandardFields;
+
 
     public function entity()
     {

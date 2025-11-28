@@ -192,6 +192,12 @@ class Song extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("title")
+            ->orderBy("artist");
+    }
     #endregion
 
     #region attributes

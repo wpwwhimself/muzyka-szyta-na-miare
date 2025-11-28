@@ -195,6 +195,11 @@ class Quest extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderByDesc("id");
+    }
     #endregion
 
     #region attributes

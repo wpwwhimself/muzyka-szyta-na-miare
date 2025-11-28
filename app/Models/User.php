@@ -46,6 +46,13 @@ class User extends ShipyardUser
     ];
     #endregion
 
+    #region scopes
+    public function scopeForConnection($query)
+    {
+        return $this->orderBy("id");
+    }
+    #endregion
+
     #region relations
     public function notes()
     {

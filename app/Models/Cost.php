@@ -32,7 +32,7 @@ class Cost extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->type;
+        return as_pln($this->amount) . ", " . $this->created_at;
     }
 
     public function optionLabel(): Attribute
@@ -51,7 +51,7 @@ class Cost extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->type,
+                "slot" => as_pln($this->amount) . ", " . $this->created_at,
             ])->render(),
         );
     }
@@ -145,6 +145,11 @@ class Cost extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection($query)
+    {
+        return $this->orderByDesc("created_at");
+    }
     #endregion
 
     #region attributes

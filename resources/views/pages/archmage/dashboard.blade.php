@@ -253,13 +253,19 @@
                     <td>
                         @switch($i->mailing)
                             @case(2)
-                                <i class="fa-solid fa-square-check success" @popper(mail wysłany)></i>
+                                <span class="accent success" @popper(mail wysłany)>
+                                    <x-shipyard.app.icon name="email-fast" />
+                                </span>
                                 @break
                             @case(1)
-                                <i class="fa-solid fa-triangle-exclamation warning" @popper(mail wysłany, ale wyślij wiadomość)></i>
+                                <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
+                                    <x-shipyard.app.icon name="email-fast" />
+                                </span>
                                 @break
                             @case(0)
-                                <i class="fa-solid fa-xmark error" @popper(wyślij wiadomość)></i>
+                                <span class="accent error" @popper(wyślij wiadomość)>
+                                    <x-shipyard.app.icon name="email-off" />
+                                </span>
                                 @break
                         @endswitch
                     </td>

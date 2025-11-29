@@ -20,7 +20,7 @@
 
     <x-phase-indicator :status-id="$request->status_id" />
 
-    <div id="phases" class="archmage-quest-phases flex right center middle">
+    <div id="phases" class="archmage-quest-phases flex right center middle nowrap">
         @if ($request->status_id != 9) <x-input type="TEXT" name="comment" label="Komentarz do zmiany" /> @endif
         <input type="hidden" name="id" value="{{ $request->id }}" />
         <input type="hidden" name="intent" value="{{ in_array($request->status_id, [4, 5, 7, 8, 95]) ? 'review' : 'change' }}" />

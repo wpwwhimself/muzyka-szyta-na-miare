@@ -7,7 +7,7 @@
 <x-shipyard.app.form method="POST" :action="route('mod-quest-back')">
     <x-phase-indicator :status-id="$quest->status_id" />
 
-    <div class="archmage-quest-phases flex right center middle">
+    <div class="archmage-quest-phases flex right center middle nowrap">
         <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
 
@@ -57,10 +57,14 @@
         >
             @php $song = $quest->song; @endphp
 
-            <div class="flex right center middle">
+            <x-slot:buttons>
                 <x-quest-type :type="$song->type" />
-                <x-a :href="route('song-edit', ['id' => $quest->song_id])">Edytuj</x-a>
-            </div>
+                <x-shipyard.ui.button
+                    pop="Edytuj utwór"
+                    :icon="model_icon('songs')"
+                    :action="route('song-edit', ['id' => $quest->song_id])"
+                />
+            </x-slot:buttons>
 
             <div class="grid but-halfsize-down" style="--col-count: 2;">
                 <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
@@ -72,12 +76,10 @@
                     "has_recorded_reel",
                     "has_original_mv",
                 ] as $field_name)
-                <div>
-                    <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
-                    @if ($field_name == "link")
-                    <x-link-interpreter :raw="$song->$field_name" />
-                    @endif
-                </div>
+                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
+                @if ($field_name == "link")
+                <x-link-interpreter :raw="$song->$field_name" />
+                @endif
                 @endforeach
 
                 <x-shipyard.ui.field-input :model="$quest" field-name="wishes" />
@@ -133,6 +135,27 @@
             scissors
         >
             <x-slot:buttons>
+                @if ($quest->user->notes->external_drive)
+                <x-shipyard.ui.button
+                    :action="$quest->user->notes->external_drive"
+                    :icon="model_field_icon('user_notes', 'external_drive')"
+                    pop="Przejdź do chmury"
+                    target="_blank"
+                />
+                <form action="{{ route('quest-files-external-update') }}" method="post" class="flex right center">
+                    @csrf
+                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
+                    <x-shipyard.ui.button
+                        action="submit"
+                        pop="Zmień status plików w chmurze"
+                        :icon="$quest->has_files_on_external_drive ? 'cloud-arrow-down' : 'cloud-arrow-up'"
+                        name="external"
+                        :value="$quest->has_files_on_external_drive ? 0 : 1"
+                        class="primary"
+                    />
+                </form>
+                @endif
+
                 @unless(Auth::id() === 0)
                 <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
                     @csrf
@@ -166,27 +189,6 @@
             </x-slot:buttons>
 
             <x-extendo-section>
-                @if ($quest->user->notes->external_drive)
-                <x-shipyard.ui.button
-                    :action="$quest->user->notes->external_drive"
-                    :icon="model_field_icon('user_notes', 'external_drive')"
-                    label="Link"
-                    target="_blank"
-                />
-                <form action="{{ route('quest-files-external-update') }}" method="post" class="flex right center">
-                    @csrf
-                    <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-
-                    @if ($quest->has_files_on_external_drive)
-                    <span><i class="fas fa-cloud success"></i> Posiada pliki</span>
-                    <x-button action="submit" label="Zmień" icon="cloud-arrow-down" name="external" value="0" :small="true" />
-                    @else
-                    <span><i class="fas fa-cloud-bolt error"></i> Brak plików</span>
-                    <x-button action="submit" label="Zmień" icon="cloud-arrow-up" name="external" value="1" :small="true" />
-                    @endif
-                </form>
-                @endif
-
                 <div class="flex right center middle">
                     @if (can_download_files($quest->client_id, $quest->id))
                     <span class="accent success">
@@ -218,6 +220,17 @@
                     <span class="accent danger">
                         <x-shipyard.app.icon name="tray-alert" />
                         Brak kompletu
+                    </span>
+                    @endif
+
+                    @if ($quest->user->notes->external_drive)
+                    <span @class(["accent success" => $quest->has_files_on_external_drive])>
+                        <x-shipyard.app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+                        @if ($quest->has_files_on_external_drive)
+                        Posiada pliki
+                        @else
+                        Brak plików
+                        @endif
                     </span>
                     @endif
                 </div>

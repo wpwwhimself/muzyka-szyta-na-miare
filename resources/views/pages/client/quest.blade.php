@@ -26,9 +26,9 @@
     >
         @php $song = $quest->song; @endphp
 
-        <div class="flex right center middle">
+        <x-slot:buttons>
             <x-quest-type :type="$song->type" />
-        </div>
+        </x-slot:buttons>
 
         <div class="grid but-mobile-down" style="--col-count: 2;">
             @foreach ([
@@ -36,12 +36,10 @@
                 "artist",
                 "link",
             ] as $field_name)
-            <div>
-                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
-                @if ($field_name == "link")
-                <x-link-interpreter :raw="$song->$field_name" />
-                @endif
-            </div>
+            <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
+            @if ($field_name == "link")
+            <x-link-interpreter :raw="$song->$field_name" />
+            @endif
             @endforeach
 
             <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
@@ -100,6 +98,14 @@
         :extended="true"
         scissors
     >
+        @if ($quest->has_files_on_external_drive)
+        <span>
+            <x-shipyard.app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+            W chmurze znajdują się pliki związane z tym zleceniem
+            <x-a :href="$quest->user->notes->external_drive">Otwórz</x-a>
+        </span>
+        @endif
+
         @if (Auth::user()->notes->can_see_files)
         <x-files.list :grouped-files="$files" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
         @endif
@@ -126,13 +132,6 @@
             </p>
             @endif
         @endif
-
-        <x-extendo-section title="Chmura">
-        @if ($quest->has_files_on_external_drive)
-            <span><i class="fas fa-cloud ghost"></i> W chmurze znajdują się pliki związane z tym zleceniem</span>
-            <x-a :href="$quest->client->external_drive">Otwórz</x-a>
-        @endif
-        </x-extendo-section>
     </x-extendo-block>
 
     <x-quest-history :quest="$quest" />

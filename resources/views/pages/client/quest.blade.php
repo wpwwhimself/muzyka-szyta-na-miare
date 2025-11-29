@@ -194,7 +194,7 @@
             onclick="openModal('quest-change-status', {
                 quest_id: '{{ $quest->id }}',
                 status_id: {{ $quest->status_id }},
-                comment: '{{ $quest->history->first()?->comment }}',
+                comment: `{{ $quest->history->first()?->comment }}`,
             })"
             class="tertiary"
         />

@@ -79,11 +79,10 @@
                 @endphp
 
                 <h2>
-                    {!! $client !!}
+                    {!! $client->name_and_badges !!}
                 </h2>
-                <small>
-                    <x-fa-icon pop="Przygotowany utwór" class="fas fa-box" />
-                    {{ $comment->re_quest->song->full_title }}
+                <small class="accent secondary">
+                    {{ $comment->re_quest->song->composition }}
                 </small>
                 {!! \Illuminate\Mail\Markdown::parse($comment->comment) !!}
                 <div class="grayed-out">{{ $comment->date->diffForHumans() }}</div>

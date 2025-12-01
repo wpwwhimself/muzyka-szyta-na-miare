@@ -184,19 +184,6 @@ class ShowcasePlatform extends Model
     //         ],
     //     );
     // }
-
-    public function getIconAttribute()
-    {
-        return view(
-            "components.fa-icon",
-            [
-                "pop" => $this->name,
-                "attributes" => new ComponentAttributeBag([
-                    "class" => "fa-brands fa-{$this->icon_class}" ?? "fas fa-hashtag",
-                ]),
-            ]
-        )->render();
-    }
     #endregion
 
     #region relations

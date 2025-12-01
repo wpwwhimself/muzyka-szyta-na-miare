@@ -18,7 +18,7 @@ if ($model) {
     ] = \App\Http\Controllers\StatsController::runPriceCalc(
         $model->price_code_override ?? $model->price_code,
         $model->client_id,
-        true
+        $model instanceof \App\Models\Request // quote mode only for requests
     );
 }
 @endphp

@@ -221,14 +221,13 @@ class UserNote extends Authenticatable
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "wrench",
+            "label" => "Edytuj po staremu",
+            "show-on" => "edit",
+            "route" => "client-view",
+            "params" => ["id" => "user_id"],
+        ],
     ];
     #endregion
 

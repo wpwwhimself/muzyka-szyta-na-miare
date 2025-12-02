@@ -22,7 +22,20 @@
         </x-tutorial>
 
         @unless (Auth::user()->notes->trust == -1)
-        <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
+        <x-shipyard.ui.button
+            label="Złóż zapytanie o podkład/nuty"
+            icon="send"
+            action="none"
+            onclick="openModal('send-podklady-request', {
+                client_id: {{ Auth::user()?->id ?? 'null' }},
+                client_name: '{{ Auth::user()?->notes?->client_name }}' || null,
+                email: '{{ Auth::user()?->notes?->email }}' || null,
+                phone: '{{ Auth::user()?->notes?->phone }}' || null,
+                other_medium: '{{ Auth::user()?->notes?->other_medium }}' || null,
+                contact_preference: '{{ Auth::user()?->notes?->contact_preference }}' || 'email',
+            })"
+            class="primary"
+        />
         @endunless
     </x-slot>
 

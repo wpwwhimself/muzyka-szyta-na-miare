@@ -147,8 +147,18 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
         tag: (song, needle, haystack) => haystack.includes(needle)
     }
 
-    let visible_songs = 0;
-    document.querySelectorAll(`#songs ul#${domain}-song-list li`).forEach(song => {
+    // mark buttons as selected
+    const filters = document.querySelector(`[role='${domain}-filters']`)
+    if (criterion && id) {
+        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.add("ghost"); });
+        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`).classList.remove("ghost");
+    } else {
+        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.remove("ghost"); });
+    }
+
+    // filter objects
+    // let visible_songs = 0;
+    document.querySelectorAll(`ul#${domain}-song-list li`).forEach(song => {
         const haystacks = {
             genre: parseInt(song.getAttribute("data-song-genre")),
             tag: song.getAttribute("data-song-tags").split(",").map(parseInt)
@@ -156,7 +166,7 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
 
         if (criterion === undefined) {
             song.classList.remove("hidden")
-            visible_songs++
+            // visible_songs++
             return
         }
 
@@ -164,7 +174,7 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
             song.classList.add("hidden")
         } else {
             song.classList.remove("hidden")
-            visible_songs++
+            // visible_songs++
         }
     })
     // document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs

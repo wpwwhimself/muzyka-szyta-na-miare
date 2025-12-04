@@ -7,7 +7,7 @@
     </p>
 
     <h3>Filtruj:</h3>
-    <div class="flex right keep-for-mobile center">
+    <div class="flex right keep-for-mobile center" role="{{ $for }}-filters">
         <x-shipyard.ui.button
             action="none"
             class="tertiary"

@@ -180,17 +180,22 @@ class Quest extends Model
     ];
 
     public const FILTERS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
-        //     "options" => [
-        //         "<label>" => <value>,
-        //     ],
-        // ],
+        "client" => [
+            "label" => "Klient",
+            "icon" => "account",
+            "compare-using" => "field",
+            "discr" => "client_id",
+            "type" => "select",
+            "selectData" => [
+                "optionsFromScope" => [
+                    UserNote::class,
+                    "clients",
+                    "option_label",
+                    "user_id",
+                ],
+                "emptyOption" => "wszyscy",
+            ],
+        ],
     ];
 
     #region scopes

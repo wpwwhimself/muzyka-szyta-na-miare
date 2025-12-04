@@ -270,9 +270,7 @@ function openCompositionDemos(composition_id = undefined) {
                     popup.querySelector(".song-list").innerHTML += `<li>
                         ${song.full_title}
                         ${song.has_showcase_file
-                            ? `<span class="interactive accent primary" onclick="startDemo('${song.id}')">
-                                <x-shipyard.app.icon :name="model_icon('songs')" />
-                            </span>`
+                            ? song.play_demo_button
                             : ""
                         }
                     </li>`;

@@ -213,6 +213,7 @@ class Song extends Model
         "has_showcase_file",
         "work_time_total",
         "now_working",
+        "play_demo_button",
     ];
 
     use HasStandardAttributes;
@@ -270,6 +271,15 @@ class Song extends Model
     }
     public function getTypeLetterAttribute(){
         return substr($this->id, 0, 1);
+    }
+
+    public function playDemoButton(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.front.song-list.play-demo-button", [
+                "song" => $this,
+            ])->render(),
+        );
     }
     #endregion
 

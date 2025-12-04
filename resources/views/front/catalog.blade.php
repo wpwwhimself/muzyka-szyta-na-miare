@@ -4,10 +4,10 @@
 
 @section("content")
 
+<x-front.song-list.popup />
+
 <div class="backdropped rounded">
     <x-front.song-list.section for="podklady" />
 </div>
-
-<x-front.song-list.popup />
 
 @endsection

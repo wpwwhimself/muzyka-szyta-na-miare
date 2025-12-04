@@ -40,5 +40,6 @@
     <ul id="{{ $for }}-song-list">
         <x-shipyard.app.loader />
     </ul>
-    <script defer>getSongList("{{ $for }}");</script>
 </div>
+
+<script defer>getSongList("{{ $for }}");</script>

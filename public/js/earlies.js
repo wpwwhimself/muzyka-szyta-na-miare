@@ -167,7 +167,7 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
             visible_songs++
         }
     })
-    document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs
+    // document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs
 }
 
 function filterShowcases(mode) {
@@ -186,13 +186,24 @@ function filterShowcases(mode) {
  */
 function getSongList(domain = undefined) {
     const list = document.querySelector(`ul#${domain}-song-list`);
+    const params = new URLSearchParams(window.location.search);
+
     list.querySelector(".loader").classList.remove("hidden");
+
+    if (params.has("composition")) {
+        openCompositionDemos(params.get("composition"));
+    }
 
     fetch("/api/songs/info" + (domain ? "?for=" + domain : ""))
         .then(res => res.json())
         .then(({data, table}) => {
             list.replaceWith(fromHTML(table));
-            list.insertAdjacentHTML('afterbegin', `<p>Razem: <b id="${domain}-songs-count">${data.length}</b></p>`);
+            
+            if (params.has("tag")) {
+                filterSongs(domain, "tag", params.get("tag"));
+            } else if (params.has("genre")) {
+                filterSongs(domain, "genre", params.get("genre"));
+            }
         });
 }
 

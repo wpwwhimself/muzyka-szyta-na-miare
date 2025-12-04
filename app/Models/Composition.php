@@ -67,7 +67,16 @@ class Composition extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
+            get: fn () => view("components.shipyard.ui.button", [
+                "icon" => "bullhorn",
+                "pop" => "Podglad w katalogu",
+                "action" => route("catalog", ["composition" => $this->id]),
+                "attributes" => new ComponentAttributeBag([
+                    "target" => "_blank",
+                ]),
+                "slot" => null,
+            ])
+            . view("components.shipyard.app.model.connections-preview", [
                 "connections" => self::getConnections(),
                 "model" => $this,
             ])->render(),
@@ -106,14 +115,14 @@ class Composition extends Model
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "bullhorn",
+            "label" => "Podgląd w katalogu",
+            "show-on" => "edit",
+            "route" => "catalog",
+            "params" => ["composition" => "id"],
+            "role" => "technical",
+        ],
     ];
     #endregion
 

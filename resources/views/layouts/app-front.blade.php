@@ -11,6 +11,7 @@
         <x-shipyard.app.logo />
         <x-shipyard.app.page-title>
             <x-slot:title>@yield("title", "Strona główna")</x-slot:title>
+            @hasSection ("subtitle") <x-slot:subtitle>@yield("subtitle")</x-slot:subtitle> @endif
         </x-shipyard.app.page-title>
     </x-slot:top>
 

@@ -3,12 +3,10 @@
 namespace App\View\Components\Front;
 
 use App\Models\ClientShowcase;
-use App\Models\Genre;
 use App\Models\Price;
 use App\Models\QuestType;
 use App\Models\Showcase;
 use App\Models\Song;
-use App\Models\SongTag;
 use App\Models\StatusChange;
 use Carbon\Carbon;
 use Closure;
@@ -25,8 +23,6 @@ class Podklady extends Component
     public $average_quest_done;
     public $random_song;
     public $contact_preferences;
-    public $genres;
-    public $song_tags;
 
     /**
      * Create a new component instance.
@@ -66,9 +62,6 @@ class Podklady extends Component
             "sms" => "SMS",
             "inne" => "inne"
         ];
-
-        $this->genres = Genre::orderBy("name")->get();
-        $this->song_tags = SongTag::orderBy("name")->get();
     }
 
     /**

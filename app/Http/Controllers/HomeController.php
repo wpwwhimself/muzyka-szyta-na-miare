@@ -12,4 +12,9 @@ class HomeController extends Controller
     {
         return view("front.index");
     }
+
+    public function catalog()
+    {
+        return view("front.catalog");
+    }
 }

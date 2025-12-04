@@ -208,7 +208,7 @@ class SongController extends Controller
             "composer",
         ])->values();
 
-        $table = view("components.front.song-list", [
+        $table = view("components.front.song-list.contents", [
             "songs" => $songs,
             "for" => request()->get("for"),
         ])->render();

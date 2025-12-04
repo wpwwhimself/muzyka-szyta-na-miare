@@ -29,7 +29,10 @@ use Illuminate\Support\Facades\Route;
 
 if (file_exists(__DIR__.'/Shipyard/shipyard.php')) require __DIR__.'/Shipyard/shipyard.php';
 
-Route::get('/', [HomeController::class, "index"])->name("home");
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/', "index")->name("home");
+    Route::get("catalog", "catalog")->name("catalog");
+});
 
 Route::redirect("/profile", "/dashboard");
 

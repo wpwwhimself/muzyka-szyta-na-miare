@@ -21,6 +21,7 @@ class Composition extends Model
         "description" => "Byty nadrzędne dla utworów. Każda kompozycja może mieć wiele wykonań, przechowywanych jako utwory.",
         "role" => "archmage",
         "ordering" => 1,
+        "defaultSort" => "title",
     ];
 
     protected $fillable = [
@@ -128,19 +129,32 @@ class Composition extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "title" => [
+            "label" => "Tytuł",
+            "compare-using" => "field",
+            "discr" => "title",
+        ],
+        "composer" => [
+            "label" => "Kompozytor",
+            "compare-using" => "field",
+            "discr" => "composer",
+        ],
     ];
 
     public const FILTERS = [
         "title" => [
             "label" => "Tytuł",
-            "icon" => "badge-account",
+            // "icon" => "badge-account",
             "compare-using" => "field",
             "discr" => "title",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
+        "composer" => [
+            "label" => "Kompozytor",
+            // "icon" => "badge-account",
+            "compare-using" => "field",
+            "discr" => "composer",
             "type" => "text",
             "operator" => "regexp",
         ],

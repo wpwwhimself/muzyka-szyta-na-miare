@@ -23,6 +23,7 @@ class Song extends Model
         "description" => "Przetworzone utwory muzyczne.",
         "role" => "technical",
         "ordering" => 2,
+        "defaultSort" => "title",
     ];
 
     public $incrementing = false;
@@ -93,7 +94,7 @@ class Song extends Model
             "type" => "text",
             "label" => "Tytuł utworu",
             "icon" => "music-box",
-            "required" => true,
+            // "required" => true,
         ],
         "artist" => [
             "type" => "text",
@@ -158,11 +159,11 @@ class Song extends Model
             "compare-using" => "field",
             "discr" => "title",
         ],
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "artist" => [
+            "label" => "wykonawca",
+            "compare-using" => "field",
+            "discr" => "artist",
+        ],
     ];
 
     public const FILTERS = [

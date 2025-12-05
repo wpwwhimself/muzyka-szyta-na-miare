@@ -184,61 +184,6 @@ body {
     color: hsl(225, 100%, 68%)
 }
 
-.extendo-block {
-    --eb-space: 0.5em;
-    --eb-border: 1px solid var(--bg-lite2);
-
-    padding: 1em;
-
-    &.warning-like{
-        border-color: var(--danger);
-        animation-name: blinking;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-
-    .grid > & {
-        align-self: baseline;
-    }
-
-    & h1, h2, h3, p, ul{
-        margin: 0;
-    }
-    & .hidden{
-        display: none;
-    }
-    & .header{
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: nowrap;
-
-        & .titles{
-            align-items: baseline;
-            text-align: left;
-        }
-        & .right-side{
-            align-self: flex-start;
-        }
-    }
-    & .body{
-        justify-content: space-evenly;
-        align-items: center;
-        border-radius: 0;
-        gap: 1em;
-        &:not(:first-child){
-            padding-top: var(--eb-space);
-            margin-top: var(--eb-space);
-            border-top: var(--eb-border);
-        }
-    }
-}
-
-@media screen and (max-width: 600px){
-    .grid > .extendo-block {
-        align-self: auto;
-    }
-}
-
 .file-container-a{
     text-align: left;
     background-color: var(--bg-lite2);

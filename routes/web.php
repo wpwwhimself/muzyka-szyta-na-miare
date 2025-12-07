@@ -34,7 +34,7 @@ Route::controller(HomeController::class)->group(function(){
     Route::get("catalog", "catalog")->name("catalog");
 });
 
-Route::redirect("/profile", "/dashboard");
+Route::redirect("/profile", "/dashboard")->withInput();
 
 Route::middleware("auth")->group(function(){
     Route::controller(BackController::class)->group(function(){

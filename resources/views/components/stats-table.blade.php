@@ -15,7 +15,7 @@
     @foreach ($data->rows as $row)
         <tr>
         @foreach ($row as $key => $val)
-            <td>{{ _ct_($val) }}</td>
+            <td>{!! _ct_($val) !!}</td>
         @endforeach
         </tr>
     @endforeach

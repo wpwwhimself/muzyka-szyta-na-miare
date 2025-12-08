@@ -331,7 +331,7 @@ class StatsController extends Controller
                             ->sortByDesc("notes.pickiness")
                             ->take(10)
                             ->map(fn($item, $key) => [
-                                "Nazwisko" => $item->notes->client_name,
+                                "Nazwisko" => $item->name_and_badges,
                                 "Wybredność" => $item->notes->pickiness * 100 . "%",
                             ])
                             ->values(),
@@ -361,7 +361,7 @@ class StatsController extends Controller
                         )
                         ->get()
                         ->map(fn($item, $key) => [
-                            "Nazwisko" => $item->entity->notes->client_name,
+                            "Nazwisko" => $item->entity->name_and_badges,
                             "Liczba zleceń" => $item->entity->questsRecent()->count(),
                         ])
                         ->sortByDesc("Liczba zleceń")

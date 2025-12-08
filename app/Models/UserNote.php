@@ -421,7 +421,7 @@ class UserNote extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                $correction_requests = StatusChange::where("changed_by", $this->id)->whereIn("new_status_id", [16, 26])->count();
+                $correction_requests = StatusChange::where("changed_by", $this->user_id)->whereIn("new_status_id", [16, 26])->count();
                 $quests_total = $this->user->quests->count();
                 if($quests_total == 0) return 0;
                 return round($correction_requests / $quests_total, 2);

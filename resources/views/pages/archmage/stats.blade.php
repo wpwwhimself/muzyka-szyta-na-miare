@@ -33,7 +33,7 @@
     <x-stats-highlight-h title="Obecne fazy zleceń" :data="$stats->quests->statuses" :bracketed-numbers="'percentages'" />
     <x-stats-highlight-h title="Obecne fazy zapytań" :data="$stats->quests->requests" :bracketed-numbers="'percentages'" />
     <x-barplot title="Na ile dni przed deadlinem się wyrabiam?" :data="$stats->quests->deadlines->soft" />
-    <x-barplot title="Ile dni przed hard-deadlinem klient akceptuje" :data="$stats->quests->deadlines->hard" />
+    {{-- <x-barplot title="Ile dni przed hard-deadlinem klient akceptuje" :data="$stats->quests->deadlines->hard" /> --}}
   </x-section>
 
   <x-section title="Top 10" icon="finance">

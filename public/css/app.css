@@ -539,8 +539,6 @@ section {
     border-radius: 1em;
     padding: 1em;
 
-    &:last-child{ margin-bottom: 0; }
-
     &.warning-like{
         border-color: var(--danger);
         animation-name: blinking;

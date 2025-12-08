@@ -22,6 +22,11 @@
                             <i class="fa-solid fa-{{ $invoice->visible ? 'file-invoice' : 'eye-slash' }}"></i>
                             {{ $invoice->fullCode }}
                         </a>
+                        @if (!$invoice->visible)
+                        <span class="accent error" @popper(Klient nie widzi faktury)>
+                            <x-shipyard.app.icon name="eye-off" />
+                        </span>
+                        @endif
                     </td>
                     <td>
                         {{ _c_(as_pln($invoice->quests->filter(fn($q) => $q->id == $quest->id)->first()->pivot->amount)) }} / {{ _c_(as_pln($invoice->amount)) }}

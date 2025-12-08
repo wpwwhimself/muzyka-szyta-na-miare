@@ -36,6 +36,11 @@
                 <td>
                     {{ $invoice->payer_name }}
                     <span class="ghost">{{ $invoice->payer_title }}</span>
+                    @if (!$invoice->visible)
+                    <span class="accent error" @popper(Klient nie widzi faktury)>
+                        <x-shipyard.app.icon name="eye-off" />
+                    </span>
+                    @endif
                 </td>
                 <td>
                 @foreach ($invoice->quests as $quest)

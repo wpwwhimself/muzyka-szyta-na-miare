@@ -175,7 +175,6 @@
                     :action="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])"
                     target="_blank"
                     onclick="primeReload();"
-                    class="primary"
                 />
                 <x-shipyard.ui.button
                     icon="recycle"
@@ -183,7 +182,6 @@
                     :action="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])"
                     target="_blank"
                     onclick="primeReload();"
-                    class="primary"
                 />
                 @endunless
             </x-slot:buttons>

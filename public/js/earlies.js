@@ -150,10 +150,11 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
     // mark buttons as selected
     const filters = document.querySelector(`[role='${domain}-filters']`)
     if (criterion && id) {
-        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.add("ghost"); });
+        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.add("ghost"); btn.classList.remove("active"); });
         filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`).classList.remove("ghost");
+        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`).classList.add("active");
     } else {
-        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.remove("ghost"); });
+        filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.remove("ghost"); btn.classList.remove("active"); });
     }
 
     // filter objects
@@ -182,11 +183,10 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
 
 function filterShowcases(mode) {
     document.querySelectorAll("#showcases .showcase-section").forEach(section => {
-        if (section.getAttribute("data-mode") === mode) {
-            section.classList.remove("hidden")
-        } else {
-            section.classList.add("hidden")
-        }
+        section.classList.toggle("hidden", section.getAttribute("data-mode") !== mode);
+        section.closest(`.section`).querySelectorAll(`.header .actions .button.toggle`).forEach(btn => {
+            btn.classList.toggle("active", btn.getAttribute("onclick") === `filterShowcases('${mode}')`);
+        });
     })
 }
 

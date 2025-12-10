@@ -101,10 +101,6 @@
         </x-section>
 
         <x-section title="Tagi" icon="tag">
-            <x-slot name="buttons">
-                <x-a :href="route('file-tag-edit')" target="_blank" icon="plus">Dodaj nowy</x-a>
-            </x-slot>
-
             <div class="flex right center wrap">
             @forelse ($tags as $tag)
             <div>
@@ -119,7 +115,13 @@
     </div>
 
     <div>
-        <x-button action="submit" name="action" value="save" label="Zapisz" icon="check" />
+        <x-shipyard.ui.button action="submit"
+            name="action"
+            value="save"
+            label="Zapisz"
+            icon="check"
+            class="primary"
+        />
     </div>
 </form>
 

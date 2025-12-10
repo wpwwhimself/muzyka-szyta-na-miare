@@ -75,7 +75,10 @@
             :icon="$icon"
             action="none"
             onclick="filterShowcases('{{ $label }}')"
-            class="tertiary"
+            @class([
+                "toggle",
+                "active" => $label === "samodzielnie",
+            ])
         />
         @endforeach
     </x-slot:buttons>

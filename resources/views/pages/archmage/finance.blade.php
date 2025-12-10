@@ -158,7 +158,7 @@
         </x-extendo-block>
         @endforeach
 
-        <x-button action="submit" icon="cash-register" label="Opłać zaznaczone" />
+        <x-shipyard.ui.button class="primary" action="submit" icon="cash-register" label="Opłać zaznaczone" />
     </form>
 
     <x-slot:buttons>

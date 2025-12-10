@@ -110,7 +110,10 @@
             icon="bullhorn"
             action="none"
             onclick="filterShowcases('{{ $mode }}')"
-            class="tertiary"
+            @class([
+                "toggle",
+                "active" => $mode === "list",
+            ])
         />
         @endforeach
     </x-slot:buttons>

@@ -8,7 +8,7 @@
 
 <div class="flex right hide-for-print">
     <x-shipyard.ui.button action="none" onclick="printInvoice();"
-        icon="download" label="Drukuj"
+        icon="download" label="Drukuj" class="tertiary"
     />
 </div>
 

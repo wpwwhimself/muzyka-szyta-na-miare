@@ -19,7 +19,7 @@
         @foreach ($genres as $genre)
         <x-shipyard.ui.button
             action="none"
-            class="tertiary"
+            class="toggle"
             :label="$genre->name"
             icon="radio"
             onclick="filterSongs(`podklady`, 'genre', {{ $genre->id }})"
@@ -29,7 +29,7 @@
         @foreach ($song_tags as $tag)
         <x-shipyard.ui.button
             action="none"
-            class="tertiary"
+            class="toggle"
             :label="$tag->name"
             icon="tag"
             onclick="filterSongs(`podklady`, 'tag', {{ $tag->id }})"

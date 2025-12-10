@@ -91,10 +91,6 @@
 
     <div class="grid" style="--col-count: 2;">
         <x-section title="Tagi" icon="tag">
-            <x-slot name="buttons">
-                <x-a :href="route('file-tag-edit')" target="_blank" icon="plus">Dodaj nowy</x-a>
-            </x-slot>
-
             <div class="flex right center wrap">
                 @forelse ($tags as $tag)
                 <div class="input-container">
@@ -132,9 +128,9 @@
     </div>
 
     <x-slot:actions>
-        <x-shipyard.ui.button action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
+        <x-shipyard.ui.button class="primary" action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
         @if ($file)
-        <x-shipyard.ui.button action="submit" name="action" value="delete" label="Usuń" icon="delete" />
+        <x-shipyard.ui.button class="danger" action="submit" name="action" value="delete" label="Usuń" icon="delete" />
         <x-a :href="route('files-upload-by-entity', ['entity_name' => 'file', 'id' => $file?->id])">Wgraj kolejny</x-a>
         @endif
     </x-slot:actions>

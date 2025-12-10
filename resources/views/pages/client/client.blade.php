@@ -8,7 +8,7 @@
     method="POST"
 >
     <x-slot:actions>
-        <x-button action="submit" label="Popraw dane" icon="pencil" />
+        <x-shipyard.ui.button class="primary" action="submit" label="Popraw dane" icon="pencil" />
     </x-slot:actions>
 
     <div class="grid but-mobile-down" style="--col-count: 2;">

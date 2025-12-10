@@ -13,6 +13,7 @@
     <x-shipyard.ui.button action="submit"
         :icon="$invoice->visible ? 'eye-off' : 'eye'"
         :label="$invoice->visible ? 'Ukryj' : 'Pokaż'"
+        class="primary"
     />
 
     <x-shipyard.ui.button :action="route('invoices')"
@@ -20,7 +21,7 @@
     />
 
     <x-shipyard.ui.button action="none" onclick="printInvoice();"
-        icon="download" label="Drukuj"
+        icon="download" label="Drukuj" class="tertiary"
     />
 </form>
 

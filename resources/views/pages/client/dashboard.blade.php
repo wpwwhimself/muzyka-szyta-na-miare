@@ -132,10 +132,11 @@
                     Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
                 </x-warning>
             </p>
-            <x-button
+            <x-shipyard.ui.button
                 label="Właśnie wystawił{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                 action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
-                />
+                class="primary"
+            />
         </form>
         @endif
     </x-section>

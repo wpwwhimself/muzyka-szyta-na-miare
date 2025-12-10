@@ -79,7 +79,7 @@
         @csrf
         <x-select name="song_id" label="Utwór" :options="$all_songs" :small="true" />
         <x-input type="text" name="embed" label="Embed" :small="true" />
-        <x-button action="submit" label="Dodaj" icon="plus" :small="true" />
+        <x-shipyard.ui.button class="primary" action="submit" label="Dodaj" icon="plus" />
     </form>
 
     <table>

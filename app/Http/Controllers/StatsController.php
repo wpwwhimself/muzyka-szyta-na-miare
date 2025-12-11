@@ -804,7 +804,7 @@ class StatsController extends Controller
 
     public function costs()
     {
-        return redirect()->route("admin.model.list", ["model" => "costs"]);
+        return redirect()->route("admin.model.list", ["model" => "money-transactions"]);
     }
     
     public function modCost(Request $rq){

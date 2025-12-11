@@ -175,10 +175,6 @@ class CostType extends Model
     #endregion
 
     #region relations
-    public function costs(){
-        return $this->hasMany(Cost::class);
-    }
-
     public function transactions()
     {
         return $this->morphMany(MoneyTransaction::class, "typable");

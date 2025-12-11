@@ -22,6 +22,7 @@ class MoneyTransaction extends Model
         "description" => "Wpłaty i wydatki.",
         "role" => "",
         "ordering" => 42,
+        "defaultSort" => "-date",
     ];
 
     use SoftDeletes, Userstamps, HasUuids;

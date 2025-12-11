@@ -130,6 +130,11 @@ class IncomeType extends Model
     #region scopes
     use HasStandardScopes;
 
+    public function scopeVisible($query)
+    {
+        return $query;
+    }
+
     public function scopeForGigs($query)
     {
         return $query->where("name", "regexp", "granie:");

@@ -102,7 +102,7 @@ class Cost extends Model
         "type" => [
             "model" => CostType::class,
             "mode" => "one",
-            // "field_name" => "",
+            "field_name" => "cost_type_id",
             "field_label" => "Typ",
         ],
     ];

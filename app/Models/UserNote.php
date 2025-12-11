@@ -382,6 +382,18 @@ class UserNote extends Authenticatable
         );
     }
 
+    //? override edit button on model list
+    public function modelEditButton(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.shipyard.ui.button", [
+                "icon" => "pencil",
+                "label" => "Edytuj",
+                "action" => route("client-view", ["id" => $this->user_id]),
+            ])->render(),
+        );
+    }
+
     public function exp(): Attribute
     {
         return Attribute::make(

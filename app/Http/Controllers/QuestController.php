@@ -27,17 +27,14 @@ use Illuminate\Support\Str;
 class QuestController extends Controller
 {
     public function list(HttpRequest $rq){
-        $status_id = $rq->status;
-        $paid = $rq->paid;
+        if (is_archmage()) {
+            return redirect()->route("admin.model.list", ["model" => "quests"])->withInput();
+        }
 
         $client = User::find(is_archmage() ? $rq->client : Auth::id());
 
         $quests = Quest::orderBy("quests.created_at", "desc");
         if($client){ $quests = $quests->where("client_id", $client->id); }
-        if (is_archmage()) {
-            if($status_id) $quests = $quests->where("status_id", $status_id);
-            if($paid) $quests = $quests->where("paid", $paid);
-        }
 
         $quests = $quests->paginate(25);
 

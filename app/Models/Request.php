@@ -266,6 +266,16 @@ class Request extends Model
     //     );
     // }
 
+    //? override edit button on model list
+    public function modelEditButton(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.requests.edit-buttons", [
+                "request" => $this,
+            ])->render(),
+        );
+    }
+
     public function clientName(): Attribute
     {
         return Attribute::make(

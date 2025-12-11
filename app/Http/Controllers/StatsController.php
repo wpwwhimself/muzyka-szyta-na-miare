@@ -802,21 +802,11 @@ class StatsController extends Controller
         return redirect()->route("invoice", ["id" => $invoice->id])->with("toast", ["success", ($rq->id) ? "Dokument poprawiony" : "Dokument utworzony"]);
     }
 
-    public function costs(){
-        $costs = MoneyTransaction::where("typable_type", CostType::class)->orderByDesc("date")->paginate(25);
-        $types = CostType::all()->pluck("name", "id");
-        $types = collect(array_map(fn($el) => _ct_($el), $types->toArray()));
-        $summary = [
-            "Zwykłe" => MoneyTransaction::where("typable_type", CostType::class)->where("typable_id", "<>", 3)->sum("amount"),
-            "Wypłaty" => MoneyTransaction::where("typable_type", CostType::class)->where("typable_id", 3)->sum("amount"),
-            "Razem" => MoneyTransaction::where("typable_type", CostType::class)->sum("amount"),
-        ];
-
-        return view("pages.".user_role().".costs", array_merge(
-            ["title" => "Lista kosztów"],
-            compact("costs", "types", "summary"),
-        ));
+    public function costs()
+    {
+        return redirect()->route("admin.model.list", ["model" => "costs"]);
     }
+    
     public function modCost(Request $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = [

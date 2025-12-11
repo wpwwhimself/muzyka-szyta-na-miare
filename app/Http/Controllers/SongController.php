@@ -21,6 +21,10 @@ use Illuminate\View\View;
 class SongController extends Controller
 {
     public function list(Request $rq){
+        if (is_archmage()) {
+            return redirect()->route("admin.model.list", ["model" => "songs"])->withInput();
+        }
+
         $search = strtolower($rq->search ?? "");
         $songs = Song::orderBy("title")
             ->whereRaw("LOWER(title) like '%$search%'")

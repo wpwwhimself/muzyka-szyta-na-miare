@@ -47,7 +47,7 @@
             {{ $requests->count() }}
         </x-shipyard.app.icon-label-value>
 
-        <x-a href="{{ route('add-request') }}" icon="plus">Dodaj nowe</x-a>
+        <x-shipyard.ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
     </x-slot>
 

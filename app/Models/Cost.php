@@ -20,6 +20,7 @@ class Cost extends Model
         "description" => "Koszty związane z działalnością - na sprzęt, outsourcing, rachunki itp.",
         "role" => "archmage",
         "ordering" => 99,
+        "defaultSort" => "-date",
     ];
 
     protected $fillable = [
@@ -51,7 +52,7 @@ class Cost extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => as_pln($this->amount) . ", " . $this->created_at,
+                "slot" => as_pln($this->amount),
             ])->render(),
         );
     }
@@ -59,9 +60,7 @@ class Cost extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->created_at->format("Y-m-d"),
         );
     }
 
@@ -122,11 +121,11 @@ class Cost extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "Data",
+            "compare-using" => "field",
+            "discr" => "created_at",
+        ],
     ];
 
     public const FILTERS = [

@@ -29,6 +29,7 @@ class UserNote extends Authenticatable
         "description" => "Dane kontaktowe klientów, ich preferencje i zobowiązania",
         "role" => "technical",
         "ordering" => 98,
+        "defaultSort" => "-exp",
     ];
 
     use SoftDeletes, Userstamps;

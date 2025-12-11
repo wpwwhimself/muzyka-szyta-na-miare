@@ -23,6 +23,7 @@ class Request extends Model
         "description" => "",
         "role" => "",
         "ordering" => 21,
+        "defaultSort" => "-date",
     ];
 
     protected $fillable = [
@@ -210,11 +211,11 @@ class Request extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "Data",
+            "compare-using" => "field",
+            "discr" => "created_at",
+        ],
     ];
 
     public const FILTERS = [
@@ -225,6 +226,20 @@ class Request extends Model
             "discr" => "client_name",
             "type" => "text",
             "operator" => "regexp",
+        ],
+        "status" => [
+            "label" => "Status",
+            "icon" => "timeline",
+            "compare-using" => "field",
+            "discr" => "status_id",
+            "type" => "select",
+            "selectData" => [
+                "optionsFromScope" => [
+                    Status::class,
+                    "forRequests",
+                ],
+                "emptyOption" => "wszystkie",
+            ],
         ],
     ];
 

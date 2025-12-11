@@ -157,6 +157,18 @@ class Status extends Model
     {
         return $this->orderBy("id");
     }
+
+    public function scopeForRequests($query)
+    {
+        return $this->where("id", "<", 10)
+            ->orderBy("id");
+    }
+
+    public function scopeForQuests($query)
+    {
+        return $this->whereBetween("id", [11, 99])
+            ->orderBy("id");
+    }
     #endregion
 
     #region attributes

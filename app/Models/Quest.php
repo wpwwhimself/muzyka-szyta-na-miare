@@ -21,6 +21,7 @@ class Quest extends Model
         "description" => "",
         "role" => "",
         "ordering" => 22,
+        "defaultSort" => "-date",
     ];
 
     public $incrementing = false;
@@ -172,11 +173,11 @@ class Quest extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "Data",
+            "compare-using" => "field",
+            "discr" => "created_at",
+        ],
     ];
 
     public const FILTERS = [
@@ -194,6 +195,20 @@ class Quest extends Model
                     "user_id",
                 ],
                 "emptyOption" => "wszyscy",
+            ],
+        ],
+        "status" => [
+            "label" => "Status",
+            "icon" => "timeline",
+            "compare-using" => "field",
+            "discr" => "status_id",
+            "type" => "select",
+            "selectData" => [
+                "optionsFromScope" => [
+                    Status::class,
+                    "forQuests",
+                ],
+                "emptyOption" => "wszystkie",
             ],
         ],
     ];

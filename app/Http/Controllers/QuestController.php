@@ -90,11 +90,11 @@ class QuestController extends Controller
         $quest = Quest::findOrFail($rq->quest_id);
 
         $this->checkFallbackSongWorkTime($quest, $rq->status_id == 12);
-        if (SongWorkTime::where([
-            "song_id" => $quest->song_id,
-            "now_working" => 1,
-            "status_id" => WorkClockController::STATUS_SPECIAL,
-        ])->first()) {
+        if (SongWorkTime::where("song_id", $quest->song_id)
+            ->where("now_working", true)
+            ->where("status_id", "<>", WorkClockController::STATUS_SPECIAL)
+            ->first()
+        ) {
             return back()->with("toast", ["error", "Zatrzymaj zegar"]);
         }
 

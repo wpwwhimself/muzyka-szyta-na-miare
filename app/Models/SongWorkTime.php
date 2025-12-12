@@ -20,6 +20,7 @@ class SongWorkTime extends Model
         "description" => "",
         "role" => "archmage",
         "ordering" => 9,
+        "defaultSort" => "-date",
     ];
 
     protected $fillable = [
@@ -123,25 +124,33 @@ class SongWorkTime extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "Data rozpoczęcia",
+            "compare-using" => "field",
+            "discr" => "since",
+        ],
+        "status" => [
+            "label" => "Kategoria",
+            "compare-using" => "field",
+            "discr" => "status_id",
+        ],
     ];
 
     public const FILTERS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "mode" => "<one|many>",
-        //     "operator" => "",
-        //     "options" => [
-        //         "<label>" => <value>,
-        //     ],
-        // ],
+        "song" => [
+            "label" => "Utwór",
+            "icon" => "compact-disc",
+            "compare-using" => "field",
+            "discr" => "song_id",
+            "mode" => "one",
+            "type" => "select",
+            "selectData" => [
+                "optionsFromScope" => [
+                    Song::class,
+                    "forConnection",
+                ],
+            ],
+        ],
     ];
 
     #region scopes

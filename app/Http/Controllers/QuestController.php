@@ -88,7 +88,13 @@ class QuestController extends Controller
     public function processMod(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->quest_id);
-        if(SongWorkTime::where(["song_id" => $quest->song_id, "now_working" => 1])->first()){
+
+        $this->checkFallbackSongWorkTime($quest, $rq->status_id == 12);
+        if (SongWorkTime::where([
+            "song_id" => $quest->song_id,
+            "now_working" => 1,
+            "status_id" => WorkClockController::STATUS_SPECIAL,
+        ])->first()) {
             return back()->with("toast", ["error", "Zatrzymaj zegar"]);
         }
 
@@ -382,5 +388,24 @@ class QuestController extends Controller
             "has_files_on_external_drive" => $rq->external,
         ]);
         return back()->with("toast", ["success", "Zmieniono status chmury"]);
+    }
+
+    private function checkFallbackSongWorkTime(Quest $quest, bool $start_counting)
+    {
+        $song = $quest->song;
+
+        // abort if log contains normal entries
+        if ($song->work_time?->filter(fn ($log) =>
+            $log->status_id !== WorkClockController::STATUS_SPECIAL
+        )) {
+            return;
+        }
+
+        WorkClockController::_startStop(
+            $song->id,
+            $start_counting
+                ? WorkClockController::STATUS_SPECIAL
+                : WorkClockController::STATUS_STOP
+        );
     }
 }

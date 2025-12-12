@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkClockController extends Controller
 {
+    public const STATUS_STOP = 13;
+    public const STATUS_SPECIAL = 199;
+
     public function main() {
         return view("pages.".user_role().".studio", array_merge([
             "title" => "Studio",
@@ -55,6 +58,14 @@ class WorkClockController extends Controller
 
     public function startStop(Request $rq){
         if(Auth::id() === 0) return response()->json(OBSERVER_ERROR(), 403);
+        
+        $response = self::_startStop($rq->song_id, $rq->status_id);
+
+        return response()->json($response);
+    }
+
+    public static function _startStop($song_id, $status_id)
+    {
         $now_working = SongWorkTime::where("now_working", 1)->first();
         $response = [];
 
@@ -71,24 +82,24 @@ class WorkClockController extends Controller
             ];
         }
 
-        if($rq->status_id != 13){
+        if($status_id != self::STATUS_STOP){
             $current = SongWorkTime::updateOrCreate([
-                "status_id" => $rq->status_id,
-                "song_id" => $rq->song_id,
+                "status_id" => $status_id,
+                "song_id" => $song_id,
             ],
             [
                 "now_working" => 1,
                 "since" => now(),
             ]);
             $response["started"] = [
-                "status_id" => $rq->status_id,
+                "status_id" => $status_id,
                 "time" => $current->time_spent,
             ];
         }
 
-        $response["now_working"] = $rq->status_id != 13;
+        $response["now_working"] = $status_id != self::STATUS_STOP;
 
-        return response()->json($response);
+        return $response;
     }
 
     public function remove($song_id, $status_id){

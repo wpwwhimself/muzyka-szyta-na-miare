@@ -161,8 +161,8 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
     // let visible_songs = 0;
     document.querySelectorAll(`ul#${domain}-song-list li`).forEach(song => {
         const haystacks = {
-            genre: parseInt(song.getAttribute("data-song-genre")),
-            tag: song.getAttribute("data-song-tags").split(",").map(parseInt)
+            genre: Number(song.getAttribute("data-song-genre")),
+            tag: song.getAttribute("data-song-tags").split(",").map(Number),
         }
 
         if (criterion === undefined) {

@@ -160,14 +160,12 @@ class Quest extends Model
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "arrow-right",
+            "label" => "Przejdź do zlecenia",
+            "show-on" => "edit",
+            "route" => "quest",
+        ],
     ];
     #endregion
 

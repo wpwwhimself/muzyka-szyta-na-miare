@@ -198,14 +198,12 @@ class Request extends Model
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "arrow-right",
+            "label" => "Przejdź do zapytania",
+            "show-on" => "edit",
+            "route" => "request",
+        ],
     ];
     #endregion
 

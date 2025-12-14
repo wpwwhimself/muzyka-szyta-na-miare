@@ -505,7 +505,7 @@ footer .icon.invert-when-dark {
 }
 
 section, .section {
-    &:not(.backdropped) {
+    &:not(.backdropped, #modal .section) {
         background: transparent;
     }
 

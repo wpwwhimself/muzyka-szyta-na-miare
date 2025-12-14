@@ -472,6 +472,7 @@ class StatsController extends Controller
                         "organy" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "organy"))->count(),
                         "koncert" => $two_months_back->filter(fn ($gt) => Str::contains($gt->typable->name, "koncert"))->count(),
                     ],
+                    "main_list" => $one_month_back->sortByDesc("date"),
                 ],
             ],
             "finances" => [
@@ -806,7 +807,7 @@ class StatsController extends Controller
     {
         return redirect()->route("admin.model.list", ["model" => "money-transactions"]);
     }
-    
+
     public function modCost(Request $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $fields = [

@@ -44,6 +44,31 @@
             />
             @endforeach
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Kategoria</th>
+                    <th>Opis</th>
+                    <th>Kwota</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($stats["gigs"]["recent"]["main_list"] as $gig)
+                <tr>
+                    <td>{{ $gig->date->format("d.m.Y") }}</td>
+                    <td>{{ Str::of($gig->typable->name)->after("granie: ") }}</td>
+                    <td>{{ $gig->description }}</td>
+                    <td>{{ _c_(as_pln($gig->amount)) }}</td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="ghost">Brak wpisów</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </x-shipyard.app.section>
 
     <x-shipyard.app.section title="Przychody w ostatnich 12 mc" icon="cash" style="grid-column: span 2;">

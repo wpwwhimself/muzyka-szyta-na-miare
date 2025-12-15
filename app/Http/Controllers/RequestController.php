@@ -32,7 +32,7 @@ class RequestController extends Controller
         if (is_archmage()) {
             return redirect()->route("admin.model.list", ["model" => "requests"])->withInput();
         }
-        
+
         $client = User::find(is_archmage() ? $rq->client : Auth::id());
 
         $requests = Request::orderBy("updated_at", "desc");
@@ -49,6 +49,10 @@ class RequestController extends Controller
     public function show($id){
         $request = Request::findOrFail($id);
         $pad_size = 30; // used by dropdowns for mobile preview fix
+
+        if ($request->status_id === 9 && !is_archmage()) {
+            return redirect()->route("quest", ["id" => $request->quest_id]);
+        }
 
         if(is_archmage()){
             $clients = User::all()

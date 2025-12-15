@@ -180,6 +180,11 @@ class Request extends Model
             "mode" => "one",
             "field_label" => "Rodzaj zlecenia",
         ],
+        "status" => [
+            "model" => Status::class,
+            "mode" => "one",
+            "field_label" => "Status",
+        ],
         "song" => [
             "model" => Song::class,
             "mode" => "one",

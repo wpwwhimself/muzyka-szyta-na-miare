@@ -19,6 +19,7 @@ if ($model) {
         $model->price_code_override ?? $model->price_code,
         $model->client_id,
         $model instanceof \App\Models\Request // quote mode only for requests
+            && $model->status_id !== 9 // which are yet to be accepted
     );
 }
 @endphp

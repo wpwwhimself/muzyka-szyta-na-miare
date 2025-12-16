@@ -405,9 +405,6 @@ footer .icon.invert-when-dark {
                 font-size: 1.5em;
                 width: var(--circle-size); height: var(--circle-size);
                 background: var(--bg-lite1);
-                &:hover{
-                    background: rgba(var(--q-clr), 0.5);
-                }
                 &.by-client{
                     border: 2px solid var(--primary);
                 }

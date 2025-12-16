@@ -65,30 +65,29 @@
         @endif
 
         <x-extendo-block key="client"
-            :header-icon="model_icon('users')"
+            :icon="model_icon('users')"
             title="Dane klienta"
             :subtitle="$request->user ?? $request->client_name"
             :extended="in_array($request->status_id, [1, 6])"
         >
-            <div class="flex right center middle">
-                <span>Powiązanie z klientem: {!! $request->user ?? "brak" !!}</span>
-                <input type="hidden" name="client_id" value="{{ $request->client_id }}" />
-
+            <x-slot:buttons>
                 @if ($request->client_id)
-                <x-button
+                <x-shipyard.ui.button
                     :action="route('client-view', ['id' => $request->client_id])"
                     :icon="model_icon('users')"
-                    label="Szczegóły"
+                    pop="Szczegóły"
+                    target="_blank"
                 />
-                <x-button
-                    :action="route('quests', ['client' => $request->client_id])"
+                <x-shipyard.ui.button
+                    :action="route('admin.model.list', ['model' => 'quests', 'fltr[client]' => $request->client_id])"
                     :icon="model_icon('quests')"
-                    label="Zlecenia"
+                    pop="Zlecenia"
+                    target="_blank"
                 />
                 @else
                 <x-shipyard.ui.button
                     icon="link"
-                    label="Przypisz klienta"
+                    pop="Przypisz klienta"
                     action="none"
                     onclick="openModal('select-user-to-request', {
                         request_id: '{{ $request->id }}',
@@ -97,7 +96,9 @@
                     class="tertiary"
                 />
                 @endif
-            </div>
+            </x-slot:buttons>
+
+            <input type="hidden" name="client_id" value="{{ $request->client_id }}" />
 
             @foreach ([
                 "client_name",
@@ -111,27 +112,24 @@
         </x-extendo-block>
 
         <x-extendo-block key="song"
-            :header-icon="model_icon('songs')"
+            :icon="model_icon('songs')"
             title="Dane utworu"
             :subtitle="$request->full_title"
             :extended="in_array($request->status_id, [1, 6, 96])"
             :warning="$warnings['song']"
         >
-            <div class="flex right center middle">
-                <span>Powiązanie z utworem: {{ $request->song ?? "brak" }}</span>
-                <input type="hidden" name="song_id" value="{{ $request->song_id }}" />
-
+            <x-slot:buttons>
                 @if ($request->song_id)
-                <x-button
-                    :action="route('songs', ['search' => $request->song_id])"
+                <x-shipyard.ui.button
+                    :action="route('admin.model.list', ['model' => 'songs', 'fltr[id]' => $request->song_id])"
                     :icon="model_icon('songs')"
-                    label="Szczegóły"
+                    pop="Szczegóły"
+                    target="_blank"
                 />
-
                 @else
                 <x-shipyard.ui.button
                     icon="link"
-                    label="Przypisz utwór"
+                    pop="Przypisz utwór"
                     action="none"
                     onclick="openModal('select-song-to-request', {
                         request_id: '{{ $request->id }}',
@@ -139,9 +137,10 @@
                     })"
                     class="tertiary"
                 />
-
                 @endif
-            </div>
+            </x-slot:buttons>
+
+            <input type="hidden" name="song_id" value="{{ $request->song_id }}" />
 
             @foreach ([
                 "title",

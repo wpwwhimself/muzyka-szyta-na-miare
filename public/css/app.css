@@ -16,17 +16,6 @@ a.section,
     text-decoration: none;
 }
 
-/* loader support */
-#price-summary,
-#delayed-payments-summary {
-    position: relative;
-
-    & .loader {
-        position: absolute;
-        left: 0; right: 0;
-    }
-}
-
 /*** plot ***/
 
 #clients-stats-graph,

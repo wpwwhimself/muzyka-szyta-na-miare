@@ -10,8 +10,9 @@ function openExtendoBlock(btn, key) {
  * runs price calculation
  */
 function reQuestCalcPrice(labels, client_id) {
-    document.querySelector("#price-summary .loader").classList.remove("hidden");
+    const loader = document.querySelector("#price-summary .loader");
 
+    loader.classList.remove("hidden");
     fetch(`/api/price_calc`, {
         method: "POST",
         headers: {
@@ -208,7 +209,7 @@ function getSongList(domain = undefined) {
         .then(res => res.json())
         .then(({data, table}) => {
             list.replaceWith(fromHTML(table));
-            
+
             if (params.has("tag")) {
                 filterSongs(domain, "tag", params.get("tag"));
             } else if (params.has("genre")) {

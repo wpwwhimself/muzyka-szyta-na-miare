@@ -55,13 +55,6 @@ class Podklady extends Component
         $this->average_quest_done = (count($diffs) == 0) ? 0 : round(array_sum($diffs)/count($diffs));
 
         $this->random_song = Song::all()->random();
-
-        $this->contact_preferences = [
-            "email" => "email",
-            "telefon" => "telefon",
-            "sms" => "SMS",
-            "inne" => "inne"
-        ];
     }
 
     /**

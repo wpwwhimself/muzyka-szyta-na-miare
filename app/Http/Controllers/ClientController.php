@@ -27,31 +27,10 @@ class ClientController extends Controller
         $client = User::findOrFail($id);
         if(!in_array(Auth::id(), [0, 1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
-        $contact_preferences = [
-            "email" => "email",
-            "telefon" => "telefon",
-            "sms" => "SMS",
-            "inne" => "inne",
-        ];
-        $trust_levels = [
-            -1 => "krętacz",
-            0 => "neutralne",
-            1 => "zaufany",
-            2 => "ulubiony",
-        ];
-        $patron_levels = [
-            0 => "brak",
-            1 => "oczekuje",
-            2 => "potwierdzony",
-        ];
-
         return view("pages.".user_role().".client", array_merge([
             "title" => $client->client_name." | Edycja klienta"
         ], compact(
             "client",
-            "contact_preferences",
-            "trust_levels",
-            "patron_levels",
         )));
     }
 

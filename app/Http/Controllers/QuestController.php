@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class QuestController extends Controller
 {
@@ -279,6 +280,20 @@ class QuestController extends Controller
         return back()->with("toast", ["success", "Zlecenie zmodyfikowane"]);
     }
 
+    #region update quote
+    public function updateQuoteSummary(HttpRequest $rq): View
+    {
+        $quest = Quest::findOrFail($rq->id);
+        $price_data = StatsController::runPriceCalc($rq->price_code_override, $quest->client_id);
+        $delayed_payment_data = StatsController::runMonthlyPaymentLimit($price_data["price"]);
+
+        return view("components.shipyard.app.card", [
+            "title" => "Podsumowanie zmiany wyceny",
+            "icon" => "alert",
+            "slot" => "Nowa cena: $price_data[price] zł, opóźnienie płatności: +$delayed_payment_data[when_to_ask].",
+        ]);
+    }
+
     public function updateQuote(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         $quest = Quest::findOrFail($rq->id);
@@ -370,6 +385,7 @@ class QuestController extends Controller
         );
         return back()->with("toast", ["success", "Wycena zapytania zmodyfikowana"]);
     }
+    #endregion
 
     public function updateFilesReady(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);

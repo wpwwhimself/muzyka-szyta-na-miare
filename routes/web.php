@@ -83,6 +83,7 @@ Route::middleware("auth")->group(function(){
         Route::post('/mod-back', "processMod")->name("mod-quest-back");
 
         Route::post("/song-update", "updateSong")->name("quest-song-update");
+        Route::post("/quote-update-summary", "updateQuoteSummary")->name("quest-quote-update-summary");
         Route::post("/quote-update", "updateQuote")->name("quest-quote-update");
         Route::post("/wishes-update", "updateWishes")->name("quest-wishes-update");
         Route::post("/files-ready-update", "updateFilesReady")->name("quest-files-ready-update");

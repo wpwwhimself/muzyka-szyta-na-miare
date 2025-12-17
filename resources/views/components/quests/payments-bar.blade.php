@@ -6,7 +6,7 @@
     <x-shipyard.app.h lvl="4" icon="account-cash">Wpłaty</x-shipyard.app.h>
 
     @if ($quest->delayed_payment_in_effect)
-    <div class="flex right spread middle accent danger">
+    <div class="flex right spread middle nowrap accent danger">
         <x-shipyard.ui.field-input :model="$quest" field-name="delayed_payment" dummy />
         <x-warning>
             Z uwagi na limity przyjmowanych przeze mnie wpłat,

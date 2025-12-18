@@ -4,44 +4,41 @@
 
 @section('content')
 
-<x-shipyard.app.form method="POST" :action="route('mod-quest-back')">
-    <x-phase-indicator :status-id="$quest->status_id" />
-
-    <div class="archmage-quest-phases flex right center middle nowrap">
-        <x-input type="TEXT" name="comment" label="Komentarz do zmiany statusu" />
-        <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-
-        @foreach ([
-            ["Wprowadzenie/odrzucenie zmian", 11, [21]],
-            ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
-            ["Oddaj", 15, [11, 12, 13, 14, 16, 26, 96]],
-            ["Doprecyzuj", 95, [11, 12, 13, 14, 16, 26, 96]],
-            ["Klient odpowiada", 96, [95]],
-            ["Zawieś", 13, [11, 12, 14, 16, 96]],
-            ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 31, 96]],
-            ["Klient cofa", 16, [15]],
-            ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 31, 21, 95, 96]],
-            ["Kient przywraca", 26, [17, 18, 19]],
-            ["Kient prosi o zmiany", 21, [11]],
-            ["Wygaś", 17, [13, 15]],
-            ["Popraw ostatni komentarz", $quest->status_id, [$quest->status_id]],
-        ] as [$label, $status_id, $show_on_statuses])
-            @if (in_array($quest->status_id, $show_on_statuses))
-            @php
-            $nomail = (!$quest->user->notes->email && in_array($status_id, [15, 95]));
-            $new_status = \App\Models\Status::find(abs($status_id));
-            @endphp
-            <x-shipyard.ui.button action="submit"
-                name="status_id"
-                :icon="$new_status->icon"
-                :value="$status_id"
-                :pop="$label . ($nomail ? ' (bez maila)' : '')"
-                :class="$nomail ? 'danger' : 'primary'"
-            />
-            @endif
-        @endforeach
-    </div>
-</x-shipyard.app.form>
+<x-phase-indicator :status-id="$quest->status_id" />
+<div class="archmage-quest-phases flex right center middle">
+    @foreach ([
+        ["Wprowadzenie/odrzucenie zmian", 11, [21]],
+        ["Rozpocznij", 12, [11, 13, 14, 16, 26, 96]],
+        ["Oddaj", 15, [11, 12, 13, 14, 16, 26, 96]],
+        ["Doprecyzuj", 95, [11, 12, 13, 14, 16, 26, 96]],
+        ["Klient odpowiada", 96, [95]],
+        ["Zawieś", 13, [11, 12, 14, 16, 96]],
+        ["Klient akceptuje", $quest->files_ready ? 19 : 14, [15, 31, 96]],
+        ["Klient cofa", 16, [15]],
+        ["Klient odrzuca", 18, [11, 12, 13, 14, 15, 16, 31, 21, 95, 96]],
+        ["Kient przywraca", 26, [17, 18, 19]],
+        ["Kient prosi o zmiany", 21, [11]],
+        ["Wygaś", 17, [13, 15]],
+        ["Popraw ostatni komentarz", $quest->status_id, [$quest->status_id]],
+    ] as [$label, $status_id, $show_on_statuses])
+        @if (in_array($quest->status_id, $show_on_statuses))
+        @php
+        $nomail = (!$quest->user->notes->email && in_array($status_id, [15, 95]));
+        $new_status = \App\Models\Status::find(abs($status_id));
+        @endphp
+        <x-shipyard.ui.button
+            :icon="$new_status->icon"
+            :label="$label . ($nomail ? ' (bez maila)' : '')"
+            action="none"
+            onclick="openModal('quest-change-status', {
+                quest_id: '{{ $quest->id }}',
+                status_id: {{ $status_id }},
+            })"
+            class="tertiary"
+        />
+        @endif
+    @endforeach
+</div>
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
     @if (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))

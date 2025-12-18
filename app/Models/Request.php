@@ -118,12 +118,12 @@ class Request extends Model
                     ["value" => "sms", "label" => "sms/komunikator"],
                 ],
             ],
+            "required" => true,
         ],
         "title" => [
             "type" => "text",
             "label" => "Tytuł utworu",
             "icon" => "music-box",
-            "required" => true,
         ],
         "artist" => [
             "type" => "text",
@@ -189,6 +189,11 @@ class Request extends Model
             "model" => Song::class,
             "mode" => "one",
             "field_label" => "Utwór",
+        ],
+        "quest" => [
+            "model" => Quest::class,
+            "mode" => "one",
+            "field_label" => "Zlecenie",
         ],
         "genre" => [
             "model" => Genre::class,

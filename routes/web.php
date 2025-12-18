@@ -106,8 +106,6 @@ Route::middleware("auth")->group(function(){
         Route::get("/list", "list")->name("songs");
         Route::get("/edit/{id}", "edit")->name("song-edit");
         Route::post("/process", "process")->name("song-process");
-
-        Route::get("downloader", "downloader")->name("song-downloader");
     });
 
     Route::controller(FileController::class)->group(function(){

@@ -14,7 +14,7 @@
         />
             @if ($link->match("/youtu\.?be/") && is_archmage())
             <x-shipyard.ui.button
-                :action="route('song-downloader').'?link='.$link"
+                action="https://lazymum.wpww.pl/downloader?link={{ urlencode($link) }}&format=wav"
                 target="_blank"
                 icon="download"
                 pop="Pobieranie"

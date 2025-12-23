@@ -39,11 +39,14 @@
                 <tr class="ghost">
                 @endif
                     <td>
+                        @if ($item->relatable)
                         <a href="{{ route('client-view', ['id' => $item->relatable->user?->id ?? $item->relatable->id]) }}">
                             {!! $item->relatable->user ?? $item->relatable !!}
                         </a>
+                        @endif
                     </td>
                     <td>
+                        @if ($item->relatable)
                         @if($item->relatable instanceof App\Models\Quest)
                         <a href="{{ route('quest', ['id' => $item->relatable->id]) }}">
                             {{ $item->relatable->song }}
@@ -51,6 +54,7 @@
                         <x-phase-indicator-mini :status="$item->relatable->status" />
                         @else
                         <span class="grayed-out">budżet</span>
+                        @endif
                         @endif
                     </td>
                     <td>

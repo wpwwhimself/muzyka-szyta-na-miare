@@ -38,15 +38,21 @@
             <tr>
                 <td>{{ $pos->date->format("d.m.Y") }}</td>
                 <td>
+                    @if ($pos->relatable)
                     <a href="{{ route('client-view', ['id' => $pos->relatable->user?->id ?? $pos->relatable->id]) }}">
                         {!! $pos->relatable->user ?? $pos->relatable !!}
                     </a>
+                    @endif
                 </td>
                 <td>
+                    @if ($pos->relatable)
                     @if ($pos->relatable instanceof \App\Models\Quest)
                     <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a>
                     @else
                     <span class="grayed-out">budżet</span>
+                    @endif
+                    @else
+                    {{ $pos->description }}
                     @endif
                 </td>
                 <td>

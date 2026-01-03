@@ -395,7 +395,7 @@ class RequestController extends Controller
             if($client){
                 $client->update([
                     "client_name" => $rq->client_name,
-                    "email" => $rq->email,
+                    "email" => $rq->email ?? $client->email,
                     "phone" => $rq->phone,
                     "other_medium" => $rq->other_medium,
                     "contact_preference" => $rq->contact_preference,

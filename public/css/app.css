@@ -597,7 +597,13 @@ table {
     body {
         --margin: 36px;
         padding: var(--margin);
-        padding: var(--margin);
+        min-height: unset;
+        height: calc(100vh - 2 * var(--margin));
+
+        & #main-wrapper {
+            min-height: unset;
+            height: 100%;
+        }
     }
     footer{
         padding: 0 var(--margin);

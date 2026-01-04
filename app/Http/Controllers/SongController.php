@@ -84,9 +84,12 @@ class SongController extends Controller
             );
         }
 
+        $files = $song->files
+            ->groupBy("variant_name");
+
         return view("pages.".user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
-            compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion"),
+            compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion", "files"),
         ));
     }
 

@@ -108,4 +108,12 @@ function setFormToFileUpload() {
     </div>
 </x-shipyard.app.form>
 
+<x-shipyard.app.section
+    title="Pliki"
+    :icon="model_icon('files')"
+    :extended="false"
+>
+    <x-files.list :grouped-files="$files" :can-download-files="true" />
+</x-shipyard.app.section>
+
 @endsection

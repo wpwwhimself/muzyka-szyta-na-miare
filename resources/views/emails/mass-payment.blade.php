@@ -12,11 +12,10 @@
 <x-quests.tile-mail :quest="$quest" />
 @endforeach
 
-@if (!($quest->user->notes->is_veteran || $quest->user->notes->trust == 1))
 <p>
-    Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniami za pomocą odpowiednich przycisków w widoku zlecenia.
+    Jeśli w zleceniach są dostępne pliki,
+    teraz może je {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać za pomocą odpowiednich przycisków w widoku zlecenia.
 </p>
-@endif
 
 <p>
     Uprzejmie dziękuję za zaufanie i skorzystanie z moich usług.

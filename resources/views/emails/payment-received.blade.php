@@ -22,7 +22,8 @@
 
 @if (!($quest->user->notes->is_veteran || $quest->user->notes->trust == 1))
 <p>
-    Teraz może {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać pliki związane ze zleceniem za pomocą odpowiednich przycisków w widoku zlecenia.
+    Jeśli w zleceniu są dostępne pliki,
+    teraz może je {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać za pomocą odpowiednich przycisków w widoku zlecenia.
 </p>
 @endif
 

@@ -89,20 +89,28 @@ class ShowcasePlatform extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "code" => [
+            "type" => "text",
+            "label" => "Kod",
+            "icon" => "barcode",
+            "required" => true,
+        ],
+        "ordering" => [
+            "type" => "number",
+            "label" => "Kolejność",
+            "icon" => "sort",
+        ],
+        "icon_url" => [
+            "type" => "url",
+            "label" => "Ścieżka do ikony",
+            "icon" => "image",
+            "required" => true,
+        ],
+        "msznm_url" => [
+            "type" => "url",
+            "label" => "Link do profilu",
+            "icon" => "link",
+        ],
     ];
 
     public const CONNECTIONS = [

@@ -388,6 +388,11 @@ class UserNote extends Authenticatable
     {
         return Attribute::make(
             get: fn () => view("components.shipyard.ui.button", [
+                "icon" => "email",
+                "pop" => "Wyślij maila",
+                "action" => route("client-mail-prepare", ["client_id" => $this->user_id]),
+            ])->render()
+            . view("components.shipyard.ui.button", [
                 "icon" => "wrench",
                 "label" => "Edytuj",
                 "action" => route("client-view", ["id" => $this->user_id]),

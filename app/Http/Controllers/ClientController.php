@@ -9,6 +9,7 @@ use App\Models\MoneyTransaction;
 use App\Models\StatusChange;
 use App\Models\Top10;
 use App\Models\User;
+use App\Models\UserNote;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,11 +101,10 @@ class ClientController extends Controller
     #region mailing
     public function mailPrepare(?int $client_id = null)
     {
-        $clients = User::clients()
-            ->orderBy("client_name")
+        $clients = UserNote::orderBy("client_name")
             ->whereNotNull("email")
             ->get()
-            ->mapWithKeys(fn ($cl) => [$cl->id => "$cl->client_name ($cl->email)"])
+            ->map(fn ($cl) => ["value" => $cl->user_id, "label" => "$cl->client_name ($cl->email)"])
             ->toArray();
 
         return view("pages.".user_role().".mail.prepare", compact("clients", "client_id"));
@@ -116,11 +116,11 @@ class ClientController extends Controller
 
         $clients_for_mailing = $rq->clients
             ? User::whereIn("id", $rq->clients)->get()
-            : User::whereNotNull("email")->get(); // defaults to everybody available!
+            : User::has("notes")->whereHas("notes", fn ($q) => $q->whereNotNull("email"))->get(); // defaults to everybody available!
 
         foreach ($clients_for_mailing as $client) {
             try {
-                Mail::to($client->email)
+                Mail::to($client->notes->email)
                     ->send(new CustomMail($client, $rq->subject, $rq->content));
             } catch (Exception $e) {
                 $failures++;

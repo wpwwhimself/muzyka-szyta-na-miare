@@ -171,14 +171,14 @@
                     pop="Wgraj"
                     :action="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])"
                     target="_blank"
-                    onclick="primeReload();"
+                    onclick="primeReloadFileList(document.querySelector(`.files-container`));"
                 />
                 <x-shipyard.ui.button
                     icon="recycle"
                     pop="Dodaj istniejące"
                     :action="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])"
                     target="_blank"
-                    onclick="primeReload();"
+                    onclick="primeReloadFileList(document.querySelector(`.files-container`));"
                 />
                 @endunless
             </x-slot:buttons>
@@ -231,7 +231,7 @@
                 </div>
             </x-extendo-section>
 
-            <x-files.list :grouped-files="$files" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
+            <x-files.list :song-id="$quest->song_id" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
         </x-extendo-block>
 
         <x-song-work-time-log :quest="$quest" :extended="true" />

@@ -113,7 +113,7 @@ function setFormToFileUpload() {
     :icon="model_icon('files')"
     :extended="false"
 >
-    <x-files.list :grouped-files="$files" :can-download-files="true" />
+    <x-files.list :song-id="$song->id" :can-download-files="true" />
 </x-shipyard.app.section>
 
 @endsection

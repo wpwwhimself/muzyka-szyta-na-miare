@@ -107,7 +107,7 @@
         @endif
 
         @if (Auth::user()->notes->can_see_files)
-        <x-files.list :grouped-files="$files" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
+        <x-files.list :song-id="$quest->song_id" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
         @endif
 
         @if ($quest->status_id == 15 && !$quest->files_ready)

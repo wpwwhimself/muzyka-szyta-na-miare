@@ -11,6 +11,7 @@ use App\Models\ShowcasePlatform;
 use App\Models\Song;
 use App\Models\SongTag;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -84,12 +85,9 @@ class SongController extends Controller
             );
         }
 
-        $files = $song->files
-            ->groupBy("variant_name");
-
         return view("pages.".user_role().".songs.edit", array_merge(
             ["title" => ($song->title ?? "Bez tytułu") . " | Edycja utworu"],
-            compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion", "files"),
+            compact("song", "genres", "tags", "showcase", "showcase_platforms", "platform_suggestion"),
         ));
     }
 
@@ -194,6 +192,30 @@ class SongController extends Controller
 
     public function getById(string $id){
         return Song::find($id)->toJson();
+    }
+
+    public function getFiles(Song $song, Request $rq) {
+        $canDownloadFiles = $rq->get("canDownloadFiles", false);
+        $editable = $rq->get("editable", false);
+        $highlightForClientId = $rq->get("highlightForClientId", null);
+
+        // sanctum robi mnie w chuja i nie mogę przekazać loginu tokenem, więc przekazuję ID usera bokiem
+        $whoAmI = $rq->get("whoAmI", null);
+        Auth::login(User::find($whoAmI));
+
+        $groupedFiles = $song->files
+            ->groupBy("variant_name");
+
+        return response()->json([
+            "data" => $groupedFiles,
+            "table" => view("components.files.tiles", compact(
+                "groupedFiles",
+                "editable",
+                "highlightForClientId",
+                "canDownloadFiles",
+                "whoAmI",
+            ))->render(),
+        ]);
     }
 
     public function getForFront()

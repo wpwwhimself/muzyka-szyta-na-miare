@@ -129,6 +129,41 @@ const seekFilePlayer = (filename, event) => {
     updateSeeker(filename)
 }
 
+//#region song files
+function loadFileList(container_uuid) {
+    const container = document.querySelector(`.files-container[data-uuid="${container_uuid}"]`);
+    const loader = container.querySelector(".loader");
+    const meta = container.querySelector(".meta");
+    const contents = container.querySelector(".contents");
+
+    const song_id = meta.dataset.songId;
+    const whoAmI = meta.dataset.whoAmI;
+    const canDownloadFiles = meta.dataset.canDownloadFiles;
+    const editable = meta.dataset.editable;
+    const highlightForClientId = meta.dataset.highlightForClientId;
+    
+    loader.classList.remove("hidden");
+    contents.innerHTML = "";
+
+    fetch(`/api/songs/${song_id}/files?` + new URLSearchParams({
+        whoAmI,
+        canDownloadFiles,
+        editable,
+        highlightForClientId,
+    }))
+        .then(res => res.json())
+        .then(({data, table}) => {
+            contents.innerHTML = table;
+        })
+        .catch(err => console.error(err))
+        .finally(() => loader.classList.add("hidden"));
+}
+
+function primeReloadFileList(btn) {
+    window.onfocus = function () { loadFileList(btn.closest(".files-container").dataset.uuid); }
+}
+//#endregion
+
 function printInvoice() {
     const tags_to_hide = [
         "header",

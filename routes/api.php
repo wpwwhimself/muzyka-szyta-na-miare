@@ -37,6 +37,7 @@ Route::controller(SongController::class)->prefix("songs")->group(function() {
     Route::post('/change-link', "changeLink");
     Route::get("/compositions/{composition}", "getComposition");
     Route::patch("/{id}/{mode?}", "patch");
+    Route::get("/{song}/files", "getFiles");
     Route::get('/{id}', "getById");
 });
 

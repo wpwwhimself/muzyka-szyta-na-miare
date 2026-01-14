@@ -14,7 +14,7 @@
         />
             @if ($link->match("/youtu\.?be/") && is_archmage())
             <x-shipyard.ui.button
-                action="https://lazymum.wpww.pl/downloader?link={{ urlencode($link) }}&format=wav"
+                action="https://lazymum.wpww.pl/downloader?link={{ urlencode($link) }}&format=mp3"
                 target="_blank"
                 icon="download"
                 pop="Pobieranie"

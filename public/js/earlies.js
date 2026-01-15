@@ -156,7 +156,10 @@ function loadFileList(container_uuid) {
             contents.innerHTML = table;
         })
         .catch(err => console.error(err))
-        .finally(() => loader.classList.add("hidden"));
+        .finally(() => {
+            loader.classList.add("hidden");
+            reapplyPopper();
+        });
 }
 
 function primeReloadFileList(btn) {

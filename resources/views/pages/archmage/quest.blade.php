@@ -61,6 +61,11 @@
                     :icon="model_icon('songs')"
                     :action="route('song-edit', ['id' => $quest->song_id])"
                 />
+                <x-shipyard.ui.button
+                    pop="Edytuj zlecenie"
+                    :icon="model_icon('quests')"
+                    :action="route('admin.model.edit', ['model' => 'quests', 'id' => $quest->id])"
+                />
             </x-slot:buttons>
 
             <div class="grid but-halfsize-down" style="--col-count: 2;">
@@ -70,8 +75,8 @@
                     "title",
                     "artist",
                     "link",
-                    "has_recorded_reel",
-                    "has_original_mv",
+                    // "has_recorded_reel",
+                    // "has_original_mv",
                 ] as $field_name)
                 <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
                 @if ($field_name == "link")

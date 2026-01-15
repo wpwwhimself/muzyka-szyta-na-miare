@@ -69,7 +69,7 @@
             </x-slot:buttons>
 
             <div class="grid but-halfsize-down" style="--col-count: 2;">
-                <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
+                <x-shipyard.ui.connection-input :model="$song" connection-name="genre" dummy />
 
                 @foreach ([
                     "title",
@@ -78,13 +78,13 @@
                     // "has_recorded_reel",
                     // "has_original_mv",
                 ] as $field_name)
-                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
+                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$song->$field_name" />
                 @endif
                 @endforeach
 
-                <x-shipyard.ui.field-input :model="$quest" field-name="wishes" />
+                <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
             </div>
         </x-extendo-block>
 

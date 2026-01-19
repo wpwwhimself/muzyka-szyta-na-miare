@@ -141,7 +141,7 @@ function loadFileList(container_uuid) {
     const canDownloadFiles = meta.dataset.canDownloadFiles;
     const editable = meta.dataset.editable;
     const highlightForClientId = meta.dataset.highlightForClientId;
-    
+
     loader.classList.remove("hidden");
     contents.innerHTML = "";
 
@@ -183,41 +183,40 @@ function printInvoice() {
 function filterSongs(domain, criterion = undefined, id = undefined) {
     const filterFunction = {
         genre: (song, needle, haystack) => haystack === needle,
-        tag: (song, needle, haystack) => haystack.includes(needle)
+        tag: (song, needle, haystack) => haystack.includes(needle),
+        query: (song, needle, haystack) => haystack.toLowerCase().includes(needle?.toLowerCase()),
     }
 
     // mark buttons as selected
     const filters = document.querySelector(`[role='${domain}-filters']`)
     if (criterion && id) {
         filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.add("ghost"); btn.classList.remove("active"); });
-        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`).classList.remove("ghost");
-        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`).classList.add("active");
+        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`)?.classList.remove("ghost");
+        filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`)?.classList.add("active");
     } else {
         filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.remove("ghost"); btn.classList.remove("active"); });
     }
+    if (criterion !== "query") filters.querySelector(`input[name="query"]`).value = "";
 
     // filter objects
-    // let visible_songs = 0;
     document.querySelectorAll(`ul#${domain}-song-list li`).forEach(song => {
         const haystacks = {
             genre: Number(song.getAttribute("data-song-genre")),
             tag: song.getAttribute("data-song-tags").split(",").map(Number),
+            query: Array.from(song.children).map(el => el.textContent).slice(0, 2).join(" "),
         }
 
         if (criterion === undefined) {
             song.classList.remove("hidden")
-            // visible_songs++
             return
         }
 
-        if (!filterFunction[criterion](song, parseInt(id), haystacks[criterion])) {
-            song.classList.add("hidden")
-        } else {
-            song.classList.remove("hidden")
-            // visible_songs++
-        }
+        song.classList.toggle("hidden", !filterFunction[criterion](
+            song,
+            criterion == "query" ? id : parseInt(id),
+            haystacks[criterion],
+        ));
     })
-    // document.querySelector(`#${domain}-songs-count`).innerHTML = visible_songs
 }
 
 function filterShowcases(mode) {
@@ -248,7 +247,10 @@ function getSongList(domain = undefined) {
         .then(({data, table}) => {
             list.replaceWith(fromHTML(table));
 
-            if (params.has("tag")) {
+            if (params.has("query")) {
+                document.querySelector(`input[name="query"]`).value = params.get("query");
+                filterSongs(domain, "query", params.get("query"));
+            } else if (params.has("tag")) {
                 filterSongs(domain, "tag", params.get("tag"));
             } else if (params.has("genre")) {
                 filterSongs(domain, "genre", params.get("genre"));

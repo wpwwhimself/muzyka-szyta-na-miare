@@ -68,6 +68,7 @@ function setFormToFileUpload() {
 
             <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music"
                 onchange="setFormToFileUpload();"
+                accept=".ogg"
             />
 
             <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>

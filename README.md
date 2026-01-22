@@ -2,7 +2,7 @@
 
 You are looking at contents of my new website to handle my business of making backing tracks 🔈 and sheet music 🎶 Its goal is to make the original website (see the other repo here, should be called **projects**) *nicer*, *smoother* and *more functional*.
 
-It is made with **Laravel** and was inspired by the sudden realization at the end of my Bachelor's that I should keep up with the technology 🏃 Which was rather a large leap but I made it nonetheless 🥳
+It is made with **Laravel** and was inspired by the sudden realization at the end of my Bachelor's that I should keep up with the technology 🏃 Which was rather a large leap but I made it nonetheless 🥳. _⚓ Also powered by Shipyard ⚓_
 
 ## Features
 This website serves as a CRM for my business and as such is equipped with:

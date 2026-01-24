@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Composition;
 use App\Models\DjSampleSet;
 use App\Models\DjSet;
 use App\Models\DjSong;
@@ -195,6 +196,39 @@ class DjController extends Controller
         $set = DjSampleSet::with("songs")->find($id);
 
         return response()->json($set);
+    }
+    #endregion
+
+    #region lottery mode
+    public function lotteryMode()
+    {
+        return view("pages.".user_role().".dj.lottery-mode");
+    }
+
+    public function lotteryData(Request $rq)
+    {
+        $compositions = Composition::get()
+            ->filter(fn ($c) => $c->is_dj_ready)
+            ->values();
+        $genres = [
+            "blues",
+            "funk",
+            "kołysanka",
+            "reggae",
+            "rock&roll",
+        ];
+
+        return response()->json([
+            "data" => compact("compositions", "genres"),
+            "compositionSummary" => "Dostępne: " . count($compositions),
+            "genreSummary" => "Dostępne: " . count($genres),
+            "compositionsList" => collect($compositions)->map(fn ($c, $i) =>
+                "<span class='interactive' onclick='pickComposition($i)'>
+                    <span class='accent primary'>$c[title]</span>
+                    <small class='ghost'>$c[composer]</small>
+                </span>"
+            )->join(""),
+        ]);
     }
     #endregion
 }

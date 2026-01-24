@@ -74,4 +74,6 @@ Route::controller(DjController::class)->prefix("dj")->group(function() {
         Route::get("set/{id}", "gigModeSet");
         Route::get("sample-set/{id}", "gigModeSampleSet");
     });
+
+    Route::get("lottery-mode", "lotteryData");
 });

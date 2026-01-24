@@ -223,6 +223,7 @@ Route::middleware("auth")->group(function(){
         Route::get("/", "index")->name("dj");
 
         Route::get("gig", "gigMode")->name("dj-gig-mode");
+        Route::get("lottery", "lotteryMode")->name("dj-lottery-mode");
 
         Route::prefix("songs")->group(function () {
             Route::get("list", "listSongs")->name("dj-list-songs");

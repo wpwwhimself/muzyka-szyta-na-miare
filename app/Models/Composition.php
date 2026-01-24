@@ -27,6 +27,8 @@ class Composition extends Model
     protected $fillable = [
         "title",
         "composer",
+        "lyrics",
+        "melody",
     ];
 
     #region presentation
@@ -99,6 +101,17 @@ class Composition extends Model
             "label" => "Kompozytor",
             "icon" => "account-music",
         ],
+        "lyrics" => [
+            "type" => "TEXT",
+            "label" => "Tekst",
+            "icon" => "playlist-music",
+            "hint" => "Słowa utworu – wypełnienie umożliwia wyszukiwanie tej kompozycji w panelu DJa.",
+        ],
+        "melody" => [
+            "type" => "ABC",
+            "label" => "Linia melodyczna",
+            "icon" => "music-clef-treble",
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -158,6 +171,21 @@ class Composition extends Model
             "type" => "text",
             "operator" => "regexp",
         ],
+        "djready" => [
+            "label" => "Gotowy dla DJ",
+            "icon" => "headphones",
+            "compare-using" => "function",
+            "discr" => "is_dj_ready",
+            "type" => "select",
+            // "operator" => "=",
+            "selectData" => [
+                "options" => [
+                    ["label" => "Tak", "value" => 1],
+                    ["label" => "Nie", "value" => 0],
+                ],
+                "emptyOption" => "Wszystkie",
+            ],
+        ],
     ];
 
     #region scopes
@@ -209,6 +237,13 @@ class Composition extends Model
                 $this->composer,
                 $this->title ?? 'utwór bez tytułu',
             ], fn($v) => !empty($v))),
+        );
+    }
+
+    public function isDjReady(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !empty($this->lyrics),
         );
     }
     #endregion

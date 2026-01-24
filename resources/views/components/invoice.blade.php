@@ -16,6 +16,8 @@
                 <span>{{ env("MAIL_MAIN_ADDRESS") }}</span>
                 <span>tel:</span>
                 <span>530 268 000</span>
+                <span>NIP:</span>
+                <span>995-025-95-79</span>
                 <span>nr konta:</span>
                 <span>58 1090 1607 0000 0001 5333 1539</span>
             </div>

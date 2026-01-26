@@ -309,6 +309,7 @@ function openCompositionDemos(composition_id = undefined) {
                 popup.querySelector(".song-full-title").innerHTML = composition.full_title;
                 songs.forEach(song => {
                     popup.querySelector(".song-list").innerHTML += `<li>
+                        ${song.link_buttons}    
                         ${song.full_title}
                         ${song.has_showcase_file
                             ? song.play_demo_button

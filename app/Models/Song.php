@@ -215,6 +215,7 @@ class Song extends Model
         "work_time_total",
         "now_working",
         "play_demo_button",
+        "link_buttons",
     ];
 
     use HasStandardAttributes;
@@ -278,6 +279,15 @@ class Song extends Model
     {
         return Attribute::make(
             get: fn () => view("components.front.song-list.play-demo-button", [
+                "song" => $this,
+            ])->render(),
+        );
+    }
+
+    public function linkButtons(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.front.song-list.link-buttons", [
                 "song" => $this,
             ])->render(),
         );

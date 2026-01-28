@@ -277,7 +277,7 @@ class Composition extends Model
     {
         $lyrics_pretty = [];
         $current_part = null;
-        foreach (preg_split("/[\r\n]+/", $this->lyrics) as $line) {
+        foreach (preg_split("/[\r\n]{1,2}/", $this->lyrics) as $line) {
             if (Str::startsWith($line, "//")) {
                 $current_part = Str::after($line, "//");
                 continue;

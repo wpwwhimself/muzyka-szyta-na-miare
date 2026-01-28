@@ -22,7 +22,7 @@ class SongTag extends Model
         "ordering" => 3,
     ];
 
-    protected $fillable = ["name", "description"];
+    protected $fillable = ["name", "icon", "description"];
     public $timestamps = false;
 
     #region presentation
@@ -43,11 +43,11 @@ class SongTag extends Model
         return Attribute::make(
             get: fn () => view("components.shipyard.app.h", [
                 "lvl" => 3,
-                "icon" => $this->icon ?? self::META["icon"],
+                "icon" => self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->name,
+                "slot" => implode(" ", array_filter([$this->icon, $this->name])),
             ])->render(),
         );
     }
@@ -55,9 +55,7 @@ class SongTag extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->description,
         );
     }
 
@@ -85,6 +83,11 @@ class SongTag extends Model
     use HasStandardFields;
 
     public const FIELDS = [
+        "icon" => [
+            "type" => "text",
+            "label" => "Ikona",
+            "icon" => "emoticon",
+        ],
         "description" => [
             "type" => "TEXT",
             "label" => "Opis",

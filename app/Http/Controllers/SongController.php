@@ -253,6 +253,7 @@ class SongController extends Controller
         return response()->json([
             "composition" => $composition,
             "songs" => $composition->songs,
+            "tags" => $composition->tags,
         ]);
     }
 

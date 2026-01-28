@@ -26,7 +26,7 @@
                 onclick="filterSongs(`podklady`)"
             />
 
-            @foreach ($genres as $genre)
+            {{-- @foreach ($genres as $genre)
             <x-shipyard.ui.button
                 action="none"
                 class="toggle"
@@ -34,16 +34,26 @@
                 icon="radio"
                 onclick="filterSongs(`podklady`, 'genre', {{ $genre->id }})"
             />
-            @endforeach
+            @endforeach --}}
 
             @foreach ($song_tags as $tag)
             <x-shipyard.ui.button
                 action="none"
                 class="toggle"
-                :label="$tag->name"
-                icon="tag"
+                :label="$tag->icon"
+                :pop="$tag->name"
+                :icon="$tag->icon ? null : 'tag'"
                 onclick="filterSongs(`podklady`, 'tag', {{ $tag->id }})"
             />
+            @endforeach
+        </div>
+
+        <div class="filter-descriptions">
+            @foreach ($song_tags as $tag)
+            <div data-description="tag-{{ $tag->id }}" class="flex down center middle no-gap hidden">
+                <strong class="accent tertiary" role="name">{{ $tag->name }}</strong>
+                <span role="description">{{ $tag->description }}</span>
+            </div>
             @endforeach
         </div>
     </div>

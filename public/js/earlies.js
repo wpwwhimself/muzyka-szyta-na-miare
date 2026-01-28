@@ -193,8 +193,10 @@ function filterSongs(domain, criterion = undefined, id = undefined) {
         filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.add("ghost"); btn.classList.remove("active"); });
         filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`)?.classList.remove("ghost");
         filters.querySelector(`.button[onclick="filterSongs(\`${domain}\`, '${criterion}', ${id})"]`)?.classList.add("active");
+        filters.querySelectorAll(`.filter-descriptions > div`).forEach(container => container.classList.toggle("hidden", container.dataset.description !== `${criterion}-${id}`));
     } else {
         filters.querySelectorAll(`.button[onclick^='filterSongs']`).forEach(btn => { btn.classList.remove("ghost"); btn.classList.remove("active"); });
+        filters.querySelectorAll(`.filter-descriptions > div`).forEach(container => container.classList.add("hidden"));
     }
     if (criterion !== "query") filters.querySelector(`input[name="query"]`).value = "";
 
@@ -295,6 +297,7 @@ function openCompositionDemos(composition_id = undefined) {
     popup.classList.toggle("open", composition_id !== undefined);
 
     popup.querySelector(".song-full-title").innerHTML = "";
+    popup.querySelector(".tags").innerHTML = "";
     popup.querySelector(".song-list").innerHTML = "";
 
     if (composition_id == undefined) {
@@ -305,11 +308,12 @@ function openCompositionDemos(composition_id = undefined) {
 
         fetch(`/api/songs/compositions/${composition_id}`)
             .then(res => res.json())
-            .then(({composition, songs}) => {
+            .then(({composition, songs, tags}) => {
                 popup.querySelector(".song-full-title").innerHTML = composition.full_title;
+                popup.querySelector(".tags").innerHTML = composition.tags.map(tag => `<span class="rounded bordered">${tag.icon || ""} ${tag.name}</span>`).join("");
                 songs.forEach(song => {
                     popup.querySelector(".song-list").innerHTML += `<li>
-                        ${song.link_buttons}    
+                        ${song.link_buttons}
                         ${song.full_title}
                         ${song.has_showcase_file
                             ? song.play_demo_button

@@ -3,6 +3,7 @@
 
     <div class="popup-contents flex down center middle">
         <h3 class="song-full-title"></h3>
+        <div class="tags flex right center middle"></div>
         <h4 class="ghost">Aranże, jakie wykonałem:</h4>
         <ul class="song-list"></ul>
         <p class="ghost">

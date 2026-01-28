@@ -9,9 +9,6 @@
     title="—"
     class="hidden"
 >
-    <ol class="lyrics"></ol>
-    <div class="melody"></div>
-
     <x-slot:actions>
         <x-shipyard.ui.button action="none" class="tertiary" id="mark-composition-btn"
             label="Zagrane"
@@ -143,21 +140,13 @@ function roll(type) {
 function pickComposition(index) {
     const picked = data.compositions[index];
 
-    const lyrics_processed = picked.lyrics.replace(/(\*\*|--|>>)\s*\r?\n/g, '</span><br>')
-        .replace(/\*\s*\r?\n/g, `<span class="chorus">`)
-        .replace(/[->]\s*\r?\n/g, `<span class="tabbed">`)
-        .replace(/_(.{1,5})_/g, '<u>$1</u>')
-        .replace(/([A-Z]+)\.\s*\r?\n/g, "<li class='lettered'><span class='letter'>$1.</span>")
-        .replace(/(\d+)\.\s*\r?\n/g, "<li value='$1'>")
-        .replace(/\s*\r?\n/g, "<br />");
-
     document.querySelector(`#lottery-song .header .titles [role="texts"] [role="section-title"]`).innerHTML = picked.full_title;
-    document.querySelector(`#lottery-song .contents .lyrics`).innerHTML = lyrics_processed;
-    document.querySelector(`#lottery-song .contents .melody`).innerHTML = picked.melody;
+    document.querySelector(`#lottery-song .contents`).innerHTML = picked.dj_preview;
     document.querySelector(`#lottery-song .header #mark-composition-btn`).classList.toggle("hidden", data.excludedCompositions.includes(index));
 
     data.picked = index;
     document.querySelector(`#lottery-song`).classList.remove("hidden");
+    abcPreview("melody_preview");
 }
 
 function markCurrentComposition() {

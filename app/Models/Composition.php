@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Support\Str;
 use Mattiverse\Userstamps\Traits\Userstamps;
 
 class Composition extends Model
@@ -27,6 +28,7 @@ class Composition extends Model
     protected $fillable = [
         "title",
         "composer",
+        "songmap",
         "lyrics",
         "melody",
     ];
@@ -101,11 +103,15 @@ class Composition extends Model
             "label" => "Kompozytor",
             "icon" => "account-music",
         ],
+        "songmap" => [
+            "type" => "text",
+            "label" => "Budowa utworu",
+            "icon" => "view-list",
+        ],
         "lyrics" => [
             "type" => "TEXT",
             "label" => "Tekst",
             "icon" => "playlist-music",
-            "hint" => "Słowa utworu – wypełnienie umożliwia wyszukiwanie tej kompozycji w panelu DJa.",
         ],
         "melody" => [
             "type" => "ABC",
@@ -188,6 +194,16 @@ class Composition extends Model
         ],
     ];
 
+    public const EXTRA_SECTIONS = [
+        "preview" => [
+            "title" => "Podgląd treści",
+            "icon" => "headphones",
+            "show-on" => "edit",
+            "component" => "dj.composition-preview",
+            // "role" => "",
+        ],
+    ];
+
     #region scopes
     use HasStandardScopes;
 
@@ -208,6 +224,7 @@ class Composition extends Model
 
     protected $appends = [
         "full_title",
+        "dj_preview",
     ];
 
     use HasStandardAttributes;
@@ -230,6 +247,15 @@ class Composition extends Model
     //     );
     // }
 
+    public function djPreview(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.dj.composition-preview", [
+                "data" => $this,
+            ])->render(),
+        );
+    }
+
     public function fullTitle(): Attribute
     {
         return Attribute::make(
@@ -243,7 +269,26 @@ class Composition extends Model
     public function isDjReady(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->lyrics),
+            get: fn () => !empty($this->songmap),
+        );
+    }
+
+    public function lyricsPretty(): Attribute
+    {
+        $lyrics_pretty = [];
+        $current_part = null;
+        foreach (preg_split("/[\r\n]+/", $this->lyrics) as $line) {
+            if (Str::startsWith($line, "//")) {
+                $current_part = Str::after($line, "//");
+                continue;
+            }
+            $lyrics_pretty[$current_part] ??= "";
+            if ($lyrics_pretty[$current_part] !== "") $lyrics_pretty[$current_part] .= "<br>";
+            $lyrics_pretty[$current_part] .= $line;
+        }
+
+        return Attribute::make(
+            get: fn () => $lyrics_pretty,
         );
     }
     #endregion

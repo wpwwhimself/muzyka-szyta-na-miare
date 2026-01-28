@@ -155,6 +155,16 @@ body {
     }
 }
 
+.composition-preview {
+    & .lyrics-table {
+        grid-template-columns: 2em auto;
+
+        & .part {
+            font-family: var(--heading-font);
+        }
+    }
+}
+
 .contact-info {
     & a {
         text-decoration: none;;

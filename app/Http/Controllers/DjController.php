@@ -216,6 +216,7 @@ class DjController extends Controller
             "kołysanka",
             "reggae",
             "rock&roll",
+            "umpa-umpa",
         ];
 
         return response()->json([

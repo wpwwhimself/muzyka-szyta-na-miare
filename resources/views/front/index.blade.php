@@ -98,6 +98,7 @@ function openSection(slug) {
             <li>Mam za sobą <b>studia magisterskie</b> z matematyki i informatyki</li>
         </ul>
     </div>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/WYTOqc6ADwA?si=sYZUcVrL0Znh7czc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </section>
 
 <x-front.song-list.popup />

@@ -17,9 +17,10 @@ class OrganShowcase extends Model
     public const META = [
         "label" => "Rolki organowe",
         "icon" => "piano",
-        "description" => "",
+        "description" => "Nagrania wideo, jak brzmi moje granie na organach.",
         "role" => "archmage",
         "ordering" => 32,
+        "defaultSort" => "-date",
     ];
 
     protected $fillable = [
@@ -30,13 +31,13 @@ class OrganShowcase extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->platform;
+        return $this->created_at->diffForHumans();
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->platform,
+            get: fn () => "[$this->platform] $this",
         );
     }
 
@@ -45,11 +46,13 @@ class OrganShowcase extends Model
         return Attribute::make(
             get: fn () => view("components.shipyard.app.h", [
                 "lvl" => 3,
-                "icon" => $this->icon ?? self::META["icon"],
+                "icon" => $this->platformData->name,
+                "iconMode" => "url",
+                "iconData" => $this->platformData->icon_url,
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->platform,
+                "slot" => $this,
             ])->render(),
         );
     }
@@ -80,20 +83,20 @@ class OrganShowcase extends Model
     public const FIELDS = [
         "link" => [
             "type" => "url",
-            "label" => "Link",
-            "hint" => "",
+            "label" => "Link do rolki",
+            "hint" => "Link do nagrania. Embed zostanie wygenerowany automatycznie na froncie na podstawie ID nagrania.",
             "icon" => "link",
             "required" => true,
         ],
     ];
 
     public const CONNECTIONS = [
-        // "<name>" => [
-        //     "model" => ,
-        //     "mode" => "<one|many>",
-        //     // "field_name" => "",
-        //     // "field_label" => "",
-        // ],
+        "platformData" => [
+            "model" => ShowcasePlatform::class,
+            "mode" => "one",
+            "field_name" => "platform",
+            "field_label" => "Platforma",
+        ],
     ];
 
     public const ACTIONS = [
@@ -110,11 +113,11 @@ class OrganShowcase extends Model
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "date" => [
+            "label" => "Data utworzenia",
+            "compare-using" => "field",
+            "discr" => "created_at",
+        ],
     ];
 
     public const FILTERS = [

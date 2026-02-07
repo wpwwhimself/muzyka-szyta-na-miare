@@ -160,6 +160,11 @@ class ShowcasePlatform extends Model
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeVisible($query)
+    {
+        return $query;
+    }
     #endregion
 
     #region attributes

@@ -17,8 +17,8 @@ class ClientShowcase extends Model
     public const META = [
         "label" => "Showcase'y klientów",
         "icon" => "video-account",
-        "description" => "Nagrania przesłane przez klientów, promowane na stronie.",
-        "role" => "",
+        "description" => "Nagrania przesłane przez klientów, dotyczące podkładów. Są promowane na stronie.",
+        "role" => "archmage",
         "ordering" => 36,
     ];
 
@@ -30,13 +30,13 @@ class ClientShowcase extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->song;
+        return $this->song->title;
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->song,
+            get: fn () => $this,
         );
     }
 
@@ -49,7 +49,7 @@ class ClientShowcase extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->song,
+                "slot" => $this,
             ])->render(),
         );
     }

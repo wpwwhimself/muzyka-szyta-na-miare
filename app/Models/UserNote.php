@@ -87,7 +87,11 @@ class UserNote extends Authenticatable
         return Attribute::make(
             get: fn () => view("components.shipyard.app.model.badges", [
                 "badges" => $this->badges,
-            ])->render(),
+            ])->render()
+            . view("components.shipyard.stats.rank-marker", [
+                "rank" => $this->exp,
+                "label" => "Doświadczenie",
+            ]),
         );
     }
 

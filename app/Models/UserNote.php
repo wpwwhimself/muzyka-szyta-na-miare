@@ -88,9 +88,10 @@ class UserNote extends Authenticatable
             get: fn () => view("components.shipyard.app.model.badges", [
                 "badges" => $this->badges,
             ])->render()
-            . view("components.shipyard.stats.rank-marker", [
+            . view("components.shipyard.stats.counter", [
                 "rank" => $this->exp,
                 "label" => "Doświadczenie",
+                "style" => "military",
             ]),
         );
     }

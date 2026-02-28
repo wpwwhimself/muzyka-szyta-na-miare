@@ -28,13 +28,13 @@ class SongTag extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->name;
+        return implode(" ", array_filter([$this->icon, $this->name]));
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->name,
+            get: fn () => $this->__toString(),
         );
     }
 
@@ -47,7 +47,7 @@ class SongTag extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => implode(" ", array_filter([$this->icon, $this->name])),
+                "slot" => $this->__toString(),
             ])->render(),
         );
     }

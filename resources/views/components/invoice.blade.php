@@ -1,7 +1,7 @@
 @props(["invoice"])
 
 <div id="invoice" class="flex down">
-    <h1>Faktura nr {{ $invoice->fullCode }}</h1>
+    <h1>{{ $invoice->is_check ? "Rachunek" : "Faktura" }} nr {{ $invoice->fullCode }}</h1>
     <div class="dates grid name-value" style="--col-count: 2;">
         <span>Data wystawienia:</span>
         <span>{{ $invoice->created_at->format("Y-m-d") }}</span>

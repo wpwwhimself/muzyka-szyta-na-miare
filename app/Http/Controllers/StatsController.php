@@ -764,6 +764,7 @@ class StatsController extends Controller
             // edycja
             $invoice = Invoice::find($rq->id);
             $invoice->update([
+                "is_check" => $rq->has("is_check"),
                 "amount" => $totals["amount"],
                 "paid" => $totals["paid"],
                 "payer_name" => $rq->payer_name,
@@ -777,6 +778,7 @@ class StatsController extends Controller
             InvoiceQuest::where("invoice_id", $rq->id)->delete();
         } else {
             $invoice = Invoice::create([
+                "is_check" => $rq->has("is_check"),
                 "visible" => false,
                 "amount" => $totals["amount"],
                 "paid" => $totals["paid"],

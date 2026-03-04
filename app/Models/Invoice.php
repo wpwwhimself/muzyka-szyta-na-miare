@@ -15,7 +15,7 @@ class Invoice extends Model
     use HasFactory;
 
     public const META = [
-        "label" => "Faktury",
+        "label" => "Faktury i rachunki",
         "icon" => "invoice-list",
         "description" => "",
         "role" => "",
@@ -25,6 +25,7 @@ class Invoice extends Model
     protected $fillable = [
         "full_code_override",
         "visible",
+        "is_check",
         "amount", "paid",
         "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",
         "payer_email", "payer_phone",
@@ -178,7 +179,11 @@ class Invoice extends Model
     // }
 
     public function getFullCodeAttribute(){
-        return $this->full_code_override ?? $this->id . "/F/" . $this->created_at->format("y");
+        return $this->full_code_override ?? implode("/", [
+            $this->id,
+            ($this->is_check ? "R" : "F"),
+            $this->created_at->format("y"),
+        ]);
     }
 
     public function getIsPaidAttribute(){

@@ -3,7 +3,7 @@
 ])
 
 <div id="invoices">
-    <x-shipyard.app.h lvl="4" :icon="model_icon('invoices')">Faktury</x-shipyard.app.h>
+    <x-shipyard.app.h lvl="4" :icon="model_icon('invoices')">Faktury i rachunki</x-shipyard.app.h>
 
     @if (is_archmage())
     <div class="flex right nowrap">

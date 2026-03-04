@@ -26,7 +26,7 @@ class Price extends Model
         "service",
         "quest_type_id",
         "operation",
-        "price_a", "price_b",
+        "price_a", "price_b", "price_c",
     ];
 
     #region presentation

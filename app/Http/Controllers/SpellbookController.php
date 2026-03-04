@@ -46,19 +46,19 @@ class SpellbookController extends Controller
     public function become(User $user)
     {
         Auth::login($user);
-        return back()->with("success", "Jesteś teraz: $user->client_name");
+        return back()->with("toast", ["success", "Jesteś teraz: $user->client_name"]);
     }
 
     public function obliterate($id){
         StatusChange::where("re_quest_id", $id)->delete();
         ModelsRequest::find($id)->delete();
-        return redirect()->route("dashboard")->with("success", "Zapytanie wymazane");
+        return redirect()->route("dashboard")->with("toast", ["success", "Zapytanie wymazane"]);
     }
 
     public function silence($id){
         StatusChange::where("re_quest_id", $id)->orderByDesc("date")->first()->delete();
         $route_back = is_request($id) ? "request" : "quest";
-        return redirect()->route($route_back, ["id" => $id])->with("success", "Ostatni status uciszony");
+        return redirect()->route($route_back, ["id" => $id])->with("toast", ["success", "Ostatni status uciszony"]);
     }
 
     public function transmute($id, $property, $value = null){
@@ -66,7 +66,7 @@ class SpellbookController extends Controller
         $r->{$property} = $value;
         $r->save();
         $route_back = is_request($id) ? "request" : "quest";
-        return redirect()->route($route_back, ["id" => $id])->with("success", "Atrybut zmieniony");
+        return redirect()->route($route_back, ["id" => $id])->with("toast", ["success", "Atrybut zmieniony"]);
     }
 
     public function restatus($id, $status_id){
@@ -76,12 +76,12 @@ class SpellbookController extends Controller
             ->orderByDesc("date")
             ->first()
             ->update(["new_status_id" => $status_id]);
-        return redirect()->route("quest", ["id" => $id])->with("success", "Faza zmieniona siłą");
+        return redirect()->route("quest", ["id" => $id])->with("toast", ["success", "Faza zmieniona siłą"]);
     }
 
     public function polymorph($id, $letter){
         if(!in_array($letter, QuestType::all()->pluck("code")->toArray()))
-            return back()->with("error", "Niewłaściwa litera");
+            return back()->with("toast", ["error", "Niewłaściwa litera"]);
 
         $new_quest_id = next_quest_id($letter);
         $new_song_id = next_song_id($letter);
@@ -98,7 +98,7 @@ class SpellbookController extends Controller
             Storage::rename("showcases/$old_song_id.ogg", "showcases/$new_song_id.ogg");
         }
 
-        return redirect()->route("quest", ["id" => $new_quest_id])->with("success", "Zlecenie przemianowane");
+        return redirect()->route("quest", ["id" => $new_quest_id])->with("toast", ["success", "Zlecenie przemianowane"]);
     }
 
     public function reprice($id, $new_code)
@@ -111,6 +111,6 @@ class SpellbookController extends Controller
             "price" => $new_price["price"],
         ]);
 
-        return back()->with("success", "Cena zmieniona");
+        return back()->with("toast", ["success", "Cena zmieniona"]);
     }
 }

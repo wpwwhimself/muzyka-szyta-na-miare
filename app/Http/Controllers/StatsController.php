@@ -444,7 +444,7 @@ class StatsController extends Controller
         $two_months_back = $gig_transactions->filter(fn ($gt) => $gt->date->gte(today()->subMonths(2)) && $gt->date->lt(today()->subMonths(1)));
         $monthly = $gig_transactions->groupBy(fn ($gt) => $gt->date->format("Y-m"))
             ->map(fn ($ts) => $ts->sum("amount"))
-            ->sortKeysDesc();
+            ->sortKeys();
         $year_back_month = today()->subMonths(12)->format("Y-m");
 
         $stats = [

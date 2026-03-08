@@ -124,11 +124,13 @@ class Request extends Model
             "type" => "text",
             "label" => "Tytuł utworu",
             "icon" => "music-box",
+            "hint" => "Dopisz tytuł w nawiasie, aby przenieść go do nowo utworzonej kompozycji.",
         ],
         "artist" => [
             "type" => "text",
             "label" => "Wykonawca",
-            "icon" => "account-music"
+            "icon" => "account-music",
+            "hint" => "Dopisz kompozytora w nawiasie, aby przenieść go do nowo utworzonej kompozycji.",
         ],
         "link" => [
             "type" => "text",

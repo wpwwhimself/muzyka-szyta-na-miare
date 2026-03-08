@@ -475,20 +475,25 @@ class RequestController extends Controller
             if(!$request->song_id){
                 $song = new Song;
                 $song->id = next_song_id($request->quest_type_id);
-                $song->title = $request->title;
-                $song->artist = $request->artist;
                 $song->link = yt_cleanup($request->link);
                 $song->genre_id = $request->genre_id;
                 $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
 
                 // add new composition if not exists
+                $composition_title = Str::of($request->title)->after("(")->before(")");
+                $request->title = Str::of($request->title)->before(" (");
+                $composition_composer = Str::of($request->artist)->after("(")->before(")");
+                $request->artist = Str::of($request->artist)->before(" (");
+
                 $composition = Composition::firstOrCreate(
                     ["id" => $request->composition_id],
                     [
-                        "title" => $request->title,
-                        "composer" => $request->artist,
+                        "title" => $composition_title,
+                        "composer" => $composition_composer,
                     ]
                 );
+                $song->title = $request->title;
+                $song->artist = $request->artist;
                 $song->composition_id = $composition->id;
 
                 $song->save();

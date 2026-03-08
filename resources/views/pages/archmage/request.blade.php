@@ -155,6 +155,7 @@
 
             <x-shipyard.ui.connection-input :model="$request" connection-name="genre" />
             <x-shipyard.ui.connection-input :model="$request" connection-name="composition" />
+            <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" />
 
             @foreach ([
                 "wishes",
@@ -172,8 +173,6 @@
             title="Wycena"
             :extended="true"
         >
-            <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" />
-
             <div>
                 @if (!$request->price_code)
                 <div class="flex down center">

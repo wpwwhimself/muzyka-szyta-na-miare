@@ -29,6 +29,7 @@ class Invoice extends Model
         "amount", "paid",
         "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",
         "payer_email", "payer_phone",
+        "ksef_number",
     ];
 
     #region presentation

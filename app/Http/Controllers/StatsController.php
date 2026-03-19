@@ -774,6 +774,7 @@ class StatsController extends Controller
                 "payer_regon" => $rq->payer_regon,
                 "payer_email" => $rq->payer_email,
                 "payer_phone" => $rq->payer_phone,
+                "ksef_number" => $rq->ksef_number,
             ]);
             InvoiceQuest::where("invoice_id", $rq->id)->delete();
         } else {
@@ -789,6 +790,7 @@ class StatsController extends Controller
                 "payer_regon" => $rq->payer_regon,
                 "payer_email" => $rq->payer_email,
                 "payer_phone" => $rq->payer_phone,
+                "ksef_number" => $rq->ksef_number,
             ]);
         }
 

@@ -229,7 +229,7 @@ class Quest extends Model
     ];
 
     protected $appends = [
-
+        "data_for_invoice",
     ];
 
     use HasStandardAttributes;
@@ -305,6 +305,29 @@ class Quest extends Model
     }
     public function getCompletedOnceAttribute() {
         return $this->history->whereIn("new_status_id", [14, 19])->count() > 0;
+    }
+
+    public function dataForInvoice(): Attribute
+    {
+        $texts = [
+            0 => "Przygotowanie materiałów muzycznych",
+            1 => "Przygotowanie podkładu muzycznego",
+            2 => "Przygotowanie nut",
+            3 => "Obróbka nagrania",
+            10 => "Przygotowanie poprawek do materiałów muzycznych",
+            11 => "Przygotowanie poprawek do podkładu muzycznego",
+            12 => "Przygotowanie poprawek do nut",
+            13 => "Dodatkowa obróbka nagrania",
+        ];
+
+        return Attribute::make(
+            get: fn () => $this->pivot ? [
+                "label" => $texts[$this->song->type->id + ($this->pivot->primary ? 0 : 10)] . " do utworu: " . $this->song->full_title,
+                "net_price" => round($this->price / (1 + VAT_RATE()), 2),
+                "vat_rate" => VAT_RATE(),
+                "gross_price" => $this->price,
+            ] : null,
+        );
     }
     #endregion
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DjController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KsefController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ShowcaseController;
@@ -201,6 +202,10 @@ Route::middleware("auth")->group(function(){
                 Route::get("/suggest", "gigPriceSuggest")->name("gig-price-suggest");
             });
         });
+    });
+
+    Route::controller(KsefController::class)->prefix("ksef")->group(function() {
+        Route::get("/export/{invoice}", "exportInvoice")->name("ksef.export-invoice");
     });
 
     Route::controller(ClientController::class)->prefix("clients")->group(function(){

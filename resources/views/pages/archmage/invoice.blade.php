@@ -16,6 +16,14 @@
         class="primary"
     />
 
+    @unless ($invoice->ksef_number)
+    <x-shipyard.ui.button :action="route('ksef.export-invoice', ['invoice' => $invoice])"
+        icon="export"
+        label="Eksportuj do KSeF"
+        class="primary"
+    />
+    @endunless
+
     <x-shipyard.ui.button :action="route('invoices')"
         icon="chevron-left" label="Wróć do faktur"
     />

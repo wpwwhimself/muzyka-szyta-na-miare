@@ -66,6 +66,11 @@ if(!function_exists("STATUSES_WAITING_FOR_ME")){
         return [1, 6, 11, 12, 13, 14, 16, 21, 26, 96];
     }
 }
+if(!function_exists("VAT_RATE")){
+    function VAT_RATE(){
+        return 0.23;
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)

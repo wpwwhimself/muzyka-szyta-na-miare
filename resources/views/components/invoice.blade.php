@@ -62,26 +62,7 @@
         @foreach ($invoice->quests as $quest)
             <tr class="table-row">
                 <td>
-                    @if ($quest->pivot->primary)
-                        @switch($quest->song->type->id)
-                            @case(1) Przygotowanie podkładu muzycznego @break
-                            @case(2) Przygotowanie nut @break
-                            @case(3) Obróbka nagrania @break
-                            @default Przygotowanie materiałów muzycznych
-                        @endswitch
-                    @else
-                        @switch($quest->song->type->id)
-                            @case(1) Przygotowanie poprawek do podkładu muzycznego @break
-                            @case(2) Przygotowanie poprawek do nut @break
-                            @case(3) Dodatkowa obróbka nagrania @break
-                            @default Przygotowanie poprawek do materiałów muzycznych
-                        @endswitch
-                    @endif
-                    do utworu:
-                    @if ($quest->song->artist)
-                    {{ $quest->song->artist }} –
-                    @endif
-                    <em>{{ $quest->song->title ?? "bez tytułu" }}</em>
+                    {{ $quest->data_for_invoice["label"] }}
                 </td>
                 <td>
                     {{ _c_(as_pln($quest->pivot->amount)) }}
@@ -101,4 +82,25 @@
         <span @if ($invoice->isPaid) class="success" @endif>{{ _c_(as_pln($invoice->amount - $invoice->paid)) }}</span>
         @endif
     </div>
+
+    @if ($invoice->ksef_number)
+    <div class="flex right but-mobile-down nowrap middle">
+        @php
+        $qr = QrCode::size(200)
+            ->generate($invoice->ksef_link);
+        $rq = response($qr)->header('Content-Type', 'image/svg+xml');
+        @endphp
+        {!! $qr !!}
+
+        <div class="flex down">
+            <span>
+                Faktura dostępna w KSeF pod numerem
+                <strong class="accent primary mono">
+                    {{ $invoice->ksef_number }}
+                </strong>
+            </span>
+            <a href="{{ $invoice->ksef_link }}" target="_blank">{{ $invoice->ksef_link }}</a>
+        </div>
+    </div>
+    @endif
 </div>

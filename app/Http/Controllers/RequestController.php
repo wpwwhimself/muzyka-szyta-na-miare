@@ -480,10 +480,10 @@ class RequestController extends Controller
                 $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
 
                 // add new composition if not exists
-                $composition_title = Str::of($request->title)->after("(")->before(")");
-                $request->title = Str::of($request->title)->before(" (");
-                $composition_composer = Str::of($request->artist)->after("(")->before(")");
-                $request->artist = Str::of($request->artist)->before(" (");
+                $composition_title = Str::of($request->title)->after("(")->before(")")->toString() ?: null;
+                $request->title = Str::of($request->title)->before(" (")->toString() ?: null;
+                $composition_composer = Str::of($request->artist)->after("(")->before(")")->toString() ?: null;
+                $request->artist = Str::of($request->artist)->before(" (")->toString() ?: null;
 
                 $composition = Composition::firstOrCreate(
                     ["id" => $request->composition_id],

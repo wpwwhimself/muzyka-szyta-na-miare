@@ -12,6 +12,15 @@
         {{ $variant_name }}
     </h4>
 
+    @php
+    $main_version = $versions->firstWhere("version_name", "wersja główna");
+    @endphp
+    @if ($main_version?->description)
+    <div class="var_desc">
+        {{ Illuminate\Mail\Markdown::parse($main_version->description ?? "") }}
+    </div>
+    @endif
+
     @foreach ($versions as $version)
     @unless (!$version->exclusiveClients->contains(Auth::user()) && !is_archmage())
     <div @class([
@@ -57,9 +66,11 @@
             @endif
         </div>
 
+        @unless ($version->is($main_version))
         <div class="ver_desc">
             {{ Illuminate\Mail\Markdown::parse($version->description ?? "") }}
         </div>
+        @endunless
 
         @if ($version->missing_files)
         <div class="yellowed-out">

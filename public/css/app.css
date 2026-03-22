@@ -622,6 +622,9 @@ table {
     .hide-for-print{
         display: none !important;
     }
+    .but-print-show {
+        display: inherit !important;
+    }
     #invoice{
         font-size: 11px;
     }

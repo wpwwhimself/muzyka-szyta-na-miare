@@ -86,11 +86,13 @@
     @if ($invoice->ksef_number)
     <div class="flex right but-mobile-down nowrap middle">
         @php
-        $qr = QrCode::size(200)
+        $qr = QrCode::size(100)
             ->generate($invoice->ksef_link);
         $rq = response($qr)->header('Content-Type', 'image/svg+xml');
         @endphp
-        {!! $qr !!}
+        <div class="hidden but-print-show">
+            {!! $qr !!}
+        </div>
 
         <div class="flex down">
             <span>

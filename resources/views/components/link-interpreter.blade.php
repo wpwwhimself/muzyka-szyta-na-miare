@@ -13,12 +13,16 @@
             icon="open-in-new"
         />
             @if ($link->match("/youtu\.?be/") && is_archmage())
-            <x-shipyard.ui.button
+            {{-- <x-shipyard.ui.button
                 action="https://lazymum.wpww.pl/downloader?link={{ urlencode($link) }}&format=mp3"
                 target="_blank"
                 icon="download"
                 pop="Pobieranie"
-            />
+            /> --}}
+            <iframe
+                src="https://p.savenow.to/api/button/?url={{ $link }}&f=mp3"
+                style="width:230px;height:60px;border:0;overflow:hidden;">
+            </iframe>
             @endif
 
         @endif

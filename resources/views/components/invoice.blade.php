@@ -81,6 +81,15 @@
         <span>Pozostało do zapłaty:</span>
         <span @if ($invoice->isPaid) class="success" @endif>{{ _c_(as_pln($invoice->amount - $invoice->paid)) }}</span>
         @endif
+
+        <span class="small">Termin płatności:</span>
+        <span class="small">
+            14 dni od daty wystawienia
+            @if ($invoice->quests->reduce(fn ($r, $quest) => $r || $quest->delayed_payment_in_effect, false))
+            <br>
+            nie wcześniej niż {{ $invoice->quests->max("delayed_payment")->format("d.m.Y") }}
+            @endif
+        </span>
     </div>
 
     @if ($invoice->ksef_number)

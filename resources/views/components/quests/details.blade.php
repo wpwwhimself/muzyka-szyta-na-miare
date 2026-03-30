@@ -4,7 +4,7 @@
 
 <div>
     @foreach ([
-        ["Klient", model_icon("users"), $quest->user->name_and_badges, null],
+        ["Klient", model_icon("users"), is_archmage() ? $quest->user->name_and_badges : null, null],
         ["Cena", model_icon("prices"), as_pln($quest->price), $quest->paid ? "accent success" : null],
         ["Termin", "calendar-blank", $quest->deadline?->addDay()->diffForHumans(),
             $quest->deadline?->addDay()->isPast() && !$quest->completed_once ? "accent error" : (

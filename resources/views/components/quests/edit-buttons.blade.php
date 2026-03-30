@@ -10,7 +10,7 @@
     <x-shipyard.ui.button
         :action="route('quest', ['id' => $quest->id])"
         icon="arrow-right"
-        pop="Szczegóły"
+        label="Szczegóły"
     />
     <x-shipyard.ui.button
         :action="route('admin.model.edit', ['model' => 'quests', 'id' => $quest->id])"

@@ -141,7 +141,7 @@
         @endif
     </x-section>
 
-    <x-section id="dashboard-finances" title="Finanse" :icon="model_icon('prices')" :extended="false"
+    <x-section id="dashboard-finances" title="Finanse" subtitle="Dane do przelewu i suma zobowiązań" :icon="model_icon('prices')" :extended="false"
         :warning="[
             'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $unpaids->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
         ]"
@@ -161,11 +161,10 @@
         <h2>
             Stan konta:
             {{ as_pln(Auth::user()->notes->budget) }}
-
-            <x-tutorial>
-                Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
-            </x-tutorial>
         </h2>
+        <x-tutorial>
+            Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
+        </x-tutorial>
 
         <div class="section-header">
             <h1>

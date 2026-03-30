@@ -293,10 +293,6 @@ footer .icon.invert-when-dark {
 
 .hint {
     font-size: 1.5em;
-
-    &.tutorial{
-        color: rgb(172, 53, 118);
-    }
 }
 
 .hint-table {
@@ -581,6 +577,10 @@ table {
     & tr:hover {
         background-color: var(--bg-lite2);
     }
+}
+
+.tutorial{
+    color: rgb(172, 53, 118);
 }
 
 .yellowed-out{

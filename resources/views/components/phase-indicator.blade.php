@@ -14,6 +14,11 @@
         <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
         {{ $statusName($statusId) }}
     </h3>
+    @endif
+</x-shipyard.app.phase-bar>
+
+@if (!$small)
+<div class="flex right center">
     <x-tutorial>
         {{ [
             1 => "Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.",
@@ -39,5 +44,5 @@
             96 => "Odpowiedź została wysłana. Odniosę się do nich i wrócę z odpowiedzią.",
         ][$statusId] }}
     </x-tutorial>
-    @endif
-</x-shipyard.app.phase-bar>
+</div>
+@endif

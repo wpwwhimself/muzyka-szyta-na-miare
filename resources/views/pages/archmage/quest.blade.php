@@ -176,14 +176,12 @@
                     pop="Wgraj"
                     :action="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])"
                     target="_blank"
-                    onclick="primeReloadFileList(document.querySelector(`.files-container`));"
                 />
                 <x-shipyard.ui.button
                     icon="recycle"
                     pop="Dodaj istniejące"
                     :action="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])"
                     target="_blank"
-                    onclick="primeReloadFileList(document.querySelector(`.files-container`));"
                 />
                 @endunless
             </x-slot:buttons>
@@ -275,4 +273,10 @@
     @endunless
 </div>
 
+@endsection
+
+@section("appends")
+<script defer>
+primeReloadFileList(document.querySelector(`.files-container`));
+</script>
 @endsection

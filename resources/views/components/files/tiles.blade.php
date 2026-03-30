@@ -60,7 +60,6 @@
                 icon="pencil"
                 pop="Edytuj"
                 :action="route('files-edit', ['id' => $version->id])"
-                onclick="primeReloadFileList(this)"
                 target="_blank"
             />
             @endif

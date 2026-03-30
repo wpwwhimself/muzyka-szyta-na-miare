@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section("title", $quest->song->full_title)
+@section("title", implode("_", [$quest->song_id, $quest->song->title]))
 @section("subtitle", "Zlecenie")
 
 @section('content')
@@ -49,7 +49,7 @@
         <x-extendo-block key="quest"
             :header-icon="model_icon('songs')"
             title="Utwór"
-            :subtitle="$quest->song_id . ' // ' . $quest->song->full_title"
+            :subtitle="$quest->song->full_title"
             :extended="true"
         >
             @php $song = $quest->song; @endphp

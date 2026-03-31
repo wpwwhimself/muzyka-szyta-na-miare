@@ -53,12 +53,18 @@ class Setting extends ShipyardSetting
                             "options" => [
                                 ["label" => "A", "value" => "A"],
                                 ["label" => "B", "value" => "B"],
+                                ["label" => "C", "value" => "C"],
                             ],
                         ],
                     ],
                     [
                         "name" => "msznm_pricing_B_since",
                         "label" => "Od kiedy obowiązuje cennik B",
+                        "icon" => "tag-check",
+                    ],
+                    [
+                        "name" => "msznm_pricing_C_since",
+                        "label" => "Od kiedy obowiązuje cennik C",
                         "icon" => "tag-check",
                     ],
                     [

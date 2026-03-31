@@ -66,7 +66,7 @@ class Price extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => collect(["a", "b"])
+            get: fn () => collect(["a", "b", "c"])
                 ->map(fn ($lvl) => "<span>"
                     ."Poziom ".ucfirst($lvl).": "
                     . ($this->operation == "+"

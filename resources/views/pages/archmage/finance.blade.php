@@ -130,6 +130,18 @@
         >
             <x-slot:buttons>
                 <x-button label="Klient" :icon="model_icon('users')" :action="route('client-view', ['id' => $client->id])" />
+                <x-shipyard.ui.button
+                    pop="Utwórz fakturę na nieopłacone zlecenia"
+                    :icon="model_icon('invoices')"
+                    action="none"
+                    onclick="openModal('edit-invoice', {
+                        payer_name: '{{ $client->notes->client_name }}',
+                        payer_email: '{{ $client->notes->email }}',
+                        payer_phone: '{{ $client->notes->phone }}',
+                        quests: '{{ implode(' ', $client->questsUnpaid->pluck('id')->toArray()) }}'
+                    });"
+                    class="tertiary"
+                />
             </x-slot:buttons>
 
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp

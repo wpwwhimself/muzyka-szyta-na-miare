@@ -5,12 +5,6 @@
 
 <div class="grid" style="--col-count: 2;">
     <x-section title="Na tapecie" subtitle="Aktualne zlecenia i zapytania" :icon="model_icon('quests')" style="grid-column: span 2;">
-        <x-slot name="buttons">
-            <x-tutorial>
-                Kliknij na poniższe wiersze, aby zobaczyć szczegóły zlecenia. Możesz najechać na większość symboli, aby pokazać ich znaczenie.
-            </x-tutorial>
-        </x-slot>
-
         <div class="flex down">
             @forelse (
                 $quests_review

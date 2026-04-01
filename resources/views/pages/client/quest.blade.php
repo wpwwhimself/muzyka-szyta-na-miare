@@ -59,23 +59,6 @@
         :warning="$warnings['quote']"
         :extended="true"
     >
-        <x-slot:buttons>
-            @unless ($quest->paid)
-            <x-tutorial>
-                <p>Opłaty projektu możesz dokonać na 2 sposoby:</p>
-                <ul>
-                    <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
-                        (w tytule wpisz <span class='mono'>{{ $quest->id }}</span>)</li>
-                    <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
-                </ul>
-                <p>
-                    Jest ona potrzebna do pobierania plików,<br>
-                    chyba, że jesteś np. stałym klientem
-                </p>
-            </x-tutorial>
-            @endunless
-        </x-slot:buttons>
-
         <x-re_quests.price-summary :model="$quest" />
         <div class="grid but-mobile-down" style="--col-count: 2;">
             @foreach ([
@@ -86,6 +69,21 @@
             @endforeach
         </div>
         <x-quests.payments-bar :quest="$quest" />
+
+        @unless ($quest->paid)
+        <x-tutorial>
+            <p>Opłaty projektu możesz dokonać na 2 sposoby:</p>
+            <ul>
+                <li>na numer konta <b>58 1090 1607 0000 0001 5333 1539</b><br>
+                    (w tytule wpisz <span class='mono'>{{ $quest->id }}</span>)</li>
+                <li>BLIKiem na numer telefonu <b>530 268 000</b>.</li>
+            </ul>
+            <p>
+                Jest ona potrzebna do pobierania plików,<br>
+                chyba, że jesteś np. stałym klientem
+            </p>
+        </x-tutorial>
+        @endunless
 
         @if ($quest->visibleInvoices->count() > 0)
         <x-quests.invoices :quest="$quest" />

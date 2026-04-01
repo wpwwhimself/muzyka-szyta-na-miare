@@ -258,7 +258,7 @@
                 name="pickiness"
                 label="Wybredność"
                 icon="fencing"
-                :value="$quest->user->notes->pickiness"
+                :value="$quest->user->notes->pickiness_pretty"
             />
         </div>
 

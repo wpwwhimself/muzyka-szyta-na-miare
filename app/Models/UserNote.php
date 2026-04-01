@@ -451,6 +451,12 @@ class UserNote extends Authenticatable
             }
         );
     }
+    public function pickinessPretty(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ($this->pickiness * 100) . "%",
+        );
+    }
 
     public function canSeeFiles(): Attribute
     {

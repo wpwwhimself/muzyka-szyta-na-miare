@@ -27,8 +27,8 @@ class Invoice extends Model
         "visible",
         "is_check",
         "amount", "paid",
-        "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon",
-        "payer_email", "payer_phone",
+        "payer_name", "payer_title", "payer_address", "payer_nip", "payer_regon", "payer_email", "payer_phone",
+        "receiver_name", "receiver_title", "receiver_address", "receiver_nip", "receiver_regon", "receiver_email", "receiver_phone",
         "ksef_number", "ksef_link",
     ];
 

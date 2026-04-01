@@ -22,33 +22,65 @@
                 <span>58 1090 1607 0000 0001 5333 1539</span>
             </div>
         </section>
-        <section class="account">
-            <h3>Nabywca</h3>
-            <h2 class="accent primary">{{ _ct_($invoice->payer_name ?? $invoice->quest->user->notes->client_name) }}</h2>
-            <h3>{{ _ct_($invoice->payer_title) }}</h3>
-            <div class="grid name-value" style="--col-count: 2;">
-                @if ($invoice->payer_address)
-                    <span>adres:</span>
-                    <span>{{ _ct_($invoice->payer_address) }}</span>
-                @endif
-                @if($invoice->payer_email)
-                    <span>e-mail:</span>
-                    <span>{{ _ct_($invoice->payer_email) }}</span>
-                @endif
-                @if($invoice->payer_phone)
-                    <span>tel:</span>
-                    <span>{{ _ct_(implode(" ", str_split($invoice->payer_phone, 3))) }}</span>
-                @endif
-                @if($invoice->payer_nip)
-                    <span>NIP:</span>
-                    <span>{{ _ct_($invoice->payer_nip) }}</span>
-                @endif
-                @if($invoice->payer_regon)
-                    <span>REGON:</span>
-                    <span>{{ _ct_($invoice->payer_regon) }}</span>
-                @endif
-            </div>
-        </section>
+        <div class="flex down">
+            <section class="account">
+                <h3>Nabywca</h3>
+                <h2 class="accent primary">{{ _ct_($invoice->payer_name ?? $invoice->quest->user->notes->client_name) }}</h2>
+                <h3>{{ _ct_($invoice->payer_title) }}</h3>
+                <div class="grid name-value" style="--col-count: 2;">
+                    @if ($invoice->payer_address)
+                        <span>adres:</span>
+                        <span>{{ _ct_($invoice->payer_address) }}</span>
+                    @endif
+                    @if($invoice->payer_email)
+                        <span>e-mail:</span>
+                        <span>{{ _ct_($invoice->payer_email) }}</span>
+                    @endif
+                    @if($invoice->payer_phone)
+                        <span>tel:</span>
+                        <span>{{ _ct_(implode(" ", str_split($invoice->payer_phone, 3))) }}</span>
+                    @endif
+                    @if($invoice->payer_nip)
+                        <span>NIP:</span>
+                        <span>{{ _ct_($invoice->payer_nip) }}</span>
+                    @endif
+                    @if($invoice->payer_regon)
+                        <span>REGON:</span>
+                        <span>{{ _ct_($invoice->payer_regon) }}</span>
+                    @endif
+                </div>
+            </section>
+
+            @if ($invoice->receiver_name)
+            <section class="account">
+                <h3>Odbiorca</h3>
+                <h2 class="accent primary">{{ _ct_($invoice->receiver_name) }}</h2>
+                <h3>{{ _ct_($invoice->receiver_title) }}</h3>
+                <div class="grid name-value" style="--col-count: 2;">
+                    @if ($invoice->receiver_address)
+                        <span>adres:</span>
+                        <span>{{ _ct_($invoice->receiver_address) }}</span>
+                    @endif
+                    @if($invoice->receiver_email)
+                        <span>e-mail:</span>
+                        <span>{{ _ct_($invoice->receiver_email) }}</span>
+                    @endif
+                    @if($invoice->receiver_phone)
+                        <span>tel:</span>
+                        <span>{{ _ct_(implode(" ", str_split($invoice->receiver_phone, 3))) }}</span>
+                    @endif
+                    @if($invoice->receiver_nip)
+                        <span>NIP:</span>
+                        <span>{{ _ct_($invoice->receiver_nip) }}</span>
+                    @endif
+                    @if($invoice->receiver_regon)
+                        <span>REGON:</span>
+                        <span>{{ _ct_($invoice->receiver_regon) }}</span>
+                    @endif
+                </div>
+            </section>
+            @endif
+        </div>
     </div>
 
     <table class="bordered rounded padded">

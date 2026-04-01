@@ -93,8 +93,8 @@ class KsefController extends Controller
                 break;
             }
         } catch (\Throwable $th) {
-            $send_data = $th;
-            Log::error($th);
+            $send_data = ["msg" => $th->getMessage()];
+            Log::error($th, $send_status["status"]);
         }
 
         //? close session
@@ -102,7 +102,7 @@ class KsefController extends Controller
             ->post($this->URL . "/sessions/online/" . $session["referenceNumber"] . "/close")
             ->status() == 204;
 
-        if ($send_data["ksefNumber"]) {
+        if ($send_data["ksefNumber"] ?? false) {
             $invoice->update([
                 "ksef_number" => $send_data["ksefNumber"],
                 "ksef_link" => implode("/", [
@@ -151,6 +151,17 @@ class KsefController extends Controller
         $buyer->addChild("JST", 2);
         $buyer->addChild("GV", 2);
 
+        if ($invoice->receiver_name) {
+            $receiver = $prepared_invoice->addChild("Podmiot3");
+            $receiver_data = $receiver->addChild("DaneIdentyfikacyjne");
+            $receiver_data->addChild("NIP", str_replace("-", "", $invoice->receiver_nip));
+            $receiver_data->addChild("Nazwa", implode(" ", array_filter([$invoice->receiver_name, $invoice->receiver_title])));
+            $receiver_address = $receiver->addChild("Adres");
+            $receiver_address->addChild("KodKraju", "PL");
+            $receiver_address->addChild("AdresL1", $invoice->receiver_address);
+            $receiver->addChild("Rola", 2);
+        }
+
         $invoice_data = $prepared_invoice->addChild("Fa");
         $invoice_data->addChild("KodWaluty", "PLN");
         $invoice_data->addChild("P_1", $invoice->created_at->format("Y-m-d"));
@@ -185,6 +196,14 @@ class KsefController extends Controller
             $row->addChild("P_11A", $quest->data_for_invoice["gross_price"]);
             $row->addChild("P_12", $quest->data_for_invoice["vat_rate"] * 100);
         }
+
+        $payment_data = $invoice_data->addChild("Platnosc");
+        $payment_date_data = $payment_data->addChild("TerminPlatnosci")->addChild("TerminOpis");
+            $payment_date_data->addChild("Ilosc", 14);
+            $payment_date_data->addChild("Jednostka", "dni");
+            $payment_date_data->addChild("ZdarzeniePoczatkowe", "od wystawienia faktury");
+        $payment_data->addChild("FormaPlatnosci", 6);
+        $payment_data->addChild("RachunekBankowy")->addChild("NrRB", "58 1090 1607 0000 0001 5333 1539");
 
         return $prepared_invoice;
     }

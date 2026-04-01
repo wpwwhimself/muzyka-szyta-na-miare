@@ -760,39 +760,33 @@ class StatsController extends Controller
             }
         }
 
-        if ($rq->id) {
-            // edycja
-            $invoice = Invoice::find($rq->id);
-            $invoice->update([
-                "is_check" => $rq->has("is_check"),
-                "amount" => $totals["amount"],
-                "paid" => $totals["paid"],
-                "payer_name" => $rq->payer_name,
-                "payer_title" => $rq->payer_title,
-                "payer_address" => $rq->payer_address,
-                "payer_nip" => $rq->payer_nip,
-                "payer_regon" => $rq->payer_regon,
-                "payer_email" => $rq->payer_email,
-                "payer_phone" => $rq->payer_phone,
-                "ksef_number" => $rq->ksef_number,
-            ]);
-            InvoiceQuest::where("invoice_id", $rq->id)->delete();
-        } else {
-            $invoice = Invoice::create([
-                "is_check" => $rq->has("is_check"),
-                "visible" => false,
-                "amount" => $totals["amount"],
-                "paid" => $totals["paid"],
-                "payer_name" => $rq->payer_name,
-                "payer_title" => $rq->payer_title,
-                "payer_address" => $rq->payer_address,
-                "payer_nip" => $rq->payer_nip,
-                "payer_regon" => $rq->payer_regon,
-                "payer_email" => $rq->payer_email,
-                "payer_phone" => $rq->payer_phone,
-                "ksef_number" => $rq->ksef_number,
-            ]);
-        }
+        $invoice = Invoice::updateOrCreate([
+            "id" => $rq->id,
+        ], [
+            "is_check" => $rq->has("is_check"),
+            "visible" => false,
+            "amount" => $totals["amount"],
+            "paid" => $totals["paid"],
+
+            "payer_name" => $rq->payer_name,
+            "payer_title" => $rq->payer_title,
+            "payer_address" => $rq->payer_address,
+            "payer_nip" => $rq->payer_nip,
+            "payer_regon" => $rq->payer_regon,
+            "payer_email" => $rq->payer_email,
+            "payer_phone" => $rq->payer_phone,
+
+            "receiver_name" => $rq->receiver_name,
+            "receiver_title" => $rq->receiver_title,
+            "receiver_address" => $rq->receiver_address,
+            "receiver_nip" => $rq->receiver_nip,
+            "receiver_regon" => $rq->receiver_regon,
+            "receiver_email" => $rq->receiver_email,
+            "receiver_phone" => $rq->receiver_phone,
+
+            "ksef_number" => $rq->ksef_number,
+        ]);
+        InvoiceQuest::where("invoice_id", $rq->id)->delete();
 
         foreach($invoice_quests as $quest_id => $values){
             InvoiceQuest::create([

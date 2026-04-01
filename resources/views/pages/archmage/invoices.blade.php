@@ -62,6 +62,13 @@
                             payer_regon: '{{ $invoice->payer_regon }}',
                             payer_email: '{{ $invoice->payer_email }}',
                             payer_phone: '{{ $invoice->payer_phone }}',
+                            receiver_name: '{{ $invoice->receiver_name }}',
+                            receiver_title: '{{ $invoice->receiver_title }}',
+                            receiver_address: '{{ $invoice->receiver_address }}',
+                            receiver_nip: '{{ $invoice->receiver_nip }}',
+                            receiver_regon: '{{ $invoice->receiver_regon }}',
+                            receiver_email: '{{ $invoice->receiver_email }}',
+                            receiver_phone: '{{ $invoice->receiver_phone }}',
                             quests: '{{ $invoice->quests->pluck('id')->implode(' ') }}',
                         });"
                         class="tertiary"
@@ -78,6 +85,13 @@
                             payer_regon: '{{ $invoice->payer_regon }}',
                             payer_email: '{{ $invoice->payer_email }}',
                             payer_phone: '{{ $invoice->payer_phone }}',
+                            receiver_name: '{{ $invoice->receiver_name }}',
+                            receiver_title: '{{ $invoice->receiver_title }}',
+                            receiver_address: '{{ $invoice->receiver_address }}',
+                            receiver_nip: '{{ $invoice->receiver_nip }}',
+                            receiver_regon: '{{ $invoice->receiver_regon }}',
+                            receiver_email: '{{ $invoice->receiver_email }}',
+                            receiver_phone: '{{ $invoice->receiver_phone }}',
                         });"
                         class="tertiary"
                     />

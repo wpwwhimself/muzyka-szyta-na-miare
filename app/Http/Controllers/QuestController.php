@@ -309,7 +309,7 @@ class QuestController extends Controller
             "paid" => ($quest->payments_sum >= $price_data["price"]),
             "deadline" => $rq->deadline,
             "delayed_payment" => $delayed_payment_data["when_to_ask"] > 0
-                ? today()->addMonths($delayed_payment_data["when_to_ask"])->firstOfMonth()->format("Y-m-d")
+                ? today()->addMonthsNoOverflow($delayed_payment_data["when_to_ask"])->firstOfMonth()->format("Y-m-d")
                 : null,
         ]);
         $difference = $quest->price - $price_before;

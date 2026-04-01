@@ -958,27 +958,20 @@ class StatsController extends Controller
 
     public static function runMonthlyPaymentLimit($price)
     {
-        $today = Carbon::parse("2026-04-01");
-        /**
-         * ! uwaga !
-         * ->addMonth() jest zbugowane i 31. dnia miesiąca dodaje o jeden miesiąc za dużo
-         * https://github.com/CarbonPHP/carbon/issues/98
-         */
-
         //scheduled and received payments
         $saturation = [
             //this month
-            MoneyTransaction::visible()->whereDate("date", ">=", $today->clone()->firstOfMonth())->where("typable_type", IncomeType::class)->sum("amount")
+            MoneyTransaction::visible()->whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("typable_type", IncomeType::class)->sum("amount")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", "<", $today->clone()->lastOfMonth()->addDay())
+                    ->whereDate("delayed_payment", "<", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
                 ->sum("price")
             + ModelsRequest::whereIn("status_id", [5])
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", "<", $today->clone()->lastOfMonth()->addDay())
+                    ->whereDate("delayed_payment", "<", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
                 ->sum("price"),
 
@@ -987,13 +980,13 @@ class StatsController extends Controller
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", ">=", $today->clone()->lastOfMonth()->addDay())
-                    ->whereDate("delayed_payment", "<=", $today->clone()->lastOfMonth()->addDay()->lastOfMonth()))
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthNoOverflow()->lastOfMonth()))
                 ->sum("price")
             + ModelsRequest::whereIn("status_id", [5])
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", ">=", $today->clone()->lastOfMonth()->addDay())
-                    ->whereDate("delayed_payment", "<=", $today->clone()->lastOfMonth()->addDay()->lastOfMonth()))
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthNoOverflow()->lastOfMonth()))
                 ->sum("price"),
 
             //neeeeeeext month (scheduled)
@@ -1001,13 +994,13 @@ class StatsController extends Controller
                 ->whereNotIn("status_id", [17, 18])
                 ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", ">=", $today->clone()->addMonths(2)->firstOfMonth())
-                    ->whereDate("delayed_payment", "<=", $today->clone()->addMonths(2)->lastOfMonth()))
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthsNoOverflow(2)->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthsNoOverflow(2)->lastOfMonth()))
                 ->sum("price")
             + ModelsRequest::whereIn("status_id", [5])
                 ->where(fn($q) => $q
-                    ->whereDate("delayed_payment", ">=", $today->clone()->addMonths(2)->firstOfMonth())
-                    ->whereDate("delayed_payment", "<=", $today->clone()->addMonths(2)->lastOfMonth()))
+                    ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthsNoOverflow(2)->firstOfMonth())
+                    ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthsNoOverflow(2)->lastOfMonth()))
                 ->sum("price"),
         ];
 

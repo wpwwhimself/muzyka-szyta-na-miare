@@ -21,7 +21,7 @@
 <div class="flex right center">
     <x-tutorial>
         {{ [
-            1 => "Twoje zapytanie zostało wysłane. W&nbsp;najbliższym czasie (może nawet jutro) odniosę się do niego i&nbsp;przygotuję odpowiednią wycenę. Zostaniesz o&nbsp;tym poinformowany w&nbsp;wybrany przez Ciebie sposób.",
+            1 => "Twoje zapytanie zostało wysłane. W najbliższym czasie (może nawet jutro) odniosę się do niego i przygotuję odpowiednią wycenę. Zostaniesz o tym poinformowany w wybrany przez Ciebie sposób.",
             4 => "Nie podejmę się wykonania tego zlecenia. Prawdopodobnie jest ono dla mnie niewykonalne.",
             5 => "Wyceniłem Twoje zapytanie. Możesz potwierdzić przedstawione warunki lub – jeśli się z nimi nie zgadzasz – przesłać mi do ponownej wyceny z opisem, co się nie zgadza. Ostatecznie możesz zupełnie odrzucić warunki.",
             6 => "Twoje poprawki zostały przekazane. Odniosę się do nich i przedstawię poprawioną wycenę.",

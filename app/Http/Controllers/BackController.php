@@ -8,11 +8,11 @@ use App\Mail\PatronRejected;
 use App\Models\Quest;
 use App\Models\QuestType;
 use App\Models\Request;
-use App\Models\Shipyard\Modal;
 use App\Models\Song;
 use App\Models\Status;
 use App\Models\StatusChange;
 use App\Models\User;
+use App\Scaffolds\Modal;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Mail\Markdown;
@@ -224,8 +224,7 @@ class BackController extends Controller
     #region lookups
     public function lookupUsers()
     {
-        $fieldName = Modal::where("name", "select-user-to-request")->first()
-            ->fields[0][5]["selectData"]["fieldName"];
+        $fieldName = "client_id";
         $data = User::has("notes")
             ->get()
             ->map(fn ($u) => collect([
@@ -257,8 +256,7 @@ class BackController extends Controller
 
     public function lookupSongs()
     {
-        $fieldName = Modal::where("name", "select-song-to-request")->first()
-            ->fields[0][5]["selectData"]["fieldName"];
+        $fieldName = "song_id";
         $data = Song::where(fn ($q) => $q
             ->where("id", "regexp", request("query"))
             ->orWhere("title", "regexp", request("query"))

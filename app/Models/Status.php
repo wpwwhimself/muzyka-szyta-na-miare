@@ -40,11 +40,13 @@ class Status extends Model
         return $this->status_name;
     }
 
-    public function nameAndLabel(): string
+    public function nameAndLabel(): Attribute
     {
-        return view("components.phase-indicator-mini", [
-            "status" => $this,
-        ])->render();
+        return Attribute::make(
+            get: fn () => view("components.phase-indicator-mini", [
+                "status" => $this,
+            ])->render(),
+        );
     }
 
     public function optionLabel(): Attribute

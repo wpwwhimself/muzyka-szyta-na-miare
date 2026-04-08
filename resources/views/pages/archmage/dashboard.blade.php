@@ -98,10 +98,57 @@
 @endif
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
-    <x-section id="dashboard-quests"
+    <x-shipyard.app.section
         title="Zlecenia w toku"
         :icon="model_icon('quests')"
         :extended="true"
+    >
+        <div class="grid but-mobile-down" style="grid-template-columns: auto 1fr;">
+            @foreach ($quests_ongoing->groupBy("client_id")
+                ->sortBy(fn ($q) => min($q->min("deadline"), $q->min("hard_deadline")))
+            as $client_id => $clients_quests)
+            @php
+            $client = $clients_quests->first()->user;
+            @endphp
+
+            <div class="flex down no-gap">
+                <span>{{ $client }}</span>
+                <span>{!! $client->notes->display_subtitle !!}</span>
+            </div>
+            <div class="flex down no-gap">
+                @foreach ($clients_quests as $quest)
+                <span
+                    @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
+                >
+                    <span {{ Popper::pop($quest->quest_type->type) }}>
+                        <x-shipyard.app.icon :name="$quest->quest_type->icon" />
+                    </span>
+                    <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
+                    {!! $quest->status->name_and_label !!}
+                </span>
+                @endforeach
+            </div>
+            @endforeach
+        </div>
+    </x-shipyard.app.section>
+
+    <x-section id="dashboard-requests" class="sc-line"
+        title="Grafik"
+        icon="calendar"
+        :extended="true"
+        scissors
+    >
+        <x-slot name="buttons">
+            <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
+        </x-slot>
+
+        <x-calendar :click-days="false" :suggest="false" :with-today="true" />
+    </x-section>
+
+    <x-section id="dashboard-quests"
+        title="Zlecenia w toku (klasycznie)"
+        :icon="model_icon('quests')"
+        :extended="false"
     >
         <x-slot:buttons>
             <x-shipyard.app.icon-label-value
@@ -119,19 +166,6 @@
             <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
             @endforelse
         </div>
-    </x-section>
-
-    <x-section id="dashboard-requests" class="sc-line"
-        title="Grafik"
-        icon="calendar"
-        :extended="true"
-        scissors
-    >
-        <x-slot name="buttons">
-            <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
-        </x-slot>
-
-        <x-calendar :click-days="false" :suggest="false" :with-today="true" />
     </x-section>
 
     <x-section id="dashboard-quests"

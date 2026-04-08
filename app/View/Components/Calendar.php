@@ -27,7 +27,7 @@ class Calendar extends Component
         $this->available_day_until = explode(",", setting("msznm_available_day_until"));
 
         $available_days_needed = setting("msznm_available_days_needed");
-        $min_length = 15;
+        $min_length = 9;
         $length = max(
             $min_length,
             $min_length - (!$suggest * 2) - Quest::orderByDesc("deadline")

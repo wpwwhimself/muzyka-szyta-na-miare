@@ -32,7 +32,7 @@
                     :icon="$quest->song->has_safe_files ? model_icon('files') : $quest->quest_type->icon"
                     label="Zlecenie"
                     @class([
-                        "accent danger" => $suffix == "_hard",
+                        "accent danger ghost" => $suffix == "_hard",
                         "accent error" => $quest->hard_deadline?->addDay()->isPast(),
                     ])
                 >

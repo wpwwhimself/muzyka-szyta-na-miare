@@ -36,7 +36,7 @@
                         "accent error" => $quest->hard_deadline?->addDay()->isPast(),
                     ])
                 >
-                    <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
+                    <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}">
                         {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
@@ -52,7 +52,7 @@
                         "accent danger" => $suffix == "_hard",
                     ])
                 >
-                    <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}" target="_blank" >
+                    <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}">
                         {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>
@@ -68,7 +68,7 @@
                         "accent danger" => $suffix == "_hard",
                     ])
                 >
-                    <a class="request" href="{{ route('request', ['id' => $request->id]) }}" target="_blank" >
+                    <a class="request" href="{{ route('request', ['id' => $request->id]) }}">
                         {!! $request->title ?? "bez tytułu" !!}
                     </a>
                 </x-shipyard.app.icon-label-value>

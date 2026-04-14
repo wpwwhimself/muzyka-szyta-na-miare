@@ -67,7 +67,7 @@
         <x-extendo-block key="client"
             :icon="model_icon('users')"
             title="Dane klienta"
-            :subtitle="$request->user ?? $request->client_name"
+            :subtitle="$request->user?->name_and_badges ?? $request->client_name"
             :extended="in_array($request->status_id, [1, 6])"
         >
             <x-slot:buttons>

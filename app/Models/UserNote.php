@@ -42,6 +42,7 @@ class UserNote extends Authenticatable
         "budget", "extra_exp",
         "default_wishes", "special_prices",
         "external_drive",
+        "invoice_data",
     ];
 
     #region presentation
@@ -215,6 +216,25 @@ class UserNote extends Authenticatable
                 ],
             ],
         ],
+        "invoice_data" => [
+            "type" => "JSON",
+            "label" => "Dane do faktury",
+            "icon" => "invoice-list",
+            "hint" => "Lista dostępnych pól:<ul>
+                <li>payer_name - nazwa płatnika</li>
+                <li>payer_title - tytuł płatnika</li>
+                <li>payer_address - adres</li>
+                <li>payer_nip - NIP</li>
+                <li>payer_regon - REGON</li>
+                <li>payer_email - email</li>
+                <li>payer_phone - telefon</li>
+                <li>...te same pola z prefiksem `receiver` dotyczą danych odbiorcy i są opcjonalne</li>
+            </ul>",
+            "columnTypes" => [
+                "Pole" => "text",
+                "Wartość" => "text",
+            ],
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -307,7 +327,7 @@ class UserNote extends Authenticatable
     protected function casts(): array
     {
         return [
-            //
+            "invoice_data" => "json",
         ];
     }
 

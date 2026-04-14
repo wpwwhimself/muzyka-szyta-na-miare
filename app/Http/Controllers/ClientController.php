@@ -61,6 +61,7 @@ class ClientController extends Controller
                 "extra_exp" => $rq->extra_exp,
                 "default_wishes" => $rq->default_wishes,
                 "special_prices" => $rq->special_prices,
+                "invoice_data" => $rq->invoice_data,
                 "external_drive" => $rq->external_drive,
                 "password" => $rq->password,
             ]);

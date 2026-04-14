@@ -135,9 +135,15 @@
                     :icon="model_icon('invoices')"
                     action="none"
                     onclick="openModal('edit-invoice', {
-                        payer_name: '{{ $client->notes->client_name }}',
-                        payer_email: '{{ $client->notes->email }}',
-                        payer_phone: '{{ $client->notes->phone }}',
+                        payer_name: '{{ $client->notes->invoice_data['payer_name'] ?? $client->notes->client_name }}',
+                        payer_email: '{{ $client->notes->invoice_data['payer_email'] ?? $client->notes->email }}',
+                        payer_phone: '{{ $client->notes->invoice_data['payer_phone'] ?? $client->notes->phone }}',
+                        {{ collect(['payer_title', 'payer_address', 'payer_nip', 'payer_regon'])->map(fn ($fld) =>
+                            isset($client->notes->invoice_data[$fld]) ? $fld.': \''.$client->notes->invoice_data[$fld].'\',' : ''
+                        )->join('') }}
+                        {{ collect(['receiver_name', 'receiver_title', 'receiver_address', 'receiver_nip', 'receiver_regon', 'receiver_email', 'receiver_phone'])->map(fn ($fld) =>
+                            isset($client->notes->invoice_data[$fld]) ? $fld.': \''.$client->notes->invoice_data[$fld].'\',' : ''
+                        )->join('') }}
                         quests: '{{ implode(' ', $client->questsUnpaid->pluck('id')->toArray()) }}'
                     });"
                     class="tertiary"

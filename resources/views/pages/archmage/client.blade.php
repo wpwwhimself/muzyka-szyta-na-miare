@@ -31,6 +31,7 @@
                 "extra_exp",
                 "default_wishes",
                 "special_prices",
+                "invoice_data",
                 "external_drive",
                 "is_forgotten",
             ] as $field_name)

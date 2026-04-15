@@ -19,7 +19,7 @@ $fields = $request::getFields();
         @endauth
     </x-slot:actions>
 
-    @if (sumWarnings($warnings))
+    @if (sumWarnings($warnings) && !in_array($request->status_id, STATUSES_WAITING_FOR_ME()))
     <div class="flex right center middle accent danger">
         <h1><x-shipyard.app.icon name="alert" /></h1>
 
@@ -56,6 +56,7 @@ $fields = $request::getFields();
                 "artist",
                 "link",
                 "wishes",
+                "hard_deadline",
             ] as $field_name)
                 <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" dummy />
                 @if ($field_name == "link")
@@ -74,60 +75,63 @@ $fields = $request::getFields();
             @if (!$request->price)
             <p class="yellowed-out">pojawi się w ciągu najbliższych dni</p>
             @else
-
                 @if ($request->status_id == 1)
                 <p class="yellowed-out">poniższa wycena może być nieaktualna – poczekaj na odpowiedź</p>
                 @endif
 
-                <x-re_quests.price-summary :model="$request" />
+                <div class="flex down">
+                    <x-shipyard.app.card title="Płatność" icon="cash">
+                        <x-re_quests.price-summary :model="$request" />
 
-                @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
-                <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
-                    <x-shipyard.app.icon name="safe-square" />
-                    Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
-                    <br>
-                    pokryje
-                    @if ($request->user->notes->budget >= $request->price)
-                    całą kwotę zlecenia
-                    @else
-                    część kwoty zlecenia
+                        @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
+                        <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
+                            <x-shipyard.app.icon name="safe-square" />
+                            Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
+                            <br>
+                            pokryje
+                            @if ($request->user->notes->budget >= $request->price)
+                            całą kwotę zlecenia
+                            @else
+                            część kwoty zlecenia
+                            @endif
+                        </span>
+                        @endif
+
+                        @if ($request->delayed_payment)
+                        <p class="accent danger">
+                            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+                            <b>proszę o dokonanie wpłaty nie wcześniej niż {{ $request->delayed_payment->format('d.m.Y') }}</b>.
+                        </p>
+                        @endif
+                        <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
+                        <ul>
+                            <li>przelew na numer konta,</li>
+                            <li>płatność BLIKiem na numer telefonu.</li>
+                        </ul>
+                    </x-shipyard.app.card>
+
+                    <x-shipyard.app.card title="Termin realizacji" icon="calendar">
+                        @if ($request->deadline)
+                        <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
+                        <p>
+                            Termin oddania jest liczony do podanego dnia włącznie.
+                            Są duże szanse, że uda mi się wykonać zlecenie szybciej,
+                            ale to jest najpóźniejszy dzień.
+                        </p>
+                        @endif
+                    </x-shipyard.app.card>
+
+                    @if ($request->price && $request->status_id == 5)
+                    <x-shipyard.app.card title="Pobieranie plików" icon="download">
+                        <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
+                        @if ($request->delayed_payment)
+                        <p class="accent danger">
+                            Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
+                        </p>
+                        @endif
+                    </x-shipyard.app.card>
                     @endif
-                </span>
-                @endif
-            @endif
-
-            @if ($request->hard_deadline)
-            <x-shipyard.ui.field-input :model="$request" field-name="hard_deadline" dummy />
-            @endif
-            @if ($request->deadline)
-            <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
-            @endif
-
-            @if ($request->price && $request->status_id == 5)
-                @if ($request->deadline)
-                <p>
-                    Termin oddania jest liczony do podanego dnia włącznie.
-                    Są duże szanse, że uda mi się wykonać zlecenie szybciej,
-                    ale to jest najpóźniejszy dzień.
-                </p>
-                @endif
-                <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
-                <ul>
-                    <li>przelew na numer konta,</li>
-                    <li>płatność BLIKiem na numer telefonu.</li>
-                </ul>
-                <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
-            @endif
-
-            @if ($request->delayed_payment)
-            <div class="accent danger flex right spread middle">
-                <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" dummy />
-                <x-warning>
-                    Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-                    <b>proszę o dokonanie wpłaty później niż {{ $request->delayed_payment->format('d.m.Y') }}</b>.
-                    Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
-                </x-warning>
-            </div>
+                </div>
             @endif
         </x-extendo-block>
     </div>

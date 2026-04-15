@@ -39,7 +39,10 @@
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">
                 <span>Ukończonych zleceń</span>
-                <span>{{ $quests_total }}</span>
+                <span>
+                    {{ $quests_total }}
+                    <x-shipyard.stats.counter :rank="$quests_total" style="military" />
+                </span>
 
                 <span>Status klienta</span>
                 <span>

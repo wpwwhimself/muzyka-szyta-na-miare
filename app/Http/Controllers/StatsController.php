@@ -604,9 +604,11 @@ class StatsController extends Controller
     public function financePayout(float $amount) {
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
         MoneyTransaction::where("typable_type", CostType::class)->create([
+            "typable_type" => CostType::class,
             "typable_id" => CostType::where("name", "like", "%wypłaty%")->first()->id,
-            "desc" => "sam sobie",
+            "description" => "sam sobie",
             "amount" => $amount,
+            "date" => today(),
         ]);
         return back()->with("toast", ["success", "Wykonano wypłatę kwoty ." . _c_(as_pln($amount))]);
     }

@@ -4,10 +4,15 @@
 
 <div class="flex right center middle">
     <x-shipyard.ui.button :action="route('finance')" label="Wróć" icon="chevron-double-left" />
-    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('cost-types')" />
+    <x-shipyard.ui.button :action="route('admin.model.list', ['model' => 'money-transactions', 'fltr[type]' => 'App\\Models\\CostType'])" label="Koszty" :icon="model_icon('cost-types')" />
     <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
 
-    <x-shipyard.ui.button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])" label="Wypłać" icon="sack-dollar" small />
+    <x-shipyard.ui.button :action="route('finance-payout', ['amount' => $summary['Można wypłacić']])"
+        icon="cash-refund"
+        label="Wypłać"
+        :pop="'Doda wypłatę w kwocie '.$summary['Można wypłacić'].' zł'"
+        class="primary"
+    />
 </div>
 
 <x-section scissors :title="'Podsumowanie – '.\Carbon\Carbon::today()->subMonths(request()->get('subMonths', 0))->format('m.Y')" icon="finance">

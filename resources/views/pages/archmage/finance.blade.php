@@ -5,7 +5,7 @@
 
 <div class="flex right center middle">
     <x-shipyard.ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
-    <x-shipyard.ui.button :action="route('costs')" label="Koszty" :icon="model_icon('cost-types')" />
+    <x-shipyard.ui.button :action="route('admin.model.list', ['model' => 'money-transactions', 'fltr[type]' => 'App\\Models\\CostType'])" label="Koszty" :icon="model_icon('cost-types')" />
     <x-shipyard.ui.button :action="route('invoices')" label="Faktury" :icon="model_icon('invoices')" />
     <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
     <x-shipyard.ui.button :action="route('gig-price-suggest')" label="Wycena grania" icon="chat-alert" />

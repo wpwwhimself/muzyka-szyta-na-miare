@@ -43,8 +43,18 @@
             @endphp
             <x-shipyard.ui.button
                 :action="abs($status_id) == 9
-                    ? route('request-final', ['id' => $request->id, 'status' => 9, 'with_priority' => $status_id < 0])
+                    ? 'none'
                     : 'submit'"
+                :onclick="abs($status_id) == 9
+                    ? 'openModal(\'confirm-quote\', {
+                        id: `.'.$request->id.'`,
+                        is_priority: '.intval($status_id < 0).',
+                        confirm_song: true,
+                        confirm_price: true,
+                        confirm_deadline: true,
+                        confirm_delayed_payment: true,
+                    })'
+                    : null"
                 name="new_status"
                 :icon="$new_status->icon"
                 :value="$status_id"

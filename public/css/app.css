@@ -132,6 +132,12 @@ body {
     padding: 1em;
 }
 
+.button.major {
+    font-size: 2em;
+    display: block;
+    text-align: center;
+}
+
 .calendar-table {
     & th {
         text-align: center !important;

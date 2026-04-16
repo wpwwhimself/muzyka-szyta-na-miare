@@ -2,6 +2,7 @@
 
 namespace App\Scaffolds;
 
+use App\Models\Request;
 use App\Scaffolds\Shipyard\Modal as ShipyardModal;
 
 class Modal extends ShipyardModal
@@ -554,6 +555,52 @@ class Modal extends ShipyardModal
                         "icon" => model_field_icon("requests", "hard_deadline"),
                     ],
                 ], $contact_form_turing),
+            ],
+            "confirm-quote" => [
+                "heading" => "Potwierdzenie wyceny",
+                "target_route" => "request-finalize",
+                "fields" => [
+                    [
+                        "type" => "paragraph",
+                        "label" => "Zaznacz poniższe zgody, żeby potwierdzić wycenę.",
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "label" => "Jeśli nie odpowiada ci któryś z punktów, zamknij to okno i użyj odpowiedniego przycisku na stronie, aby zgłosić uwagi.",
+                        "icon" => "alert",
+                        "extra" => [
+                            "class" => "accent danger",
+                        ],
+                    ],
+                    [
+                        "name" => "confirm_song",
+                        "type" => "checkbox",
+                        "label" => Request::confirmLabels()["confirm_song"],
+                        "icon" => model_icon("songs"),
+                        "required" => true,
+                    ],
+                    [
+                        "name" => "confirm_price",
+                        "type" => "checkbox",
+                        "label" => Request::confirmLabels()["confirm_price"],
+                        "icon" => model_icon("money-transactions"),
+                        "required" => true,
+                    ],
+                    [
+                        "name" => "confirm_delayed_payment",
+                        "type" => "checkbox",
+                        "label" => Request::confirmLabels()["confirm_delayed_payment"],
+                        "icon" => model_field_icon("requests", "delayed_payment"),
+                        "required" => true,
+                    ],
+                    [
+                        "name" => "confirm_deadline",
+                        "type" => "checkbox",
+                        "label" => Request::confirmLabels()["confirm_deadline"],
+                        "icon" => model_field_icon("requests", "deadline"),
+                        "required" => true,
+                    ],
+                ],
             ],
         ];
     }

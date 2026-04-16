@@ -19,6 +19,7 @@ use App\Models\Request;
 use App\Models\Song;
 use App\Models\StatusChange;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -458,136 +459,136 @@ class RequestController extends Controller
         return redirect()->route("request", ["id" => $request->id])->with("toast", ["success", $flash_content]);
     }
 
-    public function finalize($id, $status, $with_priority = false){
-        $request = Request::findOrFail($id);
+    public function finalize(HttpRequest $rq)
+    {
+        $request = Request::findOrFail($rq->id);
 
         if(in_array($request->status_id, [4,7,8,9]))
-            return redirect()->route("request", ["id" => $id])->with("toast", ["error", "Zapytanie już zamknięte"]);
+            return redirect()->route("request", ["id" => $rq->id])->with("toast", ["error", "Zapytanie już zamknięte"]);
 
-        $request->status_id = $status;
-        $price = StatsController::runPriceCalc($request->price_code.(($with_priority) ? "z" : ""), $request->client_id, true);
+        $request->status_id = 9;
+        $price = StatsController::runPriceCalc($request->price_code.(($rq->is_priority) ? "z" : ""), $request->client_id, true);
+        $mpl = StatsController::runMonthlyPaymentLimit($price["price"]);
 
         $is_new_client = 0;
 
         // adding new quest
-        if($status == 9){
-            //add new song if not exists
-            if(!$request->song_id){
-                $song = new Song;
-                $song->id = next_song_id($request->quest_type_id);
-                $song->link = yt_cleanup($request->link);
-                $song->genre_id = $request->genre_id;
-                $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
+        //add new song if not exists
+        if(!$request->song_id){
+            $song = new Song;
+            $song->id = next_song_id($request->quest_type_id);
+            $song->link = yt_cleanup($request->link);
+            $song->genre_id = $request->genre_id;
+            $song->price_code = preg_replace("/[=\-oyzqr\d]/", "", $request->price_code);
 
-                // add new composition if not exists
-                $composition_title = Str::of($request->title)->after("(")->before(")")->toString() ?: null;
-                $request->title = Str::of($request->title)->before(" (")->toString() ?: null;
-                $composition_composer = Str::of($request->artist)->after("(")->before(")")->toString() ?: null;
-                $request->artist = Str::of($request->artist)->before(" (")->toString() ?: null;
+            // add new composition if not exists
+            $composition_title = Str::of($request->title)->after("(")->before(")")->toString() ?: null;
+            $request->title = Str::of($request->title)->before(" (")->toString() ?: null;
+            $composition_composer = Str::of($request->artist)->after("(")->before(")")->toString() ?: null;
+            $request->artist = Str::of($request->artist)->before(" (")->toString() ?: null;
 
-                $composition = Composition::firstOrCreate(
-                    ["id" => $request->composition_id],
-                    [
-                        "title" => $composition_title,
-                        "composer" => $composition_composer,
-                    ]
-                );
-                $song->title = $request->title;
-                $song->artist = $request->artist;
-                $song->composition_id = $composition->id;
+            $composition = Composition::firstOrCreate(
+                ["id" => $request->composition_id],
+                [
+                    "title" => $composition_title,
+                    "composer" => $composition_composer,
+                ]
+            );
+            $song->title = $request->title;
+            $song->artist = $request->artist;
+            $song->composition_id = $composition->id;
 
-                $song->save();
+            $song->save();
 
-                $request->song_id = $song->id;
-                $request->composition_id = $composition->id;
-            }
-            //add new client if not exists
-            if(!$request->client_id){
-                $is_new_client = 1;
-
-                $password = generate_password();
-
-                $client = User::create([
-                    "name" => substr($password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
-                    "email" => $request->email ?? Str::uuid()."@test.test",
-                    "password" => $password,
-                ]);
-                $client->roles()->attach("client");
-                $client->notes()->create([
-                    "password" => $password,
-                    "client_name" => $request->client_name,
-                    "email" => $request->email,
-                    "phone" => $request->phone,
-                    "other_medium" => $request->other_medium,
-                    "contact_preference" => $request->contact_preference,
-                ]);
-
-                $request->client_id = $client->id;
-
-                //bind remaining anonymous quests from the same guy
-                Request::whereIn("status_id", [1, 5])
-                    ->where("client_name", $request->client_name)
-                    ->where("email", $request->email)
-                    ->where("phone", $request->phone)
-                    ->where("other_medium", $request->other_medium)
-                    ->where("contact_preference", $request->contact_preference)
-                    ->update(["client_id" => $client->id]);
-            }else{
-                $client = User::find($request->client_id);
-            }
-
-            $quest = new Quest;
-            $quest->id = next_quest_id($request->quest_type_id);
-            $quest->song_id = $request->song_id ?? $song->id;
-            $quest->client_id = $request->client_id ?? $client->id;
-            $quest->status_id = 11;
-            $quest->price_code_override = $price["labels"];
-            $quest->price = $price["price"];
-            $quest->deadline = ($with_priority) ? get_next_working_day() : $request->deadline;
-            $quest->hard_deadline = $request->hard_deadline;
-            $quest->delayed_payment = $request->delayed_payment;
-            $quest->wishes = $request->wishes;
-            $quest->save();
-
-            // $invoice = Invoice::create([
-            //     "quest_id" => $quest->id,
-            //     "amount" => $quest->price
-            // ]);
-
-            if($client->notes->budget){
-                $sub_amount = min([$request->price, $client->notes->budget]);
-                $client->notes->update([
-                    "budget" => $client->notes->budget - $sub_amount,
-                ]);
-                BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
-                MoneyTransaction::create([
-                    "typable_type" => IncomeType::class,
-                    "typable_id" => 2,
-                    "relatable_type" => User::class,
-                    "relatable_id" => $client->id,
-                    "date" => today(),
-                    "amount" => -$sub_amount,
-                ]);
-                if($sub_amount == $request->price){
-                    $quest->paid = true;
-                    $quest->save();
-                }
-                BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
-                MoneyTransaction::create([
-                    "typable_type" => IncomeType::class,
-                    "typable_id" => 1,
-                    "relatable_type" => Quest::class,
-                    "relatable_id" => $quest->id,
-                    "date" => today(),
-                    "amount" => $sub_amount,
-                ]);
-                // $invoice->update(["paid" => $sub_amount]);
-            }
-
-            $request->quest_id = $quest->id;
-            $request->price_code = $price["labels"];
-            $request->price = $price["price"];
+            $request->song_id = $song->id;
+            $request->composition_id = $composition->id;
         }
+        //add new client if not exists
+        if(!$request->client_id){
+            $is_new_client = 1;
+
+            $password = generate_password();
+
+            $client = User::create([
+                "name" => substr($password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
+                "email" => $request->email ?? Str::uuid()."@test.test",
+                "password" => $password,
+            ]);
+            $client->roles()->attach("client");
+            $client->notes()->create([
+                "password" => $password,
+                "client_name" => $request->client_name,
+                "email" => $request->email,
+                "phone" => $request->phone,
+                "other_medium" => $request->other_medium,
+                "contact_preference" => $request->contact_preference,
+            ]);
+
+            $request->client_id = $client->id;
+
+            //bind remaining anonymous quests from the same guy
+            Request::whereIn("status_id", [1, 5])
+                ->where("client_name", $request->client_name)
+                ->where("email", $request->email)
+                ->where("phone", $request->phone)
+                ->where("other_medium", $request->other_medium)
+                ->where("contact_preference", $request->contact_preference)
+                ->update(["client_id" => $client->id]);
+        }else{
+            $client = User::find($request->client_id);
+        }
+
+        $quest = new Quest;
+        $quest->id = next_quest_id($request->quest_type_id);
+        $quest->song_id = $request->song_id ?? $song->id;
+        $quest->client_id = $request->client_id ?? $client->id;
+        $quest->status_id = 11;
+        $quest->price_code_override = $price["labels"];
+        $quest->price = $price["price"];
+        $quest->deadline = ($rq->is_priority) ? get_next_working_day() : $request->deadline;
+        $quest->hard_deadline = $request->hard_deadline;
+        $quest->delayed_payment = $mpl["when_to_ask"] > 0 ? Carbon::today()->addMonthsNoOverflow($mpl["when_to_ask"])->firstOfMonth() : null;
+        $quest->wishes = $request->wishes;
+        $quest->save();
+
+        // $invoice = Invoice::create([
+        //     "quest_id" => $quest->id,
+        //     "amount" => $quest->price
+        // ]);
+
+        if($client->notes->budget){
+            $sub_amount = min([$request->price, $client->notes->budget]);
+            $client->notes->update([
+                "budget" => $client->notes->budget - $sub_amount,
+            ]);
+            BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 2,
+                "relatable_type" => User::class,
+                "relatable_id" => $client->id,
+                "date" => today(),
+                "amount" => -$sub_amount,
+            ]);
+            if($sub_amount == $request->price){
+                $quest->paid = true;
+                $quest->save();
+            }
+            BackController::newStatusLog($quest->id, 32, $sub_amount, $client->id);
+            MoneyTransaction::create([
+                "typable_type" => IncomeType::class,
+                "typable_id" => 1,
+                "relatable_type" => Quest::class,
+                "relatable_id" => $quest->id,
+                "date" => today(),
+                "amount" => $sub_amount,
+            ]);
+            // $invoice->update(["paid" => $sub_amount]);
+        }
+
+        $request->quest_id = $quest->id;
+        $request->price_code = $price["labels"];
+        $request->price = $price["price"];
 
         $request->save();
         $request = $request->fresh();
@@ -597,34 +598,23 @@ class RequestController extends Controller
         Mail::to(env("MAIL_MAIN_ADDRESS"))->send(new ArchmageQuestMod($request->fresh()));
         $mailing = true;
 
-        BackController::newStatusLog($id, $status, null, (is_archmage()) ? $request->client_id : null, $mailing);
+        BackController::newStatusLog($rq->id, 9, null, (is_archmage()) ? $request->client_id : null, $mailing);
 
-        if ($status == 9){
-            //added quest
-            BackController::newStatusLog($request->quest_id, 11, null, $request->client_id);
-            //add client ID to history
-            StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
-            //send onboarding if new client
-            if ($request->user->notes->email && $is_new_client){
-                Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
-            }
+        //added quest
+        BackController::newStatusLog($request->quest_id, 11, null, $request->client_id);
+        //add client ID to history
+        StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
+        //send onboarding if new client
+        if ($request->user->notes->email && $is_new_client){
+            Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
         }
 
         if(is_archmage()) return redirect()->route("request", ["id" => $request->id]);
-        else return redirect()->route("request-finalized", compact("id", "status", "is_new_client"));
-    }
-
-    public function questReject(HttpRequest $rq){
-        //adding comment
-        $history = StatusChange::where("re_quest_id", $rq->id)
-            ->where("new_status_id", $rq->status)
-            ->first();
-
-        $history->values = json_encode(["powód" => $rq->comment]);
-        $history->save();
-
-        $where_to = (!Auth::check()) ? "home" : "dashboard";
-        return redirect()->route($where_to)->with("toast", ["success", "Komentarz dodany"]);
+        else return redirect()->route("request-finalized", [
+            "id" => $request->id,
+            "status" => $request->status_id,
+            "is_new_client" => $is_new_client,
+        ]);
     }
 
     #region select

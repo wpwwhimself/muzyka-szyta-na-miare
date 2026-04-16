@@ -71,9 +71,8 @@ Route::middleware("auth")->group(function(){
                 Route::post("song", "selectSong")->name("requests.select-song");
             });
 
-            Route::get('/finalize/{id}/{status}/{with_priority?}', "finalize")->name("request-final");
+            Route::post('/finalize', "finalize")->name("request-finalize");
             Route::get('/finalized/{id}/{status}/{is_new_client}', "finalized")->name("request-finalized");
-            Route::post("/finalized-sub", "questReject")->name("quest-reject");
         });
     });
 

@@ -51,6 +51,8 @@ $fields = $request::getFields();
             subtitle="Jaki utwór mam przygotować?"
             :extended="true"
         >
+            <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" dummy />
+
             @foreach ([
                 "title",
                 "artist",
@@ -63,6 +65,14 @@ $fields = $request::getFields();
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
             @endforeach
+
+            <x-shipyard.app.card class="request-confirm">
+                <x-shipyard.ui.input type="checkbox"
+                    name="confirm_song"
+                    label="Zgadzam się na wykonanie zlecenia z powyższymi założeniami"
+                    required
+                />
+            </x-shipyard.app.card>
         </x-extendo-block>
 
         <x-extendo-block key="quote"
@@ -80,56 +90,75 @@ $fields = $request::getFields();
                 @endif
 
                 <div class="flex down">
-                    <x-shipyard.app.card title="Płatność" icon="cash">
-                        <x-re_quests.price-summary :model="$request" />
+                    <x-re_quests.price-summary :model="$request" />
 
-                        @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
-                        <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
-                            <x-shipyard.app.icon name="safe-square" />
-                            Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
-                            <br>
-                            pokryje
-                            @if ($request->user->notes->budget >= $request->price)
-                            całą kwotę zlecenia
-                            @else
-                            część kwoty zlecenia
-                            @endif
-                        </span>
+                    @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
+                    <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
+                        <x-shipyard.app.icon name="safe-square" />
+                        Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
+                        <br>
+                        pokryje
+                        @if ($request->user->notes->budget >= $request->price)
+                        całą kwotę zlecenia
+                        @else
+                        część kwoty zlecenia
                         @endif
+                    </span>
+                    @endif
 
+                    @if ($request->delayed_payment)
+                    <p class="accent danger">
+                        Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
+                        <b>proszę o dokonanie wpłaty nie wcześniej niż {{ $request->delayed_payment->format('d.m.Y') }}</b>.
+                    </p>
+                    @endif
+                    <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
+                    <ul>
+                        <li>przelew na numer konta,</li>
+                        <li>płatność BLIKiem na numer telefonu.</li>
+                    </ul>
+
+                    <x-shipyard.app.card class="request-confirm">
+                        <x-shipyard.ui.input type="checkbox"
+                            name="confirm_price"
+                            :label="'Potwierdzam, że zapłacę '.as_pln($request->price)"
+                            required
+                        />
                         @if ($request->delayed_payment)
-                        <p class="accent danger">
-                            Z uwagi na limity przyjmowanych przeze mnie wpłat z racji prowadzenia działalności nierejestrowanej,
-                            <b>proszę o dokonanie wpłaty nie wcześniej niż {{ $request->delayed_payment->format('d.m.Y') }}</b>.
-                        </p>
+                        <x-shipyard.app.card class="request-confirm">
+                            <x-shipyard.ui.input type="checkbox"
+                                name="confirm_delayed_payment"
+                                :label="'Potwierdzam, że zapłacę nie wcześniej niż '.$request->delayed_payment->format('d.m.Y')"
+                                required
+                            />
+                        </x-shipyard.app.card>
                         @endif
-                        <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
-                        <ul>
-                            <li>przelew na numer konta,</li>
-                            <li>płatność BLIKiem na numer telefonu.</li>
-                        </ul>
                     </x-shipyard.app.card>
 
-                    <x-shipyard.app.card title="Termin realizacji" icon="calendar">
-                        @if ($request->deadline)
-                        <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
-                        <p>
-                            Termin oddania jest liczony do podanego dnia włącznie.
-                            Są duże szanse, że uda mi się wykonać zlecenie szybciej,
-                            ale to jest najpóźniejszy dzień.
-                        </p>
-                        @endif
+                    @if ($request->deadline)
+                    <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
+                    <p>
+                        Termin oddania jest liczony do podanego dnia włącznie.
+                        Są duże szanse, że uda mi się wykonać zlecenie do kilku dni roboczych wcześniej,
+                        ale to jest najpóźniejszy dzień.
+                    </p>
+                    @endif
+
+                    <x-shipyard.app.card class="request-confirm">
+                        <x-shipyard.ui.input type="checkbox"
+                            name="confirm_deadline"
+                            :label="'Zgadzam się na otrzymanie pierwszej wersji zlecenia do '.$request->deadline->format('d.m.Y')"
+                            required
+                        />
                     </x-shipyard.app.card>
 
                     @if ($request->price && $request->status_id == 5)
-                    <x-shipyard.app.card title="Pobieranie plików" icon="download">
                         <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
                         @if ($request->delayed_payment)
                         <p class="accent danger">
                             Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                         </p>
                         @endif
-                    </x-shipyard.app.card>
                     @endif
                 </div>
             @endif

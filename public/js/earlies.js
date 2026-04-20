@@ -161,10 +161,6 @@ function loadFileList(container_uuid) {
             reapplyPopper();
         });
 }
-
-function primeReloadFileList(btn) {
-    window.onfocus = function () { loadFileList(btn.closest(".files-container").dataset.uuid); }
-}
 //#endregion
 
 function printInvoice() {

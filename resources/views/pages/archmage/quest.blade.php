@@ -137,6 +137,14 @@
             scissors
         >
             <x-slot:buttons>
+                <x-shipyard.ui.button
+                    label="Odśwież"
+                    icon="refresh"
+                    action="none"
+                    class="tertiary"
+                    onclick="loadFileList(document.querySelector(`.files-container`).closest(`.files-container`).dataset.uuid);"
+                />
+
                 @if ($quest->user->notes->external_drive)
                 <x-shipyard.ui.button
                     :action="$quest->user->notes->external_drive"
@@ -273,10 +281,4 @@
     @endunless
 </div>
 
-@endsection
-
-@section("appends")
-<script defer>
-primeReloadFileList(document.querySelector(`.files-container`));
-</script>
 @endsection

@@ -111,13 +111,13 @@
             $client = $clients_quests->first()->user;
             @endphp
 
-            <div class="flex down no-gap">
+            <div class="flex down but-mobile-right" style="row-gap: 0;">
                 <span>{{ $client }}</span>
                 <span>{!! $client->notes->display_subtitle !!}</span>
             </div>
             <div class="flex down no-gap">
                 @foreach ($clients_quests as $quest)
-                <span
+                <span style="text-align: right;"
                     @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
                 >
                     <span {{ Popper::pop($quest->quest_type->type) }}>

@@ -3,10 +3,13 @@
 
 @section('content')
 
+<div @class(["grid but-mobile-down", "stagger-contents" => setting("animations_mode") >= 1]) style="--col-count: 2;">
+
 @if (count($patrons_adepts) > 0)
 <x-section id="patrons-adepts"
     title="Potencjalni patroni"
     icon="seal"
+    style="grid-column: span 2;"
 >
     <x-slot name="buttons">
         <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Recenzje</x-a>
@@ -38,6 +41,7 @@
     title="Zapytania"
     :header-icon="model_icon('requests')"
     :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0"
+    style="grid-column: span 2;"
 >
     <x-slot name="buttons">
         <x-shipyard.app.icon-label-value
@@ -61,7 +65,7 @@
 </x-extendo-block>
 
 @if (count($showcases_missing))
-<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')">
+<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: span 2;">
     <table>
         <thead>
             <tr>
@@ -97,226 +101,226 @@
 </x-section>
 @endif
 
-<div class="grid but-mobile-down" style="--col-count: 2;">
-    <x-shipyard.app.section
-        title="Zlecenia w toku"
-        :icon="model_icon('quests')"
-        :extended="true"
-    >
-        <div class="grid but-mobile-down" style="grid-template-columns: auto 1fr;">
-            @foreach ($quests_ongoing->groupBy("client_id")
-                ->sortBy(fn ($q) => min($q->min("deadline"), $q->min("hard_deadline")))
-            as $client_id => $clients_quests)
-            @php
-            $client = $clients_quests->first()->user;
-            @endphp
+<x-shipyard.app.section
+    title="Zlecenia w toku"
+    :icon="model_icon('quests')"
+    :extended="true"
+>
+    <div class="grid but-mobile-down" style="grid-template-columns: auto 1fr;">
+        @foreach ($quests_ongoing->groupBy("client_id")
+            ->sortBy(fn ($q) => min($q->min("deadline"), $q->min("hard_deadline")))
+        as $client_id => $clients_quests)
+        @php
+        $client = $clients_quests->first()->user;
+        @endphp
 
-            <div class="flex down but-mobile-right" style="row-gap: 0;">
-                <span>{{ $client }}</span>
-                <span>{!! $client->notes->display_subtitle !!}</span>
-            </div>
-            <div class="flex down no-gap">
-                @foreach ($clients_quests as $quest)
-                <span style="text-align: right;"
-                    @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
-                >
-                    <span {{ Popper::pop($quest->quest_type->type) }}>
-                        <x-shipyard.app.icon :name="$quest->quest_type->icon" />
-                    </span>
-                    <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
-                    {!! $quest->status->name_and_label !!}
+        <div class="flex down but-mobile-right" style="row-gap: 0;">
+            <span>{{ $client }}</span>
+            <span>{!! $client->notes->display_subtitle !!}</span>
+        </div>
+        <div class="flex down no-gap">
+            @foreach ($clients_quests as $quest)
+            <span style="text-align: right;"
+                @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
+            >
+                <span {{ Popper::pop($quest->quest_type->type) }}>
+                    <x-shipyard.app.icon :name="$quest->quest_type->icon" />
                 </span>
-                @endforeach
-            </div>
+                <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
+                {!! $quest->status->name_and_label !!}
+            </span>
             @endforeach
         </div>
-    </x-shipyard.app.section>
+        @endforeach
+    </div>
+</x-shipyard.app.section>
 
-    <x-section id="dashboard-requests" class="sc-line"
-        title="Grafik"
-        icon="calendar"
-        :extended="true"
-        scissors
-    >
-        <x-slot name="buttons">
-            <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
-        </x-slot>
+<x-section id="dashboard-requests" class="sc-line"
+    title="Grafik"
+    icon="calendar"
+    :extended="true"
+    scissors
+>
+    <x-slot name="buttons">
+        <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
+    </x-slot>
 
-        <x-calendar :click-days="false" :suggest="false" :with-today="true" />
-    </x-section>
+    <x-calendar :click-days="false" :suggest="false" :with-today="true" />
+</x-section>
 
-    <x-section id="dashboard-quests"
-        title="Zlecenia w toku (klasycznie)"
-        :icon="model_icon('quests')"
-        :extended="false"
-    >
-        <x-slot:buttons>
-            <x-shipyard.app.icon-label-value
-                icon="counter"
-                label="Liczba"
-            >
-                {{ $quests_ongoing->count() }}
-            </x-shipyard.app.icon-label-value>
-        </x-slot:buttons>
+<x-section id="dashboard-quests"
+    title="Zlecenia w toku (klasycznie)"
+    :icon="model_icon('quests')"
+    :extended="false"
+>
+    <x-slot:buttons>
+        <x-shipyard.app.icon-label-value
+            icon="counter"
+            label="Liczba"
+        >
+            {{ $quests_ongoing->count() }}
+        </x-shipyard.app.icon-label-value>
+    </x-slot:buttons>
 
-        <div class="flex down">
-            @forelse ($quests_ongoing as $key => $quest)
-            <x-quests.tile :quest="$quest" :no="$key + 1" />
-            @empty
-            <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
-            @endforelse
-        </div>
-    </x-section>
+    <div class="flex down">
+        @forelse ($quests_ongoing as $key => $quest)
+        <x-quests.tile :quest="$quest" :no="$key + 1" />
+        @empty
+        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
+        @endforelse
+    </div>
+</x-section>
 
-    <x-section id="dashboard-quests"
-        title="Zlecenia czekające"
-        icon="package-variant"
-        :extended="false"
-    >
-        <x-slot:buttons>
-            <x-shipyard.app.icon-label-value
-                icon="counter"
-                label="Liczba"
-            >
-                {{ $quests_review->count() }}
-            </x-shipyard.app.icon-label-value>
-        </x-slot:buttons>
+<x-section id="dashboard-quests"
+    title="Zlecenia czekające"
+    icon="package-variant"
+    :extended="false"
+>
+    <x-slot:buttons>
+        <x-shipyard.app.icon-label-value
+            icon="counter"
+            label="Liczba"
+        >
+            {{ $quests_review->count() }}
+        </x-shipyard.app.icon-label-value>
+    </x-slot:buttons>
 
-        <div class="flex down">
-            @forelse ($quests_review as $key => $quest)
-            <x-quests.tile :quest="$quest" :no="$key + 1" />
-            @empty
-            <p class="grayed-out">brak aktywnych zleceń</p>
-            @endforelse
-        </div>
-    </x-section>
+    <div class="flex down">
+        @forelse ($quests_review as $key => $quest)
+        <x-quests.tile :quest="$quest" :no="$key + 1" />
+        @empty
+        <p class="grayed-out">brak aktywnych zleceń</p>
+        @endforelse
+    </div>
+</x-section>
 
-    <x-section id="recent"
-        title="Ostatnie zmiany"
-        icon="history"
-        :extended="false"
-    >
-        <table>
-            <thead>
-                <tr>
-                    <th>Zlecenie/Utwór</th>
-                    <th>Klient</th>
-                    <th>Status</th>
-                    <th>Kiedy</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($recent as $change)
-                <tr @class([
-                    "ghost" => $change->re_quest?->status_id == $change->new_status_id,
-                ])>
-                    <td>
-                        <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                            {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
-                        </a>
-                        @unless ($change->is_request)
-                        <small class="ghost">{{ $change->re_quest?->song->id }}</small>
-                        @endunless
-                    </td>
-                    <td>
-                    @if ($change->is_request)
-                        @if ($change->re_quest?->user)
-                            <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
-                        @else
-                            {{ _ct_($change->re_quest?->client_name) }}
-                        @endif
+<x-section id="recent"
+    title="Ostatnie zmiany"
+    icon="history"
+    :extended="false"
+>
+    <table>
+        <thead>
+            <tr>
+                <th>Zlecenie/Utwór</th>
+                <th>Klient</th>
+                <th>Status</th>
+                <th>Kiedy</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($recent as $change)
+            <tr @class([
+                "ghost" => $change->re_quest?->status_id == $change->new_status_id,
+            ])>
+                <td>
+                    <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                        {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
+                    </a>
+                    @unless ($change->is_request)
+                    <small class="ghost">{{ $change->re_quest?->song->id }}</small>
+                    @endunless
+                </td>
+                <td>
+                @if ($change->is_request)
+                    @if ($change->re_quest?->user)
+                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
                     @else
-                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                        {{ _ct_($change->re_quest?->client_name) }}
                     @endif
-                    </td>
-                    <td>
-                        <x-phase-indicator-mini :status="$change->new_status" />
+                @else
+                    <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                @endif
+                </td>
+                <td>
+                    <x-phase-indicator-mini :status="$change->new_status" />
 
-                        @if ($change->comment)
-                        <span {{ Popper::pop($change->comment) }}>
-                            <x-shipyard.app.icon name="comment" />
-                        </span>
-                        @endif
-                    </td>
-                    <td {{ Popper::pop($change->date) }}>
-                        {{ $change->date->diffForHumans() }}
-                    </td>
-                </tr>
-                @empty
-                    <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-    </x-section>
+                    @if ($change->comment)
+                    <span {{ Popper::pop($change->comment) }}>
+                        <x-shipyard.app.icon name="comment" />
+                    </span>
+                    @endif
+                </td>
+                <td {{ Popper::pop($change->date) }}>
+                    {{ $change->date->diffForHumans() }}
+                </td>
+            </tr>
+            @empty
+                <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</x-section>
 
-    <x-section title="Raport sprzątacza" icon="broom">
-        <table>
-            <thead>
-                <tr>
-                    <th>Obiekt</th>
-                    <th>Komentarz</th>
-                    <th>Mail</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($janitor_log as $i)
-                <tr>
-                    <td>
-                        @if(is_object($i->subject))
-                        <a href="{{ $i->subject->link_to }}">
-                            @if($i->procedure === "re_quests")
-                                <x-phase-indicator-mini :status="$i->subject->status" />
-                                {{ $i->subject->song?->title ?? $i->subject->title ?? "utwór bez tytułu" }}
-                            @elseif($i->procedure === "safe")
-                                <i class="fas fa-folder" @popper(Sejf)></i>
-                                {{ $i->subject->title ?? "utwór bez tytułu" }}
-                            @endif
-                        </a>
-                        @else
-                        <span>{{ $i->subject }}</span>
+<x-section title="Raport sprzątacza" icon="broom">
+    <table>
+        <thead>
+            <tr>
+                <th>Obiekt</th>
+                <th>Komentarz</th>
+                <th>Mail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($janitor_log as $i)
+            <tr>
+                <td>
+                    @if(is_object($i->subject))
+                    <a href="{{ $i->subject->link_to }}">
+                        @if($i->procedure === "re_quests")
+                            <x-phase-indicator-mini :status="$i->subject->status" />
+                            {{ $i->subject->song?->title ?? $i->subject->title ?? "utwór bez tytułu" }}
+                        @elseif($i->procedure === "safe")
+                            <i class="fas fa-folder" @popper(Sejf)></i>
+                            {{ $i->subject->title ?? "utwór bez tytułu" }}
                         @endif
-                    </td>
-                    <td>
-                        @if(is_array($i->comment))
-                        {{ $i->comment["comment"] }}
-                        <x-phase-indicator-mini :status="\App\Models\Status::find($i->comment['status_id'])" />
-                        @else
-                        {{ $i->comment }}
-                        @endif
-                    </td>
-                    <td>
-                        @switch($i->mailing)
-                            @case(2)
-                                <span class="accent success" @popper(mail wysłany)>
-                                    <x-shipyard.app.icon name="email-fast" />
-                                </span>
-                                @break
-                            @case(1)
-                                <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
-                                    <x-shipyard.app.icon name="email-fast" />
-                                </span>
-                                @break
-                            @case(0)
-                                <span class="accent error" @popper(wyślij wiadomość)>
-                                    <x-shipyard.app.icon name="email-off" />
-                                </span>
-                                @break
-                        @endswitch
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan=5>
-                        <span class="grayed-out">
-                            <x-shipyard.app.icon name="bed" />
-                            Sprzątacz dzisiaj śpi
-                        </span>
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </x-section>
+                    </a>
+                    @else
+                    <span>{{ $i->subject }}</span>
+                    @endif
+                </td>
+                <td>
+                    @if(is_array($i->comment))
+                    {{ $i->comment["comment"] }}
+                    <x-phase-indicator-mini :status="\App\Models\Status::find($i->comment['status_id'])" />
+                    @else
+                    {{ $i->comment }}
+                    @endif
+                </td>
+                <td>
+                    @switch($i->mailing)
+                        @case(2)
+                            <span class="accent success" @popper(mail wysłany)>
+                                <x-shipyard.app.icon name="email-fast" />
+                            </span>
+                            @break
+                        @case(1)
+                            <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
+                                <x-shipyard.app.icon name="email-fast" />
+                            </span>
+                            @break
+                        @case(0)
+                            <span class="accent error" @popper(wyślij wiadomość)>
+                                <x-shipyard.app.icon name="email-off" />
+                            </span>
+                            @break
+                    @endswitch
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan=5>
+                    <span class="grayed-out">
+                        <x-shipyard.app.icon name="bed" />
+                        Sprzątacz dzisiaj śpi
+                    </span>
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</x-section>
+
 </div>
 
 @endsection

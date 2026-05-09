@@ -25,30 +25,30 @@ class StatsHighlightH extends Component
         // if(preg_match("/satur/i", $title)) dd($data);
         switch($bracketedNumbers){
             case "percentages":
-                $this->data1 = $data->split;
-                $this->data2 = $data->total;
+                $this->data1 = $data["split"];
+                $this->data2 = $data["total"];
                 break;
             case "comparison":
-                $this->data1 = $data->main;
+                $this->data1 = $data["main"];
                 //calculate differences
                 $this->data2 = json_decode(json_encode(array_combine(
-                    array_keys(get_object_vars($data->main)),
+                    is_array($data["main"]) ? array_keys($data["main"]) : $data["main"]->keys()->toArray(),
                     array_map(
                         fn($main, $comp) => $main - $comp,
-                        get_object_vars($data->main),
-                        get_object_vars($data->compared_to),
+                        is_array($data["main"]) ? $data["main"] : $data["main"]->toArray(),
+                        is_array($data["compared_to"]) ? $data["compared_to"] : $data["compared_to"]->toArray(),
                     )
                 )));
                 break;
             case "comparison-raw":
-                $this->data1 = $data->main;
+                $this->data1 = $data["main"];
                 //calculate differences
                 $this->data2 = json_decode(json_encode(array_combine(
-                    array_keys(get_object_vars($data->main_raw)),
+                    $data["main_raw"]->keys()->toArray(),
                     array_map(
                         fn($main, $comp) => $main - $comp,
-                        get_object_vars($data->main_raw),
-                        get_object_vars($data->compared_to_raw),
+                        is_array($data["main_raw"]) ? $data["main_raw"] : $data["main_raw"]->toArray(),
+                        is_array($data["compared_to_raw"]) ? $data["compared_to_raw"] : $data["compared_to_raw"]->toArray(),
                     )
                 )));
                 break;

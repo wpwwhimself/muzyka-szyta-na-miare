@@ -24,6 +24,7 @@ use App\Models\Top10;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -70,29 +71,30 @@ class StatsController extends Controller
         $recent_income = $recent_income->sortKeys();
         $recent_costs = $recent_costs->sortKeys();
         $recent_gross = $recent_income->mergeRecursive($recent_costs)
-            ->mapWithKeys(fn($val, $month) => [$month => $val[0] - $val[2]]);
+            ->map(fn($i, $label) => ["label" => $label, "value" => $i[0] - $i[2]]);
         $finances_total = [
             "przychody" => MoneyTransaction::visible()
                 ->where("typable_type", IncomeType::class)
-                ->whereDate("date", ">=", Carbon::today()->subYear())
-                ->sum("amount"),
+                ->whereDate("date", ">=", Carbon::today()->subYears(2))
+                ->get()
+                ->groupBy(fn ($mt) => $mt->date->format("Y-m"))
+                ->map(fn ($mt) => $mt->sum("amount"))
+                ->sortKeys(),
             "koszty" => MoneyTransaction::where("typable_type", CostType::class)
-                ->whereDate("date", ">=", Carbon::today()->subYear())
+                ->whereDate("date", ">=", Carbon::today()->subYears(2))
                 ->where("typable_id", "<>", 3)
-                ->sum("amount"),
+                ->get()
+                ->groupBy(fn ($mt) => $mt->date->format("Y-m"))
+                ->map(fn ($mt) => $mt->sum("amount"))
+                ->sortKeys(),
         ];
-        $finances_total_last_year = [
-            "przychody" => MoneyTransaction::visible()
-                ->where("typable_type", IncomeType::class)
-                ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
-                ->sum("amount"),
-            "koszty" => MoneyTransaction::where("typable_type", CostType::class)
-                ->whereDate("date", ">=", Carbon::today()->subYears(2))->whereDate("date", "<", Carbon::today()->subYear())
-                ->where("typable_id", "<>", 3)
-                ->sum("amount"),
-        ];
-        $finances_total["dochody"] = $finances_total["przychody"] - $finances_total["koszty"];
-        $finances_total_last_year["dochody"] = $finances_total_last_year["przychody"] - $finances_total_last_year["koszty"];
+
+        $finances_total = collect($finances_total)->map(fn ($data) => $this->fillInMissingMonthlyData($data));
+        $finances_total_quarterly = $finances_total->map(fn ($data) => $data
+            ->sliding(3, 3)
+            ->mapWithKeys(fn ($d) => [implode(" – ", [$d->keys()[0], $d->keys()[2]]) => $d->sum()])
+        );
+        $finances_total_sum = $finances_total->map(fn ($data) => ["razem" => $data->sliding(12, 12)->map(fn ($d) => $d->sum())]);
         $recent_income_alltime = MoneyTransaction::visible()
             ->where("typable_type", IncomeType::class)
             ->whereDate("date", ">=", "2020-01-01")
@@ -120,7 +122,7 @@ class StatsController extends Controller
         $recent_costs_alltime = $recent_costs_alltime->sortKeys();
         $recent_gross_alltime = collect($recent_income_alltime)
             ->mergeRecursive($recent_costs_alltime)
-            ->mapWithKeys(fn($val, $key) => [$key => $val[0] - $val[2]]);
+            ->map(fn($val, $key) => ["label" => $key, "value" => round($val[0] - $val[2], 2)]);
         $client_exp_raw = User::has("notes")->withCount("questsDone")
             ->get()
             ->mapWithKeys(fn ($u) => [$u->notes->client_name => $u->quests_done_count])
@@ -139,6 +141,7 @@ class StatsController extends Controller
         }
 
         // soft deadlines
+        $soft_deadline_count = [];
         foreach(DB::table(DB::raw("(SELECT distinct `date`, deadline, datediff(deadline, `date`) as difference
                 FROM status_changes
                 LEFT JOIN quests ON re_quest_id = quests.id
@@ -152,27 +155,26 @@ class StatsController extends Controller
                 $label = ($deadline <= -1) ? "<= -1" : (
                     ($deadline >= 7) ? ">= 7" : $deadline
                 );
-                $soft_deadline_count[$label] ??= 0;
-                $soft_deadline_count[$label] += $count;
+                $soft_deadline_count[$label] = ["label" => $label, "value" => ($soft_deadline_count[$label]["value"] ?? 0) + $count];
             }
 
         // hard deadlines
-        foreach(DB::table(DB::raw("(SELECT distinct `date`, hard_deadline, datediff(hard_deadline, `date`) as difference
-                FROM status_changes
-                LEFT JOIN quests on re_quest_id = quests.id
-                WHERE new_status_id = 19
-                    AND hard_deadline IS NOT NULL
-                ORDER BY re_quest_id, status_changes.id DESC) as x"))
-            ->selectRaw("difference, count(*) as count")
-            ->groupBy("difference")
-            ->orderBy("difference")
-            ->pluck("count", "difference") as $deadline => $count){
-                $label = ($deadline <= -7) ? "<= -7" : (
-                    ($deadline >= 7) ? ">= 7" : $deadline
-                );
-                $hard_deadline_count[$label] ??= 0;
-                $hard_deadline_count[$label] += $count;
-            }
+        // $hard_deadline_count = [];
+        // foreach(DB::table(DB::raw("(SELECT distinct `date`, hard_deadline, datediff(hard_deadline, `date`) as difference
+        //         FROM status_changes
+        //         LEFT JOIN quests on re_quest_id = quests.id
+        //         WHERE new_status_id = 19
+        //             AND hard_deadline IS NOT NULL
+        //         ORDER BY re_quest_id, status_changes.id DESC) as x"))
+        //     ->selectRaw("difference, count(*) as count")
+        //     ->groupBy("difference")
+        //     ->orderBy("difference")
+        //     ->pluck("count", "difference") as $deadline => $count){
+        //         $label = ($deadline <= -7) ? "<= -7" : (
+        //             ($deadline >= 7) ? ">= 7" : $deadline
+        //         );
+        //         $hard_deadline_count[$label] = ["label" => $label, "value" => ($hard_deadline_count[$label]["value"] ?? 0) + $count];
+        //     }
 
         // income per hour
         $income_per_h = DB::table(DB::raw(<<<SQL
@@ -207,8 +209,8 @@ class StatsController extends Controller
             ->orderByDesc("month")
             ->limit(12)
             ->get()
-            ->mapWithKeys(fn($val) => [$val->month => $val->income_per_hour])
-            ->sortKeys();
+            ->map(fn($val) => ["label" => $val->month, "value" => $val->income_per_hour])
+            ->sortBy("label");
 
         $stats = [
             "summary" => [
@@ -216,7 +218,7 @@ class StatsController extends Controller
                     "biznes kręci się od" => BEGINNING()->diff(Carbon::now())->format("%yl %mm %dd"),
                     "skończone questy" => Quest::where("status_id", 19)->count(),
                     "poznani klienci" => User::count(),
-                    "zarobki w sumie" => as_pln(MoneyTransaction::visible()->where("typable_type", IncomeType::class)->sum("amount"), 2, ",", " "),
+                    "przychody w sumie" => as_pln(MoneyTransaction::visible()->where("typable_type", IncomeType::class)->sum("amount"), 2, ",", " "),
                 ],
                 "quest_types" => [
                     "split" => DB::table("quests")
@@ -270,7 +272,8 @@ class StatsController extends Controller
                             songs.title as 'Tytuł utworu',
                             genres.name as 'Gatunek utworu',
                             count(*) as 'Liczba poprawek'")
-                        ->get(),
+                        ->get()
+                        ->toArray(),
                     "footer" => DB::table(DB::raw("(SELECT re_quest_id, count(*) as count
                             FROM status_changes
                             WHERE new_status_id in (16, 26) AND date > '2023-01-01'
@@ -280,7 +283,7 @@ class StatsController extends Controller
                 ],
                 "deadlines" => [
                     "soft" => $soft_deadline_count,
-                    "hard" => $hard_deadline_count,
+                    // "hard" => $hard_deadline_count,
                 ],
                 "requests" => [
                     "split" => ModelsRequest::join("statuses", "statuses.id", "status_id")
@@ -309,13 +312,10 @@ class StatsController extends Controller
                     "total" => User::has("notes")->get()->count(),
                 ],
                 "exp" => [
-                    "split" => [
-                        "weterani (".VETERAN_FROM()."+)" => client_exp_tally($client_exp_raw, VETERAN_FROM()),
-                        "biegli (4-".(VETERAN_FROM()-1).")" => client_exp_tally($client_exp_raw, 4, VETERAN_FROM()-1),
-                        "zainteresowani (2-3)" => client_exp_tally($client_exp_raw, 2, 3),
-                        "nowicjusze (1)" => client_exp_tally($client_exp_raw, 1, 1),
-                    ],
-                    "total" => User::has("notes")->get()->count(),
+                    ["label" => "1", "value" => client_exp_tally($client_exp_raw, 1, 1)],
+                    ["label" => "2-3", "value" => client_exp_tally($client_exp_raw, 2, 3)],
+                    ["label" => "4-".(VETERAN_FROM()-1), "value" => client_exp_tally($client_exp_raw, 4, VETERAN_FROM()-1)],
+                    ["label" => "".VETERAN_FROM()."+", "value" => client_exp_tally($client_exp_raw, VETERAN_FROM())],
                 ],
                 "new" => User::whereDate("created_at", ">=", Carbon::today()->subYear()->firstOfMonth())
                     ->whereDate("created_at", ">=", BEGINNING())
@@ -323,7 +323,8 @@ class StatsController extends Controller
                         count(*) as count")
                     ->groupBy("month")
                     ->orderBy("month")
-                    ->pluck("count", "month"),
+                    ->get()
+                    ->map(fn ($i) => ["label" => $i->month, "value" => $i->count]),
                 "pickiness" => [
                     "high" => [
                         "rows" => User::has("notes")
@@ -369,14 +370,18 @@ class StatsController extends Controller
                 ],
             ],
             "finances" => [
-                "income" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
-                "prop" => $recent_income->mapWithKeys(fn($vals, $month) => [$month => $vals[1]]),
+                "income" => $recent_income->map(fn($vals, $month) => ["label" => $month, "value" => $vals[0]]),
+                "prop" => $recent_income->map(fn($vals, $month) => ["label" => $month, "value" => $vals[1]]),
                 "prop_per_h" => $income_per_h,
-                "costs" => $recent_costs->mapWithKeys(fn($vals, $month) => [$month => $vals[0]]),
+                "costs" => $recent_costs->map(fn($vals, $month) => ["label" => $month, "value" => $vals[0]]),
                 "gross" => $recent_gross,
                 "total" => [
-                    "main" => $finances_total,
-                    "compared_to" => $finances_total_last_year,
+                    "income" => [
+                        "main" => $finances_total_quarterly["przychody"]->take(-4)
+                            ->merge(["razem" => $finances_total_sum["przychody"]["razem"]->last()]),
+                        "compared_to" => $finances_total_quarterly["przychody"]->take(4)
+                            ->merge(["razem" => $finances_total_sum["przychody"]["razem"]->first()]),
+                    ],
                 ],
             ],
             "songs" => [
@@ -392,39 +397,38 @@ class StatsController extends Controller
                         ->where("count", ">", 1)
                         ->average("count"),
                 ],
-                "time_genres" => [
-                    "main" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                    "main_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, avg(time_spent) as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                    "compared_to_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
-                            ->groupBy(["song_id", "genre_id"])
-                            // ->whereDate("since", "<", Carbon::today()->subMonth()) //TODO naprawić
-                            ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
-                            ->toSql().") as x"))
-                        ->groupBy("genre_id")
-                        ->join("genres", "genre_id", "genres.id")
-                        ->selectRaw("name, avg(time_spent) as mean")
-                        ->orderByDesc("mean")
-                        ->pluck("mean", "name"),
-                ],
+                // "time_genres" => [
+                //     "main" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                //             ->groupBy(["song_id", "genre_id"])
+                //             ->selectRaw("song_id, genre_id, sec_to_time(sum(time_to_sec(time_spent))) as time_spent")
+                //             ->toSql().") as x"))
+                //         ->groupBy("genre_id")
+                //         ->join("genres", "genre_id", "genres.id")
+                //         ->selectRaw("name, date_format(sec_to_time(avg(time_to_sec(time_spent))), '%k:%i') as mean")
+                //         ->orderByDesc("mean")
+                //         ->pluck("mean", "name"),
+                //     "main_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                //             ->groupBy(["song_id", "genre_id"])
+                //             ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
+                //             ->toSql().") as x"))
+                //         ->groupBy("genre_id")
+                //         ->join("genres", "genre_id", "genres.id")
+                //         ->selectRaw("name, avg(time_spent) as mean")
+                //         ->orderByDesc("mean")
+                //         ->pluck("mean", "name"),
+                //     "compared_to_raw" => DB::table(DB::raw("(".SongWorkTime::join("songs", "song_id", "songs.id", "left")
+                //             ->groupBy(["song_id", "genre_id"])
+                //             // ->whereDate("since", "<", Carbon::today()->subMonth()) //TODO naprawić
+                //             ->selectRaw("song_id, genre_id, sum(time_to_sec(time_spent)) as time_spent")
+                //             ->toSql().") as x"))
+                //         ->groupBy("genre_id")
+                //         ->join("genres", "genre_id", "genres.id")
+                //         ->selectRaw("name, avg(time_spent) as mean")
+                //         ->orderByDesc("mean")
+                //         ->pluck("mean", "name"),
+                // ],
             ],
         ];
-        $stats = json_decode(json_encode($stats));
 
         return view("pages.".user_role().".stats", array_merge(
             ["title" => "GUS"],
@@ -1095,5 +1099,24 @@ class StatsController extends Controller
         MoneyTransaction::create($data);
 
         return redirect()->route("stats-gigs")->with("toast", ["success", "Dodano transakcję"]);
+    }
+
+    private function fillInMissingMonthlyData(Collection $data)
+    {
+        $data_earliest = $data->keys()->min();
+        $data_latest = $data->keys()->max();
+        for ($year = Str::before($data_earliest, "-"); $year <= Str::before($data_latest, "-"); $year++) {
+            for ($month = 1; $month <= 12; $month++) {
+                $monthpretty = Str::padLeft($month, 2, "0");
+                if ("$year-$monthpretty" < $data_earliest || "$year-$monthpretty" > $data_latest) {
+                    continue;
+                }
+                if (!isset($data[$year . "-" . $monthpretty])) {
+                    $data[$year . "-" . $monthpretty] = 0;
+                }
+            }
+        }
+
+        return $data->sortKeys();
     }
 }

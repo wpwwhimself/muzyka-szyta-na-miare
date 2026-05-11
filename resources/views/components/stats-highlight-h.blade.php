@@ -2,7 +2,7 @@
     @if ($title)
     <h2>{!! $title !!}</h2>
     @endif
-    <div class="stats-highlight-h" style="grid-template-columns: repeat({{ count((array)$data1) }}, 1fr);">
+    <div class="stats-highlight-h">
         @foreach ($data1 as $name => $val)
         <p>{{ $name }}</p>
         <h3>

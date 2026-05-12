@@ -88,6 +88,34 @@
             </div>
         </x-extendo-block>
 
+        <x-extendo-block key="client"
+            :header-icon="model_icon('users')"
+            title="Klient"
+            :subtitle="$quest->user->name_and_badges"
+        >
+            <div class="grid but-halfsize-down" style="--col-count: 2;">
+                @foreach ([
+                    "client_name",
+                    "contact_preference",
+                    "password",
+                ] as $field_name)
+                    <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
+                @endforeach
+
+                <x-shipyard.ui.input type="dummy-text"
+                    name="pickiness"
+                    label="Wybredność"
+                    icon="fencing"
+                    :value="$quest->user->notes->pickiness_pretty"
+                />
+            </div>
+
+            <x-slot:buttons>
+                <x-button :action="route('client-view', ['id' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
+                <x-button :action="route('quests', ['client' => $quest->client_id])" :icon="model_icon('quests')" pop="Zlecenia" />
+            </x-slot:buttons>
+        </x-extendo-block>
+
         <x-extendo-block key="quote"
             :header-icon="model_icon('prices')"
             title="Wycena"
@@ -246,39 +274,11 @@
         </x-extendo-block>
 
         <x-song-work-time-log :quest="$quest" :extended="true" />
+
+        @unless (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
+        <x-quest-history :quest="$quest" :extended="true" />
+        @endunless
     </div>
-
-    <x-extendo-block key="client"
-        :header-icon="model_icon('users')"
-        title="Klient"
-        :subtitle="$quest->user->name_and_badges"
-    >
-        <div class="grid but-halfsize-down" style="--col-count: 2;">
-            @foreach ([
-                "client_name",
-                "contact_preference",
-                "password",
-            ] as $field_name)
-                <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
-            @endforeach
-
-            <x-shipyard.ui.input type="dummy-text"
-                name="pickiness"
-                label="Wybredność"
-                icon="fencing"
-                :value="$quest->user->notes->pickiness_pretty"
-            />
-        </div>
-
-        <x-slot:buttons>
-            <x-button :action="route('client-view', ['id' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
-            <x-button :action="route('quests', ['client' => $quest->client_id])" :icon="model_icon('quests')" pop="Zlecenia" />
-        </x-slot:buttons>
-    </x-extendo-block>
-
-    @unless (in_array($quest->status_id, STATUSES_WITH_ELEVATED_HISTORY()))
-    <x-quest-history :quest="$quest" :extended="true" />
-    @endunless
 </div>
 
 @endsection

@@ -112,8 +112,23 @@ function setFormToFileUpload() {
 <x-shipyard.app.section
     title="Pliki"
     :icon="model_icon('files')"
-    :extended="false"
 >
+    <x-slot:actions>
+        <x-shipyard.ui.button
+            label="Odśwież"
+            icon="refresh"
+            action="none"
+            class="tertiary"
+            onclick="loadFileList(document.querySelector(`.files-container`).closest(`.files-container`).dataset.uuid);"
+        />
+        <x-shipyard.ui.button
+            icon="plus"
+            pop="Wgraj"
+            :action="route('files-upload-by-entity', ['entity_name' => 'song', 'id' => $song->id])"
+            target="_blank"
+        />
+    </x-slot:actions>
+
     <x-files.list :song-id="$song->id" :can-download-files="true" />
 </x-shipyard.app.section>
 

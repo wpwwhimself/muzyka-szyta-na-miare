@@ -58,8 +58,11 @@ class FileController extends Controller
         $entities = [
             "quest" => Quest::class,
             "file" => ModelsFile::class,
+            "song" => Song::class,
         ];
-        $song = $entities[$entity_name]::find($id)->song;
+        $song = ($entity_name == "song")
+            ? $entities[$entity_name]::find($id)
+            : $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
         $clients = User::has("notes")->get()
             ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])

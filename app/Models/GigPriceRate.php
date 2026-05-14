@@ -57,9 +57,7 @@ class GigPriceRate extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => as_pln($this->value),
         );
     }
 
@@ -78,24 +76,20 @@ class GigPriceRate extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "columnTypes" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "selectData" => [ // for select
-        //         "options" => ["label" => "", "value" => ""],
-        //         "emptyOption" => "",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofillFrom" => ["<route>", "<model_name>"],
-        //     // "characterLimit" => 999, // for text fields
-        //     // "hideForEntmgr" => true,
-        //     // "role" => "",
-        // ],
+        "label" => [
+            "type" => "text",
+            "label" => "Nazwa",
+            "icon" => "text",
+            "required" => true,
+        ],
+        "value" => [
+            "type" => "number",
+            "label" => "Stawka",
+            "icon" => "cash",
+            "required" => true,
+            "step" => 0.01,
+            "min" => 0,
+        ],
     ];
 
     public const CONNECTIONS = [

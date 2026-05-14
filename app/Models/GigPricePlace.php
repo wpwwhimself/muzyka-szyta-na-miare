@@ -87,7 +87,7 @@ class GigPricePlace extends Model
         "distance_km" => [
             "type" => "number",
             "label" => "Odległość [km]",
-            "icon" => "number",
+            "icon" => "map-marker-distance",
             "step" => 1,
             "min" => 0,
         ],

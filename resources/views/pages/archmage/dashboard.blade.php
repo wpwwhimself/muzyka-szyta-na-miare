@@ -108,13 +108,13 @@
 >
     <div class="flex down">
         @foreach ($quests_ongoing->groupBy("client_id")
-            ->sortBy(fn ($q) => min($q->min("deadline"), $q->min("hard_deadline")))
+            ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
         as $client_id => $clients_quests)
         <div class="grid but-mobile-down interactive highlight" style="grid-template-columns: auto 1fr;">
             @php
             $client = $clients_quests->first()->user;
             @endphp
-    
+
             <div class="flex down but-mobile-right" style="row-gap: 0;">
                 <span>{{ $client }}</span>
                 <span>{!! $client->notes->display_subtitle !!}</span>

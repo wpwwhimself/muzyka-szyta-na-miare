@@ -195,7 +195,7 @@ class SongController extends Controller
     }
 
     public function getFiles(Song $song, Request $rq) {
-        $canDownloadFiles = $rq->get("canDownloadFiles", false);
+        $canDownloadFiles = $rq->get("canDownloadFiles", "false") === "true";
         $editable = $rq->get("editable", "false") === "true";
         $highlightForClientId = $rq->get("highlightForClientId", null);
 

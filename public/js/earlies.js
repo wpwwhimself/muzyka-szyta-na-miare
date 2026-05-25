@@ -315,6 +315,7 @@ function openCompositionDemos(composition_id = undefined) {
                             ? song.play_demo_button
                             : ""
                         }
+                        ${song.est_price}
                     </li>`;
                 });
             })

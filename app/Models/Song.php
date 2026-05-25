@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\StatsController;
 use App\Traits\Shipyard\HasStandardAttributes;
 use App\Traits\Shipyard\HasStandardFields;
 use App\Traits\Shipyard\HasStandardScopes;
@@ -216,6 +217,7 @@ class Song extends Model
         "now_working",
         "play_demo_button",
         "link_buttons",
+        "est_price",
     ];
 
     use HasStandardAttributes;
@@ -289,6 +291,17 @@ class Song extends Model
         return Attribute::make(
             get: fn () => view("components.front.song-list.link-buttons", [
                 "song" => $this,
+            ])->render(),
+        );
+    }
+
+    public function estPrice(): Attribute
+    {
+        $price = StatsController::runPriceCalc($this->price_code."#", null);
+
+        return Attribute::make(
+            get: fn () => view("components.front.song-list.price", [
+                "price" => $price["price"],
             ])->render(),
         );
     }

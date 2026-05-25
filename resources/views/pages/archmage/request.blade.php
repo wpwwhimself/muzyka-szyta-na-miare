@@ -102,6 +102,8 @@
                     onclick="openModal('select-user-to-request', {
                         request_id: '{{ $request->id }}',
                         query: `{{ $request->client_name }}`,
+                    }, {}, () => {
+                        document.querySelector(`#query`).focus();
                     })"
                     class="tertiary"
                 />
@@ -144,6 +146,8 @@
                     onclick="openModal('select-song-to-request', {
                         request_id: '{{ $request->id }}',
                         query: `{{ $request->title }}`,
+                    }, {}, () => {
+                        document.querySelector(`#query`).focus();
                     })"
                     class="tertiary"
                 />

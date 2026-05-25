@@ -6,14 +6,14 @@
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-shipyard.app.section title="Podsumowanie" icon="chart-pie">
-        <div class="flex right center middle">
+        <div class="flex right but-mobile-down center middle">
             @foreach ($stats["summary"]["general"] as $label => $value)
             <x-shipyard.stats.tile :label="$label">{{ $value }}</x-shipyard.stats.tile>
             @endforeach
         </div>
 
         <x-shipyard.app.h lvl="3" :icon="model_icon('quest-types')">Rodzaje grań</x-shipyard.app.h>
-        <div class="flex right center middle">
+        <div class="flex right but-mobile-down center middle">
             @foreach ($stats["summary"]["gig_types"]["split"] as $label => $value)
             <x-shipyard.stats.tile :label="$label"
                 :value="$value"
@@ -36,7 +36,7 @@
             />
         </x-slot:actions>
 
-        <div class="flex right center middle">
+        <div class="flex right but-mobile-down center middle">
             @foreach ($stats["gigs"]["recent"]["main"] as $label => $value)
             <x-shipyard.stats.tile :label="$label"
                 :value="$value"

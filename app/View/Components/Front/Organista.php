@@ -16,7 +16,7 @@ class Organista extends Component
      */
     public function __construct()
     {
-        $this->showcases = OrganShowcase::orderBy("created_at", "desc")->limit(5)->get();
+        $this->showcases = OrganShowcase::orderBy("created_at", "desc")->get()->random(5);
     }
 
     /**

@@ -87,6 +87,7 @@
         <p>
             Mogę zagrać <strong>samodzielnie</strong>.
             Gram wówczas na organach lub na pianinie i śpiewam.
+            Poniżej kilka moich losowych nagrań.
         </p>
 
         <x-front.showcase-reels :showcases="$showcases" />

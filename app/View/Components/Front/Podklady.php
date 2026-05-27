@@ -29,7 +29,7 @@ class Podklady extends Component
      */
     public function __construct()
     {
-        $this->showcases = Showcase::orderBy("created_at", "desc")->limit(5)->get();
+        $this->showcases = Showcase::orderBy("created_at", "desc")->get()->random(5);
         $this->client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
         $this->pinned_comments = StatusChange::where("pinned", true)->orderBy("date", "desc")->get();
 

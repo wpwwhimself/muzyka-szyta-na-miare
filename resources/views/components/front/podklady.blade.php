@@ -136,7 +136,7 @@
     </div>
 
     <div class="showcase-section flex down spaced hidden" data-mode="reels">
-        <h2>Najnowsze realizacje</h2>
+        <p>Poniżej kilka losowych nagrań z procesu tworzenia moich projektów.</p>
         <x-front.showcase-reels :showcases="$showcases" />
     </div>
 

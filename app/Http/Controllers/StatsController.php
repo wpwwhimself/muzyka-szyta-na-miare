@@ -52,18 +52,27 @@ class StatsController extends Controller
             ->groupBy("month")
             ->orderBy("month")
             ->get();
-        $recent_costs = MoneyTransaction::visible()
+        $recent_costs_extended = MoneyTransaction::visible()
             ->where("typable_type", CostType::class)
             ->whereDate("date", ">=", Carbon::today()->subYear()->firstOfMonth())
             ->where("typable_id", "<>", 3)
             ->selectRaw("DATE_FORMAT(date, '%y-%m') as month,
                 sum(amount) as sum,
-                round(avg(amount), 2) as mean")
+                round(avg(amount), 2) as mean,
+                sum(if(typable_id = 1, amount, 0)) as sum_ads,
+                sum(if(typable_id = 1, amount, 0)) / sum(amount) as perc_ads,
+                sum(if(typable_id = 2, amount, 0)) as sum_eq,
+                sum(if(typable_id = 2, amount, 0)) / sum(amount) as perc_eq,
+                sum(if(typable_id = 4, amount, 0)) as sum_bank,
+                sum(if(typable_id = 4, amount, 0)) / sum(amount) as perc_bank,
+                sum(if(typable_id = 5, amount, 0)) as sum_os,
+                sum(if(typable_id = 5, amount, 0)) / sum(amount) as perc_os
+                ")
             ->groupBy("month")
             ->orderBy("month")
             ->get();
         $recent_income = $recent_income->pluck("sum", "month")->mergeRecursive($recent_income->pluck("mean", "month"));
-        $recent_costs = $recent_costs->pluck("sum", "month")->mergeRecursive(($recent_costs)->pluck("mean", "month"));
+        $recent_costs = $recent_costs_extended->pluck("sum", "month")->mergeRecursive(($recent_costs_extended)->pluck("mean", "month"));
         foreach($recent_income->mergeRecursive($recent_costs)->filter(fn($el) => count($el) < 4) as $month => $value){
             $recent_income = $recent_income->union([$month => [0, 0]]);
             $recent_costs = $recent_costs->union([$month => [0, 0]]);
@@ -88,6 +97,7 @@ class StatsController extends Controller
                 ->map(fn ($mt) => $mt->sum("amount"))
                 ->sortKeys(),
         ];
+        $recent_costs_extended = $recent_costs_extended->mapWithKeys(fn ($el) => [$el->month => $el->toArray()]);
 
         $finances_total = collect($finances_total)->map(fn ($data) => $this->fillInMissingMonthlyData($data));
         $finances_total_quarterly = $finances_total->map(fn ($data) => $data
@@ -373,7 +383,16 @@ class StatsController extends Controller
                 "income" => $recent_income->map(fn($vals, $month) => ["label" => $month, "value" => $vals[0]]),
                 "prop" => $recent_income->map(fn($vals, $month) => ["label" => $month, "value" => $vals[1]]),
                 "prop_per_h" => $income_per_h,
-                "costs" => $recent_costs->map(fn($vals, $month) => ["label" => $month, "value" => $vals[0]]),
+                "costs" => $recent_costs->map(fn($vals, $month) => [
+                    "label" => $month,
+                    "value" => $vals[0],
+                    "value_label" => implode("<br>", [
+                        "📣: " . as_pln($recent_costs_extended[$month]["sum_ads"]) . " (" . round($recent_costs_extended[$month]["perc_ads"] * 100) . "%)",
+                        "📦: " . as_pln($recent_costs_extended[$month]["sum_eq"]) . " (" . round($recent_costs_extended[$month]["perc_eq"] * 100) . "%)",
+                        "💰: " . as_pln($recent_costs_extended[$month]["sum_bank"]) . " (" . round($recent_costs_extended[$month]["perc_bank"] * 100) . "%)",
+                        "🚚: " . as_pln($recent_costs_extended[$month]["sum_os"]) . " (" . round($recent_costs_extended[$month]["perc_os"] * 100) . "%)",
+                    ])
+                ]),
                 "gross" => $recent_gross,
                 "total" => [
                     "income" => [

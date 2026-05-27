@@ -189,6 +189,11 @@ class MoneyTransaction extends Model
     #region scopes
     use HasStandardScopes;
 
+    public function scopeForConnection($query)
+    {
+        return $query->visible();
+    }
+
     public function scopeVisible($query)
     {
         return $query->where("is_hidden", false);

@@ -167,8 +167,13 @@ section {
         & > * {
             display: inline-block;
             max-width: 20em;
-            vertical-align: middle;
+            vertical-align: top;
             white-space: normal;
+
+            & > .comment-container {
+                max-height: 150px;
+                overflow: scroll;
+            }
         }
     }
 }

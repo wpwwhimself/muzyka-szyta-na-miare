@@ -79,12 +79,18 @@
                 @endphp
 
                 <h2>
-                    {!! $client->name_and_badges !!}
+                    {!! $client->notes->client_name !!}
                 </h2>
+                <div>
+                    {!! $client->notes->display_subtitle !!}
+                </div>
                 <small class="accent secondary">
+                    <x-shipyard.app.icon :name="model_icon('compositions')" />
                     {{ $comment->re_quest->song->composition }}
                 </small>
-                {!! \Illuminate\Mail\Markdown::parse($comment->comment) !!}
+                <div class="comment-container">
+                    {!! \Illuminate\Mail\Markdown::parse($comment->comment) !!}
+                </div>
                 <div class="grayed-out">{{ $comment->date->diffForHumans() }}</div>
             </div>
             @endforeach

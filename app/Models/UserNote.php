@@ -91,7 +91,7 @@ class UserNote extends Authenticatable
             ])->render()
             . view("components.shipyard.stats.counter", [
                 "rank" => $this->exp,
-                "label" => "Doświadczenie",
+                "label" => "Zaakceptowane zlecenia",
                 "style" => "military",
             ]),
         );

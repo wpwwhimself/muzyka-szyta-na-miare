@@ -952,7 +952,9 @@ class StatsController extends Controller
         $override = false;
 
         // minimal price
-        $minimal_price = $quest_type_present ? QUEST_MINIMAL_PRICES()[$quest_type_present] : 0;
+        $minimal_price = ($quest_type_present && !preg_match("/#/", $labels))
+            ? QUEST_MINIMAL_PRICES()[$quest_type_present]
+            : 0;
         $minimal_price_output = 0;
         if($price < $minimal_price){
             $price = $minimal_price;

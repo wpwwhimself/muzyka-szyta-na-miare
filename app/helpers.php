@@ -40,6 +40,7 @@ if(!function_exists("BEGINNING")){
 if(!function_exists("INCOME_LIMIT")){
     function INCOME_LIMIT(){
         $thresholds = [
+            "2026-01-01" => 3604.5,
             "2025-01-01" => 3499.5,
             "2024-07-01" => 3225,
             "2024-01-01" => 3181.5,

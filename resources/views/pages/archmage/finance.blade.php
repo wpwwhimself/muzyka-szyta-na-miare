@@ -14,7 +14,14 @@
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section title="Podsumowanie" icon="finance">
         <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
-        <x-barplot title="Saturacja wpływów w kolejnych miesiącach" :data="$saturation" :all-pln="true" :percentages="true" />
+        <x-shipyard.stats.chart.column
+            title="Saturacja wpływów w kolejnych miesiącach"
+            :subtitle="'Limit: ' . as_pln(INCOME_LIMIT())"
+            icon="sack"
+            :data="$saturation"
+            mode="monetary"
+            :max="INCOME_LIMIT()"
+        />
     </x-section>
 
     <x-section title="Ostatnie wpłaty" icon="history">

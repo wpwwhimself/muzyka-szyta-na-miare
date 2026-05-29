@@ -532,11 +532,11 @@ class StatsController extends Controller
                 ->sum("amount"),
         ];
 
-        $saturation = [
-            "split" => $this->runMonthlyPaymentLimit(0)["saturation"],
-            "total" => INCOME_LIMIT(),
-        ];
-        $saturation = json_decode(json_encode($saturation));
+        $saturation = collect($this->runMonthlyPaymentLimit(0)["saturation"])
+            ->map(fn ($sat, $month) => [
+                "label" => "+$month",
+                "value" => $sat,
+            ]);
 
         $unpaids = User::has("questsUnpaid")->get()->sortBy("notes.client_name");
 

@@ -513,8 +513,8 @@ class RequestController extends Controller
                 "name" => substr($password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
                 "email" => $request->email ?? Str::uuid()."@test.test",
                 "password" => $password,
+                "roles" => "client",
             ]);
-            $client->roles()->attach("client");
             $client->notes()->create([
                 "password" => $password,
                 "client_name" => $request->client_name,

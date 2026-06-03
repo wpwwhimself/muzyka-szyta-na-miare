@@ -6,7 +6,11 @@
         </span>, aby przejrzeć wykonane aranże
     </p>
 
-    <h3>Filtruj:</h3>
+    <h3 class="interactive"
+        onclick="copySongListLink(`query=${document.querySelector('#query').value}`);"
+    >
+        Filtruj:
+    </h3>
     <div class="flex down" role="{{ $for }}-filters">
         <x-shipyard.ui.input type="text"
             name="query"
@@ -50,7 +54,10 @@
 
         <div class="filter-descriptions">
             @foreach ($song_tags as $tag)
-            <div data-description="tag-{{ $tag->id }}" class="flex down center middle no-gap hidden">
+            <div data-description="tag-{{ $tag->id }}"
+                class="flex down center middle no-gap hidden interactive"
+                onclick="copySongListLink(`tag={{ $tag->id }}`);"
+            >
                 <strong class="accent tertiary" role="name">{{ $tag->name }}</strong>
                 <span role="description">{{ $tag->description }}</span>
             </div>

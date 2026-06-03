@@ -256,6 +256,11 @@ function getSongList(domain = undefined) {
         });
 }
 
+function copySongListLink(append) {
+    navigator.clipboard.writeText(`${window.location.origin}/catalog?${append}`);
+    alert("Skopiowano link do katalogu do schowka.");
+}
+
 function startDemo(song_id) {
     const popup = document.querySelector("#song-demo-popup");
     const player = popup.querySelector("audio");
@@ -306,6 +311,7 @@ function openCompositionDemos(composition_id = undefined) {
             .then(res => res.json())
             .then(({composition, songs, tags}) => {
                 popup.querySelector(".song-full-title").innerHTML = composition.full_title;
+                popup.querySelector(".song-full-title").onclick = (ev) => copySongListLink(`composition=${composition_id}`);
                 popup.querySelector(".tags").innerHTML = composition.tags.map(tag => `<span class="rounded bordered">${tag.icon || ""} ${tag.name}</span>`).join("");
                 songs.forEach(song => {
                     popup.querySelector(".song-list").innerHTML += `<li>

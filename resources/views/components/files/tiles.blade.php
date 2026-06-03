@@ -65,6 +65,15 @@
             @endif
         </div>
 
+        @if ($version->base_file_id)
+        <span>
+            Plik oparty na wersji <strong>{{ $version->base_file->version_name }}</strong>
+            @if ($version->description && !$version->is($main_version))
+            z uwzględnieniem poniższych zmian:
+            @endif
+        </span>
+        @endif
+
         @unless ($version->is($main_version))
         <div class="ver_desc">
             {{ Illuminate\Mail\Markdown::parse($version->description ?? "") }}

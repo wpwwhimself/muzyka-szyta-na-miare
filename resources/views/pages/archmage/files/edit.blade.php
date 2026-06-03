@@ -19,7 +19,7 @@
         <tbody>
             @foreach ($existing_files as $efile)
             <tr class="{{ $file?->id == $efile->id ? 'accent' : '' }}">
-                <td class="interactive" onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
+                <td class="interactive" onclick="copyFileField('variant_name', '{{ $efile->variant_name }}'); copyFileField('base_file_id', '{{ $efile->id }}')">{{ $efile->variant_name }}</td>
                 <td class="interactive" onclick="copyFileField('version_name', '{{ $efile->version_name }}')">
                     {{ $efile->version_name }}
                     @if ($efile->description) <i class="fas fa-note-sticky" {{ Popper::pop(Illuminate\Mail\Markdown::parse($efile->description)) }}></i> @endif
@@ -49,7 +49,10 @@
 
     <script>
     const copyFileField = (field, value) => {
-        document.getElementById(field).value = value
+        document.getElementById(field).value = value;
+        if (field === "base_file_id") {
+            window.shipyard.selects[field].setChoiceByValue(value);
+        }
     }
     </script>
 </x-section>
@@ -64,6 +67,25 @@
             @foreach ([
                 "variant_name",
                 "version_name",
+            ] as $field_name)
+            <x-shipyard.ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+            @endforeach
+
+            <x-shipyard.ui.input type="select"
+                name="base_file_id"
+                label="Wersja źródłowa"
+                :icon="model_field_icon('files', 'base_file_id')"
+                :value="$file?->base_file_id"
+                :select-data="[
+                    'options' => $existing_files->map(fn ($f) => [
+                        'label' => implode(' » ', [$f->variant_name, $f->version_name]),
+                        'value' => $f->id,
+                    ]),
+                    'emptyOption' => true,
+                ]"
+            />
+
+            @foreach ([
                 "transposition",
                 "description",
             ] as $field_name)
@@ -84,7 +106,6 @@
                 :icon="model_icon('users')"
                 :value="$file?->exclusiveClients->pluck('id')->toArray() ?? [$quest?->client_id] ?? []"
                 multiple
-                style="grid-column: 2 / span 2;"
             />
         </div>
     </x-section>

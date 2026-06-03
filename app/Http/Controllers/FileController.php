@@ -142,6 +142,7 @@ class FileController extends Controller
                 "song_id" => $song->id,
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
+                "base_file_id" => $rq->base_file_id,
                 "transposition" => $rq->transposition ?? 0,
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,

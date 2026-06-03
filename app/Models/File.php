@@ -26,6 +26,7 @@ class File extends Model
     protected $fillable = [
         "song_id",
         "variant_name", "version_name",
+        "base_file_id",
         "transposition",
         "description",
         "file_paths",
@@ -93,6 +94,12 @@ class File extends Model
             "type" => "text",
             "icon" => "label-variant",
             "placeholder" => "wersja główna",
+        ],
+        "base_file_id" => [
+            "label" => "Wersja źródłowa",
+            "type" => "select",
+            "icon" => "source-branch",
+            // "selectData" => ...
         ],
         "transposition" => [
             "label" => "Transpozycja",
@@ -202,6 +209,13 @@ class File extends Model
         }
 
         return $missing;
+    }
+
+    public function baseFile(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => File::find($this->base_file_id),
+        );
     }
     #endregion
 

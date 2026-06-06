@@ -80,7 +80,7 @@ class Composition extends Model
                     "target" => "_blank",
                 ]),
                 "slot" => null,
-            ])
+            ])->render()
             . view("components.shipyard.app.model.connections-preview", [
                 "connections" => self::getConnections(),
                 "model" => $this,
@@ -178,7 +178,7 @@ class Composition extends Model
             "operator" => "regexp",
         ],
         "djready" => [
-            "label" => "Gotowy dla DJ",
+            "label" => "Gotowy na koncert",
             "icon" => "headphones",
             "compare-using" => "function",
             "discr" => "is_dj_ready",
@@ -211,6 +211,12 @@ class Composition extends Model
     {
         return $this->orderBy("title")
             ->orderBy("composer");
+    }
+
+    public static function getDjReady()
+    {
+        return self::all()
+            ->filter(fn ($c) => $c->is_dj_ready);
     }
     #endregion
 

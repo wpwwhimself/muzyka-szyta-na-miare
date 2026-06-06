@@ -228,24 +228,6 @@ Route::middleware("auth")->group(function(){
 
         Route::get("gig", "gigMode")->name("dj-gig-mode");
         Route::get("lottery", "lotteryMode")->name("dj-lottery-mode");
-
-        Route::prefix("songs")->group(function () {
-            Route::get("list", "listSongs")->name("dj-list-songs");
-            Route::get("edit/{id?}", "editSong")->name("dj-edit-song");
-            Route::post("edit", "processSong")->name("dj-process-song");
-        });
-
-        Route::prefix("sample-sets")->group(function () {
-            Route::get("list", "listSampleSets")->name("dj-list-sample-sets");
-            Route::get("edit/{id?}", "editSampleSet")->name("dj-edit-sample-set");
-            Route::post("edit", "processSampleSet")->name("dj-process-sample-set");
-        });
-
-        Route::prefix("sets")->group(function () {
-            Route::get("list", "listSets")->name("dj-list-sets");
-            Route::get("edit/{id?}", "editSet")->name("dj-edit-set");
-            Route::post("edit", "processSet")->name("dj-process-set");
-        });
     });
 
     Route::controller(SpellbookController::class)->middleware(EnsureUserHasRole::class.":spellcaster")->group(function () {

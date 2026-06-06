@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Composition;
-use App\Models\DjSong;
 use App\Models\FileTag;
 use App\Models\Genre;
 use App\Models\Showcase;
@@ -224,7 +223,7 @@ class SongController extends Controller
             "songs" => Composition::with("songs", "tags")
                 ->whereHas("songs", fn ($q) => $q->where("id", "not like", "O%"))
                 ->get(),
-            "dj_songs" => DjSong::all(),
+            "dj_songs" => collect(),
         ];
 
         $songs = $song_groups["dj_songs"];

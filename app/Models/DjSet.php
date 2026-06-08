@@ -21,7 +21,7 @@ class DjSet extends Model implements ContractsAuditable
         "description" => "Zestawy kompozycji, pozwalające grać na imprezie",
         "role" => "archmage",
         // "checkOwnerUnless" => "", // for roles above, allow to see only one's own objects unless they're also other role
-        "ordering" => 1,
+        "ordering" => 71,
         // "listScope" => "", // default scope to list items in model editor, empty defaults to forAdminList
         // "defaultSort" => "", // default sort, as it appears in url
         // "defaultFltr" => "", // default filters //todo expand

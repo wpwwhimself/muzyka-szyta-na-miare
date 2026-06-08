@@ -23,7 +23,7 @@ class DjSet extends Model implements ContractsAuditable
         // "checkOwnerUnless" => "", // for roles above, allow to see only one's own objects unless they're also other role
         "ordering" => 71,
         // "listScope" => "", // default scope to list items in model editor, empty defaults to forAdminList
-        // "defaultSort" => "", // default sort, as it appears in url
+        "defaultSort" => "id", // default sort, as it appears in url
         // "defaultFltr" => "", // default filters //todo expand
     ];
 
@@ -54,7 +54,7 @@ class DjSet extends Model implements ContractsAuditable
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => "$this->id $this->name",
+            get: fn () => "[$this->id] $this->name",
         );
     }
 
@@ -70,7 +70,7 @@ class DjSet extends Model implements ContractsAuditable
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this,
+                "slot" => $this->option_label,
             ])->render(),
         );
     }
@@ -94,9 +94,10 @@ class DjSet extends Model implements ContractsAuditable
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
+            get: fn () => view("components.shipyard.app.icon-label-value", [
+                "icon" => "counter",
+                "label" => "Liczba utworów",
+                "slot" => $this->compositions->count(),
             ])->render(),
         );
     }
@@ -140,17 +141,22 @@ class DjSet extends Model implements ContractsAuditable
      * extended form validation on model save
      * set result to true if everything is ok, false with message to force back with toast
      */
-    // public static function validateOnSave($data): array
-    // {
-    //     $res = [
-    //         "result" => true/false,
-    //         "message" => "",
-    //     ];
-    //
-    //     // validation...
-    //
-    //     return $res;
-    // }
+    public static function validateOnSave($data): array
+    {
+        $res = [
+            "result" => true,
+            "message" => "",
+        ];
+    
+        if ($data["id"][0] !== "G") {
+            $res = [
+                "result" => false,
+                "message" => "ID musi zaczynać się od G.",
+            ];
+        }
+    
+        return $res;
+    }
 
     /**
      * extended form fields autofill on model save
@@ -164,24 +170,31 @@ class DjSet extends Model implements ContractsAuditable
     #endregion
 
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "id" => [
+            "label" => "ID",
+            "compare-using" => "field",
+            "discr" => "id",
+        ],
     ];
 
     public const FILTERS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "icon" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        //     "type" => "<input type>",
-        //     "operator" => "regexp",
-        //     "selectData" => [
-        //     ],
-        // ],
+        "tempo" => [
+            "label" => "Tempo",
+            "icon" => "metronome",
+            "compare-using" => "field",
+            "discr" => "id",
+            "type" => "select",
+            "operator" => "regexp",
+            "selectData" => [
+                "options" => [
+                    ["label" => "Bujane", "value" => "^GB"],
+                    ["label" => "Wolne", "value" => "^GW"],
+                    ["label" => "Szybkie", "value" => "^GS"],
+                    ["label" => "Padaka", "value" => "^GP"],
+                ],
+                "emptyOption" => "Wszystkie",
+            ],
+        ],
     ];
 
     public const EXTRA_SECTIONS = [
@@ -216,6 +229,7 @@ class DjSet extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: fn ($v) => collect(explode(",", $v ?? ""))
+                ->filter(fn ($id) => !empty($id))
                 ->map(fn ($id) => Composition::find($id)),
             set: fn ($v) => $v,
         );

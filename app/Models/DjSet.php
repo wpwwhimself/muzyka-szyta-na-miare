@@ -187,10 +187,10 @@ class DjSet extends Model implements ContractsAuditable
             "operator" => "regexp",
             "selectData" => [
                 "options" => [
-                    ["label" => "Bujane", "value" => "^GB"],
-                    ["label" => "Wolne", "value" => "^GW"],
-                    ["label" => "Szybkie", "value" => "^GS"],
-                    ["label" => "Padaka", "value" => "^GP"],
+                    ["label" => "Bujane", "value" => "B"],
+                    ["label" => "Wolne", "value" => "W"],
+                    ["label" => "Szybkie", "value" => "S"],
+                    ["label" => "Padaka", "value" => "P"],
                 ],
                 "emptyOption" => "Wszystkie",
             ],

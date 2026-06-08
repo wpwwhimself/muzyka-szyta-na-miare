@@ -1,5 +1,5 @@
 @extends("layouts.app")
-@section("title", "Panel DJa")
+@section("title", "Koncert")
 
 @section("content")
 

@@ -1,6 +1,6 @@
 @extends("layouts.app")
 @section("title", "Loteria koncertowa")
-@section("subtitle", "Panel DJa")
+@section("subtitle", "Koncert")
 
 @section("content")
 

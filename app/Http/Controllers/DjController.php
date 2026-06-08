@@ -24,7 +24,26 @@ class DjController extends Controller
     }
 
     #region gig mode
+    public function gigMode()
+    {
+        return view("pages.".user_role().".dj.gig-mode");
+    }
 
+    public function gigData(Request $rq)
+    {
+        $sets = DjSet::get()
+            ->values();
+
+        return response()->json([
+            "data" => compact("sets"),
+            "setSummary" => "Dostępne: " . count($sets),
+            "setsList" => collect($sets)->map(fn ($s, $i) =>
+                "<span class='interactive' onclick='pickSet($i)'>
+                    <span class='accent primary'>$s[id] $s[name]</span>
+                </span>"
+            )->join(""),
+        ]);
+    }
     #endregion
 
     #region lottery mode
@@ -35,8 +54,7 @@ class DjController extends Controller
 
     public function lotteryData(Request $rq)
     {
-        $compositions = Composition::get()
-            ->filter(fn ($c) => $c->is_dj_ready)
+        $compositions = Composition::getDjReady()
             ->values();
         $genres = [
             "blues",

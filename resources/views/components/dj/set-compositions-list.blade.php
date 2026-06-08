@@ -15,10 +15,11 @@
 />
 
 <ul class="hints">
-    @foreach (\App\Models\Composition::getDjReady() as $composition)
+    @foreach (\App\Models\Composition::forConnection()->get() as $composition)
     <li class="hidden interactive highlight"
         data-id="{{ $composition->id }}"
-        data-q="{{ $composition->full_title }}"
+        data-title="{{ $composition->title ?? 'Bez tytułu' }}"
+        data-composer="{{ $composition->composer }}"
         onclick="cpAddComposition({{ $composition->id }})"
     >
         {{ $composition->title }}
@@ -35,15 +36,19 @@ const hints = Array.from(document.querySelectorAll(".hints > *"));
 function cpAddToList(id) {
     const composition = hints.find(hint => hint.dataset.id == id);
     if (!composition) {
-        console.error(`⚠️ Zestaw próbuje wywołać kompozycję, która nie jest gotowa na DJa: ${id}`);
+        console.error(`⚠️ Zestaw próbuje wywołać kompozycję, która nie istnieje: ${id}`);
         return;
     }
 
     const li = document.createElement("li");
     li.classList.add("interactive", "highlight");
-    li.innerHTML = composition.dataset.q;
+    li.innerHTML = `
+        <a href="/admin/models/compositions/edit/${id}" target="_blank">
+            ${composition.dataset.title} <small class="ghost">${composition.dataset.composer}</small>
+        </a>
+        <span class="interactive accent danger" onclick="cpRemoveComposition(this.closest('li'))">×</span>
+    `;
     li.dataset.id = id;
-    li.onclick = function (ev) { cpRemoveComposition(this); };
     list.appendChild(li);
 }
 
@@ -74,7 +79,7 @@ function cpFilter(query) {
     hints.forEach(hint => {
         hint.classList.toggle(
             "hidden",
-            !(new RegExp(query, "i").test(hint.dataset.q))
+            !(new RegExp(query, "i").test(`${hint.dataset.title} ${hint.dataset.composer}`))
                 || query === ""
         );
     });

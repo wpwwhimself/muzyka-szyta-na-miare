@@ -273,7 +273,7 @@ class Composition extends Model
     public function isDjReady(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->songmap),
+            get: fn () => !empty($this->songmap) && !empty($this->lyrics),
         );
     }
 

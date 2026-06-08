@@ -40,13 +40,22 @@ class Quest extends Model
     #region presentation
     public function __toString(): string
     {
-        return "[$this->id] " . $this->song->full_title;
+        return implode(" ", [
+            $this->song->title ?? "Bez tytułu",
+            "dla:",
+            $this->user->notes->client_name,
+        ]);
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => "[$this->id] " . $this->song->full_title,
+            get: fn () => implode(" ", [
+                "[$this->id] ",
+                $this->song->title ?? "Bez tytułu",
+                "dla:",
+                $this->user->notes->client_name,
+            ]),
         );
     }
 

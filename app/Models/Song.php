@@ -62,7 +62,7 @@ class Song extends Model
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->full_title,
+                "slot" => $this->title ?? "Bez tytułu",
             ])->render(),
         );
     }
@@ -70,9 +70,7 @@ class Song extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->artist,
         );
     }
 

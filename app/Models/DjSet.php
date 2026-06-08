@@ -36,7 +36,6 @@ class DjSet extends Model implements ContractsAuditable
         "id",
         "name",
         "genre_id",
-        "compositions",
     ];
 
     #region presentation
@@ -94,10 +93,9 @@ class DjSet extends Model implements ContractsAuditable
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.icon-label-value", [
-                "icon" => "counter",
-                "label" => "Liczba utworów",
-                "slot" => $this->compositions->count(),
+            get: fn () => view("components.shipyard.app.model.connections-preview", [
+                "connections" => self::getConnections(),
+                "model" => $this,
             ])->render(),
         );
     }
@@ -124,6 +122,11 @@ class DjSet extends Model implements ContractsAuditable
             "field_label" => "Gatunek",
             // "readonly" => true,
         ],
+        "compositions" => [
+            "model" => Composition::class,
+            "mode" => "many",
+            "readonly" => true,
+        ],
     ];
 
     public const ACTIONS = [
@@ -147,14 +150,14 @@ class DjSet extends Model implements ContractsAuditable
             "result" => true,
             "message" => "",
         ];
-    
+
         if ($data["id"][0] !== "G") {
             $res = [
                 "result" => false,
                 "message" => "ID musi zaczynać się od G.",
             ];
         }
-    
+
         return $res;
     }
 
@@ -198,17 +201,22 @@ class DjSet extends Model implements ContractsAuditable
     ];
 
     public const EXTRA_SECTIONS = [
-        "compositions_list" => [
-            "title" => "Lista utworów",
-            "icon" => "music",
-            "show-on" => "edit",
-            "component" => "dj.set-compositions-list",
-            "role" => "archmage",
-        ],
+        // "compositions_list" => [
+        //     "title" => "Lista utworów",
+        //     "icon" => "music",
+        //     "show-on" => "edit",
+        //     "component" => "dj.set-compositions-list",
+        //     "role" => "archmage",
+        // ],
     ];
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeVisible()
+    {
+        return $this;
+    }
     #endregion
 
     #region attributes
@@ -224,16 +232,6 @@ class DjSet extends Model implements ContractsAuditable
     ];
 
     use HasStandardAttributes;
-
-    public function compositions(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($v) => collect(explode(",", $v ?? ""))
-                ->filter(fn ($id) => !empty($id))
-                ->map(fn ($id) => Composition::find($id)),
-            set: fn ($v) => $v,
-        );
-    }
 
     // public function badges(): Attribute
     // {
@@ -278,6 +276,10 @@ class DjSet extends Model implements ContractsAuditable
     #endregion
 
     #region relations
+    public function compositions()
+    {
+        return $this->hasMany(Composition::class);
+    }
     #endregion
 
     #region helpers

@@ -117,7 +117,7 @@ function roll(type) {
     const rolled = data_available[rolled_id];
     data.rolled[type] = rolled_id;
     document.querySelector(`#${type}-name`).innerHTML = typeof rolled == "object"
-        ? rolled.full_title
+        ? `${rolled.id} ${rolled.name}`
         : rolled;
 
     document.querySelector(`#pick-btn`).classList.toggle(

@@ -31,7 +31,8 @@ class DjController extends Controller
 
     public function gigData(Request $rq)
     {
-        $sets = DjSet::get()
+        $sets = DjSet::with("compositions")
+            ->get()
             ->values();
 
         return response()->json([
@@ -39,7 +40,7 @@ class DjController extends Controller
             "setSummary" => "Dostępne: " . count($sets),
             "setsList" => collect($sets)->map(fn ($s, $i) =>
                 "<span class='interactive' onclick='pickSet($i)'>
-                    <span class='accent primary'>$s[id] $s[name]</span>
+                    <span class='interactive highlight'>$s[id] $s[name]</span>
                 </span>"
             )->join(""),
         ]);

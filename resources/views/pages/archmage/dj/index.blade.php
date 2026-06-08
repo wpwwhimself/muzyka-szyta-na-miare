@@ -51,7 +51,8 @@
 
     <p>
         Tryb imprezowy korzysta z zestawów piosenek.
-        Każdy docelowo składa się z kilku podobnych stylistycznie utworów, co pozwala na ok. 30 minut grania.
+        Każdy docelowo składa się z kilku podobnych stylistycznie utworów, co pozwala na ok. 10-15 minut grania.
+        Na cały set muzyczny składało by się 2-3 takich zestawów.
     </p>
 
     <ul>

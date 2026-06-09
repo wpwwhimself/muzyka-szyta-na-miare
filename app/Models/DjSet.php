@@ -124,8 +124,7 @@ class DjSet extends Model implements ContractsAuditable
         ],
         "compositions" => [
             "model" => Composition::class,
-            "mode" => "many",
-            "readonly" => true,
+            "mode" => "many-reverse",
         ],
     ];
 

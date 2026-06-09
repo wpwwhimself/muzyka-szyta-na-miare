@@ -226,6 +226,8 @@ Route::middleware("auth")->group(function(){
     Route::controller(DjController::class)->middleware(EnsureUserHasRole::class.":spellcaster")->prefix("dj")->group(function () {
         Route::get("/", "index")->name("dj");
 
+        Route::post("/add-set", "processAddSet")->name("dj-add-set");
+
         Route::get("gig", "gigMode")->name("dj-gig-mode");
         Route::get("lottery", "lotteryMode")->name("dj-lottery-mode");
     });

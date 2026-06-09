@@ -36,6 +36,7 @@ class DjSet extends Model implements ContractsAuditable
         "id",
         "name",
         "genre_id",
+        "track_ready",
     ];
 
     #region presentation
@@ -68,6 +69,7 @@ class DjSet extends Model implements ContractsAuditable
                 "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
+                    "style" => "color: $this->color;",
                 ]),
                 "slot" => $this->option_label,
             ])->render(),
@@ -112,6 +114,11 @@ class DjSet extends Model implements ContractsAuditable
             "required" => true,
             "hint" => "Format: <code>G{kod_tempa}{lp}</code>, kody tempa: Bujane, Wolne, Szybkie, Padaka",
         ],
+        "track_ready" => [
+            "type" => "checkbox",
+            "label" => "Podkład gotowy",
+            "icon" => "disc",
+        ]
     ];
 
     public const CONNECTIONS = [
@@ -187,11 +194,21 @@ class DjSet extends Model implements ContractsAuditable
             "type" => "select",
             "operator" => "regexp",
             "selectData" => [
+                "options" => self::TEMPOS,
+                "emptyOption" => "Wszystkie",
+            ],
+        ],
+        "ready" => [
+            "label" => "Gotowe do grania",
+            "icon" => "disc",
+            "compare-using" => "field",
+            "discr" => "track_ready",
+            "type" => "select",
+            "operator" => "=",
+            "selectData" => [
                 "options" => [
-                    ["label" => "Bujane", "value" => "^GB"],
-                    ["label" => "Wolne", "value" => "^GW"],
-                    ["label" => "Szybkie", "value" => "^GS"],
-                    ["label" => "Padaka", "value" => "^GP"],
+                    ["label" => "Tak", "value" => 1],
+                    ["label" => "Nie", "value" => 0],
                 ],
                 "emptyOption" => "Wszystkie",
             ],
@@ -211,9 +228,14 @@ class DjSet extends Model implements ContractsAuditable
     #region scopes
     use HasStandardScopes;
 
-    public function scopeVisible()
+    public function scopeVisible($query)
     {
-        return $this;
+        return $query;
+    }
+
+    public function scopeReady()
+    {
+        return $this->where("track_ready", 1);
     }
     #endregion
 
@@ -231,34 +253,51 @@ class DjSet extends Model implements ContractsAuditable
 
     use HasStandardAttributes;
 
-    // public function badges(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => [
-    //             [
-    //                 "label" => "",
-    //                 "icon" => "",
-    //                 "class" => "",
-    //                 "style" => "",
-    //                 "condition" => "",
-    //             ],
-    //             [
-    //                 "html" => "",
-    //             ],
-    //         ],
-    //     );
-    // }
+    public function badges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => [
+                [
+                    "label" => "Podkład niegotowy",
+                    "icon" => "disc-alert",
+                    "class" => "accent error",
+                    // "style" => "",
+                    "condition" => !$this->track_ready,
+                ],
+                // [
+                //     "html" => "",
+                // ],
+            ],
+        );
+    }
+
+    public function icon(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect(self::TEMPOS)->firstWhere("value", $this->id[1])["icon"],
+        );
+    }
+
+    public function color(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect(self::TEMPOS)->firstWhere("value", $this->id[1])["color"],
+        );
+    }
 
     //? override add button on model list
-    // public static function modelAddButton(): string
-    // {
-    //     return view("components.shipyard.ui.button", [
-    //         "icon" => "plus",
-    //         "label" => "Dodaj",
-    //         "action" => route(...),
-    //         "class" => "primary",
-    //     ])->render();
-    // }
+    public static function modelAddButton(): string
+    {
+        return view("components.shipyard.ui.button", [
+            "icon" => "plus",
+            "pop" => "Dodaj",
+            "action" => "none",
+            "attributes" => new ComponentAttributeBag([
+                "onclick" => "openModal('add-dj-set')",
+                "class" => "primary",
+            ]),
+        ])->render();
+    }
 
     //? override edit button on model list
     // public function modelEditButton(): Attribute
@@ -281,5 +320,25 @@ class DjSet extends Model implements ContractsAuditable
     #endregion
 
     #region helpers
+    const TEMPOS = [
+        ["label" => "Bujane", "value" => "B", "icon" => "tortoise", "color" => "dodgerblue"],
+        ["label" => "Wolne", "value" => "W", "icon" => "horse-variant", "color" => "limegreen"],
+        ["label" => "Szybkie", "value" => "S", "icon" => "rabbit", "color" => "orange"],
+        ["label" => "Padaka", "value" => "P", "icon" => "fire", "color" => "red"],
+    ];
+
+    public static function nextSetId(string $tempo_code): string
+    {
+        if (!in_array($tempo_code, array_map(fn ($t) => $t["value"], self::TEMPOS))) {
+            throw new \Exception("Niepoprawny kod tempa.");
+        }
+        $letter = strtoupper($tempo_code);
+        $newest_id = self::where("id", "like", "G$letter%")->orderBy("id", "desc")->value("id") ?? ("G" . $letter . "0");
+        $newest_id_last = substr($newest_id, 2);
+        if(in_array($newest_id_last, ["0", "Z"])){
+            return "G" . $letter . "0";
+        }
+        return "G" . $letter . to_base36(from_base36($newest_id_last) + 1, 1);
+    }
     #endregion
 }

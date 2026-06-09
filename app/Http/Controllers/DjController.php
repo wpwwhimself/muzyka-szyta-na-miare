@@ -15,12 +15,23 @@ class DjController extends Controller
         $djReadyCount = Composition::get()
             ->filter(fn ($c) => $c->is_dj_ready)
             ->count();
-        $djSetsCount = DjSet::get()->count();
+        $djSetsCount = DjSet::ready()->count();
 
         return view("pages.".user_role().".dj.index", compact(
             "djReadyCount",
             "djSetsCount",
         ));
+    }
+
+    public function processAddSet(Request $rq)
+    {
+        $set = DjSet::create([
+            "id" => DjSet::nextSetId($rq->tempo),
+            "name" => $rq->name,
+            "genre_id" => $rq->genre_id,
+        ]);
+
+        return redirect()->route("admin.model.edit", ["model" => "dj-sets", "id" => $set->id]);
     }
 
     #region gig mode
@@ -31,7 +42,8 @@ class DjController extends Controller
 
     public function gigData(Request $rq)
     {
-        $sets = DjSet::with("compositions")
+        $sets = DjSet::ready()
+            ->with("compositions")
             ->get()
             ->values();
 

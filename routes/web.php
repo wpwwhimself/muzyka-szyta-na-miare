@@ -223,7 +223,7 @@ Route::middleware("auth")->group(function(){
         Route::get("/{quest_id}", "index")->name("studio-view");
     });
 
-    Route::controller(DjController::class)->middleware("cancastspells")->prefix("dj")->group(function () {
+    Route::controller(DjController::class)->middleware(EnsureUserHasRole::class.":spellcaster")->prefix("dj")->group(function () {
         Route::get("/", "index")->name("dj");
 
         Route::get("gig", "gigMode")->name("dj-gig-mode");

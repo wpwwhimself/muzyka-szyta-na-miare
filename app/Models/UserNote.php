@@ -93,7 +93,7 @@ class UserNote extends Authenticatable
                 "rank" => $this->exp,
                 "label" => "Zaakceptowane zlecenia",
                 "style" => "military",
-            ]),
+            ])->render(),
         );
     }
 
@@ -316,6 +316,11 @@ class UserNote extends Authenticatable
 
     #region scopes
     use HasStandardScopes;
+
+    public function scopeForConnection()
+    {
+        return $this->orderBy("user_id");
+    }
 
     public function scopeClients($query)
     {

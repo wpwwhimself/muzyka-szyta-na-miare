@@ -125,8 +125,7 @@ class Composition extends Model
     public const CONNECTIONS = [
         "songs" => [
             "model" => Song::class,
-            "mode" => "many",
-            "readonly" => true,
+            "mode" => "many-reverse",
             // "field_name" => "",
             // "field_label" => "Przypisane:",
         ],

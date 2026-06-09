@@ -120,7 +120,6 @@ class DjSet extends Model implements ContractsAuditable
             "mode" => "one",
             // "field_name" => "",
             "field_label" => "Gatunek",
-            // "readonly" => true,
         ],
         "compositions" => [
             "model" => Composition::class,

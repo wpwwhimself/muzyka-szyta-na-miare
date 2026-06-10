@@ -3,7 +3,7 @@
 
 @section("content")
 
-<div class="grid but-mobile down" style="--col-count: 2;">
+<div class="grid but-mobile-down" style="--col-count: 2;">
     <x-shipyard.app.section
         icon="spotlight"
         title="Koncert"

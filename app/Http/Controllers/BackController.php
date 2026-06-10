@@ -54,10 +54,7 @@ class BackController extends Controller
             $quests_review = $quests_review->where("client_id", $user->id);
 
             $quests_total = $user->notes->exp;
-            $unpaids = Quest::where("client_id", Auth::id())
-                ->whereNotIn("status_id", [18])
-                ->where("paid", 0)
-                ->get();
+            $unpaids = Auth::user()->questsUnpaid()->get();
         }else{
             $recent = StatusChange::whereNotIn("new_status_id", [9, 32, 34])
                 ->orderByDesc("date")

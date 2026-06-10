@@ -239,6 +239,7 @@ class Quest extends Model
 
     protected $appends = [
         "data_for_invoice",
+        "payment_remaining",
     ];
 
     use HasStandardAttributes;

@@ -243,29 +243,6 @@ if(!function_exists("pricing")){
         return CURRENT_PRICING();
     }
 }
-if(!function_exists("quests_unpaid")){
-    function quests_unpaid($client_id, $all = false){
-        $allowed_statuses = ($all) ? array_diff(range(11, 26), [18]) : [17, 19];
-
-        $quests = Quest::where("paid", 0)
-            ->whereIn("status_id", $allowed_statuses)
-            ->whereHas("user.notes", function($query){
-                $query->where("trust", ">", -1);
-            })
-            ;
-        if($client_id != 1){
-            $quests = $quests->where("client_id", $client_id);
-        }
-        // if($all) dd(...($quests_val->get()->toArray()));
-        $quests_val = $quests->sum("price");
-
-        foreach($quests->get() as $quest){
-            $quests_val -= $quest->payments_sum;
-        }
-
-        return $quests_val;
-    }
-}
 
 /**
  * Odmienianie imion klientów

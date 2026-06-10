@@ -26,7 +26,7 @@
         title="Moje dane"
         :subtitle="Auth::user()->notes"
         :icon="model_icon('user_notes')"
-        :extended="false"
+        :extended="Auth::user()->notes->trust == -1"
         scissors
     >
         <x-slot name="buttons">
@@ -77,7 +77,7 @@
 
         @if (Auth::user()->notes->trust == -1)
         <br>
-        <div class="section-header error">
+        <div class="section-header accent error">
             <h1><x-shipyard.app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
         </div>
         <p>
@@ -97,10 +97,10 @@
                 <tr>
                     <td>
                         <a href="{{ route('quest', ['id' => $quest->id]) }}">
-                        {{ $quest->song->title ?? "utwór bez tytułu" }}
+                        {{ $quest->song }}
                         </a>
                     </td>
-                    <td>{{ as_pln($quest->price) }}</td>
+                    <td>{{ as_pln($quest->payment_remaining) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -138,7 +138,11 @@
         @endif
     </x-section>
 
-    <x-section id="dashboard-finances" title="Finanse" subtitle="Dane do przelewu i suma zobowiązań" :icon="model_icon('prices')" :extended="false"
+    <x-section id="dashboard-finances"
+        title="Finanse"
+        subtitle="Dane do przelewu i suma zobowiązań"
+        :icon="model_icon('prices')"
+        :extended="$unpaids->sum('payment_remaining') > 0"
         :warning="[
             'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $unpaids->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
         ]"
@@ -148,10 +152,10 @@
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">
                 <span>Zaakceptowane</span>
-                <span>{{ as_pln(quests_unpaid(Auth::id())) }}</span>
+                <span>{{ as_pln($unpaids->filter(fn ($q) => in_array($q->status_id, [17, 19]))->sum("payment_remaining")) }}</span>
 
                 <span>Wszystkie</span>
-                <span>{{ as_pln(quests_unpaid(Auth::id(), true)) }}</span>
+                <span>{{ as_pln($unpaids->sum("payment_remaining")) }}</span>
             </div>
         </div>
 

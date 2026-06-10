@@ -66,7 +66,7 @@ class User extends ShipyardUser
     public function questsUnpaid(){
         return $this->quests()
             ->where("paid", 0)
-            ->where("status_id", "!=", 18);
+            ->whereNotIn("status_id", [17, 18]);
     }
 
     public function questsRecent() {

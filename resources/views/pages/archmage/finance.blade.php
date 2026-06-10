@@ -118,25 +118,36 @@
 @endif
 
 @if(count($unpaids))
-<x-section title="Zalegający z opłatami" icon="account-cash">
-    <form action="{{ route('finance-pay') }}" method="post" class="flex down">
-        @csrf
-
+<x-shipyard.app.form :action="route('finance-pay')" method="post">
+    <x-shipyard.app.section title="Zalegający z opłatami"
+        icon="account-cash"
+        inner-class="grid but-mobile-down"
+        inner-style="--col-count: 2;"
+    >
         @php $amount_total = ['immediate' => 0, 'delayed' => 0] @endphp
         @foreach ($unpaids as $client)
-        <x-extendo-block :key="$client->id"
-            :header-icon="model_icon('users')"
+        <x-shipyard.app.section
+            :icon="model_icon('users')"
             :title="$client->notes"
-            :subtitle="implode(' // ', [
-                $client->questsUnpaid->count(),
+            :subtitle="implode('', [
+                view('components.shipyard.stats.counter', [
+                    'rank' => $client->questsUnpaid->count(),
+                    'style' => 'lines',
+                ])->render(),
                 $client->questsUnpaid
                     ->partition(fn($q) => !$q->delayed_payment_in_effect)
                     ->map(fn($q) => _c_(as_pln($q->sum('payment_remaining'))))
-                    ->implode(' + '),
+                    ->implode(' / ')
             ])"
+            :extended="false"
+            inner-class="flex right but-mobile-down center"
         >
-            <x-slot:buttons>
-                <x-button label="Klient" :icon="model_icon('users')" :action="route('client-view', ['id' => $client->id])" />
+            <x-slot:actions>
+                <x-shipyard.ui.button
+                    pop="Klient"
+                    :icon="model_icon('users')"
+                    :action="route('client-view', ['id' => $client->id])"
+                />
                 <x-shipyard.ui.button
                     pop="Utwórz fakturę na nieopłacone zlecenia"
                     :icon="model_icon('invoices')"
@@ -155,50 +166,51 @@
                     });"
                     class="tertiary"
                 />
-            </x-slot:buttons>
+            </x-slot:actions>
 
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp
-            <div class="flex right center">
-                @foreach ($client->questsUnpaid as $quest)
-                <x-extendo-section :title="$quest->id">
-                    <a href="{{ route('quest', ['id' => $quest->id]) }}"
-                        @if ($quest->delayed_payment_in_effect)
-                        class="ghost" {{ Popper::pop("Opłata opóźniona do za ".$quest->delayed_payment->endOfDay()->diffInDays()." dni") }}
-                        @endif
-                    >
-                        {{ $quest->song->title ?? "utwór bez tytułu" }}
-                        <x-phase-indicator-mini :status="$quest->status" />
-                    </a>
-                    <span>{{ _c_(as_pln($quest->price - $quest->payments_sum)) }}</span>
-                    <input type="checkbox" name="{{ $quest->id }}" />
-                </x-extendo-section>
+
+            @foreach ($client->questsUnpaid as $quest)
+            <x-shipyard.app.card
+                @class(['ghost' => $quest->delayed_payment_in_effect])
+                inner-class="flex down middle no-gap"
+            >
+                <small class="ghost">
+                    {{ $quest->id }}
+                    <x-phase-indicator-mini :status="$quest->status" />
+                </small>
+                <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                    {{ $quest->song }}
+                </a>
+                @if ($quest->delayed_payment_in_effect)
+                <span class="accent danger">Opłata opóźniona do za {{ abs(round($quest->delayed_payment->endOfDay()->diffInDays())) }} dni</span>
+                @endif
+                <x-shipyard.ui.input type="checkbox"
+                    :name="$quest->id"
+                    :label="_c_(as_pln($quest->price - $quest->payments_sum))"
+                    class="compact"
+                />
 
                 @php
                 $amount_to_pay[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum;
                 $amount_total[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum
                 @endphp
-                @endforeach
-
-                <x-extendo-section title="Razem">
-                    @if($amount_to_pay["immediate"]) <span>{{ _c_(as_pln($amount_to_pay["immediate"])) }}</span> @endif
-                    @if($amount_to_pay["delayed"]) <span class="ghost">{{ _c_(as_pln($amount_to_pay["delayed"])) }}</span> @endif
-                </x-extendo-section>
-            </div>
-        </x-extendo-block>
+            </x-shipyard.app.card>
+            @endforeach
+        </x-shipyard.app.section>
         @endforeach
 
-        <x-shipyard.ui.button class="primary" action="submit" icon="cash-register" label="Opłać zaznaczone" />
-    </form>
-
-    <x-slot:buttons>
-        <h3>
-            Razem:
-            @if($amount_total["immediate"]) <span>{{ _c_(as_pln($amount_total["immediate"])) }}</span> @endif
-                @if(min($amount_total) > 0) / @endif
-            @if($amount_total["delayed"]) <span class="ghost">{{ _c_(as_pln($amount_total["delayed"])) }}</span> @endif
-        </h3>
-    </x-slot:buttons>
-</x-section>
+        <x-slot:actions>
+            <strong>
+                Razem:
+                @if($amount_total["immediate"]) <span>{{ _c_(as_pln($amount_total["immediate"])) }}</span> @endif
+                    @if(min($amount_total) > 0) / @endif
+                @if($amount_total["delayed"]) <span class="ghost">{{ _c_(as_pln($amount_total["delayed"])) }}</span> @endif
+            </strong>
+            <x-shipyard.ui.button class="primary" action="submit" icon="cash-register" label="Opłać zaznaczone" />
+        </x-slot:actions>
+    </x-shipyard.app.section>
+</x-shipyard.app.form>
 @endif
 
 @endsection

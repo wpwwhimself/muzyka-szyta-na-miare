@@ -149,7 +149,7 @@ class QuestController extends Controller
                 "relatable_type" => Quest::class,
                 "relatable_id" => $quest->id,
             ])->sum("amount") >= $quest->price)]);
-            
+
             // oznacz wygasłe zlecenie jako zakończone, jeśli zostało właśnie opłacone
             if ($quest->paid && $quest->status_id == 17) {
                 $quest->update(["status_id" => 19]);
@@ -170,7 +170,7 @@ class QuestController extends Controller
             }
 
             // wycofanie statusu krętacza
-            if ($quest->user->notes->trust == -1 && $quest->user->questsUnpaid->count() == 0) {
+            if ($quest->user->notes->trust == -1) {
                 $quest->user->notes->update(["trust" => 0]);
                 $flash_content .= "; już nie jest krętaczem";
             }

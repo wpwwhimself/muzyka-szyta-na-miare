@@ -136,7 +136,7 @@
     </div>
 </x-shipyard.app.section>
 
-<x-section id="dashboard-requests" class="sc-line"
+<x-section id="dashboard-requests"
     title="Grafik"
     icon="calendar"
     :extended="true"

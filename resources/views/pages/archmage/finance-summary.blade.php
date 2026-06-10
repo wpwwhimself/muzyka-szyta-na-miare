@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section("title", "Podsumowanie wpłat i wypłat")
+@section("subtitle", "Finanse")
 
 @section('content')
 
@@ -41,7 +43,7 @@
         <tbody>
             @forelse ($gains as $pos)
             <tr>
-                <td>{{ $pos->date->format("d.m.Y") }}</td>
+                <td>{{ $pos->date->format("d.m") }}</td>
                 <td>
                     @if ($pos->relatable)
                     <a href="{{ route('client-view', ['id' => $pos->relatable->user?->id ?? $pos->relatable->id]) }}">
@@ -52,7 +54,7 @@
                 <td>
                     @if ($pos->relatable)
                     @if ($pos->relatable instanceof \App\Models\Quest)
-                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a>
+                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable->song }}</a>
                     @else
                     <span class="grayed-out">budżet</span>
                     @endif
@@ -87,11 +89,11 @@
         <tbody>
             @forelse ($losses as $pos)
             <tr>
-                <td>{{ $pos->date->format("d.m.Y") }}</td>
+                <td>{{ $pos->date->format("d.m") }}</td>
                 <td>{{ _ct_($pos->typable->name) }}</td>
                 <td>
                     @if ($pos->relatable)
-                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable }}</a>
+                    <a href="{{ route('quest', ['id' => $pos->relatable->id]) }}">{{ $pos->relatable->song }}</a>
                     @endif
                     {{ $pos->description }}
                 </td>

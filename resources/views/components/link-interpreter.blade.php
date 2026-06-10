@@ -14,15 +14,16 @@
         />
             @if ($link->match("/youtu\.?be/") && is_archmage())
             <x-shipyard.ui.button
-                action="https://lazymum.wpww.pl/downloader?link={{ urlencode($link) }}&format=mp3"
-                target="_blank"
+                action="none"
+                onclick="
+                    navigator.clipboard.writeText(`{{ $link }}`);
+                    alert(`Skopiowano link. Przeklej go w pole, jakie za chwilę się pojawi.`);
+                    window.open(`https://mp3now.com/en2`, `_blank`);
+                "
                 icon="download"
                 pop="Pobieranie"
+                class="tertiary"
             />
-            {{-- <iframe
-                src="https://p.savenow.to/api/button/?url={{ $link }}&f=mp3"
-                style="width:230px;height:60px;border:0;overflow:hidden;">
-            </iframe> --}}
             @endif
 
         @endif

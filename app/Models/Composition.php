@@ -31,6 +31,7 @@ class Composition extends Model
         "songmap",
         "lyrics",
         "melody",
+        "dj_set_id",
     ];
 
     #region presentation
@@ -70,7 +71,10 @@ class Composition extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.ui.button", [
+            get: fn () => view("components.shipyard.app.model.badges", [
+                "badges" => $this->badges,
+            ])->render()
+            . view("components.shipyard.ui.button", [
                 "icon" => "bullhorn",
                 "pop" => "Podglad w katalogu",
                 "action" => route("catalog", ["composition" => $this->id]),
@@ -121,14 +125,17 @@ class Composition extends Model
     public const CONNECTIONS = [
         "songs" => [
             "model" => Song::class,
-            "mode" => "many",
-            "readonly" => true,
+            "mode" => "many-reverse",
             // "field_name" => "",
-            "field_label" => "Przypisane:",
+            // "field_label" => "Przypisane:",
         ],
         "tags" => [
             "model" => SongTag::class,
             "mode" => "many",
+        ],
+        "djSet" => [
+            "model" => DjSet::class,
+            "mode" => "one",
         ],
     ];
 
@@ -233,23 +240,23 @@ class Composition extends Model
 
     use HasStandardAttributes;
 
-    // public function badges(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => [
-    //             [
-    //                 "label" => "",
-    //                 "icon" => "",
-    //                 "class" => "",
-    //                 "style" => "",
-    //                 "condition" => "",
-    //             ],
-    //             [
-    //                 "html" => "",
-    //             ],
-    //         ],
-    //     );
-    // }
+    public function badges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => [
+                [
+                    "label" => "Gotowy na koncert",
+                    "icon" => model_icon("dj-sets"),
+                    "class" => "accent success",
+                    // "style" => "",
+                    "condition" => $this->is_dj_ready,
+                ],
+                // [
+                //     "html" => "",
+                // ],
+            ],
+        );
+    }
 
     public function djPreview(): Attribute
     {
@@ -273,7 +280,7 @@ class Composition extends Model
     public function isDjReady(): Attribute
     {
         return Attribute::make(
-            get: fn () => !empty($this->songmap),
+            get: fn () => !empty($this->songmap) && !empty($this->lyrics),
         );
     }
 
@@ -306,6 +313,11 @@ class Composition extends Model
     public function tags()
     {
         return $this->belongsToMany(SongTag::class);
+    }
+
+    public function djSet()
+    {
+        return $this->belongsTo(DjSet::class);
     }
     #endregion
 

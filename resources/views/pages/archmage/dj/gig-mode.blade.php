@@ -117,7 +117,7 @@ function roll(type) {
     const rolled = data_available[rolled_id];
     data.rolled[type] = rolled_id;
     document.querySelector(`#${type}-name`).innerHTML = typeof rolled == "object"
-        ? rolled.full_title
+        ? `${rolled.id} ${rolled.name}`
         : rolled;
 
     document.querySelector(`#pick-btn`).classList.toggle(
@@ -139,6 +139,7 @@ function fillSong(title, set_name, hide_prev, hide_next, hide_mark, preview) {
 
 function pickSet(index) {
     const picked = data.sets[index];
+    console.log(picked);
     const firstSong = picked.compositions[0];
 
     fillSong(firstSong.full_title, `${picked.id} ${picked.name}`, true, false, data.excludedSets.includes(index), firstSong.dj_preview);

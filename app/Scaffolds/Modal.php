@@ -2,6 +2,8 @@
 
 namespace App\Scaffolds;
 
+use App\Models\DjSet;
+use App\Models\Genre;
 use App\Models\Request;
 use App\Scaffolds\Shipyard\Modal as ShipyardModal;
 
@@ -599,6 +601,49 @@ class Modal extends ShipyardModal
                         "label" => Request::confirmLabels()["confirm_deadline"],
                         "icon" => model_field_icon("requests", "deadline"),
                         "required" => true,
+                    ],
+                ],
+            ],
+            "add-dj-set" => [
+                "heading" => "Utwórz nowy zestaw",
+                "target_route" => "dj-add-set",
+                "fields" => [
+                    [
+                        "name" => "tempo",
+                        "type" => "select",
+                        "label" => "Tempo",
+                        "icon" => "metronome",
+                        "required" => true,
+                        "extra" => [
+                            "selectData" => [
+                                "optionsFromConst" => [
+                                    DjSet::class,
+                                    "TEMPOS",
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        "name" => "name",
+                        "type" => "text",
+                        "label" => "Nazwa",
+                        "icon" => model_field_icon("dj-sets", "name"),
+                        "required" => true,
+                    ],
+                    [
+                        "name" => "genre_id",
+                        "type" => "select",
+                        "label" => "Gatunek",
+                        "icon" => model_icon("genres"),
+                        "required" => true,
+                        "extra" => [
+                            "selectData" => [
+                                "optionsFromScope" => [
+                                    Genre::class,
+                                    "forConnection",
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],

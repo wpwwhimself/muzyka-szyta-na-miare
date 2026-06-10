@@ -131,8 +131,7 @@ class Song extends Model
         ],
         "quests" => [
             "model" => Quest::class,
-            "mode" => "many",
-            "readonly" => true,
+            "mode" => "many-reverse",
         ],
         "composition" => [
             "model" => Composition::class,

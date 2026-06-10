@@ -34,11 +34,6 @@ class User extends ShipyardUser
 
     #region fields
     public const CONNECTIONS = [
-        "roles" => [
-            "model" => Role::class,
-            "mode" => "many",
-            "role" => "technical",
-        ],
         "notes" => [
             "model" => UserNote::class,
             "mode" => "one",

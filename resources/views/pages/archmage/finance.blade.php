@@ -127,7 +127,9 @@
         @php $amount_total = ['immediate' => 0, 'delayed' => 0] @endphp
         @foreach ($unpaids as $client)
         <x-shipyard.app.section
-            :icon="model_icon('users')"
+            :icon="$client->notes->trust == -1
+                ? 'ninja'
+                : model_icon('users')"
             :title="$client->notes"
             :subtitle="implode('', [
                 view('components.shipyard.stats.counter', [
@@ -140,6 +142,9 @@
                     ->implode(' / ')
             ])"
             :extended="false"
+            @class([
+                "accent error" => $client->notes->trust == -1,
+            ])
             inner-class="flex right but-mobile-down center"
         >
             <x-slot:actions>

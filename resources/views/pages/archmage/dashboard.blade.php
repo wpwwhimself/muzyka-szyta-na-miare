@@ -40,16 +40,15 @@
 <x-extendo-block key="requests"
     title="Zapytania"
     :header-icon="model_icon('requests')"
-    :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0"
+    :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0 || $requests->count() === 0"
     style="grid-column: span 2;"
 >
     <x-slot name="buttons">
-        <x-shipyard.app.icon-label-value
-            icon="counter"
-            label="Liczba"
-        >
-            {{ $requests->count() }}
-        </x-shipyard.app.icon-label-value>
+        <x-shipyard.stats.counter
+            :rank="$requests->count()"
+            label="Liczba zapytań"
+            style="lines"
+        />
 
         <x-shipyard.ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
@@ -156,12 +155,11 @@
     :extended="false"
 >
     <x-slot:buttons>
-        <x-shipyard.app.icon-label-value
-            icon="counter"
-            label="Liczba"
-        >
-            {{ $quests_ongoing->count() }}
-        </x-shipyard.app.icon-label-value>
+        <x-shipyard.stats.counter
+            :rank="$quests_ongoing->count()"
+            label="Liczba zleceń"
+            style="lines"
+        />
     </x-slot:buttons>
 
     <div class="flex down">
@@ -179,12 +177,11 @@
     :extended="false"
 >
     <x-slot:buttons>
-        <x-shipyard.app.icon-label-value
-            icon="counter"
-            label="Liczba"
-        >
-            {{ $quests_review->count() }}
-        </x-shipyard.app.icon-label-value>
+        <x-shipyard.stats.counter
+            :rank="$quests_review->count()"
+            label="Liczba zleceń"
+            style="lines"
+        />
     </x-slot:buttons>
 
     <div class="flex down">

@@ -51,8 +51,8 @@ class DjController extends Controller
             "data" => compact("sets"),
             "setSummary" => "Dostępne: " . count($sets),
             "setsList" => collect($sets)->map(fn ($s, $i) =>
-                "<span class='interactive' onclick='pickSet($i)'>
-                    <span class='interactive highlight'>$s[id] $s[name]</span>
+                "<span class='interactive highlight' onclick='pickSet($i)'>
+                    $s[id] $s[name]
                 </span>"
             )->join(""),
         ]);

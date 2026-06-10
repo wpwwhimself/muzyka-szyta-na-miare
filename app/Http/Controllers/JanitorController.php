@@ -23,7 +23,7 @@ class JanitorController extends Controller
         "5_REMINDED" => "Przypomnienie o działaniu",
         "7_FORGOT" => "Brak reakcji",
         "15_REMINDED" => "Przypomnienie o działaniu",
-        "17_FORGOT" => "Brak opinii",
+        "18_FORGOT" => "Brak opinii, uznane za odrzucone",
         "17_UNPAID" => "Nieopłacone, ale zaakceptowane",
         "19_ALLGOOD" => "Brak uwag",
         "31_REMINDED" => "Przypomnienie o działaniu",
@@ -121,7 +121,7 @@ class JanitorController extends Controller
         foreach($quests as $quest){
             if ($quest->user->notes->is_forgotten) continue;
 
-            [$new_status, $new_comment] = $quest->paid ? [19, "19_ALLGOOD"] : [17, "17_FORGOT"];
+            [$new_status, $new_comment] = $quest->paid ? [19, "19_ALLGOOD"] : [18, "18_FORGOT"];
             $quest->update(["status_id" => $new_status]);
             $summaryEntry = [
                 "procedure" => "re_quests",

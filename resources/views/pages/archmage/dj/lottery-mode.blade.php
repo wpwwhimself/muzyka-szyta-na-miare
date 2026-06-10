@@ -146,7 +146,7 @@ function pickComposition(index) {
 
     data.picked = index;
     document.querySelector(`#lottery-song`).classList.remove("hidden");
-    abcPreview("melody_preview");
+    document.querySelectorAll(`[name^="melody_preview_"]`).forEach(el => abcPreview(el.name));
 }
 
 function markCurrentComposition() {

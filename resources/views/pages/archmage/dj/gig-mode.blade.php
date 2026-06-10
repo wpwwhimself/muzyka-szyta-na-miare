@@ -134,7 +134,7 @@ function fillSong(title, set_name, hide_prev, hide_next, hide_mark, preview) {
     document.querySelector(`#gig-song .header #mark-set-btn`).classList.toggle("hidden", hide_mark);
     document.querySelector(`#gig-song .contents`).innerHTML = preview;
 
-    abcPreview("melody_preview");
+    document.querySelectorAll(`[name^="melody_preview_"]`).forEach(el => abcPreview(el.name));
 }
 
 function pickSet(index) {

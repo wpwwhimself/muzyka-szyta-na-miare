@@ -302,6 +302,25 @@ class Composition extends Model
             get: fn () => $lyrics_pretty,
         );
     }
+
+    public function melodyPretty(): Attribute
+    {
+        $melody_pretty = [];
+        $current_part = null;
+        foreach (preg_split("/[\r\n]{1,2}/", $this->melody) as $line) {
+            if (Str::startsWith($line, "//")) {
+                $current_part = Str::after($line, "//");
+                continue;
+            }
+            $melody_pretty[$current_part] ??= "";
+            if ($melody_pretty[$current_part] !== "") $melody_pretty[$current_part] .= "\n";
+            $melody_pretty[$current_part] .= $line;
+        }
+
+        return Attribute::make(
+            get: fn () => $melody_pretty,
+        );
+    }
     #endregion
 
     #region relations

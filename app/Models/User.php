@@ -59,18 +59,18 @@ class User extends ShipyardUser
     }
 
     public function questsDone(){
-        return $this->hasMany(Quest::class, "client_id")
+        return $this->quests()
             ->where("status_id", 19);
     }
 
     public function questsUnpaid(){
-        return $this->hasMany(Quest::class, "client_id")
+        return $this->quests()
             ->where("paid", 0)
-            ->whereNotIn("status_id", [17, 18]);
+            ->where("status_id", "!=", 18);
     }
 
     public function questsRecent() {
-        return $this->hasMany(Quest::class, "client_id")
+        return $this->quests()
             ->whereDate("updated_at", ">=", Carbon::today()->subMonths(3));
     }
 

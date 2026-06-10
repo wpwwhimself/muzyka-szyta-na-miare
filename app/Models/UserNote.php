@@ -86,13 +86,13 @@ class UserNote extends Authenticatable
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render()
-            . view("components.shipyard.stats.counter", [
+            get: fn () => view("components.shipyard.stats.counter", [
                 "rank" => $this->exp,
                 "label" => "Zaakceptowane zlecenia",
                 "style" => "military",
+            ])->render()
+            . view("components.shipyard.app.model.badges", [
+                "badges" => $this->badges,
             ])->render(),
         );
     }

@@ -387,10 +387,10 @@ class StatsController extends Controller
                     "label" => $month,
                     "value" => $vals[0],
                     "value_label" => implode("<br>", [
-                        "📣: " . as_pln($recent_costs_extended[$month]["sum_ads"]) . " (" . round($recent_costs_extended[$month]["perc_ads"] * 100) . "%)",
-                        "📦: " . as_pln($recent_costs_extended[$month]["sum_eq"]) . " (" . round($recent_costs_extended[$month]["perc_eq"] * 100) . "%)",
-                        "💰: " . as_pln($recent_costs_extended[$month]["sum_bank"]) . " (" . round($recent_costs_extended[$month]["perc_bank"] * 100) . "%)",
-                        "🚚: " . as_pln($recent_costs_extended[$month]["sum_os"]) . " (" . round($recent_costs_extended[$month]["perc_os"] * 100) . "%)",
+                        "📣: " . as_pln($recent_costs_extended[$month]["sum_ads"] ?? 0) . " (" . round(($recent_costs_extended[$month]["perc_ads"] ?? 0) * 100) . "%)",
+                        "📦: " . as_pln($recent_costs_extended[$month]["sum_eq"] ?? 0) . " (" . round(($recent_costs_extended[$month]["perc_eq"] ?? 0) * 100) . "%)",
+                        "💰: " . as_pln($recent_costs_extended[$month]["sum_bank"] ?? 0) . " (" . round(($recent_costs_extended[$month]["perc_bank"] ?? 0) * 100) . "%)",
+                        "🚚: " . as_pln($recent_costs_extended[$month]["sum_os"] ?? 0) . " (" . round(($recent_costs_extended[$month]["perc_os"] ?? 0) * 100) . "%)",
                     ])
                 ]),
                 "gross" => $recent_gross,

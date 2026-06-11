@@ -106,6 +106,8 @@
 
         @if (Auth::user()->notes->can_see_files)
         <x-files.list :song-id="$quest->song_id" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
+        @else
+        <p class="accent error">Nie masz uprawnień do przeglądania plików dla tego zlecenia.</p>
         @endif
 
         @if ($quest->status_id == 15 && !$quest->files_ready)

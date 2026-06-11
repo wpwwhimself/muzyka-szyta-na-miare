@@ -24,6 +24,11 @@
     />
     @endunless
 
+    <x-shipyard.ui.button :action="route('admin.model.edit', ['model' => 'invoices', 'id' => $invoice->id])"
+        icon="database"
+        label="Edytuj"
+    />
+
     <x-shipyard.ui.button :action="route('invoices')"
         icon="chevron-left" label="Wróć do faktur"
     />

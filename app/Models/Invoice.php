@@ -20,6 +20,7 @@ class Invoice extends Model
         "description" => "",
         "role" => "",
         "ordering" => 43,
+        "defaultSort" => "-id",
     ];
 
     protected $fillable = [
@@ -71,9 +72,20 @@ class Invoice extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
-                "connections" => self::getConnections(),
-                "model" => $this,
+            get: fn () => view("components.shipyard.app.values-preview", [
+                "data" => [
+                    [
+                        "icon" => "cash",
+                        "label" => "Nabywca",
+                        "value" => $this->payer,
+                    ],
+                    [
+                        "icon" => "call-received",
+                        "label" => "Odbiorca",
+                        "slot" => $this->receiver,
+                    ],
+                ],
+                "hideEmpty" => true,
             ])->render(),
         );
     }
@@ -83,20 +95,21 @@ class Invoice extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "visible" => [
+            "type" => "checkbox",
+            "label" => "Widoczna",
+            "icon" => "eye",
+        ],
+        "ksef_number" => [
+            "type" => "text",
+            "label" => "Numer KSeF",
+            "icon" => "barcode",
+        ],
+        "ksef_link" => [
+            "type" => "link",
+            "label" => "Link do KSeF",
+            "icon" => "link",
+        ],
     ];
 
     public const CONNECTIONS = [
@@ -109,24 +122,24 @@ class Invoice extends Model
     ];
 
     public const ACTIONS = [
-        // [
-        //     "icon" => "",
-        //     "label" => "",
-        //     "show-on" => "<list|edit>",
-        //     "route" => "",
-        //     "role" => "",
-        //     "dangerous" => true,
-        // ],
+        [
+            "icon" => "eye",
+            "label" => "Podgląd dokumentu",
+            "show-on" => "edit",
+            "route" => "invoice",
+            "role" => "",
+            // "dangerous" => true,
+        ],
     ];
     #endregion
 
     // use CanBeSorted;
     public const SORTS = [
-        // "<name>" => [
-        //     "label" => "",
-        //     "compare-using" => "function|field",
-        //     "discr" => "<function_name|field_name>",
-        // ],
+        "id" => [
+            "label" => "Numer",
+            "compare-using" => "field",
+            "discr" => "id",
+        ],
     ];
 
     public const FILTERS = [
@@ -179,6 +192,25 @@ class Invoice extends Model
     //     );
     // }
 
+    //? override edit button on model list
+    public function modelEditButton(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => implode("", [
+                view("components.shipyard.ui.button", [
+                    "icon" => "eye",
+                    "label" => "Podgląd",
+                    "action" => route("invoice", ["id" => $this->id]),
+                ])->render(),
+                view("components.shipyard.ui.button", [
+                    "icon" => "pencil",
+                    "label" => "Edytuj",
+                    "action" => route("admin.model.edit", ["model" => "invoices", "id" => $this->id]),
+                ])->render(),
+            ]),
+        );
+    }
+
     public function getFullCodeAttribute(){
         return $this->full_code_override ?? implode("/", [
             $this->id,
@@ -189,6 +221,26 @@ class Invoice extends Model
 
     public function getIsPaidAttribute(){
         return $this->amount == $this->paid;
+    }
+
+    public function payer(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => implode(" ", array_filter([
+                $this->payer_name,
+                $this->payer_title,
+            ])),
+        );
+    }
+
+    public function receiver(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => implode(" ", array_filter([
+                $this->receiver_name,
+                $this->receiver_title,
+            ])),
+        );
     }
     #endregion
 

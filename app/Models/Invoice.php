@@ -100,6 +100,11 @@ class Invoice extends Model
             "label" => "Widoczna",
             "icon" => "eye",
         ],
+        "full_code_override" => [
+            "type" => "text",
+            "label" => "Własny numer faktury",
+            "icon" => "pound",
+        ],
         "ksef_number" => [
             "type" => "text",
             "label" => "Numer KSeF",

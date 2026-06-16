@@ -69,7 +69,7 @@ if(!function_exists("STATUSES_WAITING_FOR_ME")){
 }
 if(!function_exists("VAT_RATE")){
     function VAT_RATE(){
-        return 0.23;
+        return 0;
     }
 }
 

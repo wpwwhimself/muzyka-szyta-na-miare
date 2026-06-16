@@ -171,8 +171,9 @@ class KsefController extends Controller
             "net" => $invoice->quests->reduce(fn ($c, $q) => $c + $q->data_for_invoice["net_price"], 0),
             "gross" => $invoice->quests->reduce(fn ($c, $q) => $c + $q->data_for_invoice["gross_price"], 0),
         ];
-        $invoice_data->addChild("P_13_1", $totals["net"]);
-        $invoice_data->addChild("P_14_1", $totals["gross"] - $totals["net"]);
+        // $invoice_data->addChild("P_13_1", $totals["net"]);
+        $invoice_data->addChild("P_13_7", $totals["net"]);
+        // $invoice_data->addChild("P_14_1", $totals["gross"] - $totals["net"]);
         $invoice_data->addChild("P_15", $totals["gross"]);
 
         $annotations = $invoice_data->addChild("Adnotacje");
@@ -193,8 +194,9 @@ class KsefController extends Controller
             $row->addChild("P_8A", "szt.");
             $row->addChild("P_8B", 1);
             $row->addChild("P_9B", $quest->data_for_invoice["gross_price"]);
-            $row->addChild("P_11A", $quest->data_for_invoice["gross_price"]);
-            $row->addChild("P_12", $quest->data_for_invoice["vat_rate"] * 100);
+            $row->addChild("P_11", $quest->data_for_invoice["gross_price"]);
+            $row->addChild("P_12", "zw");
+            // $row->addChild("P_12", $quest->data_for_invoice["vat_rate"] * 100);
         }
 
         $payment_data = $invoice_data->addChild("Platnosc");

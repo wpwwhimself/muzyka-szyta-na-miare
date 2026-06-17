@@ -542,6 +542,14 @@ class Modal extends ShipyardModal
                         "icon" => model_field_icon("requests", "link"),
                     ],
                     [
+                        "type" => "paragraph",
+                        "label" => "Załączniki (np. nagrania, nuty) możesz wysłać mailowo lub przez WhatsApp.",
+                        "icon" => "information",
+                        "extra" => [
+                            "class" => "tutorial",
+                        ],
+                    ],
+                    [
                         "name" => "wishes",
                         "type" => "TEXT",
                         "label" => "Jakie są Twoje życzenia",

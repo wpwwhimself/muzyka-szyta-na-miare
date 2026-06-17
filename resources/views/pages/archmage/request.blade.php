@@ -47,7 +47,7 @@
                     : 'submit'"
                 :onclick="abs($status_id) == 9
                     ? 'openModal(\'confirm-quote\', {
-                        id: `.'.$request->id.'`,
+                        id: `'.$request->id.'`,
                         is_priority: '.intval($status_id < 0).',
                         confirm_song: true,
                         confirm_price: true,

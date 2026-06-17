@@ -99,12 +99,12 @@ function calculateGigPrice() {
     calculations["distance_cost"] = {
         "label": "Koszt przejazdu (w jedną stronę)",
         "unit": "zł",
-        "value": settings.fuel_cost_pln_per_l * settings.fuel_consumption_l_per_100_km / 100 * calculations.distance_traveled.value,
+        "value": settings.fuel_cost_pln_per_l * settings.fuel_consumption_l_per_100_km / 100 * settings.travel_distance_km,
     }
     calculations["passive_cost"] = {
         "label": "Koszt pasywny (dojazd łącznie, czekanie)",
         "unit": "zł",
-        "value": settings.gain_passive_per_h * (2 * calculations.drive_time.value + settings.gig_time_buffer_h),
+        "value": 2 * calculations.distance_cost.value + settings.gain_passive_per_h * (2 * calculations.drive_time.value + settings.gig_time_buffer_h),
     }
     calculations["active_cost"] = {
         "label": "Koszt aktywny (granie)",

@@ -12,9 +12,7 @@
 
     <div id="settings" class="flex right center">
         @foreach ($defaults as $heading => $fields)
-        <div class="section flex down center">
-            <h2>{{ $heading }}</h2>
-
+        <x-shipyard.app.card :title="$heading">
             @if ($heading == "Dojazd")
             <x-shipyard.ui.input type="select"
                 :select-data="[
@@ -36,12 +34,10 @@
                 small
             />
             @endforeach
-        </div>
+        </x-shipyard.app.card>
         @endforeach
 
-        <div class="section flex down center">
-            <h2>Stawki</h2>
-
+        <x-shipyard.app.card title="Stawki">
             <x-shipyard.ui.input type="select" name="gain_active_per_h"
                 label="Stawka aktywna (granie)"
                 :select-data="['options' => $rates]"
@@ -54,7 +50,7 @@
                 name="my_gear"
                 label="Własny sprzęt"
             />
-        </div>
+        </x-shipyard.app.card>
     </div>
 
     <div class="flex right center">

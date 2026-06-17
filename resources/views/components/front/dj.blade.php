@@ -139,10 +139,10 @@
         <h1>Cennik</h1>
         <span class="yellowed-out">
             <i class="fas fa-triangle-exclamation"></i>
-            Poniższe ceny mogą się różnić w zależności od kosztów dojazdu
+            Poniższe ceny zakładają przeciętny czas trwania uroczystości i mogą się różnić w zależności od kosztów dojazdu i czasu grania
         </span>
         <div class="front-table">
-            {{-- <span class="scroll-hidden">Organy (ślub, jubileusz, ...)</span>
+            {{-- <span class="scroll-hidden">Oprawa weselna</span>
             <span class="scroll-hidden">{{ as_pln(300) }}</span>
 
             <span class="scroll-hidden">Trąbka (pogrzeb, ślub, ...)</span>

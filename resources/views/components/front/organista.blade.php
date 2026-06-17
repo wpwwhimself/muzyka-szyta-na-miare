@@ -144,14 +144,14 @@
         <div class="front-table">
             <h2 class="header scroll-hidden">Organy</h2>
 
-            <span class="scroll-hidden">Msza ślubna</span>
-            <span class="scroll-hidden">od {{ as_pln(270) }}</span>
+            <span class="scroll-hidden">Msza ślubna/komunijna</span>
+            <span class="scroll-hidden">od {{ as_pln(350) }}</span>
 
             <span class="scroll-hidden">Msza jubileuszowa/okolicznościowa/pogrzebowa</span>
-            <span class="scroll-hidden">od {{ as_pln(170) }}</span>
+            <span class="scroll-hidden">od {{ as_pln(200) }}</span>
 
             <span class="scroll-hidden">Msza niedzielna</span>
-            <span class="scroll-hidden">{{ as_pln(80) }}</span>
+            <span class="scroll-hidden">od {{ as_pln(70) }}</span>
 
             <h2 class="header scroll-hidden">Trąbka</h2>
 

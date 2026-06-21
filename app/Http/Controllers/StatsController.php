@@ -461,20 +461,27 @@ class StatsController extends Controller
 
     public function gigsDashboard()
     {
+        $range_in_months = 12;
+
         $gig_transactions = MoneyTransaction::fromGigs()
+            ->where("date", ">=", today()->subMonths($range_in_months)->firstOfMonth())
             ->get();
         $one_month_back = $gig_transactions->filter(fn ($gt) => $gt->date->gte(today()->subMonths(1)));
         $two_months_back = $gig_transactions->filter(fn ($gt) => $gt->date->gte(today()->subMonths(2)) && $gt->date->lt(today()->subMonths(1)));
         $monthly = $gig_transactions->groupBy(fn ($gt) => $gt->date->format("y-m"))
-            ->map(fn ($ts) => $ts->sum("amount"))
+            ->map(fn ($ts) => [
+                "sum" => $ts->sum("amount"),
+                "split" => $ts->groupBy("typable_id")->map(fn ($ts) => $ts->sum("amount")),
+            ])
             ->sortKeys();
-        $year_back_month = today()->subMonths(12)->format("Y-m");
+        $max_monthly = $monthly->max("sum");
 
         $stats = [
             "summary" => [
                 "general" => [
                     "łącznie grań" => $gig_transactions->count(),
                     "zarobki w sumie" => as_pln($gig_transactions->sum("amount")),
+                    "średnio /mc" => as_pln($gig_transactions->sum("amount") / $range_in_months),
                 ],
             "gig_types" => [
                     "split" => $gig_transactions->countBy(fn ($gt) => $gt->typable->name),
@@ -498,18 +505,30 @@ class StatsController extends Controller
                     "main_list" => $one_month_back->sortByDesc("date"),
                 ],
             ],
-            "finances" => [
-                "income" => $monthly->filter(fn ($amount, $month) => $month >= $year_back_month)
-                    ->map(fn ($amount, $month) => [
-                        "value" => $amount,
-                        "value_label" => as_pln($amount),
-                        "label" => $month,
-                    ]),
-            ],
+            "finances" => array_merge(
+                [
+                    "income" => $monthly
+                        ->map(fn ($data, $month) => [
+                            "value" => $data["sum"],
+                            "label" => $month,
+                        ])
+                ],
+                collect([3, 4, 5, 6])
+                    ->mapWithKeys(fn ($type_id) => [
+                        "income_$type_id" => $monthly
+                            ->map(fn ($data, $month) => [
+                                "value" => $data["split"][$type_id] ?? 0,
+                                "label" => $month,
+                            ])
+                    ])
+                    ->toArray()
+            ),
         ];
 
         return view("pages.".user_role().".stats.gigs", compact(
             "stats",
+            "range_in_months",
+            "max_monthly"
         ));
     }
 

@@ -4,6 +4,10 @@
 
 @section("content")
 
+<x-shipyard.app.card>
+    Dane dotyczą ostatnich {{ $range_in_months }} miesięcy.
+</x-shipyard.app.card>
+
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-shipyard.app.section title="Podsumowanie" icon="chart-pie">
         <div class="flex right but-mobile-down center middle">
@@ -71,8 +75,11 @@
         </table>
     </x-shipyard.app.section>
 
-    <x-shipyard.app.section title="Przychody w ostatnich 12 mc" icon="cash" style="grid-column: span 2;">
-        <x-shipyard.stats.chart.column :data="$stats['finances']['income']" />
+    <x-shipyard.app.section title="Przychody w miesiącach" icon="cash" style="grid-column: span 2;">
+        <x-shipyard.stats.chart.column title="Łącznie" :data="$stats['finances']['income']" />
+        @foreach (\App\Models\IncomeType::where("name", "like", "granie:%")->get() as $type)
+        <x-shipyard.stats.chart.column :title="$type->name" :data="$stats['finances']['income_'.$type->id]" :max="$max_monthly" />
+        @endforeach
     </x-shipyard.app.section>
 </div>
 

@@ -39,7 +39,7 @@
 
     <h1>Gdzie gram?</h1>
 
-    <div class="grid" style="--col-count: 3;">
+    <div class="grid" role="locations" style="--col-count: 3;">
         @foreach ([
             "Wolsztyn",
             "Poznań",
@@ -48,17 +48,21 @@
         <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
             <x-shipyard.app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
-            <em class="ghost">{{ implode(", ", array_map(
-                fn ($tag) => "$tag $loc",
-                [
-                    "DJ",
-                    "oprawa muzyczna imprezy",
-                    "koncert",
-                    "tło muzyczne",
-                ]
-            )) }}</em>
         </span>
         @endforeach
+        <em class="ghost location-keywords">
+            @foreach (LOCATIONS() as $loc)
+            @foreach ([
+                "DJ",
+                "oprawa muzyczna imprezy",
+                "oprawa muzyczna wesela",
+                "koncert",
+                "tło muzyczne",
+            ] as $tag)
+            {{ $tag }} {{ $loc }},
+            @endforeach
+            @endforeach
+        </em>
     </div>
     <p>Przyjmuję też zlecenia na granie w okolicznych miejscowościach</p>
 </section>

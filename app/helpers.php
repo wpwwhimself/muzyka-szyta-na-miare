@@ -72,6 +72,31 @@ if(!function_exists("VAT_RATE")){
         return 0;
     }
 }
+if(!function_exists("LOCATIONS")){
+    function LOCATIONS(){
+        return [
+            "Poznań",
+            "Swarzędz",
+            "Luboń",
+            "Plewiska",
+            "Kostrzyn",
+            "Puszczykowo",
+            "Mosina",
+            "Kórnik",
+            "Środa Wlkp",
+            "Jarocin",
+            "Kotlin",
+            "Pleszew",
+            "Kościan",
+            "Śrem",
+            "Leszno",
+            "Gostyń",
+            "Wolsztyn",
+            "Grodzisk Wlkp",
+            "Rakoniewice",
+        ];
+    }
+}
 
 /**
  * Converts user ID to string depicting, which kind of view it is supposed to see. Works in role-specific views (like dashboard)

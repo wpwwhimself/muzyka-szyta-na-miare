@@ -129,6 +129,19 @@ section {
         color: var(--primary);
     }
 
+    & [role="locations"] {
+        position: relative;
+
+        & .location-keywords {
+            position: absolute;
+            top: 0; bottom: 0;
+            z-index: -1;
+            opacity: 0.2;
+            font-size: 0.75em;
+            overflow: hidden;
+        }
+    }
+
     & div:nth-of-type(2) {
         margin-left: 10%;
     }

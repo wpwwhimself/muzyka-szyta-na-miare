@@ -48,6 +48,15 @@
         <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
             <x-shipyard.app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
+            <em class="ghost">{{ implode(", ", array_map(
+                fn ($tag) => "$tag $loc",
+                [
+                    "DJ",
+                    "oprawa muzyczna imprezy",
+                    "koncert",
+                    "tło muzyczne",
+                ]
+            )) }}</em>
         </span>
         @endforeach
     </div>

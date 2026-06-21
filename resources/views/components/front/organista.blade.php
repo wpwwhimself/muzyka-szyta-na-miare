@@ -9,6 +9,7 @@
         </div>
         <ul>
             <li>Na <strong>lokalnym instrumencie</strong> <i class="fas fa-circle-question" @popper(...o ile proboszcz pozwoli grać)></i> lub moim własnym</li>
+            <li><strong>Męski wokal</strong> z możliwością wsparcia przez wokalistkę</li>
             <li>Akompaniament do wielu <strong>różnych pieśni</strong> i piosenek</li>
             <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar melodii <strong>psalmów</strong></li>
         </ul>
@@ -21,8 +22,8 @@
         </div>
         <ul>
             <li><strong>Realistyczne brzmienie</strong> fortepianu</li>
-            <li>Efekty dźwiękowe budujące <strong>nastrój</strong></li>
-            <li>W utworach spoza repertuaru kościelnego</li>
+            <li>Tło muzyczne podczas <strong>gromadzenia się gości</strong></li>
+            <li>W utworach spoza repertuaru kościelnego i nie tylko</li>
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
@@ -49,6 +50,13 @@
         <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
             <x-shipyard.app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
+            <em class="ghost">{{ implode(", ", array_map(
+                fn ($tag) => "$tag $loc",
+                [
+                    "organista",
+                    "oprawa muzyczna ślubu",
+                ]
+            )) }}</em>
         </span>
         @endforeach
     </div>

@@ -207,8 +207,6 @@ class FileController extends Controller
 
     public function show($id, $filename)
     {
-        /*
-        //! to się czasami zacina na mobile (prawdopodobnie) !//
         $path = storage_path("app/safe/$id/$filename");
 
         if(!File::exists($path)) abort(404,"Plik nie istnieje");
@@ -233,9 +231,6 @@ class FileController extends Controller
         }
 
         return (new Response($file, 200, $headers));
-        */
-
-        return Storage::get("safe/$id/$filename");
     }
 
     public function fileDownload($id, $filename){

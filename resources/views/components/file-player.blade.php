@@ -40,13 +40,4 @@
             type="audio/{{ $type == "mp3" ? "mpeg" : $type }}"
         />
     </audio>
-    @if (Auth::user()->hasRole("spellcaster"))
-    <audio controls>
-        <source src="{{ $isShowcase
-            ? basename($file)
-            : route('safe-show', ["id" => $songId, "filename" => basename($file)]) }}"
-            type="audio/{{ $type == "mp3" ? "mpeg" : $type }}"
-        />
-    </audio>
-    @endif
 </div>

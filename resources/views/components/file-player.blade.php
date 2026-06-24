@@ -13,10 +13,10 @@
     data-file-name="{{ basename($file) }}"
 >
     <div class="container">
-        <span role="btn">
+        <span role="btn" class="hidden">
             <x-shipyard.app.icon name="loading" />
         </span>
-        <span role="btn" onclick="startFilePlayer('{{ basename($file) }}')" class="hidden interactive">
+        <span role="btn" onclick="startFilePlayer('{{ basename($file) }}')" class="interactive">
             <x-shipyard.app.icon name="play" />
         </span>
         <span role="btn" onclick="pauseFilePlayer('{{ basename($file) }}')" class="hidden interactive">
@@ -30,7 +30,6 @@
     </div>
 
     <audio
-        onloadeddata="enableFilePlayer('{{ basename($file) }}')"
         ontimeupdate="updateSeeker('{{ basename($file) }}')"
         onended="pauseFilePlayer('{{ basename($file) }}')"
 

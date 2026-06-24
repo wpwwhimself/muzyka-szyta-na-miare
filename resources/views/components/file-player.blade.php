@@ -30,7 +30,6 @@
     </div>
 
     <audio
-        onloadstart="disableFilePlayer('{{ basename($file) }}')"
         onloadeddata="enableFilePlayer('{{ basename($file) }}')"
         ontimeupdate="updateSeeker('{{ basename($file) }}')"
         onended="pauseFilePlayer('{{ basename($file) }}')"

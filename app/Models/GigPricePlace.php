@@ -58,9 +58,7 @@ class GigPricePlace extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->distance_km . " km",
         );
     }
 

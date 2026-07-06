@@ -27,16 +27,23 @@ class Calendar extends Component
         $this->available_day_until = explode(",", setting("msznm_available_day_until"));
 
         $available_days_needed = setting("msznm_available_days_needed");
-        $min_length = 9;
-        $length = max(
-            $min_length,
-            $min_length - (!$suggest * 2) - Quest::orderByDesc("deadline")
+        $min_length = 2 // at least 1 day
+            + $withToday // accounting today
+            + ($suggest * 3) // more range if suggesting
+        ;
+        $length = $min_length + max(0,
+            // the latest quest's deadline
+            -Quest::orderByDesc("deadline")
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),
-            $min_length - (!$suggest * 2) - Request::orderByDesc("deadline")
+            // the latest request's deadline
+            -Request::orderByDesc("deadline")
                 ->first()
                 ->deadline
+                ->diffInDays(Carbon::now(), false),
+            // the latest free day
+            -Carbon::parse(CalendarFreeDay::max("date"))
                 ->diffInDays(Carbon::now(), false),
         );
 

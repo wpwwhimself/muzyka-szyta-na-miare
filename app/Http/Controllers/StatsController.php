@@ -558,7 +558,7 @@ class StatsController extends Controller
             ]);
 
         $unpaids = User::has("questsUnpaid")
-            ->whereHas("notes", fn ($q) => !$q->is_forgotten)
+            ->whereHas("notes", fn ($q) => $q->where("is_forgotten", false))
             ->get()
             ->sortBy("notes.client_name");
 

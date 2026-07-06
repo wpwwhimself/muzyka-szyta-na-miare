@@ -557,7 +557,10 @@ class StatsController extends Controller
                 "value" => $sat,
             ]);
 
-        $unpaids = User::has("questsUnpaid")->get()->sortBy("notes.client_name");
+        $unpaids = User::has("questsUnpaid")
+            ->whereHas("notes", fn ($q) => !$q->is_forgotten)
+            ->get()
+            ->sortBy("notes.client_name");
 
         $recent = MoneyTransaction::visible()->where("typable_type", IncomeType::class)->orderByDesc("created_at")->limit(10)->get();
         foreach($recent as $i){

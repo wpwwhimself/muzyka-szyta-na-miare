@@ -158,9 +158,12 @@
             <h2 class="header scroll-hidden">Organy</h2>
 
             <span class="scroll-hidden">Msza ślubna/komunijna</span>
-            <span class="scroll-hidden">od {{ as_pln(350) }}</span>
+            <span class="scroll-hidden">od {{ as_pln(400) }}</span>
+            
+            <span class="scroll-hidden">Msza pogrzebowa</span>
+            <span class="scroll-hidden">od {{ as_pln(300) }}</span>
 
-            <span class="scroll-hidden">Msza jubileuszowa/okolicznościowa/pogrzebowa</span>
+            <span class="scroll-hidden">Msza jubileuszowa/okolicznościowa</span>
             <span class="scroll-hidden">od {{ as_pln(200) }}</span>
 
             <span class="scroll-hidden">Msza niedzielna</span>
@@ -168,8 +171,8 @@
 
             <h2 class="header scroll-hidden">Trąbka</h2>
 
-            <span class="scroll-hidden">Pogrzeb</span>
-            <span class="scroll-hidden">od {{ as_pln(100) }}</span>
+            <span class="scroll-hidden">Trębacz podczas pogrzebu</span>
+            <span class="scroll-hidden">od {{ as_pln(150) }}</span>
         </div>
     </div>
 

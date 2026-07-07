@@ -44,4 +44,14 @@ class ShipyardTheme
     // if fonts come from Google Fonts, add the URL here
     public const FONT_IMPORT_URL = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap';
     #endregion
+
+    #region optional modules
+    /**
+     * Uncomment the modules you want to use
+     */
+    public const MODULES = [
+        "sheetmusic",
+        // "wysiwyg",
+    ];
+    #endregion
 }

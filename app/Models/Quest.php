@@ -188,6 +188,20 @@ class Quest extends Model
     ];
 
     public const FILTERS = [
+        "song" => [
+            "label" => "Utwór",
+            "icon" => "disc",
+            "compare-using" => "field",
+            "discr" => "song_id",
+            "type" => "select",
+            "selectData" => [
+                "optionsFromScope" => [
+                    Song::class,
+                    "forConnection",
+                ],
+                "emptyOption" => "wszystkie",
+            ],
+        ],
         "client" => [
             "label" => "Klient",
             "icon" => "account",

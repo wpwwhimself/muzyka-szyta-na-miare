@@ -7,10 +7,11 @@
 <x-shipyard.app.section id="lottery-song"
     :icon="model_icon('compositions')"
     title="—"
+    subtitle="—"
     class="hidden"
 >
     <x-slot:actions>
-        <x-shipyard.ui.button action="none" class="tertiary" id="mark-composition-btn"
+        <x-shipyard.ui.button action="none" class="tertiary hide-for-print" id="mark-composition-btn"
             label="Zagrane"
             icon="check"
             onclick="markCurrentComposition();"
@@ -18,7 +19,7 @@
     </x-slot:actions>
 </x-shipyard.app.section>
 
-<div class="flex down" id="lottery-nav">
+<div class="flex down hide-for-print" id="lottery-nav">
     <x-shipyard.app.loader />
     <div class="grid but-mobile-down hidden" style="--col-count: 2;">
         <x-shipyard.app.card
@@ -63,7 +64,7 @@
         </x-shipyard.app.card>
     </div>
 
-    <div class="flex right spread and-cover">
+    <div class="flex right spread and-cover hide-for-print">
         <x-shipyard.ui.button action="none" id="pick-btn" class="primary hidden"
             label="Wybierz"
             icon="arrow-up"
@@ -73,6 +74,16 @@
 
     <div id="compositions-list" class="hidden">
     </div>
+</div>
+
+<div class="flex right center middle hide-for-print">
+    <x-shipyard.ui.button
+        label="Drukuj"
+        icon="printer"
+        action="none"
+        onclick="printInvoice();"
+        class="tertiary"
+    />
 </div>
 
 @endsection
@@ -140,7 +151,8 @@ function roll(type) {
 function pickComposition(index) {
     const picked = data.compositions[index];
 
-    document.querySelector(`#lottery-song .header .titles [role="texts"] [role="section-title"]`).innerHTML = picked.full_title;
+    document.querySelector(`#lottery-song .header .titles [role="texts"] [role="section-title"]`).innerHTML = picked.title;
+    document.querySelector(`#lottery-song .header .titles [role="texts"] [role="section-subtitle"]`).innerHTML = picked.composer;
     document.querySelector(`#lottery-song .contents`).innerHTML = picked.dj_preview;
     document.querySelector(`#lottery-song .header #mark-composition-btn`).classList.toggle("hidden", data.excludedCompositions.includes(index));
 

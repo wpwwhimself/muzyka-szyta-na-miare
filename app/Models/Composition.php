@@ -188,7 +188,7 @@ class Composition extends Model
             "compare-using" => "function",
             "discr" => "is_dj_ready",
             "type" => "select",
-            // "operator" => "=",
+            "operator" => "=",
             "selectData" => [
                 "options" => [
                     ["label" => "Tak", "value" => 1],

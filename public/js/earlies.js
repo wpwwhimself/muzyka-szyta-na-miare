@@ -13,13 +13,12 @@ function reQuestCalcPrice(labels, client_id) {
     const loader = document.querySelector("#price-summary .loader");
 
     loader.classList.remove("hidden");
-    fetch(`/api/price_calc`, {
+    fetchWithUser(`/api/price_calc`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            _token: '{{ csrf_token() }}',
             labels: labels,
             client_id: client_id,
             quoting: true
@@ -38,13 +37,12 @@ function reQuestCalcPrice(labels, client_id) {
 function checkMonthlyPaymentLimit(price) {
     document.querySelector("#delayed-payments-summary .loader").classList.remove("hidden");
 
-    fetch(`/api/monthly_payment_limit`, {
+    fetchWithUser(`/api/monthly_payment_limit`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            _token: '{{ csrf_token() }}',
             amount: price,
         }),
     })
@@ -145,7 +143,7 @@ function loadFileList(container_uuid) {
     loader.classList.remove("hidden");
     contents.innerHTML = "";
 
-    fetch(`/api/songs/${song_id}/files?` + new URLSearchParams({
+    fetchPublic(`/api/songs/${song_id}/files?` + new URLSearchParams({
         whoAmI,
         canDownloadFiles,
         editable,
@@ -240,7 +238,7 @@ function getSongList(domain = undefined) {
         openCompositionDemos(params.get("composition"));
     }
 
-    fetch("/api/songs/info" + (domain ? "?for=" + domain : ""))
+    fetchPublic("/api/songs/info" + (domain ? "?for=" + domain : ""))
         .then(res => res.json())
         .then(({data, table}) => {
             list.replaceWith(fromHTML(table));
@@ -307,7 +305,7 @@ function openCompositionDemos(composition_id = undefined) {
         loader.classList.remove("hidden");
         player.parentElement.classList.add("hidden");
 
-        fetch(`/api/songs/compositions/${composition_id}`)
+        fetchPublic(`/api/songs/compositions/${composition_id}`)
             .then(res => res.json())
             .then(({composition, songs, tags}) => {
                 popup.querySelector(".song-full-title").innerHTML = composition.full_title;

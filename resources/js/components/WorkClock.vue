@@ -65,7 +65,7 @@ const parseTime = (timestring) => {
 //////// requests ////////
 
 const getSong = () => {
-    fetch(url + `song-data-by-quest/${id}/`)
+    fetchPublic(url + `song-data-by-quest/${id}/`)
         .then(res => res.json())
         .then(data => {
             song.value = data.song
@@ -83,7 +83,7 @@ const getSong = () => {
  * @param {string} status_id - log status (use 13 to stop)
  */
 const startStop = (song_id, status_id) => {
-    fetch(url + "start-stop", {
+    fetchWithUser(url + "start-stop", {
         method: "post",
         body: JSON.stringify({
             status_id: status_id,
@@ -112,7 +112,7 @@ const startStop = (song_id, status_id) => {
 const remove = (song_id, status_id) => {
     if (!confirm("Ostrożnie! Czy na pewno chcesz usunąć ten wpis?")) return
 
-    fetch(url + `remove/${song_id}/${status_id}/`)
+    fetchPublic(url + `remove/${song_id}/${status_id}/`)
         .then(res => res.json())
         .then(res => {
             getSong()
@@ -122,7 +122,7 @@ const remove = (song_id, status_id) => {
 //////// boot ////////
 
 onMounted(() => {
-    fetch(url + "modes")
+    fetchPublic(url + "modes")
         .then(res => res.json())
         .then(data => {
             modes.value = data

@@ -17,7 +17,7 @@ const dIcons = {
 //////// requests ////////
 
 const getQuests = () => {
-    fetch(url + `active-quests`)
+    fetchPublic(url + `active-quests`)
         .then(res => res.json())
         .then(data => {
             quests.value = data

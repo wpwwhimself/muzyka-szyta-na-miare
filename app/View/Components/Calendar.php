@@ -42,9 +42,9 @@ class Calendar extends Component
                 ->first()
                 ->deadline
                 ->diffInDays(Carbon::now(), false),
-            // the latest free day
-            -Carbon::parse(CalendarFreeDay::max("date"))
-                ->diffInDays(Carbon::now(), false),
+            // the latest free day if you can click on days (for suggesting or marking new free days)
+            ($clickDays * -Carbon::parse(CalendarFreeDay::max("date"))
+                ->diffInDays(Carbon::now(), false)),
         );
 
         $available_days_count = 0;

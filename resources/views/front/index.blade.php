@@ -51,7 +51,7 @@ function openSection(slug) {
             ["Organista", "Oprawa ślubów i mszy", "organista"],
             ["Imprezy i koncerty", "Muzyka na żywo", "dj"],
         ] as $i => [$label, $desc, $slug_part])
-        <div class="section flex right center middle interactive backdropped stagger"
+        <div class="section flex right but-mobile-down center middle interactive backdropped stagger"
             onclick="openSection('{{ $slug_part }}')"
             role="service-button"
             data-slug="{{ $slug_part }}"

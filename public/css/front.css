@@ -75,7 +75,7 @@ b, strong{
 
     & .icon{
         height: 5em;
-        margin: 0.25em;
+        align-self: center;
 
         &.small {
             height: 1.6666em;
@@ -343,7 +343,17 @@ span.scroll-hidden {
 
 @media screen and (max-width: 900px) {
     .service-label {
-        display: none;
+        max-width: 15vw;
+        text-align: center;
+
+        & > h2 {
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        & > p {
+            display: none;
+        }
     }
 
     #home {

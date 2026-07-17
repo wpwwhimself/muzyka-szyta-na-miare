@@ -1,4 +1,4 @@
-@extends('layouts.app', compact("title"))
+@extends("layouts.shipyard.admin", compact("title"))
 
 @section('content')
 <x-section title="Podsumowanie" icon="chart-column">

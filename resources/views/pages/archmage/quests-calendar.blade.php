@@ -1,4 +1,4 @@
-@extends("layouts.app")
+@extends("layouts.shipyard.admin")
 @section("title", "Kalendarz zleceń i dni wolne")
 
 @section('content')

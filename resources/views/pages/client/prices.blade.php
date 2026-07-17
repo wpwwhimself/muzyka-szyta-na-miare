@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends("layouts.shipyard.admin")
 @section("title", "Ceny")
 
 @section('content')
@@ -63,7 +63,7 @@
             </li>
         </ul>
     </x-section>
-    
+
     <x-section title="Jak naliczam ceny?" icon="lightbulb-question">
         <p>
             Wszystkie wielkości podane w procentach naliczane są w ostatniej kolejności.

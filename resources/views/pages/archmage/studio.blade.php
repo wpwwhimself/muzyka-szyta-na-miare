@@ -1,4 +1,4 @@
-@extends("layouts.minimal")
+@extends("layouts.shipyard.minimal")
 @section("title", "Lista zleceń")
 @section("subtitle", "Studio")
 

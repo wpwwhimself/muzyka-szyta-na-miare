@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends("layouts.shipyard.admin")
 @section("title", $client->notes->client_name)
 @section("subtitle", "Dane klienta")
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends("layouts.shipyard.admin")
 @section("title", "Zapytanie zostało pomyślnie dodane")
 
 @section('content')

@@ -15,7 +15,7 @@
         "postare/blade-mdi": "^1.1",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-cookie-consent": "^3.2",
-        "wpwwhimself/shipyard": "*"
+        "wpwwhimself/shipyard": "^3.10"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^2.0",

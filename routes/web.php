@@ -14,7 +14,7 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\SpellbookController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\WorkClockController;
-use App\Http\Middleware\Shipyard\EnsureUserHasRole;
+use Wpwwhimself\Shipyard\Middleware\EnsureUserHasRole;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,8 +27,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-if (file_exists(__DIR__.'/Shipyard/shipyard.php')) require __DIR__.'/Shipyard/shipyard.php';
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/', "index")->name("home");

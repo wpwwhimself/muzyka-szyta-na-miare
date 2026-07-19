@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Shipyard\Role;
-use App\Models\Shipyard\User as ShipyardUser;
+use Wpwwhimself\Shipyard\Models\Role;
+use Wpwwhimself\Shipyard\Models\User as ShipyardUser;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 

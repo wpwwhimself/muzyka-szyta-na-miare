@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Http\Controllers\StatsController;
-use App\Traits\Shipyard\HasStandardAttributes;
-use App\Traits\Shipyard\HasStandardFields;
-use App\Traits\Shipyard\HasStandardScopes;
+use Wpwwhimself\Shipyard\Traits\HasStandardAttributes;
+use Wpwwhimself\Shipyard\Traits\HasStandardFields;
+use Wpwwhimself\Shipyard\Traits\HasStandardScopes;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

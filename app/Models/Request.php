@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Traits\Shipyard\HasStandardAttributes;
-use App\Traits\Shipyard\HasStandardFields;
-use App\Traits\Shipyard\HasStandardScopes;
+use Wpwwhimself\Shipyard\Traits\HasStandardAttributes;
+use Wpwwhimself\Shipyard\Traits\HasStandardFields;
+use Wpwwhimself\Shipyard\Traits\HasStandardScopes;
 use App\Traits\Uuids;
 use Carbon\Carbon;
 use DateTimeInterface;

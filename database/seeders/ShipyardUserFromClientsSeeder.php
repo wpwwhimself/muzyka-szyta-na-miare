@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Shipyard\User;
+use Wpwwhimself\Shipyard\Models\User;
 use App\Models\UserNote;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

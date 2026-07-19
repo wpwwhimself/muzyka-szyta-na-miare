@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Shipyard\NavItem;
+use Wpwwhimself\Shipyard\Models\NavItem;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

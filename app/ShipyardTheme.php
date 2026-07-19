@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Theme\Shipyard\Theme;
+use Wpwwhimself\Shipyard\Theme;
 
 class ShipyardTheme
 {

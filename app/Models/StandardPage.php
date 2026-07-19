@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Shipyard\StandardPage as ShipyardStandardPage;
+use Wpwwhimself\Shipyard\Models\StandardPage as ShipyardStandardPage;
 
 class StandardPage extends ShipyardStandardPage
 {

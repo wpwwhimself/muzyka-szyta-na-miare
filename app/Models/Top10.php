@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\Shipyard\HasStandardFields;
-use App\Traits\Shipyard\HasStandardScopes;
+use Wpwwhimself\Shipyard\Traits\HasStandardFields;
+use Wpwwhimself\Shipyard\Traits\HasStandardScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

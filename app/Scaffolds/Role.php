@@ -2,7 +2,7 @@
 
 namespace App\Scaffolds;
 
-use App\Scaffolds\Shipyard\Role as ShipyardRole;
+use Wpwwhimself\Shipyard\Scaffolds\Role as ShipyardRole;
 
 class Role extends ShipyardRole
 {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Shipyard\AuthController;
+use Wpwwhimself\Shipyard\Controllers\AuthController;
 use App\Mail\ArchmageQuestMod;
 use App\Mail\Clarification;
 use App\Mail\NewRequest\Dj;

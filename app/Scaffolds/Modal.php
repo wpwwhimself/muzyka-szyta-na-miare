@@ -5,7 +5,7 @@ namespace App\Scaffolds;
 use App\Models\DjSet;
 use App\Models\Genre;
 use App\Models\Request;
-use App\Scaffolds\Shipyard\Modal as ShipyardModal;
+use Wpwwhimself\Shipyard\Scaffolds\Modal as ShipyardModal;
 
 class Modal extends ShipyardModal
 {

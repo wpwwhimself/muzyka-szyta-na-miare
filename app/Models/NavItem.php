@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Shipyard\NavItem as ShipyardNavItem;
+use Wpwwhimself\Shipyard\Models\NavItem as ShipyardNavItem;
 
 class NavItem extends ShipyardNavItem
 {

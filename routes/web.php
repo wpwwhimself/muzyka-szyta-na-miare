@@ -42,11 +42,6 @@ Route::middleware("auth")->group(function(){
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
         Route::withoutMiddleware("auth")->post("restatus-with-comment", "restatusReQuestWithComment")->name("re_quests.restatus-with-comment");
-
-        Route::prefix("lookup")->group(function() {
-            Route::get("users", "lookupUsers")->name("lookup.users");
-            Route::get("songs", "lookupSongs")->name("lookup.songs");
-        });
     });
 
     Route::controller(RequestController::class)->prefix("requests")->group(function(){

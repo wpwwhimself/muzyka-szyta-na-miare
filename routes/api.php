@@ -27,6 +27,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::controller(BackController::class)->group(function() {
+    Route::prefix("lookup")->group(function() {
+        Route::get("users", "lookupUsers")->name("lookup.users");
+        Route::get("songs", "lookupSongs")->name("lookup.songs");
+    });
+});
+
 Route::controller(QuestController::class)->prefix("quests")->group(function() {
     Route::patch("/{id}/{mode?}", "patch");
 });

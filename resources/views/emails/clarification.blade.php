@@ -9,7 +9,7 @@
     chciałbym doprecyzować pewne kwestie jego dotyczące.
 </p>
 
-@if ($re_quest->is_request)
+@if ($is_request)
 <x-requests.tile-mail :request="$re_quest" />
 @else
 <x-quests.tile-mail :quest="$re_quest" />

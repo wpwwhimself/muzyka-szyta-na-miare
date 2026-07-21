@@ -3,7 +3,7 @@
 ])
 
 <div id="invoices">
-    <x-shipyard.app.h lvl="4" :icon="model_icon('invoices')">Faktury i rachunki</x-shipyard.app.h>
+    <x-shipyard::app.h lvl="4" :icon="model_icon('invoices')">Faktury i rachunki</x-shipyard::app.h>
 
     @if (is_archmage())
     <div class="flex right nowrap">
@@ -24,7 +24,7 @@
                         </a>
                         @if (!$invoice->visible)
                         <span class="accent error" @popper(Klient nie widzi faktury)>
-                            <x-shipyard.app.icon name="eye-off" />
+                            <x-shipyard::app.icon name="eye-off" />
                         </span>
                         @endif
                     </td>
@@ -42,7 +42,7 @@
             </tbody>
         </table>
 
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="plus"
             pop="Dodaj"
             action="none"
@@ -65,7 +65,7 @@
     @else
     <div class="flex right">
         @forelse($quest->visibleInvoices ?? [] as $invoice)
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :icon="model_icon('invoices')"
             :label="$invoice->fullCode"
             :action="route('invoice', ['id' => $invoice->id])"

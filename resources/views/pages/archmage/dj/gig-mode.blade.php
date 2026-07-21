@@ -4,33 +4,33 @@
 
 @section("content")
 
-<x-shipyard.app.section id="gig-song"
+<x-shipyard::app.section id="gig-song"
     :icon="model_icon('compositions')"
     title="—"
     subtitle="—"
     class="hidden"
 >
     <x-slot:actions>
-        <x-shipyard.ui.button action="none" class="tertiary" id="set-prev-btn"
+        <x-shipyard::ui.button action="none" class="tertiary" id="set-prev-btn"
             icon="step-backward"
             onclick="songPrev();"
         />
-        <x-shipyard.ui.button action="none" class="tertiary" id="set-next-btn"
+        <x-shipyard::ui.button action="none" class="tertiary" id="set-next-btn"
             icon="step-forward"
             onclick="songNext();"
         />
-        <x-shipyard.ui.button action="none" class="tertiary" id="mark-set-btn"
+        <x-shipyard::ui.button action="none" class="tertiary" id="mark-set-btn"
             label="Zagrane"
             icon="check"
             onclick="markCurrentSet();"
         />
     </x-slot:actions>
-</x-shipyard.app.section>
+</x-shipyard::app.section>
 
 <div class="flex down" id="gig-nav">
-    <x-shipyard.app.loader />
+    <x-shipyard::app.loader />
     <div class="grid but-mobile-down hidden" style="--col-count: 2;">
-        <x-shipyard.app.card
+        <x-shipyard::app.card
             title="Zestawy"
             :icon="model_icon('dj-sets')"
         >
@@ -40,22 +40,22 @@
             </div>
 
             <x-slot:actions>
-                <x-shipyard.ui.button action="none" class="tertiary"
+                <x-shipyard::ui.button action="none" class="tertiary"
                     pop="Lista"
                     icon="format-list-bulleted"
                     onclick="toggleSetList();"
                 />
-                <x-shipyard.ui.button action="none" class="tertiary" id="roll-set-btn"
+                <x-shipyard::ui.button action="none" class="tertiary" id="roll-set-btn"
                     pop="Losuj"
                     icon="dice-3"
                     onclick="roll('set');"
                 />
             </x-slot:actions>
-        </x-shipyard.app.card>
+        </x-shipyard::app.card>
     </div>
 
     <div class="flex right spread and-cover">
-        <x-shipyard.ui.button action="none" id="pick-btn" class="primary hidden"
+        <x-shipyard::ui.button action="none" id="pick-btn" class="primary hidden"
             label="Wybierz"
             icon="arrow-up"
             onclick="pickSet(data.rolled.set);"

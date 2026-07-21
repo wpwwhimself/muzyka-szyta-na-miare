@@ -11,7 +11,7 @@ if ($pop !== false) $pop = $status->status_name;
 <span style="color: {{ $status->color }};"
     {{ $pop ? Popper::pop($pop) : null }}
 >
-    <x-shipyard.app.icon :name="$status->icon" />
+    <x-shipyard::app.icon :name="$status->icon" />
 
     @if ($withName) {{ $status->status_name }} @endif
 </span>

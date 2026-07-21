@@ -10,30 +10,30 @@
     @csrf
     <input type="hidden" name="id" value="{{ $invoice->id }}" />
     <input type="hidden" name="visible" value="{{ intval(!$invoice->visible) }}" />
-    <x-shipyard.ui.button action="submit"
+    <x-shipyard::ui.button action="submit"
         :icon="$invoice->visible ? 'eye-off' : 'eye'"
         :label="$invoice->visible ? 'Ukryj' : 'Pokaż'"
         class="primary"
     />
 
     @unless ($invoice->ksef_number)
-    <x-shipyard.ui.button :action="route('ksef.export-invoice', ['invoice' => $invoice])"
+    <x-shipyard::ui.button :action="route('ksef.export-invoice', ['invoice' => $invoice])"
         icon="export"
         label="Eksportuj do KSeF"
         class="primary"
     />
     @endunless
 
-    <x-shipyard.ui.button :action="route('admin.model.edit', ['model' => 'invoices', 'id' => $invoice->id])"
+    <x-shipyard::ui.button :action="route('admin.model.edit', ['model' => 'invoices', 'id' => $invoice->id])"
         icon="database"
         label="Edytuj"
     />
 
-    <x-shipyard.ui.button :action="route('invoices')"
+    <x-shipyard::ui.button :action="route('invoices')"
         icon="chevron-left" label="Wróć do faktur"
     />
 
-    <x-shipyard.ui.button action="none" onclick="printInvoice();"
+    <x-shipyard::ui.button action="none" onclick="printInvoice();"
         icon="download" label="Drukuj" class="tertiary"
     />
 </form>

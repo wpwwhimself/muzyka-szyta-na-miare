@@ -1,5 +1,5 @@
 <div id="song-demo-popup" class="popup">
-    <x-shipyard.app.loader />
+    <x-shipyard::app.loader />
 
     <div class="popup-contents flex down center middle">
         <h3 class="song-full-title interactive"></h3>
@@ -8,13 +8,13 @@
         <ul class="song-list"></ul>
         <p class="ghost">
             Kliknij ikonę <span class="accent primary">
-                <x-shipyard.app.icon :name="model_icon('songs')" />
+                <x-shipyard::app.icon :name="model_icon('songs')" />
             </span>, aby odtworzyć próbkę
         </p>
 
         <x-file-player type="ogg" file="" is-showcase />
 
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Zamknij"
             icon="close"
             action="none"

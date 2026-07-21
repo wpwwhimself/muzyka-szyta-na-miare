@@ -9,7 +9,7 @@
     'small' => false
 ])
 
-<x-shipyard.ui.input
+<x-shipyard::ui.input
     type="select"
     :name="$name"
     :label="$label"

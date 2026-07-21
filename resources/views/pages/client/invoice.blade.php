@@ -7,7 +7,7 @@
 <x-invoice :invoice="$invoice" />
 
 <div class="flex right hide-for-print">
-    <x-shipyard.ui.button action="none" onclick="printInvoice();"
+    <x-shipyard::ui.button action="none" onclick="printInvoice();"
         icon="download" label="Drukuj" class="tertiary"
     />
 </div>

@@ -3,7 +3,7 @@
 
 @section("content")
 
-<x-shipyard.app.h icon="headphones">Nowe zapytanie dla DJa</x-shipyard.app.h>
+<x-shipyard::app.h icon="headphones">Nowe zapytanie dla DJa</x-shipyard::app.h>
 
 <x-client.contact-info :data="$data" />
 

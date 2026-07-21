@@ -25,9 +25,9 @@ if ($model) {
 @endphp
 
 <div id="price-summary">
-    <x-shipyard.app.h lvl="4" icon="cash-register">Podsumowanie wyceny</x-shipyard.app.h>
+    <x-shipyard::app.h lvl="4" icon="cash-register">Podsumowanie wyceny</x-shipyard::app.h>
 
-    <x-shipyard.app.loader horizontal />
+    <x-shipyard::app.loader horizontal />
 
     @if ($price)
     <table>

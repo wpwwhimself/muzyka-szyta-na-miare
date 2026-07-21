@@ -11,6 +11,6 @@ $links = array_filter(
 
 @foreach ($links as $link)
 <a class="interactive accent primary" target="_blank" href="{{ $link }}">
-    <x-shipyard.app.icon name="open-in-new" />
+    <x-shipyard::app.icon name="open-in-new" />
 </a>
 @endforeach

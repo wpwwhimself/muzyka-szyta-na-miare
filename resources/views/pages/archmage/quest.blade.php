@@ -26,7 +26,7 @@
         $nomail = (!$quest->user->notes->email && in_array($status_id, [15, 95]));
         $new_status = \App\Models\Status::find(abs($status_id));
         @endphp
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :icon="$new_status->icon"
             :label="$label . ($nomail ? ' (bez maila)' : '')"
             action="none"
@@ -56,12 +56,12 @@
 
             <x-slot:buttons>
                 <x-quest-type :type="$song->type" />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     pop="Edytuj utwór"
                     :icon="model_icon('songs')"
                     :action="route('song-edit', ['id' => $quest->song_id])"
                 />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     pop="Edytuj zlecenie"
                     :icon="model_icon('quests')"
                     :action="route('admin.model.edit', ['model' => 'quests', 'id' => $quest->id])"
@@ -69,7 +69,7 @@
             </x-slot:buttons>
 
             <div class="grid but-halfsize-down" style="--col-count: 2;">
-                <x-shipyard.ui.connection-input :model="$song" connection-name="genre" dummy />
+                <x-shipyard::ui.connection-input :model="$song" connection-name="genre" dummy />
 
                 @foreach ([
                     "title",
@@ -78,13 +78,13 @@
                     // "has_recorded_reel",
                     // "has_original_mv",
                 ] as $field_name)
-                <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
+                <x-shipyard::ui.field-input :model="$song" :field-name="$field_name" dummy />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$song->$field_name" />
                 @endif
                 @endforeach
 
-                <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
+                <x-shipyard::ui.field-input :model="$quest" field-name="wishes" dummy />
             </div>
         </x-extendo-block>
 
@@ -99,10 +99,10 @@
                     "contact_preference",
                     "password",
                 ] as $field_name)
-                    <x-shipyard.ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
+                    <x-shipyard::ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
                 @endforeach
 
-                <x-shipyard.ui.input type="dummy-text"
+                <x-shipyard::ui.input type="dummy-text"
                     name="pickiness"
                     label="Wybredność"
                     icon="fencing"
@@ -128,7 +128,7 @@
             :extended="!$quest->paid"
         >
             <x-slot:buttons>
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     icon="cash-edit"
                     pop="Zmień wycenę"
                     action="none"
@@ -147,7 +147,7 @@
                     "deadline",
                     "hard_deadline",
                 ] as $field_name)
-                    <x-shipyard.ui.field-input :model="$quest" :field-name="$field_name" dummy />
+                    <x-shipyard::ui.field-input :model="$quest" :field-name="$field_name" dummy />
                 @endforeach
             </div>
             <x-quests.payments-bar :quest="$quest" />
@@ -165,7 +165,7 @@
             scissors
         >
             <x-slot:buttons>
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     label="Odśwież"
                     icon="refresh"
                     action="none"
@@ -174,7 +174,7 @@
                 />
 
                 @if ($quest->user->notes->external_drive)
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="$quest->user->notes->external_drive"
                     :icon="model_field_icon('user_notes', 'external_drive')"
                     pop="Przejdź do chmury"
@@ -183,7 +183,7 @@
                 <form action="{{ route('quest-files-external-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-shipyard.ui.button
+                    <x-shipyard::ui.button
                         action="submit"
                         pop="Zmień status plików w chmurze"
                         :icon="$quest->has_files_on_external_drive ? 'cloud-arrow-down' : 'cloud-arrow-up'"
@@ -198,7 +198,7 @@
                 <form action="{{ route('quest-files-ready-update') }}" method="post" class="flex right center">
                     @csrf
                     <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
-                    <x-shipyard.ui.button
+                    <x-shipyard::ui.button
                         pop="Przełącz komplet"
                         :icon="$quest->files_ready ? 'tray-alert' : 'tray-full'"
                         action="submit"
@@ -207,13 +207,13 @@
                         class="primary"
                     />
                 </form>
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     icon="plus"
                     pop="Wgraj"
                     :action="route('files-upload-by-entity', ['entity_name' => 'quest', 'id' => $quest->id])"
                     target="_blank"
                 />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     icon="recycle"
                     pop="Dodaj istniejące"
                     :action="route('files-add-from-existing-safe', ['song_id' => $quest->song_id])"
@@ -226,20 +226,20 @@
                 <div class="flex right center middle">
                     @if (can_download_files($quest->client_id, $quest->id))
                     <span class="accent success">
-                        <x-shipyard.app.icon name="download" />
+                        <x-shipyard::app.icon name="download" />
                         Klient może pobierać
                     </span>
 
                     @elseif ($quest->user->notes->can_see_files)
                     <span class="accent danger">
-                        <x-shipyard.app.icon name="eye" />
+                        <x-shipyard::app.icon name="eye" />
                         Klient widzi podglądy
                     </span>
 
 
                     @else
                     <span class="accent error">
-                        <x-shipyard.app.icon name="eye-remove" />
+                        <x-shipyard::app.icon name="eye-remove" />
                         Klient nic nie widzi
                     </span>
 
@@ -247,19 +247,19 @@
 
                     @if ($quest->files_ready)
                     <span class="accent success">
-                        <x-shipyard.app.icon name="tray-full" />
+                        <x-shipyard::app.icon name="tray-full" />
                         Pliki w komplecie
                     </span>
                     @else
                     <span class="accent danger">
-                        <x-shipyard.app.icon name="tray-alert" />
+                        <x-shipyard::app.icon name="tray-alert" />
                         Brak kompletu
                     </span>
                     @endif
 
                     @if ($quest->user->notes->external_drive)
                     <span @class(["accent success" => $quest->has_files_on_external_drive])>
-                        <x-shipyard.app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+                        <x-shipyard::app.icon :name="model_field_icon('user_notes', 'external_drive')" />
                         @if ($quest->has_files_on_external_drive)
                         Posiada pliki
                         @else

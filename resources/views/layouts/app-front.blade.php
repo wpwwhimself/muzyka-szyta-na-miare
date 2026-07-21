@@ -6,21 +6,21 @@
 
 @section("body")
 
-<x-shipyard.app.big.header>
+<x-shipyard::app.big.header>
     <x-slot:top>
-        <x-shipyard.app.logo />
-        <x-shipyard.app.page-title>
+        <x-shipyard::app.logo />
+        <x-shipyard::app.page-title>
             <x-slot:title>@yield("title", "Strona główna")</x-slot:title>
             @hasSection ("subtitle") <x-slot:subtitle>@yield("subtitle")</x-slot:subtitle> @endif
-        </x-shipyard.app.page-title>
+        </x-shipyard::app.page-title>
     </x-slot:top>
 
     <x-slot:bottom>
-        @env("local") <span @popper(Środowisko lokalne) class="accent danger"><x-shipyard.app.icon name="shovel" /></span> @endenv
-        @env("stage") <span @popper(Środowisko testowe (stage)) class="accent success"><x-shipyard.app.icon name="test-tube" /></span> @endenv
-        <x-shipyard.auth.user-badge />
+        @env("local") <span @popper(Środowisko lokalne) class="accent danger"><x-shipyard::app.icon name="shovel" /></span> @endenv
+        @env("stage") <span @popper(Środowisko testowe (stage)) class="accent success"><x-shipyard::app.icon name="test-tube" /></span> @endenv
+        <x-shipyard::auth.user-badge />
     </x-slot:bottom>
-</x-shipyard.app.big.header>
+</x-shipyard::app.big.header>
 
 <div id="background-division">
     @foreach (["podklady", "organista", "dj", "msznm"] as $name)
@@ -46,14 +46,14 @@
     @endif
 </div>
 
-<x-shipyard.app.big.footer>
+<x-shipyard::app.big.footer>
     <x-slot:top>
         <x-contact-info />
     </x-slot:top>
 
     <x-slot:bottom>
         @unless (setting("app_adaptive_dark_mode"))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="theme-light-dark"
             pop="Tryb ciemny"
             action="none"
@@ -62,8 +62,8 @@
         />
         @endunless
 
-        <x-shipyard.app.app-badge />
+        <x-shipyard::app.app-badge />
     </x-slot:bottom>
-</x-shipyard.app.big.footer>
+</x-shipyard::app.big.footer>
 
 @endsection()

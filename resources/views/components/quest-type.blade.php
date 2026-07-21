@@ -14,5 +14,5 @@ if ($type) [$id, $label, $icon] = [$type->id, $type->type, $type->icon];
 ])
     @if ($label) {{ Popper::pop($label) }} @endif
 >
-    <x-shipyard.app.icon :name="$icon" />
+    <x-shipyard::app.icon :name="$icon" />
 </span>

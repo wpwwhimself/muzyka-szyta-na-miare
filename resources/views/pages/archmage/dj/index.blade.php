@@ -4,13 +4,13 @@
 @section("content")
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
-    <x-shipyard.app.section
+    <x-shipyard::app.section
         icon="spotlight"
         title="Koncert"
         subtitle="Występ pianistyczny"
     >
         <x-slot:actions>
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 :action="route('admin.model.list', ['model' => 'compositions', 'fltr[djready]' => 1])"
                 label="Kompozycje gotowe na koncert"
                 :icon="model_icon('compositions')"
@@ -26,21 +26,21 @@
         </ul>
 
         <div class="flex down spread">
-            <x-shipyard.ui.button :action="route('dj-lottery-mode')"
+            <x-shipyard::ui.button :action="route('dj-lottery-mode')"
                 label="Loteria koncertowa"
                 icon="slot-machine"
                 class="primary"
             />
         </div>
-    </x-shipyard.app.section>
+    </x-shipyard::app.section>
 
-    <x-shipyard.app.section
+    <x-shipyard::app.section
         :icon="model_icon('dj-sets')"
         title="Impreza"
         subtitle="Granie z brassami"
     >
         <x-slot:actions>
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 :action="route('admin.model.list', ['model' => 'dj-sets'])"
                 label="Zestawy"
                 :icon="model_icon('dj-sets')"
@@ -58,13 +58,13 @@
         </ul>
 
         <div class="flex down spread">
-            <x-shipyard.ui.button :action="route('dj-gig-mode')"
+            <x-shipyard::ui.button :action="route('dj-gig-mode')"
                 label="Panel DJa"
                 icon="headphones"
                 class="primary"
             />
         </div>
-    </x-shipyard.app.section>
+    </x-shipyard::app.section>
 </div>
 
 @endsection

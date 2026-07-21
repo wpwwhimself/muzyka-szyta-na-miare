@@ -4,7 +4,7 @@
 
 @if (!$data->is_dj_ready)
 <span class="accent error">
-    <x-shipyard.app.icon name="alert" />
+    <x-shipyard::app.icon name="alert" />
     Kompozycja nie posiada kompletu danych do loterii utworów.
 </span>
 
@@ -17,7 +17,7 @@
         @endphp
         <strong class="part accent secondary">{{ $part }}</strong>
         <div class="lyrics">
-            <x-shipyard.ui.abc-preview :name="'melody_preview_'.$i" :value="$data->melody_pretty[$part_clean] ?? null" />
+            <x-shipyard::ui.abc-preview :name="'melody_preview_'.$i" :value="$data->melody_pretty[$part_clean] ?? null" />
             {!! $data->lyrics_pretty[$part_clean] ?? null !!}
         </div>
         @endforeach

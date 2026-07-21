@@ -44,13 +44,13 @@
     style="grid-column: span 2;"
 >
     <x-slot name="buttons">
-        <x-shipyard.stats.counter
+        <x-shipyard::stats.counter
             :rank="$requests->count()"
             label="Liczba zapytań"
             style="lines"
         />
 
-        <x-shipyard.ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
+        <x-shipyard::ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
         <x-a href="{{ route('requests') }}">Wszystkie</x-a>
     </x-slot>
 
@@ -83,14 +83,14 @@
                 <td>
                     @if ($quest->song->has_recorded_reel)
                         @if ($quest->song->has_original_mv)
-                        <span @popper(Rolka z teledyskiem)><x-shipyard.app.icon name="video-vintage" /></span>
+                        <span @popper(Rolka z teledyskiem)><x-shipyard::app.icon name="video-vintage" /></span>
                         @else
-                        <span @popper(Rolka)><x-shipyard.app.icon name="movie-roll" /></span>
+                        <span @popper(Rolka)><x-shipyard::app.icon name="movie-roll" /></span>
                         @endif
                     @endif
 
                     @if (!$quest->song->has_showcase_file)
-                    <span @popper(Krótki showcase)><x-shipyard.app.icon name="tshirt-crew" /></span>
+                    <span @popper(Krótki showcase)><x-shipyard::app.icon name="tshirt-crew" /></span>
                     @endif
                 </td>
             </tr>
@@ -100,7 +100,7 @@
 </x-section>
 @endif
 
-<x-shipyard.app.section
+<x-shipyard::app.section
     title="Zlecenia w toku"
     :icon="model_icon('quests')"
     :extended="true"
@@ -124,7 +124,7 @@
                     @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
                 >
                     <span {{ Popper::pop($quest->quest_type->type) }}>
-                        <x-shipyard.app.icon :name="$quest->quest_type->icon" />
+                        <x-shipyard::app.icon :name="$quest->quest_type->icon" />
                     </span>
                     <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
                     {!! $quest->status->name_and_label !!}
@@ -134,7 +134,7 @@
         </div>
         @endforeach
     </div>
-</x-shipyard.app.section>
+</x-shipyard::app.section>
 
 <x-section id="dashboard-requests"
     title="Grafik"
@@ -155,7 +155,7 @@
     :extended="false"
 >
     <x-slot:buttons>
-        <x-shipyard.stats.counter
+        <x-shipyard::stats.counter
             :rank="$quests_ongoing->count()"
             label="Liczba zleceń"
             style="lines"
@@ -177,7 +177,7 @@
     :extended="false"
 >
     <x-slot:buttons>
-        <x-shipyard.stats.counter
+        <x-shipyard::stats.counter
             :rank="$quests_review->count()"
             label="Liczba zleceń"
             style="lines"
@@ -236,7 +236,7 @@
 
                     @if ($change->comment)
                     <span {{ Popper::pop($change->comment) }}>
-                        <x-shipyard.app.icon name="comment" />
+                        <x-shipyard::app.icon name="comment" />
                     </span>
                     @endif
                 </td>
@@ -290,17 +290,17 @@
                     @switch($i->mailing)
                         @case(2)
                             <span class="accent success" @popper(mail wysłany)>
-                                <x-shipyard.app.icon name="email-fast" />
+                                <x-shipyard::app.icon name="email-fast" />
                             </span>
                             @break
                         @case(1)
                             <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
-                                <x-shipyard.app.icon name="email-fast" />
+                                <x-shipyard::app.icon name="email-fast" />
                             </span>
                             @break
                         @case(0)
                             <span class="accent error" @popper(wyślij wiadomość)>
-                                <x-shipyard.app.icon name="email-off" />
+                                <x-shipyard::app.icon name="email-off" />
                             </span>
                             @break
                     @endswitch
@@ -310,7 +310,7 @@
             <tr>
                 <td colspan=5>
                     <span class="grayed-out">
-                        <x-shipyard.app.icon name="bed" />
+                        <x-shipyard::app.icon name="bed" />
                         Sprzątacz dzisiaj śpi
                     </span>
                 </td>

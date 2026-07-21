@@ -12,13 +12,13 @@ function setFormToFileUpload() {
 }
 </script>
 
-<x-shipyard.app.form :action="route('song-process')" method="POST" enctype="multipart/form-data">
+<x-shipyard::app.form :action="route('song-process')" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{{ $song->id }}">
 
     <div class="grid but-mobile-down" style="--col-count: 2;">
         <x-section title="Dane utworu" :icon="model_icon('songs')">
             <div class="grid but-halfsize-down" style="--col-count: 2;">
-                <x-shipyard.ui.input type="dummy-text" name="id" label="ID" icon="barcode" :value="$song->id" />
+                <x-shipyard::ui.input type="dummy-text" name="id" label="ID" icon="barcode" :value="$song->id" />
 
                 @foreach ([
                     "title",
@@ -27,7 +27,7 @@ function setFormToFileUpload() {
                     "price_code",
                 ] as $field_name)
                 <div>
-                    <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" />
+                    <x-shipyard::ui.field-input :model="$song" :field-name="$field_name" />
 
                     @if ($field_name == "link")
                     <x-link-interpreter :raw="$song->$field_name" />
@@ -35,19 +35,19 @@ function setFormToFileUpload() {
                 </div>
                 @endforeach
 
-                <x-shipyard.ui.connection-input :model="$song" connection-name="genre" />
+                <x-shipyard::ui.connection-input :model="$song" connection-name="genre" />
             </div>
 
-            <x-shipyard.app.h lvl="3" :icon="model_icon('compositions')">Dane kompozycji</x-shipyard.app.h>
+            <x-shipyard::app.h lvl="3" :icon="model_icon('compositions')">Dane kompozycji</x-shipyard::app.h>
             @php
             $composition = $song->composition;
             @endphp
             @if ($composition)
             <div class="grid but-halfsize-down" style="--col-count: 2;">
-                <x-shipyard.ui.field-input :model="$composition" field-name="title" dummy />
-                <x-shipyard.ui.field-input :model="$composition" field-name="composer" dummy />
-                <x-shipyard.ui.connection-input :model="$composition" connection-name="tags" dummy />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.field-input :model="$composition" field-name="title" dummy />
+                <x-shipyard::ui.field-input :model="$composition" field-name="composer" dummy />
+                <x-shipyard::ui.connection-input :model="$composition" connection-name="tags" dummy />
+                <x-shipyard::ui.button
                     label="Edytuj kompozycję"
                     :icon="model_icon('compositions')"
                     :action="route('admin.model.edit', ['model' => 'compositions', 'id' => $composition->id])"
@@ -59,20 +59,20 @@ function setFormToFileUpload() {
         </x-section>
 
         <x-section title="Reklama" :icon="model_icon('showcases')">
-            <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Showcase</x-shipyard.app.h>
+            <x-shipyard::app.h lvl="3" :icon="model_icon('showcases')">Showcase</x-shipyard::app.h>
             @if($song->has_showcase_file)
             <audio controls><source src="{{ route('showcase-file-show', ['id' => $song->id]) }}?{{ time() }}" type="audio/ogg" /></audio>
             @else
             <span class="grayed-out">Brak showcase'u</span>
             @endif
 
-            <x-shipyard.ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music"
+            <x-shipyard::ui.input type="file" name="showcase_file" label="Nowy plik showcase'u" icon="file-music"
                 onchange="setFormToFileUpload();"
                 accept=".ogg"
             />
 
-            <x-shipyard.app.h lvl="3" :icon="model_icon('showcases')">Rolka</x-shipyard.app.h>
-            <x-shipyard.ui.input type="select"
+            <x-shipyard::app.h lvl="3" :icon="model_icon('showcases')">Rolka</x-shipyard::app.h>
+            <x-shipyard::ui.input type="select"
                 name="reel_platform"
                 label="Platforma"
                 :icon="model_icon('showcase-platforms')"
@@ -81,7 +81,7 @@ function setFormToFileUpload() {
                 ]"
                 :value="$showcase?->platform ?? $platform_suggestion['code']"
             />
-            <x-shipyard.ui.input type="url"
+            <x-shipyard::ui.input type="url"
                 name="reel_link"
                 label="Link"
                 icon="link"
@@ -95,33 +95,33 @@ function setFormToFileUpload() {
     </div>
 
     <div class="flex right middle center">
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Popraw dane"
             icon="pencil"
             class="primary"
             action="submit"
         />
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Edytuj mocniej"
             icon="database"
             :action="route('admin.model.edit', ['model' => 'songs', 'id' => $song->id])"
         />
     </div>
-</x-shipyard.app.form>
+</x-shipyard::app.form>
 
-<x-shipyard.app.section
+<x-shipyard::app.section
     title="Pliki"
     :icon="model_icon('files')"
 >
     <x-slot:actions>
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Odśwież"
             icon="refresh"
             action="none"
             class="tertiary"
             onclick="loadFileList(document.querySelector(`.files-container`).closest(`.files-container`).dataset.uuid);"
         />
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="plus"
             pop="Wgraj"
             :action="route('files-upload-by-entity', ['entity_name' => 'song', 'id' => $song->id])"
@@ -130,6 +130,6 @@ function setFormToFileUpload() {
     </x-slot:actions>
 
     <x-files.list :song-id="$song->id" :can-download-files="true" />
-</x-shipyard.app.section>
+</x-shipyard::app.section>
 
 @endsection

@@ -12,9 +12,9 @@
 
     <div id="settings" class="flex right center">
         @foreach ($defaults as $heading => $fields)
-        <x-shipyard.app.card :title="$heading">
+        <x-shipyard::app.card :title="$heading">
             @if ($heading == "Dojazd")
-            <x-shipyard.ui.input type="select"
+            <x-shipyard::ui.input type="select"
                 :select-data="[
                     'options' => $places,
                     'emptyOption' => 'inne',
@@ -34,15 +34,15 @@
                 small
             />
             @endforeach
-        </x-shipyard.app.card>
+        </x-shipyard::app.card>
         @endforeach
 
-        <x-shipyard.app.card title="Stawki">
-            <x-shipyard.ui.input type="select" name="gain_active_per_h"
+        <x-shipyard::app.card title="Stawki">
+            <x-shipyard::ui.input type="select" name="gain_active_per_h"
                 label="Stawka aktywna (granie)"
                 :select-data="['options' => $rates]"
             />
-            <x-shipyard.ui.input type="select" name="gain_passive_per_h"
+            <x-shipyard::ui.input type="select" name="gain_passive_per_h"
                 label="Stawka pasywna (dojazd, czekanie)"
                 :select-data="['options' => $rates]"
             />
@@ -50,11 +50,11 @@
                 name="my_gear"
                 label="Własny sprzęt"
             />
-        </x-shipyard.app.card>
+        </x-shipyard::app.card>
     </div>
 
     <div class="flex right center">
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             action="none"
             class="tertiary"
             label="Oblicz"

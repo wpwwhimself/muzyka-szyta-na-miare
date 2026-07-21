@@ -2,7 +2,7 @@
     <h1>Jak mogę uświetnić Twoją imprezę?</h1>
 
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
-        <x-shipyard.app.icon name="guitar-electric" />
+        <x-shipyard::app.icon name="guitar-electric" />
         <div>
             <h2>Impreza z pompą</h2>
             <p>Jednoosobowy koncert, po którym trudno będzie ustać w miejscu</p>
@@ -14,7 +14,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
-        <x-shipyard.app.icon name="piano" />
+        <x-shipyard::app.icon name="piano" />
         <div>
             <h2>Występ kameralny</h2>
             <p>Nastrojowy koncert dla mniejszej publiczności</p>
@@ -26,7 +26,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
-        <x-shipyard.app.icon name="saxophone" />
+        <x-shipyard::app.icon name="saxophone" />
         <div>
             <h2>Żywe instrumenty</h2>
             <p>Miks DJa i instrumentalisty</p>
@@ -46,7 +46,7 @@
             "Jarocin",
         ] as $i => $loc)
         <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
-            <x-shipyard.app.icon name="map-marker" />
+            <x-shipyard::app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
         </span>
         @endforeach
@@ -81,7 +81,7 @@
             "rolki" => "reels",
             "pełny katalog" => "list",
         ] as $label => $mode)
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :label="$label"
             icon="bullhorn"
             action="none"
@@ -104,13 +104,13 @@
             <h2>Wszystkie utwory, jakie mam w repertuarze</h2>
             <p>
                 Kliknij ikonę <span class="accent primary">
-                    <x-shipyard.app.icon :name="model_icon('songs')" />
+                    <x-shipyard::app.icon :name="model_icon('songs')" />
                 </span>, aby odtworzyć próbkę
             </p>
 
             <h3>Filtruj:</h3>
             <div class="flex right keep-for-mobile center">
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     action="none"
                     class="tertiary"
                     label="wszystkie"
@@ -119,7 +119,7 @@
                 />
 
                 @foreach ($genres as $genre)
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     action="none"
                     class="toggle"
                     :label="$genre->name"
@@ -130,7 +130,7 @@
 
                 {{--
                 @foreach ($song_tags as $tag)
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     action="none"
                     class="toggle"
                     :label="$tag->name"
@@ -181,7 +181,7 @@
     </div>
 </section>
 
-<x-shipyard.ui.button
+<x-shipyard::ui.button
     label="Złóż zapytanie o występ"
     icon="send"
     action="none"

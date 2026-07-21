@@ -6,14 +6,14 @@
         @php $link = Str::of($link)->trim() @endphp
 
         @if (filter_var($link, FILTER_VALIDATE_URL))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :action="$link"
             label="Link"
             target="_blank"
             icon="open-in-new"
         />
             @if ($link->match("/youtu\.?be/") && is_archmage())
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 action="none"
                 onclick="
                     navigator.clipboard.writeText(`{{ $link }}`);

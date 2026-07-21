@@ -21,10 +21,10 @@
                 <span><strong>wycena</strong>: {{ $quest->price_code_override }}</span>
             </div>
 
-            <x-shipyard.ui.field-input :model="$quest->song" field-name="link" dummy />
+            <x-shipyard::ui.field-input :model="$quest->song" field-name="link" dummy />
             <x-link-interpreter :raw="$quest->song->link" />
 
-            <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
+            <x-shipyard::ui.field-input :model="$quest" field-name="wishes" dummy />
         </x-extendo-block>
 
         <x-quest-history :quest="$quest" />

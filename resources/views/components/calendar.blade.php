@@ -15,11 +15,11 @@
                 "suggest" => $meta['suggest_date'] && $suggest,
             ])>
                 @if ($meta['suggest_date'] && $suggest)
-                <x-shipyard.app.icon name="check-circle" />
+                <x-shipyard::app.icon name="check-circle" />
                 @elseif (preg_match("/free/", $meta['day_type']))
-                <x-shipyard.app.icon name="circle-outline" />
+                <x-shipyard::app.icon name="circle-outline" />
                 @else
-                <x-shipyard.app.icon name="circle" />
+                <x-shipyard::app.icon name="circle" />
                 @endif
 
                 {{ $date }}
@@ -28,7 +28,7 @@
             <td>
             @foreach (["", "_hard"] as $suffix)
                 @foreach ($meta["quests$suffix"] as $quest)
-                <x-shipyard.app.icon-label-value
+                <x-shipyard::app.icon-label-value
                     :icon="$quest->song->has_safe_files ? model_icon('files') : $quest->quest_type->icon"
                     label="Zlecenie"
                     @class([
@@ -39,12 +39,12 @@
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}">
                         {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
-                </x-shipyard.app.icon-label-value>
+                </x-shipyard::app.icon-label-value>
                 @endforeach
 
                 {{--
                 @foreach ($meta["quests_done$suffix"] as $quest)
-                <x-shipyard.app.icon-label-value
+                <x-shipyard::app.icon-label-value
                     icon="check"
                     label="Zakończone zlecenie"
                     @class([
@@ -55,12 +55,12 @@
                     <a class="quest" href="{{ route('quest', ['id' => $quest->id]) }}">
                         {!! $quest->song->title ?? "bez tytułu" !!}
                     </a>
-                </x-shipyard.app.icon-label-value>
+                </x-shipyard::app.icon-label-value>
                 @endforeach
                 --}}
 
                 @foreach ($meta["requests$suffix"] as $request)
-                <x-shipyard.app.icon-label-value
+                <x-shipyard::app.icon-label-value
                     :icon="model_icon('requests')"
                     label="Zapytanie"
                     @class([
@@ -71,7 +71,7 @@
                     <a class="request" href="{{ route('request', ['id' => $request->id]) }}">
                         {!! $request->title ?? "bez tytułu" !!}
                     </a>
-                </x-shipyard.app.icon-label-value>
+                </x-shipyard::app.icon-label-value>
                 @endforeach
             @endforeach
             </td>

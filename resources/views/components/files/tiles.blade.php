@@ -43,7 +43,7 @@
                     style="background-color: white;"
                     {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("notes.client_name")->join(", ")) }}
                 >
-                    <x-shipyard.app.icon name="eye" />
+                    <x-shipyard::app.icon name="eye" />
                 </div>
                 @endif
 
@@ -56,7 +56,7 @@
             </span>
 
             @if ($editable)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="pencil"
                 pop="Edytuj"
                 :action="route('files-edit', ['id' => $version->id])"
@@ -83,7 +83,7 @@
         @if ($version->missing_files)
         <div class="yellowed-out">
             <span class="accent warning">
-                <x-shipyard.app.icon name="alert" />
+                <x-shipyard::app.icon name="alert" />
             </span>
             Sejf jest niekompletny. Napisz do mnie, żeby dodać pliki.
         </div>

@@ -8,7 +8,7 @@
     "pop" => null,
 ])
 
-<x-shipyard.ui.button
+<x-shipyard::ui.button
     :label="$label"
     :icon="$icon"
     :action="$action"

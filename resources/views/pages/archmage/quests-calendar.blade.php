@@ -9,7 +9,7 @@
             @csrf
             <x-input type="date" name="date" label="Dodaj dzień" :small="true" min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" />
             <input type="hidden" name="mode" value="add" />
-            <x-shipyard.ui.button class="primary" action="submit" label="Dodaj" icon="check" />
+            <x-shipyard::ui.button class="primary" action="submit" label="Dodaj" icon="check" />
         </form>
 
         <div class="flex right but-mobile-down center day-tiles">

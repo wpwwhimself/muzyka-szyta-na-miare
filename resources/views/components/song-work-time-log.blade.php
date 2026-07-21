@@ -50,7 +50,7 @@
     </table>
 
     <x-slot:buttons>
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :icon="model_icon('song_work_times')"
             pop="Studio"
             :action="route('studio-view', ['quest_id' => $quest->id])"

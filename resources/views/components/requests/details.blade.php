@@ -19,11 +19,11 @@
     ] as [$label, $icon, $value])
     @continue (!$value)
 
-    <x-shipyard.app.icon-label-value
+    <x-shipyard::app.icon-label-value
         :icon="$icon"
         :label="$label"
     >
         {!! $value !!}
-    </x-shipyard.app.icon-label-value>
+    </x-shipyard::app.icon-label-value>
     @endforeach
 </div>

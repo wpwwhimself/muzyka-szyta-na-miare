@@ -6,7 +6,7 @@
 
 @if (sumWarnings($warnings) && !in_array($request->status_id, STATUSES_WAITING_FOR_ME()))
 <div class="flex right center middle accent danger">
-    <h1><x-shipyard.app.icon name="alert" /></h1>
+    <h1><x-shipyard::app.icon name="alert" /></h1>
 
     <div>
         <h1>Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!</h1>
@@ -20,7 +20,7 @@
 @if ($request->quest_id)
 <div class="flex right center middle">
     <h2>Zapytanie zostało przyjęte i jest przepisane na zlecenie <span class="mono">{{ $request->quest_id }}</span></h2>
-    <x-shipyard.ui.button
+    <x-shipyard::ui.button
         label="Przejdź do zlecenia"
         :icon="model_icon('quests')"
         :action="route('quest', ['id' => $request->quest_id])"
@@ -36,7 +36,7 @@
         subtitle="Jaki utwór mam przygotować?"
         :extended="true"
     >
-        <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" dummy />
+        <x-shipyard::ui.connection-input :model="$request" connection-name="quest_type" dummy />
 
         @foreach ([
             "title",
@@ -45,7 +45,7 @@
             "wishes",
             "hard_deadline",
         ] as $field_name)
-            <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" dummy />
+            <x-shipyard::ui.field-input :model="$request" :field-name="$field_name" dummy />
             @if ($field_name == "link")
             <x-link-interpreter :raw="$request->$field_name" />
             @endif
@@ -53,7 +53,7 @@
 
         @if ($request->status_id === 5)
         <div class="flex right center">
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 label="Poproś o zmiany do utworu"
                 icon="reply"
                 action="none"
@@ -84,7 +84,7 @@
             @endif
 
             <div class="flex down">
-                <x-shipyard.app.card title="Płatność" icon="cash">
+                <x-shipyard::app.card title="Płatność" icon="cash">
                     <div class="standard">
                         <x-re_quests.price-summary :model="$request" />
                     </div>
@@ -111,7 +111,7 @@
 
                     @if ($request->user?->notes->budget && in_array($request->status_id, [5, 6]))
                     <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
-                        <x-shipyard.app.icon name="safe-square" />
+                        <x-shipyard::app.icon name="safe-square" />
                         Budżet w wysokości <b>{{ as_pln($request->user->notes->budget) }}</b> automatycznie
                         <br>
                         pokryje
@@ -142,15 +142,15 @@
                         <li>płatność BLIKiem na numer telefonu.</li>
                     </ul>
                     <p>Poprawki do zlecenia są zawarte w cenie, chyba że będą wiązać się z dużym zakresem zmian lub zostaną zgłoszone później niż miesiąc po zaakceptowaniu dostarczonych plików.</p>
-                </x-shipyard.app.card>
+                </x-shipyard::app.card>
 
                 @if ($request->deadline)
-                <x-shipyard.app.card title="Termin realizacji" icon="calendar">
+                <x-shipyard::app.card title="Termin realizacji" icon="calendar">
                     <div class="standard">
-                        <x-shipyard.ui.field-input :model="$request" field-name="deadline" dummy />
+                        <x-shipyard::ui.field-input :model="$request" field-name="deadline" dummy />
                     </div>
                     <div class="priority hidden">
-                        <x-shipyard.ui.input type="dummy-date"
+                        <x-shipyard::ui.input type="dummy-date"
                             name="priority_deadline"
                             label="Przyspieszony termin realizacji"
                             :icon="model_field_icon('requests', 'deadline')"
@@ -165,14 +165,14 @@
 
                     @if ($request->status_id === 5)
                     <div class="flex right center">
-                        <x-shipyard.ui.button
+                        <x-shipyard::ui.button
                             label="Poproś o szybszą realizację"
                             icon="calendar"
                             action="none"
                             onclick="togglePriority()"
                             class="tertiary standard"
                         />
-                        <x-shipyard.ui.button
+                        <x-shipyard::ui.button
                             label="Wróć do poprzedniej wyceny"
                             icon="calendar"
                             action="none"
@@ -181,18 +181,18 @@
                         />
                     </div>
                     @endif
-                </x-shipyard.app.card>
+                </x-shipyard::app.card>
                 @endif
 
                 @if ($request->price && $request->status_id == 5)
-                <x-shipyard.app.card title="Pobieranie plików" icon="download">
+                <x-shipyard::app.card title="Pobieranie plików" icon="download">
                     <p>Pliki będą dostępne z poziomu tej strony internetowej.</p>
                     @if ($request->delayed_payment)
                     <p class="accent danger">
                         Po zaakceptowaniu zlecenia dostęp do plików (kiedy tylko się pojawią) zostanie przyznany automatycznie.
                     </p>
                     @endif
-                </x-shipyard.app.card>
+                </x-shipyard::app.card>
                 @endif
             </div>
         @endif
@@ -211,7 +211,7 @@
     @if($request->status_id != 5)
     <div class="flex right center">
         @if (in_array($request->status_id, [95]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Odpowiedz"
             icon="reply-all"
             action="none"
@@ -223,7 +223,7 @@
             })"
             class="tertiary"
         />
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Zrezygnuj ze zlecenia"
             icon="clipboard-remove"
             action="none"
@@ -237,7 +237,7 @@
         />
         @endif
         @if (in_array($request->status_id, [4, 7, 8]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Odnów"
             icon="star"
             action="none"
@@ -255,14 +255,14 @@
     @else
 
     <div class="flex right center middle">
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Kliknij tutaj, aby potwierdzić warunki zlecenia"
             :icon="\App\Models\Status::find(9)->icon"
             action="none"
             onclick="confirmRequest()"
             class="major primary"
         />
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="...lub tutaj, aby zrezygnować"
             :icon="\App\Models\Status::find(8)->icon"
             action="none"
@@ -282,7 +282,7 @@
 
 <div class="flex right center middle">
     @auth
-    <x-shipyard.ui.button
+    <x-shipyard::ui.button
         icon="chevron-left"
         label="Wróć do listy"
         :action="route('requests')"

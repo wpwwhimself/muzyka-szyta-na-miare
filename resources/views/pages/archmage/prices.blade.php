@@ -75,7 +75,7 @@
         $request = new App\Models\Request;
         @endphp
 
-        <x-shipyard.ui.input type="select"
+        <x-shipyard::ui.input type="select"
             name="client_id"
             label="Klient"
             :icon="model_icon('users')"
@@ -83,7 +83,7 @@
                 'options' => $clients,
             ]"
         />
-        <x-shipyard.ui.field-input :model="$request" field-name="price_code"
+        <x-shipyard::ui.field-input :model="$request" field-name="price_code"
             onchange="reQuestCalcPrice(event.target.value, parseInt(document.querySelector('#client_id').value));"
         />
         <x-re_quests.price-summary :model="$request" />

@@ -2,7 +2,7 @@
     <h1>Jak mogę wzbogacić Twoją uroczystość?</h1>
 
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
-        <x-shipyard.app.icon name="book-cross" />
+        <x-shipyard::app.icon name="book-cross" />
         <div>
             <h2>Organy</h2>
             <p>Od wielu lat gram na organach podczas mszy niedzielnych i okolicznościowych</p>
@@ -15,7 +15,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
-        <x-shipyard.app.icon name="piano" />
+        <x-shipyard::app.icon name="piano" />
         <div>
             <h2>Pianino</h2>
             <p>Dodatkowy akcent muzyczny dla Twojej ceremonii</p>
@@ -27,7 +27,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
-        <x-shipyard.app.icon name="trumpet" />
+        <x-shipyard::app.icon name="trumpet" />
         <div>
             <h2>Trąbka</h2>
             <p>Pozwól wybrzmieć pięknym melodiom</p>
@@ -48,7 +48,7 @@
             "Jarocin",
         ] as $i => $loc)
         <span class="location scroll-hidden stagger" style="--stagger-index: {{ $i + 4 }}">
-            <x-shipyard.app.icon name="map-marker" />
+            <x-shipyard::app.icon name="map-marker" />
             <h2>{{ $loc }}</h2>
         </span>
         @endforeach
@@ -82,7 +82,7 @@
             "ViolArte" => "violin",
             "Ewelina Spławska" => "microphone",
         ] as $label => $icon)
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :label="$label"
             :icon="$icon"
             action="none"
@@ -112,7 +112,7 @@
             Nawet śpiewamy na 4 głosy!
         </p>
 
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Więcej informacji"
             icon="open-in-new"
             action="https://www.facebook.com/profile.php?id=100024867817512"
@@ -132,7 +132,7 @@
             Razem śpiewamy i gramy na pianinie i organach.
         </p>
 
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Więcej informacji"
             icon="open-in-new"
             action="https://www.facebook.com/ewelinasplawska"
@@ -199,7 +199,7 @@
     </div>
 </section>
 
-<x-shipyard.ui.button
+<x-shipyard::ui.button
     label="Złóż zapytanie o oprawę"
     icon="send"
     action="none"

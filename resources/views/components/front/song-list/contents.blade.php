@@ -17,7 +17,7 @@
             class="interactive accent primary"
             onclick="openCompositionDemos({{ $song->id }})"
         >
-            <x-shipyard.app.icon :name="model_icon('compositions')" />
+            <x-shipyard::app.icon :name="model_icon('compositions')" />
             {{ $song->songs->count() }}
         </span>
     </li>
@@ -39,7 +39,7 @@
                 `{{ Str::of($song->notes ?? '')->replace('\n', '<br>') }}`
             )"
         >
-            <x-shipyard.app.icon :name="model_icon('songs')" />
+            <x-shipyard::app.icon :name="model_icon('songs')" />
         </span>
         @endif
     </li>

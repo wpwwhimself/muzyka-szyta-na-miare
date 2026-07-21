@@ -6,7 +6,7 @@
 
 @if (sumWarnings($warnings))
 <div class="flex right center middle accent danger">
-    <h1><x-shipyard.app.icon name="alert" /></h1>
+    <h1><x-shipyard::app.icon name="alert" /></h1>
 
     <div>
         <h1>Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać!</h1>
@@ -36,13 +36,13 @@
                 "artist",
                 "link",
             ] as $field_name)
-            <x-shipyard.ui.field-input :model="$song" :field-name="$field_name" dummy />
+            <x-shipyard::ui.field-input :model="$song" :field-name="$field_name" dummy />
             @if ($field_name == "link")
             <x-link-interpreter :raw="$song->$field_name" />
             @endif
             @endforeach
 
-            <x-shipyard.ui.field-input :model="$quest" field-name="wishes" dummy />
+            <x-shipyard::ui.field-input :model="$quest" field-name="wishes" dummy />
         </div>
     </x-extendo-block>
 
@@ -65,7 +65,7 @@
                 "deadline",
                 "hard_deadline",
             ] as $field_name)
-                <x-shipyard.ui.field-input :model="$quest" :field-name="$field_name" dummy />
+                <x-shipyard::ui.field-input :model="$quest" :field-name="$field_name" dummy />
             @endforeach
         </div>
         <x-quests.payments-bar :quest="$quest" />
@@ -98,7 +98,7 @@
     >
         @if ($quest->has_files_on_external_drive)
         <span>
-            <x-shipyard.app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+            <x-shipyard::app.icon :name="model_field_icon('user_notes', 'external_drive')" />
             W chmurze znajdują się pliki związane z tym zleceniem
             <x-a :href="$quest->user->notes->external_drive">Otwórz</x-a>
         </span>
@@ -137,9 +137,9 @@
     <x-quest-history :quest="$quest" />
 </div>
 
-<x-shipyard.app.form :action="route('mod-quest-back')" method="POST" id="phases">
+<x-shipyard::app.form :action="route('mod-quest-back')" method="POST" id="phases">
     <x-slot:actions>
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="chevron-left"
             label="Wróć do listy"
             :action="route('quests')"
@@ -173,7 +173,7 @@
         <input type="hidden" name="quest_id" value="{{ $quest->id }}" />
 
         @if (in_array($quest->status_id, [11]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="account-alert"
             label="Poproś o zmiany"
             action="none"
@@ -186,7 +186,7 @@
         @endif
 
         @if (in_array($quest->status_id, [16, 21, 26, 96]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="comment-edit"
             label="Popraw ostatni komentarz"
             action="none"
@@ -198,7 +198,7 @@
             class="tertiary"
         />
             @if ($quest->status_id == 21)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="comment-remove"
                 label="Zrezygnuj ze zmian"
                 action="none"
@@ -212,7 +212,7 @@
         @endif
 
         @if (in_array($quest->status_id, [95]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="reply-all"
             label="Odpowiedz"
             action="none"
@@ -226,7 +226,7 @@
 
         @if (in_array($quest->status_id, [15, 31, 95]))
             @if ($quest->files_ready)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="check-all"
                 label="Zaakceptuj i zakończ"
                 action="none"
@@ -237,7 +237,7 @@
                 class="tertiary"
             />
             @else
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="check"
                 label="Zaakceptuj etap"
                 action="none"
@@ -251,7 +251,7 @@
         @endif
 
         @if (in_array($quest->status_id, [14, 15]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="chat-alert"
             :label="$quest->files_ready ? 'Poproś o poprawki' : 'Poproś o poprawki w tym etapie'"
             action="none"
@@ -264,7 +264,7 @@
         @endif
 
         @if (in_array($quest->status_id, [18, 19]))
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             icon="recycle"
             label="Przywróć zlecenie"
             action="none"
@@ -278,7 +278,7 @@
 
         @if (in_array($quest->status_id, [15, 16, 26, 95, 96]))
             @if ($quest->completed_once)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="check-all"
                 label="Zrezygnuj z dalszych zmian"
                 action="none"
@@ -289,7 +289,7 @@
                 class="tertiary"
             />
             @else
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 icon="package-variant-closed-remove"
                 label="Zrezygnuj ze zlecenia"
                 action="none"
@@ -302,6 +302,6 @@
             @endif
         @endif
     </div>
-</x-shipyard.app.form>
+</x-shipyard::app.form>
 
 @endsection

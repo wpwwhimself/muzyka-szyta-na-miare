@@ -11,7 +11,7 @@
     <span><strong>Wykonawca</strong>: {{ $data["artist"] }}</span>
 </div>
 
-<x-shipyard.ui.button
+<x-shipyard::ui.button
     label="Przejdź do zapytania"
     :icon="model_icon('requests')"
     :action="route('request', ['id' => $data['id']])"

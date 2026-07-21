@@ -4,7 +4,7 @@
 
 @section('content')
 
-<x-shipyard.app.form method="POST" :action="route('mod-request-back')">
+<x-shipyard::app.form method="POST" :action="route('mod-request-back')">
     <x-slot:actions>
         <x-a href="{!! route('add-request', [
             'client' => $request->client_id,
@@ -41,7 +41,7 @@
             @php
             $new_status = \App\Models\Status::find(abs($status_id));
             @endphp
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 :action="abs($status_id) == 9
                     ? 'none'
                     : 'submit'"
@@ -82,20 +82,20 @@
         >
             <x-slot:buttons>
                 @if ($request->client_id)
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="route('client-view', ['id' => $request->client_id])"
                     :icon="model_icon('users')"
                     pop="Szczegóły"
                     target="_blank"
                 />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="route('admin.model.list', ['model' => 'quests', 'fltr[client]' => $request->client_id])"
                     :icon="model_icon('quests')"
                     pop="Zlecenia"
                     target="_blank"
                 />
                 @else
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     icon="link"
                     pop="Przypisz klienta"
                     action="none"
@@ -119,7 +119,7 @@
                 "other_medium",
                 "contact_preference",
             ] as $field_name)
-            <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+            <x-shipyard::ui.field-input :model="$request" :field-name="$field_name" />
             @endforeach
         </x-extendo-block>
 
@@ -132,14 +132,14 @@
         >
             <x-slot:buttons>
                 @if ($request->song_id)
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="route('admin.model.list', ['model' => 'songs', 'fltr[id]' => $request->song_id])"
                     :icon="model_icon('songs')"
                     pop="Szczegóły"
                     target="_blank"
                 />
                 @else
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     icon="link"
                     pop="Przypisz utwór"
                     action="none"
@@ -161,21 +161,21 @@
                 "artist",
                 "link",
             ] as $field_name)
-                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+                <x-shipyard::ui.field-input :model="$request" :field-name="$field_name" />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
             @endforeach
 
-            <x-shipyard.ui.connection-input :model="$request" connection-name="genre" />
-            <x-shipyard.ui.connection-input :model="$request" connection-name="composition" />
-            <x-shipyard.ui.connection-input :model="$request" connection-name="quest_type" />
+            <x-shipyard::ui.connection-input :model="$request" connection-name="genre" />
+            <x-shipyard::ui.connection-input :model="$request" connection-name="composition" />
+            <x-shipyard::ui.connection-input :model="$request" connection-name="quest_type" />
 
             @foreach ([
                 "wishes",
                 "hard_deadline",
             ] as $field_name)
-                <x-shipyard.ui.field-input :model="$request" :field-name="$field_name" />
+                <x-shipyard::ui.field-input :model="$request" :field-name="$field_name" />
                 @if ($field_name == "link")
                 <x-link-interpreter :raw="$request->$field_name" />
                 @endif
@@ -200,14 +200,14 @@
                 </div>
                 @endif
 
-                <x-shipyard.ui.field-input :model="$request" field-name="price_code"
+                <x-shipyard::ui.field-input :model="$request" field-name="price_code"
                     onchange="reQuestCalcPrice(event.target.value, {{ $request->client_id ?? 'null' }});"
                 />
                 <x-re_quests.price-summary :model="$request" />
 
                 @if ($request->user?->notes->budget && in_array($request->status_id, [1, 5, 6]))
                 <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
-                    <x-shipyard.app.icon name="safe-square" />
+                    <x-shipyard::app.icon name="safe-square" />
                     Budżet w wysokości <b>{{ _c_(as_pln($request->user->notes->budget)) }}</b> automatycznie
                     <br>
                     pokryje
@@ -220,7 +220,7 @@
                 @endif
 
                 <x-re_quests.monthly-payment-limit :model="$request" />
-                <x-shipyard.ui.field-input :model="$request" field-name="delayed_payment" />
+                <x-shipyard::ui.field-input :model="$request" field-name="delayed_payment" />
 
                 <div>
                     @if (in_array($request->status_id, [1, 6, 96]))
@@ -233,7 +233,7 @@
                     }
                     </script>
                     @endif
-                    <x-shipyard.ui.field-input :model="$request" field-name="deadline" />
+                    <x-shipyard::ui.field-input :model="$request" field-name="deadline" />
                 </div>
             </div>
         </x-extendo-block>
@@ -242,6 +242,6 @@
         <x-quest-history :quest="$request" :extended="true" />
         @endunless
     </div>
-</x-shipyard.app.form>
+</x-shipyard::app.form>
 
 @endsection

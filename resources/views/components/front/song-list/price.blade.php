@@ -3,6 +3,6 @@
 ])
 
 <span class="ghost">
-    <x-shipyard.app.icon name="cash" />
+    <x-shipyard::app.icon name="cash" />
     ~{{ as_pln($price) }}
 </span>

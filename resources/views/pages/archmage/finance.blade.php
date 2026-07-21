@@ -4,17 +4,17 @@
 @section('content')
 
 <div class="flex right center middle">
-    <x-shipyard.ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
-    <x-shipyard.ui.button :action="route('admin.model.list', ['model' => 'money-transactions', 'fltr[type]' => 'App\\Models\\CostType'])" label="Koszty" :icon="model_icon('cost-types')" />
-    <x-shipyard.ui.button :action="route('invoices')" label="Faktury" :icon="model_icon('invoices')" />
-    <x-shipyard.ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
-    <x-shipyard.ui.button :action="route('gig-price-suggest')" label="Wycena grania" icon="chat-alert" />
+    <x-shipyard::ui.button :action="route('finance-summary')" label="Podsumowanie" icon="finance" />
+    <x-shipyard::ui.button :action="route('admin.model.list', ['model' => 'money-transactions', 'fltr[type]' => 'App\\Models\\CostType'])" label="Koszty" :icon="model_icon('cost-types')" />
+    <x-shipyard::ui.button :action="route('invoices')" label="Faktury" :icon="model_icon('invoices')" />
+    <x-shipyard::ui.button :action="route('taxes')" label="Podatki" icon="cash-register" />
+    <x-shipyard::ui.button :action="route('gig-price-suggest')" label="Wycena grania" icon="chat-alert" />
 </div>
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-section title="Podsumowanie" icon="finance">
         <x-stats-highlight-h title="Obecny miesiąc" :data="$this_month" :all-pln="true" />
-        <x-shipyard.stats.chart.column
+        <x-shipyard::stats.chart.column
             title="Saturacja wpływów w kolejnych miesiącach"
             :subtitle="'Limit: ' . as_pln(INCOME_LIMIT())"
             icon="sack"
@@ -81,18 +81,18 @@
 <x-section title="Zwroty pieniędzy do wykonania" icon="cash-refund">
     <div class="flex down">
         @foreach ($returns as $quest)
-        <x-shipyard.app.section
+        <x-shipyard::app.section
             :icon="$quest->song->type->icon"
             :title="$quest->user"
         >
             <x-slot:actions>
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="route('finance-return', ['quest_id' => $quest->id])"
                     label="Potwierdź zwrot"
                     icon="check"
                     class="primary"
                 />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     :action="route('finance-return', ['quest_id' => $quest->id, 'budget' => true])"
                     label="Przesuń na budżet"
                     icon="safe-square"
@@ -104,29 +104,29 @@
                 <a href="{{ route("quest", ["id" => $quest->id]) }}">
                     {{ $quest }}
                 </a>
-                <x-shipyard.app.icon-label-value
+                <x-shipyard::app.icon-label-value
                     icon="cash"
                     label="Suma wpłat"
                 >
                     {{ _ct_(as_pln($quest->payments_sum)) }}
-                </x-shipyard.app.icon-label-value>
+                </x-shipyard::app.icon-label-value>
             </div>
-        </x-shipyard.app.section>
+        </x-shipyard::app.section>
         @endforeach
     </div>
 </x-section>
 @endif
 
 @if(count($unpaids))
-<x-shipyard.app.form :action="route('finance-pay')" method="post">
-    <x-shipyard.app.section title="Zalegający z opłatami"
+<x-shipyard::app.form :action="route('finance-pay')" method="post">
+    <x-shipyard::app.section title="Zalegający z opłatami"
         icon="account-cash"
         inner-class="grid but-mobile-down"
         inner-style="--col-count: 2;"
     >
         @php $amount_total = ['immediate' => 0, 'delayed' => 0] @endphp
         @foreach ($unpaids as $client)
-        <x-shipyard.app.section
+        <x-shipyard::app.section
             :icon="$client->notes->trust == -1
                 ? 'ninja'
                 : model_icon('users')"
@@ -148,12 +148,12 @@
             inner-class="flex right but-mobile-down center"
         >
             <x-slot:actions>
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     pop="Klient"
                     :icon="model_icon('users')"
                     :action="route('client-view', ['id' => $client->id])"
                 />
-                <x-shipyard.ui.button
+                <x-shipyard::ui.button
                     pop="Utwórz fakturę na nieopłacone zlecenia"
                     :icon="model_icon('invoices')"
                     action="none"
@@ -176,7 +176,7 @@
             @php $amount_to_pay = ['immediate' => 0, 'delayed' => 0] @endphp
 
             @foreach ($client->questsUnpaid as $quest)
-            <x-shipyard.app.card
+            <x-shipyard::app.card
                 @class(['ghost' => $quest->delayed_payment_in_effect])
                 inner-class="flex down middle no-gap"
             >
@@ -190,7 +190,7 @@
                 @if ($quest->delayed_payment_in_effect)
                 <span class="accent danger">Opłata opóźniona do za {{ abs(round($quest->delayed_payment->endOfDay()->diffInDays())) }} dni</span>
                 @endif
-                <x-shipyard.ui.input type="checkbox"
+                <x-shipyard::ui.input type="checkbox"
                     :name="$quest->id"
                     :label="_c_(as_pln($quest->price - $quest->payments_sum))"
                     class="compact"
@@ -200,9 +200,9 @@
                 $amount_to_pay[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum;
                 $amount_total[($quest->delayed_payment_in_effect) ? "delayed" : "immediate"] += $quest->price - $quest->payments_sum
                 @endphp
-            </x-shipyard.app.card>
+            </x-shipyard::app.card>
             @endforeach
-        </x-shipyard.app.section>
+        </x-shipyard::app.section>
         @endforeach
 
         <x-slot:actions>
@@ -212,10 +212,10 @@
                     @if(min($amount_total) > 0) / @endif
                 @if($amount_total["delayed"]) <span class="ghost">{{ _c_(as_pln($amount_total["delayed"])) }}</span> @endif
             </strong>
-            <x-shipyard.ui.button class="primary" action="submit" icon="cash-register" label="Opłać zaznaczone" />
+            <x-shipyard::ui.button class="primary" action="submit" icon="cash-register" label="Opłać zaznaczone" />
         </x-slot:actions>
-    </x-shipyard.app.section>
-</x-shipyard.app.form>
+    </x-shipyard::app.section>
+</x-shipyard::app.form>
 @endif
 
 @endsection

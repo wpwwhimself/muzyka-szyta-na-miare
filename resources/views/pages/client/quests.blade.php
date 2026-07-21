@@ -20,7 +20,7 @@
         </x-tutorial>
 
         @unless (Auth::user()->notes->trust == -1)
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Złóż zapytanie o podkład/nuty"
             icon="send"
             action="none"

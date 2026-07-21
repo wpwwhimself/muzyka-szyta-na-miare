@@ -13,7 +13,7 @@ $key ??= Str::uuid();
 $warning = array_filter($warning ?? []);
 @endphp
 
-<x-shipyard.app.section
+<x-shipyard::app.section
     :title="$title"
     :subtitle="$subtitle"
     :icon="$icon"
@@ -35,7 +35,7 @@ $warning = array_filter($warning ?? []);
         <span class="accent danger"
             {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
         >
-            <x-shipyard.app.icon name="alert" />
+            <x-shipyard::app.icon name="alert" />
         </span>
         @endif
 
@@ -49,4 +49,4 @@ $warning = array_filter($warning ?? []);
     @endisset
 
     @if ($scissors) <x-sc-scissors /> @endif
-</x-shipyard.app.section>
+</x-shipyard::app.section>

@@ -58,7 +58,7 @@
 </x-section>
 @endif
 
-<x-shipyard.app.form :action="route('files-process')" method="POST" enctype="multipart/form-data">
+<x-shipyard::app.form :action="route('files-process')" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{{ $file?->id }}" />
     <input type="hidden" name="song_id" value="{{ $file?->song_id ?? $song?->id }}" />
 
@@ -68,10 +68,10 @@
                 "variant_name",
                 "version_name",
             ] as $field_name)
-            <x-shipyard.ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+            <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
             @endforeach
 
-            <x-shipyard.ui.input type="select"
+            <x-shipyard::ui.input type="select"
                 name="base_file_id"
                 label="Wersja źródłowa"
                 :icon="model_field_icon('files', 'base_file_id')"
@@ -89,10 +89,10 @@
                 "transposition",
                 "description",
             ] as $field_name)
-            <x-shipyard.ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+            <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
             @endforeach
 
-            <x-shipyard.ui.input type="select"
+            <x-shipyard::ui.input type="select"
                 :select-data="[
                     'optionsFromScope' => [
                         '\App\Models\UserNote',
@@ -139,7 +139,7 @@
             </div>
             @endif
 
-            <x-shipyard.ui.input type="file"
+            <x-shipyard::ui.input type="file"
                 name="files[]"
                 label="Wgraj nowe pliki"
                 :icon="model_field_icon('files', 'file_paths')"
@@ -149,12 +149,12 @@
     </div>
 
     <x-slot:actions>
-        <x-shipyard.ui.button class="primary" action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
+        <x-shipyard::ui.button class="primary" action="submit" name="action" value="save" :label="$file ? 'Popraw' : 'Wgraj'" icon="check" />
         @if ($file)
-        <x-shipyard.ui.button class="danger" action="submit" name="action" value="delete" label="Usuń" icon="delete" />
+        <x-shipyard::ui.button class="danger" action="submit" name="action" value="delete" label="Usuń" icon="delete" />
         <x-a :href="route('files-upload-by-entity', ['entity_name' => 'file', 'id' => $file?->id])">Wgraj kolejny</x-a>
         @endif
     </x-slot:actions>
-</x-shipyard.app.form>
+</x-shipyard::app.form>
 
 @endsection

@@ -41,17 +41,17 @@
                 <span>Ukończonych zleceń</span>
                 <span>
                     {{ $quests_total }}
-                    <x-shipyard.stats.counter :rank="$quests_total" style="military" />
+                    <x-shipyard::stats.counter :rank="$quests_total" style="military" />
                 </span>
 
                 <span>Status klienta</span>
                 <span>
                     @if (Auth::user()->notes->trust == -1)
-                    <span class="error"><x-shipyard.app.icon name="ninja" /></span> niezaufany
+                    <span class="error"><x-shipyard::app.icon name="ninja" /></span> niezaufany
                     @elseif (Auth::user()->notes->is_veteran)
-                    <span><x-shipyard.app.icon name="shield-account" /></span> stały klient
+                    <span><x-shipyard::app.icon name="shield-account" /></span> stały klient
                     @else
-                    <span><x-shipyard.app.icon name="account" /></span> klient początkujący<br>
+                    <span><x-shipyard::app.icon name="account" /></span> klient początkujący<br>
                     <i>pozostało zleceń: {{ setting("msznm_veteran_from") - $quests_total }}</i>
                     @endif
                 </span>
@@ -78,7 +78,7 @@
         @if (Auth::user()->notes->trust == -1)
         <br>
         <div class="section-header accent error">
-            <h1><x-shipyard.app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
+            <h1><x-shipyard::app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
         </div>
         <p>
             Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
@@ -110,7 +110,7 @@
         @if ($quests_total && !Auth::user()->notes->is_patron && Auth::user()->notes->helped_showcasing != 1)
         <br>
         <div class="section-header showcase-highlight">
-            <h1><x-shipyard.app.icon name="seal" /> Oceń naszą współpracę</h1>
+            <h1><x-shipyard::app.icon name="seal" /> Oceń naszą współpracę</h1>
         </div>
         <p>
             Recenzje pomagają mi pozyskiwać nowych klientów.
@@ -129,7 +129,7 @@
                     Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
                 </x-warning>
             </p>
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 label="Właśnie wystawił{{ client_polonize(Auth::user()->notes->client_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
                 action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
                 class="primary"
@@ -193,7 +193,7 @@
 
 <div class="flex right center">
     @unless (Auth::user()->notes->trust == -1)
-    <x-shipyard.ui.button
+    <x-shipyard::ui.button
         label="Złóż zapytanie o podkład/nuty"
         icon="send"
         action="none"

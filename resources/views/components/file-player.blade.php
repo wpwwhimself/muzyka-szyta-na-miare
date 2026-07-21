@@ -14,13 +14,13 @@
 >
     <div class="container">
         <span role="btn" class="hidden">
-            <x-shipyard.app.icon name="loading" />
+            <x-shipyard::app.icon name="loading" />
         </span>
         <span role="btn" onclick="startFilePlayer('{{ basename($file) }}')" class="interactive">
-            <x-shipyard.app.icon name="play" />
+            <x-shipyard::app.icon name="play" />
         </span>
         <span role="btn" onclick="pauseFilePlayer('{{ basename($file) }}')" class="hidden interactive">
-            <x-shipyard.app.icon name="pause" />
+            <x-shipyard::app.icon name="pause" />
         </span>
     </div>
 

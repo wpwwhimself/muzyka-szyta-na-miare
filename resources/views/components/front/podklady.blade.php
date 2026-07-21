@@ -2,7 +2,7 @@
     <h1>Co mogę dla Ciebie zrobić?</h1>
 
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
-        <x-shipyard.app.icon name="volume-high" />
+        <x-shipyard::app.icon name="volume-high" />
         <div>
             <h2>Podkłady muzyczne</h2>
             <p>Odsłuchuję oryginał i nagrywam podkład według Twoich wymagań</p>
@@ -14,7 +14,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
-        <x-shipyard.app.icon name="music" />
+        <x-shipyard::app.icon name="music" />
         <div>
             <h2>Nuty i partytury</h2>
             <p>Odsłuchuję oryginał i przepisuję wszystko, co usłyszę</p>
@@ -26,7 +26,7 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
-        <x-shipyard.app.icon name="account" />
+        <x-shipyard::app.icon name="account" />
         <div>
             <h2>Z myślą o Tobie</h2>
             <p>To, co dla Ciebie tworzę, może być dokładnie takie, jakie chcesz</p>
@@ -43,19 +43,19 @@
         <span class="section scroll-hidden stagger" style="--stagger-index: 4;">
             Schematy akordowe
             <span @popper(Uproszczona partia instrumentalna, zawierająca wszystkie znajdujące się w utworze akordy)>
-                <x-shipyard.app.icon name="information" />
+                <x-shipyard::app.icon name="information" />
             </span>
         </span>
         <span class="section scroll-hidden stagger" style="--stagger-index: 5;">
             Osadzenie partii wokalnej
             <span @popper(Przygotowanie utworu poprzez dodanie dostarczonego nagrania wokalu, bądź też osobiste jego nagranie)>
-                <x-shipyard.app.icon name="information" />
+                <x-shipyard::app.icon name="information" />
             </span>
         </span>
         <span class="section scroll-hidden stagger" style="--stagger-index: 6;">
             Korekcja dźwiękowa
             <span @popper(Naniesienie poprawek na dostarczony podkład muzyczny, np. zmiana tonacji czy głośności)>
-                <x-shipyard.app.icon name="information" />
+                <x-shipyard::app.icon name="information" />
             </span>
         </span>
     </div>
@@ -85,7 +85,7 @@
                     {!! $client->notes->display_subtitle !!}
                 </div>
                 <small class="accent secondary">
-                    <x-shipyard.app.icon :name="model_icon('compositions')" />
+                    <x-shipyard::app.icon :name="model_icon('compositions')" />
                     {{ $comment->re_quest->song->composition }}
                 </small>
                 <div class="comment-container">
@@ -111,7 +111,7 @@
             "za kulisami" => "reels",
             "nuty" => "scores",
         ] as $label => $mode)
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             :label="$label"
             icon="bullhorn"
             action="none"
@@ -205,7 +205,7 @@
     </div>
 </section>
 
-<x-shipyard.ui.button
+<x-shipyard::ui.button
     label="Złóż zapytanie o podkład/nuty"
     icon="send"
     action="none"

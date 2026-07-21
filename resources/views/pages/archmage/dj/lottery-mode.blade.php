@@ -4,25 +4,25 @@
 
 @section("content")
 
-<x-shipyard.app.section id="lottery-song"
+<x-shipyard::app.section id="lottery-song"
     :icon="model_icon('compositions')"
     title="—"
     subtitle="—"
     class="hidden"
 >
     <x-slot:actions>
-        <x-shipyard.ui.button action="none" class="tertiary hide-for-print" id="mark-composition-btn"
+        <x-shipyard::ui.button action="none" class="tertiary hide-for-print" id="mark-composition-btn"
             label="Zagrane"
             icon="check"
             onclick="markCurrentComposition();"
         />
     </x-slot:actions>
-</x-shipyard.app.section>
+</x-shipyard::app.section>
 
 <div class="flex down hide-for-print" id="lottery-nav">
-    <x-shipyard.app.loader />
+    <x-shipyard::app.loader />
     <div class="grid but-mobile-down hidden" style="--col-count: 2;">
-        <x-shipyard.app.card
+        <x-shipyard::app.card
             title="Utwory"
             :icon="model_icon('compositions')"
         >
@@ -32,20 +32,20 @@
             </div>
 
             <x-slot:actions>
-                <x-shipyard.ui.button action="none" class="tertiary"
+                <x-shipyard::ui.button action="none" class="tertiary"
                     pop="Lista"
                     icon="format-list-bulleted"
                     onclick="toggleCompositionList();"
                 />
-                <x-shipyard.ui.button action="none" class="tertiary" id="roll-composition-btn"
+                <x-shipyard::ui.button action="none" class="tertiary" id="roll-composition-btn"
                     pop="Losuj"
                     icon="dice-3"
                     onclick="roll('composition');"
                 />
             </x-slot:actions>
-        </x-shipyard.app.card>
+        </x-shipyard::app.card>
 
-        <x-shipyard.app.card
+        <x-shipyard::app.card
             title="Gatunki"
             :icon="model_icon('genres')"
         >
@@ -55,17 +55,17 @@
             </div>
 
             <x-slot:actions>
-                <x-shipyard.ui.button action="none" class="tertiary"
+                <x-shipyard::ui.button action="none" class="tertiary"
                     pop="Losuj"
                     icon="dice-3"
                     onclick="roll('genre');"
                 />
             </x-slot:actions>
-        </x-shipyard.app.card>
+        </x-shipyard::app.card>
     </div>
 
     <div class="flex right spread and-cover hide-for-print">
-        <x-shipyard.ui.button action="none" id="pick-btn" class="primary hidden"
+        <x-shipyard::ui.button action="none" id="pick-btn" class="primary hidden"
             label="Wybierz"
             icon="arrow-up"
             onclick="pickComposition(data.rolled.composition);"
@@ -77,7 +77,7 @@
 </div>
 
 <div class="flex right center middle hide-for-print">
-    <x-shipyard.ui.button
+    <x-shipyard::ui.button
         label="Drukuj"
         icon="printer"
         action="none"

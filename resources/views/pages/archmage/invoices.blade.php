@@ -5,7 +5,7 @@
 
 <x-section title="Lista faktur" :icon="model_icon('invoices')">
     <x-slot:buttons>
-        <x-shipyard.ui.button
+        <x-shipyard::ui.button
             label="Dodaj nową"
             icon="plus"
             action="none"
@@ -38,7 +38,7 @@
                     <span class="ghost">{{ $invoice->payer_title }}</span>
                     @if (!$invoice->visible)
                     <span class="accent error" @popper(Klient nie widzi faktury)>
-                        <x-shipyard.app.icon name="eye-off" />
+                        <x-shipyard::app.icon name="eye-off" />
                     </span>
                     @endif
                 </td>
@@ -49,7 +49,7 @@
                 </td>
                 <td class="{{ $invoice->isPaid ? '' : 'error' }}">{{ _c_(as_pln($invoice->amount)) }}</td>
                 <td>
-                    <x-shipyard.ui.button
+                    <x-shipyard::ui.button
                         pop="Edytuj"
                         icon="pencil"
                         action="none"
@@ -73,7 +73,7 @@
                         });"
                         class="tertiary"
                     />
-                    <x-shipyard.ui.button
+                    <x-shipyard::ui.button
                         pop="Utwórz nową na tego samego płatnika"
                         icon="content-duplicate"
                         action="none"

@@ -2,7 +2,7 @@
     <h2>Wszystkie utwory, których się podjąłem</h2>
     <p>
         Kliknij ikonę <span class="accent primary">
-            <x-shipyard.app.icon :name="model_icon('compositions')" />
+            <x-shipyard::app.icon :name="model_icon('compositions')" />
         </span>, aby przejrzeć wykonane aranże
     </p>
 
@@ -12,7 +12,7 @@
         Filtruj:
     </h3>
     <div class="flex down" role="{{ $for }}-filters">
-        <x-shipyard.ui.input type="text"
+        <x-shipyard::ui.input type="text"
             name="query"
             placeholder="Kliknij tutaj, żeby wyszukać tytułu lub kompozytora..."
             icon="magnify"
@@ -22,7 +22,7 @@
         <p class="ghost">...lub wybierz kategorię utworu:</p>
 
         <div class="flex right keep-for-mobile center">
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 action="none"
                 class="tertiary"
                 label="wszystkie"
@@ -31,7 +31,7 @@
             />
 
             {{-- @foreach ($genres as $genre)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 action="none"
                 class="toggle"
                 :label="$genre->name"
@@ -41,7 +41,7 @@
             @endforeach --}}
 
             @foreach ($song_tags as $tag)
-            <x-shipyard.ui.button
+            <x-shipyard::ui.button
                 action="none"
                 class="toggle"
                 :label="$tag->icon"
@@ -66,7 +66,7 @@
     </div>
 
     <ul id="{{ $for }}-song-list">
-        <x-shipyard.app.loader />
+        <x-shipyard::app.loader />
     </ul>
 </div>
 

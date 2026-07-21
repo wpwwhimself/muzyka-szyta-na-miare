@@ -115,7 +115,7 @@
     </div>
 
     <div>
-        <x-shipyard.ui.button action="submit"
+        <x-shipyard::ui.button action="submit"
             name="action"
             value="save"
             label="Zapisz"

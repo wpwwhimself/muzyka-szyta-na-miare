@@ -1,4 +1,4 @@
-<x-shipyard.app.section
+<x-shipyard::app.section
     :title="$title"
     :subtitle="$subtitle"
     :icon="$headerIcon"
@@ -20,7 +20,7 @@
         <span class="accent danger"
             {{ Popper::arrow()->pop(Illuminate\Mail\Markdown::parse(implode("<br>", $warning_content))) }}
         >
-            <x-shipyard.app.icon name="alert" />
+            <x-shipyard::app.icon name="alert" />
         </span>
         @endif
 
@@ -34,4 +34,4 @@
     @endisset
 
     @if($scissors) <x-sc-scissors /> @endif
-</x-shipyard.app.section>
+</x-shipyard::app.section>

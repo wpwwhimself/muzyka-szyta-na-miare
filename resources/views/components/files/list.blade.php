@@ -10,7 +10,7 @@ $uuid = Str::uuid();
 @endphp
 
 <div class="files-container" data-uuid="{{ $uuid }}">
-    <x-shipyard.app.loader />
+    <x-shipyard::app.loader />
     <div class="meta hidden"
         data-song-id="{{ $songId }}"
         data-who-am-i="{{ Auth::id() }}"

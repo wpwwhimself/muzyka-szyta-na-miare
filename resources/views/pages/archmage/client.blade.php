@@ -3,12 +3,12 @@
 @section("subtitle", "Dane klienta")
 
 @section('content')
-<x-shipyard.app.form
+<x-shipyard::app.form
     :action="route('client-edit', ['id' => $client->id])"
     method="POST"
 >
     <x-slot:actions>
-        <x-shipyard.ui.button action="submit" class="primary" label="Popraw dane" icon="pencil" />
+        <x-shipyard::ui.button action="submit" class="primary" label="Popraw dane" icon="pencil" />
     </x-slot:actions>
 
     <div class="grid but-mobile-down" style="--col-count: 2;">
@@ -21,7 +21,7 @@
                     "other_medium",
                     "contact_preference",
                 ] as $field_name)
-                <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
+                <x-shipyard::ui.field-input :model="$client->notes" :field-name="$field_name" />
                 @endforeach
             </div>
 
@@ -35,16 +35,16 @@
                 "external_drive",
                 "is_forgotten",
             ] as $field_name)
-            <x-shipyard.ui.field-input :model="$client->notes" :field-name="$field_name" />
+            <x-shipyard::ui.field-input :model="$client->notes" :field-name="$field_name" />
             @endforeach
         </x-section>
 
         <x-section title="Dane użytkownika" :icon="model_icon('users')">
-            <x-shipyard.ui.field-input :model="$client->notes" field-name="password" />
+            <x-shipyard::ui.field-input :model="$client->notes" field-name="password" />
         </x-section>
 
         <x-section title="Reklama" icon="bullhorn">
-            <x-shipyard.ui.field-input :model="$client->notes" field-name="helped_showcasing" />
+            <x-shipyard::ui.field-input :model="$client->notes" field-name="helped_showcasing" />
 
             <h2>Przypięty komentarz</h2>
             <table>
@@ -67,24 +67,24 @@
             </table>
         </x-section>
 
-        <x-shipyard.app.section title="Statystyki" icon="finance">
+        <x-shipyard::app.section title="Statystyki" icon="finance">
             <div class="flex right center middle">
                 @foreach ([
                     ["Pierwsze zlecenie", "star", $client->created_at->format("Y-m-d")],
                     ["Doświadczenie", "abacus", $client->notes->exp],
                     ["Zlecenia w toku", model_icon('quests'), $client->notes->upcoming_quests_count ?? 0],
                 ] as [$label, $icon, $value])
-                <x-shipyard.app.icon-label-value
+                <x-shipyard::app.icon-label-value
                     :icon="$icon"
                     :label="$label"
                 >
                     {{ $value }}
-                </x-shipyard.app.icon-label-value>
+                </x-shipyard::app.icon-label-value>
                 @endforeach
 
-                <x-shipyard.app.model.badges :badges="$client->notes->badges" />
+                <x-shipyard::app.model.badges :badges="$client->notes->badges" />
             </div>
-        </x-shipyard.app.section>
+        </x-shipyard::app.section>
     </div>
-</x-shipyard.app.form>
+</x-shipyard::app.form>
 @endsection

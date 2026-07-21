@@ -9,7 +9,7 @@
     "links" => false,
 ])
 
-<x-shipyard.ui.input
+<x-shipyard::ui.input
     :type="$type"
     :name="$name"
     :label="$label"

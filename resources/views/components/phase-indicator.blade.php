@@ -1,21 +1,21 @@
-<x-shipyard.app.phase-bar
+<x-shipyard::app.phase-bar
     total="9"
     :current="$statusId % 10"
     :color="$statusColor($statusId)"
 >
     @if ($small)
     <p>
-        <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
+        <x-shipyard::app.icon :name="$statusSymbol($statusId)" />
         {{ $statusName($statusId) }}
     </p>
     @else
     <span>Status:</span>
     <h3>
-        <x-shipyard.app.icon :name="$statusSymbol($statusId)" />
+        <x-shipyard::app.icon :name="$statusSymbol($statusId)" />
         {{ $statusName($statusId) }}
     </h3>
     @endif
-</x-shipyard.app.phase-bar>
+</x-shipyard::app.phase-bar>
 
 @if (!$small)
 <div class="flex right center">

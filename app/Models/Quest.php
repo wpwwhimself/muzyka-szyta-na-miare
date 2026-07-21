@@ -62,7 +62,7 @@ class Quest extends Model
     public function displayTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.h", [
+            get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
                 "icon" => $this->quest_type->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
@@ -76,7 +76,7 @@ class Quest extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            // get: fn () => view("components.shipyard.app.model.badges", [
+            // get: fn () => view("shipyard::components.app.model.badges", [
             //     "badges" => $this->badges,
             // ])->render(),
             get: fn () => $this->song->artist,

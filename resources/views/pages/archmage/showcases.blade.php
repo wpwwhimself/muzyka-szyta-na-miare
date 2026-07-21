@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin", compact("title"))
+@extends("shipyard::layouts.admin", compact("title"))
 
 @section('content')
 
@@ -33,7 +33,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ $showcases->links("components.shipyard.pagination.default") }}
+    {{ $showcases->links("shipyard::components.pagination.default") }}
 </x-section>
 
 @foreach (["organ" => "organowe", "dj" => "DJowskie"] as $reel_type => $label_part)
@@ -70,7 +70,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ ${$reel_type."_showcases"}->links("components.shipyard.pagination.default") }}
+    {{ ${$reel_type."_showcases"}->links("shipyard::components.pagination.default") }}
 </x-section>
 @endforeach
 
@@ -102,7 +102,7 @@
             @endforelse
         </tbody>
     </table>
-    {{ $client_showcases->links("components.shipyard.pagination.default") }}
+    {{ $client_showcases->links("shipyard::components.pagination.default") }}
 </x-section>
 
 </div>

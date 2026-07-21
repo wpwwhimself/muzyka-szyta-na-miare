@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.base")
+@extends("shipyard::layouts.base")
 
 @section("prepends")
 <link rel="stylesheet" href="{{ asset("css/front.css") }}">

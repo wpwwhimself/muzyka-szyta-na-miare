@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin")
+@extends("shipyard::layouts.admin")
 @section("title", "Zlecenia")
 
 @section('content')
@@ -54,7 +54,7 @@
         @endforelse
     </div>
 
-    {{ $quests->links("components.shipyard.pagination.default") }}
+    {{ $quests->links("shipyard::components.pagination.default") }}
 </x-section>
 
 @endsection

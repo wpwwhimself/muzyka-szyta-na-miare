@@ -292,7 +292,7 @@ class QuestController extends Controller
         $price_data = StatsController::runPriceCalc($rq->price_code_override, $quest->client_id);
         $delayed_payment_data = StatsController::runMonthlyPaymentLimit($price_data["price"]);
 
-        return view("components.shipyard.app.card", [
+        return view("shipyard::components.app.card", [
             "title" => "Podsumowanie zmiany wyceny",
             "icon" => "alert",
             "slot" => "Nowa cena: $price_data[price] zł, opóźnienie płatności: +$delayed_payment_data[when_to_ask].",

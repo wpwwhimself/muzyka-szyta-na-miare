@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin", ["title" => "Recykling Sejfu"])
+@extends("shipyard::layouts.admin", ["title" => "Recykling Sejfu"])
 
 @section("content")
 

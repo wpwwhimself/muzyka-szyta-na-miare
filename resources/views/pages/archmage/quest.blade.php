@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin")
+@extends("shipyard::layouts.admin")
 @section("title", implode("_", [$quest->song_id, $quest->song->title]))
 @section("subtitle", "Zlecenie")
 

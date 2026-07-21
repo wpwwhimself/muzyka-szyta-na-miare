@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin")
+@extends("shipyard::layouts.admin")
 @section('title', $invoice->full_code)
 @section("subtitle", "Podgląd faktury")
 

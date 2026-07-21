@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.minimal")
+@extends("shipyard::layouts.minimal")
 @section("title", $quest->full_title)
 @section("subtitle", "Studio")
 

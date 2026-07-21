@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin")
+@extends("shipyard::layouts.admin")
 @section("title", "Centrum finansowe")
 
 @section('content')
@@ -132,7 +132,7 @@
                 : model_icon('users')"
             :title="$client->notes"
             :subtitle="implode('', [
-                view('components.shipyard.stats.counter', [
+                view('shipyard::components.stats.counter', [
                     'rank' => $client->questsUnpaid->count(),
                     'style' => 'lines',
                 ])->render(),

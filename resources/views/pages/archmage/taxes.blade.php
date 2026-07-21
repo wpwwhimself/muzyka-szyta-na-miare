@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin", compact("title"))
+@extends("shipyard::layouts.admin", compact("title"))
 
 @section("content")
 

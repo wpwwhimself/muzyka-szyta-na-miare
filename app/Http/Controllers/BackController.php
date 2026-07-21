@@ -244,7 +244,7 @@ class BackController extends Controller
             "Telefon",
         ]);
 
-        return view("components.shipyard.ui.lookup-results", compact(
+        return view("shipyard::components.ui.lookup-results", compact(
             "data",
             "headings",
             "fieldName",
@@ -277,7 +277,7 @@ class BackController extends Controller
             "Kompozycja",
         ]);
 
-        return view("components.shipyard.ui.lookup-results", compact(
+        return view("shipyard::components.ui.lookup-results", compact(
             "data",
             "headings",
             "fieldName",

@@ -48,7 +48,7 @@ class File extends Model
     public function displayTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.h", [
+            get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
                 "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
@@ -62,7 +62,7 @@ class File extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
+            get: fn () => view("shipyard::components.app.model.badges", [
                 "badges" => $this->badges,
             ])->render(),
         );
@@ -71,7 +71,7 @@ class File extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.connections-preview", [
+            get: fn () => view("shipyard::components.app.model.connections-preview", [
                 "connections" => self::getConnections(),
                 "model" => $this,
             ])->render(),

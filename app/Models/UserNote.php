@@ -72,7 +72,7 @@ class UserNote extends Authenticatable
     public function displayTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.h", [
+            get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
                 "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
@@ -86,12 +86,12 @@ class UserNote extends Authenticatable
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.stats.counter", [
+            get: fn () => view("shipyard::components.stats.counter", [
                 "rank" => $this->exp,
                 "label" => "Zaakceptowane zlecenia",
                 "style" => "military",
             ])->render()
-            . view("components.shipyard.app.model.badges", [
+            . view("shipyard::components.app.model.badges", [
                 "badges" => $this->badges,
             ])->render(),
         );
@@ -100,7 +100,7 @@ class UserNote extends Authenticatable
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.fields-preview", [
+            get: fn () => view("shipyard::components.app.model.fields-preview", [
                     "model" => $this,
                     "fields" => [
                         "email",
@@ -417,12 +417,12 @@ class UserNote extends Authenticatable
     public function modelEditButton(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.ui.button", [
+            get: fn () => view("shipyard::components.ui.button", [
                 "icon" => "email",
                 "pop" => "Wyślij maila",
                 "action" => route("client-mail-prepare", ["client_id" => $this->user_id]),
             ])->render()
-            . view("components.shipyard.ui.button", [
+            . view("shipyard::components.ui.button", [
                 "icon" => "wrench",
                 "label" => "Edytuj",
                 "action" => route("client-view", ["id" => $this->user_id]),

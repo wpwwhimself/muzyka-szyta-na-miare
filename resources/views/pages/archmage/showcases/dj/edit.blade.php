@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.admin", ["title" => "Edycja rolki DJowskiej"])
+@extends("shipyard::layouts.admin", ["title" => "Edycja rolki DJowskiej"])
 
 @section('content')
 

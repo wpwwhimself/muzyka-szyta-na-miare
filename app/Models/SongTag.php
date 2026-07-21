@@ -41,7 +41,7 @@ class SongTag extends Model
     public function displayTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.h", [
+            get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
                 "icon" => self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
@@ -62,7 +62,7 @@ class SongTag extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.ui.button", [
+            get: fn () => view("shipyard::components.ui.button", [
                 "icon" => "bullhorn",
                 "pop" => "Podglad w katalogu",
                 "action" => route("catalog", ["tag" => $this->id]),
@@ -71,7 +71,7 @@ class SongTag extends Model
                 ]),
                 "slot" => null,
             ])
-            . view("components.shipyard.app.model.connections-preview", [
+            . view("shipyard::components.app.model.connections-preview", [
                 "connections" => self::getConnections(),
                 "model" => $this,
             ])->render(),

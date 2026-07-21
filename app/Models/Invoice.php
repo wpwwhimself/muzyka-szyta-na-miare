@@ -49,7 +49,7 @@ class Invoice extends Model
     public function displayTitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.h", [
+            get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
                 "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
@@ -63,7 +63,7 @@ class Invoice extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.model.badges", [
+            get: fn () => view("shipyard::components.app.model.badges", [
                 "badges" => $this->badges,
             ])->render(),
         );
@@ -72,7 +72,7 @@ class Invoice extends Model
     public function displayMiddlePart(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("components.shipyard.app.values-preview", [
+            get: fn () => view("shipyard::components.app.values-preview", [
                 "data" => [
                     [
                         "icon" => "cash",
@@ -202,12 +202,12 @@ class Invoice extends Model
     {
         return Attribute::make(
             get: fn () => implode("", [
-                view("components.shipyard.ui.button", [
+                view("shipyard::components.ui.button", [
                     "icon" => "eye",
                     "label" => "Podgląd",
                     "action" => route("invoice", ["id" => $this->id]),
                 ])->render(),
-                view("components.shipyard.ui.button", [
+                view("shipyard::components.ui.button", [
                     "icon" => "pencil",
                     "label" => "Edytuj",
                     "action" => route("admin.model.edit", ["model" => "invoices", "id" => $this->id]),

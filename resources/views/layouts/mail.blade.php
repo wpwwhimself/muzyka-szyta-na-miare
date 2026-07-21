@@ -1,4 +1,4 @@
-@extends("layouts.shipyard.simple")
+@extends("shipyard::layouts.simple")
 
 @section("body")
 

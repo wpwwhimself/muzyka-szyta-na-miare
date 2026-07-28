@@ -81,6 +81,7 @@
             "samodzielnie" => "piano",
             "ViolArte" => "violin",
             "Ewelina Spławska" => "microphone",
+            "Julia Bulinska" => "microphone",
         ] as $label => $icon)
         <x-shipyard::ui.button
             :label="$label"
@@ -145,6 +146,24 @@
             <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Fewelinasplawska%2Fvideos%2F1322933316175087%2F&show_text=false&width=267&t=0" width="300" height="575" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
         </div>
     </div>
+
+    <div class="showcase-section flex down spaced hidden" data-mode="Julia Bulinska">
+        <p>
+            Współpracuję z <strong>Julią Bulinską</strong> oraz <strong>Julią Glapiak</strong>, które swoim śpiewem i skrzypcami uświetniają msze ślubne w Poznaniu i okolicach.
+        </p>
+
+        <x-shipyard::ui.button
+            label="Więcej informacji"
+            icon="open-in-new"
+            action="https://www.tiktok.com/@juliaspiewajaco"
+            target="_blank"
+            class="primary"
+        />
+
+        <div id="showcase-fbs">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/7M8bBFDUvRg?si=xqttwxJm45BbjFU2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
 </x-front.tabbed-section>
 
 <section id="prices" class="grid but-mobile-down" style="--col-count: 2;">
@@ -159,7 +178,7 @@
 
             <span class="scroll-hidden">Msza ślubna/komunijna</span>
             <span class="scroll-hidden">od {{ as_pln(400) }}</span>
-            
+
             <span class="scroll-hidden">Msza pogrzebowa</span>
             <span class="scroll-hidden">od {{ as_pln(300) }}</span>
 

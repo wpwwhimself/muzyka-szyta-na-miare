@@ -25,10 +25,10 @@ function openSection(slug) {
 
 <x-section id="home" scissors>
     <div class="company-name flex right but-mobile-down center">
-        <img src="{{ asset("msznm.svg") }}" alt="logo" class="logo">
+        <x-shipyard::app.logo />
         <div>
-            <h1>{{ setting("app_name") }}</h1>
-            <p>Wojciech Przybyła</p>
+            <h1>Wojciech Przybyła</h1>
+            <p>{{ setting("app_name") }}</p>
             <h2>
                 <span class="appear-cycle">
                     <span>Podkłady i aranże</span>
@@ -82,21 +82,21 @@ function openSection(slug) {
 </div>
 
 <section id="about">
-    <h1>O mnie</h1>
     <div class="flex right center">
         <img class="photo rounded" src="{{ asset("assets/front/img/home_me.jpg") }}" alt="me!">
-        <ul>
-            <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
-            <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
-            <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
-            <li>Jestem stałym członkiem <b>2 zespołów muzycznych</b>:
-                <a href="https://www.facebook.com/profile.php?id=100060053047728">Dixie Kings</a>
-                oraz
-                <a href="https://www.facebook.com/orkiestrawihajster">Orkiestry Tanecznej Wihajster</a>
-            </li>
-            <li>Z wykształcenia <b>jestem informatykiem</b>, obecnie pracuję jako software developer</li>
-            <li>Mam za sobą <b>studia magisterskie</b> z matematyki i informatyki</li>
-        </ul>
+        <div class="flex down center">
+            <h1>O mnie</h1>
+            <ul>
+                <li>Mam na imię Wojtek i muzyką profesjonalnie zajmuję się od <b>ponad {{ date("Y") - 2012 }} lat</b></li>
+                <li>Ukończyłem <b>szkołę muzyczną</b> I stopnia na gitarze</li>
+                <li>Gram na wielu instrumentach, w tym <b>klawiszowych, perkusyjnych oraz dętych</b></li>
+                <li>Jestem stałym członkiem <b>2 zespołów muzycznych</b>:
+                    <a href="https://www.facebook.com/profile.php?id=100060053047728">Dixie Kings</a>
+                    oraz
+                    <a href="https://www.facebook.com/orkiestrawihajster">Orkiestry Tanecznej Wihajster</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/WYTOqc6ADwA?si=sYZUcVrL0Znh7czc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </section>

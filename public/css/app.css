@@ -287,10 +287,6 @@ body {
     }
 }
 
-footer .icon.invert-when-dark {
-    filter: invert(1);
-}
-
 .grayed-out{
     font-style: italic;
     color: gray;

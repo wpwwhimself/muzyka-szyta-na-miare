@@ -27,7 +27,7 @@
         </div>
     </x-shipyard::app.section>
 
-    <x-shipyard::app.section title="Ostatnie grania" icon="trumpet">
+    <x-shipyard::app.section title="Ostatnie grania" icon="trumpet" inner-class="flex down">
         <x-slot:actions>
             <x-shipyard::ui.button
                 label="Dodaj"
@@ -61,9 +61,13 @@
             <tbody>
                 @forelse ($stats["gigs"]["recent"]["main_list"] as $gig)
                 <tr>
-                    <td>{{ $gig->date->format("d.m.Y") }}</td>
+                    <td>{{ $gig->date->format("d.m.y") }}</td>
                     <td>{{ Str::of($gig->typable->name)->after("granie: ") }}</td>
-                    <td>{{ $gig->description }}</td>
+                    <td>
+                        <a href="{{ route('admin.model.edit', ['model' => 'money-transactions', 'id' => $gig->id]) }}">
+                            {{ $gig->description }}
+                        </a>
+                    </td>
                     <td>{{ _c_(as_pln($gig->amount)) }}</td>
                 </tr>
                 @empty

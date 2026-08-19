@@ -1,17 +1,16 @@
 @extends("layouts.mail")
-@section("title", "Nowe zapytanie o organy")
+@section("title", "Nowe zapytanie dla organisty")
 
 @section("content")
 
-<x-shipyard::app.h icon="piano">Nowe zapytanie dla organisty</x-shipyard::app.h>
-
 <x-client.contact-info :data="$data" />
 
-<div class="flex down">
-    <span><strong>Rodzaj uroczystości</strong>: {{ $data["occasion"] }}</span>
-    <span><strong>Data</strong>: {{ $data["date"] }}</span>
-    <span><strong>Mój sprzęt</strong>? {{ isset($data["equipment"]) ? "Tak" : "Nie" }}</span>
-    <p>{{ $data["wishes"] }}</p>
-</div>
+<span><strong>Rodzaj uroczystości</strong>: {{ $data["occasion"] }}</span>
+<br />
+<span><strong>Data</strong>: {{ $data["date"] }}</span>
+<br />
+<span><strong>Mój sprzęt</strong>? {{ isset($data["equipment"]) ? "Tak" : "Nie" }}</span>
+<br />
+<span><strong>Życzenia</strong>: {{ $data["wishes"] }}</span>
 
 @endsection

@@ -10,14 +10,14 @@
 
 <div class="grid but-mobile-down" style="--col-count: 2;">
     <x-shipyard::app.section title="Podsumowanie" icon="chart-pie">
-        <div class="flex right but-mobile-down center middle">
+        <div class="flex right center middle">
             @foreach ($stats["summary"]["general"] as $label => $value)
             <x-shipyard::stats.tile :label="$label">{{ $value }}</x-shipyard::stats.tile>
             @endforeach
         </div>
 
         <x-shipyard::app.h lvl="3" :icon="model_icon('quest-types')">Rodzaje grań</x-shipyard::app.h>
-        <div class="flex right but-mobile-down center middle">
+        <div class="flex right center middle">
             @foreach ($stats["summary"]["gig_types"]["split"] as $label => $value)
             <x-shipyard::stats.tile :label="$label"
                 :value="$value"
@@ -40,7 +40,7 @@
             />
         </x-slot:actions>
 
-        <div class="flex right but-mobile-down center middle">
+        <div class="flex right center middle">
             @foreach ($stats["gigs"]["recent"]["main"] as $label => $value)
             <x-shipyard::stats.tile :label="$label"
                 :value="$value"
@@ -53,7 +53,7 @@
             <thead>
                 <tr>
                     <th>Data</th>
-                    <th>Kategoria</th>
+                    <th>Kat.</th>
                     <th>Opis</th>
                     <th>Kwota</th>
                 </tr>
@@ -62,7 +62,12 @@
                 @forelse ($stats["gigs"]["recent"]["main_list"] as $gig)
                 <tr>
                     <td>{{ $gig->date->format("d.m.y") }}</td>
-                    <td>{{ Str::of($gig->typable->name)->after("granie: ") }}</td>
+                    @php
+                    $type_name_pretty = Str::of($gig->typable->name)->after("granie: ");
+                    @endphp
+                    <td {{ Popper::pop($type_name_pretty) }}>
+                        {{ $type_name_pretty->charAt(-1) }}
+                    </td>
                     <td>
                         <a href="{{ route('admin.model.edit', ['model' => 'money-transactions', 'id' => $gig->id]) }}">
                             {{ $gig->description }}

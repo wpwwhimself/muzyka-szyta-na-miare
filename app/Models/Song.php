@@ -67,6 +67,13 @@ class Song extends Model
         );
     }
 
+    public function rawTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->full_title,
+        );
+    }
+
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(

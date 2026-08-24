@@ -1,11 +1,17 @@
 @props([
-    "for",
-    "songdata" => null,
+    "data",
 ])
 
 @php
-$title_holder = $songdata?->title ?? '$tytuł';
-$artist_holder = $songdata?->artist ?? '$wykonawca';
+$fors = [
+    "Showcase" => "podklady",
+    "OrganShowcase" => "organista",
+    "DjShowcase" => "dj",
+];
+$for = $fors[Str::of($data::class)->classBasename()->__toString()];
+
+$title_holder = '$tytuł';
+$artist_holder = '$wykonawca';
 $openings = [
     "podklady" => $title_holder.' ('.$artist_holder.') | Jak się szyje muzykę
 
@@ -15,13 +21,12 @@ Krótkie demo, jak powstała partia $partia do mojego podkładu. $flavortext',
 ];
 $hashtags = [
     "podklady" => '#muzykaszytanamiarę #podkład #karaoke #cover #$autor #$gatunek #$instrument',
-    "organista" => '#muzykaszytanamiarę #organy #msza #$pieśńczypsalm',
+    "organista" => '#muzykaszytanamiarę #organy #msza #$pieśńczypsalm #ślub?',
     "dj" => '#muzykaszytanamiarę #dj #muzykalive #cover #$autor #$gatunek #$instrument',
 ];
 @endphp
 
-<code onclick="copyDesc(this)">
-<pre>
+<pre onclick="copyDesc(this)">
 {{ $openings[$for] }}
 
 Zobacz więcej rolek:
@@ -34,7 +39,6 @@ Moje usługi:
 
 {{ $hashtags[$for] }}
 </pre>
-</code>
 
 <script>
 function copyDesc(el) {

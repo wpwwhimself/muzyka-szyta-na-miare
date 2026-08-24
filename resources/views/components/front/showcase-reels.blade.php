@@ -5,15 +5,20 @@
 <div id="showcase-fbs" class="flex right center">
     @php $player_dims = [300, 575]; @endphp
     @forelse ($showcases as $showcase)
-        @switch($showcase->platform)
+        @php
+        $platforms_available = collect($showcase->links?->keys());
+        $platform = $platforms_available->random();
+        $link = $showcase->links?->get($platform);
+        @endphp
+        @switch($platform)
             @case("yt")
-                <iframe width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" src="https://www.youtube.com/embed/{{ Str::contains($showcase->link, "shorts") ? Str::between($showcase->link, "shorts/", "?") : Str::after($showcase->link, "watch?v=") }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" src="https://www.youtube.com/embed/{{ Str::contains($link, "shorts") ? Str::between($link, "shorts/", "?") : Str::after($link, "watch?v=") }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 @break
             @case("tt")
-                <iframe src="https://www.tiktok.com/player/v1/{{ Str::between($showcase->link, "video/", "?") }}" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe src="https://www.tiktok.com/player/v1/{{ Str::between($link, "video/", "?") }}" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
                 @break
             @case("ig")
-                <iframe src="{{ Str::before($showcase->link, "?") }}embed" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe src="{{ Str::before($link, "?") }}embed" width="{{ $player_dims[0] }}" height="{{ $player_dims[1] }}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
                 @break
             @case("fb")
         @endswitch

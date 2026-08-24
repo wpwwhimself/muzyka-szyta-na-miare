@@ -25,6 +25,8 @@ class Showcase extends Model
 
     protected $fillable = [
         "song_id",
+        "links",
+        // obsolete but required for migrations:
         "platform",
         "link",
     ];
@@ -56,9 +58,7 @@ class Showcase extends Model
         return Attribute::make(
             get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
-                "icon" => $this->platformData->name,
-                "iconMode" => "url",
-                "iconData" => $this->platformData->icon_url,
+                "icon" => self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
@@ -70,16 +70,12 @@ class Showcase extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("shipyard::components.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
-        );
-    }
-
-    public function displayPreTitle(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => null,
+            get: fn () => $this->links
+                ?->map(fn ($l, $sm) => view("shipyard::components.app.icon", [
+                    "mode" => "url",
+                    "data" => ShowcasePlatform::find($sm)->icon_url,
+                ])->render())
+                ->join(""),
         );
     }
 
@@ -98,12 +94,16 @@ class Showcase extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        "link" => [
-            "type" => "url",
-            "label" => "Link do rolki",
+        "links" => [
+            "type" => "JSON",
+            "label" => "Linki do rolek",
             "icon" => "link",
-            "hint" => "Link do nagrania. Embed zostanie wygenerowany automatycznie na froncie na podstawie ID nagrania.",
+            "hint" => "Linki do nagrania. Embed zostanie wygenerowany automatycznie na froncie na podstawie ID nagrania.",
             "required" => true,
+            "columnTypes" => [
+                "social" => "text",
+                "link" => "text",
+            ],
         ],
     ];
 
@@ -113,13 +113,13 @@ class Showcase extends Model
             "mode" => "one",
             "field_label" => "Powiązany utwór",
         ],
-        "platformData" => [
-            "model" => ShowcasePlatform::class,
-            "mode" => "one",
-            "field_name" => "platform",
-            "field_label" => "Platforma",
-            // "readonly" => true,
-        ],
+        // "platformData" => [
+        //     "model" => ShowcasePlatform::class,
+        //     "mode" => "one",
+        //     "field_name" => "platform",
+        //     "field_label" => "Platforma",
+        //     // "readonly" => true,
+        // ],
     ];
 
     public const ACTIONS = [
@@ -182,13 +182,13 @@ class Showcase extends Model
     ];
 
     public const EXTRA_SECTIONS = [
-        // "<id>" => [
-        //     "title" => "",
-        //     "icon" => "",
-        //     "show-on" => "<list|edit>",
-        //     "component" => "<component_name>",
-        //     "role" => "",
-        // ],
+        "desc" => [
+            "title" => "Opis",
+            "icon" => "text",
+            "show-on" => "edit",
+            "component" => "showcases.description",
+            // "role" => "",
+        ],
     ];
 
     #region scopes
@@ -199,7 +199,7 @@ class Showcase extends Model
     protected function casts(): array
     {
         return [
-            //
+            "links" => "collection",
         ];
     }
 

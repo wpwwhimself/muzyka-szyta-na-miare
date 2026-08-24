@@ -24,6 +24,8 @@ class OrganShowcase extends Model
     ];
 
     protected $fillable = [
+        "links",
+        // obsolete but required for migrations:
         "platform",
         "link",
     ];
@@ -46,9 +48,7 @@ class OrganShowcase extends Model
         return Attribute::make(
             get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
-                "icon" => $this->platformData->name,
-                "iconMode" => "url",
-                "iconData" => $this->platformData->icon_url,
+                "icon" => self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
@@ -60,9 +60,12 @@ class OrganShowcase extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("shipyard::components.app.model.badges", [
-                "badges" => $this->badges,
-            ])->render(),
+            get: fn () => $this->links
+                ?->map(fn ($l, $sm) => view("shipyard::components.app.icon", [
+                    "mode" => "url",
+                    "data" => ShowcasePlatform::find($sm)->icon_url,
+                ])->render())
+                ->join(""),
         );
     }
 
@@ -81,22 +84,26 @@ class OrganShowcase extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        "link" => [
-            "type" => "url",
-            "label" => "Link do rolki",
-            "hint" => "Link do nagrania. Embed zostanie wygenerowany automatycznie na froncie na podstawie ID nagrania.",
+        "links" => [
+            "type" => "JSON",
+            "label" => "Linki do rolek",
             "icon" => "link",
+            "hint" => "Linki do nagrania. Embed zostanie wygenerowany automatycznie na froncie na podstawie ID nagrania.",
             "required" => true,
+            "columnTypes" => [
+                "social" => "text",
+                "link" => "text",
+            ],
         ],
     ];
 
     public const CONNECTIONS = [
-        "platformData" => [
-            "model" => ShowcasePlatform::class,
-            "mode" => "one",
-            "field_name" => "platform",
-            "field_label" => "Platforma",
-        ],
+        // "platformData" => [
+        //     "model" => ShowcasePlatform::class,
+        //     "mode" => "one",
+        //     "field_name" => "platform",
+        //     "field_label" => "Platforma",
+        // ],
     ];
 
     public const ACTIONS = [
@@ -134,6 +141,16 @@ class OrganShowcase extends Model
         // ],
     ];
 
+    public const EXTRA_SECTIONS = [
+        "desc" => [
+            "title" => "Opis",
+            "icon" => "text",
+            "show-on" => "edit",
+            "component" => "showcases.description",
+            // "role" => "",
+        ],
+    ];
+
     #region scopes
     use HasStandardScopes;
     #endregion
@@ -142,7 +159,7 @@ class OrganShowcase extends Model
     protected function casts(): array
     {
         return [
-            //
+            "links" => "collection",
         ];
     }
 

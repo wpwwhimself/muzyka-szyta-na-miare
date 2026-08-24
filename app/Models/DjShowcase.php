@@ -183,7 +183,7 @@ class DjShowcase extends Model
 
     public const EXTRA_SECTIONS = [
         "desc" => [
-            "title" => "Opis",
+            "title" => "Opis do skopiowania",
             "icon" => "text",
             "show-on" => "edit",
             "component" => "showcases.description",

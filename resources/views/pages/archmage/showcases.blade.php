@@ -24,8 +24,14 @@
                 <td>{{ model($scope)::count() }}</td>
                 <td>
                     <x-shipyard::ui.button
+                        icon="arrow-right"
+                        pop="Przejdź"
+                        class="small"
+                        :action="route('admin.model.list', ['model' => $scope])"
+                    />
+                    <x-shipyard::ui.button
                         icon="plus"
-                        label="Dodaj"
+                        pop="Dodaj"
                         class="small primary"
                         :action="route('admin.model.edit', ['model' => $scope])"
                     />

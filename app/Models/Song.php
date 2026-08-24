@@ -141,12 +141,7 @@ class Song extends Model
     ];
 
     public const ACTIONS = [
-        [
-            "icon" => "wrench",
-            "label" => "Edytuj po staremu",
-            "show-on" => "edit",
-            "route" => "song-edit",
-        ],
+        //
     ];
     #endregion
 
@@ -186,6 +181,15 @@ class Song extends Model
             "discr" => "artist",
             "type" => "text",
             "operator" => "regexp",
+        ],
+    ];
+
+    public const EXTRA_SECTIONS = [
+        "showcase" => [
+            "title" => "Reklama",
+            "icon" => "bullhorn",
+            "show-on" => "edit",
+            "component" => "showcases.song-short-editor",
         ],
     ];
 

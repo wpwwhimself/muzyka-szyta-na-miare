@@ -59,7 +59,7 @@
                 <x-shipyard::ui.button
                     pop="Edytuj utwór"
                     :icon="model_icon('songs')"
-                    :action="route('song-edit', ['id' => $quest->song_id])"
+                    :action="route('admin.model.edit', ['model' => 'songs', 'id' => $quest->song_id])"
                 />
                 <x-shipyard::ui.button
                     pop="Edytuj zlecenie"

@@ -97,7 +97,6 @@ Route::middleware("auth")->group(function(){
         });
 
         Route::get("/list", "list")->name("songs");
-        Route::get("/edit/{id}", "edit")->name("song-edit");
         Route::post("/process", "process")->name("song-process");
     });
 

@@ -13,18 +13,6 @@ class SongTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testArchmageCanOpenSongEditor()
-    {
-        $admin = User::find(1);
-        $song = Song::factory()->create();
-
-        $res = $this->actingAs($admin)->get(route("song-edit", [
-            "id" => $song->id,
-        ]));
-        $res->assertOk();
-        $res->assertViewIs("archmage.songs.edit");
-    }
-    
     public function testArchmageCanEditSong()
     {
         $admin = User::find(1);

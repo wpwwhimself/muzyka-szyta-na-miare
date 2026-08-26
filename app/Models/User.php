@@ -17,6 +17,13 @@ class User extends ShipyardUser
         return $this->notes ?? $this->name;
     }
 
+    public function rawTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this,
+        );
+    }
+
     public function optionLabel(): Attribute
     {
         return Attribute::make(
@@ -37,6 +44,10 @@ class User extends ShipyardUser
         "notes" => [
             "model" => UserNote::class,
             "mode" => "one",
+        ],
+        "quests" => [
+            "model" => Quest::class,
+            "mode" => "many-reverse",
         ],
     ];
     #endregion

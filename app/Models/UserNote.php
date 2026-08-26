@@ -375,6 +375,12 @@ class UserNote extends Authenticatable
                     "class" => "accent success",
                     "label" => "Zleceń w ostatnich 3 mc: ".$this->user->questsRecent()->count()
                 ],
+                "early_payer" => [
+                    "condition" => $this->likes_to_pay_early && is_archmage(),
+                    "icon" => "cash-fast",
+                    "class" => "accent success",
+                    "label" => "Lubi płacić przed odbiorem",
+                ],
                 "picky" => [
                     "condition" => $this->pickiness >= 1.5 && is_archmage(),
                     "icon" => "fencing",
@@ -462,6 +468,18 @@ class UserNote extends Authenticatable
     {
         return Attribute::make(
             get: fn () => $this->helped_showcasing == 2,
+        );
+    }
+
+    public function likesToPayEarly(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $rate = $this->user->questsDone->map(fn ($q) =>
+                    (int) $q->payments->first()?->date->lt($q->history->firstWhere("new_status_id", 19)?->date)
+                )->avg() ?? 0;
+                return $rate > 0.5;
+            }
         );
     }
 

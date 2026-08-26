@@ -475,9 +475,12 @@ class UserNote extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                $rate = $this->user->questsDone->map(fn ($q) =>
-                    (int) $q->payments->first()?->date->lt($q->history->firstWhere("new_status_id", 19)?->date)
-                )->avg() ?? 0;
+                $rate = $this->user->questsDone->map(function ($q) {
+                    $date_accepted = $q->history->firstWhere("new_status_id", 19)?->date;
+                    return ($date_accepted)
+                        ? (int) $q->payments->first()?->date->lt($date_accepted)
+                        : 0;
+                })->avg() ?? 0;
                 return $rate > 0.5;
             }
         );

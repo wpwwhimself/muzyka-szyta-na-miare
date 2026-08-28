@@ -22,7 +22,7 @@
 @if ($request->user)
 <p>
     <i>
-        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->user->notes->password }}</b>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $request->user->password_actual }}</b>
     </i>
 </p>
 @endif

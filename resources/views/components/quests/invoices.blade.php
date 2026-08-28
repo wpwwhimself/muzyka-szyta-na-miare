@@ -47,14 +47,14 @@
             pop="Dodaj"
             action="none"
             onclick="openModal('edit-invoice', {
-                payer_name: '{{ $quest->user->notes->invoice_data['payer_name'] ?? $quest->user->notes->client_name }}',
-                payer_email: '{{ $quest->user->notes->invoice_data['payer_email'] ?? $quest->user->notes->email }}',
-                payer_phone: '{{ $quest->user->notes->invoice_data['payer_phone'] ?? $quest->user->notes->phone }}',
+                payer_name: '{{ $quest->user->invoice_data['payer_name'] ?? $quest->user->display_name }}',
+                payer_email: '{{ $quest->user->invoice_data['payer_email'] ?? $quest->user->email }}',
+                payer_phone: '{{ $quest->user->invoice_data['payer_phone'] ?? $quest->user->phone }}',
                 {{ collect(['payer_title', 'payer_address', 'payer_nip', 'payer_regon'])->map(fn ($fld) =>
-                    isset($quest->user->notes->invoice_data[$fld]) ? $fld.': \''.$quest->user->notes->invoice_data[$fld].'\',' : ''
+                    isset($quest->user->invoice_data[$fld]) ? $fld.': \''.$quest->user->invoice_data[$fld].'\',' : ''
                 )->join('') }}
                 {{ collect(['receiver_name', 'receiver_title', 'receiver_address', 'receiver_nip', 'receiver_regon', 'receiver_email', 'receiver_phone'])->map(fn ($fld) =>
-                    isset($quest->user->notes->invoice_data[$fld]) ? $fld.': \''.$quest->user->notes->invoice_data[$fld].'\',' : ''
+                    isset($quest->user->invoice_data[$fld]) ? $fld.': \''.$quest->user->invoice_data[$fld].'\',' : ''
                 )->join('') }}
                 quests: '{{ $quest->id }}'
             });"

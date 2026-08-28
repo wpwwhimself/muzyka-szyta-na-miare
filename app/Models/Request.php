@@ -304,7 +304,7 @@ class Request extends Model
     public function clientName(): Attribute
     {
         return Attribute::make(
-            get: fn ($v) => $this->user?->notes->client_name ?? $v,
+            get: fn ($v) => $this->user?->display_name ?? $v,
         );
     }
 

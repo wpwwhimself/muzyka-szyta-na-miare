@@ -9,7 +9,6 @@ use App\Models\MoneyTransaction;
 use App\Models\StatusChange;
 use App\Models\Top10;
 use App\Models\User;
-use App\Models\UserNote;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,8 +44,8 @@ class ClientController extends Controller
                 "email" => $rq->email,
             ]);
         }
-        $client->notes()->update([
-            "client_name" => $rq->client_name,
+        $client->update([
+            "display_name" => $rq->client_name,
             "email" => $rq->email,
             "phone" => $rq->phone,
             "other_medium" => $rq->other_medium,
@@ -54,7 +53,7 @@ class ClientController extends Controller
         ]);
 
         if(is_archmage()){
-            $client->notes()->update([
+            $client->update([
                 "trust" => $rq->trust,
                 "is_forgotten" => $rq->has("is_forgotten"),
                 "helped_showcasing" => $rq->helped_showcasing,
@@ -63,7 +62,7 @@ class ClientController extends Controller
                 "special_prices" => $rq->special_prices,
                 "invoice_data" => $rq->invoice_data,
                 "external_drive" => $rq->external_drive,
-                "password" => $rq->password,
+                "password_actual" => $rq->password,
             ]);
             $client->update([
                 "name" => substr($rq->password, 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
@@ -71,17 +70,17 @@ class ClientController extends Controller
             ]);
 
             if ($rq->has("pinned_comment_id")) {
-                $client->notes()->update(["helped_showcasing" => 2]);
+                $client->update(["helped_showcasing" => 2]);
                 StatusChange::where("changed_by", $client->id)->update(["pinned" => false]);
                 StatusChange::find($rq->pinned_comment_id)->update(["pinned" => true]);
             }
 
             // budget handling
-            if($client->notes->budget != $rq->budget){
+            if($client->budget != $rq->budget){
                 BackController::newStatusLog(
                     null,
                     32,
-                    $rq->budget - $client->notes->budget,
+                    $rq->budget - $client->budget,
                     $client->id
                 );
                 MoneyTransaction::create([
@@ -89,10 +88,10 @@ class ClientController extends Controller
                     "typable_id" => 2,
                     "relatable_type" => User::class,
                     "relatable_id" => $client->id,
-                    "amount" => $rq->budget - $client->notes->budget,
+                    "amount" => $rq->budget - $client->budget,
                     "date" => today(),
                 ]);
-                $client->notes()->update(["budget" => $rq->budget]);
+                $client->update(["budget" => $rq->budget]);
             }
         }
 
@@ -102,10 +101,10 @@ class ClientController extends Controller
     #region mailing
     public function mailPrepare(?int $client_id = null)
     {
-        $clients = UserNote::orderBy("client_name")
+        $clients = User::orderBy("display_name")
             ->whereNotNull("email")
             ->get()
-            ->map(fn ($cl) => ["value" => $cl->user_id, "label" => "$cl->client_name ($cl->email)"])
+            ->map(fn ($cl) => ["value" => $cl->id, "label" => "$cl->display_name ($cl->email)"])
             ->toArray();
 
         return view("pages.".user_role().".mail.prepare", compact("clients", "client_id"));
@@ -121,7 +120,7 @@ class ClientController extends Controller
 
         foreach ($clients_for_mailing as $client) {
             try {
-                Mail::to($client->notes->email)
+                Mail::to($client->email)
                     ->send(new CustomMail($client, $rq->subject, $rq->content));
             } catch (Exception $e) {
                 $failures++;

@@ -23,7 +23,7 @@
     ] as [$label, $status_id, $show_on_statuses])
         @if (in_array($quest->status_id, $show_on_statuses))
         @php
-        $nomail = (!$quest->user->notes->email && in_array($status_id, [15, 95]));
+        $nomail = (!$quest->user->email && in_array($status_id, [15, 95]));
         $new_status = \App\Models\Status::find(abs($status_id));
         @endphp
         <x-shipyard::ui.button
@@ -95,18 +95,18 @@
         >
             <div class="grid but-halfsize-down" style="--col-count: 2;">
                 @foreach ([
-                    "client_name",
+                    "display_name",
                     "contact_preference",
-                    "password",
+                    "password_actual",
                 ] as $field_name)
-                    <x-shipyard::ui.field-input :model="$quest->user->notes" :field-name="$field_name" dummy />
+                    <x-shipyard::ui.field-input :model="$quest->user" :field-name="$field_name" dummy />
                 @endforeach
 
                 <x-shipyard::ui.input type="dummy-text"
                     name="pickiness"
                     label="Wybredność"
                     icon="fencing"
-                    :value="$quest->user->notes->pickiness_pretty"
+                    :value="$quest->user->pickiness_pretty"
                 />
             </div>
 
@@ -173,10 +173,10 @@
                     onclick="loadFileList(document.querySelector(`.files-container`).closest(`.files-container`).dataset.uuid);"
                 />
 
-                @if ($quest->user->notes->external_drive)
+                @if ($quest->user->external_drive)
                 <x-shipyard::ui.button
-                    :action="$quest->user->notes->external_drive"
-                    :icon="model_field_icon('user_notes', 'external_drive')"
+                    :action="$quest->user->external_drive"
+                    :icon="model_field_icon('users', 'external_drive')"
                     pop="Przejdź do chmury"
                     target="_blank"
                 />
@@ -230,7 +230,7 @@
                         Klient może pobierać
                     </span>
 
-                    @elseif ($quest->user->notes->can_see_files)
+                    @elseif ($quest->user->can_see_files)
                     <span class="accent danger">
                         <x-shipyard::app.icon name="eye" />
                         Klient widzi podglądy
@@ -257,9 +257,9 @@
                     </span>
                     @endif
 
-                    @if ($quest->user->notes->external_drive)
+                    @if ($quest->user->external_drive)
                     <span @class(["accent success" => $quest->has_files_on_external_drive])>
-                        <x-shipyard::app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+                        <x-shipyard::app.icon :name="model_field_icon('users', 'external_drive')" />
                         @if ($quest->has_files_on_external_drive)
                         Posiada pliki
                         @else

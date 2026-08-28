@@ -293,11 +293,11 @@ class RequestController extends Controller
                     "made_by_me" => false,
 
                     "client_id" => (Auth::check()) ? Auth::id() : null,
-                    "client_name" => (Auth::check()) ? Auth::user()->notes->client_name : $rq->client_name,
-                    "email" => (Auth::check()) ? Auth::user()->notes->email : $rq->email,
-                    "phone" => (Auth::check()) ? Auth::user()->notes->phone : $rq->phone,
-                    "other_medium" => (Auth::check()) ? Auth::user()->notes->other_medium : $rq->other_medium,
-                    "contact_preference" => (Auth::check()) ? Auth::user()->notes->contact_preference : $rq->contact_preference,
+                    "client_name" => (Auth::check()) ? Auth::user()->display_name : $rq->client_name,
+                    "email" => (Auth::check()) ? Auth::user()->email : $rq->email,
+                    "phone" => (Auth::check()) ? Auth::user()->phone : $rq->phone,
+                    "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
+                    "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
 
                     "quest_type_id" => $rq->quest_type_id,
                     "title" => $rq->title,
@@ -514,10 +514,8 @@ class RequestController extends Controller
                 "email" => $request->email ?? Str::uuid()."@test.test",
                 "password" => $password,
                 "roles" => "client",
-            ]);
-            $client->notes()->create([
-                "password" => $password,
-                "client_name" => $request->client_name,
+                "password_actual" => $password,
+                "display_name" => $request->client_name,
                 "email" => $request->email,
                 "phone" => $request->phone,
                 "other_medium" => $request->other_medium,
@@ -556,10 +554,10 @@ class RequestController extends Controller
         //     "amount" => $quest->price
         // ]);
 
-        if($client->notes->budget){
-            $sub_amount = min([$request->price, $client->notes->budget]);
-            $client->notes->update([
-                "budget" => $client->notes->budget - $sub_amount,
+        if($client->budget){
+            $sub_amount = min([$request->price, $client->budget]);
+            $client->update([
+                "budget" => $client->budget - $sub_amount,
             ]);
             BackController::newStatusLog(null, 32, -$sub_amount, $client->id);
             MoneyTransaction::create([
@@ -605,8 +603,8 @@ class RequestController extends Controller
         //add client ID to history
         StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         //send onboarding if new client
-        if ($request->user->notes->email && $is_new_client){
-            Mail::to($request->user->notes->email)->send(new Onboarding($request->user));
+        if ($request->user->email && $is_new_client){
+            Mail::to($request->user->email)->send(new Onboarding($request->user));
         }
 
         if(is_archmage()) return redirect()->route("request", ["id" => $request->id]);
@@ -625,11 +623,11 @@ class RequestController extends Controller
 
         $request->update([
             "client_id" => $user->id,
-            "client_name" => $user->notes->client_name,
-            "email" => $user->notes->email,
-            "phone" => $user->notes->phone,
-            "other_medium" => $user->notes->other_medium,
-            "contact_preference" => $user->notes->contact_preference,
+            "client_name" => $user->display_name,
+            "email" => $user->email,
+            "phone" => $user->phone,
+            "other_medium" => $user->other_medium,
+            "contact_preference" => $user->contact_preference,
         ]);
 
         return back()->with("toast", ["success", "Utwór przypisany"]);

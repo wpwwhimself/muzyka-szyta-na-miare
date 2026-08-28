@@ -41,12 +41,12 @@ class ArchmageQuestMod extends Mailable
         return ($this->isRequest) ?
             $this
             ->subject("[".($this->quest->is_priority ? "PRIORYTETOWO " : "").$this->quest->status->status_name."] ".$this->quest->full_title)
-            ->replyTo($this->quest->email ?? $this->quest->user->notes?->email)
+            ->replyTo($this->quest->email ?? $this->quest->user?->email)
             ->view('emails.archmage-quest-mod', ["title" => "Goniec przynosi wieści"])
             :
             $this
             ->subject("[".$this->quest->status->status_name."] ".$this->quest->id." | ".$this->quest->song->full_title)
-            ->replyTo($this->quest->user->notes->email)
+            ->replyTo($this->quest->user->email)
             ->view('emails.archmage-quest-mod', ["title" => "Goniec przynosi wieści"]);
     }
 }

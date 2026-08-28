@@ -66,7 +66,6 @@ class UserNote extends Authenticatable
                 $this->display_subtitle,
             ]),
         );
-
     }
 
     public function displayTitle(): Attribute

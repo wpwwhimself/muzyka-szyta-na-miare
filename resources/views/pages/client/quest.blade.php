@@ -98,13 +98,13 @@
     >
         @if ($quest->has_files_on_external_drive)
         <span>
-            <x-shipyard::app.icon :name="model_field_icon('user_notes', 'external_drive')" />
+            <x-shipyard::app.icon :name="model_field_icon('users', 'external_drive')" />
             W chmurze znajdują się pliki związane z tym zleceniem
-            <x-a :href="$quest->user->notes->external_drive">Otwórz</x-a>
+            <x-a :href="$quest->user->external_drive">Otwórz</x-a>
         </span>
         @endif
 
-        @if (Auth::user()->notes->can_see_files)
+        @if (Auth::user()->can_see_files)
         <x-files.list :song-id="$quest->song_id" :can-download-files="can_download_files(Auth::id(), $quest->id)" />
         @else
         <p class="accent error">Nie masz uprawnień do przeglądania plików dla tego zlecenia.</p>

@@ -11,11 +11,11 @@
 
 <x-quests.tile-mail :quest="$quest" />
 
-@if ($quest->user->notes->budget)
+@if ($quest->user->budget)
 <p><i>
-    *{{ ($quest->user->notes->budget >= $price_difference) ? "Całość" : "Część" }}
+    *{{ ($quest->user->budget >= $price_difference) ? "Całość" : "Część" }}
     różnicy kwoty zlecenia zostanie pokryta ze zgromadzonego przez {{ $pl["kobieta"] ? "Panią" : "Pana" }} budżet w wysokości
-    {{ as_pln($quest->user->notes->budget) }}
+    {{ as_pln($quest->user->budget) }}
 </i></p>
 @endif
 
@@ -29,7 +29,7 @@
 
 <p>
     <i>
-        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->notes->password }}</b>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->password_actual }}</b>
     </i>
 </p>
 

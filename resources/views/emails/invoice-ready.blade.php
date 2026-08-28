@@ -12,7 +12,7 @@
 
 <p>
     <i>
-        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $user->notes->password }}</b>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $user->password_actual }}</b>
     </i>
 </p>
 

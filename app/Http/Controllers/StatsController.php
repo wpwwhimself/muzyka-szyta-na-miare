@@ -135,8 +135,8 @@ class StatsController extends Controller
             ->map(fn($val, $key) => ["label" => $key, "value" => round($val[0] - $val[2], 2)]);
         $client_exp_raw = User::has("notes")->withCount("questsDone")
             ->get()
-            ->mapWithKeys(fn ($u) => [$u->notes->client_name => $u->quests_done_count])
-            ->mergeRecursive(User::has("notes")->get()->mapWithKeys(fn ($u) => [$u->notes->client_name => $u->extra_exp]))
+            ->mapWithKeys(fn ($u) => [$u->display_name => $u->quests_done_count])
+            ->mergeRecursive(User::has("notes")->get()->mapWithKeys(fn ($u) => [$u->display_name => $u->extra_exp]))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] + $val[1]])
             ->countBy()
             ->toArray();
@@ -274,11 +274,11 @@ class StatsController extends Controller
                         ->orderByDesc("Liczba poprawek")
                         ->limit(10)
                         ->join("quests", "re_quest_id", "quests.id", "left")
-                        ->join("user_notes", "quests.client_id", "user_notes.user_id", "left")
+                        ->join("users", "quests.client_id", "users.id", "left")
                         ->join("songs", "quests.song_id", "songs.id", "left")
                         ->join("genres", "songs.genre_id", "genres.id", "left")
                         ->selectRaw("re_quest_id as 'ID zlecenia',
-                            user_notes.client_name as 'Klient',
+                            users.display_name as 'Klient',
                             songs.title as 'Tytuł utworu',
                             genres.name as 'Gatunek utworu',
                             count(*) as 'Liczba poprawek'")
@@ -316,7 +316,7 @@ class StatsController extends Controller
                             ->count(),
                         "kobiety" => User::has("notes")
                             ->get()
-                            ->filter(fn($client) => $client->notes->is_woman)
+                            ->filter(fn($client) => $client->is_woman)
                             ->count(),
                     ],
                     "total" => User::has("notes")->get()->count(),
@@ -343,7 +343,7 @@ class StatsController extends Controller
                             ->take(10)
                             ->map(fn($item, $key) => [
                                 "Nazwisko" => $item->name_and_badges,
-                                "Wybredność" => $item->notes->pickiness * 100 . "%",
+                                "Wybredność" => $item->pickiness * 100 . "%",
                             ])
                             ->values(),
                     ],
@@ -596,7 +596,7 @@ class StatsController extends Controller
                 32,
                 $amount_to_pay,
                 $quest->client_id,
-                $quest->user->notes->email,
+                $quest->user->email,
             );
             MoneyTransaction::create([
                 "typable_type" => IncomeType::class,
@@ -632,8 +632,8 @@ class StatsController extends Controller
         $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
             $client = User::find($client_id);
-            if($client->notes->email){
-                Mail::to($client->notes->email)->send(new MassPayment($quests));
+            if($client->email){
+                Mail::to($client->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
             }else{
                 $clients_informed[$client_id] = 0;
@@ -695,8 +695,8 @@ class StatsController extends Controller
                 "typable_id" => 2,
             ]);
 
-            $quest->user->notes->update([
-                "budget" => $quest->user->notes->budget += $payments_sum,
+            $quest->user->update([
+                "budget" => $quest->user->budget += $payments_sum,
             ]);
         }
 
@@ -705,12 +705,12 @@ class StatsController extends Controller
 
         $flash_content = "Zwrot wpisany" . (($budget) ? ", budżet zmieniony" : "");
 
-        if($quest->user->notes->email && !$budget){
-            Mail::to($quest->user->notes->email)->send(new PaymentReturned($quest->fresh()));
+        if($quest->user->email && !$budget){
+            Mail::to($quest->user->email)->send(new PaymentReturned($quest->fresh()));
             StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
             $flash_content .= ", mail wysłany";
         }
-        if($quest->user->notes->contact_preference != "email"){
+        if($quest->user->contact_preference != "email"){
             // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
             $flash_content .= ", ale wyślij wiadomość";
         }
@@ -783,10 +783,10 @@ class StatsController extends Controller
         if ($rq->visible) {
             $users = $invoice->quests->map(fn ($q) => $q->user)->unique();
             foreach ($users as $u) {
-                if (!$u->notes->email) continue;
+                if (!$u->email) continue;
 
-                $sent = Mail::to($u->notes->email)->send(new InvoiceReady($invoice, $u));
-                if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->notes->client_name;
+                $sent = Mail::to($u->email)->send(new InvoiceReady($invoice, $u));
+                if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->display_name;
             }
         }
 
@@ -942,9 +942,9 @@ class StatsController extends Controller
             ->get();
 
         if($quoting){
-            if($client?->notes->is_veteran && !strpos($labels, "=")) $labels .= "=";
-            if($client?->notes->is_patron && !strpos($labels, "-")) $labels .= "-";
-            if($client?->notes->is_favourite && !strpos($labels, "!")) $labels .= "!";
+            if($client?->is_veteran && !strpos($labels, "=")) $labels .= "=";
+            if($client?->is_patron && !strpos($labels, "-")) $labels .= "-";
+            if($client?->is_favourite && !strpos($labels, "!")) $labels .= "!";
         }
 
         $quest_type_present = null;

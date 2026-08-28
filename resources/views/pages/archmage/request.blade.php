@@ -194,8 +194,8 @@
                     <span>Sugerowana wycena: {{ $request->song->price_code }}</span>
                     @endif
 
-                    @if ($request->user?->notes->special_prices)
-                    <span>Klient ma specjalne warunki cenowe: {{ $request->user->notes->special_prices }}</span>
+                    @if ($request->user?->special_prices)
+                    <span>Klient ma specjalne warunki cenowe: {{ $request->user->special_prices }}</span>
                     @endif
                 </div>
                 @endif
@@ -205,13 +205,13 @@
                 />
                 <x-re_quests.price-summary :model="$request" />
 
-                @if ($request->user?->notes->budget && in_array($request->status_id, [1, 5, 6]))
-                <span class="accent {{ $request->user->notes->budget >= $request->price ? 'success' : 'danger' }}">
+                @if ($request->user?->budget && in_array($request->status_id, [1, 5, 6]))
+                <span class="accent {{ $request->user->budget >= $request->price ? 'success' : 'danger' }}">
                     <x-shipyard::app.icon name="safe-square" />
-                    Budżet w wysokości <b>{{ _c_(as_pln($request->user->notes->budget)) }}</b> automatycznie
+                    Budżet w wysokości <b>{{ _c_(as_pln($request->user->budget)) }}</b> automatycznie
                     <br>
                     pokryje
-                    @if ($request->user->notes->budget >= $request->price)
+                    @if ($request->user->budget >= $request->price)
                     całą kwotę zlecenia
                     @else
                     część kwoty zlecenia

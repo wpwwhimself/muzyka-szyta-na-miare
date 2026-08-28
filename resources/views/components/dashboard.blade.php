@@ -1,11 +1,12 @@
-@extends('shipyard::layouts.admin')
-@section("title", "Szpica Arcymaga")
+@props([
+    "user",
+    "data",
+])
 
-@section('content')
-
+@if (is_archmage())
 <div @class(["grid but-mobile-down", "stagger-contents" => setting("animations_mode") >= 1]) style="--col-count: 2;">
 
-@if (count($patrons_adepts) > 0)
+@if (count($data["patrons_adepts"]) > 0)
 <x-section id="patrons-adepts"
     title="Potencjalni patroni"
     icon="seal"
@@ -40,12 +41,12 @@
 <x-extendo-block key="requests"
     title="Zapytania"
     :header-icon="model_icon('requests')"
-    :extended="$requests->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0 || $requests->count() === 0"
+    :extended="$data['requests']->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0 || $data['requests']->count() === 0"
     style="grid-column: span 2;"
 >
     <x-slot name="buttons">
         <x-shipyard::stats.counter
-            :rank="$requests->count()"
+            :rank="$data['requests']->count()"
             label="Liczba zapytań"
             style="lines"
         />
@@ -55,7 +56,7 @@
     </x-slot>
 
     <div class="flex down">
-        @forelse ($requests as $request)
+        @forelse ($data['requests'] as $request)
         <x-requests.tile :request="$request" />
         @empty
         <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
@@ -63,7 +64,7 @@
     </div>
 </x-extendo-block>
 
-@if (count($showcases_missing))
+@if (count($data['showcases_missing']))
 <x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: span 2;">
     <table>
         <thead>
@@ -75,7 +76,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($showcases_missing as $quest)
+            @foreach ($data['showcases_missing'] as $quest)
             <tr>
                 <td><a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a></td>
                 <td><a href="{{ route('admin.model.edit', ['model' => 'songs', 'id' => $quest->song->id]) }}">{{ $quest->song->id }}</a></td>
@@ -106,7 +107,7 @@
     :extended="true"
 >
     <div class="flex down">
-        @foreach ($quests_ongoing->groupBy("client_id")
+        @foreach ($data['quests_ongoing']->groupBy("client_id")
             ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
         as $client_id => $clients_quests)
         <div class="grid but-mobile-down animatable highlight" style="grid-template-columns: auto 1fr;">
@@ -116,7 +117,7 @@
 
             <div class="flex down but-mobile-right" style="row-gap: 0;">
                 <span>{{ $client }}</span>
-                <span>{!! $client->notes->display_subtitle !!}</span>
+                <span>{!! $client->display_subtitle !!}</span>
             </div>
             <div class="flex down no-gap">
                 @foreach ($clients_quests as $quest)
@@ -156,14 +157,14 @@
 >
     <x-slot:buttons>
         <x-shipyard::stats.counter
-            :rank="$quests_ongoing->count()"
+            :rank="$data['quests_ongoing']->count()"
             label="Liczba zleceń"
             style="lines"
         />
     </x-slot:buttons>
 
     <div class="flex down">
-        @forelse ($quests_ongoing as $key => $quest)
+        @forelse ($data['quests_ongoing'] as $key => $quest)
         <x-quests.tile :quest="$quest" :no="$key + 1" />
         @empty
         <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
@@ -178,14 +179,14 @@
 >
     <x-slot:buttons>
         <x-shipyard::stats.counter
-            :rank="$quests_review->count()"
+            :rank="$data['quests_review']->count()"
             label="Liczba zleceń"
             style="lines"
         />
     </x-slot:buttons>
 
     <div class="flex down">
-        @forelse ($quests_review as $key => $quest)
+        @forelse ($data['quests_review'] as $key => $quest)
         <x-quests.tile :quest="$quest" :no="$key + 1" />
         @empty
         <p class="grayed-out">brak aktywnych zleceń</p>
@@ -208,7 +209,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($recent as $change)
+            @forelse ($data['recent'] as $change)
             <tr @class([
                 "ghost" => $change->re_quest?->status_id == $change->new_status_id,
             ])>
@@ -223,12 +224,12 @@
                 <td>
                 @if ($change->is_request)
                     @if ($change->re_quest?->user)
-                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
                     @else
                         {{ _ct_($change->re_quest?->client_name) }}
                     @endif
                 @else
-                    <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->notes->client_name) }}</a>
+                    <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
                 @endif
                 </td>
                 <td>
@@ -261,7 +262,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($janitor_log as $i)
+            @forelse ($data['janitor_log'] as $i)
             <tr>
                 <td>
                     @if(is_object($i->subject))
@@ -322,4 +323,212 @@
 
 </div>
 
-@endsection
+@else
+<div class="grid stagger-contents" style="--col-count: 2;">
+    <x-shipyard::app.section
+        title="Na tapecie"
+        subtitle="Aktualne zlecenia i zapytania"
+        :icon="model_icon('quests')"
+        style="grid-column: span 2;"
+    >
+        <div class="flex down">
+            @forelse (
+                $data["quests_review"]
+                    ->merge($data["quests_ongoing"])
+                    ->merge($data["requests"])
+            as $item)
+                @if ($item instanceof \App\Models\Request)
+                <x-requests.tile :request="$item" />
+                @else
+                <x-quests.tile :quest="$item" />
+                @endif
+            @empty
+            <p class="grayed-out">brak aktywnych zleceń</p>
+            @endforelse
+        </div>
+    </x-shipyard::app.section>
+
+    <x-section id="who-am-i"
+        title="Moje dane"
+        :subtitle="Auth::user()"
+        :icon="model_icon('users')"
+        scissors
+    >
+        <x-sc-scissors />
+
+        <div class="hint-table">
+            <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
+            <div class="positions">
+                <span>Ukończonych zleceń</span>
+                <span>
+                    {{ $data["quests_total"] }}
+                    <x-shipyard::stats.counter :rank="$data['quests_total']" style="military" />
+                </span>
+
+                <span>Status klienta</span>
+                <span>
+                    @if (Auth::user()->trust == -1)
+                    <span class="error"><x-shipyard::app.icon name="ninja" /></span> niezaufany
+                    @elseif (Auth::user()->is_veteran)
+                    <span><x-shipyard::app.icon name="shield-account" /></span> stały klient
+                    @else
+                    <span><x-shipyard::app.icon name="account" /></span> klient początkujący<br>
+                    <i>pozostało zleceń: {{ setting("msznm_veteran_from") - $data["quests_total"] }}</i>
+                    @endif
+                </span>
+
+                @if (Auth::user()->is_patron)
+                <span>Pomoc w reklamie</span>
+                <span>odnotowana</span>
+                @endif
+
+                <span>Łącznie zniżek</span>
+                <span>
+                    {{
+                        Auth::user()->special_prices ? "spersonalizowany cennik"
+                        : (
+                            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+                            +
+                            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+                        )*100 . "%"
+                    }}
+                </span>
+            </div>
+        </div>
+
+        @if (Auth::user()->trust == -1)
+        <br>
+        <div class="section-header accent error">
+            <h1><x-shipyard::app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
+        </div>
+        <p>
+            Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
+            Do momentu ich opłacenia nie możesz przeglądać udostępnionych plików.
+        </p>
+        <h2 class="error">Nieopłacone zlecenia</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Kwota</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data["unpaids"] as $quest)
+                <tr>
+                    <td>
+                        <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                        {{ $quest->song }}
+                        </a>
+                    </td>
+                    <td>{{ as_pln($quest->payment_remaining) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @endif
+
+        @if ($data["quests_total"] && !Auth::user()->is_patron && Auth::user()->helped_showcasing != 1)
+        <br>
+        <div class="section-header showcase-highlight">
+            <h1><x-shipyard::app.icon name="seal" /> Oceń naszą współpracę</h1>
+        </div>
+        <p>
+            Recenzje pomagają mi pozyskiwać nowych klientów.
+            Jeśli i Tobie przypadły do gustu efekty moich prac,
+            możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!
+        </p>
+        <form>
+            <x-button
+                label="Przejdź do mojego fanpage'a" icon="open-in-new" target="_blank"
+                action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
+                />
+            <p>
+                Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
+                <x-warning>
+                    Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
+                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+                </x-warning>
+            </p>
+            <x-shipyard::ui.button
+                label="Właśnie wystawił{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
+                action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
+                class="primary"
+            />
+        </form>
+        @endif
+    </x-section>
+
+    <x-section id="dashboard-finances"
+        title="Finanse"
+        subtitle="Dane do przelewu i suma zobowiązań"
+        :icon="model_icon('prices')"
+        :extended="$data['unpaids']->sum('payment_remaining') > 0"
+        :warning="[
+            'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $data['unpaids']->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
+        ]"
+    >
+        <h2 @if(Auth::user()->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
+        <div class="hint-table">
+            <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
+            <div class="positions">
+                <span>Zaakceptowane</span>
+                <span>{{ as_pln($data["unpaids"]->filter(fn ($q) => in_array($q->status_id, [17, 19]))->sum("payment_remaining")) }}</span>
+
+                <span>Wszystkie</span>
+                <span>{{ as_pln($data["unpaids"]->sum("payment_remaining")) }}</span>
+            </div>
+        </div>
+
+        <h2>
+            Stan konta:
+            {{ as_pln(Auth::user()->budget) }}
+        </h2>
+        <x-tutorial>
+            Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
+        </x-tutorial>
+
+        <div class="section-header">
+            <h1>
+                <i class="fa-solid fa-address-card"></i>
+                Dane do przelewu
+            </h1>
+        </div>
+        <p>
+            Numer konta:
+            <b>58 1090 1607 0000 0001 5333 1539</b>
+        </p>
+        <p>
+            W tytule proszę o wpisanie ID zlecenia dla łatwiejszej identyfikacji wpłaty.
+            Więcej szczegółów znajdziesz w konkretnym zleceniu.
+        </p>
+        @if($data["unpaids"]->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count())
+        <p class="yellowed-out">
+            <i class="fas fa-triangle-exclamation"></i>
+            Posiadasz nieopłacone zlecenia z opóźnionym terminem płatności.
+            Zanim dokonasz przelewu, zwróć uwagę, czy nie wykonujesz go zbyt wcześnie.
+        </p>
+        @endif
+    </x-section>
+</div>
+
+<div class="flex right center">
+    @unless (Auth::user()->trust == -1)
+    <x-shipyard::ui.button
+        label="Złóż zapytanie o podkład/nuty"
+        icon="send"
+        action="none"
+        onclick="openModal('send-podklady-request', {
+            client_id: {{ Auth::user()?->id ?? 'null' }},
+            client_name: '{{ Auth::user()?->display_name }}' || null,
+            email: '{{ Auth::user()?->email }}' || null,
+            phone: '{{ Auth::user()?->phone }}' || null,
+            other_medium: '{{ Auth::user()?->other_medium }}' || null,
+            contact_preference: '{{ Auth::user()?->contact_preference }}' || 'email',
+        })"
+        class="primary"
+    />
+    @endunless
+</div>
+
+@endif

@@ -194,7 +194,7 @@ if(!function_exists("from_base36")){
  */
 if(!function_exists("generate_password")){
     function generate_password(){
-        $existing_passwords = User::all()->map(fn ($u) => $u->notes?->password)->filter()->toArray();
+        $existing_passwords = User::all()->map(fn ($u) => $u?->password_actual)->filter()->toArray();
         $chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789";
         do{
             //sprawdź unikatowość
@@ -241,10 +241,10 @@ if(!function_exists("can_download_files")){
         $client = User::findOrFail($client_id);
         $quest = Quest::findOrFail($quest_id);
         return
-            $client->notes->can_see_files
+            $client->can_see_files
             && (
-                $client->notes->is_veteran
-                || $client->notes->trust >= 1
+                $client->is_veteran
+                || $client->trust >= 1
                 || $quest->paid
                 || (
                     ($quest->delayed_payment?->diffInDays(Carbon::today(), false) <= 0 ?? true)

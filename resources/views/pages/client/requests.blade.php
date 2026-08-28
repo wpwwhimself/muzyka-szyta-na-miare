@@ -21,25 +21,25 @@
             </p>
         </x-tutorial>
 
-        @unless (Auth::user()->notes->trust == -1)
+        @unless (Auth::user()->trust == -1)
         <x-shipyard::ui.button
             label="Złóż zapytanie o podkład/nuty"
             icon="send"
             action="none"
             onclick="openModal('send-podklady-request', {
                 client_id: {{ Auth::user()?->id ?? 'null' }},
-                client_name: '{{ Auth::user()?->notes?->client_name }}' || null,
-                email: '{{ Auth::user()?->notes?->email }}' || null,
-                phone: '{{ Auth::user()?->notes?->phone }}' || null,
-                other_medium: '{{ Auth::user()?->notes?->other_medium }}' || null,
-                contact_preference: '{{ Auth::user()?->notes?->contact_preference }}' || 'email',
+                client_name: '{{ Auth::user()?->display_name }}' || null,
+                email: '{{ Auth::user()?->email }}' || null,
+                phone: '{{ Auth::user()?->phone }}' || null,
+                other_medium: '{{ Auth::user()?->other_medium }}' || null,
+                contact_preference: '{{ Auth::user()?->contact_preference }}' || 'email',
             })"
             class="primary"
         />
         @endunless
     </x-slot>
 
-    @if (Auth::user()->notes->is_old)
+    @if (Auth::user()->is_old)
     <p class="yellowed-out">
         <i class="fa-solid fa-triangle-exclamation"></i>
         Bardzo prawdopodobnym jest, że poniższa lista jest niepełna.

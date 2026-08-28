@@ -307,7 +307,7 @@ class Modal extends ShipyardModal
                     [
                         "name" => "comment",
                         "type" => "TEXT",
-                        "label" => "Komentarz (opcjonalnie)",
+                        "label" => "Komentarz (opcj.)",
                         "icon" => "text",
                         "extra" => [
                             "rows" => 10,

@@ -20,7 +20,7 @@
 </p>
 @endif
 
-@if (!($quest->user->notes->is_veteran || $quest->user->notes->trust == 1))
+@if (!($quest->user->is_veteran || $quest->user->trust == 1))
 <p>
     Jeśli w zleceniu są dostępne pliki,
     teraz może je {{ $pl["kobieta"] ? "Pani" : "Pan" }} pobierać za pomocą odpowiednich przycisków w widoku zlecenia.
@@ -36,7 +36,7 @@
 </p>
 <p>
     <i>
-        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->notes->password }}</b>
+        Dla przypomnienia: hasło dostępu do {{ $pl["kobieta"] ? "Pani" : "Pana" }} konta to <b>{{ $quest->user->password_actual }}</b>
     </i>
 </p>
 

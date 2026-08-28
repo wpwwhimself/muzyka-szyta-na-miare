@@ -65,7 +65,7 @@ class FileController extends Controller
             : $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
         $clients = User::has("notes")->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->client_name . " «$c[id]»")])
             ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
@@ -86,7 +86,7 @@ class FileController extends Controller
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
         $clients = User::has("notes")->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->notes->client_name . " «$c[id]»")])
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->client_name . " «$c[id]»")])
             ->toArray();
         $song = null;
         $existing_files = ModelsFile::where("song_id", $file->song_id)->get();

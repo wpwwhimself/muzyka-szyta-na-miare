@@ -40,7 +40,7 @@ class QuestController extends Controller
         $quests = $quests->paginate(25);
 
         return view("pages.".user_role().".quests", [
-            "title" => ($client && is_archmage()) ? $client->notes->client_name." – zlecenia" : "Lista zleceń",
+            "title" => ($client && is_archmage()) ? $client->display_name." – zlecenia" : "Lista zleceń",
             "quests" => $quests
         ]);
     }
@@ -71,7 +71,7 @@ class QuestController extends Controller
         ] : [
             "quote" => [
                 'Zwróć uwagę, kiedy masz zapłacić' => !!$quest->delayed_payment_in_effect,
-                'Zlecenie nieopłacone' => $quest->user->notes->trust == -1
+                'Zlecenie nieopłacone' => $quest->user->trust == -1
                     || $quest->status_id == 19 && !$quest->paid
                     || $quest->payments_sum > 0 && $quest->payments_sum < $quest->price,
             ],
@@ -128,8 +128,8 @@ class QuestController extends Controller
                 ]);
 
                 // budżet
-                $quest->user->notes->update([
-                    "budget" => $quest->user->notes->budget + $amount_for_budget
+                $quest->user->update([
+                    "budget" => $quest->user->budget + $amount_for_budget
                 ]);
             }
 
@@ -158,20 +158,20 @@ class QuestController extends Controller
             // sending mail
             $flash_content = "Cena wpisana";
             if($quest->paid){
-                if($quest->user->notes->email){
-                    Mail::to($quest->user->notes->email)->send(new PaymentReceived($quest->fresh()));
+                if($quest->user->email){
+                    Mail::to($quest->user->email)->send(new PaymentReceived($quest->fresh()));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
                 }
-                if($quest->user->notes->contact_preference != "email"){
+                if($quest->user->contact_preference != "email"){
                     // StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => false]);
                     $flash_content .= ", ale wyślij wiadomość";
                 }
             }
 
             // wycofanie statusu krętacza
-            if ($quest->user->notes->trust == -1) {
-                $quest->user->notes->update(["trust" => 0]);
+            if ($quest->user->trust == -1) {
+                $quest->user->update(["trust" => 0]);
                 $flash_content .= "; już nie jest krętaczem";
             }
 
@@ -227,8 +227,8 @@ class QuestController extends Controller
             in_array($quest->status_id, [15, 95])
             || $quest->status_id == 11 && is_archmage()
         ){ // mail do klienta
-            if($quest->user->notes->email){
-                Mail::to($quest->user->notes->email)->send(
+            if($quest->user->email){
+                Mail::to($quest->user->email)->send(
                     $quest->status_id == 95
                     ? new Clarification($quest->fresh())
                     : new QuestUpdated($quest->fresh())
@@ -236,7 +236,7 @@ class QuestController extends Controller
                 $mailing = true;
                 $flash_content .= ", mail wysłany";
             }
-            if($quest->user->notes->contact_preference != "email"){
+            if($quest->user->contact_preference != "email"){
                 $mailing ??= false;
                 $flash_content .= ", ale wyślij wiadomość";
             }
@@ -318,10 +318,10 @@ class QuestController extends Controller
                 : null,
         ]);
         $difference = $quest->price - $price_before;
-        if($quest->user->notes->budget){
-            $sub_amount = min([$difference, $quest->user->notes->budget]);
-            $quest->user->notes->update([
-                "budget" => $quest->user->notes->budget - $sub_amount
+        if($quest->user->budget){
+            $sub_amount = min([$difference, $quest->user->budget]);
+            $quest->user->update([
+                "budget" => $quest->user->budget - $sub_amount
             ]);
             BackController::newStatusLog(null, 32, -$sub_amount, $quest->client_id);
             MoneyTransaction::create([
@@ -354,11 +354,11 @@ class QuestController extends Controller
 
         // sending mail
         $mailing = null;
-        if($quest->user->notes->email){
-            Mail::to($quest->user->notes->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
+        if($quest->user->email){
+            Mail::to($quest->user->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
             $mailing = true;
         }
-        if($quest->user->notes->contact_preference != "email"){
+        if($quest->user->contact_preference != "email"){
             $mailing ??= false;
         }
 

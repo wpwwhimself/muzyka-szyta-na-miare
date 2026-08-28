@@ -74,7 +74,7 @@ class StatusChange extends Model
             get: fn () => (
                 $this->changed_by == 1 ? "Wojciech Przybyła" : (
                 $this->changed_by === null ? Request::find($this->re_quest_id)->client_name : (
-                $this->changer->notes->client_name
+                $this->changer->display_name
             ))),
         );
     }

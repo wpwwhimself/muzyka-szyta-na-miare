@@ -25,7 +25,7 @@
         <div class="flex down">
             <section class="account">
                 <h3>Nabywca</h3>
-                <h2 class="accent primary">{{ _ct_($invoice->payer_name ?? $invoice->quest->user->notes->client_name) }}</h2>
+                <h2 class="accent primary">{{ _ct_($invoice->payer_name ?? $invoice->quest->user->display_name) }}</h2>
                 <h3>{{ _ct_($invoice->payer_title) }}</h3>
                 <div class="grid name-value" style="--col-count: 2;">
                     @if ($invoice->payer_address)

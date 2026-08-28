@@ -95,10 +95,10 @@
             <x-shipyard::ui.input type="select"
                 :select-data="[
                     'optionsFromScope' => [
-                        '\App\Models\UserNote',
+                        '\App\Models\User',
                         'clients',
                         'option_label',
-                        'user_id',
+                        'id',
                     ],
                 ]"
                 name="only_for_client_id[]"

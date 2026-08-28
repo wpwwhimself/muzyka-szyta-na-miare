@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         User::all()->each(fn ($u) => $u->update([
-            "name" => substr($u->notes?->password ?? Str::random(4), 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
+            "name" => substr($u?->password_actual ?? Str::random(4), 0, AuthController::NOLOGIN_LOGIN_PART_LENGTH),
         ]));
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         User::all()->each(fn ($u) => $u->update([
-            "name" => $u->notes?->client_name ?? Str::random(8),
+            "name" => $u?->display_name ?? Str::random(8),
         ]));
     }
 };

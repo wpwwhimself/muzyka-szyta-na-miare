@@ -79,10 +79,10 @@
                 @endphp
 
                 <h2>
-                    {!! $client->notes->client_name !!}
+                    {!! $client->display_name !!}
                 </h2>
                 <div>
-                    {!! $client->notes->display_subtitle !!}
+                    {!! $client->display_subtitle !!}
                 </div>
                 <small class="accent secondary">
                     <x-shipyard::app.icon :name="model_icon('compositions')" />
@@ -211,11 +211,11 @@
     action="none"
     onclick="openModal('send-podklady-request', {
         client_id: {{ Auth::user()?->id ?? 'null' }},
-        client_name: '{{ Auth::user()?->notes?->client_name }}' || null,
-        email: '{{ Auth::user()?->notes?->email }}' || null,
-        phone: '{{ Auth::user()?->notes?->phone }}' || null,
-        other_medium: '{{ Auth::user()?->notes?->other_medium }}' || null,
-        contact_preference: '{{ Auth::user()?->notes?->contact_preference }}' || 'email',
+        client_name: '{{ Auth::user()?->display_name }}' || null,
+        email: '{{ Auth::user()?->email }}' || null,
+        phone: '{{ Auth::user()?->phone }}' || null,
+        other_medium: '{{ Auth::user()?->other_medium }}' || null,
+        contact_preference: '{{ Auth::user()?->contact_preference }}' || 'email',
     })"
     class="major primary"
 />

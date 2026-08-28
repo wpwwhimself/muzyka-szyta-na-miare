@@ -30,7 +30,7 @@ class Clarification extends Mailable
             $this->re_quest = $data;
             $this->is_request = $data instanceof Request;
         }
-        $this->pl = client_polonize($this->is_request ? $this->re_quest->client_name : $this->re_quest->user->notes->client_name);
+        $this->pl = client_polonize($this->is_request ? $this->re_quest->client_name : $this->re_quest->user->display_name);
     }
 
     /**

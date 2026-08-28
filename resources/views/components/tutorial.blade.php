@@ -1,4 +1,4 @@
-@unless (is_archmage() || Auth::user()?->notes->is_veteran)
+@unless (is_archmage() || Auth::user()?->is_veteran)
 <div class="tutorial flex right middle nowrap">
     <span class="hint">
         <x-shipyard::app.icon name="lightbulb-question" />

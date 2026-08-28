@@ -43,7 +43,7 @@ class Quest extends Model
         return implode(" ", [
             $this->song->title ?? "Bez tytułu",
             "dla:",
-            $this->user->notes->client_name,
+            $this->user->display_name,
         ]);
     }
 
@@ -54,7 +54,7 @@ class Quest extends Model
                 "[$this->id] ",
                 $this->song->title ?? "Bez tytułu",
                 "dla:",
-                $this->user->notes->client_name,
+                $this->user->display_name,
             ]),
         );
     }
@@ -217,7 +217,7 @@ class Quest extends Model
             "type" => "select",
             "selectData" => [
                 "optionsFromScope" => [
-                    UserNote::class,
+                    User::class,
                     "clients",
                     "option_label",
                     "user_id",
@@ -296,7 +296,7 @@ class Quest extends Model
     public function clientName(): Attribute
     {
         return Attribute::make(
-            get: fn ($v) => $this->user->notes->client_name ?? $v,
+            get: fn ($v) => $this->user->display_name ?? $v,
         );
     }
 

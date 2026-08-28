@@ -25,111 +25,21 @@ use Illuminate\Support\Str;
 
 class BackController extends Controller
 {
-    public function dashboard(){
-        $user = Auth::user();
-
-        $requests = Request::whereNotIn("status_id", [4, 7, 8, 9])
-            ->orderBy("updated_at");
-        $quests_ongoing = Quest::whereIn("status_id", STATUSES_WAITING_FOR_ME())
-            ->orderByRaw("case status_id when 13 then 1 else 0 end")
-            ->orderByRaw("case when deadline is null then 1 else 0 end")
-            ->orderByRaw("case status_id
-                when 12 then 1
-                when 11 or 14 or 16 or 21 or 26 or 96 then 5
-                else 99
-            end")
-            ->orderByRaw("case when deadline <= now() + interval 1 day then 0 else 1 end")
-            ->orderByRaw("case when hard_deadline is not null and hard_deadline < deadline then hard_deadline else deadline end")
-            ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
-            ->orderByRaw("paid desc")
-            ->orderBy("created_at");
-        $quests_review = Quest::whereNotIn("status_id", [17, 18, 19])
-            ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
-            ->orderByDesc("deadline")
-            ->orderBy("created_at");
-
-        if($user->hasRole("client", true)){
-            $requests = $requests->where("client_id", $user->id);
-            $quests_ongoing = $quests_ongoing->where("client_id", $user->id);
-            $quests_review = $quests_review->where("client_id", $user->id);
-
-            $quests_total = $user->notes->exp;
-            $unpaids = Auth::user()->questsUnpaid()->get();
-        }else{
-            $recent = StatusChange::whereNotIn("new_status_id", [9, 32, 34])
-                ->orderByDesc("date")
-                ->limit(25)
-                ->get();
-            foreach($recent as $change){
-                $change->is_request = is_request($change->re_quest_id);
-                $change->re_quest = ($change->is_request) ?
-                    Request::find($change->re_quest_id) :
-                    Quest::find($change->re_quest_id);
-                $change->new_status = Status::find($change->new_status_id);
-            }
-            $patrons_adepts = User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 1))->get();
-            $showcases_missing = Quest::where("status_id", 19)
-                ->whereDate("updated_at", ">", Carbon::today()->subWeeks(2))
-                ->get()
-                ->filter(fn($q) => !$q->song->has_showcase_file && $q->quest_type?->code == "P");
-
-            $janitor_log = json_decode(Storage::get("janitor_log.json")) ?? [];
-            foreach($janitor_log as $i){
-                // translating subjects
-                $length = strlen($i->subject);
-                $replacement =
-                    ($length == 36) ? Request::find($i->subject)
-                    : (($length == 6) ? Quest::find($i->subject)
-                    : Song::find($i->subject));
-                $i->subject = $replacement ?? $i->subject;
-
-                // translating operations
-                if(in_array($i->comment, array_keys(JanitorController::$OPERATIONS))){
-                    [$status_id, $comment_code] = explode("_", $i->comment);
-                    $i->comment = [
-                        "status_id" => $status_id,
-                        "comment" => JanitorController::$OPERATIONS[$i->comment],
-                    ];
-                }
-            }
-        }
-        $quests_ongoing = $quests_ongoing->get();
-        $quests_review = $quests_review->get();
-        $requests = $requests->get();
-
-        return view(
-            "pages.".user_role().".dashboard",
-            !is_archmage()
-                ? compact(
-                    "quests_ongoing", "quests_review", "requests",
-                    "quests_total",
-                    "unpaids",
-                )
-                : compact(
-                    "quests_ongoing", "quests_review", "requests",
-                    "recent",
-                    "patrons_adepts",
-                    "showcases_missing",
-                    "janitor_log",
-                )
-        );
-    }
-
     #region prices
     public function prices(){
         $prices = DB::table("prices")->get();
 
         $discount = (is_archmage()) ? null : (
-            (Auth::user()->notes->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
+            (Auth::user()->is_veteran) * floatval(DB::table("prices")->where("indicator", "=")->value("price_".pricing(Auth::id())))
             +
-            (Auth::user()->notes->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
+            (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
         );
 
         $clients = [];
         if (is_archmage()) {
-            $clients_raw = User::has("notes")->get();
+            $clients_raw = User::clients()->get();
             foreach($clients_raw as $client){
-                $clients[] = ["value" => $client->id, "label" => _ct_($client->notes->client_name ." «" . $client->id . "»")];
+                $clients[] = ["value" => $client->id, "label" => _ct_($client->display_name ." «" . $client->id . "»")];
             }
         }
 
@@ -222,13 +132,13 @@ class BackController extends Controller
     public function lookupUsers()
     {
         $fieldName = "client_id";
-        $data = User::has("notes")
+        $data = User::clients()
             ->get()
             ->map(fn ($u) => collect([
                 "id" => $u->id,
-                "name" => $u->notes->client_name,
-                "email" => $u->notes->email,
-                "phone" => $u->notes->phone,
+                "name" => $u->display_name,
+                "email" => $u->email,
+                "phone" => $u->phone,
             ]))
             ->filter(fn ($u) =>
                 Str::contains($u["id"], request("query"), true)

@@ -52,7 +52,7 @@ setInterval(getQuests, 10e3)
                 </div>
             </div>
 
-            <span><a :href="`/clients/list?search=${quest.user.notes.client_name}`">{{ quest.user.notes.client_name }}</a></span>
+            <span><a :href="`/clients/list?search=${quest.user.display_name}`">{{ quest.user.display_name }}</a></span>
 
             <a :href="`/studio-view/${quest.id}`" class="button submit tight"><FontAwesomeIcon :icon="faAnglesRight" /></a>
         </div>

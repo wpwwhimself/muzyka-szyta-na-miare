@@ -68,9 +68,9 @@ class User extends ShipyardUser
                 "action" => route("client-mail-prepare", ["client_id" => $this->id]),
             ])->render()
             . view("shipyard::components.ui.button", [
-                "icon" => "wrench",
+                "icon" => "pencil",
                 "label" => "Edytuj",
-                "action" => route("client-view", ["id" => $this->id]),
+                "action" => route("admin.model.edit", ["model" => "users", "id" => $this->id]),
             ])->render(),
         );
     }
@@ -580,12 +580,6 @@ class User extends ShipyardUser
     #endregion
 
     #region relations
-    // deprecated
-    public function notes()
-    {
-        return $this->hasOne(UserNote::class);
-    }
-
     public function quests(){
         return $this->hasMany(Quest::class, "client_id");
     }

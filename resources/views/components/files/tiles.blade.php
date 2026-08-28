@@ -41,7 +41,7 @@
                 @if ($version->exclusiveClients && is_archmage())
                 <div class="file-tag flex right center middle"
                     style="background-color: white;"
-                    {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("notes.client_name")->join(", ")) }}
+                    {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("display_name")->join(", ")) }}
                 >
                     <x-shipyard::app.icon name="eye" />
                 </div>

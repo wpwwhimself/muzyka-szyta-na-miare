@@ -22,7 +22,7 @@ class RequestAwaitingReview extends Mailable
     public function __construct($request)
     {
         $this->request = is_string($request) ? Request::findOrFail($request) : $request;
-        $this->pl = client_polonize($this->request->client?->client_name ?? $this->request->client_name);
+        $this->pl = client_polonize($this->request->client?->display_name ?? $this->request->client_name);
     }
 
     /**

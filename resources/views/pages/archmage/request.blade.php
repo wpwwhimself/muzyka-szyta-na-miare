@@ -83,7 +83,7 @@
             <x-slot:buttons>
                 @if ($request->client_id)
                 <x-shipyard::ui.button
-                    :action="route('client-view', ['id' => $request->client_id])"
+                    :action="route('admin.model.edit', ['model' => 'users', 'id' => $request->client_id])"
                     :icon="model_icon('users')"
                     pop="Szczegóły"
                     target="_blank"

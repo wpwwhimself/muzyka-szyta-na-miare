@@ -133,10 +133,10 @@ class StatsController extends Controller
         $recent_gross_alltime = collect($recent_income_alltime)
             ->mergeRecursive($recent_costs_alltime)
             ->map(fn($val, $key) => ["label" => $key, "value" => round($val[0] - $val[2], 2)]);
-        $client_exp_raw = User::has("notes")->withCount("questsDone")
+        $client_exp_raw = User::clients()->withCount("questsDone")
             ->get()
             ->mapWithKeys(fn ($u) => [$u->display_name => $u->quests_done_count])
-            ->mergeRecursive(User::has("notes")->get()->mapWithKeys(fn ($u) => [$u->display_name => $u->extra_exp]))
+            ->mergeRecursive(User::clients()->get()->mapWithKeys(fn ($u) => [$u->display_name => $u->extra_exp]))
             ->mapWithKeys(fn($val, $key) => [$key => $val[0] + $val[1]])
             ->countBy()
             ->toArray();
@@ -307,19 +307,19 @@ class StatsController extends Controller
             "clients" => [
                 "summary" => [
                     "split" => [
-                        "zaufani" => User::whereHas("notes", fn ($q) => $q->where("trust", 1))->count(),
-                        "krętacze" => User::whereHas("notes", fn ($q) => $q->where("trust", -1))->count(),
-                        "patroni" => User::whereHas("notes", fn ($q) => $q->where("helped_showcasing", 2))->count(),
+                        "zaufani" => User::where("trust", 1)->count(),
+                        "krętacze" => User::where("trust", -1)->count(),
+                        "patroni" => User::where("helped_showcasing", 2)->count(),
                         "bez zleceń" => User::withCount("questsDone")
                             ->having("quests_done_count", 0)
-                            ->whereHas("notes", fn ($q) => $q->where("extra_exp", 0))
+                            ->where("extra_exp", 0)
                             ->count(),
-                        "kobiety" => User::has("notes")
+                        "kobiety" => User::clients()
                             ->get()
                             ->filter(fn($client) => $client->is_woman)
                             ->count(),
                     ],
-                    "total" => User::has("notes")->get()->count(),
+                    "total" => User::clients()->get()->count(),
                 ],
                 "exp" => [
                     ["label" => "1", "value" => client_exp_tally($client_exp_raw, 1, 1)],
@@ -337,9 +337,9 @@ class StatsController extends Controller
                     ->map(fn ($i) => ["label" => $i->month, "value" => $i->count]),
                 "pickiness" => [
                     "high" => [
-                        "rows" => User::has("notes")
+                        "rows" => User::clients()
                             ->get()
-                            ->sortByDesc("notes.pickiness")
+                            ->sortByDesc("pickiness")
                             ->take(10)
                             ->map(fn($item, $key) => [
                                 "Nazwisko" => $item->name_and_badges,
@@ -558,9 +558,9 @@ class StatsController extends Controller
             ]);
 
         $unpaids = User::has("questsUnpaid")
-            ->whereHas("notes", fn ($q) => $q->where("is_forgotten", false))
+            ->where("is_forgotten", false)
             ->get()
-            ->sortBy("notes.client_name");
+            ->sortBy("display_name");
 
         $recent = MoneyTransaction::visible()->where("typable_type", IncomeType::class)->orderByDesc("created_at")->limit(10)->get();
         foreach($recent as $i){
@@ -1007,7 +1007,7 @@ class StatsController extends Controller
             MoneyTransaction::visible()->whereDate("date", ">=", Carbon::today()->firstOfMonth())->where("typable_type", IncomeType::class)->sum("amount")
             + Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
+                ->whereHas("user", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", "<", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
                     ->orWhereNull("delayed_payment"))
@@ -1021,7 +1021,7 @@ class StatsController extends Controller
             //next month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
+                ->whereHas("user", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthNoOverflow()->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthNoOverflow()->lastOfMonth()))
@@ -1035,7 +1035,7 @@ class StatsController extends Controller
             //neeeeeeext month (scheduled)
             Quest::where("paid", 0)
                 ->whereNotIn("status_id", [17, 18])
-                ->whereHas("user.notes", fn($q) => $q->whereBetween("trust", [0, 3]))
+                ->whereHas("user", fn($q) => $q->whereBetween("trust", [0, 3]))
                 ->where(fn($q) => $q
                     ->whereDate("delayed_payment", ">=", Carbon::today()->addMonthsNoOverflow(2)->firstOfMonth())
                     ->whereDate("delayed_payment", "<=", Carbon::today()->addMonthsNoOverflow(2)->lastOfMonth()))

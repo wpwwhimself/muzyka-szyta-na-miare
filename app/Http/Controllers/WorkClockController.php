@@ -22,7 +22,7 @@ class WorkClockController extends Controller
     }
 
     public function activeQuests(Request $rq) {
-        $data = Quest::with("song", "user.notes", "status")
+        $data = Quest::with("song", "user", "status")
             ->whereIn("status_id", [12])
             ->orderBy("deadline")
             ->get();
@@ -58,7 +58,7 @@ class WorkClockController extends Controller
 
     public function startStop(Request $rq){
         if(Auth::id() === 0) return response()->json(OBSERVER_ERROR(), 403);
-        
+
         $response = self::_startStop($rq->song_id, $rq->status_id);
 
         return response()->json($response);

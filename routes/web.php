@@ -33,13 +33,10 @@ Route::controller(HomeController::class)->group(function(){
     Route::get("catalog", "catalog")->name("catalog");
 });
 
-if (is_archmage()) {
-    Route::redirect("/profile", "/dashboard");
-}
+Route::redirect("/dashboard", "/profile");
 
 Route::middleware("auth")->group(function(){
     Route::controller(BackController::class)->group(function(){
-        Route::get('/dashboard', "dashboard")->name("dashboard");
         Route::get('/prices', "prices")->name("prices");
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");

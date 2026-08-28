@@ -64,8 +64,8 @@ class FileController extends Controller
             ? $entities[$entity_name]::find($id)
             : $entities[$entity_name]::find($id)->song;
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::has("notes")->get()
-            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->client_name . " «$c[id]»")])
+        $clients = User::clients()->get()
+            ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->display_name . " «$c[id]»")])
             ->toArray();
         $file = null;
         $existing_files = ModelsFile::where("song_id", $song->id)->get();
@@ -85,7 +85,7 @@ class FileController extends Controller
     {
         $file = ModelsFile::findOrFail($id);
         $tags = FileTag::orderBy("name")->get();
-        $clients = User::has("notes")->get()
+        $clients = User::clients()->get()
             ->mapWithKeys(fn ($c) => [$c->id => _ct_($c->client_name . " «$c[id]»")])
             ->toArray();
         $song = null;

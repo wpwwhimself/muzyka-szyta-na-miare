@@ -46,7 +46,7 @@ class SpellbookController extends Controller
     public function become(User $user)
     {
         Auth::login($user);
-        return back()->with("toast", ["success", "Jesteś teraz: $user->client_name"]);
+        return back()->with("toast", ["success", "Jesteś teraz: $user->display_name"]);
     }
 
     public function obliterate($id){

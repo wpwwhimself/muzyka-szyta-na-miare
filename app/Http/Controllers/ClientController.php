@@ -28,7 +28,7 @@ class ClientController extends Controller
         if(!in_array(Auth::id(), [0, 1, $id])) abort(403, "Nie możesz edytować danych innego użytkownika");
 
         return view("pages.".user_role().".client", array_merge([
-            "title" => $client->client_name." | Edycja klienta"
+            "title" => $client->display_name." | Edycja klienta"
         ], compact(
             "client",
         )));
@@ -116,7 +116,7 @@ class ClientController extends Controller
 
         $clients_for_mailing = $rq->clients
             ? User::whereIn("id", $rq->clients)->get()
-            : User::has("notes")->whereHas("notes", fn ($q) => $q->whereNotNull("email"))->get(); // defaults to everybody available!
+            : User::clients()->whereNotNull("email")->get(); // defaults to everybody available!
 
         foreach ($clients_for_mailing as $client) {
             try {

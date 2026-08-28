@@ -28,7 +28,7 @@
                     <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
                     <td>
                         @if ($efile->exclusiveClients->count())
-                        {{ $efile->exclusiveClients->pluck("client_name")->join(", ") }}
+                        {{ $efile->exclusiveClients->pluck("display_name")->join(", ") }}
                         @else
                         <span class="grayed-out">nikt</span>
                         @endif

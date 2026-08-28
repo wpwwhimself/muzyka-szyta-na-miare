@@ -107,8 +107,8 @@ class JanitorController extends Controller
          */
         $quests = Quest::whereIn("status_id", [15, 31, 95])
             ->where(function($q){
-                $q->whereHas('user.notes', function($q){ $q->where('trust', '<', 1); })
-                    ->orWhereHas('user.notes', function($q){ $q->where('trust', 1); })->where("paid", true);
+                $q->whereHas('user', function($q){ $q->where('trust', '<', 1); })
+                    ->orWhereHas('user', function($q){ $q->where('trust', 1); })->where("paid", true);
             })
             ->where(function($q) use ($msznm_quest_expired_after){
                 $q->where(function($qq) use ($msznm_quest_expired_after){
@@ -145,7 +145,7 @@ class JanitorController extends Controller
          */
         $quests = Quest::where("paid", 0)
             ->where("status_id", 19)
-            ->whereHas('user.notes', function($q){
+            ->whereHas('user', function($q){
                 $q->where('trust', '<', 1);
             })
             ->where("updated_at", "<=", Carbon::now()->subDays($msznm_quest_expired_after)->toDateString())

@@ -264,7 +264,7 @@ class RequestController extends Controller
                 }
                 if($rq->client_id){
                     User::find($rq->client_id)->update([
-                        "client_name" => $rq->client_name,
+                        "display_name" => $rq->client_name,
                         "email" => $rq->email,
                         "phone" => $rq->phone,
                         "other_medium" => $rq->other_medium,
@@ -395,7 +395,7 @@ class RequestController extends Controller
             }
             if($client){
                 $client->update([
-                    "client_name" => $rq->client_name,
+                    "display_name" => $rq->client_name,
                     "email" => $rq->email ?? $client->email,
                     "phone" => $rq->phone,
                     "other_medium" => $rq->other_medium,

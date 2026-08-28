@@ -220,7 +220,7 @@ class Quest extends Model
                     User::class,
                     "clients",
                     "option_label",
-                    "user_id",
+                    "id",
                 ],
                 "emptyOption" => "wszyscy",
             ],

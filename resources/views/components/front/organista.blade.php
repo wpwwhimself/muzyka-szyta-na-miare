@@ -27,15 +27,15 @@
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
-        <x-shipyard::app.icon name="trumpet" />
+        <x-shipyard::app.icon name="account-hard-hat" />
         <div>
-            <h2>Trąbka</h2>
-            <p>Pozwól wybrzmieć pięknym melodiom</p>
+            <h2>Gotowy na wszystko</h2>
+            <p>Mogę zagrać w każdym scenariuszu</p>
         </div>
         <ul>
-            <li>Trębacz podczas <strong>pogrzebu</strong></li>
-            <li><strong>Solista</strong> z akompaniatorem</li>
-            <li>Melancholijne utwory odpowiednie do okazji</li>
+            <li>Utwory <strong>obcojęzyczne</strong> – angielski/niemiecki</li>
+            <li>Uroczystości w plenerze, <strong>na własnym instrumencie</strong></li>
+            <li>Msze ekumeniczne itp.</li>
         </ul>
     </div>
 

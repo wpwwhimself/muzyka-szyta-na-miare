@@ -431,7 +431,7 @@ class Modal extends ShipyardModal
                     [
                         "name" => "wishes",
                         "type" => "TEXT",
-                        "label" => "Jakie są Twoje życzenia?",
+                        "label" => "Szczegóły (miejsce, życzenia itp.)",
                         "icon" => "cloud",
                     ],
                 ], $contact_form_turing),
@@ -478,7 +478,7 @@ class Modal extends ShipyardModal
                     [
                         "name" => "wishes",
                         "type" => "TEXT",
-                        "label" => "Jakie są Twoje życzenia?",
+                        "label" => "Szczegóły (miejsce, życzenia itp.)",
                         "icon" => "cloud",
                     ],
                     [

@@ -25,7 +25,7 @@
             @foreach ($patrons_adepts as $patron)
             <tr>
                 <td>
-                    <a href="{{ route('client-view', ['id' => $patron->id]) }}">{!! $patron !!}</a>
+                    <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $patron->id]) }}">{!! $patron !!}</a>
                 </td>
                 <td>
                     <x-button label="" icon="check" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 2]) }}" :small="true" />
@@ -224,12 +224,12 @@
                 <td>
                 @if ($change->is_request)
                     @if ($change->re_quest?->user)
-                        <a href="{{ route('client-view', ['id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
+                        <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
                     @else
                         {{ _ct_($change->re_quest?->client_name) }}
                     @endif
                 @else
-                    <a href="{{ route('client-view', ['id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
+                    <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
                 @endif
                 </td>
                 <td>

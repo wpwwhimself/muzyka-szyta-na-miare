@@ -111,7 +111,7 @@
             </div>
 
             <x-slot:buttons>
-                <x-button :action="route('client-view', ['id' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
+                <x-button :action="route('admin.model.edit', ['model' => 'users', 'id' => $quest->client_id])" :icon="model_icon('users')" pop="Szczegóły" />
                 <x-button :action="route('admin.model.list', ['model' => 'quests', 'fltr[client]' => $quest->client_id])" :icon="model_icon('quests')" pop="Zlecenia" />
             </x-slot:buttons>
         </x-extendo-block>

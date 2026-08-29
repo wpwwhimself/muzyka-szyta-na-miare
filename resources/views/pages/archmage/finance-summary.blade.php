@@ -46,7 +46,7 @@
                 <td>{{ $pos->date->format("d.m") }}</td>
                 <td>
                     @if ($pos->relatable)
-                    <a href="{{ route('client-view', ['id' => $pos->relatable->user?->id ?? $pos->relatable->id]) }}">
+                    <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $pos->relatable->user?->id ?? $pos->relatable->id]) }}">
                         {!! $pos->relatable->user ?? $pos->relatable !!}
                     </a>
                     @endif

@@ -47,7 +47,7 @@
                 @endif
                     <td>
                         @if ($item->relatable)
-                        <a href="{{ route('client-view', ['id' => $item->relatable->user?->id ?? $item->relatable->id]) }}">
+                        <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $item->relatable->user?->id ?? $item->relatable->id]) }}">
                             {!! $item->relatable->user ?? $item->relatable !!}
                         </a>
                         @endif
@@ -151,7 +151,7 @@
                 <x-shipyard::ui.button
                     pop="Klient"
                     :icon="model_icon('users')"
-                    :action="route('client-view', ['id' => $client->id])"
+                    :action="route('admin.model.edit', ['model' => 'users', 'id' => $client->id])"
                 />
                 <x-shipyard::ui.button
                     pop="Utwórz fakturę na nieopłacone zlecenia"

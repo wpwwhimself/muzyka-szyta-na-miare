@@ -319,7 +319,7 @@ class RequestController extends Controller
             $requests_created[] = $request;
         }
 
-        if(Auth::check()) return redirect()->route("dashboard")->with("toast", ["success", $flash_content]);
+        if(Auth::check()) return redirect()->route("profile")->with("toast", ["success", $flash_content]);
         return view("pages.client.request-confirm", compact("requests_created"))->with("toast", ["success", $flash_content]);
     }
 

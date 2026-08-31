@@ -23,7 +23,7 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->make();
         $res = $this->actingAs($user)->get(route("login"));
-        $res->assertRedirect(route("dashboard"));
+        $res->assertRedirect(route("profile"));
     }
 
     public function testUserCanLoginWithCorrectCredentials()
@@ -36,7 +36,7 @@ class LoginTest extends TestCase
         $res = $this->post(route("authenticate"), [
             "password" => $password,
         ]);
-        $res->assertRedirect(route("dashboard"));
+        $res->assertRedirect(route("profile"));
         $this->assertAuthenticatedAs($user);
     }
 

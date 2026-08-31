@@ -22,7 +22,7 @@
 
 <h3>
     Kliknij
-    <a class="button" href="{{ route('dashboard') }}">tutaj</a>,
+    <a class="button" href="{{ route('profile') }}">tutaj</a>,
     aby się zalogować
 </h3>
 

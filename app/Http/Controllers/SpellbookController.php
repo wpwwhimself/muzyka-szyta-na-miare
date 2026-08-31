@@ -52,7 +52,7 @@ class SpellbookController extends Controller
     public function obliterate($id){
         StatusChange::where("re_quest_id", $id)->delete();
         ModelsRequest::find($id)->delete();
-        return redirect()->route("dashboard")->with("toast", ["success", "Zapytanie wymazane"]);
+        return redirect()->route("profile")->with("toast", ["success", "Zapytanie wymazane"]);
     }
 
     public function silence($id){

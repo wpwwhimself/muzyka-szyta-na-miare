@@ -13,6 +13,6 @@
     <div id="studio" style="width: 100%"></div>
 </x-extendo-block>
 
-<x-a :href="route('dashboard')">Wróć</x-a>
+<x-a :href="route('profile')">Wróć</x-a>
 
 @endsection

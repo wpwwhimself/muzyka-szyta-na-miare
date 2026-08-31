@@ -12,7 +12,7 @@
     Proszę zwrócić uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
 </p>
 <p>
-    Proszę o zweryfikowanie napisanej recenzji i ponowne kliknięcie przycisku w <a href="{{ route('dashboard') }}">Panelu klienta</a>.
+    Proszę o zweryfikowanie napisanej recenzji i ponowne kliknięcie przycisku w <a href="{{ route('profile') }}">Panelu klienta</a>.
 </p>
 
 @endsection

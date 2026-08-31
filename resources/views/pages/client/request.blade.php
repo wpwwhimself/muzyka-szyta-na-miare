@@ -145,7 +145,7 @@
                 </x-shipyard::app.card>
 
                 @if ($request->deadline)
-                <x-shipyard::app.card title="Termin realizacji" icon="calendar">
+                <x-shipyard::app.card title="Termin realizacji" icon="calendar" role="deadline_dates">
                     <div class="standard">
                         <x-shipyard::ui.field-input :model="$request" field-name="deadline" dummy />
                     </div>
@@ -164,22 +164,26 @@
                     </p>
 
                     @if ($request->status_id === 5)
-                    <div class="flex right center">
-                        <x-shipyard::ui.button
-                            label="Poproś o szybszą realizację"
-                            icon="calendar"
-                            action="none"
-                            onclick="togglePriority()"
-                            class="tertiary standard"
-                        />
-                        <x-shipyard::ui.button
-                            label="Wróć do poprzedniej wyceny"
-                            icon="calendar"
-                            action="none"
-                            onclick="togglePriority()"
-                            class="tertiary priority hidden"
-                        />
-                    </div>
+                        @if (get_next_working_day() != $request->deadline)
+                        <div class="flex right center">
+                            <x-shipyard::ui.button
+                                label="Poproś o szybszą realizację"
+                                icon="calendar"
+                                action="none"
+                                onclick="togglePriority()"
+                                class="tertiary standard"
+                            />
+                            <x-shipyard::ui.button
+                                label="Wróć do poprzedniej wyceny"
+                                icon="calendar"
+                                action="none"
+                                onclick="togglePriority()"
+                                class="tertiary priority hidden"
+                            />
+                        </div>
+                        @else
+                        <span class="accent danger">Dla tej wyceny niestety nie jestem w stanie zaproponować priorytetowego terminu realizacji.</span>
+                        @endif
                     @endif
                 </x-shipyard::app.card>
                 @endif

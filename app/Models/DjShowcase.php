@@ -189,6 +189,12 @@ class DjShowcase extends Model
             "component" => "showcases.description",
             // "role" => "",
         ],
+        "reel_preview" => [
+            "title" => "Podgląd",
+            "icon" => "image",
+            "show-on" => "edit",
+            "component" => "showcases.reel-preview",
+        ],
     ];
 
     #region scopes

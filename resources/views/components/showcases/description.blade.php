@@ -16,7 +16,11 @@ $openings = [
     "podklady" => $title_holder.' ('.$artist_holder.') | Jak się szyje muzykę
 
 Krótkie demo, jak powstała partia $partia do mojego podkładu. $flavortext',
-    "organista" => '$tytuł | Shorty organisty',
+    "organista" => '$tytuł | Shorty organisty
+
+Zagrane na mszy ślubnej w ...
+
+Nuty: https://sz3.wpww.pl/...',
     "dj" => '$tytuł | Shorty ze sceny',
 ];
 $hashtags = [

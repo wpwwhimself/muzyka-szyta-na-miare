@@ -1,5 +1,6 @@
 @props([
     "showcases",
+    "previewMode" => false,
 ])
 
 <div id="showcase-fbs" class="flex right center">
@@ -7,7 +8,13 @@
     @forelse ($showcases as $showcase)
         @php
         $platforms_available = collect($showcase->links?->keys());
-        $platform = $platforms_available->random();
+        $platforms_to_preview = ($previewMode)
+            ? $platforms_available
+            : [$platforms_available->random()];
+        @endphp
+
+        @foreach ($platforms_to_preview as $platform)
+        @php
         $link = $showcase->links?->get($platform);
         @endphp
         @switch($platform)
@@ -22,6 +29,7 @@
                 @break
             @case("fb")
         @endswitch
+        @endforeach
     @empty
     <span>🚧 Na razie nic tu nie ma...</span>
     @endforelse

@@ -13,6 +13,18 @@ class User extends ShipyardUser
 {
     public const FROM_SHIPYARD = true;
 
+    public const META = [
+        "label" => "Użytkownicy",
+        "icon" => "account",
+        "description" => "Lista użytkowników systemu. Każdy z wymienionych może otrzymać role, które nadają mu uprawnienia do korzystania z konkretnych funkcjonalności.",
+        "role" => "",
+        "uneditable" => [
+            "archmage",
+        ],
+        "uneditableField" => "display_name",
+        "defaultSort" => "-exp",
+    ];
+
     #region presentation
     public function optionLabel(): Attribute
     {

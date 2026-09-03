@@ -233,7 +233,7 @@
                 @endif
                 </td>
                 <td>
-                    <x-phase-indicator-mini :status="$change->new_status" />
+                    <x-phase-indicator-mini :status="$change->status" />
 
                     @if ($change->comment)
                     <span {{ Popper::pop($change->comment) }}>

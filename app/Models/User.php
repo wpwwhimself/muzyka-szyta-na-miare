@@ -90,9 +90,11 @@ class User extends ShipyardUser
     public function profileComponents(): Attribute
     {
         $dashboardData = [
-            "requests" => Request::whereNotIn("status_id", [4, 7, 8, 9])
+            "requests" => Request::with(["song"])
+                ->whereNotIn("status_id", [4, 7, 8, 9])
                 ->orderBy("updated_at"),
-            "quests_ongoing" => Quest::whereIn("status_id", STATUSES_WAITING_FOR_ME())
+            "quests_ongoing" => Quest::with(["song", "quest_type", "status"])
+                ->whereIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByRaw("case status_id when 13 then 1 else 0 end")
                 ->orderByRaw("case when deadline is null then 1 else 0 end")
                 ->orderByRaw("case status_id
@@ -105,7 +107,8 @@ class User extends ShipyardUser
                 ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
                 ->orderByRaw("paid desc")
                 ->orderBy("created_at"),
-            "quests_review" => Quest::whereNotIn("status_id", [17, 18, 19])
+            "quests_review" => Quest::with(["song", "quest_type", "status"])
+                ->whereNotIn("status_id", [17, 18, 19])
                 ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByDesc("deadline")
                 ->orderBy("created_at"),
@@ -125,10 +128,6 @@ class User extends ShipyardUser
                 ->get()
                 ->map(function ($change) {
                     $change->is_request = is_request($change->re_quest_id);
-                    $change->re_quest = ($change->is_request) ?
-                        Request::find($change->re_quest_id) :
-                        Quest::find($change->re_quest_id);
-                    $change->new_status = Status::find($change->new_status_id);
                     return $change;
                 });
             $dashboardData["patrons_adepts"] = User::where("helped_showcasing", 1)->get();

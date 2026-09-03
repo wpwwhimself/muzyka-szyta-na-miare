@@ -83,8 +83,8 @@ class StatusChange extends Model
     }
     public function getReQuestAttribute(){
         return (strlen($this->re_quest_id) == 36)
-            ? Request::find($this->re_quest_id)
-            : Quest::find($this->re_quest_id);
+            ? Request::with(["user"])->find($this->re_quest_id)
+            : Quest::with(["user"])->find($this->re_quest_id);
     }
 
     public function changer(){

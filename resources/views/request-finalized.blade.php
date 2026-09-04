@@ -18,7 +18,7 @@
     <p>
         <b>Zachowaj je, bo będzie przydatne!</b>
         Jeśli się zgubi, zawsze można poprosić mnie o jego ponowne wysłanie.
-        @if($request->user->email)
+        @if($request->user->can_be_mailed)
         Potwierdzenie wysłałem też na Twojego maila.
         @endif
     </p>

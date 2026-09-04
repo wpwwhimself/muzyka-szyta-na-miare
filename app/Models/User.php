@@ -8,6 +8,7 @@ use Wpwwhimself\Shipyard\Models\User as ShipyardUser;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class User extends ShipyardUser
 {
@@ -197,6 +198,7 @@ class User extends ShipyardUser
             "type" => "email",
             "label" => "Email",
             "icon" => "email",
+            "required" => true,
         ],
         "phone" => [
             "type" => "tel",
@@ -406,6 +408,11 @@ class User extends ShipyardUser
     {
         return $query->whereNotIn("id", [0, 1]);
     }
+
+    public function scopeMailableClients($query)
+    {
+        return $query->clients()->where("email", "not regexp", "@test");
+    }
     #endregion
 
     #region attributes and helpers
@@ -497,6 +504,13 @@ class User extends ShipyardUser
                     "label" => "Budżet:<br>"._c_(as_pln($this->budget))
                 ],
             ],
+        );
+    }
+
+    public function canBeMailed(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => !Str::contains($this->email, "@test"),
         );
     }
 

@@ -79,7 +79,7 @@ class BackController extends Controller
 
         $client->update(["helped_showcasing" => $level]);
         $mailing = false;
-        if($level == 0 && $client->email){
+        if($level == 0 && $client->can_be_mailed){
             Mail::to($client->email)->send(new PatronRejected($client->fresh()));
             $mailing = true;
         }
@@ -137,7 +137,7 @@ class BackController extends Controller
             ->map(fn ($u) => collect([
                 "id" => $u->id,
                 "name" => $u->display_name,
-                "email" => $u->email,
+                "email" => $u->can_be_mailed ? $u->email : null,
                 "phone" => $u->phone,
             ]))
             ->filter(fn ($u) =>

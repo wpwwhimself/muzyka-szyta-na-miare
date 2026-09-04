@@ -23,7 +23,7 @@
     ] as [$label, $status_id, $show_on_statuses])
         @if (in_array($quest->status_id, $show_on_statuses))
         @php
-        $nomail = (!$quest->user->email && in_array($status_id, [15, 95]));
+        $nomail = (!$quest->user->can_be_mailed && in_array($status_id, [15, 95]));
         $new_status = \App\Models\Status::find(abs($status_id));
         @endphp
         <x-shipyard::ui.button

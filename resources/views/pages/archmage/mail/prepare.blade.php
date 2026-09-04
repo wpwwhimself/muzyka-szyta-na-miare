@@ -5,11 +5,11 @@
 
 <x-shipyard::app.form :action="route('client-mail-send')" method="POST">
     <div class="grid but-mobile-down" style="--col-count: 2;">
-        <x-shipyard::app.section title="Adresat" :icon="model_icon('user-notes')">
+        <x-shipyard::app.section title="Adresat" :icon="model_icon('users')">
             <x-shipyard::ui.input type="select"
                 name="clients[]"
                 label="Klient"
-                :icon="model_icon('user-notes')"
+                :icon="model_icon('users')"
                 :select-data="['options' => $clients]"
                 :value="$client_id"
                 multiple

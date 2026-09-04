@@ -294,7 +294,7 @@ class RequestController extends Controller
 
                     "client_id" => (Auth::check()) ? Auth::id() : null,
                     "client_name" => (Auth::check()) ? Auth::user()->display_name : $rq->client_name,
-                    "email" => (Auth::check()) ? Auth::user()->email : $rq->email,
+                    "email" => (Auth::check()) ? (Auth::user()->can_be_mailed ? Auth::user()->email : null) : $rq->email,
                     "phone" => (Auth::check()) ? Auth::user()->phone : $rq->phone,
                     "other_medium" => (Auth::check()) ? Auth::user()->other_medium : $rq->other_medium,
                     "contact_preference" => (Auth::check()) ? Auth::user()->contact_preference : $rq->contact_preference,
@@ -338,7 +338,7 @@ class RequestController extends Controller
             }
 
             // tries to send quote by mail to client without it
-            if (!$rq->email && $rq->contact_preference == "email") {
+            if (!$rq->can_be_mailed && $rq->contact_preference == "email") {
                 return back()->with("toast", ["error", "Brakuje adresu email klienta lub klient nie ma takiej preferencji"]);
             }
         }
@@ -516,7 +516,6 @@ class RequestController extends Controller
                 "roles" => "client",
                 "password_actual" => $password,
                 "display_name" => $request->client_name,
-                "email" => $request->email,
                 "phone" => $request->phone,
                 "other_medium" => $request->other_medium,
                 "contact_preference" => $request->contact_preference,
@@ -603,7 +602,7 @@ class RequestController extends Controller
         //add client ID to history
         StatusChange::whereIn("re_quest_id", [$request->id, $request->quest_id])->whereNull("changed_by")->update(["changed_by" => $request->client_id]);
         //send onboarding if new client
-        if ($request->user->email && $is_new_client){
+        if ($request->user->can_be_mailed && $is_new_client){
             Mail::to($request->user->email)->send(new Onboarding($request->user));
         }
 
@@ -624,13 +623,13 @@ class RequestController extends Controller
         $request->update([
             "client_id" => $user->id,
             "client_name" => $user->display_name,
-            "email" => $user->email,
+            "email" => $user->can_be_mailed ? $user->email : null,
             "phone" => $user->phone,
             "other_medium" => $user->other_medium,
             "contact_preference" => $user->contact_preference,
         ]);
 
-        return back()->with("toast", ["success", "Utwór przypisany"]);
+        return back()->with("toast", ["success", "Klient przypisany"]);
     }
 
     public function selectSong(HttpRequest $rq)

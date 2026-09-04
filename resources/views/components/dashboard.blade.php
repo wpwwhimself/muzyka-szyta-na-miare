@@ -521,7 +521,7 @@
         onclick="openModal('send-podklady-request', {
             client_id: {{ Auth::user()?->id ?? 'null' }},
             client_name: '{{ Auth::user()?->display_name }}' || null,
-            email: '{{ Auth::user()?->email }}' || null,
+            email: '{{ Auth::user()?->can_be_mailed ? Auth::user()->email : null }}' || null,
             phone: '{{ Auth::user()?->phone }}' || null,
             other_medium: '{{ Auth::user()?->other_medium }}' || null,
             contact_preference: '{{ Auth::user()?->contact_preference }}' || 'email',

@@ -596,7 +596,7 @@ class StatsController extends Controller
                 32,
                 $amount_to_pay,
                 $quest->client_id,
-                $quest->user->email,
+                $quest->user->can_be_mailed,
             );
             MoneyTransaction::create([
                 "typable_type" => IncomeType::class,
@@ -632,7 +632,7 @@ class StatsController extends Controller
         $clients_informed = [];
         foreach($clients_quests as $client_id => $quests){
             $client = User::find($client_id);
-            if($client->email){
+            if($client->can_be_mailed){
                 Mail::to($client->email)->send(new MassPayment($quests));
                 $clients_informed[$client_id] = 1;
             }else{
@@ -705,7 +705,7 @@ class StatsController extends Controller
 
         $flash_content = "Zwrot wpisany" . (($budget) ? ", budżet zmieniony" : "");
 
-        if($quest->user->email && !$budget){
+        if($quest->user->can_be_mailed && !$budget){
             Mail::to($quest->user->email)->send(new PaymentReturned($quest->fresh()));
             StatusChange::where(["re_quest_id" => $quest_id, "new_status_id" => 34])->first()->update(["mail_sent" => true]);
             $flash_content .= ", mail wysłany";
@@ -783,7 +783,7 @@ class StatsController extends Controller
         if ($rq->visible) {
             $users = $invoice->quests->map(fn ($q) => $q->user)->unique();
             foreach ($users as $u) {
-                if (!$u->email) continue;
+                if (!$u->can_be_mailed) continue;
 
                 $sent = Mail::to($u->email)->send(new InvoiceReady($invoice, $u));
                 if (!empty($sent)) $res .= ", wiadomość wysłana do: ". $u->display_name;

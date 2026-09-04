@@ -48,7 +48,7 @@
             action="none"
             onclick="openModal('edit-invoice', {
                 payer_name: '{{ $quest->user->invoice_data['payer_name'] ?? $quest->user->display_name }}',
-                payer_email: '{{ $quest->user->invoice_data['payer_email'] ?? $quest->user->email }}',
+                payer_email: '{{ $quest->user->invoice_data['payer_email'] ?? $quest->user->can_be_mailed ? $quest->user->email : null }}',
                 payer_phone: '{{ $quest->user->invoice_data['payer_phone'] ?? $quest->user->phone }}',
                 {{ collect(['payer_title', 'payer_address', 'payer_nip', 'payer_regon'])->map(fn ($fld) =>
                     isset($quest->user->invoice_data[$fld]) ? $fld.': \''.$quest->user->invoice_data[$fld].'\',' : ''

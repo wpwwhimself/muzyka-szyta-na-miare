@@ -159,7 +159,7 @@
                     action="none"
                     onclick="openModal('edit-invoice', {
                         payer_name: '{{ $client->invoice_data['payer_name'] ?? $client->display_name }}',
-                        payer_email: '{{ $client->invoice_data['payer_email'] ?? $client->email }}',
+                        payer_email: '{{ $client->invoice_data['payer_email'] ?? $client->can_be_mailed ? $client->email : null }}',
                         payer_phone: '{{ $client->invoice_data['payer_phone'] ?? $client->phone }}',
                         {{ collect(['payer_title', 'payer_address', 'payer_nip', 'payer_regon'])->map(fn ($fld) =>
                             isset($client->invoice_data[$fld]) ? $fld.': \''.$client->invoice_data[$fld].'\',' : ''

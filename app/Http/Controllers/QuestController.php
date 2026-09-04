@@ -158,7 +158,7 @@ class QuestController extends Controller
             // sending mail
             $flash_content = "Cena wpisana";
             if($quest->paid){
-                if($quest->user->email){
+                if($quest->user->can_be_mailed){
                     Mail::to($quest->user->email)->send(new PaymentReceived($quest->fresh()));
                     StatusChange::where(["re_quest_id" => $rq->quest_id, "new_status_id" => $rq->status_id])->first()->update(["mail_sent" => true]);
                     $flash_content .= ", mail wysłany";
@@ -227,7 +227,7 @@ class QuestController extends Controller
             in_array($quest->status_id, [15, 95])
             || $quest->status_id == 11 && is_archmage()
         ){ // mail do klienta
-            if($quest->user->email){
+            if($quest->user->can_be_mailed){
                 Mail::to($quest->user->email)->send(
                     $quest->status_id == 95
                     ? new Clarification($quest->fresh())
@@ -354,7 +354,7 @@ class QuestController extends Controller
 
         // sending mail
         $mailing = null;
-        if($quest->user->email){
+        if($quest->user->can_be_mailed){
             Mail::to($quest->user->email)->send(new QuestRequoted($quest->fresh(), $rq->reason, $difference));
             $mailing = true;
         }

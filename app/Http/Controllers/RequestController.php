@@ -338,7 +338,7 @@ class RequestController extends Controller
             }
 
             // tries to send quote by mail to client without it
-            if (!$rq->can_be_mailed && $rq->contact_preference == "email") {
+            if (!$rq->email && $rq->contact_preference == "email") {
                 return back()->with("toast", ["error", "Brakuje adresu email klienta lub klient nie ma takiej preferencji"]);
             }
         }

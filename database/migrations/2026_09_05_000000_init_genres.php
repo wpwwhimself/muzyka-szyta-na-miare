@@ -15,13 +15,13 @@ return new class extends Migration
         foreach ([
             ["name" => "szybka przeróbka"],
             ["name" => "songwriter"],
-            ["name" => "gitary"],
-            ["name" => "gitary + elektro"],
-            ["name" => "gitary + orkiestra"],
-            ["name" => "elektro"],
-            ["name" => "orkiestra"],
-            ["name" => "jazz"],
-            ["name" => "folk"],
+            ["name" => "rock"],
+            ["name" => "electronic"],
+            ["name" => "orkiestrowe"],
+            ["name" => "jazz/blues/soul"],
+            ["name" => "folk/marszowe"],
+            ["name" => "dance/disco"],
+            ["name" => "funk/reggae/latino"],
         ] as $g) {
             if (Genre::where("name", $g["name"])->exists()) continue;
             Genre::insert($g);

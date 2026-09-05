@@ -35,12 +35,12 @@ class Calendar extends Component
             // the latest quest's deadline
             -Quest::orderByDesc("deadline")
                 ->first()
-                ->deadline
+                ?->deadline
                 ->diffInDays(Carbon::now(), false),
             // the latest request's deadline
             -Request::orderByDesc("deadline")
                 ->first()
-                ->deadline
+                ?->deadline
                 ->diffInDays(Carbon::now(), false),
             // the latest free day if you can click on days (for suggesting or marking new free days)
             ($clickDays * -Carbon::parse(CalendarFreeDay::max("date"))

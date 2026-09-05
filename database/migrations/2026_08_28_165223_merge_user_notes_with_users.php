@@ -29,22 +29,22 @@ return new class extends Migration
             $table->json("invoice_data")->nullable();
         });
 
-        UserNote::all()->each(fn ($un) => User::find($un->user_id)->update([
-            "display_name" => $un->client_name,
-            "password_actual" => $un->password,
-            "phone" => $un->phone,
-            "other_medium" => $un->other_medium,
-            "contact_preference" => $un->contact_preference,
-            "trust" => $un->trust,
-            "budget" => $un->budget,
-            "default_wishes" => $un->default_wishes,
-            "special_prices" => $un->special_prices,
-            "helped_showcasing" => $un->helped_showcasing,
-            "extra_exp" => $un->extra_exp,
-            "external_drive" => $un->external_drive,
-            "is_forgotten" => $un->is_forgotten,
-            "invoice_data" => $un->invoice_data,
-        ]));
+        // UserNote::all()->each(fn ($un) => User::find($un->user_id)->update([
+        //     "display_name" => $un->client_name,
+        //     "password_actual" => $un->password,
+        //     "phone" => $un->phone,
+        //     "other_medium" => $un->other_medium,
+        //     "contact_preference" => $un->contact_preference,
+        //     "trust" => $un->trust,
+        //     "budget" => $un->budget,
+        //     "default_wishes" => $un->default_wishes,
+        //     "special_prices" => $un->special_prices,
+        //     "helped_showcasing" => $un->helped_showcasing,
+        //     "extra_exp" => $un->extra_exp,
+        //     "external_drive" => $un->external_drive,
+        //     "is_forgotten" => $un->is_forgotten,
+        //     "invoice_data" => $un->invoice_data,
+        // ]));
 
         Schema::table("requests", function (Blueprint $table) {
             $table->dropForeign("requests_client_id_foreign");

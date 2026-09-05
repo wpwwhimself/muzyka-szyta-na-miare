@@ -336,7 +336,13 @@ class User extends ShipyardUser
     ];
 
     public const ACTIONS = [
-        // disabled password reset
+        [
+            "icon" => "key-change",
+            "label" => "Zmień hasło",
+            "show-on" => "edit",
+            "route" => "password.set",
+            "role" => "technical", // disabled password reset
+        ],
     ];
     #endregion
 

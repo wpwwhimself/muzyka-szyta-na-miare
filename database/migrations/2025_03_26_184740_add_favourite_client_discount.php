@@ -28,10 +28,10 @@ class AddFavouriteClientDiscount extends Migration
         DB::table("prices")->where("indicator", "#")->update(["price_a" => -0.5, "price_b" => -0.5]);
 
         // favourite client
-        Schema::table("users", function (Blueprint $table) {
-            $table->boolean("is_forgotten")->nullable()->default(false);
-        });
-        User::where("trust", 2)->update(["trust" => 0, "is_forgotten" => true]);
+        // Schema::table("users", function (Blueprint $table) {
+        //     $table->boolean("is_forgotten")->nullable()->default(false);
+        // });
+        // User::where("trust", 2)->update(["trust" => 0, "is_forgotten" => true]);
     }
 
     /**

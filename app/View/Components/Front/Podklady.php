@@ -29,7 +29,7 @@ class Podklady extends Component
      */
     public function __construct()
     {
-        $this->showcases = Showcase::orderBy("created_at", "desc")->get()->random(5);
+        $this->showcases = Showcase::orderBy("created_at", "desc")->get()->random(fn ($ss) => min(5, count($ss)));
         $this->client_showcases = ClientShowcase::orderBy("updated_at", "desc")->limit(3)->get();
         $this->pinned_comments = StatusChange::where("pinned", true)->orderBy("date", "desc")->get();
 
@@ -54,7 +54,7 @@ class Podklady extends Component
         $diffs = array_filter($diffs, function($val){ return is_numeric($val); });
         $this->average_quest_done = (count($diffs) == 0) ? 0 : round(array_sum($diffs)/count($diffs));
 
-        $this->random_song = Song::all()->random();
+        $this->random_song = Song::all()->random(fn ($ss) => min(1, count($ss)));
     }
 
     /**

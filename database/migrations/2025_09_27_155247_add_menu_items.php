@@ -19,7 +19,7 @@ return new class extends Migration
                 "order" => 1,
                 "icon" => "home-account",
                 "target_type" => 1,
-                "target_name" => "dashboard",
+                "target_name" => "profile",
             ],
             [
                 "name" => "Zapytania",
@@ -94,21 +94,6 @@ return new class extends Migration
                 "target_name" => "stats",
             ],
         ]);
-
-        NavItem::all()->each(function ($item) {
-            $item->roles()->attach(
-                in_array($item->name, [
-                    "Utwory",
-                    "Klienci",
-                    "Finanse",
-                    "Reklama",
-                    "DJ",
-                    "Statystyki",
-                ])
-                    ? "technical"
-                    : "client"
-            );
-        });
     }
 
     /**

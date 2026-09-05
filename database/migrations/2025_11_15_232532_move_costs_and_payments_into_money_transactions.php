@@ -34,15 +34,15 @@ return new class extends Migration
             ],
         );
 
-        Cost::all()->each(fn (Cost $cost) =>
-            MoneyTransaction::create([
-                "typable_type" => CostType::class,
-                "typable_id" => $cost->cost_type_id,
-                "date" => $cost->created_at,
-                "amount" => $cost->amount,
-                "description" => $cost->desc,
-            ])
-        );
+        // Cost::all()->each(fn (Cost $cost) =>
+        //     MoneyTransaction::create([
+        //         "typable_type" => CostType::class,
+        //         "typable_id" => $cost->cost_type_id,
+        //         "date" => $cost->created_at,
+        //         "amount" => $cost->amount,
+        //         "description" => $cost->desc,
+        //     ])
+        // );
 
         StatusChange::whereIn("new_status_id", [32, 34])
             ->get()

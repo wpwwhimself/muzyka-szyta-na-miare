@@ -22,6 +22,7 @@ class CreatePricesTable extends Migration
             $table->char("operation")->comment("+: addition, *: multiplication");
             $table->float("price_a")->nullable();
             $table->float("price_b")->nullable();
+            $table->float("price_c")->nullable();
         });
     }
 

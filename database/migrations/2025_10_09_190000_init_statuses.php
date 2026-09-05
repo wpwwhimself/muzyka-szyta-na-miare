@@ -1,21 +1,19 @@
 <?php
 
-namespace Database\Seeders;
+use App\Models\QuestType;
+use App\Models\Status;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
-class StatusesSeeder extends Seeder
+return new class extends Migration
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Run the migrations.
      */
-    public function run()
+    public function up(): void
     {
-        DB::table("statuses")->insert([
-            /* statusy requestów */
+        foreach ([
             ["id" => 1, "status_name" => "nowe", "status_symbol" => "fa-star"],
             ["id" => 4, "status_name" => "nie podejmę się", "status_symbol" => "fa-trash"],
             ["id" => 5, "status_name" => "wycena do akceptacji", "status_symbol" => "fa-clipboard-question"],
@@ -56,6 +54,17 @@ class StatusesSeeder extends Seeder
             ["id" => 110, "status_name" => "pisanie nut", "status_symbol" => "🎵"],
             ["id" => 111, "status_name" => "przygotowanie filmu", "status_symbol" => "🎬"],
             ["id" => 112, "status_name" => "nagr: basy", "status_symbol" => "🟨"],
-        ]);
+        ] as $s) {
+            if (Status::find($s["id"])) continue;
+            Status::create($s);
+        }
     }
-}
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+
+    }
+};

@@ -468,7 +468,11 @@
             'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $data['unpaids']->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
         ]"
     >
-        <h2 @if(Auth::user()->trust == -1) class="error" @endif>Do zapłacenia za zlecenia</h2>
+        <h2 @class([
+            "error" => Auth::user()->trust == -1,
+        ])>
+            Do zapłacenia za zlecenia
+        </h2>
         <div class="hint-table">
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">
@@ -488,27 +492,36 @@
             Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
         </x-tutorial>
 
-        <div class="section-header">
-            <h1>
-                <i class="fa-solid fa-address-card"></i>
-                Dane do przelewu
-            </h1>
-        </div>
-        <p>
-            Numer konta:
-            <b>58 1090 1607 0000 0001 5333 1539</b>
-        </p>
-        <p>
-            W tytule proszę o wpisanie ID zlecenia dla łatwiejszej identyfikacji wpłaty.
-            Więcej szczegółów znajdziesz w konkretnym zleceniu.
-        </p>
-        @if($data["unpaids"]->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count())
-        <p class="yellowed-out">
-            <i class="fas fa-triangle-exclamation"></i>
-            Posiadasz nieopłacone zlecenia z opóźnionym terminem płatności.
-            Zanim dokonasz przelewu, zwróć uwagę, czy nie wykonujesz go zbyt wcześnie.
-        </p>
-        @endif
+        <x-shipyard::app.card
+            title="Dane do przelewu"
+            icon="card-account-details-outline"
+        >
+            <table>
+                <tr>
+                    <td>Odbiorca</td>
+                    <th>Wojciech Przybyła</th>
+                </tr>
+                <tr>
+                    <td>Adres</td>
+                    <th>Łąkie 62, 62-068 Łąkie</th>
+                </tr>
+                <tr>
+                    <td>Numer konta</td>
+                    <th>58 1090 1607 0000 0001 5333 1539</th>
+                </tr>
+            </table>
+            <p>
+                W tytule proszę o wpisanie <strong>ID zlecenia</strong> (np. <code>P23-5X</code>) dla łatwiejszej identyfikacji wpłaty.
+                Więcej szczegółów znajdziesz w konkretnym zleceniu.
+            </p>
+            @if($data["unpaids"]->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count())
+            <p class="yellowed-out">
+                <i class="fas fa-triangle-exclamation"></i>
+                Posiadasz nieopłacone zlecenia z opóźnionym terminem płatności.
+                Zanim dokonasz przelewu, zwróć uwagę, czy nie wykonujesz go zbyt wcześnie.
+            </p>
+            @endif
+        </x-shipyard::app.card>
     </x-section>
 </div>
 

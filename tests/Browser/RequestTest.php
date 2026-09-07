@@ -62,7 +62,6 @@ class RequestTest extends DuskTestCase
                 ->waitFor("#price-summary table")
                 ->assertSeeIn("#price-summary", $rd["price"])
                 ->assertValueIsNot("#deadline", "");
-
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
             })

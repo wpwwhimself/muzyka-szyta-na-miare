@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\ComponentAttributeBag;
+use Override;
 
 class Request extends Model
 {
@@ -38,7 +39,18 @@ class Request extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->full_title;
+        return implode(" ", [
+            $this->title ?? "Bez tytułu",
+            "dla:",
+            $this->client_name,
+        ]);
+    }
+
+    public function rawTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this,
+        );
     }
 
     public function optionLabel(): Attribute

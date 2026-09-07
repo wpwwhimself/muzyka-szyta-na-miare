@@ -138,7 +138,7 @@
 
                     <p>Opłaty zlecenia będzie można dokonać na 2 sposoby:</p>
                     <ul>
-                        <li>przelew na numer konta,</li>
+                        <li>przelew na konto,</li>
                         <li>płatność BLIKiem na numer telefonu.</li>
                     </ul>
                     <p>Poprawki do zlecenia są zawarte w cenie, chyba że będą wiązać się z dużym zakresem zmian lub zostaną zgłoszone później niż miesiąc po zaakceptowaniu dostarczonych plików.</p>
@@ -304,8 +304,8 @@ function togglePriority() {
 
 function confirmRequest() {
     const prices = [
-        {{ $request->price }},
-        {{ $priority_price }},
+        `{{ as_pln($request->price) }}`,
+        `{{ as_pln($priority_price) }}`,
     ];
     const deadlines = [
         `{{ $request->deadline->format('d.m.Y') }}`,

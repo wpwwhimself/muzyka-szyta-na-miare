@@ -1,14 +1,15 @@
-name: MSZNM QA
+name: MSZNM
 on: [push]
 jobs:
 
-  dusk-php:
+  qa:
     runs-on: ubuntu-latest
     env:
       APP_URL: "http://127.0.0.1:8000"
       DB_USERNAME: root
       DB_PASSWORD: root
       MAIL_MAILER: log
+      MAIL_FROM_ADDRESS: "noreply@msznm.test"
     steps:
       - uses: actions/checkout@v5
       - name: Prepare The Environment

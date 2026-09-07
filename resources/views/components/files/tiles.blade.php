@@ -55,14 +55,25 @@
                 </h5>
             </span>
 
-            @if ($editable)
-            <x-shipyard::ui.button
-                icon="pencil"
-                pop="Edytuj"
-                :action="route('files-edit', ['id' => $version->id])"
-                target="_blank"
-            />
-            @endif
+            <div class="flex right middle nowrap">
+                @if ($editable)
+                    @if (!$version->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)))
+                    <x-shipyard::ui.button
+                        :icon="model_icon('users')"
+                        pop="Przypisz aktualnemu klientowi"
+                        action="none"
+                        onclick="assignFileToUser({{ $version->id }}, {{ $highlightForClientId }})"
+                        class="tertiary"
+                    />
+                    @endif
+                <x-shipyard::ui.button
+                    icon="pencil"
+                    pop="Edytuj"
+                    :action="route('files-edit', ['id' => $version->id])"
+                    target="_blank"
+                />
+                @endif
+            </div>
         </div>
 
         @if ($version->base_file_id)

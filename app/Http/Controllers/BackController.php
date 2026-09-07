@@ -103,19 +103,19 @@ class BackController extends Controller
     #region re_quests
     public function restatusReQuestWithComment(HttpRequest $rq)
     {
-        $scope = Str::plural($rq->get("model"));
-        $model = model($scope)::find($rq->get("id"));
+        $scope = Str::plural($rq->input("model"));
+        $model = model($scope)::find($rq->input("id"));
 
         $model->update([
-            "status_id" => $rq->get("newStatus"),
+            "status_id" => $rq->input("newStatus"),
         ]);
         $flash_content = "Status ".($scope == "requests" ? "zapytania" : "zlecenia")." zmieniony";
 
         self::newStatusLog(
             $model->id,
-            $rq->get("newStatus"),
-            $rq->get("comment"),
-            $rq->get("changedBy")
+            $rq->input("newStatus"),
+            $rq->input("comment"),
+            $rq->input("changedBy")
         );
 
         // mail
@@ -124,7 +124,7 @@ class BackController extends Controller
         $flash_content .= ", mail wysłany";
         if($mailing !== null) $model->history->first()->update(["mail_sent" => $mailing]);
 
-        return redirect()->route($rq->get("model"), ["id" => $model->id])->with("toast", ["success", $flash_content]);
+        return redirect()->route($rq->input("model"), ["id" => $model->id])->with("toast", ["success", $flash_content]);
     }
     #endregion
 

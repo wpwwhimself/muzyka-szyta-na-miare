@@ -135,7 +135,6 @@ function loadFileList(container_uuid) {
     const contents = container.querySelector(".contents");
 
     const song_id = meta.dataset.songId;
-    const whoAmI = meta.dataset.whoAmI;
     const canDownloadFiles = meta.dataset.canDownloadFiles;
     const editable = meta.dataset.editable;
     const highlightForClientId = meta.dataset.highlightForClientId;
@@ -143,8 +142,7 @@ function loadFileList(container_uuid) {
     loader.classList.remove("hidden");
     contents.innerHTML = "";
 
-    fetchPublic(`/api/songs/${song_id}/files?` + new URLSearchParams({
-        whoAmI,
+    fetchWithUser(`/api/songs/${song_id}/files?` + new URLSearchParams({
         canDownloadFiles,
         editable,
         highlightForClientId,
@@ -157,6 +155,32 @@ function loadFileList(container_uuid) {
         .finally(() => {
             loader.classList.add("hidden");
             reapplyPopper();
+        });
+}
+
+function assignFileToUser(file_id, user_id) {
+    document.querySelector(`.files-container > .loader`).classList.remove("hidden");
+
+    fetchWithUser(`/api/files/assign`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            fileId: file_id,
+            userId: user_id,
+        }),
+    })
+        .then(res => res.json())
+        .then(res => {
+            popToast("success", "Klient przypisany");
+        })
+        .catch(err => {
+            popToast("error", "Nie udało się przypisać klienta");
+            console.error(err);
+        })
+        .finally(() => {
+            loadFileList(document.querySelector(`.files-container`).closest(`.files-container`).dataset.uuid);
         });
 }
 //#endregion

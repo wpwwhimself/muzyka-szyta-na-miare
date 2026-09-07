@@ -267,4 +267,13 @@ class FileController extends Controller
 
         return (new Response($file, 200, $headers));
     }
+
+    public function assignFileToUser(Request $rq)
+    {
+        ModelsFile::find($rq->fileId)->exclusiveClients()->attach($rq->userId);
+
+        return response()->json([
+            "success" => true,
+        ]);
+    }
 }

@@ -194,13 +194,9 @@ class SongController extends Controller
     }
 
     public function getFiles(Song $song, Request $rq) {
-        $canDownloadFiles = $rq->get("canDownloadFiles", "false") === "true";
-        $editable = $rq->get("editable", "false") === "true";
-        $highlightForClientId = $rq->get("highlightForClientId", null);
-
-        // sanctum robi mnie w chuja i nie mogę przekazać loginu tokenem, więc przekazuję ID usera bokiem
-        $whoAmI = $rq->get("whoAmI", null);
-        Auth::login(User::find($whoAmI));
+        $canDownloadFiles = $rq->input("canDownloadFiles", "false") === "true";
+        $editable = $rq->input("editable", "false") === "true";
+        $highlightForClientId = $rq->input("highlightForClientId", null);
 
         $groupedFiles = $song->files
             ->groupBy("variant_name");
@@ -212,7 +208,6 @@ class SongController extends Controller
                 "editable",
                 "highlightForClientId",
                 "canDownloadFiles",
-                "whoAmI",
             ))->render(),
         ]);
     }

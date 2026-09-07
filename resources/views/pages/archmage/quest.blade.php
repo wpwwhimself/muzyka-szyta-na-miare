@@ -222,53 +222,47 @@
                 @endunless
             </x-slot:buttons>
 
-            <x-extendo-section>
-                <div class="flex right center middle">
-                    @if (can_download_files($quest->client_id, $quest->id))
-                    <span class="accent success">
-                        <x-shipyard::app.icon name="download" />
-                        Klient może pobierać
-                    </span>
+            <div class="flex right center middle">
+                @if (can_download_files($quest->client_id, $quest->id))
+                <span class="accent success">
+                    <x-shipyard::app.icon name="download" />
+                    Klient może pobierać
+                </span>
+                @elseif ($quest->user->can_see_files)
+                <span class="accent danger">
+                    <x-shipyard::app.icon name="eye" />
+                    Klient widzi podglądy
+                </span>
+                @else
+                <span class="accent error">
+                    <x-shipyard::app.icon name="eye-remove" />
+                    Klient nic nie widzi
+                </span>
+                @endif
 
-                    @elseif ($quest->user->can_see_files)
-                    <span class="accent danger">
-                        <x-shipyard::app.icon name="eye" />
-                        Klient widzi podglądy
-                    </span>
+                @if ($quest->files_ready)
+                <span class="accent success">
+                    <x-shipyard::app.icon name="tray-full" />
+                    Pliki w komplecie
+                </span>
+                @else
+                <span class="accent danger">
+                    <x-shipyard::app.icon name="tray-alert" />
+                    Brak kompletu
+                </span>
+                @endif
 
-
+                @if ($quest->user->external_drive)
+                <span @class(["accent success" => $quest->has_files_on_external_drive])>
+                    <x-shipyard::app.icon :name="model_field_icon('users', 'external_drive')" />
+                    @if ($quest->has_files_on_external_drive)
+                    Posiada pliki
                     @else
-                    <span class="accent error">
-                        <x-shipyard::app.icon name="eye-remove" />
-                        Klient nic nie widzi
-                    </span>
-
+                    Brak plików
                     @endif
-
-                    @if ($quest->files_ready)
-                    <span class="accent success">
-                        <x-shipyard::app.icon name="tray-full" />
-                        Pliki w komplecie
-                    </span>
-                    @else
-                    <span class="accent danger">
-                        <x-shipyard::app.icon name="tray-alert" />
-                        Brak kompletu
-                    </span>
-                    @endif
-
-                    @if ($quest->user->external_drive)
-                    <span @class(["accent success" => $quest->has_files_on_external_drive])>
-                        <x-shipyard::app.icon :name="model_field_icon('users', 'external_drive')" />
-                        @if ($quest->has_files_on_external_drive)
-                        Posiada pliki
-                        @else
-                        Brak plików
-                        @endif
-                    </span>
-                    @endif
-                </div>
-            </x-extendo-section>
+                </span>
+                @endif
+            </div>
 
             <x-files.list :song-id="$quest->song_id" :editable="true" :highlight-for-client-id="$quest->client_id" :can-download-files="true" />
         </x-extendo-block>

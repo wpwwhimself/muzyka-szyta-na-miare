@@ -176,8 +176,14 @@
                 "hard_deadline",
             ] as $field_name)
                 <x-shipyard::ui.field-input :model="$request" :field-name="$field_name" />
-                @if ($field_name == "link")
-                <x-link-interpreter :raw="$request->$field_name" />
+                @if ($field_name == "wishes" && $request->user?->default_wishes)
+                <x-shipyard::ui.button
+                    :icon="model_field_icon('users', 'default_wishes')"
+                    label="Wklej domyślne życzenia"
+                    action="none"
+                    onclick="document.querySelector(`#wishes`).value = `{{ $request->user->default_wishes }}`;"
+                    class="tertiary"
+                />
                 @endif
             @endforeach
         </x-extendo-block>

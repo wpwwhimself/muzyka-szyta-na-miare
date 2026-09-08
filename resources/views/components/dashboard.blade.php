@@ -38,13 +38,13 @@
 </x-section>
 @endif
 
-<x-extendo-block key="requests"
+<x-shipyard::app.section
     title="Zapytania"
-    :header-icon="model_icon('requests')"
+    :icon="model_icon('requests')"
     :extended="$data['requests']->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0 || $data['requests']->count() === 0"
     style="grid-column: span 2;"
 >
-    <x-slot name="buttons">
+    <x-slot:actions>
         <x-shipyard::stats.counter
             :rank="$data['requests']->count()"
             label="Liczba zapytań"
@@ -52,8 +52,8 @@
         />
 
         <x-shipyard::ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
-        <x-a href="{{ route('requests') }}">Wszystkie</x-a>
-    </x-slot>
+        <x-shipyard::ui.button :action="route('requests')" icon="chevron-double-right" label="Wszystkie" />
+    </x-slot:actions>
 
     <div class="flex down">
         @forelse ($data['requests'] as $request)
@@ -62,7 +62,7 @@
         <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
         @endforelse
     </div>
-</x-extendo-block>
+</x-shipyard::app.section>
 
 @if (count($data['showcases_missing']))
 <x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: span 2;">

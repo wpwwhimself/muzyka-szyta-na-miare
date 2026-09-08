@@ -376,7 +376,7 @@ class Request extends Model
     {
         return [
             "confirm_song" => "Tytuł, linki i życzenia do utworu są poprawne",
-            "confirm_price" => "Zapłacę kwotę w wysokości ??? zł",
+            "confirm_price" => "Zapłacę kwotę w wysokości ???",
             "confirm_delayed_payment" => "Wpłaty dokonam nie wcześniej niż ???",
             "confirm_deadline" => "Zgadzam się, że dostęp do plików otrzymam ??? lub do kilku dni roboczych wcześniej",
         ];

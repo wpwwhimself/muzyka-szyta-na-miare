@@ -148,7 +148,7 @@ if(!function_exists("next_song_id")){
         $letter = (is_numeric($quest_type_id)) ? QuestType::find($quest_type_id)->code : $quest_type_id;
         $newest_id = Song::where("id", "like", "$letter%")->orderBy("id", "desc")->value("id") ?? $letter . "000";
         $newest_id_last = substr($newest_id, 1);
-        if(in_array($newest_id_last, ["000", "ZZZ"])){
+        if(in_array($newest_id_last, ["ZZZ"])){
             return $letter . "000";
         }
         return $letter . to_base36(from_base36($newest_id_last) + 1, 3);

@@ -215,7 +215,7 @@ class RequestController extends Controller
     public function processAdd(HttpRequest $rq){
         if(Auth::id() === 0) return back()->with("toast", ["error", OBSERVER_ERROR()]);
 
-        $flash_content = "Zapytania dodane";
+        $flash_content = "Zapytanie dodane";
         $loop_length = is_array($rq->quest_type_id) ? count($rq->quest_type_id) : 1;
         $requests_created = [];
 

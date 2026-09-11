@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4eb788dff7b0775a43f5f4ebd6035352",
+    "content-hash": "ea44461d9fecc1417185f69e0417338a",
     "packages": [
         {
             "name": "andcarpi/laravel-popper",
@@ -7283,16 +7283,16 @@
         },
         {
             "name": "wpwwhimself/shipyard",
-            "version": "v4.5.2",
+            "version": "v4.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpwwhimself/shipyard.git",
-                "reference": "ddeca0c136b4b20d73d1497e066581ff65abdb93"
+                "reference": "2b7953c1fc82e41b046c5daf8299503d22214f1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpwwhimself/shipyard/zipball/ddeca0c136b4b20d73d1497e066581ff65abdb93",
-                "reference": "ddeca0c136b4b20d73d1497e066581ff65abdb93",
+                "url": "https://api.github.com/repos/wpwwhimself/shipyard/zipball/2b7953c1fc82e41b046c5daf8299503d22214f1f",
+                "reference": "2b7953c1fc82e41b046c5daf8299503d22214f1f",
                 "shasum": ""
             },
             "require": {
@@ -7348,9 +7348,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wpwwhimself/shipyard/issues",
-                "source": "https://github.com/wpwwhimself/shipyard/tree/v4.5.2"
+                "source": "https://github.com/wpwwhimself/shipyard/tree/v4.5.4"
             },
-            "time": "2026-09-05T22:09:46+00:00"
+            "time": "2026-09-10T19:23:28+00:00"
         }
     ],
     "packages-dev": [

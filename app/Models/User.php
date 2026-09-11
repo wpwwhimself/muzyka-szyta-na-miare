@@ -344,6 +344,19 @@ class User extends ShipyardUser
             "role" => "technical", // disabled password reset
         ],
     ];
+
+    public const EXTRA_SECTIONS = [
+        "badges" => [
+            "title" => "Odznaczenia",
+            "icon" => "medal",
+            "component" => "shipyard::app.model.badges",
+            "show-on" => "edit",
+            "data_key" => "model",
+            "props" => [
+                "large" => true,
+            ],
+        ],
+    ];
     #endregion
 
     #region sorts and filters
@@ -440,58 +453,87 @@ class User extends ShipyardUser
     {
         return Attribute::make(
             get: fn () => [
+                "forgotten" => [
+                    "condition" => $this->is_forgotten && is_archmage(),
+                    "medal" => [
+                        20 => "#808080",
+                        80 => "#c9c9c9",
+                        100 => "#808080",
+                    ],
+                    "label" => "Zapomniany"
+                ],
                 "veteran" => [
                     "condition" => $this->is_veteran,
-                    "icon" => "shield-account",
+                    "medal" => [
+                        35 => "#b313e4",
+                        65 => "#ffffff",
+                        100 => "#b313e4",
+                    ],
                     "label" => "Stały klient"
                 ],
                 "patron" => [
                     "condition" => $this->is_patron && is_archmage(),
-                    "icon" => "seal",
-                    "class" => "showcase-highlight",
+                    "medal" => [
+                        30 => "rgb(36, 172, 250)",
+                        40 => "#ffd828",
+                        60 => "rgb(36, 172, 250)",
+                        70 => "#ffd828",
+                        100 => "rgb(36, 172, 250)",
+                    ],
                     "label" => "Patron"
                 ],
                 "trusted" => [
                     "condition" => $this->trust > 0,
-                    "icon" => "hand-heart",
-                    "class" => "accent success",
+                    "medal" => [
+                        10 => "#41a841",
+                        90 => "#8be8ff",
+                        100 => "#41a841",
+                    ],
                     "label" => "Zaufany"
                 ],
                 "favourite" => [
                     "condition" => $this->is_favourite,
-                    "icon" => "heart",
-                    "class" => "accent success",
+                    "medal" => [
+                        100 => "#ff2289",
+                    ],
                     "label" => "Ulubiony"
-                ],
-                "active" => [
-                    "condition" => $this->top10->where("type", "active")->count() > 0,
-                    "icon" => "chart-line",
-                    "class" => "accent success",
-                    "label" => "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()
                 ],
                 "early_payer" => [
                     "condition" => $this->likes_to_pay_early && is_archmage(),
-                    "icon" => "cash-fast",
-                    "class" => "accent success",
+                    "medal" => [
+                        50 => "#2afc70",
+                        100 => "#26964b",
+                    ],
                     "label" => "Lubi płacić przed odbiorem",
                 ],
                 "picky" => [
                     "condition" => $this->pickiness >= 1.5 && is_archmage(),
-                    "icon" => "fencing",
-                    "class" => "accent error",
+                    "medal" => [
+                        10 => "#ff2222",
+                        45 => "#ff9822",
+                        55 => "#000000",
+                        90 => "#ff9822",
+                        100 => "#ff2222",
+                    ],
                     "label" => "Wybredny"
-                ],
-                "forgotten" => [
-                    "condition" => $this->is_forgotten && is_archmage(),
-                    "icon" => "ghost",
-                    "class" => "accent success",
-                    "label" => "Zapomniany"
                 ],
                 "kio" => [
                     "condition" => $this->trust < 0 && is_archmage(),
-                    "icon" => "ninja",
-                    "class" => "accent error",
+                    "medal" => [
+                        35 => "#000000",
+                        65 => "#ff0000",
+                        100 => "#000000",
+                    ],
                     "label" => "Na czarnej liście"
+                ],
+                "active" => [
+                    "condition" => $this->top10->where("type", "active")->count() > 0,
+                    "medal" => [
+                        30 => "#0ebe49",
+                        70 => "#f7cb07",
+                        100 => "#c682cf",
+                    ],
+                    "label" => "Zleceń w ostatnich 3 mc: ".$this->questsRecent()->count()
                 ],
                 "special_prices" => [
                     "condition" => $this->special_prices && is_archmage(),

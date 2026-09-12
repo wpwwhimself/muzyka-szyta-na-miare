@@ -177,7 +177,6 @@
     </div>
 
     <div class="sc-line rounded stagger" style="--stagger-index: 2;">
-        <x-sc-scissors />
         <h1>FAQ</h1>
         <ul id="faq">
             <li class="scroll-hidden">Jak tworzone są utwory?</li>

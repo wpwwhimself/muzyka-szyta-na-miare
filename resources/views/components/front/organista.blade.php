@@ -4,33 +4,33 @@
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
         <x-shipyard::app.icon name="book-cross" />
         <div>
-            <h2>Organy</h2>
+            <h2>Organy i pianino</h2>
             <p>Od wielu lat gram na organach podczas mszy niedzielnych i okolicznościowych</p>
         </div>
         <ul>
             <li>Na <strong>lokalnym instrumencie</strong> <i class="fas fa-circle-question" @popper(...o ile proboszcz pozwoli grać)></i> lub moim własnym</li>
-            <li><strong>Męski wokal</strong> z możliwością wsparcia przez wokalistkę</li>
+            <li>Możliwość grania pieśni <strong>na pianinie</strong></li>
             <li>Akompaniament do wielu <strong>różnych pieśni</strong> i piosenek</li>
             <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar melodii <strong>psalmów</strong></li>
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 2;">
-        <x-shipyard::app.icon name="piano" />
+        <x-shipyard::app.icon name="trumpet" />
         <div>
-            <h2>Pianino</h2>
-            <p>Dodatkowy akcent muzyczny dla Twojej ceremonii</p>
+            <h2>Trąbka</h2>
+            <p>Trębacz podczas uroczystości pogrzebowych</p>
         </div>
         <ul>
-            <li><strong>Realistyczne brzmienie</strong> fortepianu</li>
-            <li>Tło muzyczne podczas <strong>gromadzenia się gości</strong></li>
-            <li>W utworach spoza repertuaru kościelnego i nie tylko</li>
+            <li>Utwory zgodne z Twoimi życzeniami</li>
+            <li>Godna i profesjonalna oprawa ceremonii</li>
+            <li><strong>Ciepłe brzmienie</strong> flugelhornu</li>
         </ul>
     </div>
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 3;">
-        <x-shipyard::app.icon name="account-hard-hat" />
+        <x-shipyard::app.icon name="star" />
         <div>
-            <h2>Gotowy na wszystko</h2>
-            <p>Mogę zagrać w każdym scenariuszu</p>
+            <h2>Na specjalne okazje</h2>
+            <p>Wyjątkowe scenariusze mszy</p>
         </div>
         <ul>
             <li>Utwory <strong>obcojęzyczne</strong> – angielski/niemiecki</li>
@@ -197,7 +197,6 @@
     </div>
 
     <div class="sc-line rounded stagger" style="--stagger-index: 2;">
-        <x-sc-scissors />
         <h1>FAQ</h1>
 
         <ul id="faq">

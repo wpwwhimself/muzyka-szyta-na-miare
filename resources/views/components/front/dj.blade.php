@@ -165,7 +165,6 @@
     </div>
 
     <div class="sc-line rounded stagger" style="--stagger-index: 2;">
-        <x-sc-scissors />
         <h1>FAQ</h1>
 
         <ul id="faq">

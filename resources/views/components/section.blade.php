@@ -48,5 +48,4 @@ $warning = array_filter($warning ?? []);
     {{ $slot }}
     @endisset
 
-    @if ($scissors) <x-sc-scissors /> @endif
 </x-shipyard::app.section>

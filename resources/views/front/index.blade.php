@@ -1,16 +1,8 @@
 @extends("layouts.app-front")
-@section("title", setting("app_name"))
 
 @section("content")
 
 <script>
-function jumpTo(selector) {
-    document.querySelector(selector).scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-    });
-}
-
 function openSection(slug) {
     document.querySelectorAll(`[role="service"]`).forEach(el => {
         el.classList.toggle("active", el.getAttribute("data-slug") === slug);
@@ -23,11 +15,12 @@ function openSection(slug) {
 }
 </script>
 
-<x-section id="home" scissors>
+<section id="home">
     <div class="company-name flex right but-mobile-down center">
         <x-shipyard::app.logo />
+        <div class="vertical-divider but-mobile-hidden"></div>
         <div>
-            <h1>Wojciech Przybyła</h1>
+            <h1>Wojciech <big class="accent primary">Przybyła</big></h1>
             <p>{{ setting("app_name") }}</p>
             <h2>
                 <span class="appear-cycle">
@@ -40,7 +33,7 @@ function openSection(slug) {
             </h2>
         </div>
     </div>
-</x-section>
+</section>
 
 <div role="services">
     <p id="jump-target">Wybierz kategorię, aby dowiedzieć się więcej:</p>

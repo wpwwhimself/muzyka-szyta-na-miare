@@ -2,7 +2,9 @@
     <x-shipyard::app.loader />
 
     <div class="popup-contents flex down center middle">
-        <h3 class="song-full-title interactive"></h3>
+        <h3 class="song-full-title interactive"
+            @popper(Kliknij, aby skopiować link do bieżącej kompozycji)
+        ></h3>
         <div class="tags flex right center middle"></div>
         <h4 class="ghost">Aranże, jakie wykonałem:</h4>
         <ul class="song-list"></ul>

@@ -97,9 +97,16 @@
         </div>
     </div>
     <h2>Współpracuję również z:</h2>
-    <div id="recomms-other" class="flex right center">
-        <img class="scroll-hidden stagger" style="--stagger-index: 1;" src="{{ asset("assets/front/img/recomms/pwod.png") }}" alt="recomms" @popper(Powiatowa Wolsztyńska Orkiestra Dęta)>
-        <img class="scroll-hidden stagger" style="--stagger-index: 2;" src="{{ asset("assets/front/img/recomms/gckib.png") }}" alt="recomms" @popper(Gminne Centrum Kultury i Biblioteka w Przemęcie)>
+    <div id="recomms-other" class="flex right center stagger-content">
+        @foreach ([
+            "wihajster" => "Orkiestra Taneczna Wihajster",
+            "grobrass" => "Kapela GroBrass",
+            "dixie" => "Dixie Kings Wossztyn",
+            "pwod" => "Powiatowa Wolsztyńska Orkiestra Dęta",
+            "gckib" => "Gminne Centrum Kultury i Biblioteka w Przemęcie",
+        ] as $code => $label)
+        <img class="scroll-hidden" src="{{ asset("assets/front/img/recomms/$code.png") }}" alt="recomms" {{ Popper::pop($label) }}>
+        @endforeach
     </div>
 </section>
 

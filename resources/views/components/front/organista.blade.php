@@ -18,7 +18,7 @@
         <x-shipyard::app.icon name="trumpet" />
         <div>
             <h2>Trąbka</h2>
-            <p>Trębacz podczas uroczystości pogrzebowych</p>
+            <p>Gram też jako trębacz podczas uroczystości pogrzebowych</p>
         </div>
         <ul>
             <li>Utwory zgodne z Twoimi życzeniami</li>
@@ -30,7 +30,7 @@
         <x-shipyard::app.icon name="star" />
         <div>
             <h2>Na specjalne okazje</h2>
-            <p>Wyjątkowe scenariusze mszy</p>
+            <p>Jestem w stanie się dostosować pod wyjątkowe scenariusze mszy</p>
         </div>
         <ul>
             <li>Utwory <strong>obcojęzyczne</strong> – angielski/niemiecki</li>

@@ -11,7 +11,7 @@ function openSection(slug) {
         el.classList.toggle("active", el.getAttribute("data-slug") === slug);
     });
 
-    jumpTo(`#jump-target`);
+    jumpTo(`[role="service"][data-slug="${slug}"] #offer`);
 }
 </script>
 
@@ -36,7 +36,7 @@ function openSection(slug) {
 </section>
 
 <div role="services">
-    <p id="jump-target">Wybierz kategorię, aby dowiedzieć się więcej:</p>
+    <p>Wybierz kategorię, aby dowiedzieć się więcej:</p>
 
     <div class="flex right center">
         @foreach ([

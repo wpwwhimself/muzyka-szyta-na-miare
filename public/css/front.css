@@ -15,7 +15,7 @@ b, strong{
     & h2,
     & p {
         margin: 0;
-        text-shadow: 0 2px 5px var(--bg-lite);
+        text-shadow: 0 2px 5px var(--shadow);
     }
 
     & h1 {

@@ -22,7 +22,7 @@
             <th>Decyzja</th>
         </thead>
         <tbody>
-            @foreach ($patrons_adepts as $patron)
+            @foreach ($data["patrons_adepts"] as $patron)
             <tr>
                 <td>
                     <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $patron->id]) }}">{!! $patron !!}</a>

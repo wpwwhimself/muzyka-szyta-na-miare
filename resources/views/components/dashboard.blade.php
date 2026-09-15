@@ -354,8 +354,6 @@
         :icon="model_icon('users')"
         scissors
     >
-        <x-sc-scissors />
-
         <div class="hint-table">
             <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
             <div class="positions">

@@ -20,6 +20,10 @@ jobs:
       - uses: actions/checkout@v5
       - name: Prepare The Environment
         run: cp .env.example .env
+      - name: Set up locale
+        run: |
+          sudo locale-gen pl_PL.UTF-8
+          sudo update-locale LANG=pl_PL.UTF-8
       - name: Create Database
         run: |
           sudo systemctl start mysql

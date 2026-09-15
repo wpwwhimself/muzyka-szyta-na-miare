@@ -155,7 +155,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("Poproś o zmiany do utworu")
@@ -233,7 +233,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("Poproś o zmiany do utworu")
@@ -313,7 +313,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("profile")
+            $client->visitRoute("profile")->pause(0.5e3)
                 ->with(".section[data-title='Na tapecie']", fn ($section) => $section
                     ->assertSee("wycena do akceptacji")
                     ->assertSee($rd["title"])
@@ -370,8 +370,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "blues",
-                "wishes" => null,
                 "price_code" => $rd["price_code"],
+                "wishes" => null,
             ]);
             $archmage->waitFor("#price-summary table")
                 ->assertSeeIn("#price-summary", $rd["price"])
@@ -386,7 +386,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("Termin realizacji")
@@ -457,7 +457,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("Poproś o zmiany do utworu");
@@ -521,7 +521,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("Poproś o szybszą realizację");
@@ -596,7 +596,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee($rd["title"])
                 ->assertSee("lub tutaj, aby zrezygnować");
@@ -657,7 +657,7 @@ class RequestTest extends DuskTestCase
                 ["client_name", $rd["client_name"]],
             ]);
 
-            $client->visitRoute("request", ["id" => $request->id])
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
                 ->assertSee("wycena do akceptacji")
                 ->assertSee("Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać")
                 ->assertSee($rd["title"])

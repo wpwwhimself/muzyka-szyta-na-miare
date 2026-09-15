@@ -15,6 +15,7 @@ jobs:
       DB_DATABASE: msznm
       MAIL_MAILER: log
       MAIL_FROM_ADDRESS: archmage@test.test
+      MAIL_MAIN_ADDRESS: kontakt@muzykaszytanamiare.pl
     steps:
       - uses: actions/checkout@v5
       - name: Prepare The Environment

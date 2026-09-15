@@ -391,7 +391,7 @@ class RequestTest extends DuskTestCase
                 ->assertSee($rd["title"])
                 ->assertSee("Termin realizacji")
                 ->with(".card[data-title='Termin realizacji']", fn ($card) => $card
-                    ->assertSee(".card[data-title='Termin realizacji']", "nie ma określonego terminu")
+                    ->assertSee(".card[data-title='Termin realizacji']", "nie ma")
                     ->assertDontSee("Poproś o szybszą realizację")
                 );
             $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))

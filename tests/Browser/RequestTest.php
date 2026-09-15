@@ -124,7 +124,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -134,7 +134,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "jazz",
@@ -147,7 +147,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -178,7 +178,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_deadline");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte")
                 ->assertSee("Utworzyłem dla Ciebie konto")
                 ->assertSee("następujące hasło")
@@ -202,7 +202,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -212,7 +212,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "jazz",
@@ -225,7 +225,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -256,7 +256,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_deadline");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte")
                 ->assertSee("Utworzyłem dla Ciebie konto")
                 ->assertSee("następujące hasło")
@@ -281,7 +281,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie dodane")
                 ->assertSeeIn(".section[data-title='Na tapecie']", $rd["title"]);
 
@@ -292,7 +292,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "reggae",
@@ -305,7 +305,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -320,7 +320,7 @@ class RequestTest extends DuskTestCase
                 )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button');
-                });
+                })->pause(0.5e3);
             $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
                 ->waitFor("#modal-card")
                 ->with("#modal-card", fn ($modal) => $modal
@@ -334,7 +334,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_deadline");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte");
         });
     }
@@ -356,7 +356,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -366,7 +366,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "blues",
@@ -378,7 +378,7 @@ class RequestTest extends DuskTestCase
                 ->assertValue("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -404,7 +404,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_deadline");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte");
         });
     }
@@ -427,7 +427,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -437,7 +437,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "folk",
@@ -449,7 +449,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -468,7 +468,7 @@ class RequestTest extends DuskTestCase
                 );
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena zakwestionowana");
         });
     }
@@ -490,7 +490,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -500,7 +500,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "songwriter",
@@ -513,7 +513,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -542,7 +542,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_deadline");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte")
                 ->assertSee("Utworzyłem dla Ciebie konto")
                 ->assertSee("następujące hasło")
@@ -566,7 +566,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -576,7 +576,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "songwriter",
@@ -588,7 +588,7 @@ class RequestTest extends DuskTestCase
                 ->assertValueIsNot("#deadline", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -604,7 +604,7 @@ class RequestTest extends DuskTestCase
                 ->waitFor("#modal-card");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena odrzucona")
                 ->assertSee("Odnów");
         });
@@ -626,7 +626,7 @@ class RequestTest extends DuskTestCase
             ]);
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
@@ -636,7 +636,7 @@ class RequestTest extends DuskTestCase
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
-                })
+                })->pause(0.5e3)
                 ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
             $this->fillOutRequestForArchmage($archmage, [
                 "genre_id" => "soul",
@@ -652,7 +652,7 @@ class RequestTest extends DuskTestCase
             $archmage->assertValueIsNot("#delayed_payment", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
-            })
+            })->pause(0.5e3)
                 ->assertSee("wycena do akceptacji");
 
             $request = Request::firstWhere([
@@ -677,7 +677,7 @@ class RequestTest extends DuskTestCase
                 ->check("confirm_delayed_payment");
             $client->waitForReload(function (Browser $browser) {
                 $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
-            })
+            })->pause(0.5e3)
                 ->assertSee("przyjęte")
                 ->assertSee("Utworzyłem dla Ciebie konto")
                 ->assertSee("następujące hasło")

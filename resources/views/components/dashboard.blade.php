@@ -509,7 +509,7 @@
                 </tr>
             </table>
             <p>
-                W tytule proszę o wpisanie <strong>ID zlecenia</strong> (np. <code>P23-5X</code>) dla łatwiejszej identyfikacji wpłaty.
+                W tytule proszę o wpisanie <strong>ID zlecenia, które opłacasz</strong> (np. <code>P23-5X</code>) dla łatwiejszej identyfikacji wpłaty.
                 Więcej szczegółów znajdziesz w konkretnym zleceniu.
             </p>
             @if($data["unpaids"]->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count())

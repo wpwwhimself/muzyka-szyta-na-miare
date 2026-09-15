@@ -66,6 +66,15 @@ class RequestTest extends DuskTestCase
                 "price" => 60,
                 "deadline" => Carbon::today()->addDays(5),
             ],
+            "anon_low_prio" => [
+                "client_name" => "Tomasz Luzak",
+                "title" => "Feel the Blues",
+                "artist" => "The Blues Sisters",
+                "link" => "https://www.youtube.com/watch?v=FK0Cj7f6_ZI",
+                "wishes" => "nie spieszy się",
+                "price_code" => "c",
+                "price" => 80,
+            ],
             "anon_unhappy" => [
                 "client_name" => "Tomasz Zawiedziony",
                 "title" => "Wiem więcej",
@@ -162,7 +171,7 @@ class RequestTest extends DuskTestCase
                     ->assertSee("Zaznacz poniższe zgody")
                     ->assertSee("Tytuł, linki i życzenia do utworu są poprawne")
                     ->assertSee("Zapłacę kwotę w wysokości $rd[price]")
-                    ->assertSee("dostęp do plików otrzymam ".$rd["deadline"]->format("d.m.Y"))
+                    ->assertSee("dostęp do plików otrzymam najpóźniej ".$rd["deadline"]->format("d.m.Y"))
                 )
                 ->check("confirm_song")
                 ->check("confirm_price")
@@ -240,7 +249,7 @@ class RequestTest extends DuskTestCase
                     ->assertSee("Zaznacz poniższe zgody")
                     ->assertSee("Tytuł, linki i życzenia do utworu są poprawne")
                     ->assertSee("Zapłacę kwotę w wysokości $rd[price]")
-                    ->assertSee("dostęp do plików otrzymam ".$rd["deadline"]->format("d.m.Y"))
+                    ->assertSee("dostęp do plików otrzymam najpóźniej ".$rd["deadline"]->format("d.m.Y"))
                 )
                 ->check("confirm_song")
                 ->check("confirm_price")
@@ -318,7 +327,77 @@ class RequestTest extends DuskTestCase
                     ->assertSee("Zaznacz poniższe zgody")
                     ->assertSee("Tytuł, linki i życzenia do utworu są poprawne")
                     ->assertSee("Zapłacę kwotę w wysokości $rd[price]")
-                    ->assertSee("dostęp do plików otrzymam ".$rd["deadline"]->format("d.m.Y"))
+                    ->assertSee("dostęp do plików otrzymam najpóźniej ".$rd["deadline"]->format("d.m.Y"))
+                )
+                ->check("confirm_song")
+                ->check("confirm_price")
+                ->check("confirm_deadline");
+            $client->waitForReload(function (Browser $browser) {
+                $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
+            })
+                ->assertSee("przyjęte");
+        });
+    }
+
+    public function test_new_request_without_deadline(): void
+    {
+        $this->browse(function(Browser $client, Browser $archmage) {
+            $rd = self::getRequestData()["anon_low_prio"];
+
+            $this->openPodkladyModal($client, [
+                "client_name" => $rd["client_name"],
+                "email" => "ttorpeda-lazy@torpeda-industries.bong",
+                "phone" => "123778947",
+                "title" => $rd["title"],
+                "artist" => $rd["artist"],
+                "link" => $rd["link"],
+                "wishes" => $rd["wishes"],
+                "test" => "20",
+            ]);
+            $client->waitForReload(function (Browser $browser) {
+                $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
+            })
+                ->assertSee("Zapytanie zostało pomyślnie dodane");
+
+            $this->openArchmageDashboard($archmage);
+            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
+                $section->assertSee($rd["title"])
+                    ->assertSee("nowe")
+            )
+                ->waitForReload(function (Browser $browser) use ($rd) {
+                    $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
+                })
+                ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
+            $this->fillOutRequestForArchmage($archmage, [
+                "genre_id" => "blues",
+                "wishes" => null,
+                "price_code" => $rd["price_code"],
+            ]);
+            $archmage->waitFor("#price-summary table")
+                ->assertSeeIn("#price-summary", $rd["price"])
+                ->assertValue("#deadline", "");
+            $archmage->waitForReload(function (Browser $browser) {
+                $browser->click('.button[data-tippy="Oddaj"]');
+            })
+                ->assertSee("wycena do akceptacji");
+
+            $request = Request::firstWhere([
+                ["title", $rd["title"]],
+                ["client_name", $rd["client_name"]],
+            ]);
+
+            $client->visitRoute("request", ["id" => $request->id])
+                ->assertSee("wycena do akceptacji")
+                ->assertSee($rd["title"])
+                ->assertSee("Termin realizacji")
+                ->with(".card[data-title='Termin realizacji']", fn ($card) => $card
+                    ->assertSee(".card[data-title='Termin realizacji']", "nie ma określonego terminu")
+                    ->assertDontSee("Poproś o szybszą realizację")
+                );
+            $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
+                ->waitFor("#modal-card")
+                ->with("#modal-card", fn ($modal) => $modal
+                    ->assertSee("dostęp do plików otrzymam")
                 )
                 ->check("confirm_song")
                 ->check("confirm_price")
@@ -456,7 +535,7 @@ class RequestTest extends DuskTestCase
                 ->with("#modal-card", fn ($modal) => $modal
                     ->assertSee("Zaznacz poniższe zgody")
                     ->assertSee("Zapłacę kwotę w wysokości ".($rd["price"] * 2))
-                    ->assertSee("dostęp do plików otrzymam ".get_next_working_day()->format("d.m.Y"))
+                    ->assertSee("dostęp do plików otrzymam najpóźniej ".get_next_working_day()->format("d.m.Y"))
                 )
                 ->check("confirm_song")
                 ->check("confirm_price")

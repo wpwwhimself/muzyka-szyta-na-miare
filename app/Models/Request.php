@@ -378,7 +378,7 @@ class Request extends Model
             "confirm_song" => "Tytuł, linki i życzenia do utworu są poprawne",
             "confirm_price" => "Zapłacę kwotę w wysokości ???",
             "confirm_delayed_payment" => "Wpłaty dokonam nie wcześniej niż ???",
-            "confirm_deadline" => "Zgadzam się, że dostęp do plików otrzymam ??? lub do kilku dni roboczych wcześniej",
+            "confirm_deadline" => "Zgadzam się, że dostęp do plików otrzymam najpóźniej ???",
         ];
     }
     #endregion

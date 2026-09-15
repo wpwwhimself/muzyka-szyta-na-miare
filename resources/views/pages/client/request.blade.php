@@ -144,8 +144,8 @@
                     <p>Poprawki do zlecenia są zawarte w cenie, chyba że będą wiązać się z dużym zakresem zmian lub zostaną zgłoszone później niż miesiąc po zaakceptowaniu dostarczonych plików.</p>
                 </x-shipyard::app.card>
 
-                @if ($request->deadline)
                 <x-shipyard::app.card title="Termin realizacji" icon="calendar" role="deadline_dates">
+                    @if ($request->deadline)
                     <div class="standard">
                         <x-shipyard::ui.field-input :model="$request" field-name="deadline" dummy />
                     </div>
@@ -185,8 +185,15 @@
                         <span class="accent danger">Dla tej wyceny niestety nie jestem w stanie zaproponować priorytetowego terminu realizacji.</span>
                         @endif
                     @endif
+
+                    @else
+                    <p>
+                        Dla tego zlecenia nie ma określonego terminu realizacji.
+                        Będę nad nim pracował z niższym priorytetem, ale na pewno będę nad nim pracował.
+                    </p>
+
+                    @endif
                 </x-shipyard::app.card>
-                @endif
 
                 @if ($request->price && $request->status_id == 5)
                 <x-shipyard::app.card title="Pobieranie plików" icon="download">
@@ -308,7 +315,7 @@ function confirmRequest() {
         `{{ as_pln($priority_price) }}`,
     ];
     const deadlines = [
-        `{{ $request->deadline->format('d.m.Y') }}`,
+        `{{ $request->deadline?->format('d.m.Y') ?? "w bliżej nieokreślonej przyszłości" }}`,
         `{{ get_next_working_day()->format('d.m.Y') }}`,
     ];
     const delayed_payments = [

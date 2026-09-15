@@ -391,7 +391,7 @@ class RequestTest extends DuskTestCase
                 ->assertSee($rd["title"])
                 ->assertSee("Termin realizacji")
                 ->with(".card[data-title='Termin realizacji']", fn ($card) => $card
-                    ->assertSee(".card[data-title='Termin realizacji']", "nie ma")
+                    ->assertSee("nie ma określonego terminu realizacji")
                     ->assertDontSee("Poproś o szybszą realizację")
                 );
             $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
@@ -642,11 +642,14 @@ class RequestTest extends DuskTestCase
                 "genre_id" => "soul",
                 "price_code" => $rd["price_code"],
                 "deadline" => $rd["deadline"]->format("d.m.Y"),
-                "delayed_payment" => $rd["delayed_payment"]->format("d.m.Y"),
             ]);
             $archmage->waitFor("#price-summary table")
                 ->assertSeeIn("#price-summary", $rd["price"])
                 ->assertValueIsNot("#deadline", "");
+            $this->fillOutRequestForArchmage($archmage, [
+                "delayed_payment" => $rd["delayed_payment"]->format("d.m.Y"),
+            ]);
+            $archmage->assertValueIsNot("#delayed_payment", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
             })

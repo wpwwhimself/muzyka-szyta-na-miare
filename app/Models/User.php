@@ -158,7 +158,9 @@ class User extends ShipyardUser
 
                     return $i;
                 });
-            $dashboardData["janitor_date"] = Storage::lastModified("janitor_log.json");
+            $dashboardData["janitor_date"] = (Storage::exists("janitor_log.json"))
+                ? date("d.m.Y", Storage::lastModified("janitor_log.json"))
+                : null;
         }
         $dashboardData["requests"] = $dashboardData["requests"]->get();
         $dashboardData["quests_ongoing"] = $dashboardData["quests_ongoing"]->get();

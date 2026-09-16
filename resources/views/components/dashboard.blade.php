@@ -252,7 +252,7 @@
     </table>
 </x-section>
 
-<x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="date('d.m.Y', $data['janitor_date'])">
+<x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="$data['janitor_date']">
     <table>
         <thead>
             <tr>

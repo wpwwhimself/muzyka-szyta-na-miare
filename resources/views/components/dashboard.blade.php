@@ -252,7 +252,7 @@
     </table>
 </x-section>
 
-<x-section title="Raport sprzątacza" icon="broom">
+<x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="date('d.m.Y', $data['janitor_date'])">
     <table>
         <thead>
             <tr>
@@ -319,7 +319,7 @@
             @endforelse
         </tbody>
     </table>
-</x-section>
+</x-shipyard::app.section>
 
 </div>
 

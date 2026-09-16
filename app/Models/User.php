@@ -502,8 +502,9 @@ class User extends ShipyardUser
                 "early_payer" => [
                     "condition" => $this->likes_to_pay_early && is_archmage(),
                     "medal" => [
-                        50 => "#2afc70",
-                        100 => "#26964b",
+                        10 => "#2afc70",
+                        90 => "#26964b",
+                        100 => "#2afc70",
                     ],
                     "label" => "Lubi płacić przed odbiorem",
                 ],

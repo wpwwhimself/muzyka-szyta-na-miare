@@ -32,6 +32,4 @@
     @isset ($slot)
     {{ $slot }}
     @endisset
-
-    @if($scissors) <x-sc-scissors /> @endif
 </x-shipyard::app.section>

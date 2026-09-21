@@ -4,6 +4,7 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DjController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JanitorController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\SongController;
@@ -25,6 +26,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::controller(HomeController::class)->group(function() {
+    Route::prefix("front")->group(function() {
+        Route::get("service/{service_name}", "loadFrontService")->name("front.load-service");
+    });
 });
 
 Route::controller(BackController::class)->group(function() {

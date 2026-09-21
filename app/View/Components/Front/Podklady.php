@@ -53,8 +53,6 @@ class Podklady extends Component
         }
         $diffs = array_filter($diffs, function($val){ return is_numeric($val); });
         $this->average_quest_done = (count($diffs) == 0) ? 0 : round(array_sum($diffs)/count($diffs));
-
-        $this->random_song = Song::all()->random(fn ($ss) => min(1, count($ss)));
     }
 
     /**

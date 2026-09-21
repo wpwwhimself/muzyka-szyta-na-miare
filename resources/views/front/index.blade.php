@@ -3,6 +3,14 @@
 @section("content")
 
 <script>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.remove("scroll-hidden");
+        }
+    });
+});
+
 function openSection(slug) {
     document.querySelectorAll(`[role="service"]`).forEach(el => {
         el.classList.toggle("active", el.getAttribute("data-slug") === slug);
@@ -12,6 +20,29 @@ function openSection(slug) {
     });
 
     jumpTo(`[role="service"][data-slug="${slug}"] #offer`);
+}
+
+function loadFrontServices() {
+    ["podklady", "organista", "dj"].forEach(service_name => {
+        const section = document.querySelector(`[role="service"][data-slug="${service_name}"]`);
+
+        section.querySelector(".loader").classList.remove("hidden");
+        fetchPublic(`/api/front/service/${service_name}`)
+            .then(res => res.json())
+            .then(({html}) => {
+                section.innerHTML = html;
+                reapplyPopper();
+
+                // animate on scroll
+                const hiddenElements = document.querySelectorAll(".scroll-hidden");
+                hiddenElements.forEach((el) => observer.observe(el));
+
+                // load song list for catalog
+                if (["podklady", "dj"].includes(service_name)) {
+                    getSongList(service_name);
+                }
+            });
+    });
 }
 </script>
 
@@ -63,15 +94,15 @@ function openSection(slug) {
 </div>
 
 <div role="service" data-slug="podklady" class="animatable stagger">
-    <x-front.podklady />
+    <x-shipyard::app.loader />
 </div>
 
 <div role="service" data-slug="organista" class="animatable stagger">
-    <x-front.organista />
+    <x-shipyard::app.loader />
 </div>
 
 <div role="service" data-slug="dj" class="animatable stagger">
-    <x-front.dj />
+    <x-shipyard::app.loader />
 </div>
 
 <section id="about">
@@ -101,19 +132,7 @@ function openSection(slug) {
 @section("appends")
 
 <script>
-/**
- * animate on scroll
- */
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            entry.target.classList.remove("scroll-hidden");
-        }
-    });
-});
-
-const hiddenElements = document.querySelectorAll(".scroll-hidden");
-hiddenElements.forEach((el) => observer.observe(el));
+loadFrontServices();
 </script>
 
 @endsection

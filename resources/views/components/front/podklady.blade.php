@@ -101,7 +101,7 @@
         @foreach ([
             "wihajster" => "Orkiestra Taneczna Wihajster",
             "grobrass" => "Kapela GroBrass",
-            "dixie" => "Dixie Kings Wossztyn",
+            "dixie" => "Dixie Kings Wolsztyn",
             "pwod" => "Powiatowa Wolsztyńska Orkiestra Dęta",
             "gckib" => "Gminne Centrum Kultury i Biblioteka w Przemęcie",
         ] as $code => $label)

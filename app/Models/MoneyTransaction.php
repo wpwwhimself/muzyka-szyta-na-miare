@@ -63,6 +63,13 @@ class MoneyTransaction extends Model
         );
     }
 
+    public function rawTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this,
+        );
+    }
+
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(

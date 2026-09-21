@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class SpellbookController extends Controller
@@ -40,6 +41,9 @@ class SpellbookController extends Controller
         "transmute" => [
             "requests/view/{id}/transmute/{property}/{value?}",
             "quests/view/{id}/transmute/{property}/{value?}",
+        ],
+        "mindscream" => [
+            "requests/view/{id}/mindscream/{notification}",
         ],
     ];
 
@@ -112,5 +116,18 @@ class SpellbookController extends Controller
         ]);
 
         return back()->with("toast", ["success", "Cena zmieniona"]);
+    }
+
+    public function mindscream($id, $notification)
+    {
+        $r = is_request($id) ? ModelsRequest::find($id) : Quest::find($id);
+        $email = is_request($id) ? $r->email : ($r->can_be_mailed ? $r->user->email : null);
+        $notification_class = "App\\Mail\\$notification";
+
+        if ($email) {
+            Mail::to($email)->send(new $notification_class($r));
+        }
+
+        return back()->with("toast", ["success", "Wysłano powiadomienie"]);
     }
 }

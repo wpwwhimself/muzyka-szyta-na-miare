@@ -116,7 +116,11 @@
         @foreach ($version->file_paths as $extension => $file)
             @switch ($extension)
                 @case ("mp4")
-                <video controls><source src="{{ $file }}" /></video>
+                <video controls>
+                    <source src="{{ route('safe-show', ["id" => $version->song_id, "filename" => basename($file)]) }}"
+                        type="video/mp4"
+                    />
+                </video>
                 @break
 
                 @case ("mp3")
@@ -129,7 +133,7 @@
                 @break
 
                 @case ("pdf")
-                    <span class="ghost">Nie jestem w stanie<br>pokazać podglądu</span>
+                    <span class="ghost">Nie jestem w stanie<br>pokazać podglądu PDF</span>
                 @break
             @endswitch
         @endforeach

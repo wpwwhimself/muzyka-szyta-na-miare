@@ -225,7 +225,7 @@ class FileController extends Controller
             'Expires' => '0',
         ];
 
-        if ($type == "image/jpeg") {
+        if (in_array($type, ["image/jpeg", "video/mp4"])) {
             // update headers to preview file instead of download
             $headers["Content-Disposition"] = "inline; filename=$filename";
         }

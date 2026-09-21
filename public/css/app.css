@@ -234,6 +234,10 @@ body {
 .file-container-c{
     display: flex;
     align-items: center; justify-content: center;
+
+    & video {
+        max-width: 25em;
+    }
 }
 
 .file-player {

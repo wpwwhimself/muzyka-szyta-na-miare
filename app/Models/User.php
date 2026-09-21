@@ -94,7 +94,7 @@ class User extends ShipyardUser
             "requests" => Request::with(["song"])
                 ->whereNotIn("status_id", [4, 7, 8, 9])
                 ->orderBy("updated_at"),
-            "quests_ongoing" => Quest::with(["song", "quest_type", "status"])
+            "quests_ongoing" => Quest::with(["song", "quest_type", "status", "user"])
                 ->whereIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByRaw("case status_id when 13 then 1 else 0 end")
                 ->orderByRaw("case when deadline is null then 1 else 0 end")
@@ -108,7 +108,7 @@ class User extends ShipyardUser
                 ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
                 ->orderByRaw("paid desc")
                 ->orderBy("created_at"),
-            "quests_review" => Quest::with(["song", "quest_type", "status"])
+            "quests_review" => Quest::with(["song", "quest_type", "status", "user"])
                 ->whereNotIn("status_id", [17, 18, 19])
                 ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByDesc("deadline")
@@ -153,6 +153,7 @@ class User extends ShipyardUser
                         $i->comment = [
                             "status_id" => $status_id,
                             "comment" => JanitorController::$OPERATIONS[$i->comment],
+                            "status" => Status::find($status_id),
                         ];
                     }
 

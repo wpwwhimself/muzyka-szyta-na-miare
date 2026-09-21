@@ -7,35 +7,41 @@
 <div @class(["grid but-mobile-down", "stagger-contents" => setting("animations_mode") >= 1]) style="--col-count: 2;">
 
 @if (count($data["patrons_adepts"]) > 0)
-<x-section id="patrons-adepts"
+<x-shipyard::app.section id="patrons-adepts"
     title="Potencjalni patroni"
     icon="seal"
     style="grid-column: span 2;"
 >
-    <x-slot name="buttons">
-        <x-a href="https://www.facebook.com/muzykaszytanamiarepl/reviews" target="_blank">Recenzje</x-a>
-    </x-slot>
+    <x-slot:actions>
+        <x-shipyard::ui.button
+            icon="chevron-double-right"
+            label="Recenzje"
+            target="_blank"
+            action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
+        />
+    </x-slot:actions>
 
-    <table>
-        <thead>
-            <th>Klient</th>
-            <th>Decyzja</th>
-        </thead>
-        <tbody>
-            @foreach ($data["patrons_adepts"] as $patron)
-            <tr>
-                <td>
-                    <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $patron->id]) }}">{!! $patron !!}</a>
-                </td>
-                <td>
-                    <x-button label="" icon="check" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 2]) }}" :small="true" />
-                    <x-button label="" icon="x" action="{{ route('patron-mode', ['client_id' => $patron->id, 'level' => 0]) }}" :small="true" />
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</x-section>
+    @foreach ($data["patrons_adepts"] as $patron)
+    <x-shipyard::app.model.tile
+        :model="$patron"
+    >
+        <x-slot:actions>
+            <x-shipyard::ui.button
+                icon="check"
+                pop="Zatwierdź"
+                :action="route('patron-mode', ['client_id' => $patron->id, 'level' => 2])"
+                class="primary"
+            />
+            <x-shipyard::ui.button
+                icon="cancel"
+                pop="Zaniechaj"
+                :action="route('patron-mode', ['client_id' => $patron->id, 'level' => 0])"
+                class="primary"
+            />
+        </x-slot:actions>
+    </x-shipyard::app.model.tile>
+    @endforeach
+</x-shipyard::app.section>
 @endif
 
 <x-shipyard::app.section
@@ -150,7 +156,7 @@
     <x-calendar :click-days="false" :suggest="false" :with-today="true" />
 </x-section>
 
-<x-section id="dashboard-quests"
+<x-shipyard::app.section id="dashboard-quests"
     title="Zlecenia w toku (klasycznie)"
     :icon="model_icon('quests')"
     :extended="false"
@@ -170,7 +176,7 @@
         <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
         @endforelse
     </div>
-</x-section>
+</x-shipyard::app.section>
 
 <x-section id="dashboard-quests"
     title="Zlecenia czekające"
@@ -282,7 +288,7 @@
                 <td>
                     @if(is_array($i->comment))
                     {{ $i->comment["comment"] }}
-                    <x-phase-indicator-mini :status="\App\Models\Status::find($i->comment['status_id'])" />
+                    <x-phase-indicator-mini :status="$i->comment['status']" />
                     @else
                     {{ $i->comment }}
                     @endif

@@ -122,7 +122,13 @@ function loadFrontServices() {
             </ul>
         </div>
     </div>
-    <iframe src="https://www.youtube.com/embed/WYTOqc6ADwA?si=sYZUcVrL0Znh7czc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/WYTOqc6ADwA?si=sYZUcVrL0Znh7czc"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+        width="500"
+        style="width: 100%; max-width: 500px; aspect-ratio: 16/9;"
+    ></iframe>
 </section>
 
 <x-front.song-list.popup />

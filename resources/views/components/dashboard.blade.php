@@ -112,6 +112,14 @@
     :icon="model_icon('quests')"
     :extended="true"
 >
+    <x-slot:actions>
+        <x-shipyard::stats.counter
+            :rank="$data['quests_ongoing']->count()"
+            label="Liczba zleceń"
+            style="lines"
+        />
+    </x-slot:actions>
+
     <div class="flex down">
         @foreach ($data['quests_ongoing']->groupBy("client_id")
             ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
@@ -178,18 +186,18 @@
     </div>
 </x-shipyard::app.section>
 
-<x-section id="dashboard-quests"
+<x-shipyard::app.section id="dashboard-quests"
     title="Zlecenia czekające"
     icon="package-variant"
     :extended="false"
 >
-    <x-slot:buttons>
+    <x-slot:actions>
         <x-shipyard::stats.counter
             :rank="$data['quests_review']->count()"
             label="Liczba zleceń"
             style="lines"
         />
-    </x-slot:buttons>
+    </x-slot:actions>
 
     <div class="flex down">
         @forelse ($data['quests_review'] as $key => $quest)
@@ -198,7 +206,7 @@
         <p class="grayed-out">brak aktywnych zleceń</p>
         @endforelse
     </div>
-</x-section>
+</x-shipyard::app.section>
 
 <x-section id="recent"
     title="Ostatnie zmiany"

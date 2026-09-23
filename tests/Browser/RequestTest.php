@@ -108,8 +108,8 @@ class RequestTest extends DuskTestCase
                 "title" => "Gdybym był bogaty",
                 "artist" => "Tomasz Skrzypczak",
                 "link" => "https://www.youtube.com/watch?v=775UbsSpL5I",
-                "price_code" => "c2000",
-                "price" => 2000,
+                "price_code" => "c3000",
+                "price" => 3000,
                 "deadline" => Carbon::today()->addDays(2),
             ],
         ];
@@ -729,7 +729,7 @@ class RequestTest extends DuskTestCase
                 "deadline" => $rd["deadline"]->format("d.m.Y"),
             ]);
             $archmage->waitFor("#price-summary table")
-                ->assertSeeIn("#price-summary", $rd["price"])
+                ->assertSeeIn("#price-summary", number_format($rd["price"], thousands_separator: ' '))
                 ->assertValueIsNot("#deadline", "")
                 ->pause(1e3)
                 ->assertValueIsNot("#delayed_payment", "");

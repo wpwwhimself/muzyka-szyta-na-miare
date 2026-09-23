@@ -756,7 +756,7 @@ class RequestTest extends DuskTestCase
                 ->waitFor("#modal-card")
                 ->with("#modal-card", fn ($modal) => $modal
                     ->assertSee("Zaznacz poniższe zgody")
-                    ->assertDontSee("Wpłaty dokonam nie wcześniej niż ".$rd["delayed_payment"]->format("d.m.Y"))
+                    ->assertDontSee("Wpłaty dokonam nie wcześniej niż")
                 )
                 ->check("confirm_song")
                 ->check("confirm_price")

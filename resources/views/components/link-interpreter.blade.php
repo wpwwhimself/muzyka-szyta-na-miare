@@ -18,7 +18,7 @@
                 onclick="
                     navigator.clipboard.writeText(`{{ $link }}`);
                     alert(`Skopiowano link. Przeklej go w pole, jakie za chwilę się pojawi.`);
-                    window.open(`https://mp3now.com/en2`, `_blank`);
+                    window.open(`https://y2mate.gs/`, `_blank`);
                 "
                 icon="download"
                 pop="Pobieranie"

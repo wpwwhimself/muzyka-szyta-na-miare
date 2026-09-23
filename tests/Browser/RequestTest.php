@@ -736,7 +736,7 @@ class RequestTest extends DuskTestCase
             $this->fillOutRequestForArchmage($archmage, [
                 "delayed_payment" => null,
             ]);
-            $archmage->assertValueIs("#delayed_payment", "");
+            $archmage->assertValue("#delayed_payment", "");
             $archmage->waitForReload(function (Browser $browser) {
                 $browser->click('.button[data-tippy="Oddaj"]');
             })->pause(0.5e3)
@@ -767,7 +767,7 @@ class RequestTest extends DuskTestCase
                 ->assertSee("przyjęte");
 
             $archmage->refresh()
-                ->assertValueIs("#delayed_payment", "")
+                ->assertValue("#delayed_payment", "")
                 ->waitForReload(function (Browser $browser) {
                     $browser->click("h3 a.mono");
                 })

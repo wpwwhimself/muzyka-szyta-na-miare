@@ -103,6 +103,15 @@ class RequestTest extends DuskTestCase
                 "deadline" => Carbon::today()->addDays(2),
                 "delayed_payment" => Carbon::today()->addMonth()->floorMonth(),
             ],
+            "anon_rich" => [
+                "client_name" => "Tomasz Bogacki",
+                "title" => "Gdybym był bogaty",
+                "artist" => "Tomasz Skrzypczak",
+                "link" => "https://www.youtube.com/watch?v=775UbsSpL5I",
+                "price_code" => "c2000",
+                "price" => 2000,
+                "deadline" => Carbon::today()->addDays(2),
+            ],
         ];
     }
     #endregion
@@ -645,7 +654,8 @@ class RequestTest extends DuskTestCase
             ]);
             $archmage->waitFor("#price-summary table")
                 ->assertSeeIn("#price-summary", $rd["price"])
-                ->assertValueIsNot("#deadline", "");
+                ->assertValueIsNot("#deadline", "")
+                ->pause(1e3);
             $this->fillOutRequestForArchmage($archmage, [
                 "delayed_payment" => $rd["delayed_payment"]->format("d.m.Y"),
             ]);
@@ -682,6 +692,87 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Utworzyłem dla Ciebie konto")
                 ->assertSee("następujące hasło")
                 ->assertSee("Zaloguj się");
+        });
+    }
+
+    public function test_archmage_can_override_auto_set_delayed_payment(): void
+    {
+        $this->browse(function(Browser $client, Browser $archmage) {
+            $rd = self::getRequestData()["anon_rich"];
+
+            $this->openPodkladyModal($client, [
+                "client_name" => $rd["client_name"],
+                "email" => "rich@test.test",
+                "phone" => "153775228",
+                "title" => $rd["title"],
+                "artist" => $rd["artist"],
+                "link" => $rd["link"],
+                "test" => "20",
+            ]);
+            $client->waitForReload(function (Browser $browser) {
+                $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
+            })->pause(0.5e3)
+                ->assertSee("Zapytanie zostało pomyślnie dodane");
+
+            $this->openArchmageDashboard($archmage);
+            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
+                $section->assertSee($rd["title"])
+                    ->assertSee("nowe")
+            )
+                ->waitForReload(function (Browser $browser) use ($rd) {
+                    $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
+                })->pause(0.5e3)
+                ->assertSee(implode(" – ", [$rd["artist"], $rd["title"]]));
+            $this->fillOutRequestForArchmage($archmage, [
+                "genre_id" => "rock",
+                "price_code" => $rd["price_code"],
+                "deadline" => $rd["deadline"]->format("d.m.Y"),
+            ]);
+            $archmage->waitFor("#price-summary table")
+                ->assertSeeIn("#price-summary", $rd["price"])
+                ->assertValueIsNot("#deadline", "")
+                ->pause(1e3)
+                ->assertValueIsNot("#delayed_payment", "");
+            $this->fillOutRequestForArchmage($archmage, [
+                "delayed_payment" => null,
+            ]);
+            $archmage->assertValueIs("#delayed_payment", "");
+            $archmage->waitForReload(function (Browser $browser) {
+                $browser->click('.button[data-tippy="Oddaj"]');
+            })->pause(0.5e3)
+                ->assertSee("wycena do akceptacji");
+
+            $request = Request::firstWhere([
+                ["title", $rd["title"]],
+                ["client_name", $rd["client_name"]],
+            ]);
+
+            $client->visitRoute("request", ["id" => $request->id])->pause(0.5e3)
+                ->assertSee("wycena do akceptacji")
+                ->assertDontSee("Jest kilka rzeczy, z którymi musisz się koniecznie zapoznać")
+                ->assertSee($rd["title"])
+                ->assertDontSeeIn(".card[data-title='Płatność']", "proszę o dokonanie wpłaty nie wcześniej niż");
+            $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
+                ->waitFor("#modal-card")
+                ->with("#modal-card", fn ($modal) => $modal
+                    ->assertSee("Zaznacz poniższe zgody")
+                    ->assertDontSee("Wpłaty dokonam nie wcześniej niż ".$rd["delayed_payment"]->format("d.m.Y"))
+                )
+                ->check("confirm_song")
+                ->check("confirm_price")
+                ->check("confirm_deadline");
+            $client->waitForReload(function (Browser $browser) {
+                $browser->clickAtXPath(self::x("class", "button", "Zatwierdź"));
+            })->pause(0.5e3)
+                ->assertSee("przyjęte");
+
+            $archmage->refresh()
+                ->assertValueIs("#delayed_payment", "")
+                ->waitForReload(function (Browser $browser) {
+                    $browser->click("h3 a.mono");
+                })
+                ->pause(0.5e3)
+                ->assertDontSeeIn(".section[data-title='Wycena']", "Opóźnienie wpłaty");
         });
     }
 

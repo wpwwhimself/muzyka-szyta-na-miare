@@ -467,8 +467,21 @@ class RequestController extends Controller
             return redirect()->route("request", ["id" => $rq->id])->with("toast", ["error", "Zapytanie już zamknięte"]);
 
         $request->status_id = 9;
-        $price = StatsController::runPriceCalc($request->price_code.(($rq->is_priority) ? "z" : ""), $request->client_id, true);
-        $mpl = StatsController::runMonthlyPaymentLimit($price["price"]);
+
+        if ($rq->is_priority) {
+            // for priority recalculate price and automatically assume payment limit
+            $price = StatsController::runPriceCalc($request->price_code.(($rq->is_priority) ? "z" : ""), $request->client_id, true);
+            $mpl = StatsController::runMonthlyPaymentLimit($price["price"]);
+            $target_price_code = $price["labels"];
+            $target_price = $price["price"];
+            $target_deadline = get_next_working_day();
+            $target_delayed_payment = $mpl["when_to_ask"] > 0 ? Carbon::today()->addMonthsNoOverflow($mpl["when_to_ask"])->firstOfMonth() : null;
+        } else {
+            $target_price_code = $request->price_code;
+            $target_price = $request->price;
+            $target_deadline = $request->deadline;
+            $target_delayed_payment = $request->delayed_payment;
+        }
 
         $is_new_client = 0;
 
@@ -540,18 +553,13 @@ class RequestController extends Controller
         $quest->song_id = $request->song_id ?? $song->id;
         $quest->client_id = $request->client_id ?? $client->id;
         $quest->status_id = 11;
-        $quest->price_code_override = $price["labels"];
-        $quest->price = $price["price"];
-        $quest->deadline = ($rq->is_priority) ? get_next_working_day() : $request->deadline;
+        $quest->price_code_override = $target_price_code;
+        $quest->price = $target_price;
+        $quest->deadline = $target_deadline;
         $quest->hard_deadline = $request->hard_deadline;
-        $quest->delayed_payment = $mpl["when_to_ask"] > 0 ? Carbon::today()->addMonthsNoOverflow($mpl["when_to_ask"])->firstOfMonth() : null;
+        $quest->delayed_payment = $target_delayed_payment;
         $quest->wishes = $request->wishes;
         $quest->save();
-
-        // $invoice = Invoice::create([
-        //     "quest_id" => $quest->id,
-        //     "amount" => $quest->price
-        // ]);
 
         if($client->budget){
             $sub_amount = min([$request->price, $client->budget]);
@@ -580,12 +588,13 @@ class RequestController extends Controller
                 "date" => today(),
                 "amount" => $sub_amount,
             ]);
-            // $invoice->update(["paid" => $sub_amount]);
         }
 
         $request->quest_id = $quest->id;
-        $request->price_code = $price["labels"];
-        $request->price = $price["price"];
+        $request->price_code = $quest->price_code_override;
+        $request->price = $quest->price;
+        $request->deadline = $quest->deadline;
+        $request->delayed_payment = $quest->delayed_payment;
 
         $request->save();
         $request = $request->fresh();

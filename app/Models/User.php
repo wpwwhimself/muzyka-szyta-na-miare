@@ -315,21 +315,18 @@ class User extends ShipyardUser
         ],
     ];
 
-    protected $fillable = [
-        "name",
-        "display_name",
-        "email",
-        "password",
-        "roles",
-        "p13n",
-        "password_actual",
-        "phone", "other_medium", "contact_preference",
-        "trust", "helped_showcasing", "is_forgotten",
-        "budget", "extra_exp",
-        "default_wishes", "special_prices",
-        "external_drive",
-        "invoice_data",
-    ];
+    public function __construct()
+    {
+        $this->mergeFillable([
+            "password_actual",
+            "phone", "other_medium", "contact_preference",
+            "trust", "helped_showcasing", "is_forgotten",
+            "budget", "extra_exp",
+            "default_wishes", "special_prices",
+            "external_drive",
+            "invoice_data",
+        ]);
+    }
 
     public const CONNECTIONS = [
         "quests" => [

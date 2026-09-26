@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>Dzień</th>
+            <th @popper(Obłożenie dnia)>OD</th>
             <th>Zlecenia</th>
         </tr>
     </thead>
@@ -23,6 +24,22 @@
                 @endif
 
                 {{ $date }}
+            </td>
+
+            <td>
+                @if (!Str::contains($meta["day_type"], "free"))
+                <span class="flex down no-gap">
+                    @for ($i = 0; $i < $meta["capacity"]; $i++)
+                        @if (count($meta["quests"]) > $i)
+                        {{-- <span>█</span> --}}
+                        <x-shipyard::app.icon name="square-rounded" />
+                        @else
+                        {{-- <span>░</span> --}}
+                        <x-shipyard::app.icon name="square-rounded-outline" />
+                        @endif
+                    @endfor
+                </span>
+                @endif
             </td>
 
             <td>

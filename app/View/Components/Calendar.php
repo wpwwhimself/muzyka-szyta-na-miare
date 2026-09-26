@@ -15,13 +15,14 @@ class Calendar extends Component
      *
      * @return void
      */
-    public $calendar;
-    public $withToday;
-    public $clickDays;
-    public $suggest;
-    private $available_day_until;
-    public function __construct($withToday = false, $clickDays = true, $suggest = true)
-    {
+    public array $calendar;
+    private array $available_day_until;
+
+    public function __construct(
+        public $withToday = false,
+        public $clickDays = true,
+        public $suggest = true,
+    ) {
         $this->clickDays = $clickDays;
         $this->suggest = $suggest;
         $this->available_day_until = explode(",", setting("msznm_available_day_until"));
@@ -75,6 +76,7 @@ class Calendar extends Component
             $this->calendar[date("d.m", $date)] = [
                 "day_type" => $workday_type,
                 "date_val" => date("Y-m-d", $date),
+                "capacity" => $this->available_day_until[date("w", $date)],
                 "quests" => $quests,
                 "quests_done" => $quests_done,
                 "requests" => $requests,

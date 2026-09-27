@@ -389,7 +389,7 @@ class RequestController extends Controller
                     "artist" => $rq->artist,
                     "link" => yt_cleanup($rq->link),
                     "genre_id" => $rq->genre_id,
-                    "price_code" => preg_replace("/[=\-oyzqr\d]/", "", $rq->price_code),
+                    "price_code" => preg_replace("/[=\-!#oyzqr\d]/", "", $rq->price_code),
                     "composition_id" => $rq->composition_id,
                 ]);
             }

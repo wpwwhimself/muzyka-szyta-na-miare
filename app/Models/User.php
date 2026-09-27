@@ -26,6 +26,28 @@ class User extends ShipyardUser
         "defaultSort" => "-exp",
     ];
 
+    public function __construct()
+    {
+        $this->mergeFillable([
+            "password_actual",
+            "phone", "other_medium", "contact_preference",
+            "trust", "helped_showcasing", "is_forgotten",
+            "budget", "extra_exp",
+            "default_wishes", "special_prices",
+            "external_drive",
+            "invoice_data",
+        ]);
+        $this->mergeCasts([
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'p13n' => "collection",
+            "invoice_data" => "json",
+        ]);
+        $this->mergeAppends([
+            "pickiness",
+        ]);
+    }
+
     #region presentation
     public function optionLabel(): Attribute
     {
@@ -315,19 +337,6 @@ class User extends ShipyardUser
         ],
     ];
 
-    public function __construct()
-    {
-        $this->mergeFillable([
-            "password_actual",
-            "phone", "other_medium", "contact_preference",
-            "trust", "helped_showcasing", "is_forgotten",
-            "budget", "extra_exp",
-            "default_wishes", "special_prices",
-            "external_drive",
-            "invoice_data",
-        ]);
-    }
-
     public const CONNECTIONS = [
         "quests" => [
             "model" => Quest::class,
@@ -436,20 +445,6 @@ class User extends ShipyardUser
     #endregion
 
     #region attributes and helpers
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'p13n' => "collection",
-            "invoice_data" => "json",
-        ];
-    }
-
-    protected $appends = [
-        "pickiness",
-    ];
-
     public function badges(): Attribute
     {
         return Attribute::make(

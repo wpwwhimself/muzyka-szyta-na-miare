@@ -94,7 +94,7 @@ class KsefController extends Controller
             }
         } catch (\Throwable $th) {
             $send_data = ["msg" => $th->getMessage()];
-            Log::error($th, $send_status["status"]);
+            Log::error($th, $send_status["status"] ?? []);
         }
 
         //? close session
@@ -144,7 +144,8 @@ class KsefController extends Controller
         $buyer = $prepared_invoice->addChild("Podmiot2");
         $buyer_data = $buyer->addChild("DaneIdentyfikacyjne");
         $buyer_data->addChild("NIP", str_replace("-", "", $invoice->payer_nip));
-        $buyer_data->addChild("Nazwa", implode(" ", array_filter([$invoice->payer_name, $invoice->payer_title])));
+        dd(preg_replace("/[\- ]/", "", $invoice->payer_nip), str_replace("-", "", $invoice->payer_nip));
+        $buyer_data->addChild("Nazwa", Str::replace("&", "&amp;", implode(" ", array_filter([$invoice->payer_name, $invoice->payer_title]))));
         $buyer_address = $buyer->addChild("Adres");
         $buyer_address->addChild("KodKraju", "PL");
         $buyer_address->addChild("AdresL1", $invoice->payer_address);
@@ -154,7 +155,7 @@ class KsefController extends Controller
         if ($invoice->receiver_name) {
             $receiver = $prepared_invoice->addChild("Podmiot3");
             $receiver_data = $receiver->addChild("DaneIdentyfikacyjne");
-            $receiver_data->addChild("NIP", str_replace("-", "", $invoice->receiver_nip));
+            $receiver_data->addChild("NIP", preg_replace("/[\- ]/", "", $invoice->receiver_nip));
             $receiver_data->addChild("Nazwa", implode(" ", array_filter([$invoice->receiver_name, $invoice->receiver_title])));
             $receiver_address = $receiver->addChild("Adres");
             $receiver_address->addChild("KodKraju", "PL");

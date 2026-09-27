@@ -144,7 +144,6 @@ class KsefController extends Controller
         $buyer = $prepared_invoice->addChild("Podmiot2");
         $buyer_data = $buyer->addChild("DaneIdentyfikacyjne");
         $buyer_data->addChild("NIP", str_replace("-", "", $invoice->payer_nip));
-        dd(preg_replace("/[\- ]/", "", $invoice->payer_nip), str_replace("-", "", $invoice->payer_nip));
         $buyer_data->addChild("Nazwa", Str::replace("&", "&amp;", implode(" ", array_filter([$invoice->payer_name, $invoice->payer_title]))));
         $buyer_address = $buyer->addChild("Adres");
         $buyer_address->addChild("KodKraju", "PL");

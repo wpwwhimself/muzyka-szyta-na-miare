@@ -83,7 +83,7 @@ class DjController extends Controller
             "compositionSummary" => "Dostępne: " . count($compositions),
             "genreSummary" => "Dostępne: " . count($genres),
             "compositionsList" => collect($compositions)->map(fn ($c, $i) =>
-                "<span class='interactive' onclick='pickComposition($i)'>
+                "<span class='button' onclick='pickComposition($i)'>
                     <span class='accent primary'>$c[title]</span>
                     <small class='ghost'>$c[composer]</small>
                 </span>"

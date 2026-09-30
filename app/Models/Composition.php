@@ -228,7 +228,8 @@ class Composition extends Model
     public static function getDjReady()
     {
         return self::all()
-            ->filter(fn ($c) => $c->is_dj_ready);
+            ->filter(fn ($c) => $c->is_dj_ready)
+            ->sortBy("title");
     }
     #endregion
 

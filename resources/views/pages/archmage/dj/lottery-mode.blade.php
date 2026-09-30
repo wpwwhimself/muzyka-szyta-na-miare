@@ -72,7 +72,7 @@
         />
     </div>
 
-    <div id="compositions-list" class="hidden">
+    <div id="compositions-list" class="flex right hidden">
     </div>
 </div>
 

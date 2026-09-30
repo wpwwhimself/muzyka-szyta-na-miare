@@ -92,6 +92,18 @@ class Request extends Model
             ])->render(),
         );
     }
+
+    public static function modelAddButton(): string
+    {
+        return view("shipyard::components.ui.button", [
+            "icon" => "plus",
+            "pop" => "Dodaj",
+            "action" => route("add-request"),
+            "attributes" => new ComponentAttributeBag([
+                "class" => "primary",
+            ]),
+        ])->render();
+    }
     #endregion
 
     #region fields

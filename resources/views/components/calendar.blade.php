@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>Dzień</th>
-            <th @popper(Obłożenie dnia)>OD</th>
+            <th @popper(Obłożenie dnia) role="capacity" class="hidden">OD</th>
             <th>Zlecenia</th>
         </tr>
     </thead>
@@ -26,15 +26,13 @@
                 {{ $date }}
             </td>
 
-            <td>
+            <td role="capacity" class="hidden">
                 @if (!Str::contains($meta["day_type"], "free"))
                 <span class="flex down no-gap">
                     @for ($i = 0; $i < $meta["capacity"]; $i++)
                         @if (count($meta["quests"]) > $i)
-                        {{-- <span>█</span> --}}
                         <x-shipyard::app.icon name="square-rounded" />
                         @else
-                        {{-- <span>░</span> --}}
                         <x-shipyard::app.icon name="square-rounded-outline" />
                         @endif
                     @endfor
@@ -96,3 +94,20 @@
     @endforeach
     </tbody>
 </table>
+
+<div class="flex right center middle">
+    <x-shipyard::ui.button
+        icon="eye"
+        label="OD"
+        pop="Wyświetl obłożenie dnia"
+        action="none"
+        onclick="cToggleCapacity()"
+        class="tertiary"
+    />
+</div>
+
+<script>
+function cToggleCapacity() {
+    document.querySelectorAll(`.calendar-table [role="capacity"]`).forEach(el => el.classList.toggle("hidden"));
+}
+</script>

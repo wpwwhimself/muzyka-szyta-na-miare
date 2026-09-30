@@ -107,49 +107,73 @@
 </x-section>
 @endif
 
-<x-shipyard::app.section
-    title="Zlecenia w toku"
-    :icon="model_icon('quests')"
-    :extended="true"
->
-    <x-slot:actions>
-        <x-shipyard::stats.counter
-            :rank="$data['quests_ongoing']->count()"
-            label="Liczba zleceń"
-            style="lines"
-        />
-    </x-slot:actions>
+<div class="flex down">
+    <x-shipyard::app.section
+        title="Zlecenia w toku"
+        :icon="model_icon('quests')"
+        :extended="true"
+    >
+        <x-slot:actions>
+            <x-shipyard::stats.counter
+                :rank="$data['quests_ongoing']->count()"
+                label="Liczba zleceń"
+                style="lines"
+            />
+        </x-slot:actions>
 
-    <div class="flex down">
-        @foreach ($data['quests_ongoing']->groupBy("client_id")
-            ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
-        as $client_id => $clients_quests)
-        <div class="grid but-mobile-down animatable highlight" style="grid-template-columns: auto 1fr;">
-            @php
-            $client = $clients_quests->first()->user;
-            @endphp
+        <div class="flex down">
+            @foreach ($data['quests_ongoing']->groupBy("client_id")
+                ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
+            as $client_id => $clients_quests)
+            <div class="grid but-mobile-down animatable highlight" style="grid-template-columns: auto 1fr;">
+                @php
+                $client = $clients_quests->first()->user;
+                @endphp
 
-            <div class="flex down but-mobile-right" style="row-gap: 0;">
-                <span>{{ $client }}</span>
-                <span>{!! $client->display_subtitle !!}</span>
-            </div>
-            <div class="flex down no-gap">
-                @foreach ($clients_quests as $quest)
-                <span style="text-align: right;"
-                    @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
-                >
-                    <span {{ Popper::pop($quest->quest_type->type) }}>
-                        <x-shipyard::app.icon :name="$quest->quest_type->icon" />
+                <div class="flex down but-mobile-right" style="row-gap: 0;">
+                    <span>{{ $client }}</span>
+                    <span>{!! $client->display_subtitle !!}</span>
+                </div>
+                <div class="flex down no-gap">
+                    @foreach ($clients_quests as $quest)
+                    <span style="text-align: right;"
+                        @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
+                    >
+                        <span {{ Popper::pop($quest->quest_type->type) }}>
+                            <x-shipyard::app.icon :name="$quest->quest_type->icon" />
+                        </span>
+                        <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
+                        {!! $quest->status->name_and_label !!}
                     </span>
-                    <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
-                    {!! $quest->status->name_and_label !!}
-                </span>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
-    </div>
-</x-shipyard::app.section>
+    </x-shipyard::app.section>
+
+    <x-shipyard::app.section id="dashboard-quests"
+        title="Zlecenia czekające"
+        icon="package-variant"
+        :extended="false"
+    >
+        <x-slot:actions>
+            <x-shipyard::stats.counter
+                :rank="$data['quests_review']->count()"
+                label="Liczba zleceń"
+                style="lines"
+            />
+        </x-slot:actions>
+
+        <div class="flex down">
+            @forelse ($data['quests_review'] as $key => $quest)
+            <x-quests.tile :quest="$quest" :no="$key + 1" />
+            @empty
+            <p class="grayed-out">brak aktywnych zleceń</p>
+            @endforelse
+        </div>
+    </x-shipyard::app.section>
+</div>
 
 <x-section id="dashboard-requests"
     title="Grafik"
@@ -163,50 +187,6 @@
 
     <x-calendar :click-days="false" :suggest="false" :with-today="true" />
 </x-section>
-
-<x-shipyard::app.section id="dashboard-quests"
-    title="Zlecenia w toku (klasycznie)"
-    :icon="model_icon('quests')"
-    :extended="false"
->
-    <x-slot:buttons>
-        <x-shipyard::stats.counter
-            :rank="$data['quests_ongoing']->count()"
-            label="Liczba zleceń"
-            style="lines"
-        />
-    </x-slot:buttons>
-
-    <div class="flex down">
-        @forelse ($data['quests_ongoing'] as $key => $quest)
-        <x-quests.tile :quest="$quest" :no="$key + 1" />
-        @empty
-        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zleceń</p>
-        @endforelse
-    </div>
-</x-shipyard::app.section>
-
-<x-shipyard::app.section id="dashboard-quests"
-    title="Zlecenia czekające"
-    icon="package-variant"
-    :extended="false"
->
-    <x-slot:actions>
-        <x-shipyard::stats.counter
-            :rank="$data['quests_review']->count()"
-            label="Liczba zleceń"
-            style="lines"
-        />
-    </x-slot:actions>
-
-    <div class="flex down">
-        @forelse ($data['quests_review'] as $key => $quest)
-        <x-quests.tile :quest="$quest" :no="$key + 1" />
-        @empty
-        <p class="grayed-out">brak aktywnych zleceń</p>
-        @endforelse
-    </div>
-</x-shipyard::app.section>
 
 <x-section id="recent"
     title="Ostatnie zmiany"

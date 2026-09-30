@@ -342,40 +342,41 @@
         </div>
     </x-shipyard::app.section>
 
-    <x-section id="who-am-i"
-        title="Moje dane"
-        :subtitle="Auth::user()"
-        :icon="model_icon('users')"
-        scissors
+    <x-shipyard::app.section id="who-am-i"
+        title="Moje statystyki"
+        icon="chart-bar"
+        @class(["sc-line"])
     >
-        <div class="hint-table">
-            <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
-            <div class="positions">
-                <span>Ukończonych zleceń</span>
-                <span>
+        <table>
+            <tr>
+                <td>Ukończonych zleceń</td>
+                <td>
                     {{ $data["quests_total"] }}
                     <x-shipyard::stats.counter :rank="$data['quests_total']" style="military" />
-                </span>
-
-                <span>Status klienta</span>
-                <span>
+                </td>
+            </tr>
+            <tr>
+                <td>Status klienta</td>
+                <td>
                     @if (Auth::user()->trust == -1)
-                    <span class="error"><x-shipyard::app.icon name="ninja" /></span> niezaufany
+                    <span class="accent error"><x-shipyard::app.icon name="ninja" /></span> niezaufany
                     @elseif (Auth::user()->is_veteran)
                     <span><x-shipyard::app.icon name="shield-account" /></span> stały klient
                     @else
-                    <span><x-shipyard::app.icon name="account" /></span> klient początkujący<br>
-                    <i>pozostało zleceń: {{ setting("msznm_veteran_from") - $data["quests_total"] }}</i>
+                    <span><x-shipyard::app.icon name="account" /></span> klient początkujący
+                    (<i>pozostało zleceń: {{ setting("msznm_veteran_from") - $data["quests_total"] }}</i>)
                     @endif
-                </span>
-
-                @if (Auth::user()->is_patron)
-                <span>Pomoc w reklamie</span>
-                <span>odnotowana</span>
-                @endif
-
-                <span>Łącznie zniżek</span>
-                <span>
+                </td>
+            </tr>
+            @if (Auth::user()->is_patron)
+            <tr>
+                <td>Pomoc w reklamie</td>
+                <td>odnotowana</td>
+            </tr>
+            @endif
+            <tr>
+                <td>Łącznie zniżek</td>
+                <td>
                     {{
                         Auth::user()->special_prices ? "spersonalizowany cennik"
                         : (
@@ -384,20 +385,18 @@
                             (Auth::user()->is_patron) * floatval(DB::table("prices")->where("indicator", "-")->value("price_".pricing(Auth::id())))
                         )*100 . "%"
                     }}
-                </span>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
 
         @if (Auth::user()->trust == -1)
-        <br>
-        <div class="section-header accent error">
-            <h1><x-shipyard::app.icon name="ninja" /> Jesteś na czarnej liście!</h1>
-        </div>
+        <x-shipyard::app.h :lvl="2" icon="ninja" class="accent error">Jesteś na czarnej liście</x-shipyard::app.h>
         <p>
-            Z powodu nieopłaconych przez bardzo długi czas projektów, ograniczyłem możliwości korzystania ze strony.
+            Z powodu nieopłaconych przez bardzo długi czas zleceń, ograniczyłem możliwości korzystania ze strony.
             Do momentu ich opłacenia nie możesz przeglądać udostępnionych plików.
         </p>
-        <h2 class="error">Nieopłacone zlecenia</h2>
+
+        <x-shipyard::app.h :lvl="3" :icon="model_icon('quests')" class="accent error">Nieopłacone zlecenia</x-shipyard::app.h>
         <table>
             <thead>
                 <tr>
@@ -421,35 +420,32 @@
         @endif
 
         @if ($data["quests_total"] && !Auth::user()->is_patron && Auth::user()->helped_showcasing != 1)
-        <br>
-        <div class="section-header showcase-highlight">
-            <h1><x-shipyard::app.icon name="seal" /> Oceń naszą współpracę</h1>
-        </div>
+        <x-shipyard::app.h :lvl="2" icon="seal" class="showcase-highlight">Oceń naszą współpracę</x-shipyard::app.h>
         <p>
             Recenzje pomagają mi pozyskiwać nowych klientów.
             Jeśli i Tobie przypadły do gustu efekty moich prac,
             możesz dać o tym znać innym i uzyskać <strong class="showcase-highlight">dodatkowe 5% zniżki na kolejne zlecenia</strong>!
         </p>
-        <form>
-            <x-button
-                label="Przejdź do mojego fanpage'a" icon="open-in-new" target="_blank"
-                action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
-                />
-            <p>
-                Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
-                <x-warning>
-                    Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
-                    Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
-                </x-warning>
-            </p>
-            <x-shipyard::ui.button
-                label="Właśnie wystawił{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature"
-                action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
-                class="primary"
+
+        <x-button
+            label="Przejdź do mojego fanpage'a" icon="open-in-new" target="_blank"
+            action="https://www.facebook.com/muzykaszytanamiarepl/reviews"
             />
-        </form>
+        <p>
+            Po wystawieniu opinii kliknij przycisk poniżej – wtedy sprawdzę opinię i przyznam zniżkę.
+        </p>
+        <x-shipyard::app.card icon="alert" class="accent danger">
+            Zwróć uwagę, żeby widoczność posta była ustawiona na <strong>Wszyscy</strong>.
+            Inaczej nie będę mógł stwierdzić, że faktycznie napisał{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'aś' : 'eś' }} opinię.
+        </x-shipyard::app.card>
+
+        <x-shipyard::ui.button
+            label="Właśnie wystawił{{ client_polonize(Auth::user()->display_name)['kobieta'] ? 'am' : 'em' }} opinię" icon="signature-freehand"
+            action="{{ route('patron-mode', ['client_id' => Auth::id(), 'level' => 1]) }}"
+            class="primary"
+        />
         @endif
-    </x-section>
+    </x-shipyard::app.section>
 
     <x-section id="dashboard-finances"
         title="Finanse"

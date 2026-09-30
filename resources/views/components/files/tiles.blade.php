@@ -112,37 +112,41 @@
         </div>
         @endif
 
-        <div class="file-container-c">
-        @foreach ($version->file_paths as $extension => $file)
-            @switch ($extension)
-                @case ("mp4")
-                <video controls>
-                    <source src="{{ route('safe-show', ["id" => $version->song_id, "filename" => basename($file)]) }}"
-                        type="video/mp4"
+        <div class="file-container-c flex right but-mobile-down center">
+            <div role="preview" class="flex right center middle">
+            @foreach ($version->file_paths as $extension => $file)
+                @switch ($extension)
+                    @case ("mp4")
+                    <video controls>
+                        <source src="{{ route('safe-show', ["id" => $version->song_id, "filename" => basename($file)]) }}"
+                            type="video/mp4"
+                        />
+                    </video>
+                    @break
+
+                    @case ("mp3")
+                    @case ("ogg")
+                    <x-file-player
+                        :song-id="$version->song_id"
+                        :file="$file"
+                        :type="$extension"
                     />
-                </video>
-                @break
+                    @break
 
-                @case ("mp3")
-                @case ("ogg")
-                <x-file-player
-                    :song-id="$version->song_id"
-                    :file="$file"
-                    :type="$extension"
-                />
-                @break
+                    @case ("pdf")
+                        <span class="ghost">Podgląd PDF<br>niedostępny</span>
+                    @break
+                @endswitch
+            @endforeach
+            </div>
 
-                @case ("pdf")
-                    <span class="ghost">Nie jestem w stanie<br>pokazać podglądu PDF</span>
-                @break
-            @endswitch
-        @endforeach
-
-        @foreach ($version->file_paths as $extension => $file)
-            @continue (!$canDownloadFiles && $extension != "pdf")
-            @continue ($extension == "jpg")
-            <x-file-tile :id="$version->song_id" :file="$file" />
-        @endforeach
+            <div role="tiles" class="flex right center middle no-gap">
+            @foreach ($version->file_paths as $extension => $file)
+                @continue (!$canDownloadFiles && $extension != "pdf")
+                @continue ($extension == "jpg")
+                <x-file-tile :id="$version->song_id" :file="$file" />
+            @endforeach
+            </div>
         </div>
     </div>
     @endunless

@@ -18,7 +18,7 @@ class ShowcasePlatform extends Model
         "label" => "Społecznościówki",
         "icon" => "account-group",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 30,
     ];
 

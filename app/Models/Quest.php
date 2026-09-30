@@ -19,7 +19,7 @@ class Quest extends Model
         "label" => "Zlecenia",
         "icon" => "package-variant-closed",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 22,
         "defaultSort" => "-date",
     ];

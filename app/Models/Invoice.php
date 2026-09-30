@@ -18,7 +18,7 @@ class Invoice extends Model
         "label" => "Faktury i rachunki",
         "icon" => "invoice-list",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 43,
         "defaultSort" => "-id",
     ];

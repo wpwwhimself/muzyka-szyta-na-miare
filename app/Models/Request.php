@@ -22,7 +22,7 @@ class Request extends Model
         "label" => "Zapytania",
         "icon" => "chat",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 21,
         "defaultSort" => "-date",
     ];

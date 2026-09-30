@@ -18,7 +18,7 @@ class Genre extends Model
         "label" => "Gatunki",
         "icon" => "book-music",
         "description" => "Kategorie utworów, pozwalające pogrupować je pod kątem ich ogólnej charakterystyki.",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 4,
     ];
 

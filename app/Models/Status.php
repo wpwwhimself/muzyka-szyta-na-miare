@@ -18,7 +18,7 @@ class Status extends Model
         "label" => "Statusy",
         "icon" => "list-status",
         "description" => "",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 61,
     ];
 

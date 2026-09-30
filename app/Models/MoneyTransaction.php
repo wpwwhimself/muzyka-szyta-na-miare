@@ -20,7 +20,7 @@ class MoneyTransaction extends Model
         "label" => "Transakcje",
         "icon" => "cash-register",
         "description" => "Wpłaty i wydatki.",
-        "role" => "",
+        "role" => "technical",
         "ordering" => 42,
         "defaultSort" => "-date",
     ];

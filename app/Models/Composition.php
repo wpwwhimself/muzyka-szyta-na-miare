@@ -204,6 +204,21 @@ class Composition extends Model
                 "emptyOption" => "Wszystkie",
             ],
         ],
+        "tagged" => [
+            "label" => "Otagowane",
+            "icon" => "tag-multiple",
+            "compare-using" => "function",
+            "discr" => "is_tagged",
+            "type" => "select",
+            "operator" => "=",
+            "selectData" => [
+                "options" => [
+                    ["label" => "Tak", "value" => 1],
+                    ["label" => "Nie", "value" => 0],
+                ],
+                "emptyOption" => "Wszystkie",
+            ],
+        ],
     ];
 
     public const EXTRA_SECTIONS = [
@@ -289,6 +304,13 @@ class Composition extends Model
     {
         return Attribute::make(
             get: fn () => !empty($this->songmap) && !empty($this->lyrics),
+        );
+    }
+
+    public function isTagged(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->tags()->count() > 0,
         );
     }
 

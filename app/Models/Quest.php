@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Support\Str;
 
 class Quest extends Model
 {
@@ -265,23 +266,36 @@ class Quest extends Model
 
     use HasStandardAttributes;
 
-    // public function badges(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => [
-    //             [
-    //                 "label" => "",
-    //                 "icon" => "",
-    //                 "class" => "",
-    //                 "style" => "",
-    //                 "condition" => "",
-    //             ],
-    //             [
-    //                 "html" => "",
-    //             ],
-    //         ],
-    //     );
-    // }
+    public function badges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => [
+                [
+                    "label" => "Dubel",
+                    "icon" => model_icon('files'),
+                    "class" => "accent danger",
+                    "condition" => $this->song->has_safe_files,
+                ],
+                [
+                    "label" => "Łatwe",
+                    "icon" => "dots-horizontal-circle-outline",
+                    "class" => "accent success",
+                    "condition" => Str::contains($this->price_code_override, ["b", "h", "i"]),
+                ],
+                [
+                    "label" => $this->quest_type->type,
+                    "icon" => $this->quest_type->icon,
+                    "condition" => true,
+                ],
+                [
+                    "label" => $this->status->status_name,
+                    "icon" => $this->status->icon,
+                    "style" => "color: ".$this->status->color,
+                    "condition" => true,
+                ],
+            ],
+        );
+    }
 
     //? override edit button on model list
     public function modelEditButton(): Attribute

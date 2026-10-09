@@ -139,11 +139,8 @@
                     <span style="text-align: right;"
                         @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
                     >
-                        <span {{ Popper::pop($quest->quest_type->type) }}>
-                            <x-shipyard::app.icon :name="$quest->quest_type->icon" />
-                        </span>
                         <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
-                        {!! $quest->status->name_and_label !!}
+                        <x-shipyard::app.model.badges :model="$quest" />
                     </span>
                     @endforeach
                 </div>
@@ -263,7 +260,7 @@
                     <a href="{{ $i->subject->link_to }}">
                         @if($i->procedure === "re_quests")
                             <x-phase-indicator-mini :status="$i->subject->status" />
-                            {{ $i->subject->song?->title ?? $i->subject->title ?? "utwór bez tytułu" }}
+                            {{ $i->subject }}
                         @elseif($i->procedure === "safe")
                             <i class="fas fa-folder" @popper(Sejf)></i>
                             {{ $i->subject->title ?? "utwór bez tytułu" }}

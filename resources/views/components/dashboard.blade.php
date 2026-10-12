@@ -315,7 +315,7 @@
 </div>
 
 @else
-<div class="grid stagger-contents" style="--col-count: 2;">
+<div @class(["grid but-mobile-down", "stagger-contents" => setting("animations_mode") >= 1]) style="--col-count: 2;">
     <x-shipyard::app.section
         title="Na tapecie"
         subtitle="Aktualne zlecenia i zapytania"

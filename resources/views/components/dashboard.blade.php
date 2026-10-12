@@ -444,38 +444,58 @@
         @endif
     </x-shipyard::app.section>
 
-    <x-section id="dashboard-finances"
+    <x-shipyard::app.section id="dashboard-finances"
         title="Finanse"
         subtitle="Dane do przelewu i suma zobowiązań"
         :icon="model_icon('prices')"
         :extended="$data['unpaids']->sum('payment_remaining') > 0"
-        :warning="[
-            'Niektóre ze zleceń, które musisz opłacić, posiadają opóźniony termin płatności' => $data['unpaids']->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count(),
-        ]"
+        inner-class="flex down"
     >
-        <h2 @class([
-            "error" => Auth::user()->trust == -1,
-        ])>
-            Do zapłacenia za zlecenia
-        </h2>
-        <div class="hint-table">
-            <style>.hint-table div{ grid-template-columns: 1fr 1fr; }</style>
-            <div class="positions">
-                <span>Zaakceptowane</span>
-                <span>{{ as_pln($data["unpaids"]->filter(fn ($q) => in_array($q->status_id, [17, 19]))->sum("payment_remaining")) }}</span>
+        @if (count($data["unpaids"]))
+        <x-shipyard::app.card
+            title="Zlecenia do opłacenia"
+            :icon="model_icon('money-transactions')"
+        >
+            <table>
+                <thead>
+                    <tr>
+                        <th>Zlecenie</th>
+                        <th>ID zlecenia</th>
+                        <th>Kwota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data['unpaids'] as $quest)
+                    <tr>
+                        <td>
+                            <a href="{{ route('quest', ['id' => $quest->id]) }}">
+                            {{ $quest->song }}
+                            </a>
+                        </td>
+                        <td><code>{{ $quest->id }}</code></td>
+                        <td>{{ as_pln($quest->payment_remaining) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Suma zobowiązań</th>
+                        <th>{{ as_pln($data['unpaids']->sum('payment_remaining')) }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </x-shipyard::app.card>
+        @endif
 
-                <span>Wszystkie</span>
-                <span>{{ as_pln($data["unpaids"]->sum("payment_remaining")) }}</span>
-            </div>
-        </div>
-
-        <h2>
-            Stan konta:
-            {{ as_pln(Auth::user()->budget) }}
-        </h2>
-        <x-tutorial>
-            Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
-        </x-tutorial>
+        <x-shipyard::app.card
+            title="Stan konta"
+            icon="safe-square"
+        >
+            <p>Aktualny stan konta: <strong class="accent primary">{{ as_pln(Auth::user()->budget) }}</strong></p>
+            <x-tutorial>
+                Jeśli zdarzy Ci się wpłacić więcej, niż to było planowane, to odnotuję tę różnicę i wpiszę ją na poczet przyszlych zleceń.
+            </x-tutorial>
+        </x-shipyard::app.card>
 
         <x-shipyard::app.card
             title="Dane do przelewu"
@@ -496,8 +516,8 @@
                 </tr>
             </table>
             <p>
-                W tytule proszę o wpisanie <strong>ID zlecenia, które opłacasz</strong> (np. <code>P23-5X</code>) dla łatwiejszej identyfikacji wpłaty.
-                Więcej szczegółów znajdziesz w konkretnym zleceniu.
+                W tytule proszę o wpisanie <strong>ID zlecenia, które opłacasz</strong> dla łatwiejszej identyfikacji wpłaty.
+                Więcej szczegółów znajdziesz w konkretnym zleceniu{{ (count($data["unpaids"]) ? ' i w zestawieniu powyżej' : '') }}.
             </p>
             @if($data["unpaids"]->filter(fn($quest) => $quest->delayed_payment?->gte(Carbon\Carbon::today()))->count())
             <p class="yellowed-out">
@@ -507,7 +527,7 @@
             </p>
             @endif
         </x-shipyard::app.card>
-    </x-section>
+    </x-shipyard::app.section>
 </div>
 
 <div class="flex right center">

@@ -253,6 +253,14 @@ class Request extends Model
     ];
 
     public const FILTERS = [
+        "title" => [
+            "label" => "Tytuł",
+            "icon" => "music-box",
+            "compare-using" => "field",
+            "discr" => "title",
+            "type" => "text",
+            "operator" => "regexp",
+        ],
         "client" => [
             "label" => "Nazwisko klienta",
             "icon" => "account",

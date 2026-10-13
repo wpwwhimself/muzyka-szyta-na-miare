@@ -31,7 +31,12 @@ class FileTag extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->name;
+        return implode(" ", [
+            view("components.file-tag", [
+                "tag" => $this,
+            ])->render(),
+            $this->name,
+        ]);
     }
 
     public function optionLabel(): Attribute
@@ -46,20 +51,34 @@ class FileTag extends Model
         return Attribute::make(
             get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
-                "icon" => $this->icon ?? self::META["icon"],
+                // "icon" => $this->icon ?? self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
-                "slot" => $this->name,
+                "slot" => ucfirst($this->name),
             ])->render(),
+        );
+    }
+
+    public function rawTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ucfirst($this->name),
         );
     }
 
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            get: fn () => view("shipyard::components.app.model.badges", [
-                "badges" => $this->badges,
+            get: fn () => null,
+        );
+    }
+
+    public function displayPreTitle(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => view("components.file-tag", [
+                "tag" => $this,
             ])->render(),
         );
     }
@@ -79,20 +98,18 @@ class FileTag extends Model
     use HasStandardFields;
 
     public const FIELDS = [
-        // "<column_name>" => [
-        //     "type" => "<input_type>",
-        //     "column-types" => [ // for JSON
-        //         "<label>" => "<input_type>",
-        //     ],
-        //     "label" => "",
-        //     "hint" => "",
-        //     "icon" => "",
-        //     // "required" => true,
-        //     // "autofill-from" => ["<route>", "<model_name>"],
-        //     // "character-limit" => 999, // for text fields
-        //     // "hide-for-entmgr" => true,
-        //     // "role" => "",
-        // ],
+        "icon" => [
+            "type" => "icon",
+            "label" => "Ikona",
+            "icon" => "image",
+            "required" => true,
+        ],
+        "color" => [
+            "type" => "color",
+            "label" => "Kolor",
+            "icon" => "palette",
+            "required" => true,
+        ],
     ];
 
     public const CONNECTIONS = [

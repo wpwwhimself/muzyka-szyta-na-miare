@@ -638,7 +638,9 @@ class RequestController extends Controller
             "contact_preference" => $user->contact_preference,
         ]);
 
-        return back()->with("toast", ["success", "Klient przypisany"]);
+        return response()->json([
+            "success" => true,
+        ]);
     }
 
     public function selectSong(HttpRequest $rq)
@@ -657,7 +659,9 @@ class RequestController extends Controller
             "composition_id" => $song->composition_id,
         ]);
 
-        return back()->with("toast", ["success", "Utwór przypisany"]);
+        return response()->json([
+            "success" => true,
+        ]);
     }
     #endregion
 }

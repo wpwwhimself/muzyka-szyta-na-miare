@@ -94,21 +94,68 @@
                     pop="Zlecenia"
                     target="_blank"
                 />
-                @else
-                <x-shipyard::ui.button
-                    icon="link"
-                    pop="Przypisz klienta"
-                    action="none"
-                    onclick="openModal('select-user-to-request', {
-                        request_id: '{{ $request->id }}',
-                        query: `{{ $request->client_name }}`,
-                    }, {}, () => {
-                        document.querySelector(`#query`).focus();
-                    })"
-                    class="tertiary"
-                />
                 @endif
             </x-slot:buttons>
+
+            @if ($request->status_id == 1 && $request->client_name && !$request->client_id)
+            <x-shipyard::app.card id="binder-suggestions-for-user"
+                title="Podobni istniejący klienci"
+                :icon="model_icon('users')"
+                inner-class="flex down"
+            >
+                <div class="suggestions"></div>
+                <div class="flex right center middle">
+                    <x-shipyard::ui.button
+                        icon="link"
+                        label="Przypisz wybranego klienta"
+                        class="primary hidden"
+                        action="none"
+                        onclick="bindUserToRequest(`{{ $request->id }}`, document.forms[0].elements.client_id.value)"
+                    />
+                </div>
+                <script defer>
+                    const binder_user_container = document.querySelector(`#binder-suggestions-for-user`);
+
+                    function bindUserToRequest(request_id, user_id) {
+                        if (!user_id) {
+                            popToast("error", "Wybierz klienta");
+                            return;
+                        }
+
+                        binder_user_container.querySelector(`.loader`).classList.remove(`hidden`);
+                        fetchWithUser(`/requests/select/user`, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                request_id: request_id,
+                                client_id: user_id,
+                            }),
+                        })
+                            .then(res => res.json())
+                            .then(res => {
+                                if (!res.success) throw new Error(res.message);
+                                location.reload();
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            });
+                    }
+
+                    binder_user_container.querySelector(`.loader`).classList.remove(`hidden`);
+                    fetchPublic(`/api/lookup/users?query={{ $request->client_name }}`)
+                        .then(res => res.text())
+                        .then(table => {
+                            document.querySelector(`#binder-suggestions-for-user .contents .suggestions`).innerHTML = table;
+                            document.querySelector(`#binder-suggestions-for-user .button[data-label*="Przypisz"]`).classList.remove(`hidden`);
+                        })
+                        .finally(() => {
+                            binder_user_container.querySelector(`.loader`).classList.add(`hidden`);
+                        });
+                </script>
+            </x-shipyard::app.card>
+            @endif
 
             <input type="hidden" name="client_id" value="{{ $request->client_id }}" />
 
@@ -138,21 +185,68 @@
                     pop="Szczegóły"
                     target="_blank"
                 />
-                @else
-                <x-shipyard::ui.button
-                    icon="link"
-                    pop="Przypisz utwór"
-                    action="none"
-                    onclick="openModal('select-song-to-request', {
-                        request_id: '{{ $request->id }}',
-                        query: `{{ $request->title }}`,
-                    }, {}, () => {
-                        document.querySelector(`#query`).focus();
-                    })"
-                    class="tertiary"
-                />
                 @endif
             </x-slot:buttons>
+
+            @if ($request->status_id == 1 && $request->title && !$request->song_id)
+            <x-shipyard::app.card id="binder-suggestions-for-song"
+                title="Podobne istniejące utwory"
+                :icon="model_icon('songs')"
+                inner-class="flex down"
+            >
+                <div class="suggestions"></div>
+                <div class="flex right center middle">
+                    <x-shipyard::ui.button
+                        icon="link"
+                        label="Przypisz wybrany utwór"
+                        class="primary hidden"
+                        action="none"
+                        onclick="bindSongToRequest(`{{ $request->id }}`, document.forms[0].elements.song_id.value)"
+                    />
+                </div>
+                <script defer>
+                    const binder_song_container = document.querySelector(`#binder-suggestions-for-song`);
+
+                    function bindSongToRequest(request_id, song_id) {
+                        if (!song_id) {
+                            popToast("error", "Wybierz utwór");
+                            return;
+                        }
+
+                        binder_song_container.querySelector(`.loader`).classList.remove(`hidden`);
+                        fetchWithUser(`/requests/select/song`, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                request_id: request_id,
+                                song_id: song_id,
+                            }),
+                        })
+                            .then(res => res.json())
+                            .then(res => {
+                                if (!res.success) throw new Error(res.message);
+                                location.reload();
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            });
+                    }
+
+                    binder_song_container.querySelector(`.loader`).classList.remove(`hidden`);
+                    fetchPublic(`/api/lookup/songs?query={{ $request->title }}`)
+                        .then(res => res.text())
+                        .then(table => {
+                            document.querySelector(`#binder-suggestions-for-song .contents .suggestions`).innerHTML = table;
+                            document.querySelector(`#binder-suggestions-for-song .button[data-label*="Przypisz"]`).classList.remove(`hidden`);
+                        })
+                        .finally(() => {
+                            binder_song_container.querySelector(`.loader`).classList.add(`hidden`);
+                        });
+                </script>
+            </x-shipyard::app.card>
+            @endif
 
             <input type="hidden" name="song_id" value="{{ $request->song_id }}" />
 

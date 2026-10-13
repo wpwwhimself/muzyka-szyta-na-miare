@@ -354,42 +354,6 @@ class Modal extends ShipyardModal
                     ]
                 ],
             ],
-            "select-song-to-request" => [
-                "heading" => "Przypisz utwór",
-                "target_route" => "requests.select-song",
-                "fields" => [
-                    [
-                        "name" => "query",
-                        "type" => "lookup",
-                        "label" => "Wyszukaj",
-                        "icon" => "archive-search",
-                        "extra" => [
-                            "selectData" => [
-                                "dataRoute" => "lookup.songs",
-                                "fieldName" => "song_id",
-                            ],
-                        ]
-                    ],
-                ]
-            ],
-            "select-user-to-request" => [
-                "heading" => "Przypisz klienta",
-                "target_route" => "requests.select-user",
-                "fields" => [
-                    [
-                        "name" => "query",
-                        "type" => "lookup",
-                        "label" => "Wyszukaj",
-                        "icon" => "account-search",
-                        "extra" => [
-                            "selectData" => [
-                                "dataRoute" => "lookup.users",
-                                "fieldName" => "client_id",
-                            ],
-                        ]
-                    ]
-                ]
-            ],
             "send-dj-request" => [
                 "heading" => "Wyślij zapytanie",
                 "target_route" => "dj-requests.new",

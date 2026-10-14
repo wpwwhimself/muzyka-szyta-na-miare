@@ -94,6 +94,20 @@
                     pop="Zlecenia"
                     target="_blank"
                 />
+                @else
+                <x-shipyard::ui.button
+                    icon="link"
+                    pop="Przypisz klienta"
+                    action="none"
+                    onclick="openModal('select-user-to-request', {
+                        request_id: '{{ $request->id }}',
+                        query: document.querySelector(`#client_name`).value,
+                        mode: 'manual',
+                    }, {}, () => {
+                        document.querySelector(`#query`).focus();
+                    })"
+                    class="tertiary"
+                />
                 @endif
             </x-slot:buttons>
 
@@ -131,6 +145,7 @@
                             body: JSON.stringify({
                                 request_id: request_id,
                                 client_id: user_id,
+                                mode: 'semi-auto',
                             }),
                         })
                             .then(res => res.json())
@@ -185,6 +200,20 @@
                     pop="Szczegóły"
                     target="_blank"
                 />
+                @else
+                <x-shipyard::ui.button
+                    icon="link"
+                    pop="Przypisz utwór"
+                    action="none"
+                    onclick="openModal('select-song-to-request', {
+                        request_id: '{{ $request->id }}',
+                        query: document.querySelector(`#title`).value,
+                        mode: 'manual',
+                    }, {}, () => {
+                        document.querySelector(`#query`).focus();
+                    })"
+                    class="tertiary"
+                />
                 @endif
             </x-slot:buttons>
 
@@ -222,6 +251,7 @@
                             body: JSON.stringify({
                                 request_id: request_id,
                                 song_id: song_id,
+                                mode: 'semi-auto',
                             }),
                         })
                             .then(res => res.json())
@@ -235,7 +265,7 @@
                     }
 
                     binder_song_container.querySelector(`.loader`).classList.remove(`hidden`);
-                    fetchPublic(`/api/lookup/songs?query={{ $request->title }}`)
+                    fetchPublic(`/api/lookup/songs?query={{ urlencode($request->title) }}`)
                         .then(res => res.text())
                         .then(table => {
                             document.querySelector(`#binder-suggestions-for-song .contents .suggestions`).innerHTML = table;

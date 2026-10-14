@@ -638,9 +638,12 @@ class RequestController extends Controller
             "contact_preference" => $user->contact_preference,
         ]);
 
-        return response()->json([
-            "success" => true,
-        ]);
+        switch ($rq->mode) {
+            case "semi-auto":
+                return response()->json(["success" => true]);
+            case "manual":
+                return back()->with("toast", ["success", "Klient powiązany"]);
+        }
     }
 
     public function selectSong(HttpRequest $rq)
@@ -659,9 +662,12 @@ class RequestController extends Controller
             "composition_id" => $song->composition_id,
         ]);
 
-        return response()->json([
-            "success" => true,
-        ]);
+        switch ($rq->mode) {
+            case "semi-auto":
+                return response()->json(["success" => true]);
+            case "manual":
+                return back()->with("toast", ["success", "Utwór powiązany"]);
+        }
     }
     #endregion
 }

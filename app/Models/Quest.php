@@ -231,13 +231,12 @@ class Quest extends Model
             "icon" => "timeline",
             "compare-using" => "field",
             "discr" => "status_id",
-            "type" => "select",
+            "type" => "select-multiple",
             "selectData" => [
                 "optionsFromScope" => [
                     Status::class,
                     "forQuests",
                 ],
-                "emptyOption" => "wszystkie",
             ],
         ],
     ];

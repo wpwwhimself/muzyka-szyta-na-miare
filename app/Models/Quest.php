@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\ComponentAttributeBag;
 use Illuminate\Support\Str;
 
@@ -84,10 +85,9 @@ class Quest extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            // get: fn () => view("shipyard::components.app.model.badges", [
-            //     "badges" => $this->badges,
-            // ])->render(),
-            get: fn () => $this->song->artist,
+            get: fn () => view("shipyard::components.app.model.badges", [
+                "badges" => $this->badges,
+            ])->render(),
         );
     }
 
@@ -278,24 +278,24 @@ class Quest extends Model
                     "label" => "Dubel",
                     "icon" => model_icon('files'),
                     "class" => "accent danger",
-                    "condition" => $this->song->has_safe_files,
+                    "condition" => !is_archmage() && $this->song->has_safe_files,
                 ],
                 [
                     "label" => "Łatwe",
                     "icon" => "dots-horizontal-circle-outline",
                     "class" => "accent success",
-                    "condition" => Str::contains($this->price_code_override, ["b", "h", "i"]),
+                    "condition" => !is_archmage() && Str::contains($this->price_code_override, ["b", "h", "i"]),
                 ],
                 [
                     "label" => $this->quest_type->type,
                     "icon" => $this->quest_type->icon,
-                    "condition" => true,
+                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
                 ],
                 [
                     "label" => $this->status->status_name,
                     "icon" => $this->status->icon,
                     "style" => "color: ".$this->status->color,
-                    "condition" => true,
+                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
                 ],
             ],
         );

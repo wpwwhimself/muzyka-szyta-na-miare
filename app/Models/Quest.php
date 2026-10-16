@@ -193,6 +193,11 @@ class Quest extends Model
             "compare-using" => "field",
             "discr" => "created_at",
         ],
+        "deadline" => [
+            "label" => "Termin wykonania",
+            "compare-using" => "field",
+            "discr" => "deadline",
+        ],
     ];
 
     public const FILTERS = [

@@ -163,6 +163,7 @@ class Status extends Model
     public function scopeForRequests($query)
     {
         return $this->where("id", "<", 10)
+            ->orWhereBetween("id", [90, 99])
             ->orderBy("id");
     }
 

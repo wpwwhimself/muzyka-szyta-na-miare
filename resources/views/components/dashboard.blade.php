@@ -74,6 +74,7 @@
 <x-shipyard::app.section title="Showcase'y do stworzenia"
     :icon="model_icon('showcases')"
     style="grid-column: span 2;"
+    inner-class="flex down"
 >
     @foreach ($data["showcases_missing"] as $quest)
     <x-shipyard::app.model.tile :model="$quest->song">

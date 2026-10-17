@@ -3,10 +3,13 @@
     "editable" => false,
     "highlightForClientId" => null,
     "canDownloadFiles" => false,
+    "song" => null,
 ])
 
 @php
 $uuid = Str::uuid();
+
+if ($song) $songId = $song->id;
 @endphp
 
 <div class="files-container" data-uuid="{{ $uuid }}">

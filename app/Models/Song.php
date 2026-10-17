@@ -198,6 +198,12 @@ class Song extends Model
             "show-on" => "edit",
             "component" => "showcases.song-short-editor",
         ],
+        "files" => [
+            "title" => "Pliki",
+            "icon" => "file-multiple",
+            "show-on" => "edit",
+            "component" => "files.list-for-song-editor",
+        ],
     ];
 
     #region scopes

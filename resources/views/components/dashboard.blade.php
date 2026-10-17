@@ -71,40 +71,22 @@
 </x-shipyard::app.section>
 
 @if (count($data['showcases_missing']))
-<x-section title="Showcase'y do stworzenia" :icon="model_icon('showcases')" style="grid-column: span 2;">
-    <table>
-        <thead>
-            <tr>
-                <th>ID questa</th>
-                <th>ID utworu</th>
-                <th>Utwór</th>
-                <th>Co trzeba zrobić</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data['showcases_missing'] as $quest)
-            <tr>
-                <td><a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->id }}</a></td>
-                <td><a href="{{ route('admin.model.edit', ['model' => 'songs', 'id' => $quest->song->id]) }}">{{ $quest->song->id }}</a></td>
-                <td>{{ $quest->song->full_title }}</td>
-                <td>
-                    @if ($quest->song->has_recorded_reel)
-                        @if ($quest->song->has_original_mv)
-                        <span @popper(Rolka z teledyskiem)><x-shipyard::app.icon name="video-vintage" /></span>
-                        @else
-                        <span @popper(Rolka)><x-shipyard::app.icon name="movie-roll" /></span>
-                        @endif
-                    @endif
-
-                    @if (!$quest->song->has_showcase_file)
-                    <span @popper(Krótki showcase)><x-shipyard::app.icon name="tshirt-crew" /></span>
-                    @endif
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</x-section>
+<x-shipyard::app.section title="Showcase'y do stworzenia"
+    :icon="model_icon('showcases')"
+    style="grid-column: span 2;"
+>
+    @foreach ($data["showcases_missing"] as $quest)
+    <x-shipyard::app.model.tile :model="$quest->song">
+        <x-slot:actions>
+            <x-shipyard::ui.button
+                :action="route('admin.model.edit', ['model' => 'songs', 'id' => $quest->song_id])"
+                icon="pencil"
+                label="Edytuj"
+            />
+        </x-slot:actions>
+    </x-shipyard::app.model.tile>
+    @endforeach
+</x-shipyard::app.section>
 @endif
 
 <div class="flex down">

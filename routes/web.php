@@ -16,6 +16,7 @@ use App\Http\Controllers\StatsController;
 use App\Http\Controllers\WorkClockController;
 use Wpwwhimself\Shipyard\Middleware\EnsureUserHasRole;
 use Illuminate\Support\Facades\Route;
+use PageviewCounter\Middleware\LogRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(HomeController::class)->group(function(){
+Route::controller(HomeController::class)->middleware(LogRequest::class)->group(function(){
     Route::get('/', "index")->name("home");
     Route::get("catalog", "catalog")->name("catalog");
 });
@@ -37,7 +38,7 @@ Route::redirect("/dashboard", "/profile");
 
 Route::middleware("auth")->group(function(){
     Route::controller(BackController::class)->group(function(){
-        Route::get('/prices', "prices")->name("prices");
+        Route::get('/prices', "prices")->middleware(LogRequest::class)->name("prices");
 
         Route::withoutMiddleware("auth")->get("/patron-mode/{client_id}/{level}", "setPatronLevel")->name("patron-mode");
         Route::withoutMiddleware("auth")->post("restatus-with-comment", "restatusReQuestWithComment")->name("re_quests.restatus-with-comment");

@@ -120,7 +120,7 @@
                 <div class="flex down no-gap">
                     @foreach ($clients_quests as $quest)
                     <span style="text-align: right;"
-                        @if ($quest->hard_deadline?->isPast()) class="accent error" @endif
+                        @if ($quest->hard_deadline?->addDay()->isPast()) class="accent error" @endif
                     >
                         <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
                         <x-shipyard::app.model.badges :model="$quest" />

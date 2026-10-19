@@ -24,4 +24,4 @@
     />
 </div>
 
-<x-files.list :song-id="$data->id" />
+<x-files.list :song-id="$data->id" :editable="true" />

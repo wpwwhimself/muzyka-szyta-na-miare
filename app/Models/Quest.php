@@ -278,13 +278,13 @@ class Quest extends Model
                     "label" => "Dubel",
                     "icon" => model_icon('files'),
                     "class" => "accent danger",
-                    "condition" => !is_archmage() && $this->song->has_safe_files,
+                    "condition" => is_archmage() && $this->song->has_safe_files,
                 ],
                 [
                     "label" => "Łatwe",
                     "icon" => "dots-horizontal-circle-outline",
                     "class" => "accent success",
-                    "condition" => !is_archmage() && Str::contains($this->price_code_override, ["b", "h", "i"]),
+                    "condition" => is_archmage() && Str::contains($this->price_code_override, ["b", "h", "i"]),
                 ],
                 [
                     "label" => $this->quest_type->type,

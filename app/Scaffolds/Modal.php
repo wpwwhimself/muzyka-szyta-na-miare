@@ -459,12 +459,16 @@ class Modal extends ShipyardModal
                         "required" => true,
                         "extra" => [
                             "selectData" => [
-                                "options" => [
-                                    ["label" => "Msza ślubna", "value" => "wedding"],
-                                    ["label" => "Msza jubileuszowa", "value" => "anniversary"],
-                                    ["label" => "Pogrzeb", "value" => "funeral"],
-                                    ["label" => "Inna uroczystość", "value" => "other"],
-                                ],
+                                "options" => collect([
+                                    "Msza ślubna/komunijna",
+                                    "Msza jubileuszowa",
+                                    "Pogrzeb (organista z opcj. trąbką)",
+                                    "Pogrzeb (tylko trąbka)",
+                                    "Ślub cywilny",
+                                    "Inna",
+                                ])
+                                    ->map(fn ($v) => ["label" => $v, "value" => $v])
+                                    ->toArray(),
                             ],
                         ],
                     ],
@@ -476,9 +480,35 @@ class Modal extends ShipyardModal
                         "required" => true,
                     ],
                     [
+                        "name" => "place",
+                        "type" => "text",
+                        "label" => "Miejsce",
+                        "icon" => "map-marker",
+                        "required" => true,
+                    ],
+                    [
+                        "name" => "people",
+                        "type" => "select",
+                        "label" => "Zespół",
+                        "icon" => "account-multiple",
+                        "required" => true,
+                        "extra" => [
+                            "selectData" => [
+                                "options" => collect([
+                                    "Tylko ja",
+                                    "Ja + śpiew żeński",
+                                    "Ja + skrzypce",
+                                    "Ja + śpiew żeński + skrzypce",
+                                ])
+                                    ->map(fn ($v) => ["label" => $v, "value" => $v])
+                                    ->toArray(),
+                            ],
+                        ],
+                    ],
+                    [
                         "name" => "wishes",
                         "type" => "TEXT",
-                        "label" => "Szczegóły (miejsce, życzenia itp.)",
+                        "label" => "Życzenia (repertuar itp.)",
                         "icon" => "cloud",
                     ],
                     [

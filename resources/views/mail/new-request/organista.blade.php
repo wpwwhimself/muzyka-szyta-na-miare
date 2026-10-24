@@ -7,7 +7,9 @@
 
 <span><strong>Rodzaj uroczystości</strong>: {{ $data["occasion"] }}</span>
 <br />
-<span><strong>Data</strong>: {{ $data["date"] }}</span>
+<span><strong>Data i miejsce</strong>: {{ $data["date"] }}, {{ $data["place"] }}</span>
+<br />
+<span><strong>Skład</strong>: {{ $data["people"] }}</span>
 <br />
 <span><strong>Mój sprzęt</strong>? {{ isset($data["equipment"]) ? "Tak" : "Nie" }}</span>
 <br />

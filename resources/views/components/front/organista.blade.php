@@ -2,14 +2,14 @@
     <h1>Jak mogę wzbogacić Twoją uroczystość?</h1>
 
     <div class="main rounded backdropped scroll-hidden stagger" style="--stagger-index: 1;">
-        <x-shipyard::app.icon name="book-cross" />
+        <x-shipyard::app.icon name="piano" />
         <div>
             <h2>Organy i pianino</h2>
-            <p>Od wielu lat gram na organach podczas mszy niedzielnych i okolicznościowych</p>
+            <p>Od wielu lat gram na instrumentach klawiszowych podczas mszy niedzielnych i okolicznościowych oraz innych ceremonii</p>
         </div>
         <ul>
             <li>Na <strong>lokalnym instrumencie</strong> <i class="fas fa-circle-question" @popper(...o ile proboszcz pozwoli grać)></i> lub moim własnym</li>
-            <li>Możliwość grania pieśni <strong>na pianinie</strong></li>
+            <li>Możliwość grania pieśni i innych utworów <strong>na pianinie</strong></li>
             <li>Akompaniament do wielu <strong>różnych pieśni</strong> i piosenek</li>
             <li>Nastrojowe <strong>improwizacje</strong> i bogaty repertuar melodii <strong>psalmów</strong></li>
         </ul>
@@ -35,6 +35,7 @@
         <ul>
             <li>Utwory <strong>obcojęzyczne</strong> – angielski/niemiecki</li>
             <li>Uroczystości w plenerze, <strong>na własnym instrumencie</strong></li>
+            <li><strong>Śluby cywilne</strong> jako pianista</li>
             <li>Msze ekumeniczne itp.</li>
         </ul>
     </div>
@@ -130,7 +131,7 @@
 
     <div class="showcase-section flex down spaced hidden" data-mode="Ewelina Spławska">
         <p>
-            Współpracuję z <strong>Eweliną Spławską</strong>, grając w okolicach Wolsztyna.
+            Współpracuję z <strong>Eweliną Spławską</strong>, grając w okolicach Wolsztyna i Poznania.
             Razem śpiewamy i gramy na pianinie i organach.
         </p>
 
@@ -176,7 +177,7 @@
             Poniższe ceny mogą się różnić w zależności od kosztów dojazdu
         </span>
         <div class="front-table">
-            <h2 class="header scroll-hidden">Organy</h2>
+            <h2 class="header scroll-hidden">Organy (samodzielnie)</h2>
 
             <span class="scroll-hidden">Msza ślubna/komunijna</span>
             <span class="scroll-hidden">od {{ as_pln(400) }}</span>
@@ -190,10 +191,20 @@
             <span class="scroll-hidden">Msza niedzielna</span>
             <span class="scroll-hidden">od {{ as_pln(70) }}</span>
 
+            <h2 class="header scroll-hidden">Pianino</h2>
+
+            <span class="scroll-hidden">Ślub cywilny</span>
+            <span class="scroll-hidden">od {{ as_pln(300) }}</span>
+
             <h2 class="header scroll-hidden">Trąbka</h2>
 
             <span class="scroll-hidden">Trębacz podczas pogrzebu</span>
             <span class="scroll-hidden">od {{ as_pln(150) }}</span>
+
+            <h2 class="header scroll-hidden">Z zespołem</h2>
+
+            <span class="scroll-hidden">Msza ślubna/komunijna</span>
+            <span class="scroll-hidden">od {{ as_pln(400) }} za os.</span>
         </div>
     </div>
 
@@ -202,16 +213,22 @@
 
         <ul id="faq">
             <li class="scroll-hidden">Jaki repertuar gram?</li>
-            <li class="scroll-hidden">Gram pieśni eucharystyczne, ale nie tylko. Na msze okolicznościowe gram pieśni dopasowane do okazji. Mogę również zagrać utwory <strong>na życzenie</strong>.</li>
+            <li class="scroll-hidden">
+                W kościele gram pieśni eucharystyczne, ale nie tylko. Na msze okolicznościowe gram pieśni dopasowane do okazji. Mogę również zagrać utwory <strong>na życzenie</strong>.<br>
+                Na ślub cywilny mam przygotowany repertuar utworów o tematyce miłosnej (polskich i zagranicznych), które gram w melancholijnym, jazzowym stylu, adekwatnie do roli tła muzycznego.
+            </li>
 
             <li class="scroll-hidden">Czy mam własny instrument?</li>
-            <li class="scroll-hidden">Preferuję grę na lokalnym instrumencie, ale jeśli go nie ma lub nie ma pozwolenia na grę na nim, jestem w stanie grać na <b>własnych organach (elektrycznych) z własnym nagłośnieniem</b>.</li>
+            <li class="scroll-hidden">Preferuję grę na lokalnym instrumencie, ale jeśli go nie ma lub nie ma pozwolenia na grę na nim, jestem w stanie grać na <b>własnym instrumencie (elektrycznym) z własnym nagłośnieniem</b>.</li>
 
             <li class="scroll-hidden">Czy współpracuję z innymi muzykami?</li>
-            <li class="scroll-hidden">Jeśli podczas uroczystości ma zaśpiewać/zagrać również ktoś inny, to jestem w stanie tej osobie akompaniować. Proszę tylko o stosowną informację wcześniej, żeby móc się dogadać z innymi muzykami.</li>
+            <li class="scroll-hidden">
+                Jeśli podczas uroczystości ma zaśpiewać/zagrać również ktoś inny, <strong>gorąco polecam skorzystać z zaznajomionych ze mną muzyków</strong> – wówczas przed potwierdzeniem terminu ustalimy, czy możemy zagrać w danym składzie.<br>
+                Mogę również grać <strong>z wokalistą/instrumentalistą zorganizowanym narzuconym z góry</strong>, wówczas to jestem w stanie tej osobie akompaniować. Proszę tylko o stosowną informację wcześniej, żeby móc się dogadać z innymi muzykami.
+            </li>
 
             <li class="scroll-hidden">Co z zapłatą?</li>
-            <li class="scroll-hidden">W zupełności wystarcza mi przekazanie pieniędzy przed uroczystością.</li>
+            <li class="scroll-hidden">W zupełności wystarcza mi przekazanie pieniędzy przed lub krótko po uroczystości.</li>
 
             <li class="scroll-hidden">Podpisujemy umowę?</li>
             <li class="scroll-hidden">Ja nie widzę takiej potrzeby – jeśli termin zostanie przez nas uzgodniony i mnie on pasuje, to zobowiązuję się przyjechać na uroczystość.</li>

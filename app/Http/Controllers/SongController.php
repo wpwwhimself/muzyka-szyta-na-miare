@@ -199,7 +199,8 @@ class SongController extends Controller
         $highlightForClientId = $rq->input("highlightForClientId", null);
 
         $groupedFiles = $song->files
-            ->groupBy("variant_name");
+            ->filter(fn ($file) => $file->exclusiveClients?->contains(Auth::user()) || is_archmage())
+            ->groupBy(["variant_name", "version_name"]);
 
         return response()->json([
             "data" => $groupedFiles,

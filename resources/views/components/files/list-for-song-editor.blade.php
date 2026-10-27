@@ -2,7 +2,7 @@
     "data",
 ])
 
-<div class="flex right center middl">
+<div class="flex right center middle">
     <x-shipyard::ui.button
         icon="refresh"
         pop="Odśwież"

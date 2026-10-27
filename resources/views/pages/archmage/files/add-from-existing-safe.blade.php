@@ -23,9 +23,11 @@
             <tbody>
                 @foreach ($existing_files as $efile)
                 <tr>
-                    <td onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
-                    <td onclick="copyFileField('version_name', '{{ $efile->version_name }}')">{{ $efile->version_name }}</td>
-                    <td onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
+                    <td class="interactive" onclick="copyFileField('variant_name', '{{ $efile->variant_name }}')">{{ $efile->variant_name }}</td>
+                    <td class="interactive" onclick="copyFileField('version_name', '{{ $efile->version_name }}')">{{ $efile->version_name }}</td>
+                    <td class="interactive" onclick="copyFileField('transposition', {{ $efile->transposition }})">
+                        <x-file-tag :transpose="$efile->transposition" />
+                    </td>
                     <td>
                         @if ($efile->exclusiveClients->count())
                         {{ $efile->exclusiveClients->pluck("display_name")->join(", ") }}
@@ -34,6 +36,9 @@
                         @endif
                     </td>
                     <td>
+                         @if ($efile->needs_replacing)
+                        <x-file-tag tag="needs_replacing" />
+                        @endif
                         @foreach ($efile->tags as $tag)
                         <x-file-tag :tag="$tag" />
                         @endforeach

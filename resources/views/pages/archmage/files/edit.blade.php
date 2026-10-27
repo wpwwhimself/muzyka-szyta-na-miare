@@ -24,7 +24,9 @@
                     {{ $efile->version_name }}
                     @if ($efile->description) <i class="fas fa-note-sticky" {{ Popper::pop(Illuminate\Mail\Markdown::parse($efile->description)) }}></i> @endif
                 </td>
-                <td class="interactive" onclick="copyFileField('transposition', {{ $efile->transposition }})">{{ $efile->transposition }}</td>
+                <td class="interactive" onclick="copyFileField('transposition', {{ $efile->transposition }})">
+                    <x-file-tag :transpose="$efile->transposition" />
+                </td>
                 <td>
                     @if ($efile->exclusiveClients->count())
                     {{ $efile->exclusiveClients->pluck("display_name")->join(", ") }}
@@ -33,6 +35,9 @@
                     @endif
                 </td>
                 <td>
+                    @if ($efile->needs_replacing)
+                    <x-file-tag tag="needs_replacing" />
+                    @endif
                     @foreach ($efile->tags as $tag)
                     <x-file-tag :tag="$tag" />
                     @endforeach
@@ -62,57 +67,58 @@
     <input type="hidden" name="id" value="{{ $file?->id }}" />
     <input type="hidden" name="song_id" value="{{ $file?->song_id ?? $song?->id }}" />
 
-    <x-section title="Dane wersji" :icon="model_icon('files')">
-        <div class="grid but-moblie-down" style="--col-count: 3;">
-            @foreach ([
-                "variant_name",
-                "version_name",
-            ] as $field_name)
-            <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
-            @endforeach
+    <div class="grid" style="--col-count: 3;">
+        <x-section title="Dane wersji" :icon="model_icon('files')">
+            <div class="flex down">
+                @foreach ([
+                    "variant_name",
+                    "version_name",
+                ] as $field_name)
+                <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+                @endforeach
 
-            <x-shipyard::ui.input type="select"
-                name="base_file_id"
-                label="Wersja źródłowa"
-                :icon="model_field_icon('files', 'base_file_id')"
-                :value="$file?->base_file_id"
-                :select-data="[
-                    'options' => $existing_files->map(fn ($f) => [
-                        'label' => implode(' » ', [$f->variant_name, $f->version_name]),
-                        'value' => $f->id,
-                    ]),
-                    'emptyOption' => true,
-                ]"
-            />
+                <x-shipyard::ui.input type="select"
+                    name="base_file_id"
+                    label="Wersja źródłowa"
+                    :icon="model_field_icon('files', 'base_file_id')"
+                    :value="$file?->base_file_id"
+                    :select-data="[
+                        'options' => $existing_files->map(fn ($f) => [
+                            'label' => implode(' » ', [$f->variant_name, $f->version_name]),
+                            'value' => $f->id,
+                        ]),
+                        'emptyOption' => true,
+                    ]"
+                />
 
-            @foreach ([
-                "transposition",
-                "description",
-            ] as $field_name)
-            <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
-            @endforeach
+                @foreach ([
+                    "transposition",
+                    "needs_replacing",
+                    "description",
+                ] as $field_name)
+                <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />
+                @endforeach
 
-            <x-shipyard::ui.input type="select"
-                :select-data="[
-                    'optionsFromScope' => [
-                        '\App\Models\User',
-                        'clients',
-                        'option_label',
-                        'id',
-                    ],
-                ]"
-                name="only_for_client_id[]"
-                label="Upoważnieni"
-                :icon="model_icon('users')"
-                :value="$file?->exclusiveClients->pluck('id')->toArray() ?? [$quest?->client_id] ?? []"
-                multiple
-            />
-        </div>
-    </x-section>
+                <x-shipyard::ui.input type="select"
+                    :select-data="[
+                        'optionsFromScope' => [
+                            '\App\Models\User',
+                            'clients',
+                            'option_label',
+                            'id',
+                        ],
+                    ]"
+                    name="only_for_client_id[]"
+                    label="Upoważnieni"
+                    :icon="model_icon('users')"
+                    :value="$file?->exclusiveClients->pluck('id')->toArray() ?? [$quest?->client_id] ?? []"
+                    multiple
+                />
+            </div>
+        </x-section>
 
-    <div class="grid" style="--col-count: 2;">
         <x-section title="Tagi" icon="tag">
-            <div class="flex right center wrap">
+            <div class="grid but-mobile-down" style="--col-count: 3;">
                 @forelse ($tags as $tag)
                 <div class="input-container">
                     <x-file-tag :tag="$tag" />
@@ -131,8 +137,8 @@
 
         <x-section title="Pliki" icon="file">
             @if ($file)
-            <h2>Usuń istniejące pliki</h2>
-            <div class="flex right center">
+            <h3>Usuń istniejące pliki</h3>
+            <div class="grid but-mobile-down" style="--col-count: 3;">
                 @foreach ($file?->file_paths as $extension => $path)
                 <x-input type="checkbox" name="delete_files[{{ $extension }}]" :label="$extension" />
                 @endforeach

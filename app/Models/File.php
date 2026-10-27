@@ -30,6 +30,7 @@ class File extends Model
         "transposition",
         "description",
         "file_paths",
+        "needs_replacing",
     ];
 
     #region presentation
@@ -107,6 +108,12 @@ class File extends Model
             "icon" => "music-note-plus",
             "placeholder" => 0,
         ],
+        "needs_replacing" => [
+            "label" => "Do poprawy",
+            "type" => "checkbox",
+            "icon" => "glass-fragile",
+            "hint" => "Oznacza plik, który okazuje się, że jednak jest wadliwy i trzeba go podmienić."
+        ],
         "description" => [
             "label" => "Opis",
             "type" => "TEXT",
@@ -172,7 +179,7 @@ class File extends Model
     #endregion
 
     #region attributes
-    protected $casts = ["file_paths" => "array"];
+    protected $casts = ["file_paths" => "array", "needs_replacing" => "boolean"];
 
     protected $appends = [
 
@@ -215,6 +222,27 @@ class File extends Model
     {
         return Attribute::make(
             get: fn () => File::find($this->base_file_id),
+        );
+    }
+
+    public function variantDescription(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => File::where("variant_name", $this->variant_name)
+                ->where("version_name", "wersja główna")
+                ->first()
+                ?->description,
+        );
+    }
+
+    public function versionTags(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => File::where("variant_name", $this->variant_name)
+                ->where("version_name", $this->version_name)
+                ->has("tags")
+                ->first()
+                ?->tags,
         );
     }
     #endregion

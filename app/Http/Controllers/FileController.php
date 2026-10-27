@@ -144,6 +144,7 @@ class FileController extends Controller
                 "version_name" => $rq->version_name ?? "wersja główna",
                 "base_file_id" => $rq->base_file_id,
                 "transposition" => $rq->transposition ?? 0,
+                "needs_replacing" => $rq->has("needs_replacing"),
                 "description" => $rq->description,
                 "file_paths" => $uploaded_files,
             ]);
@@ -192,6 +193,7 @@ class FileController extends Controller
                 "variant_name" => $rq->variant_name ?? "podstawowy",
                 "version_name" => $rq->version_name ?? "wersja główna",
                 "transposition" => $rq->transposition,
+                "needs_replacing" => false,
                 "description" => $rq->description,
                 "file_paths" => collect(array_keys($rq->file_to_recycle ?? []))
                     ->mapWithKeys(fn($path) => [pathinfo($path, PATHINFO_EXTENSION) => Str::replaceArray("$", ["[", "]"], $path)])

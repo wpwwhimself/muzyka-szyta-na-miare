@@ -66,17 +66,17 @@
                         @if ($file->needs_replacing)
                         <x-file-tag tag="needs_replacing" />
                         @endif
-                        @if ($version->exclusiveClients && is_archmage())
+                        @if ($file->exclusiveClients && is_archmage())
                         <div class="file-tag flex right center middle"
                             style="background-color: white;"
-                            {{ Popper::pop("Widoczny dla: ".$version->exclusiveClients->pluck("display_name")->join(", ")) }}
+                            {{ Popper::pop("Widoczny dla: ".$file->exclusiveClients->pluck("display_name")->join(", ")) }}
                         >
                             <x-shipyard::app.icon name="eye" />
                         </div>
                         @endif
                     </div>
-                    <small class="grayed-out" {{ Popper::pop($version->updated_at) }}>
-                        {{ $version->updated_at->diffForHumans() }}
+                    <small class="grayed-out" {{ Popper::pop($file->updated_at) }}>
+                        {{ $file->updated_at->diffForHumans() }}
                     </small>
                 </div>
 

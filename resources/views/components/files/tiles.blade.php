@@ -100,7 +100,7 @@
                             @case ("ogg")
                             <x-file-player
                                 :song-id="$file->song_id"
-                                :file="$file"
+                                :file="$f"
                                 :type="$extension"
                             />
                             @break

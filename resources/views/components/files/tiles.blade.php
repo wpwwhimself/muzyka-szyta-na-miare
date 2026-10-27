@@ -58,6 +58,7 @@
             <x-shipyard::app.card @class([
                 'ghost' => is_archmage() && !$file->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)),
             ])
+                role="file_card"
                 inner-class="flex down"
             >
                 <div class="flex right middle spread">
@@ -131,7 +132,7 @@
                 </div>
 
                 @if ($editable)
-                <div class="flex right center middle nowrap">
+                <div role="file_edit_btns" class="flex right center middle nowrap hidden">
                     @if ($highlightForClientId != "null" && !$file->exclusiveClients?->contains(App\Models\User::find($highlightForClientId)))
                     <x-shipyard::ui.button
                         :icon="model_icon('users')"

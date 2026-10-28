@@ -31,7 +31,7 @@
             inner-class="flex down"
         >
             <x-slot:actions>
-                @foreach ($transpositions->first()->version_tags ?? [] as $tag)
+                @foreach ($version->version_tags ?? [] as $tag)
                 <x-file-tag :tag="$tag" />
                 @endforeach
             </x-slot:actions>

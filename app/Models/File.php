@@ -228,7 +228,8 @@ class File extends Model
     public function variantDescription(): Attribute
     {
         return Attribute::make(
-            get: fn () => File::where("variant_name", $this->variant_name)
+            get: fn () => File::where("song_id", $this->song_id)
+                ->where("variant_name", $this->variant_name)
                 ->where("version_name", "wersja główna")
                 ->first()
                 ?->description,
@@ -238,7 +239,8 @@ class File extends Model
     public function versionTags(): Attribute
     {
         return Attribute::make(
-            get: fn () => File::where("variant_name", $this->variant_name)
+            get: fn () => File::where("song_id", $this->song_id)
+                ->where("variant_name", $this->variant_name)
                 ->where("version_name", $this->version_name)
                 ->has("tags")
                 ->first()

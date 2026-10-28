@@ -90,7 +90,7 @@
                     @foreach ($file->file_paths as $extension => $f)
                         @switch ($extension)
                             @case ("mp4")
-                            <video controls>
+                            <video class="thumbnail" controls>
                                 <source src="{{ route('safe-show', ["id" => $file->song_id, "filename" => basename($f)]) }}"
                                     type="video/mp4"
                                 />

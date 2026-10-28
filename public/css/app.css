@@ -152,12 +152,6 @@ body {
     &:hover [role="file_edit_btns"] {
         display: flex !important;
     }
-
-    & [role="preview"] {
-        & video {
-            max-width: 25em;
-        }
-    }
 }
 
 .file-player {

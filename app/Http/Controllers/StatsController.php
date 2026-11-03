@@ -861,12 +861,15 @@ class StatsController extends Controller
             "description" => $rq->desc,
             "amount" => $rq->amount,
             "date" => $rq->created_at,
+            "relatable_type" => $rq->relatable_type,
+            "relatable_id" => $rq->relatable_id,
         ];
         if($rq->id) MoneyTransaction::find($rq->id)->update($fields);
         else MoneyTransaction::create($fields);
 
         return back()->with("toast", ["success", "Gotowe"]);
     }
+
     public function costTypes(){
         $types = CostType::all();
 

@@ -254,11 +254,6 @@ class Song extends Model
     //     );
     // }
 
-    public function getCostsAttribute() {
-        return MoneyTransaction::where("description", "like", "%".$this->id."%")
-            ->orderByDesc("created_at")
-            ->get();
-    }
     public function getWorkTimeTotalAttribute(){
         return CarbonInterval::seconds($this->hasMany(SongWorkTime::class)->sum(DB::raw("TIME_TO_SEC(time_spent)")))
             ->cascade()
@@ -352,6 +347,11 @@ class Song extends Model
     public function composition()
     {
         return $this->belongsTo(Composition::class);
+    }
+
+    public function costs()
+    {
+        return $this->morphMany(MoneyTransaction::class, "relatable");
     }
     #endregion
 }

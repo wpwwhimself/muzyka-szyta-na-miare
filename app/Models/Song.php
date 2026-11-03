@@ -348,10 +348,5 @@ class Song extends Model
     {
         return $this->belongsTo(Composition::class);
     }
-
-    public function costs()
-    {
-        return $this->morphMany(MoneyTransaction::class, "relatable");
-    }
     #endregion
 }

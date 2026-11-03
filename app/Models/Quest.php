@@ -405,6 +405,9 @@ class Quest extends Model
     public function allInvoices(){
         return $this->belongsToMany(Invoice::class, InvoiceQuest::class, "quest_id", "invoice_id");
     }
+    public function costs() {
+        return $this->morphMany(MoneyTransaction::class, "relatable");
+    }
     #endregion
 
     #region helpers

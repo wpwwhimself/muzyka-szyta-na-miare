@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($quest->song->costs as $cost)
+                @forelse ($quest->costs as $cost)
                 <tr>
                     <td>
                         {{ Str::substr($cost->typable->name, -1) }}
@@ -29,7 +29,7 @@
             <tfoot>
                 <tr>
                     <th>Suma:</th>
-                    <th>{{ _c_(as_pln($quest->song->costs?->sum("amount"))) }}</th>
+                    <th>{{ _c_(as_pln($quest->costs?->sum("amount"))) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -40,8 +40,8 @@
             action="none"
             onclick="openModal('mod-cost', {
                 created_at: '{{ now()->format('Y-m-d') }}',
-                relatable_type: 'App\\\\Models\\\\Song',
-                relatable_id: '{{ $quest->song_id }}',
+                relatable_type: 'App\\\\Models\\\\Quest',
+                relatable_id: '{{ $quest->id }}',
             });"
             class="tertiary"
         />

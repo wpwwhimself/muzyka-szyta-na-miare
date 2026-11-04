@@ -39,7 +39,7 @@ Zobacz więcej rolek:
 📷 https://www.instagram.com/muzykaszytanamiarepl
 
 Moje usługi:
-✂️ https://muzykaszytanamiare.pl/
+🪡 https://muzykaszytanamiare.pl/
 
 {{ $hashtags[$for] }}
 </pre>

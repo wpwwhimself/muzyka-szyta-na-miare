@@ -24,6 +24,7 @@ class OrganShowcase extends Model
     ];
 
     protected $fillable = [
+        "title",
         "links",
         // obsolete but required for migrations:
         "platform",
@@ -33,13 +34,13 @@ class OrganShowcase extends Model
     #region presentation
     public function __toString(): string
     {
-        return $this->created_at->diffForHumans();
+        return $this->title ?? $this->created_at->diffForHumans();
     }
 
     public function optionLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => "[$this->platform] $this",
+            get: fn () => $this,
         );
     }
 
@@ -84,6 +85,11 @@ class OrganShowcase extends Model
     use HasStandardFields;
 
     public const FIELDS = [
+        "title" => [
+            "type" => "text",
+            "label" => "Tytuł",
+            "icon" => "text",
+        ],
         "links" => [
             "type" => "JSON",
             "label" => "Linki do rolek",

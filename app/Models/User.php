@@ -181,9 +181,13 @@ class User extends ShipyardUser
 
                     return $i;
                 });
-            $dashboardData["janitor_date"] = (Storage::exists("janitor_log.json"))
-                ? date("d.m.Y", Storage::lastModified("janitor_log.json"))
+            $janitor_date = (Storage::exists("janitor_log.json"))
+                ? Carbon::parse(Storage::lastModified("janitor_log.json"))
                 : null;
+            if ($janitor_date) {
+                $dashboardData["janitor_date"] = $janitor_date->diffForHumans();
+                if ($janitor_date->lt(Carbon::now()->subDay())) $dashboardData["janitor_date"] .= " 🚨";
+            }
         }
         $dashboardData["requests"] = $dashboardData["requests"]->get();
         $dashboardData["quests_ongoing"] = $dashboardData["quests_ongoing"]->get();

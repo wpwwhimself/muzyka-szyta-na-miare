@@ -26,6 +26,7 @@ class FileTag extends Model
         "name",
         "icon",
         "color",
+        "is_local",
     ];
 
     #region presentation
@@ -109,6 +110,12 @@ class FileTag extends Model
             "label" => "Kolor",
             "icon" => "palette",
             "required" => true,
+        ],
+        "is_local" => [
+            "type" => "checkbox",
+            "label" => "Lokalny",
+            "icon" => "contain",
+            "hint" => "Zaznacz, jeśli tag ma wyświetlać się przy każdym pliku osobno, w odróżnieniu od wyświetlania się przy całej sekcji z wersją",
         ],
     ];
 

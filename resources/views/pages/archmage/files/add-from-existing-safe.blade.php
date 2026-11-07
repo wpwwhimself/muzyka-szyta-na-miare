@@ -36,9 +36,6 @@
                         @endif
                     </td>
                     <td>
-                         @if ($efile->needs_replacing)
-                        <x-file-tag tag="needs_replacing" />
-                        @endif
                         @foreach ($efile->tags as $tag)
                         <x-file-tag :tag="$tag" />
                         @endforeach

@@ -35,9 +35,6 @@
                     @endif
                 </td>
                 <td>
-                    @if ($efile->needs_replacing)
-                    <x-file-tag tag="needs_replacing" />
-                    @endif
                     @foreach ($efile->tags as $tag)
                     <x-file-tag :tag="$tag" />
                     @endforeach
@@ -93,7 +90,6 @@
 
                 @foreach ([
                     "transposition",
-                    "needs_replacing",
                     "description",
                 ] as $field_name)
                 <x-shipyard::ui.field-input :model="$file ?? new \App\Models\File" :field-name="$field_name" />

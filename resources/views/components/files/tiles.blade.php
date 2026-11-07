@@ -64,9 +64,9 @@
                 <div class="flex right middle spread">
                     <div class="flex right middle" role="tp_tags">
                         <x-file-tag :transpose="$file->transposition" />
-                        @if ($file->needs_replacing)
-                        <x-file-tag tag="needs_replacing" />
-                        @endif
+                        @foreach ($file->tags->filter(fn ($t) => $t->is_local) as $tag)
+                        <x-file-tag :tag="$tag" />
+                        @endforeach
                         @if ($file->exclusiveClients->count() && is_archmage())
                         <div class="file-tag flex right center middle"
                             style="background-color: white;"

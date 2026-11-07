@@ -3,15 +3,6 @@
     "transpose" => null,
 ])
 
-@php
-if ($tag === "needs_replacing") {
-    $tag = new stdClass();
-    $tag->name = "Wymaga poprawy";
-    $tag->icon = "glass-fragile";
-    $tag->color = "#990808";
-}
-@endphp
-
 <div class="file-tag flex right center middle" {{ $attributes }}
 @if ($tag)
     style="background-color: {{ $tag->color }};"

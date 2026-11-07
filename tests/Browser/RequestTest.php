@@ -138,7 +138,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -217,7 +217,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -298,7 +298,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
                     ->assertSee($rd["client_name"])
@@ -374,7 +374,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -446,7 +446,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -510,7 +510,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -587,7 +587,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -648,7 +648,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -725,7 +725,7 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )

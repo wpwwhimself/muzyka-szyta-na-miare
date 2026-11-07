@@ -13,10 +13,4 @@
         :label="is_archmage() ? null : 'Szczegóły'"
         :pop="is_archmage() ? 'Szczegóły' : null"
     />
-    <x-shipyard::ui.button
-        :action="route('admin.model.edit', ['model' => 'requests', 'id' => $request->id])"
-        icon="pencil"
-        pop="Edytuj"
-        show-for="technical"
-    />
 </div>

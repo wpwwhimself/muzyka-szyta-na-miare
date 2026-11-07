@@ -77,13 +77,25 @@
 </x-shipyard::app.section>
 @endif
 
+<x-shipyard::app.section
+    title="Zlecenia w toku"
+    :icon="model_icon('quests')"
+    :extended="true"
+>
+    <x-shipyard::app.card id="dashboard-quests-ongoing" />
+</x-shipyard::app.section>
+
 <div class="flex down">
-    <x-shipyard::app.section
-        title="Zlecenia w toku"
-        :icon="model_icon('quests')"
-        :extended="true"
+    <x-shipyard::app.section id="dashboard-requests"
+        title="Grafik"
+        icon="calendar"
+        inner-class="flex down"
     >
-        <x-shipyard::app.card id="dashboard-quests-ongoing" />
+        <x-slot:actions>
+            <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
+        </x-slot:actions>
+
+        <x-calendar :click-days="false" :suggest="false" :with-today="true" />
     </x-shipyard::app.section>
 
     <x-shipyard::app.section
@@ -93,147 +105,134 @@
     >
         <x-shipyard::app.card id="dashboard-quests-waiting" />
     </x-shipyard::app.section>
-</div>
 
-<x-section id="dashboard-requests"
-    title="Grafik"
-    icon="calendar"
-    :extended="true"
-    scissors
->
-    <x-slot name="buttons">
-        <x-a href="{{ route('quests-calendar') }}">Wszystkie</x-a>
-    </x-slot>
-
-    <x-calendar :click-days="false" :suggest="false" :with-today="true" />
-</x-section>
-
-<x-section id="recent"
-    title="Ostatnie zmiany"
-    icon="history"
-    :extended="false"
->
-    <table>
-        <thead>
-            <tr>
-                <th>Zlecenie/Utwór</th>
-                <th>Klient</th>
-                <th>Status</th>
-                <th>Kiedy</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($data['recent'] as $change)
-            <tr @class([
-                "ghost" => $change->re_quest?->status_id == $change->new_status_id,
-            ])>
-                <td>
-                    <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
-                        {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
-                    </a>
-                    @unless ($change->is_request)
-                    <small class="ghost">{{ $change->re_quest?->song->id }}</small>
-                    @endunless
-                </td>
-                <td>
-                @if ($change->is_request)
-                    @if ($change->re_quest?->user)
-                        <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
-                    @else
-                        {{ _ct_($change->re_quest?->client_name) }}
-                    @endif
-                @else
-                    <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
-                @endif
-                </td>
-                <td>
-                    <x-phase-indicator-mini :status="$change->status" />
-
-                    @if ($change->comment)
-                    <span {{ Popper::pop($change->comment) }}>
-                        <x-shipyard::app.icon name="comment" />
-                    </span>
-                    @endif
-                </td>
-                <td {{ Popper::pop($change->date) }}>
-                    {{ $change->date->diffForHumans() }}
-                </td>
-            </tr>
-            @empty
-                <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</x-section>
-
-<x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="$data['janitor_date']">
-    <table>
-        <thead>
-            <tr>
-                <th>Obiekt</th>
-                <th>Komentarz</th>
-                <th>Mail</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($data['janitor_log'] as $i)
-            <tr>
-                <td>
-                    @if(is_object($i->subject))
-                    <a href="{{ $i->subject->link_to }}">
-                        @if($i->procedure === "re_quests")
-                            <x-phase-indicator-mini :status="$i->subject->status" />
-                            {{ $i->subject }}
-                        @elseif($i->procedure === "safe")
-                            <i class="fas fa-folder" @popper(Sejf)></i>
-                            {{ $i->subject->title ?? "utwór bez tytułu" }}
+    <x-shipyard::app.section id="recent"
+        title="Ostatnie zmiany"
+        icon="history"
+        :extended="false"
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th>Zlecenie/Utwór</th>
+                    <th>Klient</th>
+                    <th>Status</th>
+                    <th>Kiedy</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($data['recent'] as $change)
+                <tr @class([
+                    "ghost" => $change->re_quest?->status_id == $change->new_status_id,
+                ])>
+                    <td>
+                        <a href="{{ route(($change->is_request) ? 'request' : 'quest', ['id' => $change->re_quest_id]) }}">
+                            {{ (($change->is_request) ? $change->re_quest?->title : $change->re_quest?->song->title) ?? "utwór bez tytułu" }}
+                        </a>
+                        @unless ($change->is_request)
+                        <small class="ghost">{{ $change->re_quest?->song->id }}</small>
+                        @endunless
+                    </td>
+                    <td>
+                    @if ($change->is_request)
+                        @if ($change->re_quest?->user)
+                            <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user?->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
+                        @else
+                            {{ _ct_($change->re_quest?->client_name) }}
                         @endif
-                    </a>
                     @else
-                    <span>{{ $i->subject }}</span>
+                        <a href="{{ route('admin.model.edit', ['model' => 'users', 'id' => $change->re_quest?->user->id]) }}">{{ _ct_($change->re_quest?->user->display_name) }}</a>
                     @endif
-                </td>
-                <td>
-                    @if(is_array($i->comment))
-                    {{ $i->comment["comment"] }}
-                    <x-phase-indicator-mini :status="$i->comment['status']" />
-                    @else
-                    {{ $i->comment }}
-                    @endif
-                </td>
-                <td>
-                    @switch($i->mailing)
-                        @case(2)
-                            <span class="accent success" @popper(mail wysłany)>
-                                <x-shipyard::app.icon name="email-fast" />
-                            </span>
-                            @break
-                        @case(1)
-                            <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
-                                <x-shipyard::app.icon name="email-fast" />
-                            </span>
-                            @break
-                        @case(0)
-                            <span class="accent error" @popper(wyślij wiadomość)>
-                                <x-shipyard::app.icon name="email-off" />
-                            </span>
-                            @break
-                    @endswitch
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan=5>
-                    <span class="grayed-out">
-                        <x-shipyard::app.icon name="bed" />
-                        Sprzątacz dzisiaj śpi
-                    </span>
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-</x-shipyard::app.section>
+                    </td>
+                    <td>
+                        <x-phase-indicator-mini :status="$change->status" />
+
+                        @if ($change->comment)
+                        <span {{ Popper::pop($change->comment) }}>
+                            <x-shipyard::app.icon name="comment" />
+                        </span>
+                        @endif
+                    </td>
+                    <td {{ Popper::pop($change->date) }}>
+                        {{ $change->date->diffForHumans() }}
+                    </td>
+                </tr>
+                @empty
+                    <tr><td colspan=3 class="grayed-out">brak ostatnich zleceń</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </x-shipyard::app.section>
+
+    <x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="$data['janitor_date']">
+        <table>
+            <thead>
+                <tr>
+                    <th>Obiekt</th>
+                    <th>Komentarz</th>
+                    <th>Mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($data['janitor_log'] as $i)
+                <tr>
+                    <td>
+                        @if(is_object($i->subject))
+                        <a href="{{ $i->subject->link_to }}">
+                            @if($i->procedure === "re_quests")
+                                <x-phase-indicator-mini :status="$i->subject->status" />
+                                {{ $i->subject }}
+                            @elseif($i->procedure === "safe")
+                                <i class="fas fa-folder" @popper(Sejf)></i>
+                                {{ $i->subject->title ?? "utwór bez tytułu" }}
+                            @endif
+                        </a>
+                        @else
+                        <span>{{ $i->subject }}</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if(is_array($i->comment))
+                        {{ $i->comment["comment"] }}
+                        <x-phase-indicator-mini :status="$i->comment['status']" />
+                        @else
+                        {{ $i->comment }}
+                        @endif
+                    </td>
+                    <td>
+                        @switch($i->mailing)
+                            @case(2)
+                                <span class="accent success" @popper(mail wysłany)>
+                                    <x-shipyard::app.icon name="email-fast" />
+                                </span>
+                                @break
+                            @case(1)
+                                <span class="accent danger" @popper(mail wysłany, ale wyślij wiadomość)>
+                                    <x-shipyard::app.icon name="email-fast" />
+                                </span>
+                                @break
+                            @case(0)
+                                <span class="accent error" @popper(wyślij wiadomość)>
+                                    <x-shipyard::app.icon name="email-off" />
+                                </span>
+                                @break
+                        @endswitch
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan=5>
+                        <span class="grayed-out">
+                            <x-shipyard::app.icon name="bed" />
+                            Sprzątacz dzisiaj śpi
+                        </span>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </x-shipyard::app.section>
+</div>
 
 </div>
 
@@ -267,8 +266,7 @@ fetchComponent(
     { method: "POST", body: formdata_requests },
     [[`#dashboard-requests > .contents`, `html`]],
     (res) => { reapplyPopper(); },
-    {},
-    debounce_timer_1
+    _debounce_timer = debounce_timer_1
 );
 
 fetchComponent(
@@ -277,8 +275,7 @@ fetchComponent(
     { method: "POST", body: formdata_quests_ongoing },
     [[`#dashboard-quests-ongoing > .contents`, `html`]],
     (res) => { reapplyPopper(); },
-    {},
-    debounce_timer_2
+    _debounce_timer = debounce_timer_2
 );
 
 fetchComponent(
@@ -287,8 +284,7 @@ fetchComponent(
     { method: "POST", body: formdata_quests_waiting },
     [[`#dashboard-quests-waiting > .contents`, `html`]],
     (res) => { reapplyPopper(); },
-    {},
-    debounce_timer_3
+    _debounce_timer = debounce_timer_3
 );
 </script>
 

@@ -23,6 +23,7 @@ class HomepageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit("/")
+                ->pause(1e3)
                 ->assertSee("Podkłady i nuty")
                 ->assertSee("Oprawa ślubów")
                 ->assertSee("Imprezy i koncerty");

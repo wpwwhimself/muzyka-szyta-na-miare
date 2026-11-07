@@ -137,8 +137,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -216,8 +216,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -297,8 +297,8 @@ class RequestTest extends DuskTestCase
                 ->assertSeeIn(".section[data-title='Na tapecie']", $rd["title"]);
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
                     ->assertSee($rd["client_name"])
@@ -373,8 +373,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -445,8 +445,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -509,8 +509,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -586,8 +586,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -647,8 +647,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
@@ -724,8 +724,8 @@ class RequestTest extends DuskTestCase
                 ->assertSee("Zapytanie zostało pomyślnie dodane");
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->waitFor("#dashboard-requests contents [role='model-card']", 10)
+            $archmage->with('.section[data-title="Zapytania do wyceny"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests nav")
                     ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )

@@ -25,6 +25,7 @@ class Request extends Model
         "role" => "technical",
         "ordering" => 21,
         "defaultSort" => "-date",
+        "listScopeWith" => ["user"],
     ];
 
     protected $fillable = [

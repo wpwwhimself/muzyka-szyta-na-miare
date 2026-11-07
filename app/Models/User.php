@@ -112,11 +112,15 @@ class User extends ShipyardUser
 
     public function profileComponents(): Attribute
     {
-        $dashboardData = [
-            "requests" => Request::with(["song"])
+        $dashboardData = [];
+
+        if ($this->hasRole("client", true)) {
+            $dashboardData["requests"] = Request::with(["song"])
                 ->whereNotIn("status_id", [4, 7, 8, 9])
-                ->orderBy("updated_at"),
-            "quests_ongoing" => Quest::with(["song", "quest_type", "status", "user"])
+                ->where("client_id", $this->id)
+                ->orderBy("updated_at")
+                ->get();
+            $dashboardData["quests_ongoing"] = Quest::with(["song", "quest_type", "status", "user"])
                 ->whereIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByRaw("case status_id when 13 then 1 else 0 end")
                 ->orderByRaw("case when deadline is null then 1 else 0 end")
@@ -129,18 +133,16 @@ class User extends ShipyardUser
                 ->orderByRaw("case when hard_deadline is not null and hard_deadline < deadline then hard_deadline else deadline end")
                 ->orderByRaw("case when price_code_override regexp 'z' and status_id in (11, 12, 16, 26, 96) then 0 else 1 end")
                 ->orderByRaw("paid desc")
-                ->orderBy("created_at"),
-            "quests_review" => Quest::with(["song", "quest_type", "status", "user"])
+                ->where("client_id", $this->id)
+                ->orderBy("created_at")
+                ->get();
+            $dashboardData["quests_review"] = Quest::with(["song", "quest_type", "status", "user"])
                 ->whereNotIn("status_id", [17, 18, 19])
                 ->whereNotIn("status_id", STATUSES_WAITING_FOR_ME())
                 ->orderByDesc("deadline")
-                ->orderBy("created_at"),
-        ];
-
-        if ($this->hasRole("client", true)) {
-            $dashboardData["requests"] = $dashboardData["requests"]->where("client_id", $this->id);
-            $dashboardData["quests_ongoing"] = $dashboardData["quests_ongoing"]->where("client_id", $this->id);
-            $dashboardData["quests_review"] = $dashboardData["quests_review"]->where("client_id", $this->id);
+                ->where("client_id", $this->id)
+                ->orderBy("created_at")
+                ->get();
 
             $dashboardData["quests_total"] = $this->exp;
             $dashboardData["unpaids"] = $this->questsUnpaid()->get();
@@ -187,9 +189,6 @@ class User extends ShipyardUser
             $dashboardData["janitor_date"] = $janitor_date?->diffForHumans();
             if ($janitor_date?->lt(Carbon::now()->subDay())) $dashboardData["janitor_date"] .= " 🚨";
         }
-        $dashboardData["requests"] = $dashboardData["requests"]->get();
-        $dashboardData["quests_ongoing"] = $dashboardData["quests_ongoing"]->get();
-        $dashboardData["quests_review"] = $dashboardData["quests_review"]->get();
 
         return Attribute::make(
             get: fn () => [

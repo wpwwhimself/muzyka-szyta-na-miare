@@ -45,29 +45,16 @@
 @endif
 
 <x-shipyard::app.section
-    title="Zapytania"
+    title="Zapytania do wyceny"
     :icon="model_icon('requests')"
-    :extended="$data['requests']->filter(fn ($r) => in_array($r->status_id, [1, 6, 96]))->count() > 0 || $data['requests']->count() === 0"
     style="grid-column: span 2;"
 >
     <x-slot:actions>
-        <x-shipyard::stats.counter
-            :rank="$data['requests']->count()"
-            label="Liczba zapytań"
-            style="lines"
-        />
-
         <x-shipyard::ui.button class="primary" :action="route('add-request')" icon="plus" label="Dodaj nowe" />
         <x-shipyard::ui.button :action="route('requests')" icon="chevron-double-right" label="Wszystkie" />
     </x-slot:actions>
 
-    <div class="flex down">
-        @forelse ($data['requests'] as $request)
-        <x-requests.tile :request="$request" />
-        @empty
-        <p class="grayed-out"><i class="fas fa-check"></i> brak aktywnych zapytań</p>
-        @endforelse
-    </div>
+    <x-shipyard::app.card id="dashboard-requests" />
 </x-shipyard::app.section>
 
 @if (count($data['showcases_missing']))
@@ -96,62 +83,15 @@
         :icon="model_icon('quests')"
         :extended="true"
     >
-        <x-slot:actions>
-            <x-shipyard::stats.counter
-                :rank="$data['quests_ongoing']->count()"
-                label="Liczba zleceń"
-                style="lines"
-            />
-        </x-slot:actions>
-
-        <div class="flex down">
-            @foreach ($data['quests_ongoing']->groupBy("client_id")
-                ->sortBy(fn ($q) => min($q->min("deadline")?->format("Ymd") ?? "99999999", $q->min("hard_deadline")?->format("Ymd") ?? "99999999"))
-            as $client_id => $clients_quests)
-            <div class="grid but-mobile-down animatable highlight" style="grid-template-columns: auto 1fr;">
-                @php
-                $client = $clients_quests->first()->user;
-                @endphp
-
-                <div class="flex down but-mobile-right" style="row-gap: 0;">
-                    <span>{{ $client }}</span>
-                    <span>{!! $client->display_subtitle !!}</span>
-                </div>
-                <div class="flex down no-gap">
-                    @foreach ($clients_quests as $quest)
-                    <span style="text-align: right;"
-                        @if ($quest->hard_deadline?->addDay()->isPast()) class="accent error" @endif
-                    >
-                        <a href="{{ route('quest', ['id' => $quest->id]) }}">{{ $quest->song->title ?? "bez tytułu" }}</a>
-                        <x-shipyard::app.model.badges :model="$quest" />
-                    </span>
-                    @endforeach
-                </div>
-            </div>
-            @endforeach
-        </div>
+        <x-shipyard::app.card id="dashboard-quests-ongoing" />
     </x-shipyard::app.section>
 
-    <x-shipyard::app.section id="dashboard-quests"
+    <x-shipyard::app.section
         title="Zlecenia czekające"
         icon="package-variant"
         :extended="false"
     >
-        <x-slot:actions>
-            <x-shipyard::stats.counter
-                :rank="$data['quests_review']->count()"
-                label="Liczba zleceń"
-                style="lines"
-            />
-        </x-slot:actions>
-
-        <div class="flex down">
-            @forelse ($data['quests_review'] as $key => $quest)
-            <x-quests.tile :quest="$quest" :no="$key + 1" />
-            @empty
-            <p class="grayed-out">brak aktywnych zleceń</p>
-            @endforelse
-        </div>
+        <x-shipyard::app.card id="dashboard-quests-waiting" />
     </x-shipyard::app.section>
 </div>
 
@@ -296,6 +236,61 @@
 </x-shipyard::app.section>
 
 </div>
+
+<script defer>
+const formdata_requests = new FormData();
+formdata_requests.append("_token", "{{ csrf_token() }}");
+formdata_requests.append("fltr[status][]", 1);
+formdata_requests.append("fltr[status][]", 6);
+formdata_requests.append("fltr[status][]", 96);
+
+const formdata_quests_ongoing = new FormData();
+formdata_quests_ongoing.append("_token", "{{ csrf_token() }}");
+formdata_quests_ongoing.append("fltr[status][]", 11);
+formdata_quests_ongoing.append("fltr[status][]", 12);
+formdata_quests_ongoing.append("fltr[status][]", 13);
+formdata_quests_ongoing.append("fltr[status][]", 14);
+formdata_quests_ongoing.append("fltr[status][]", 16);
+formdata_quests_ongoing.append("fltr[status][]", 26);
+formdata_quests_ongoing.append("fltr[status][]", 96);
+formdata_quests_ongoing.append("sort", "deadline");
+
+const formdata_quests_waiting = new FormData();
+formdata_quests_waiting.append("_token", "{{ csrf_token() }}");
+formdata_quests_waiting.append("fltr[status][]", 15);
+formdata_quests_waiting.append("fltr[status][]", 95);
+
+let debounce_timer_1, debounce_timer_2, debounce_timer_3;
+fetchComponent(
+    `#dashboard-requests > .loader`,
+    `{{ route('admin.model.list.filter', ['model' => 'requests']) }}`,
+    { method: "POST", body: formdata_requests },
+    [[`#dashboard-requests > .contents`, `html`]],
+    (res) => { reapplyPopper(); },
+    {},
+    debounce_timer_1
+);
+
+fetchComponent(
+    `#dashboard-quests-ongoing > .loader`,
+    `{{ route('admin.model.list.filter', ['model' => 'quests']) }}`,
+    { method: "POST", body: formdata_quests_ongoing },
+    [[`#dashboard-quests-ongoing > .contents`, `html`]],
+    (res) => { reapplyPopper(); },
+    {},
+    debounce_timer_2
+);
+
+fetchComponent(
+    `#dashboard-quests-waiting > .loader`,
+    `{{ route('admin.model.list.filter', ['model' => 'quests']) }}`,
+    { method: "POST", body: formdata_quests_waiting },
+    [[`#dashboard-quests-waiting > .contents`, `html`]],
+    (res) => { reapplyPopper(); },
+    {},
+    debounce_timer_3
+);
+</script>
 
 @else
 <div @class(["grid but-mobile-down", "stagger-contents" => setting("animations_mode") >= 1]) style="--col-count: 2;">

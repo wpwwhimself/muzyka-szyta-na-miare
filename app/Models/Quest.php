@@ -24,6 +24,7 @@ class Quest extends Model
         "role" => "technical",
         "ordering" => 22,
         "defaultSort" => "-date",
+        "listScopeWith" => ["user", "song", "status", "quest_type"],
     ];
 
     public $incrementing = false;

@@ -138,7 +138,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -216,7 +217,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -295,9 +297,11 @@ class RequestTest extends DuskTestCase
                 ->assertSeeIn(".section[data-title='Na tapecie']", $rd["title"]);
 
             $this->openArchmageDashboard($archmage);
-            $archmage->with('.section[data-title="Zapytania"]', fn ($section) => $section->assertSee($rd["title"])
-                ->assertSee("nowe")
-                ->assertSee($rd["client_name"])
+            $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
+                    ->assertSee("nowe")
+                    ->assertSee($rd["client_name"])
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
                     $browser->click('[role="model-card"][data-model="'.$rd["title"].' dla: '.$rd["client_name"].'"] .button[data-tippy="Szczegóły"]');
@@ -370,7 +374,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -441,7 +446,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -504,7 +510,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -580,7 +587,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -640,7 +648,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {
@@ -716,7 +725,8 @@ class RequestTest extends DuskTestCase
 
             $this->openArchmageDashboard($archmage);
             $archmage->with('.section[data-title="Zapytania"]', fn ($section) =>
-                $section->assertSee($rd["title"])
+                $section->waitFor("#dashboard-requests contents [role='model-card']")
+                    ->assertSee($rd["title"])
                     ->assertSee("nowe")
             )
                 ->waitForReload(function (Browser $browser) use ($rd) {

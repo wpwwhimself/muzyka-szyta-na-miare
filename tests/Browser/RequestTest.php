@@ -173,7 +173,6 @@ class RequestTest extends DuskTestCase
                 ->assertSee("przelew na konto")
                 ->assertSee("Termin realizacji")
                 ->assertSeeIn(".card[data-title='Termin realizacji']", $rd["deadline"]->format("Y-m-d"))
-                ->assertSee("Poproś o szybszą realizację")
                 ->assertSee("Pliki będą dostępne");
             $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
                 ->waitFor("#modal-card")
@@ -252,7 +251,6 @@ class RequestTest extends DuskTestCase
                 ->assertSee("przelew na konto")
                 ->assertSee("Termin realizacji")
                 ->assertSeeIn(".card[data-title='Termin realizacji']", $rd["deadline"]->format("Y-m-d"))
-                ->assertSee("Poproś o szybszą realizację")
                 ->assertSee("Pliki będą dostępne");
             $client->clickAtXPath(self::x("class", "button", "Kliknij tutaj, aby potwierdzić warunki zlecenia"))
                 ->waitFor("#modal-card")

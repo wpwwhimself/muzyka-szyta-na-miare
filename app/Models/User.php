@@ -147,7 +147,7 @@ class User extends ShipyardUser
             $dashboardData["quests_total"] = $this->exp;
             $dashboardData["unpaids"] = $this->questsUnpaid()->get();
         } else {
-            $dashboardData["recent"] = StatusChange::whereNotIn("new_status_id", [9, 32, 34])
+            $dashboardData["recent"] = StatusChange::whereNotIn("new_status_id", [9, 32, 33, 34])
                 ->orderByDesc("date")
                 ->limit(25)
                 ->get()
@@ -183,11 +183,10 @@ class User extends ShipyardUser
 
                     return $i;
                 });
-            $janitor_date = (Storage::exists("janitor_log.json"))
-                ? Carbon::parse(Storage::lastModified("janitor_log.json"))
+            $dashboardData["janitor_date"] = (Storage::exists("janitor_log.json"))
+                // ? Carbon::parse(Storage::lastModified("janitor_log.json"))
+                ? Carbon::today()
                 : null;
-            $dashboardData["janitor_date"] = $janitor_date?->diffForHumans();
-            if ($janitor_date?->lt(Carbon::now()->subDay())) $dashboardData["janitor_date"] .= " 🚨";
         }
 
         return Attribute::make(

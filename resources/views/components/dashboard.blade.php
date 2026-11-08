@@ -164,7 +164,19 @@
         </table>
     </x-shipyard::app.section>
 
-    <x-shipyard::app.section title="Raport sprzątacza" icon="broom" :subtitle="$data['janitor_date']">
+    <x-shipyard::app.section title="Raport sprzątacza" icon="broom">
+        <x-slot:actions>
+            @php
+            $is_late = $data['janitor_date'] < now()->subDays(1);
+            @endphp
+            <strong @class(["accent error" => $is_late])>
+                {{ $data['janitor_date']?->format("d.m") }}
+                @if ($is_late)
+                <x-shipyard::app.icon name="alert" />
+                @endif
+            </strong>
+        </x-slot:actions>
+
         <table>
             <thead>
                 <tr>

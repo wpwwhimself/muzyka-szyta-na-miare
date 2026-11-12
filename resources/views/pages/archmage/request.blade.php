@@ -1,5 +1,5 @@
 @extends("shipyard::layouts.admin")
-@section("title", $request->full_title)
+@section("title", $request->raw_title)
 @section("subtitle", "Zapytanie")
 
 @section('content')

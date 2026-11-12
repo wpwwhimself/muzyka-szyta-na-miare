@@ -1,5 +1,5 @@
 @extends("shipyard::layouts.admin")
-@section("title", implode("_", [$quest->song_id, $quest->song->title]))
+@section("title", implode("_", [$quest->song_id, $quest->raw_title]))
 @section("subtitle", "Zlecenie")
 
 @section('content')

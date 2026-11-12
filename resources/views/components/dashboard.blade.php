@@ -262,6 +262,7 @@ formdata_quests_ongoing.append("fltr[status][]", 12);
 formdata_quests_ongoing.append("fltr[status][]", 13);
 formdata_quests_ongoing.append("fltr[status][]", 14);
 formdata_quests_ongoing.append("fltr[status][]", 16);
+formdata_quests_ongoing.append("fltr[status][]", 21);
 formdata_quests_ongoing.append("fltr[status][]", 26);
 formdata_quests_ongoing.append("fltr[status][]", 96);
 formdata_quests_ongoing.append("sort", "deadline");

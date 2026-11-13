@@ -254,6 +254,7 @@ formdata_requests.append("_token", "{{ csrf_token() }}");
 formdata_requests.append("fltr[status][]", 1);
 formdata_requests.append("fltr[status][]", 6);
 formdata_requests.append("fltr[status][]", 96);
+formdata_requests.append("sort", "date");
 
 const formdata_quests_ongoing = new FormData();
 formdata_quests_ongoing.append("_token", "{{ csrf_token() }}");

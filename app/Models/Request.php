@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\ComponentAttributeBag;
 use Override;
 
@@ -78,10 +79,9 @@ class Request extends Model
     public function displaySubtitle(): Attribute
     {
         return Attribute::make(
-            // get: fn () => view("shipyard::components.app.model.badges", [
-            //     "badges" => $this->badges,
-            // ])->render(),
-            get: fn () => $this->song?->artist ?? $this->artist,
+            get: fn () => view("shipyard::components.app.model.badges", [
+                "badges" => $this->badges,
+            ])->render(),
         );
     }
 
@@ -305,23 +305,24 @@ class Request extends Model
 
     use HasStandardAttributes;
 
-    // public function badges(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => [
-    //             [
-    //                 "label" => "",
-    //                 "icon" => "",
-    //                 "class" => "",
-    //                 "style" => "",
-    //                 "condition" => "",
-    //             ],
-    //             [
-    //                 "html" => "",
-    //             ],
-    //         ],
-    //     );
-    // }
+    public function badges(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => [
+                [
+                    "label" => $this->quest_type->type,
+                    "icon" => $this->quest_type->icon,
+                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                ],
+                [
+                    "label" => $this->status->status_name,
+                    "icon" => $this->status->icon,
+                    "style" => "color: ".$this->status->color,
+                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                ],
+            ],
+        );
+    }
 
     //? override edit button on model list
     public function modelEditButton(): Attribute

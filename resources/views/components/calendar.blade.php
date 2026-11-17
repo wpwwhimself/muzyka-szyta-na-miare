@@ -23,7 +23,7 @@
                 <x-shipyard::app.icon name="circle" />
                 @endif
 
-                {{ $date }}
+                {{ $meta["day_symbol"] }} {{ $date }}
             </td>
 
             <td role="capacity" class="hidden">

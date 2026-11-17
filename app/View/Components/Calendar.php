@@ -27,6 +27,8 @@ class Calendar extends Component
         $this->suggest = $suggest;
         $this->available_day_until = explode(",", setting("msznm_available_day_until"));
 
+        $day_symbols = ["日", "月", "火", "水", "木", "金", "土"];
+
         $available_days_needed = setting("msznm_available_days_needed");
         $min_length = 2 // at least 1 day
             + $withToday // accounting today
@@ -75,6 +77,7 @@ class Calendar extends Component
 
             $this->calendar[date("d.m", $date)] = [
                 "day_type" => $workday_type,
+                "day_symbol" => $day_symbols[date("w", $date)],
                 "date_val" => date("Y-m-d", $date),
                 "capacity" => $this->available_day_until[date("w", $date)],
                 "quests" => $quests,

@@ -118,6 +118,12 @@ body {
             color:hsl(108, 100%, 39%) !important;
         }
     }
+
+    &.highlight-mode {
+        & .quest-row:not(.highlighted) {
+            opacity: 0.1 !important;
+        }
+    }
 }
 
 .composition-preview {

@@ -6,6 +6,7 @@ use App\Models\CalendarFreeDay;
 use App\Models\Quest;
 use App\Models\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Calendar extends Component
@@ -17,6 +18,7 @@ class Calendar extends Component
      */
     public array $calendar;
     private array $available_day_until;
+    public Collection $clients;
 
     public function __construct(
         public $withToday = false,
@@ -55,16 +57,16 @@ class Calendar extends Component
         for($i = ($withToday ? 0 : 1); $i < $length; $i++){
             $date = strtotime("+$i day");
             $workday_type = $this->workday_type($date);
-            $quests = Quest::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [15, 95, 17, 18, 19])->get();
-            $quests_done = Quest::where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
-            $requests = Request::where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
-            $quests_hard = Quest::where("hard_deadline", date("Y-m-d", $date))
+            $quests = Quest::with("user")->where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [15, 95, 17, 18, 19])->get();
+            $quests_done = Quest::with("user")->where("deadline", date("Y-m-d", $date))->whereIn("status_id", [15])->get();
+            $requests = Request::with("user")->where("deadline", date("Y-m-d", $date))->whereNotIn("status_id", [7,8,9])->get();
+            $quests_hard = Quest::with("user")->where("hard_deadline", date("Y-m-d", $date))
                 ->where("deadline", ">", date("Y-m-d", $date))
                 ->whereNotIn("status_id", [15, 95, 17, 18, 19])->get();
-            $quests_done_hard = Quest::where("hard_deadline", date("Y-m-d", $date))
+            $quests_done_hard = Quest::with("user")->where("hard_deadline", date("Y-m-d", $date))
                 ->where("deadline", ">", date("Y-m-d", $date))
                 ->whereIn("status_id", [15])->get();
-            $requests_hard = Request::where("hard_deadline", date("Y-m-d", $date))
+            $requests_hard = Request::with("user")->where("hard_deadline", date("Y-m-d", $date))
                 ->where("deadline", ">", date("Y-m-d", $date))
                 ->whereNotIn("status_id", [7,8,9])->get();
 
@@ -89,9 +91,15 @@ class Calendar extends Component
                 "suggest_date" => ($suggestion_ready == 1),
             ];
 
+            $this->clients = collect($this->clients ?? [])
+                ->merge($quests->map(fn ($q) => $q->user))
+                ->merge($requests->map(fn ($q) => $q->user ?? $q->client_name));
+
             // if a suggestion is made, no more is needed
             if($suggestion_ready === 1) $suggestion_ready = 2;
         }
+
+        $this->clients = $this->clients->unique()->sortBy(fn ($c) => (string) $c);
     }
 
     /**

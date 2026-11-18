@@ -15,14 +15,6 @@
                 $meta['day_type'],
                 "suggest" => $meta['suggest_date'] && $suggest,
             ])>
-                {{-- @if ($meta['suggest_date'] && $suggest)
-                <x-shipyard::app.icon name="check-circle" />
-                @elseif (preg_match("/free/", $meta['day_type']))
-                <x-shipyard::app.icon name="circle-outline" />
-                @else
-                <x-shipyard::app.icon name="circle" />
-                @endif --}}
-
                 {{ $meta["day_symbol"] }} {{ $date }}
             </td>
 
@@ -43,7 +35,8 @@
             <td>
             @foreach (["", "_hard"] as $suffix)
                 @foreach ($meta["quests$suffix"] as $quest)
-                <div @class([
+                <div data-client="{{ $quest->user }}" @class([
+                    "quest-row animatable",
                     "flex right middle",
                     "accent danger ghost" => $suffix == "_hard",
                     "accent error" => $quest->hard_deadline?->addDay()->isPast(),
@@ -56,7 +49,8 @@
                 @endforeach
 
                 @foreach ($meta["requests$suffix"] as $request)
-                <div @class([
+                <div data-client="{{ $request->user ?? $request->client_name }}" @class([
+                    "quest-row animatable",
                     "flex right middle",
                     "ghost",
                     "accent danger" => $suffix == "_hard",
@@ -74,19 +68,50 @@
     </tbody>
 </table>
 
-<div class="flex right center middle">
+<div role="switches" class="flex right center middle">
     <x-shipyard::ui.button
         icon="eye"
         label="OD"
         pop="Wyświetl obłożenie dnia"
         action="none"
         onclick="cToggleCapacity()"
-        class="tertiary"
+        class="toggle"
     />
+    <x-shipyard::ui.button
+        icon="eye"
+        label="Klienci"
+        pop="Wyświetl przypisanie do klientów"
+        action="none"
+        onclick="cToggleOwnership()"
+        class="toggle"
+    />
+</div>
+
+<div role="ownership-highlighters" class="flex right center middle hidden">
+    @foreach ($clients as $client)
+    <span
+        class="interactive"
+        onmouseover="cHighlightClient('{{ $client }}')"
+        onmouseout="cHighlightClient(null)"
+    >
+        {{ $client }}
+    </span>
+    @endforeach
 </div>
 
 <script>
 function cToggleCapacity() {
     document.querySelectorAll(`.calendar-table [role="capacity"]`).forEach(el => el.classList.toggle("hidden"));
+    document.querySelector(`[role="switches"] [data-label="OD"]`).classList.toggle("active");
+}
+
+function cToggleOwnership() {
+    document.querySelector(`[role="ownership-highlighters"]`).classList.toggle("hidden");
+    document.querySelector(`[role="switches"] [data-label="Klienci"]`).classList.toggle("active");
+}
+
+function cHighlightClient(client) {
+    document.querySelector(`.calendar-table`).classList.toggle("highlight-mode", client !== null);
+    document.querySelectorAll(`.calendar-table [data-client]`).forEach(el => el.classList.toggle("highlighted", el.dataset.client === client));
 }
 </script>

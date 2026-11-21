@@ -290,13 +290,23 @@ class Quest extends Model
                 [
                     "label" => $this->quest_type->type,
                     "icon" => $this->quest_type->icon,
-                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                    "condition" => !in_array(Route::currentRouteName(), [
+                        "admin.model.list.filter",
+                        "profile",
+                        "quests",
+                        "requests",
+                    ]),
                 ],
                 [
                     "label" => $this->status->status_name,
                     "icon" => $this->status->icon,
                     "style" => "color: ".$this->status->color,
-                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                    "condition" => !in_array(Route::currentRouteName(), [
+                        "admin.model.list.filter",
+                        "profile",
+                        "quests",
+                        "requests",
+                    ]),
                 ],
             ],
         );

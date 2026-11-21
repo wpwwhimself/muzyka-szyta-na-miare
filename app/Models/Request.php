@@ -310,15 +310,25 @@ class Request extends Model
         return Attribute::make(
             get: fn () => [
                 [
-                    "label" => $this->quest_type->type,
-                    "icon" => $this->quest_type->icon,
-                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                    "label" => $this->quest_type?->type ?? "nowe zapytanie",
+                    "icon" => $this->quest_type?->icon ?? model_icon("requests"),
+                    "condition" => !in_array(Route::currentRouteName(), [
+                        "admin.model.list.filter",
+                        "profile",
+                        "quests",
+                        "requests",
+                    ]),
                 ],
                 [
                     "label" => $this->status->status_name,
                     "icon" => $this->status->icon,
                     "style" => "color: ".$this->status->color,
-                    "condition" => Route::currentRouteName() != "admin.model.list.filter",
+                    "condition" => !in_array(Route::currentRouteName(), [
+                        "admin.model.list.filter",
+                        "profile",
+                        "quests",
+                        "requests",
+                    ]),
                 ],
             ],
         );

@@ -67,7 +67,7 @@ class Request extends Model
         return Attribute::make(
             get: fn () => view("shipyard::components.app.h", [
                 "lvl" => 3,
-                "icon" => $this->quest_type->icon ?? self::META["icon"],
+                "icon" => self::META["icon"],
                 "attributes" => new ComponentAttributeBag([
                     "role" => "card-title",
                 ]),
@@ -313,8 +313,6 @@ class Request extends Model
                     "label" => $this->quest_type?->type ?? "nowe zapytanie",
                     "icon" => $this->quest_type?->icon ?? model_icon("requests"),
                     "condition" => !in_array(Route::currentRouteName(), [
-                        "admin.model.list.filter",
-                        "profile",
                         "quests",
                         "requests",
                     ]),
@@ -324,8 +322,6 @@ class Request extends Model
                     "icon" => $this->status->icon,
                     "style" => "color: ".$this->status->color,
                     "condition" => !in_array(Route::currentRouteName(), [
-                        "admin.model.list.filter",
-                        "profile",
                         "quests",
                         "requests",
                     ]),

@@ -312,7 +312,7 @@ class Request extends Model
                 [
                     "label" => $this->quest_type?->type ?? "nowe zapytanie",
                     "icon" => $this->quest_type?->icon ?? model_icon("requests"),
-                    "condition" => !in_array(Route::currentRouteName(), [
+                    "condition" => $this->quest_type && !in_array(Route::currentRouteName(), [
                         "quests",
                         "requests",
                     ]),

@@ -3,12 +3,16 @@
 
 @section("content")
 
-<x-section :title="$title" :icon="model_icon('gig-price-rates')">
-    <x-slot name="buttons">
+<x-shipyard::app.section
+    :title="$title"
+    :icon="model_icon('gig-price-rates')"
+    inner-class="flex down center middle"
+>
+    <x-slot:actions>
         <x-a :href="route('admin.model.list', ['model' => 'gig-price-defaults'])" :icon="model_icon('gig-price-defaults')">Domyślne</x-a>
         <x-a :href="route('admin.model.list', ['model' => 'gig-price-rates'])" :icon="model_icon('gig-price-rates')">Stawki</x-a>
         <x-a :href="route('admin.model.list', ['model' => 'gig-price-places'])" :icon="model_icon('gig-price-places')">Miejsca</x-a>
-    </x-slot>
+    </x-slot:actions>
 
     <div id="settings" class="flex right center">
         @foreach ($defaults as $heading => $fields)
@@ -63,10 +67,15 @@
         />
     </div>
 
-    <table id="results">
-
-    </table>
-</x-section>
+    <x-shipyard::app.card id="results" inner-class="flex right center but-mobile-down">
+        <x-shipyard::stats.tile label="Sugerowana cena" class="accent primary" />
+        <x-shipyard::stats.tile label="Cena za h" />
+        <x-shipyard::stats.tile label="Czas poświęcony" />
+        <x-shipyard::stats.tile label="Koszt paliwa" />
+        <x-shipyard::stats.tile label="Koszt czekania" />
+        <x-shipyard::stats.tile label="Koszt grania" />
+    </x-shipyard::app.card>
+</x-shipyard::app.section>
 
 <script>
 function changePlace(data) {
@@ -77,75 +86,41 @@ function changePlace(data) {
 function calculateGigPrice() {
     // get settings
     const settings = Array.from(document.querySelectorAll("#settings input, #settings select"))
-        .reduce((obj, input) => ({ ...obj, [input.name]: (input.type === "checkbox") ? input.checked : parseFloat(input.value) }), {})
-    console.log(settings)
+        .reduce((obj, input) => ({ ...obj, [input.name]: (input.type === "checkbox") ? input.checked : parseFloat(input.value) }), {});
 
     // calculate
-    let calculations = {}
-    calculations["drive_time"] = {
-        "label": "Przewidywany czas jazdy",
-        "unit": "h",
-        "value": settings.travel_distance_km / 60, // average of 60 km/h
-    }
-    calculations["distance_traveled"] = {
-        "label": "Przejechany dystans",
-        "unit": "km",
-        "value": 2 * settings.travel_distance_km,
-    }
-    calculations["distance_cost"] = {
-        "label": "Koszt przejazdu (w jedną stronę)",
-        "unit": "zł",
-        "value": settings.fuel_cost_pln_per_l * settings.fuel_consumption_l_per_100_km / 100 * settings.travel_distance_km,
-    }
-    calculations["passive_cost"] = {
-        "label": "Koszt pasywny (dojazd łącznie, czekanie)",
-        "unit": "zł",
-        "value": 2 * calculations.distance_cost.value + settings.gain_passive_per_h * (2 * calculations.drive_time.value + settings.gig_time_buffer_h),
-    }
-    calculations["active_cost"] = {
-        "label": "Koszt aktywny (granie)",
-        "unit": "zł",
-        "value": settings.gain_active_per_h * (settings.gig_duration_h) + (settings.my_gear * settings.my_gear_surcharge),
-    }
-    calculations["total_cost"] = {
-        "label": "Koszty razem",
-        "unit": "zł",
-        "value": calculations.passive_cost.value + calculations.active_cost.value,
-    }
+    let calculations = {
+        time_spent: {},
+        costs: {},
+        suggestions: {},
+    };
 
-    let summary = {}
-    summary["suggested_price"] = {
-        "label": "Sugerowana cena",
-        "unit": "zł",
-        "value": calculations.total_cost.value,
-    }
+    calculations.time_spent.driving = 2 * settings.travel_distance_km / 62.5; // average speed in mixed driving
+    calculations.time_spent.waiting = settings.gig_time_buffer_h * 1.5; // assumes teardown takes half as long
+    calculations.time_spent.playing = settings.gig_duration_h;
 
-    let balance = {}
-    balance["drive_return"] = {
-        "label": "Zwrot za przejazd",
-        "unit": "zł",
-        "value": summary.suggested_price.value - calculations.distance_cost.value,
-    }
+    calculations.costs.driving = 2 * settings.travel_distance_km * settings.fuel_cost_pln_per_l * settings.fuel_consumption_l_per_100_km / 100;
+    calculations.costs.waiting_in_car = calculations.time_spent.driving * settings.gain_passive_per_h;
+    calculations.costs.waiting_in_venue = calculations.time_spent.waiting * settings.gain_passive_per_h;
+    calculations.costs.playing = calculations.time_spent.playing * settings.gain_active_per_h + settings.my_gear * settings.my_gear_surcharge;
 
     const precision = 10
-    summary.suggested_price.value = Math.round(summary.suggested_price.value / precision) * precision
+    calculations.suggestions.price = Math.round(Math.sumPrecise(Object.values(calculations.costs)) / precision) * precision;
+    calculations.suggestions.price_per_h = calculations.suggestions.price / Math.sumPrecise(Object.values(calculations.time_spent));
 
     // show results
-    const results = document.querySelector("#results")
-    results.innerHTML = ""
-
-    Object.entries(calculations).map(row => results.insertAdjacentHTML("beforeend", `<tr>
-        <td>${row[1].label}</td>
-        <td>${row[1].value.toFixed(2)} ${row[1].unit}</td>
-    </tr>`))
-    Object.entries(summary).map(row => results.insertAdjacentHTML("beforeend", `<tr>
-        <th>${row[1].label}</th>
-        <th>${row[1].value.toFixed(2)} ${row[1].unit}</th>
-    </tr>`))
-    Object.entries(balance).map(row => results.insertAdjacentHTML("beforeend", `<tr>
-        <td>${row[1].label}</td>
-        <td>${row[1].value.toFixed(2)} ${row[1].unit}</td>
-    </tr>`))
+    const pretty_mapping = [
+        ["Sugerowana cena", "zł", calculations.suggestions.price],
+        ["Cena za h", "zł", calculations.suggestions.price_per_h],
+        ["Czas poświęcony", "h", Math.sumPrecise(Object.values(calculations.time_spent))],
+        ["Koszt paliwa", "zł", calculations.costs.driving],
+        ["Koszt czekania", "zł", calculations.costs.waiting_in_car + calculations.costs.waiting_in_venue],
+        ["Koszt grania", "zł", calculations.costs.playing],
+    ];
+    pretty_mapping.forEach(([label, unit, value]) => {
+        value = value.toFixed((unit == "h") ? 2 : 0);
+        document.querySelector(`#results .stat-tile[data-label="${label}"] [role="value"]`).innerHTML = `${value} ${unit}`;
+    });
 }
 </script>
 

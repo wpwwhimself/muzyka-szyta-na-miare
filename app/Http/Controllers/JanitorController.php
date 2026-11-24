@@ -47,7 +47,8 @@ class JanitorController extends Controller
 
     //////////////////////////////////////////////////////////////////////////
 
-    public function index(){
+    public function index()
+    {
         $this->clearSummary();
 
         $this->re_quests_cleanup();
@@ -274,26 +275,17 @@ class JanitorController extends Controller
         }
     }
 
-    private function safe_cleanup(){
-        $safes = Storage::disk("safe")->directories();
-        $sizes = []; $times = [];
+    private function safe_cleanup()
+    {
+        $safes = StatsController::getFileSizeData()["sizes"];
 
         foreach($safes as $safe){
-            $files = Storage::files($safe);
-            $size = 0;
-            $modtime = 0;
-            foreach($files as $file){
-                $size += Storage::size($file);
-                if(Storage::lastModified($file) > $modtime) $modtime = Storage::lastModified($file);
-            }
-            $modtime = new Carbon($modtime);
-
-            if($modtime->diffInDays() >= setting("msznm_safe_old_enough")){
-                Storage::deleteDirectory($safe);
+            if ($safe["is_too_old"]) {
+                Storage::deleteDirectory($safe["safe"]);
                 $this->addToSummary(
                     "safe",
                     "song",
-                    preg_replace('/.*\/(.{4}).*/', '$1', $safe),
+                    $safe["song_id"],
                     "Sejf wyczyszczony"
                 );
             }

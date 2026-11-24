@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use andcarpi\Popper\Facades\Popper;
 use App\Mail\InvoiceReady;
 use App\Mail\MassPayment;
 use App\Mail\PaymentReturned;
@@ -887,10 +888,49 @@ class StatsController extends Controller
         return back()->with("toast", ["success", "Gotowe"]);
     }
 
-    public function fileSizeReport(){
+    #region file size report
+    public function fileSizeReport()
+    {
+        $safes = self::getFileSizeData()["sizes"];
+        $summary_size = 0;
+        foreach ($safes as $safe) {
+            $summary_size += $safe["size"];
+            $sizes[] = [
+                "label" => implode("<br>", [
+                    implode("", [
+                        "<a href='".route("admin.model.edit", ["model" => "songs", "id" => $safe["song_id"]])."' target='_blank'>",
+                        "<strong>",
+                        $safe["song_id"],
+                        "</strong>",
+                        "</a>",
+                    ]),
+                    implode("", [
+                        "<span class='".($safe["is_too_old"] ? "accent error" : null)."' ".Popper::pop(new Carbon($safe["modtime"])).">",
+                        (new Carbon($safe["modtime"]))->diffForHumans(),
+                        "</span>",
+                    ]),
+                ]),
+                "value" => round($safe["size"] / pow(2, 20)),
+            ];
+        }
+        usort($sizes, fn ($a, $b) => $b["value"] <=> $a["value"]);
+        $summary_size = number_format($summary_size / pow(2, 20), 0, ",", " ") . " MB";
+
+        return view("pages.".user_role().".file-size-report", array_merge(
+            ["title" => "Raport zajętości serwera"],
+            compact(
+                "sizes", "summary_size"
+            ),
+        ));
+    }
+
+    public static function getFileSizeData()
+    {
         $safes = Storage::disk()->directories("safe");
-        $sizes = []; $times = []; $songs = [];
+        $sizes = [];
+
         foreach($safes as $safe){
+            $song_id = preg_replace('/.*\/(.{4}).*/', '$1', $safe);
             $files = Storage::files($safe);
             $size = 0;
             $modtime = 0;
@@ -898,19 +938,20 @@ class StatsController extends Controller
                 $size += Storage::size($file);
                 if(Storage::lastModified($file) > $modtime) $modtime = Storage::lastModified($file);
             }
-            $sizes[$safe] = $size;
-            $times[$safe] = new Carbon($modtime);
-            $songs[$safe] = Song::find(preg_replace('/.*\/(.{4}).*/', '$1', $safe));
-        }
-        arsort($sizes);
+            $is_too_old = now()->subDays(setting("msznm_safe_old_enough"))->gte(new Carbon($modtime));
 
-        return view("pages.".user_role().".file-size-report", array_merge(
-            ["title" => "Raport zajętości serwera"],
-            compact(
-                "sizes", "times", "songs"
-            ),
-        ));
+            $sizes[] = compact(
+                "safe",
+                "song_id",
+                "size",
+                "modtime",
+                "is_too_old",
+            );
+        }
+
+        return compact("sizes");
     }
+    #endregion
 
     public function questsCalendar(){
         $free_days = CalendarFreeDay::orderBy("date")->whereDate("date", ">=", Carbon::today())->get();

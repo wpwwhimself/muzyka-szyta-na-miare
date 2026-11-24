@@ -52,6 +52,11 @@
     icon="trumpet"
     :action="route('stats-gigs')"
   />
+  <x-shipyard::ui.button
+    label="Sejfy"
+    :icon="model_icon('files')"
+    :action="route('file-size-report')"
+  />
 </div>
 
 @endsection

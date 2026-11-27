@@ -3,6 +3,10 @@
 
 @section('content')
 
+<x-shipyard::app.card title="Cenniki A i B już nie działają" icon="alert" class="accent danger">
+    Różne cenniki dla klientów zostały wyłączone od 27.11.2026.
+</x-shipyard::app.card>
+
 <x-section id="prices" title="Cenniki" :icon="model_icon('prices')">
     <table>
         <thead>

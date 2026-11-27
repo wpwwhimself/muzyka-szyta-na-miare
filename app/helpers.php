@@ -259,7 +259,7 @@ if(!function_exists("pricing")){
         else{
             $client_since = User::find($client_id)->created_at;
             //loop for cycling through pricing schemas
-            for($letter = "A"; $letter != CURRENT_PRICING(); $letter = $next_letter){
+            for($letter = "C"; $letter != CURRENT_PRICING(); $letter = $next_letter){ // different pricing disabled
                 $next_letter = chr(ord($letter) + 1);
                 $this_pricing_since = Carbon::parse(setting("msznm_pricing_".$next_letter."_since"));
                 if($client_since->lt($this_pricing_since)) return $letter;
